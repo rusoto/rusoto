@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>An activation registers one or more on-premises servers or virtual machines (VMs) with AWS so that you can configure those servers or VMs using Run Command. A server or VM that has been registered with AWS is called a managed instance.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Activation {
     /// <p>The ID created by Systems Manager when you submitted the activation.</p>
     #[serde(rename = "ActivationId")]
@@ -71,7 +71,7 @@ pub struct Activation {
     pub registrations_count: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddTagsToResourceRequest {
     /// <p><p>The resource ID you want to tag.</p> <p>Use the ID of the resource. Here are some examples:</p> <p>ManagedInstance: mi-012345abcde</p> <p>MaintenanceWindow: mw-012345abcde</p> <p>PatchBaseline: pb-012345abcde</p> <p>For the Document and Parameter values, use the name of the resource.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
     #[serde(rename = "ResourceId")]
@@ -84,11 +84,11 @@ pub struct AddTagsToResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AddTagsToResourceResult {}
 
 /// <p>Describes an association of a Systems Manager document and an instance.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Association {
     /// <p>The ID created by the system when you create an association. An association is a binding between a document and a set of targets with a schedule.</p>
     #[serde(rename = "AssociationId")]
@@ -133,7 +133,7 @@ pub struct Association {
 }
 
 /// <p>Describes the parameters for a document.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AssociationDescription {
     /// <p>The association ID.</p>
     #[serde(rename = "AssociationId")]
@@ -202,7 +202,7 @@ pub struct AssociationDescription {
 }
 
 /// <p>Describes a filter.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociationFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "key")]
@@ -213,7 +213,7 @@ pub struct AssociationFilter {
 }
 
 /// <p>Information about the association.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AssociationOverview {
     /// <p>Returns the number of targets for the association status. For example, if you created an association with two instances, and one of them was successful, this would return the count of instances by status.</p>
     #[serde(rename = "AssociationStatusAggregatedCount")]
@@ -230,7 +230,7 @@ pub struct AssociationOverview {
 }
 
 /// <p>Describes an association status.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AssociationStatus {
     /// <p>A user-defined string.</p>
     #[serde(rename = "AdditionalInfo")]
@@ -248,7 +248,7 @@ pub struct AssociationStatus {
 }
 
 /// <p>Information about the association version.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AssociationVersionInfo {
     /// <p>The ID created by the system when the association was created.</p>
     #[serde(rename = "AssociationId")]
@@ -293,7 +293,7 @@ pub struct AssociationVersionInfo {
 }
 
 /// <p>Detailed information about the current state of an individual Automation execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AutomationExecution {
     /// <p>The execution ID.</p>
     #[serde(rename = "AutomationExecutionId")]
@@ -386,7 +386,7 @@ pub struct AutomationExecution {
 }
 
 /// <p>A filter used to match specific automation executions. This is used to limit the scope of Automation execution information returned.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AutomationExecutionFilter {
     /// <p>One or more keys to limit the results. Valid filter keys include the following: DocumentNamePrefix, ExecutionStatus, ExecutionId, ParentExecutionId, CurrentAction, StartTimeBefore, StartTimeAfter.</p>
     #[serde(rename = "Key")]
@@ -397,7 +397,7 @@ pub struct AutomationExecutionFilter {
 }
 
 /// <p>Details about a specific Automation execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AutomationExecutionMetadata {
     /// <p>The execution ID.</p>
     #[serde(rename = "AutomationExecutionId")]
@@ -482,7 +482,7 @@ pub struct AutomationExecutionMetadata {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CancelCommandRequest {
     /// <p>The ID of the command you want to cancel.</p>
     #[serde(rename = "CommandId")]
@@ -494,11 +494,11 @@ pub struct CancelCommandRequest {
 }
 
 /// <p>Whether or not the command was successfully canceled. There is no guarantee that a request can be canceled.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CancelCommandResult {}
 
 /// <p>Describes a command request.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Command {
     /// <p>A unique identifier for this command.</p>
     #[serde(rename = "CommandId")]
@@ -583,7 +583,7 @@ pub struct Command {
 }
 
 /// <p>Describes a command filter.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CommandFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "key")]
@@ -594,7 +594,7 @@ pub struct CommandFilter {
 }
 
 /// <p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user executes SendCommand against three instances, then a command invocation is created for each requested instance ID. A command invocation returns status and detail information about a command you executed. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CommandInvocation {
     /// <p>The command against which this invocation was requested.</p>
     #[serde(rename = "CommandId")]
@@ -654,7 +654,7 @@ pub struct CommandInvocation {
 }
 
 /// <p>Describes plugin details.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CommandPlugin {
     /// <p>The name of the plugin. Must be one of the following: aws:updateAgent, aws:domainjoin, aws:applications, aws:runPowerShellScript, aws:psmodule, aws:cloudWatch, aws:runShellScript, or aws:updateSSMAgent. </p>
     #[serde(rename = "Name")]
@@ -707,7 +707,7 @@ pub struct CommandPlugin {
 }
 
 /// <p>A summary of the call execution that includes an execution ID, the type of execution (for example, <code>Command</code>), and the date/time of the execution using a datetime object that is saved in the following format: yyyy-MM-dd'T'HH:mm:ss'Z'.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ComplianceExecutionSummary {
     /// <p>An ID created by the system when <code>PutComplianceItems</code> was called. For example, <code>CommandID</code> is a valid execution ID. You can use this ID in subsequent calls.</p>
     #[serde(rename = "ExecutionId")]
@@ -723,7 +723,7 @@ pub struct ComplianceExecutionSummary {
 }
 
 /// <p>Information about the compliance as defined by the resource type. For example, for a patch resource type, <code>Items</code> includes information about the PatchSeverity, Classification, etc.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ComplianceItem {
     /// <p>The compliance type. For example, Association (for a State Manager association), Patch, or Custom:<code>string</code> are all valid compliance types.</p>
     #[serde(rename = "ComplianceType")]
@@ -764,7 +764,7 @@ pub struct ComplianceItem {
 }
 
 /// <p>Information about a compliance item.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ComplianceItemEntry {
     /// <p>A "Key": "Value" tag combination for the compliance item.</p>
     #[serde(rename = "Details")]
@@ -787,7 +787,7 @@ pub struct ComplianceItemEntry {
 }
 
 /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ComplianceStringFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "Key")]
@@ -804,7 +804,7 @@ pub struct ComplianceStringFilter {
 }
 
 /// <p>A summary of compliance information by compliance type.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ComplianceSummaryItem {
     /// <p>The type of compliance item. For example, the compliance type can be Association, Patch, or Custom:string.</p>
     #[serde(rename = "ComplianceType")]
@@ -821,7 +821,7 @@ pub struct ComplianceSummaryItem {
 }
 
 /// <p>A summary of resources that are compliant. The summary is organized according to the resource count for each compliance type.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CompliantSummary {
     /// <p>The total number of resources that are compliant.</p>
     #[serde(rename = "CompliantCount")]
@@ -833,7 +833,7 @@ pub struct CompliantSummary {
     pub severity_summary: Option<SeveritySummary>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateActivationRequest {
     /// <p><p>The name of the registered, managed instance as it will appear in the Amazon EC2 console or when you use the AWS command line tools to list EC2 resources.</p> <important> <p>Do not enter personally identifiable information in this field.</p> </important></p>
     #[serde(rename = "DefaultInstanceName")]
@@ -856,7 +856,7 @@ pub struct CreateActivationRequest {
     pub registration_limit: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateActivationResult {
     /// <p>The code the system generates when it processes the activation. The activation code functions like a password to validate the activation ID. </p>
     #[serde(rename = "ActivationCode")]
@@ -868,7 +868,7 @@ pub struct CreateActivationResult {
     pub activation_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateAssociationBatchRequest {
     /// <p>One or more associations.</p>
     #[serde(rename = "Entries")]
@@ -876,7 +876,7 @@ pub struct CreateAssociationBatchRequest {
 }
 
 /// <p>Describes the association of a Systems Manager document and an instance.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CreateAssociationBatchRequestEntry {
     /// <p>Specify a descriptive name for the association.</p>
     #[serde(rename = "AssociationName")]
@@ -911,7 +911,7 @@ pub struct CreateAssociationBatchRequestEntry {
     pub targets: Option<Vec<Target>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateAssociationBatchResult {
     /// <p>Information about the associations that failed.</p>
     #[serde(rename = "Failed")]
@@ -923,7 +923,7 @@ pub struct CreateAssociationBatchResult {
     pub successful: Option<Vec<AssociationDescription>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateAssociationRequest {
     /// <p>Specify a descriptive name for the association.</p>
     #[serde(rename = "AssociationName")]
@@ -958,7 +958,7 @@ pub struct CreateAssociationRequest {
     pub targets: Option<Vec<Target>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateAssociationResult {
     /// <p>Information about the association.</p>
     #[serde(rename = "AssociationDescription")]
@@ -966,7 +966,7 @@ pub struct CreateAssociationResult {
     pub association_description: Option<AssociationDescription>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDocumentRequest {
     /// <p>A valid JSON or YAML string.</p>
     #[serde(rename = "Content")]
@@ -988,7 +988,7 @@ pub struct CreateDocumentRequest {
     pub target_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateDocumentResult {
     /// <p>Information about the Systems Manager document.</p>
     #[serde(rename = "DocumentDescription")]
@@ -996,7 +996,7 @@ pub struct CreateDocumentResult {
     pub document_description: Option<DocumentDescription>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateMaintenanceWindowRequest {
     /// <p>Enables a Maintenance Window task to execute on managed instances, even if you have not registered those instances as targets. If enabled, then you must specify the unregistered instances (by instance ID) when you register a task with the Maintenance Window </p> <p>If you don't enable this option, then you must specify previously-registered targets when you register a task with the Maintenance Window. </p>
     #[serde(rename = "AllowUnassociatedTargets")]
@@ -1023,7 +1023,7 @@ pub struct CreateMaintenanceWindowRequest {
     pub schedule: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateMaintenanceWindowResult {
     /// <p>The ID of the created Maintenance Window.</p>
     #[serde(rename = "WindowId")]
@@ -1031,7 +1031,7 @@ pub struct CreateMaintenanceWindowResult {
     pub window_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreatePatchBaselineRequest {
     /// <p>A set of rules used to include patches in the baseline.</p>
     #[serde(rename = "ApprovalRules")]
@@ -1078,7 +1078,7 @@ pub struct CreatePatchBaselineRequest {
     pub sources: Option<Vec<PatchSource>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreatePatchBaselineResult {
     /// <p>The ID of the created patch baseline.</p>
     #[serde(rename = "BaselineId")]
@@ -1086,7 +1086,7 @@ pub struct CreatePatchBaselineResult {
     pub baseline_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateResourceDataSyncRequest {
     /// <p>Amazon S3 configuration details for the sync.</p>
     #[serde(rename = "S3Destination")]
@@ -1096,20 +1096,20 @@ pub struct CreateResourceDataSyncRequest {
     pub sync_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateResourceDataSyncResult {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteActivationRequest {
     /// <p>The ID of the activation that you want to delete.</p>
     #[serde(rename = "ActivationId")]
     pub activation_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteActivationResult {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteAssociationRequest {
     /// <p>The association ID that you want to delete.</p>
     #[serde(rename = "AssociationId")]
@@ -1125,27 +1125,27 @@ pub struct DeleteAssociationRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteAssociationResult {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDocumentRequest {
     /// <p>The name of the document.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteDocumentResult {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteMaintenanceWindowRequest {
     /// <p>The ID of the Maintenance Window to delete.</p>
     #[serde(rename = "WindowId")]
     pub window_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteMaintenanceWindowResult {
     /// <p>The ID of the deleted Maintenance Window.</p>
     #[serde(rename = "WindowId")]
@@ -1153,24 +1153,24 @@ pub struct DeleteMaintenanceWindowResult {
     pub window_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteParameterRequest {
     /// <p>The name of the parameter to delete.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteParameterResult {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteParametersRequest {
     /// <p>The names of the parameters to delete.</p>
     #[serde(rename = "Names")]
     pub names: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteParametersResult {
     /// <p>The names of the deleted parameters.</p>
     #[serde(rename = "DeletedParameters")]
@@ -1182,14 +1182,14 @@ pub struct DeleteParametersResult {
     pub invalid_parameters: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeletePatchBaselineRequest {
     /// <p>The ID of the patch baseline to delete.</p>
     #[serde(rename = "BaselineId")]
     pub baseline_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeletePatchBaselineResult {
     /// <p>The ID of the deleted patch baseline.</p>
     #[serde(rename = "BaselineId")]
@@ -1197,27 +1197,27 @@ pub struct DeletePatchBaselineResult {
     pub baseline_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteResourceDataSyncRequest {
     /// <p>The name of the configuration to delete.</p>
     #[serde(rename = "SyncName")]
     pub sync_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteResourceDataSyncResult {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeregisterManagedInstanceRequest {
     /// <p>The ID assigned to the managed instance when you registered it using the activation process. </p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeregisterManagedInstanceResult {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeregisterPatchBaselineForPatchGroupRequest {
     /// <p>The ID of the patch baseline to deregister the patch group from.</p>
     #[serde(rename = "BaselineId")]
@@ -1227,7 +1227,7 @@ pub struct DeregisterPatchBaselineForPatchGroupRequest {
     pub patch_group: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeregisterPatchBaselineForPatchGroupResult {
     /// <p>The ID of the patch baseline the patch group was deregistered from.</p>
     #[serde(rename = "BaselineId")]
@@ -1239,7 +1239,7 @@ pub struct DeregisterPatchBaselineForPatchGroupResult {
     pub patch_group: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeregisterTargetFromMaintenanceWindowRequest {
     /// <p>The system checks if the target is being referenced by a task. If the target is being referenced, the system returns an error and does not deregister the target from the Maintenance Window.</p>
     #[serde(rename = "Safe")]
@@ -1253,7 +1253,7 @@ pub struct DeregisterTargetFromMaintenanceWindowRequest {
     pub window_target_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeregisterTargetFromMaintenanceWindowResult {
     /// <p>The ID of the Maintenance Window the target was removed from.</p>
     #[serde(rename = "WindowId")]
@@ -1265,7 +1265,7 @@ pub struct DeregisterTargetFromMaintenanceWindowResult {
     pub window_target_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeregisterTaskFromMaintenanceWindowRequest {
     /// <p>The ID of the Maintenance Window the task should be removed from.</p>
     #[serde(rename = "WindowId")]
@@ -1275,7 +1275,7 @@ pub struct DeregisterTaskFromMaintenanceWindowRequest {
     pub window_task_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeregisterTaskFromMaintenanceWindowResult {
     /// <p>The ID of the Maintenance Window the task was removed from.</p>
     #[serde(rename = "WindowId")]
@@ -1288,7 +1288,7 @@ pub struct DeregisterTaskFromMaintenanceWindowResult {
 }
 
 /// <p>Filter for the DescribeActivation API.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeActivationsFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "FilterKey")]
@@ -1300,7 +1300,7 @@ pub struct DescribeActivationsFilter {
     pub filter_values: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeActivationsRequest {
     /// <p>A filter to view information about your activations.</p>
     #[serde(rename = "Filters")]
@@ -1316,7 +1316,7 @@ pub struct DescribeActivationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeActivationsResult {
     /// <p>A list of activations for your AWS account.</p>
     #[serde(rename = "ActivationList")]
@@ -1328,7 +1328,7 @@ pub struct DescribeActivationsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeAssociationRequest {
     /// <p>The association ID for which you want information.</p>
     #[serde(rename = "AssociationId")]
@@ -1348,7 +1348,7 @@ pub struct DescribeAssociationRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeAssociationResult {
     /// <p>Information about the association.</p>
     #[serde(rename = "AssociationDescription")]
@@ -1356,7 +1356,7 @@ pub struct DescribeAssociationResult {
     pub association_description: Option<AssociationDescription>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeAutomationExecutionsRequest {
     /// <p>Filters used to limit the scope of executions that are requested.</p>
     #[serde(rename = "Filters")]
@@ -1372,7 +1372,7 @@ pub struct DescribeAutomationExecutionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeAutomationExecutionsResult {
     /// <p>The list of details about each automation execution which has occurred which matches the filter specification, if any.</p>
     #[serde(rename = "AutomationExecutionMetadataList")]
@@ -1384,7 +1384,7 @@ pub struct DescribeAutomationExecutionsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeAutomationStepExecutionsRequest {
     /// <p>The Automation execution ID for which you want step execution descriptions.</p>
     #[serde(rename = "AutomationExecutionId")]
@@ -1407,7 +1407,7 @@ pub struct DescribeAutomationStepExecutionsRequest {
     pub reverse_order: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeAutomationStepExecutionsResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -1419,7 +1419,7 @@ pub struct DescribeAutomationStepExecutionsResult {
     pub step_executions: Option<Vec<StepExecution>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeAvailablePatchesRequest {
     /// <p>Filters used to scope down the returned patches.</p>
     #[serde(rename = "Filters")]
@@ -1435,7 +1435,7 @@ pub struct DescribeAvailablePatchesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeAvailablePatchesResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -1447,7 +1447,7 @@ pub struct DescribeAvailablePatchesResult {
     pub patches: Option<Vec<Patch>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeDocumentPermissionRequest {
     /// <p>The name of the document for which you are the owner.</p>
     #[serde(rename = "Name")]
@@ -1457,7 +1457,7 @@ pub struct DescribeDocumentPermissionRequest {
     pub permission_type: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeDocumentPermissionResponse {
     /// <p>The account IDs that have permission to use this document. The ID can be either an AWS account or <i>All</i>.</p>
     #[serde(rename = "AccountIds")]
@@ -1465,7 +1465,7 @@ pub struct DescribeDocumentPermissionResponse {
     pub account_ids: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeDocumentRequest {
     /// <p>The document version for which you want information. Can be a specific version or the default version.</p>
     #[serde(rename = "DocumentVersion")]
@@ -1476,7 +1476,7 @@ pub struct DescribeDocumentRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeDocumentResult {
     /// <p>Information about the Systems Manager document.</p>
     #[serde(rename = "Document")]
@@ -1484,7 +1484,7 @@ pub struct DescribeDocumentResult {
     pub document: Option<DocumentDescription>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeEffectiveInstanceAssociationsRequest {
     /// <p>The instance ID for which you want to view all associations.</p>
     #[serde(rename = "InstanceId")]
@@ -1499,7 +1499,7 @@ pub struct DescribeEffectiveInstanceAssociationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeEffectiveInstanceAssociationsResult {
     /// <p>The associations for the requested instance.</p>
     #[serde(rename = "Associations")]
@@ -1511,7 +1511,7 @@ pub struct DescribeEffectiveInstanceAssociationsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeEffectivePatchesForPatchBaselineRequest {
     /// <p>The ID of the patch baseline to retrieve the effective patches for.</p>
     #[serde(rename = "BaselineId")]
@@ -1526,7 +1526,7 @@ pub struct DescribeEffectivePatchesForPatchBaselineRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeEffectivePatchesForPatchBaselineResult {
     /// <p>An array of patches and patch status.</p>
     #[serde(rename = "EffectivePatches")]
@@ -1538,7 +1538,7 @@ pub struct DescribeEffectivePatchesForPatchBaselineResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeInstanceAssociationsStatusRequest {
     /// <p>The instance IDs for which you want association status information.</p>
     #[serde(rename = "InstanceId")]
@@ -1553,7 +1553,7 @@ pub struct DescribeInstanceAssociationsStatusRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeInstanceAssociationsStatusResult {
     /// <p>Status information about the association.</p>
     #[serde(rename = "InstanceAssociationStatusInfos")]
@@ -1565,7 +1565,7 @@ pub struct DescribeInstanceAssociationsStatusResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeInstanceInformationRequest {
     /// <p>One or more filters. Use a filter to return a more specific list of instances.</p>
     #[serde(rename = "Filters")]
@@ -1585,7 +1585,7 @@ pub struct DescribeInstanceInformationRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeInstanceInformationResult {
     /// <p>The instance information list.</p>
     #[serde(rename = "InstanceInformationList")]
@@ -1597,7 +1597,7 @@ pub struct DescribeInstanceInformationResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeInstancePatchStatesForPatchGroupRequest {
     /// <p>Each entry in the array is a structure containing:</p> <p>Key (string between 1 and 200 characters)</p> <p> Values (array containing a single string)</p> <p> Type (string "Equal", "NotEqual", "LessThan", "GreaterThan")</p>
     #[serde(rename = "Filters")]
@@ -1616,7 +1616,7 @@ pub struct DescribeInstancePatchStatesForPatchGroupRequest {
     pub patch_group: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeInstancePatchStatesForPatchGroupResult {
     /// <p>The high-level patch state for the requested instances. </p>
     #[serde(rename = "InstancePatchStates")]
@@ -1628,7 +1628,7 @@ pub struct DescribeInstancePatchStatesForPatchGroupResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeInstancePatchStatesRequest {
     /// <p>The ID of the instance whose patch state information should be retrieved.</p>
     #[serde(rename = "InstanceIds")]
@@ -1643,7 +1643,7 @@ pub struct DescribeInstancePatchStatesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeInstancePatchStatesResult {
     /// <p>The high-level patch state for the requested instances.</p>
     #[serde(rename = "InstancePatchStates")]
@@ -1655,7 +1655,7 @@ pub struct DescribeInstancePatchStatesResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeInstancePatchesRequest {
     /// <p>Each entry in the array is a structure containing:</p> <p>Key (string, between 1 and 128 characters)</p> <p>Values (array of strings, each string between 1 and 256 characters)</p>
     #[serde(rename = "Filters")]
@@ -1674,7 +1674,7 @@ pub struct DescribeInstancePatchesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeInstancePatchesResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -1686,7 +1686,7 @@ pub struct DescribeInstancePatchesResult {
     pub patches: Option<Vec<PatchComplianceData>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeMaintenanceWindowExecutionTaskInvocationsRequest {
     /// <p>Optional filters used to scope down the returned task invocations. The supported filter key is STATUS with the corresponding values PENDING, IN_PROGRESS, SUCCESS, FAILED, TIMED_OUT, CANCELLING, and CANCELLED.</p>
     #[serde(rename = "Filters")]
@@ -1708,7 +1708,7 @@ pub struct DescribeMaintenanceWindowExecutionTaskInvocationsRequest {
     pub window_execution_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeMaintenanceWindowExecutionTaskInvocationsResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -1721,7 +1721,7 @@ pub struct DescribeMaintenanceWindowExecutionTaskInvocationsResult {
         Option<Vec<MaintenanceWindowExecutionTaskInvocationIdentity>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeMaintenanceWindowExecutionTasksRequest {
     /// <p>Optional filters used to scope down the returned tasks. The supported filter key is STATUS with the corresponding values PENDING, IN_PROGRESS, SUCCESS, FAILED, TIMED_OUT, CANCELLING, and CANCELLED. </p>
     #[serde(rename = "Filters")]
@@ -1740,7 +1740,7 @@ pub struct DescribeMaintenanceWindowExecutionTasksRequest {
     pub window_execution_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeMaintenanceWindowExecutionTasksResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -1752,7 +1752,7 @@ pub struct DescribeMaintenanceWindowExecutionTasksResult {
     pub window_execution_task_identities: Option<Vec<MaintenanceWindowExecutionTaskIdentity>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeMaintenanceWindowExecutionsRequest {
     /// <p>Each entry in the array is a structure containing:</p> <p>Key (string, between 1 and 128 characters)</p> <p>Values (array of strings, each string is between 1 and 256 characters)</p> <p>The supported Keys are ExecutedBefore and ExecutedAfter with the value being a date/time string such as 2016-11-04T05:00:00Z.</p>
     #[serde(rename = "Filters")]
@@ -1771,7 +1771,7 @@ pub struct DescribeMaintenanceWindowExecutionsRequest {
     pub window_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeMaintenanceWindowExecutionsResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -1783,7 +1783,7 @@ pub struct DescribeMaintenanceWindowExecutionsResult {
     pub window_executions: Option<Vec<MaintenanceWindowExecution>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeMaintenanceWindowTargetsRequest {
     /// <p>Optional filters that can be used to narrow down the scope of the returned window targets. The supported filter keys are Type, WindowTargetId and OwnerInformation.</p>
     #[serde(rename = "Filters")]
@@ -1802,7 +1802,7 @@ pub struct DescribeMaintenanceWindowTargetsRequest {
     pub window_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeMaintenanceWindowTargetsResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -1814,7 +1814,7 @@ pub struct DescribeMaintenanceWindowTargetsResult {
     pub targets: Option<Vec<MaintenanceWindowTarget>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeMaintenanceWindowTasksRequest {
     /// <p>Optional filters used to narrow down the scope of the returned tasks. The supported filter keys are WindowTaskId, TaskArn, Priority, and TaskType.</p>
     #[serde(rename = "Filters")]
@@ -1833,7 +1833,7 @@ pub struct DescribeMaintenanceWindowTasksRequest {
     pub window_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeMaintenanceWindowTasksResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -1845,7 +1845,7 @@ pub struct DescribeMaintenanceWindowTasksResult {
     pub tasks: Option<Vec<MaintenanceWindowTask>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeMaintenanceWindowsRequest {
     /// <p>Optional filters used to narrow down the scope of the returned Maintenance Windows. Supported filter keys are Name and Enabled.</p>
     #[serde(rename = "Filters")]
@@ -1861,7 +1861,7 @@ pub struct DescribeMaintenanceWindowsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeMaintenanceWindowsResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -1873,7 +1873,7 @@ pub struct DescribeMaintenanceWindowsResult {
     pub window_identities: Option<Vec<MaintenanceWindowIdentity>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeParametersRequest {
     /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
     #[serde(rename = "Filters")]
@@ -1893,7 +1893,7 @@ pub struct DescribeParametersRequest {
     pub parameter_filters: Option<Vec<ParameterStringFilter>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeParametersResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -1905,7 +1905,7 @@ pub struct DescribeParametersResult {
     pub parameters: Option<Vec<ParameterMetadata>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribePatchBaselinesRequest {
     /// <p>Each element in the array is a structure containing: </p> <p>Key: (string, "NAME_PREFIX" or "OWNER")</p> <p>Value: (array of strings, exactly 1 entry, between 1 and 255 characters)</p>
     #[serde(rename = "Filters")]
@@ -1921,7 +1921,7 @@ pub struct DescribePatchBaselinesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribePatchBaselinesResult {
     /// <p>An array of PatchBaselineIdentity elements.</p>
     #[serde(rename = "BaselineIdentities")]
@@ -1933,14 +1933,14 @@ pub struct DescribePatchBaselinesResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribePatchGroupStateRequest {
     /// <p>The name of the patch group whose patch snapshot should be retrieved.</p>
     #[serde(rename = "PatchGroup")]
     pub patch_group: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribePatchGroupStateResult {
     /// <p>The number of instances in the patch group.</p>
     #[serde(rename = "Instances")]
@@ -1968,7 +1968,7 @@ pub struct DescribePatchGroupStateResult {
     pub instances_with_not_applicable_patches: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribePatchGroupsRequest {
     /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
     #[serde(rename = "Filters")]
@@ -1984,7 +1984,7 @@ pub struct DescribePatchGroupsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribePatchGroupsResult {
     /// <p>Each entry in the array contains:</p> <p>PatchGroup: string (between 1 and 256 characters, Regex: ^([\p{L}\p{Z}\p{N}_.:/=+\-@]*)$)</p> <p>PatchBaselineIdentity: A PatchBaselineIdentity element. </p>
     #[serde(rename = "Mappings")]
@@ -1997,7 +1997,7 @@ pub struct DescribePatchGroupsResult {
 }
 
 /// <p>A default version of a document.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DocumentDefaultVersionDescription {
     /// <p>The default version of the document.</p>
     #[serde(rename = "DefaultVersion")]
@@ -2010,7 +2010,7 @@ pub struct DocumentDefaultVersionDescription {
 }
 
 /// <p>Describes a Systems Manager document. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DocumentDescription {
     /// <p>The date when the document was created.</p>
     #[serde(rename = "CreatedDate")]
@@ -2087,7 +2087,7 @@ pub struct DocumentDescription {
 }
 
 /// <p>Describes a filter.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DocumentFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "key")]
@@ -2098,7 +2098,7 @@ pub struct DocumentFilter {
 }
 
 /// <p>Describes the name of a Systems Manager document.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DocumentIdentifier {
     /// <p>The document format, either JSON or YAML.</p>
     #[serde(rename = "DocumentFormat")]
@@ -2139,7 +2139,7 @@ pub struct DocumentIdentifier {
 }
 
 /// <p>One or more filters. Use a filter to return a more specific list of documents.</p> <p>For keys, you can specify one or more tags that have been applied to a document. </p> <p>Other valid values include Owner, Name, PlatformTypes, and DocumentType.</p> <p>Note that only one Owner can be specified in a request. For example: <code>Key=Owner,Values=Self</code>.</p> <p>If you use Name as a key, you can use a name prefix to return a list of documents. For example, in the AWS CLI, to return a list of all documents that begin with <code>Te</code>, run the following command:</p> <p> <code>aws ssm list-documents --filters Key=Name,Values=Te</code> </p> <p>If you specify more than two keys, only documents that are identified by all the tags are returned in the results. If you specify more than two values for a key, documents that are identified by any of the values are returned in the results.</p> <p>To specify a custom key and value pair, use the format <code>Key=tag:[tagName],Values=[valueName]</code>.</p> <p>For example, if you created a Key called region and are using the AWS CLI to call the <code>list-documents</code> command: </p> <p> <code>aws ssm list-documents --filters Key=tag:region,Values=east,west Key=Owner,Values=Self</code> </p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DocumentKeyValuesFilter {
     /// <p>The name of the filter key.</p>
     #[serde(rename = "Key")]
@@ -2152,7 +2152,7 @@ pub struct DocumentKeyValuesFilter {
 }
 
 /// <p>Parameters specified in a System Manager document that execute on the server when the command is run. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DocumentParameter {
     /// <p>If specified, the default values for the parameters. Parameters without a default value are required. Parameters with a default value are optional.</p>
     #[serde(rename = "DefaultValue")]
@@ -2173,7 +2173,7 @@ pub struct DocumentParameter {
 }
 
 /// <p>Version information about the document.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DocumentVersionInfo {
     /// <p>The date the document was created.</p>
     #[serde(rename = "CreatedDate")]
@@ -2198,7 +2198,7 @@ pub struct DocumentVersionInfo {
 }
 
 /// <p>The EffectivePatch structure defines metadata about a patch along with the approval state of the patch in a particular patch baseline. The approval state includes information about whether the patch is currently approved, due to be approved by a rule, explicitly approved, or explicitly rejected and the date the patch was or will be approved.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct EffectivePatch {
     /// <p>Provides metadata for a patch, including information such as the KB ID, severity, classification and a URL for where more information can be obtained about the patch.</p>
     #[serde(rename = "Patch")]
@@ -2211,7 +2211,7 @@ pub struct EffectivePatch {
 }
 
 /// <p>Describes a failed association.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct FailedCreateAssociation {
     /// <p>The association.</p>
     #[serde(rename = "Entry")]
@@ -2228,7 +2228,7 @@ pub struct FailedCreateAssociation {
 }
 
 /// <p>Information about an Automation failure.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct FailureDetails {
     /// <p>Detailed information about the Automation step failure.</p>
     #[serde(rename = "Details")]
@@ -2244,14 +2244,14 @@ pub struct FailureDetails {
     pub failure_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetAutomationExecutionRequest {
     /// <p>The unique identifier for an existing automation execution to examine. The execution ID is returned by StartAutomationExecution when the execution of an Automation document is initiated.</p>
     #[serde(rename = "AutomationExecutionId")]
     pub automation_execution_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetAutomationExecutionResult {
     /// <p>Detailed information about the current state of an automation execution.</p>
     #[serde(rename = "AutomationExecution")]
@@ -2259,7 +2259,7 @@ pub struct GetAutomationExecutionResult {
     pub automation_execution: Option<AutomationExecution>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetCommandInvocationRequest {
     /// <p>(Required) The parent command ID of the invocation plugin.</p>
     #[serde(rename = "CommandId")]
@@ -2273,7 +2273,7 @@ pub struct GetCommandInvocationRequest {
     pub plugin_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetCommandInvocationResult {
     /// <p>The parent command ID of the invocation plugin.</p>
     #[serde(rename = "CommandId")]
@@ -2337,7 +2337,7 @@ pub struct GetCommandInvocationResult {
     pub status_details: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDefaultPatchBaselineRequest {
     /// <p>Returns the default patch baseline for the specified operating system.</p>
     #[serde(rename = "OperatingSystem")]
@@ -2345,7 +2345,7 @@ pub struct GetDefaultPatchBaselineRequest {
     pub operating_system: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetDefaultPatchBaselineResult {
     /// <p>The ID of the default patch baseline.</p>
     #[serde(rename = "BaselineId")]
@@ -2357,7 +2357,7 @@ pub struct GetDefaultPatchBaselineResult {
     pub operating_system: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDeployablePatchSnapshotForInstanceRequest {
     /// <p>The ID of the instance for which the appropriate patch snapshot should be retrieved.</p>
     #[serde(rename = "InstanceId")]
@@ -2367,7 +2367,7 @@ pub struct GetDeployablePatchSnapshotForInstanceRequest {
     pub snapshot_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetDeployablePatchSnapshotForInstanceResult {
     /// <p>The ID of the instance.</p>
     #[serde(rename = "InstanceId")]
@@ -2387,7 +2387,7 @@ pub struct GetDeployablePatchSnapshotForInstanceResult {
     pub snapshot_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDocumentRequest {
     /// <p>Returns the document in the specified format. The document format can be either JSON or YAML. JSON is the default format.</p>
     #[serde(rename = "DocumentFormat")]
@@ -2402,7 +2402,7 @@ pub struct GetDocumentRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetDocumentResult {
     /// <p>The contents of the Systems Manager document.</p>
     #[serde(rename = "Content")]
@@ -2426,7 +2426,7 @@ pub struct GetDocumentResult {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetInventoryRequest {
     /// <p>Returns counts of inventory types based on one or more expressions. For example, if you aggregate by using an expression that uses the <code>AWS:InstanceInformation.PlatformType</code> type, you can see a count of how many Windows and Linux instances exist in your inventoried fleet.</p>
     #[serde(rename = "Aggregators")]
@@ -2450,7 +2450,7 @@ pub struct GetInventoryRequest {
     pub result_attributes: Option<Vec<ResultAttribute>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetInventoryResult {
     /// <p>Collection of inventory entities such as a collection of instance inventory. </p>
     #[serde(rename = "Entities")]
@@ -2462,7 +2462,7 @@ pub struct GetInventoryResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetInventorySchemaRequest {
     /// <p>Returns inventory schemas that support aggregation. For example, this call returns the <code>AWS:InstanceInformation</code> type, because it supports aggregation based on the <code>PlatformName</code>, <code>PlatformType</code>, and <code>PlatformVersion</code> attributes.</p>
     #[serde(rename = "Aggregator")]
@@ -2486,7 +2486,7 @@ pub struct GetInventorySchemaRequest {
     pub type_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetInventorySchemaResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -2498,14 +2498,14 @@ pub struct GetInventorySchemaResult {
     pub schemas: Option<Vec<InventoryItemSchema>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetMaintenanceWindowExecutionRequest {
     /// <p>The ID of the Maintenance Window execution that includes the task.</p>
     #[serde(rename = "WindowExecutionId")]
     pub window_execution_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetMaintenanceWindowExecutionResult {
     /// <p>The time the Maintenance Window finished executing.</p>
     #[serde(rename = "EndTime")]
@@ -2533,7 +2533,7 @@ pub struct GetMaintenanceWindowExecutionResult {
     pub window_execution_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetMaintenanceWindowExecutionTaskInvocationRequest {
     /// <p>The invocation ID to retrieve.</p>
     #[serde(rename = "InvocationId")]
@@ -2546,7 +2546,7 @@ pub struct GetMaintenanceWindowExecutionTaskInvocationRequest {
     pub window_execution_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetMaintenanceWindowExecutionTaskInvocationResult {
     /// <p>The time that the task finished executing on the target.</p>
     #[serde(rename = "EndTime")]
@@ -2598,7 +2598,7 @@ pub struct GetMaintenanceWindowExecutionTaskInvocationResult {
     pub window_target_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetMaintenanceWindowExecutionTaskRequest {
     /// <p>The ID of the specific task execution in the Maintenance Window task that should be retrieved.</p>
     #[serde(rename = "TaskId")]
@@ -2608,7 +2608,7 @@ pub struct GetMaintenanceWindowExecutionTaskRequest {
     pub window_execution_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetMaintenanceWindowExecutionTaskResult {
     /// <p>The time the task execution completed.</p>
     #[serde(rename = "EndTime")]
@@ -2666,14 +2666,14 @@ pub struct GetMaintenanceWindowExecutionTaskResult {
     pub window_execution_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetMaintenanceWindowRequest {
     /// <p>The ID of the desired Maintenance Window.</p>
     #[serde(rename = "WindowId")]
     pub window_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetMaintenanceWindowResult {
     /// <p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>
     #[serde(rename = "AllowUnassociatedTargets")]
@@ -2717,7 +2717,7 @@ pub struct GetMaintenanceWindowResult {
     pub window_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetMaintenanceWindowTaskRequest {
     /// <p>The Maintenance Window ID that includes the task to retrieve.</p>
     #[serde(rename = "WindowId")]
@@ -2727,7 +2727,7 @@ pub struct GetMaintenanceWindowTaskRequest {
     pub window_task_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetMaintenanceWindowTaskResult {
     /// <p>The retrieved task description.</p>
     #[serde(rename = "Description")]
@@ -2788,7 +2788,7 @@ pub struct GetMaintenanceWindowTaskResult {
     pub window_task_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetParameterHistoryRequest {
     /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
     #[serde(rename = "MaxResults")]
@@ -2807,7 +2807,7 @@ pub struct GetParameterHistoryRequest {
     pub with_decryption: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetParameterHistoryResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -2819,7 +2819,7 @@ pub struct GetParameterHistoryResult {
     pub parameters: Option<Vec<ParameterHistory>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetParameterRequest {
     /// <p>The name of the parameter you want to query.</p>
     #[serde(rename = "Name")]
@@ -2830,7 +2830,7 @@ pub struct GetParameterRequest {
     pub with_decryption: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetParameterResult {
     /// <p>Information about a parameter.</p>
     #[serde(rename = "Parameter")]
@@ -2838,7 +2838,7 @@ pub struct GetParameterResult {
     pub parameter: Option<Parameter>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetParametersByPathRequest {
     /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
     #[serde(rename = "MaxResults")]
@@ -2865,7 +2865,7 @@ pub struct GetParametersByPathRequest {
     pub with_decryption: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetParametersByPathResult {
     /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -2877,7 +2877,7 @@ pub struct GetParametersByPathResult {
     pub parameters: Option<Vec<Parameter>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetParametersRequest {
     /// <p>Names of the parameters for which you want to query information.</p>
     #[serde(rename = "Names")]
@@ -2888,7 +2888,7 @@ pub struct GetParametersRequest {
     pub with_decryption: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetParametersResult {
     /// <p>A list of parameters that are not formatted correctly or do not run when executed.</p>
     #[serde(rename = "InvalidParameters")]
@@ -2900,7 +2900,7 @@ pub struct GetParametersResult {
     pub parameters: Option<Vec<Parameter>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetPatchBaselineForPatchGroupRequest {
     /// <p>Returns he operating system rule specified for patch groups using the patch baseline.</p>
     #[serde(rename = "OperatingSystem")]
@@ -2911,7 +2911,7 @@ pub struct GetPatchBaselineForPatchGroupRequest {
     pub patch_group: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetPatchBaselineForPatchGroupResult {
     /// <p>The ID of the patch baseline that should be used for the patch group.</p>
     #[serde(rename = "BaselineId")]
@@ -2927,14 +2927,14 @@ pub struct GetPatchBaselineForPatchGroupResult {
     pub patch_group: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetPatchBaselineRequest {
     /// <p>The ID of the patch baseline to retrieve.</p>
     #[serde(rename = "BaselineId")]
     pub baseline_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetPatchBaselineResult {
     /// <p>A set of rules used to include patches in the baseline.</p>
     #[serde(rename = "ApprovalRules")]
@@ -2995,7 +2995,7 @@ pub struct GetPatchBaselineResult {
 }
 
 /// <p>Status information about the aggregated associations.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InstanceAggregatedAssociationOverview {
     /// <p>Detailed status information about the aggregated associations.</p>
     #[serde(rename = "DetailedStatus")]
@@ -3009,7 +3009,7 @@ pub struct InstanceAggregatedAssociationOverview {
 }
 
 /// <p>One or more association documents on the instance. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InstanceAssociation {
     /// <p>The association ID.</p>
     #[serde(rename = "AssociationId")]
@@ -3030,7 +3030,7 @@ pub struct InstanceAssociation {
 }
 
 /// <p>An Amazon S3 bucket where you want to store the results of this request.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InstanceAssociationOutputLocation {
     /// <p>An Amazon S3 bucket where you want to store the results of this request.</p>
     #[serde(rename = "S3Location")]
@@ -3039,7 +3039,7 @@ pub struct InstanceAssociationOutputLocation {
 }
 
 /// <p>The URL of Amazon S3 bucket where you want to store the results of this request.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InstanceAssociationOutputUrl {
     /// <p>The URL of Amazon S3 bucket where you want to store the results of this request.</p>
     #[serde(rename = "S3OutputUrl")]
@@ -3048,7 +3048,7 @@ pub struct InstanceAssociationOutputUrl {
 }
 
 /// <p>Status information about the instance association.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InstanceAssociationStatusInfo {
     /// <p>The association ID.</p>
     #[serde(rename = "AssociationId")]
@@ -3101,7 +3101,7 @@ pub struct InstanceAssociationStatusInfo {
 }
 
 /// <p>Describes a filter for a specific list of instances. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InstanceInformation {
     /// <p>The activation ID created by Systems Manager when the server or VM was registered.</p>
     #[serde(rename = "ActivationId")]
@@ -3182,7 +3182,7 @@ pub struct InstanceInformation {
 }
 
 /// <p>Describes a filter for a specific list of instances. </p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct InstanceInformationFilter {
     /// <p>The name of the filter. </p>
     #[serde(rename = "key")]
@@ -3193,7 +3193,7 @@ pub struct InstanceInformationFilter {
 }
 
 /// <p>The filters to describe or get information about your managed instances.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct InstanceInformationStringFilter {
     /// <p>The filter key name to describe your instances. For example:</p> <p>"InstanceIds"|"AgentVersion"|"PingStatus"|"PlatformTypes"|"ActivationIds"|"IamRole"|"ResourceType"|"AssociationStatus"|"Tag Key"</p>
     #[serde(rename = "Key")]
@@ -3204,7 +3204,7 @@ pub struct InstanceInformationStringFilter {
 }
 
 /// <p>Defines the high-level patch compliance state for a managed instance, providing information about the number of installed, missing, not applicable, and failed patches along with metadata about the operation when this information was gathered for the instance.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InstancePatchState {
     /// <p>The ID of the patch baseline used to patch the instance.</p>
     #[serde(rename = "BaselineId")]
@@ -3255,7 +3255,7 @@ pub struct InstancePatchState {
 }
 
 /// <p>Defines a filter used in DescribeInstancePatchStatesForPatchGroup used to scope down the information returned by the API.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct InstancePatchStateFilter {
     /// <p>The key for the filter. Supported values are FailedCount, InstalledCount, InstalledOtherCount, MissingCount and NotApplicableCount.</p>
     #[serde(rename = "Key")]
@@ -3269,7 +3269,7 @@ pub struct InstancePatchStateFilter {
 }
 
 /// <p>Specifies the inventory type and attribute for the aggregation execution.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct InventoryAggregator {
     /// <p>Nested aggregators to further refine aggregation for an inventory type.</p>
     #[serde(rename = "Aggregators")]
@@ -3282,7 +3282,7 @@ pub struct InventoryAggregator {
 }
 
 /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct InventoryFilter {
     /// <p>The name of the filter key.</p>
     #[serde(rename = "Key")]
@@ -3297,7 +3297,7 @@ pub struct InventoryFilter {
 }
 
 /// <p>Information collected from managed instances based on your inventory policy document</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct InventoryItem {
     /// <p>The time the inventory information was collected.</p>
     #[serde(rename = "CaptureTime")]
@@ -3323,7 +3323,7 @@ pub struct InventoryItem {
 }
 
 /// <p>Attributes are the entries within the inventory item content. It contains name and value.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InventoryItemAttribute {
     /// <p>The data type of the inventory item attribute. </p>
     #[serde(rename = "DataType")]
@@ -3334,7 +3334,7 @@ pub struct InventoryItemAttribute {
 }
 
 /// <p>The inventory item schema definition. Users can use this to compose inventory query filters.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InventoryItemSchema {
     /// <p>The schema attributes for inventory. This contains data type and attribute name.</p>
     #[serde(rename = "Attributes")]
@@ -3353,7 +3353,7 @@ pub struct InventoryItemSchema {
 }
 
 /// <p>Inventory query results.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InventoryResultEntity {
     /// <p>The data section in the inventory result entity JSON.</p>
     #[serde(rename = "Data")]
@@ -3366,7 +3366,7 @@ pub struct InventoryResultEntity {
 }
 
 /// <p>The inventory result item.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InventoryResultItem {
     /// <p>The time inventory item data was captured.</p>
     #[serde(rename = "CaptureTime")]
@@ -3387,7 +3387,7 @@ pub struct InventoryResultItem {
     pub type_name: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListAssociationVersionsRequest {
     /// <p>The association ID for which you want to view all versions.</p>
     #[serde(rename = "AssociationId")]
@@ -3402,7 +3402,7 @@ pub struct ListAssociationVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListAssociationVersionsResult {
     /// <p>Information about all versions of the association for the specified association ID.</p>
     #[serde(rename = "AssociationVersions")]
@@ -3414,7 +3414,7 @@ pub struct ListAssociationVersionsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListAssociationsRequest {
     /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
     #[serde(rename = "AssociationFilterList")]
@@ -3430,7 +3430,7 @@ pub struct ListAssociationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListAssociationsResult {
     /// <p>The associations.</p>
     #[serde(rename = "Associations")]
@@ -3442,7 +3442,7 @@ pub struct ListAssociationsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListCommandInvocationsRequest {
     /// <p>(Optional) The invocations for a specific command ID.</p>
     #[serde(rename = "CommandId")]
@@ -3470,7 +3470,7 @@ pub struct ListCommandInvocationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListCommandInvocationsResult {
     /// <p>(Optional) A list of all invocations. </p>
     #[serde(rename = "CommandInvocations")]
@@ -3482,7 +3482,7 @@ pub struct ListCommandInvocationsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListCommandsRequest {
     /// <p>(Optional) If provided, lists only the specified command.</p>
     #[serde(rename = "CommandId")]
@@ -3506,7 +3506,7 @@ pub struct ListCommandsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListCommandsResult {
     /// <p>(Optional) The list of commands requested by the user. </p>
     #[serde(rename = "Commands")]
@@ -3518,7 +3518,7 @@ pub struct ListCommandsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListComplianceItemsRequest {
     /// <p>One or more compliance filters. Use a filter to return a more specific list of results.</p>
     #[serde(rename = "Filters")]
@@ -3542,7 +3542,7 @@ pub struct ListComplianceItemsRequest {
     pub resource_types: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListComplianceItemsResult {
     /// <p>A list of compliance information for the specified resource ID. </p>
     #[serde(rename = "ComplianceItems")]
@@ -3554,7 +3554,7 @@ pub struct ListComplianceItemsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListComplianceSummariesRequest {
     /// <p>One or more compliance or inventory filters. Use a filter to return a more specific list of results.</p>
     #[serde(rename = "Filters")]
@@ -3570,7 +3570,7 @@ pub struct ListComplianceSummariesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListComplianceSummariesResult {
     /// <p>A list of compliant and non-compliant summary counts based on compliance types. For example, this call returns State Manager associations, patches, or custom compliance types according to the filter criteria that you specified.</p>
     #[serde(rename = "ComplianceSummaryItems")]
@@ -3582,7 +3582,7 @@ pub struct ListComplianceSummariesResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListDocumentVersionsRequest {
     /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
     #[serde(rename = "MaxResults")]
@@ -3597,7 +3597,7 @@ pub struct ListDocumentVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListDocumentVersionsResult {
     /// <p>The document versions.</p>
     #[serde(rename = "DocumentVersions")]
@@ -3609,7 +3609,7 @@ pub struct ListDocumentVersionsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListDocumentsRequest {
     /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
     #[serde(rename = "DocumentFilterList")]
@@ -3629,7 +3629,7 @@ pub struct ListDocumentsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListDocumentsResult {
     /// <p>The names of the Systems Manager documents.</p>
     #[serde(rename = "DocumentIdentifiers")]
@@ -3641,7 +3641,7 @@ pub struct ListDocumentsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListInventoryEntriesRequest {
     /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
     #[serde(rename = "Filters")]
@@ -3663,7 +3663,7 @@ pub struct ListInventoryEntriesRequest {
     pub type_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListInventoryEntriesResult {
     /// <p>The time that inventory information was collected for the instance(s).</p>
     #[serde(rename = "CaptureTime")]
@@ -3691,7 +3691,7 @@ pub struct ListInventoryEntriesResult {
     pub type_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListResourceComplianceSummariesRequest {
     /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
     #[serde(rename = "Filters")]
@@ -3707,7 +3707,7 @@ pub struct ListResourceComplianceSummariesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListResourceComplianceSummariesResult {
     /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -3719,7 +3719,7 @@ pub struct ListResourceComplianceSummariesResult {
     pub resource_compliance_summary_items: Option<Vec<ResourceComplianceSummaryItem>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListResourceDataSyncRequest {
     /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
     #[serde(rename = "MaxResults")]
@@ -3731,7 +3731,7 @@ pub struct ListResourceDataSyncRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListResourceDataSyncResult {
     /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -3743,7 +3743,7 @@ pub struct ListResourceDataSyncResult {
     pub resource_data_sync_items: Option<Vec<ResourceDataSyncItem>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTagsForResourceRequest {
     /// <p>The resource ID for which you want to see a list of tags.</p>
     #[serde(rename = "ResourceId")]
@@ -3753,7 +3753,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_type: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListTagsForResourceResult {
     /// <p>A list of tags.</p>
     #[serde(rename = "TagList")]
@@ -3762,7 +3762,7 @@ pub struct ListTagsForResourceResult {
 }
 
 /// <p><p>Information about an Amazon S3 bucket to write instance-level logs to.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoggingInfo {
     /// <p>The name of an Amazon S3 bucket where execution logs are stored .</p>
     #[serde(rename = "S3BucketName")]
@@ -3777,7 +3777,7 @@ pub struct LoggingInfo {
 }
 
 /// <p>The parameters for an AUTOMATION task type.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MaintenanceWindowAutomationParameters {
     /// <p>The version of an Automation document to use during task execution.</p>
     #[serde(rename = "DocumentVersion")]
@@ -3790,7 +3790,7 @@ pub struct MaintenanceWindowAutomationParameters {
 }
 
 /// <p>Describes the information about an execution of a Maintenance Window. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct MaintenanceWindowExecution {
     /// <p>The time the execution finished.</p>
     #[serde(rename = "EndTime")]
@@ -3819,7 +3819,7 @@ pub struct MaintenanceWindowExecution {
 }
 
 /// <p>Information about a task execution performed as part of a Maintenance Window execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct MaintenanceWindowExecutionTaskIdentity {
     /// <p>The time the task execution finished.</p>
     #[serde(rename = "EndTime")]
@@ -3856,7 +3856,7 @@ pub struct MaintenanceWindowExecutionTaskIdentity {
 }
 
 /// <p>Describes the information about a task invocation for a particular target as part of a task execution performed as part of a Maintenance Window execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct MaintenanceWindowExecutionTaskInvocationIdentity {
     /// <p>The time the invocation finished.</p>
     #[serde(rename = "EndTime")]
@@ -3909,7 +3909,7 @@ pub struct MaintenanceWindowExecutionTaskInvocationIdentity {
 }
 
 /// <p>Filter used in the request.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct MaintenanceWindowFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "Key")]
@@ -3922,7 +3922,7 @@ pub struct MaintenanceWindowFilter {
 }
 
 /// <p>Information about the Maintenance Window.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct MaintenanceWindowIdentity {
     /// <p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>
     #[serde(rename = "Cutoff")]
@@ -3951,7 +3951,7 @@ pub struct MaintenanceWindowIdentity {
 }
 
 /// <p><p>The parameters for a LAMBDA task type.</p> <p>For information about specifying and updating task parameters, see <a>RegisterTaskWithMaintenanceWindow</a> and <a>UpdateMaintenanceWindowTask</a>.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p>For Lambda tasks, Systems Manager ignores any values specified for TaskParameters and LoggingInfo.</p> </note></p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MaintenanceWindowLambdaParameters {
     /// <p>Pass client-specific information to the Lambda function that you are invoking. You can then process the client information in your Lambda function as you choose through the context variable.</p>
     #[serde(rename = "ClientContext")]
@@ -3972,7 +3972,7 @@ pub struct MaintenanceWindowLambdaParameters {
 }
 
 /// <p><p>The parameters for a RUN_COMMAND task type.</p> <p>For information about specifying and updating task parameters, see <a>RegisterTaskWithMaintenanceWindow</a> and <a>UpdateMaintenanceWindowTask</a>.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p>For Run Command tasks, Systems Manager uses specified values for <code>TaskParameters</code> and <code>LoggingInfo</code> only if no values are specified for <code>TaskInvocationParameters</code>. </p> </note></p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MaintenanceWindowRunCommandParameters {
     /// <p>Information about the command(s) to execute.</p>
     #[serde(rename = "Comment")]
@@ -4013,7 +4013,7 @@ pub struct MaintenanceWindowRunCommandParameters {
 }
 
 /// <p><p>The parameters for a STEP_FUNCTION task.</p> <p>For information about specifying and updating task parameters, see <a>RegisterTaskWithMaintenanceWindow</a> and <a>UpdateMaintenanceWindowTask</a>.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p>For Step Functions tasks, Systems Manager ignores any values specified for <code>TaskParameters</code> and <code>LoggingInfo</code>.</p> </note></p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MaintenanceWindowStepFunctionsParameters {
     /// <p>The inputs for the STEP_FUNCTION task.</p>
     #[serde(rename = "Input")]
@@ -4026,7 +4026,7 @@ pub struct MaintenanceWindowStepFunctionsParameters {
 }
 
 /// <p>The target registered with the Maintenance Window.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct MaintenanceWindowTarget {
     /// <p>A description of the target.</p>
     #[serde(rename = "Description")]
@@ -4059,7 +4059,7 @@ pub struct MaintenanceWindowTarget {
 }
 
 /// <p>Information about a task defined for a Maintenance Window.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct MaintenanceWindowTask {
     /// <p>A description of the task.</p>
     #[serde(rename = "Description")]
@@ -4117,7 +4117,7 @@ pub struct MaintenanceWindowTask {
 }
 
 /// <p>The parameters for task execution.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MaintenanceWindowTaskInvocationParameters {
     /// <p>The parameters for an AUTOMATION task type.</p>
     #[serde(rename = "Automation")]
@@ -4138,7 +4138,7 @@ pub struct MaintenanceWindowTaskInvocationParameters {
 }
 
 /// <p>Defines the values for a task parameter.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MaintenanceWindowTaskParameterValueExpression {
     /// <p>This field contains an array of 0 or more strings, each 1 to 255 characters in length.</p>
     #[serde(rename = "Values")]
@@ -4146,7 +4146,7 @@ pub struct MaintenanceWindowTaskParameterValueExpression {
     pub values: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ModifyDocumentPermissionRequest {
     /// <p>The AWS user accounts that should have access to the document. The account IDs can either be a group of account IDs or <i>All</i>.</p>
     #[serde(rename = "AccountIdsToAdd")]
@@ -4164,11 +4164,11 @@ pub struct ModifyDocumentPermissionRequest {
     pub permission_type: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ModifyDocumentPermissionResponse {}
 
 /// <p>A summary of resources that are not compliant. The summary is organized according to resource type.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct NonCompliantSummary {
     /// <p>The total number of compliance items that are not compliant.</p>
     #[serde(rename = "NonCompliantCount")]
@@ -4181,7 +4181,7 @@ pub struct NonCompliantSummary {
 }
 
 /// <p>Configurations for sending notifications.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NotificationConfig {
     /// <p>An Amazon Resource Name (ARN) for a Simple Notification Service (SNS) topic. Run Command pushes notifications about command status changes to this topic.</p>
     #[serde(rename = "NotificationArn")]
@@ -4198,7 +4198,7 @@ pub struct NotificationConfig {
 }
 
 /// <p>An Amazon EC2 Systems Manager parameter in Parameter Store.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Parameter {
     /// <p>The name of the parameter.</p>
     #[serde(rename = "Name")]
@@ -4219,7 +4219,7 @@ pub struct Parameter {
 }
 
 /// <p>Information about parameter usage.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ParameterHistory {
     /// <p>Parameter names can include the following letters and symbols.</p> <p>a-zA-Z0-9_.-</p>
     #[serde(rename = "AllowedPattern")]
@@ -4260,7 +4260,7 @@ pub struct ParameterHistory {
 }
 
 /// <p>Metada includes information like the ARN of the last user and the date/time the parameter was last used.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ParameterMetadata {
     /// <p>A parameter name can include only the following letters and symbols.</p> <p>a-zA-Z0-9_.-</p>
     #[serde(rename = "AllowedPattern")]
@@ -4297,7 +4297,7 @@ pub struct ParameterMetadata {
 }
 
 /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ParameterStringFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "Key")]
@@ -4313,7 +4313,7 @@ pub struct ParameterStringFilter {
 }
 
 /// <p>This data type is deprecated. Instead, use <a>ParameterStringFilter</a>.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ParametersFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "Key")]
@@ -4324,7 +4324,7 @@ pub struct ParametersFilter {
 }
 
 /// <p>Represents metadata about a patch.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Patch {
     /// <p>The classification of the patch (for example, SecurityUpdates, Updates, CriticalUpdates).</p>
     #[serde(rename = "Classification")]
@@ -4381,7 +4381,7 @@ pub struct Patch {
 }
 
 /// <p>Defines the basic information about a patch baseline.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PatchBaselineIdentity {
     /// <p>The description of the patch baseline.</p>
     #[serde(rename = "BaselineDescription")]
@@ -4406,7 +4406,7 @@ pub struct PatchBaselineIdentity {
 }
 
 /// <p>Information about the state of a patch on a particular instance as it relates to the patch baseline used to patch the instance.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PatchComplianceData {
     /// <p>The classification of the patch (for example, SecurityUpdates, Updates, CriticalUpdates).</p>
     #[serde(rename = "Classification")]
@@ -4429,7 +4429,7 @@ pub struct PatchComplianceData {
 }
 
 /// <p><p>Defines a patch filter.</p> <p>A patch filter consists of key/value pairs, but not all keys are valid for all operating system types. For example, the key <code>PRODUCT</code> is valid for all supported operating system types. The key <code>MSRC<em>SEVERITY</code>, however, is valid only for Windows operating systems, and the key <code>SECTION</code> is valid only for Ubuntu operating systems.</p> <p>Refer to the following sections for information about which keys may be used with each major operating system, and which values are valid for each key.</p> <p> <b>Windows Operating Systems</b> </p> <p>The supported keys for Windows operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>MSRC</em>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Windows7</code> </p> </li> <li> <p> <code>Windows8</code> </p> </li> <li> <p> <code>Windows8.1</code> </p> </li> <li> <p> <code>Windows8Embedded</code> </p> </li> <li> <p> <code>Windows10</code> </p> </li> <li> <p> <code>Windows10LTSB</code> </p> </li> <li> <p> <code>WindowsServer2008</code> </p> </li> <li> <p> <code>WindowsServer2008R2</code> </p> </li> <li> <p> <code>WindowsServer2012</code> </p> </li> <li> <p> <code>WindowsServer2012R2</code> </p> </li> <li> <p> <code>WindowsServer2016</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>CriticalUpdates</code> </p> </li> <li> <p> <code>DefinitionUpdates</code> </p> </li> <li> <p> <code>Drivers</code> </p> </li> <li> <p> <code>FeaturePacks</code> </p> </li> <li> <p> <code>SecurityUpdates</code> </p> </li> <li> <p> <code>ServicePacks</code> </p> </li> <li> <p> <code>Tools</code> </p> </li> <li> <p> <code>UpdateRollups</code> </p> </li> <li> <p> <code>Updates</code> </p> </li> <li> <p> <code>Upgrades</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>MSRC_SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Moderate</code> </p> </li> <li> <p> <code>Low</code> </p> </li> <li> <p> <code>Unspecified</code> </p> </li> </ul> <p> <b>Ubuntu Operating Systems</b> </p> <p>The supported keys for Ubuntu operating systems are <code>PRODUCT</code>, <code>PRIORITY</code>, and <code>SECTION</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Ubuntu14.04</code> </p> </li> <li> <p> <code>Ubuntu16.04</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>PRIORITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Required</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Standard</code> </p> </li> <li> <p> <code>Optional</code> </p> </li> <li> <p> <code>Extra</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SECTION</code> </p> <p>Only the length of the key value is validated. Minimum length is 1. Maximum length is 64.</p> <p> <b>Amazon Linux Operating Systems</b> </p> <p>The supported keys for Amazon Linux operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>AmazonLinux2012.03</code> </p> </li> <li> <p> <code>AmazonLinux2012.09</code> </p> </li> <li> <p> <code>AmazonLinux2013.03</code> </p> </li> <li> <p> <code>AmazonLinux2013.09</code> </p> </li> <li> <p> <code>AmazonLinux2014.03</code> </p> </li> <li> <p> <code>AmazonLinux2014.09</code> </p> </li> <li> <p> <code>AmazonLinux2015.03</code> </p> </li> <li> <p> <code>AmazonLinux2015.09</code> </p> </li> <li> <p> <code>AmazonLinux2016.03</code> </p> </li> <li> <p> <code>AmazonLinux2016.09</code> </p> </li> <li> <p> <code>AmazonLinux2017.03</code> </p> </li> <li> <p> <code>AmazonLinux2017.09</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul> <p> <b>RedHat Enterprise Linux (RHEL) Operating Systems</b> </p> <p>The supported keys for RedHat Enterprise Linux operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>RedhatEnterpriseLinux6.5</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.6</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.7</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.8</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.9</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.0</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.1</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.2</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.3</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.4</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul> <p> <b>SUSE Linux Enterprise Server (SUSE) Operating Systems</b> </p> <p>The supported keys for SUSE operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Suse12.0</code> </p> </li> <li> <p> <code>Suse12.1</code> </p> </li> <li> <p> <code>Suse12.2</code> </p> </li> <li> <p> <code>Suse12.3</code> </p> </li> <li> <p> <code>Suse12.4</code> </p> </li> <li> <p> <code>Suse12.5</code> </p> </li> <li> <p> <code>Suse12.6</code> </p> </li> <li> <p> <code>Suse12.7</code> </p> </li> <li> <p> <code>Suse12.8</code> </p> </li> <li> <p> <code>Suse12.9</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Optional</code> </p> </li> <li> <p> <code>Feature</code> </p> </li> <li> <p> <code>Document</code> </p> </li> <li> <p> <code>Yast</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Moderate</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PatchFilter {
     /// <p>The key for the filter.</p> <p>See <a>PatchFilter</a> for lists of valid keys for each operating system type.</p>
     #[serde(rename = "Key")]
@@ -4440,7 +4440,7 @@ pub struct PatchFilter {
 }
 
 /// <p>A set of patch filters, typically used for approval rules.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PatchFilterGroup {
     /// <p>The set of patch filters that make up the group.</p>
     #[serde(rename = "PatchFilters")]
@@ -4448,7 +4448,7 @@ pub struct PatchFilterGroup {
 }
 
 /// <p>The mapping between a patch group and the patch baseline the patch group is registered with.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PatchGroupPatchBaselineMapping {
     /// <p>The patch baseline the patch group is registered with.</p>
     #[serde(rename = "BaselineIdentity")]
@@ -4461,7 +4461,7 @@ pub struct PatchGroupPatchBaselineMapping {
 }
 
 /// <p>Defines a filter used in Patch Manager APIs.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PatchOrchestratorFilter {
     /// <p>The key for the filter.</p>
     #[serde(rename = "Key")]
@@ -4474,7 +4474,7 @@ pub struct PatchOrchestratorFilter {
 }
 
 /// <p>Defines an approval rule for a patch baseline.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PatchRule {
     /// <p>The number of days after the release date of each patch matched by the rule the patch is marked as approved in the patch baseline.</p>
     #[serde(rename = "ApproveAfterDays")]
@@ -4493,7 +4493,7 @@ pub struct PatchRule {
 }
 
 /// <p>A set of rules defining the approval rules for a patch baseline.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PatchRuleGroup {
     /// <p>The rules that make up the rule group.</p>
     #[serde(rename = "PatchRules")]
@@ -4501,7 +4501,7 @@ pub struct PatchRuleGroup {
 }
 
 /// <p>Information about the patches to use to update the instances, including target operating systems and source repository. Applies to Linux instances only.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PatchSource {
     /// <p>The value of the yum repo configuration. For example:</p> <p> <code>cachedir=/var/cache/yum/$basesearch</code> </p> <p> <code>$releasever</code> </p> <p> <code>keepcache=0</code> </p> <p> <code>debualevel=2</code> </p>
     #[serde(rename = "Configuration")]
@@ -4515,7 +4515,7 @@ pub struct PatchSource {
 }
 
 /// <p>Information about the approval status of a patch.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PatchStatus {
     /// <p>The date the patch was approved (or will be approved if the status is PENDING_APPROVAL).</p>
     #[serde(rename = "ApprovalDate")]
@@ -4531,7 +4531,7 @@ pub struct PatchStatus {
     pub deployment_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutComplianceItemsRequest {
     /// <p>Specify the compliance type. For example, specify Association (for a State Manager association), Patch, or Custom:<code>string</code>.</p>
     #[serde(rename = "ComplianceType")]
@@ -4554,10 +4554,10 @@ pub struct PutComplianceItemsRequest {
     pub resource_type: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutComplianceItemsResult {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutInventoryRequest {
     /// <p>One or more instance IDs where you want to add or update inventory items.</p>
     #[serde(rename = "InstanceId")]
@@ -4567,10 +4567,10 @@ pub struct PutInventoryRequest {
     pub items: Vec<InventoryItem>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutInventoryResult {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutParameterRequest {
     /// <p>A regular expression used to validate the parameter value. For example, for String types with values restricted to numbers, you can specify the following: AllowedPattern=^\d+$ </p>
     #[serde(rename = "AllowedPattern")]
@@ -4599,7 +4599,7 @@ pub struct PutParameterRequest {
     pub value: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutParameterResult {
     /// <p>The new version number of a parameter. If you edit a parameter value, Parameter Store automatically creates a new version and assigns this new version a unique ID. You can reference a parameter version ID in API actions or in Systems Manager documents (SSM documents). By default, if you don't specify a specific version, the system returns the latest parameter value when a parameter is called.</p>
     #[serde(rename = "Version")]
@@ -4607,14 +4607,14 @@ pub struct PutParameterResult {
     pub version: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterDefaultPatchBaselineRequest {
     /// <p>The ID of the patch baseline that should be the default patch baseline.</p>
     #[serde(rename = "BaselineId")]
     pub baseline_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RegisterDefaultPatchBaselineResult {
     /// <p>The ID of the default patch baseline.</p>
     #[serde(rename = "BaselineId")]
@@ -4622,7 +4622,7 @@ pub struct RegisterDefaultPatchBaselineResult {
     pub baseline_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterPatchBaselineForPatchGroupRequest {
     /// <p>The ID of the patch baseline to register the patch group with.</p>
     #[serde(rename = "BaselineId")]
@@ -4632,7 +4632,7 @@ pub struct RegisterPatchBaselineForPatchGroupRequest {
     pub patch_group: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RegisterPatchBaselineForPatchGroupResult {
     /// <p>The ID of the patch baseline the patch group was registered with.</p>
     #[serde(rename = "BaselineId")]
@@ -4644,7 +4644,7 @@ pub struct RegisterPatchBaselineForPatchGroupResult {
     pub patch_group: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterTargetWithMaintenanceWindowRequest {
     /// <p>User-provided idempotency token.</p>
     #[serde(rename = "ClientToken")]
@@ -4673,7 +4673,7 @@ pub struct RegisterTargetWithMaintenanceWindowRequest {
     pub window_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RegisterTargetWithMaintenanceWindowResult {
     /// <p>The ID of the target definition in this Maintenance Window.</p>
     #[serde(rename = "WindowTargetId")]
@@ -4681,7 +4681,7 @@ pub struct RegisterTargetWithMaintenanceWindowResult {
     pub window_target_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterTaskWithMaintenanceWindowRequest {
     /// <p>User-provided idempotency token.</p>
     #[serde(rename = "ClientToken")]
@@ -4735,7 +4735,7 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     pub window_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RegisterTaskWithMaintenanceWindowResult {
     /// <p>The id of the task in the Maintenance Window.</p>
     #[serde(rename = "WindowTaskId")]
@@ -4743,7 +4743,7 @@ pub struct RegisterTaskWithMaintenanceWindowResult {
     pub window_task_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemoveTagsFromResourceRequest {
     /// <p><p>The resource ID for which you want to remove tags. Use the ID of the resource. Here are some examples:</p> <p>ManagedInstance: mi-012345abcde</p> <p>MaintenanceWindow: mw-012345abcde</p> <p>PatchBaseline: pb-012345abcde</p> <p>For the Document and Parameter values, use the name of the resource.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
     #[serde(rename = "ResourceId")]
@@ -4756,11 +4756,11 @@ pub struct RemoveTagsFromResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RemoveTagsFromResourceResult {}
 
 /// <p>Information about targets that resolved during the Automation execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ResolvedTargets {
     /// <p>A list of parameter values sent to targets that resolved during the Automation execution.</p>
     #[serde(rename = "ParameterValues")]
@@ -4773,7 +4773,7 @@ pub struct ResolvedTargets {
 }
 
 /// <p>Compliance summary information for a specific resource. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ResourceComplianceSummaryItem {
     /// <p>The compliance type.</p>
     #[serde(rename = "ComplianceType")]
@@ -4810,7 +4810,7 @@ pub struct ResourceComplianceSummaryItem {
 }
 
 /// <p>Information about a Resource Data Sync configuration, including its current status and last successful sync.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ResourceDataSyncItem {
     /// <p>The status reported by the last sync.</p>
     #[serde(rename = "LastStatus")]
@@ -4843,7 +4843,7 @@ pub struct ResourceDataSyncItem {
 }
 
 /// <p>Information about the target Amazon S3 bucket for the Resource Data Sync.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResourceDataSyncS3Destination {
     /// <p>The ARN of an encryption key for a destination in Amazon S3. Must belong to the same region as the destination Amazon S3 bucket.</p>
     #[serde(rename = "AWSKMSKeyARN")]
@@ -4865,7 +4865,7 @@ pub struct ResourceDataSyncS3Destination {
 }
 
 /// <p>The inventory item result attribute.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ResultAttribute {
     /// <p>Name of the inventory item type. Valid value: AWS:InstanceInformation. Default Value: AWS:InstanceInformation.</p>
     #[serde(rename = "TypeName")]
@@ -4873,7 +4873,7 @@ pub struct ResultAttribute {
 }
 
 /// <p>An Amazon S3 bucket where you want to store the results of this request.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3OutputLocation {
     /// <p>The name of the Amazon S3 bucket.</p>
     #[serde(rename = "OutputS3BucketName")]
@@ -4890,7 +4890,7 @@ pub struct S3OutputLocation {
 }
 
 /// <p>A URL for the Amazon S3 bucket where you want to store the results of this request.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct S3OutputUrl {
     /// <p>A URL for an Amazon S3 bucket where you want to store the results of this request.</p>
     #[serde(rename = "OutputUrl")]
@@ -4898,7 +4898,7 @@ pub struct S3OutputUrl {
     pub output_url: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SendAutomationSignalRequest {
     /// <p>The unique identifier for an existing Automation execution that you want to send the signal to.</p>
     #[serde(rename = "AutomationExecutionId")]
@@ -4912,10 +4912,10 @@ pub struct SendAutomationSignalRequest {
     pub signal_type: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SendAutomationSignalResult {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SendCommandRequest {
     /// <p>User-specified information about the command, such as a brief description of what the command should do.</p>
     #[serde(rename = "Comment")]
@@ -4978,7 +4978,7 @@ pub struct SendCommandRequest {
     pub timeout_seconds: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SendCommandResult {
     /// <p>The request as it was received by Systems Manager. Also provides the command ID which can be used future references to this request.</p>
     #[serde(rename = "Command")]
@@ -4987,7 +4987,7 @@ pub struct SendCommandResult {
 }
 
 /// <p>The number of managed instances found for each patch severity level defined in the request filter.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SeveritySummary {
     /// <p>The total number of resources or compliance items that have a severity level of critical. Critical severity is determined by the organization that published the compliance items.</p>
     #[serde(rename = "CriticalCount")]
@@ -5015,7 +5015,7 @@ pub struct SeveritySummary {
     pub unspecified_count: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartAutomationExecutionRequest {
     /// <p>User-provided idempotency token. The token must be unique, is case insensitive, enforces the UUID format, and can't be reused.</p>
     #[serde(rename = "ClientToken")]
@@ -5054,7 +5054,7 @@ pub struct StartAutomationExecutionRequest {
     pub targets: Option<Vec<Target>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StartAutomationExecutionResult {
     /// <p>The unique ID of a newly scheduled automation execution.</p>
     #[serde(rename = "AutomationExecutionId")]
@@ -5063,7 +5063,7 @@ pub struct StartAutomationExecutionResult {
 }
 
 /// <p>Detailed information about an the execution state of an Automation step.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StepExecution {
     /// <p>The action this step performs. The action determines the behavior of the step.</p>
     #[serde(rename = "Action")]
@@ -5132,7 +5132,7 @@ pub struct StepExecution {
 }
 
 /// <p>A filter to limit the amount of step execution information returned by the call.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StepExecutionFilter {
     /// <p>One or more keys to limit the results. Valid filter keys include the following: StepName, Action, StepExecutionId, StepExecutionStatus, StartTimeBefore, StartTimeAfter.</p>
     #[serde(rename = "Key")]
@@ -5142,7 +5142,7 @@ pub struct StepExecutionFilter {
     pub values: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopAutomationExecutionRequest {
     /// <p>The execution ID of the Automation to stop.</p>
     #[serde(rename = "AutomationExecutionId")]
@@ -5153,11 +5153,11 @@ pub struct StopAutomationExecutionRequest {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StopAutomationExecutionResult {}
 
 /// <p>Metadata that you assign to your AWS resources. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. In Systems Manager, you can apply tags to documents, managed instances, Maintenance Windows, Parameter Store parameters, and patch baselines.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
     /// <p>The name of the tag.</p>
     #[serde(rename = "Key")]
@@ -5168,7 +5168,7 @@ pub struct Tag {
 }
 
 /// <p><p>An array of search criteria that targets instances using a Key,Value combination that you specify. <code>Targets</code> is required if you don&#39;t provide one or more instance IDs in the call.</p> <p/></p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Target {
     /// <p>User-defined criteria for sending commands that target instances that meet the criteria. Key can be tag:&lt;Amazon EC2 tag&gt; or InstanceIds. For more information about how to send commands that target instances using Key,Value parameters, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Executing a Command Using Systems Manager Run Command</a>.</p>
     #[serde(rename = "Key")]
@@ -5180,7 +5180,7 @@ pub struct Target {
     pub values: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateAssociationRequest {
     /// <p>The ID of the association you want to update. </p>
     #[serde(rename = "AssociationId")]
@@ -5219,7 +5219,7 @@ pub struct UpdateAssociationRequest {
     pub targets: Option<Vec<Target>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateAssociationResult {
     /// <p>The description of the association that was updated.</p>
     #[serde(rename = "AssociationDescription")]
@@ -5227,7 +5227,7 @@ pub struct UpdateAssociationResult {
     pub association_description: Option<AssociationDescription>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateAssociationStatusRequest {
     /// <p>The association status.</p>
     #[serde(rename = "AssociationStatus")]
@@ -5240,7 +5240,7 @@ pub struct UpdateAssociationStatusRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateAssociationStatusResult {
     /// <p>Information about the association.</p>
     #[serde(rename = "AssociationDescription")]
@@ -5248,7 +5248,7 @@ pub struct UpdateAssociationStatusResult {
     pub association_description: Option<AssociationDescription>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDocumentDefaultVersionRequest {
     /// <p>The version of a custom document that you want to set as the default version.</p>
     #[serde(rename = "DocumentVersion")]
@@ -5258,7 +5258,7 @@ pub struct UpdateDocumentDefaultVersionRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateDocumentDefaultVersionResult {
     /// <p>The description of a custom document that you want to set as the default version.</p>
     #[serde(rename = "Description")]
@@ -5266,7 +5266,7 @@ pub struct UpdateDocumentDefaultVersionResult {
     pub description: Option<DocumentDefaultVersionDescription>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDocumentRequest {
     /// <p>The content in a document that you want to update.</p>
     #[serde(rename = "Content")]
@@ -5288,7 +5288,7 @@ pub struct UpdateDocumentRequest {
     pub target_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateDocumentResult {
     /// <p>A description of the document that was updated.</p>
     #[serde(rename = "DocumentDescription")]
@@ -5296,7 +5296,7 @@ pub struct UpdateDocumentResult {
     pub document_description: Option<DocumentDescription>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateMaintenanceWindowRequest {
     /// <p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>
     #[serde(rename = "AllowUnassociatedTargets")]
@@ -5335,7 +5335,7 @@ pub struct UpdateMaintenanceWindowRequest {
     pub window_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateMaintenanceWindowResult {
     /// <p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>
     #[serde(rename = "AllowUnassociatedTargets")]
@@ -5371,7 +5371,7 @@ pub struct UpdateMaintenanceWindowResult {
     pub window_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateMaintenanceWindowTargetRequest {
     /// <p>An optional description for the update.</p>
     #[serde(rename = "Description")]
@@ -5401,7 +5401,7 @@ pub struct UpdateMaintenanceWindowTargetRequest {
     pub window_target_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateMaintenanceWindowTargetResult {
     /// <p>The updated description.</p>
     #[serde(rename = "Description")]
@@ -5429,7 +5429,7 @@ pub struct UpdateMaintenanceWindowTargetResult {
     pub window_target_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateMaintenanceWindowTaskRequest {
     /// <p>The new task description to specify.</p>
     #[serde(rename = "Description")]
@@ -5488,7 +5488,7 @@ pub struct UpdateMaintenanceWindowTaskRequest {
     pub window_task_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateMaintenanceWindowTaskResult {
     /// <p>The updated task description.</p>
     #[serde(rename = "Description")]
@@ -5545,7 +5545,7 @@ pub struct UpdateMaintenanceWindowTaskResult {
     pub window_task_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateManagedInstanceRoleRequest {
     /// <p>The IAM role you want to assign or change.</p>
     #[serde(rename = "IamRole")]
@@ -5555,10 +5555,10 @@ pub struct UpdateManagedInstanceRoleRequest {
     pub instance_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateManagedInstanceRoleResult {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdatePatchBaselineRequest {
     /// <p>A set of rules used to include patches in the baseline.</p>
     #[serde(rename = "ApprovalRules")]
@@ -5605,7 +5605,7 @@ pub struct UpdatePatchBaselineRequest {
     pub sources: Option<Vec<PatchSource>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdatePatchBaselineResult {
     /// <p>A set of rules used to include patches in the baseline.</p>
     #[serde(rename = "ApprovalRules")]

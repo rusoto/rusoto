@@ -30,7 +30,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateRoleToGroupRequest {
     /// <p>The ID of the AWS Greengrass group.</p>
     #[serde(rename = "GroupId")]
@@ -41,7 +41,7 @@ pub struct AssociateRoleToGroupRequest {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AssociateRoleToGroupResponse {
     /// <p>The time, in milliseconds since the epoch, when the role ARN was associated with the group.</p>
     #[serde(rename = "AssociatedAt")]
@@ -49,7 +49,7 @@ pub struct AssociateRoleToGroupResponse {
     pub associated_at: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateServiceRoleToAccountRequest {
     /// <p>The ARN of the service role you wish to associate with your account.</p>
     #[serde(rename = "RoleArn")]
@@ -57,7 +57,7 @@ pub struct AssociateServiceRoleToAccountRequest {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AssociateServiceRoleToAccountResponse {
     /// <p>The time when the service role was associated with the account.</p>
     #[serde(rename = "AssociatedAt")]
@@ -66,7 +66,7 @@ pub struct AssociateServiceRoleToAccountResponse {
 }
 
 /// <p>Information about a Greengrass core&#39;s connectivity.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ConnectivityInfo {
     /// <p>The endpoint for the Greengrass core. Can be an IP address or DNS.</p>
     #[serde(rename = "HostAddress")]
@@ -87,7 +87,7 @@ pub struct ConnectivityInfo {
 }
 
 /// <p>Information about a core.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Core {
     /// <p>The ARN of the certificate associated with the core.</p>
     #[serde(rename = "CertificateArn")]
@@ -108,7 +108,7 @@ pub struct Core {
 }
 
 /// <p>Information about a core definition version.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CoreDefinitionVersion {
     /// <p>A list of cores in the core definition version.</p>
     #[serde(rename = "Cores")]
@@ -117,7 +117,7 @@ pub struct CoreDefinitionVersion {
 }
 
 /// <p>Information needed to create a core definition.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateCoreDefinitionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -133,7 +133,7 @@ pub struct CreateCoreDefinitionRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateCoreDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -165,7 +165,7 @@ pub struct CreateCoreDefinitionResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateCoreDefinitionVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -180,7 +180,7 @@ pub struct CreateCoreDefinitionVersionRequest {
     pub cores: Option<Vec<Core>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateCoreDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -200,7 +200,7 @@ pub struct CreateCoreDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDeploymentRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -223,7 +223,7 @@ pub struct CreateDeploymentRequest {
     pub group_version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateDeploymentResponse {
     /// <p>The ARN of the deployment.</p>
     #[serde(rename = "DeploymentArn")]
@@ -235,7 +235,7 @@ pub struct CreateDeploymentResponse {
     pub deployment_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDeviceDefinitionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -251,7 +251,7 @@ pub struct CreateDeviceDefinitionRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateDeviceDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -283,7 +283,7 @@ pub struct CreateDeviceDefinitionResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDeviceDefinitionVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -298,7 +298,7 @@ pub struct CreateDeviceDefinitionVersionRequest {
     pub devices: Option<Vec<Device>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateDeviceDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -318,7 +318,7 @@ pub struct CreateDeviceDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateFunctionDefinitionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -334,7 +334,7 @@ pub struct CreateFunctionDefinitionRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateFunctionDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -367,7 +367,7 @@ pub struct CreateFunctionDefinitionResponse {
 }
 
 /// <p>Information needed to create a function definition version.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateFunctionDefinitionVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -382,7 +382,7 @@ pub struct CreateFunctionDefinitionVersionRequest {
     pub functions: Option<Vec<Function>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateFunctionDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -402,7 +402,7 @@ pub struct CreateFunctionDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateGroupCertificateAuthorityRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -413,7 +413,7 @@ pub struct CreateGroupCertificateAuthorityRequest {
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateGroupCertificateAuthorityResponse {
     /// <p>The ARN of the group certificate authority.</p>
     #[serde(rename = "GroupCertificateAuthorityArn")]
@@ -421,7 +421,7 @@ pub struct CreateGroupCertificateAuthorityResponse {
     pub group_certificate_authority_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateGroupRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -437,7 +437,7 @@ pub struct CreateGroupRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateGroupResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -469,7 +469,7 @@ pub struct CreateGroupResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateGroupVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -504,7 +504,7 @@ pub struct CreateGroupVersionRequest {
     pub subscription_definition_version_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateGroupVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -524,7 +524,7 @@ pub struct CreateGroupVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateLoggerDefinitionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -540,7 +540,7 @@ pub struct CreateLoggerDefinitionRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateLoggerDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -572,7 +572,7 @@ pub struct CreateLoggerDefinitionResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateLoggerDefinitionVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -587,7 +587,7 @@ pub struct CreateLoggerDefinitionVersionRequest {
     pub loggers: Option<Vec<Logger>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateLoggerDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -607,7 +607,7 @@ pub struct CreateLoggerDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateResourceDefinitionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -623,7 +623,7 @@ pub struct CreateResourceDefinitionRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateResourceDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -655,7 +655,7 @@ pub struct CreateResourceDefinitionResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateResourceDefinitionVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -670,7 +670,7 @@ pub struct CreateResourceDefinitionVersionRequest {
     pub resources: Option<Vec<Resource>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateResourceDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -690,7 +690,7 @@ pub struct CreateResourceDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateSoftwareUpdateJobRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -716,7 +716,7 @@ pub struct CreateSoftwareUpdateJobRequest {
     pub update_targets_operating_system: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateSoftwareUpdateJobResponse {
     /// <p>The IoT Job ARN corresponding to this update.</p>
     #[serde(rename = "IotJobArn")]
@@ -728,7 +728,7 @@ pub struct CreateSoftwareUpdateJobResponse {
     pub iot_job_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateSubscriptionDefinitionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -744,7 +744,7 @@ pub struct CreateSubscriptionDefinitionRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateSubscriptionDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -776,7 +776,7 @@ pub struct CreateSubscriptionDefinitionResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateSubscriptionDefinitionVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -791,7 +791,7 @@ pub struct CreateSubscriptionDefinitionVersionRequest {
     pub subscriptions: Option<Vec<Subscription>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateSubscriptionDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -812,7 +812,7 @@ pub struct CreateSubscriptionDefinitionVersionResponse {
 }
 
 /// <p>Information about a definition.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DefinitionInformation {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -844,78 +844,78 @@ pub struct DefinitionInformation {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteCoreDefinitionRequest {
     /// <p>The ID of the core definition.</p>
     #[serde(rename = "CoreDefinitionId")]
     pub core_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteCoreDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDeviceDefinitionRequest {
     /// <p>The ID of the device definition.</p>
     #[serde(rename = "DeviceDefinitionId")]
     pub device_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteDeviceDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteFunctionDefinitionRequest {
     /// <p>The ID of the Lambda function definition.</p>
     #[serde(rename = "FunctionDefinitionId")]
     pub function_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteFunctionDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteGroupRequest {
     /// <p>The ID of the AWS Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteGroupResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteLoggerDefinitionRequest {
     /// <p>The ID of the logger definition.</p>
     #[serde(rename = "LoggerDefinitionId")]
     pub logger_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteLoggerDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteResourceDefinitionRequest {
     /// <p>The ID of the resource definition.</p>
     #[serde(rename = "ResourceDefinitionId")]
     pub resource_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteResourceDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteSubscriptionDefinitionRequest {
     /// <p>The ID of the subscription definition.</p>
     #[serde(rename = "SubscriptionDefinitionId")]
     pub subscription_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteSubscriptionDefinitionResponse {}
 
 /// <p>Information about a deployment.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Deployment {
     /// <p>The time, in milliseconds since the epoch, when the deployment was created.</p>
     #[serde(rename = "CreatedAt")]
@@ -940,7 +940,7 @@ pub struct Deployment {
 }
 
 /// <p>Information about a device.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Device {
     /// <p>The ARN of the certificate associated with the device.</p>
     #[serde(rename = "CertificateArn")]
@@ -961,7 +961,7 @@ pub struct Device {
 }
 
 /// <p>Information about a device definition version.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeviceDefinitionVersion {
     /// <p>A list of devices in the definition version.</p>
     #[serde(rename = "Devices")]
@@ -969,14 +969,14 @@ pub struct DeviceDefinitionVersion {
     pub devices: Option<Vec<Device>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateRoleFromGroupRequest {
     /// <p>The ID of the AWS Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DisassociateRoleFromGroupResponse {
     /// <p>The time, in milliseconds since the epoch, when the role was disassociated from the group.</p>
     #[serde(rename = "DisassociatedAt")]
@@ -984,10 +984,10 @@ pub struct DisassociateRoleFromGroupResponse {
     pub disassociated_at: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateServiceRoleFromAccountRequest {}
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DisassociateServiceRoleFromAccountResponse {
     /// <p>The time when the service role was disassociated from the account.</p>
     #[serde(rename = "DisassociatedAt")]
@@ -996,11 +996,11 @@ pub struct DisassociateServiceRoleFromAccountResponse {
 }
 
 /// <p>Empty</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Empty {}
 
 /// <p>Details about the error.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ErrorDetail {
     /// <p>A detailed error code.</p>
     #[serde(rename = "DetailedErrorCode")]
@@ -1013,7 +1013,7 @@ pub struct ErrorDetail {
 }
 
 /// <p>Information about a Lambda function.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Function {
     /// <p>The ARN of the Lambda function.</p>
     #[serde(rename = "FunctionArn")]
@@ -1030,7 +1030,7 @@ pub struct Function {
 }
 
 /// <p>The configuration of the Lambda function.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FunctionConfiguration {
     /// <p>The expected encoding type of the input payload for the function. The default is &#39;&#39;json&#39;&#39;.</p>
     #[serde(rename = "EncodingType")]
@@ -1063,7 +1063,7 @@ pub struct FunctionConfiguration {
 }
 
 /// <p>The environment configuration of the function.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FunctionConfigurationEnvironment {
     /// <p>If true, the Lambda function is allowed to access the host&#39;s /sys folder. Use this when the Lambda function needs to read device information from /sys.</p>
     #[serde(rename = "AccessSysfs")]
@@ -1080,7 +1080,7 @@ pub struct FunctionConfigurationEnvironment {
 }
 
 /// <p>Information about a function definition version.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FunctionDefinitionVersion {
     /// <p>A list of Lambda functions in this function definition version.</p>
     #[serde(rename = "Functions")]
@@ -1089,7 +1089,7 @@ pub struct FunctionDefinitionVersion {
 }
 
 /// <p>General error information.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GeneralError {
     /// <p>Details about the error.</p>
     pub error_details: Option<Vec<ErrorDetail>>,
@@ -1097,14 +1097,14 @@ pub struct GeneralError {
     pub message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetAssociatedRoleRequest {
     /// <p>The ID of the AWS Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetAssociatedRoleResponse {
     /// <p>The time when the role was associated with the group.</p>
     #[serde(rename = "AssociatedAt")]
@@ -1116,14 +1116,14 @@ pub struct GetAssociatedRoleResponse {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetConnectivityInfoRequest {
     /// <p>The thing name.</p>
     #[serde(rename = "ThingName")]
     pub thing_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetConnectivityInfoResponse {
     /// <p>Connectivity info list.</p>
     #[serde(rename = "ConnectivityInfo")]
@@ -1135,14 +1135,14 @@ pub struct GetConnectivityInfoResponse {
     pub message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetCoreDefinitionRequest {
     /// <p>The ID of the core definition.</p>
     #[serde(rename = "CoreDefinitionId")]
     pub core_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetCoreDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -1174,7 +1174,7 @@ pub struct GetCoreDefinitionResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetCoreDefinitionVersionRequest {
     /// <p>The ID of the core definition.</p>
     #[serde(rename = "CoreDefinitionId")]
@@ -1184,7 +1184,7 @@ pub struct GetCoreDefinitionVersionRequest {
     pub core_definition_version_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetCoreDefinitionVersionResponse {
     /// <p>The ARN of the core definition version.</p>
     #[serde(rename = "Arn")]
@@ -1208,7 +1208,7 @@ pub struct GetCoreDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDeploymentStatusRequest {
     /// <p>The ID of the deployment.</p>
     #[serde(rename = "DeploymentId")]
@@ -1218,7 +1218,7 @@ pub struct GetDeploymentStatusRequest {
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetDeploymentStatusResponse {
     /// <p>The status of the deployment.</p>
     #[serde(rename = "DeploymentStatus")]
@@ -1242,14 +1242,14 @@ pub struct GetDeploymentStatusResponse {
     pub updated_at: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDeviceDefinitionRequest {
     /// <p>The ID of the device definition.</p>
     #[serde(rename = "DeviceDefinitionId")]
     pub device_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetDeviceDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -1281,7 +1281,7 @@ pub struct GetDeviceDefinitionResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDeviceDefinitionVersionRequest {
     /// <p>The ID of the device definition.</p>
     #[serde(rename = "DeviceDefinitionId")]
@@ -1291,7 +1291,7 @@ pub struct GetDeviceDefinitionVersionRequest {
     pub device_definition_version_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetDeviceDefinitionVersionResponse {
     /// <p>The ARN of the device definition version.</p>
     #[serde(rename = "Arn")]
@@ -1315,14 +1315,14 @@ pub struct GetDeviceDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetFunctionDefinitionRequest {
     /// <p>The ID of the Lambda function definition.</p>
     #[serde(rename = "FunctionDefinitionId")]
     pub function_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetFunctionDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -1354,7 +1354,7 @@ pub struct GetFunctionDefinitionResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetFunctionDefinitionVersionRequest {
     /// <p>The ID of the Lambda function definition.</p>
     #[serde(rename = "FunctionDefinitionId")]
@@ -1364,7 +1364,7 @@ pub struct GetFunctionDefinitionVersionRequest {
     pub function_definition_version_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetFunctionDefinitionVersionResponse {
     /// <p>The ARN of the function definition version.</p>
     #[serde(rename = "Arn")]
@@ -1388,7 +1388,7 @@ pub struct GetFunctionDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetGroupCertificateAuthorityRequest {
     /// <p>The ID of the certificate authority.</p>
     #[serde(rename = "CertificateAuthorityId")]
@@ -1398,7 +1398,7 @@ pub struct GetGroupCertificateAuthorityRequest {
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetGroupCertificateAuthorityResponse {
     /// <p>The ARN of the certificate authority for the group.</p>
     #[serde(rename = "GroupCertificateAuthorityArn")]
@@ -1414,14 +1414,14 @@ pub struct GetGroupCertificateAuthorityResponse {
     pub pem_encoded_certificate: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetGroupCertificateConfigurationRequest {
     /// <p>The ID of the AWS Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetGroupCertificateConfigurationResponse {
     /// <p>The amount of time remaining before the certificate authority expires, in milliseconds.</p>
     #[serde(rename = "CertificateAuthorityExpiryInMilliseconds")]
@@ -1437,14 +1437,14 @@ pub struct GetGroupCertificateConfigurationResponse {
     pub group_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetGroupRequest {
     /// <p>The ID of the AWS Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetGroupResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -1476,7 +1476,7 @@ pub struct GetGroupResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetGroupVersionRequest {
     /// <p>The ID of the AWS Greengrass group.</p>
     #[serde(rename = "GroupId")]
@@ -1486,7 +1486,7 @@ pub struct GetGroupVersionRequest {
     pub group_version_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetGroupVersionResponse {
     /// <p>The ARN of the group version.</p>
     #[serde(rename = "Arn")]
@@ -1510,14 +1510,14 @@ pub struct GetGroupVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetLoggerDefinitionRequest {
     /// <p>The ID of the logger definition.</p>
     #[serde(rename = "LoggerDefinitionId")]
     pub logger_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetLoggerDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -1549,7 +1549,7 @@ pub struct GetLoggerDefinitionResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetLoggerDefinitionVersionRequest {
     /// <p>The ID of the logger definition.</p>
     #[serde(rename = "LoggerDefinitionId")]
@@ -1559,7 +1559,7 @@ pub struct GetLoggerDefinitionVersionRequest {
     pub logger_definition_version_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetLoggerDefinitionVersionResponse {
     /// <p>The ARN of the logger definition version.</p>
     #[serde(rename = "Arn")]
@@ -1583,14 +1583,14 @@ pub struct GetLoggerDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetResourceDefinitionRequest {
     /// <p>The ID of the resource definition.</p>
     #[serde(rename = "ResourceDefinitionId")]
     pub resource_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetResourceDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -1622,7 +1622,7 @@ pub struct GetResourceDefinitionResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetResourceDefinitionVersionRequest {
     /// <p>The ID of the resource definition.</p>
     #[serde(rename = "ResourceDefinitionId")]
@@ -1632,7 +1632,7 @@ pub struct GetResourceDefinitionVersionRequest {
     pub resource_definition_version_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetResourceDefinitionVersionResponse {
     /// <p>Arn of the resource definition version.</p>
     #[serde(rename = "Arn")]
@@ -1656,10 +1656,10 @@ pub struct GetResourceDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetServiceRoleForAccountRequest {}
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetServiceRoleForAccountResponse {
     /// <p>The time when the service role was associated with the account.</p>
     #[serde(rename = "AssociatedAt")]
@@ -1671,14 +1671,14 @@ pub struct GetServiceRoleForAccountResponse {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetSubscriptionDefinitionRequest {
     /// <p>The ID of the subscription definition.</p>
     #[serde(rename = "SubscriptionDefinitionId")]
     pub subscription_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetSubscriptionDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -1710,7 +1710,7 @@ pub struct GetSubscriptionDefinitionResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetSubscriptionDefinitionVersionRequest {
     /// <p>The ID of the subscription definition.</p>
     #[serde(rename = "SubscriptionDefinitionId")]
@@ -1720,7 +1720,7 @@ pub struct GetSubscriptionDefinitionVersionRequest {
     pub subscription_definition_version_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetSubscriptionDefinitionVersionResponse {
     /// <p>The ARN of the subscription definition version.</p>
     #[serde(rename = "Arn")]
@@ -1745,7 +1745,7 @@ pub struct GetSubscriptionDefinitionVersionResponse {
 }
 
 /// <p>Information about a certificate authority for a group.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GroupCertificateAuthorityProperties {
     /// <p>The ARN of the certificate authority for the group.</p>
     #[serde(rename = "GroupCertificateAuthorityArn")]
@@ -1758,7 +1758,7 @@ pub struct GroupCertificateAuthorityProperties {
 }
 
 /// <p>Information about a group certificate configuration.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GroupCertificateConfiguration {
     /// <p>The amount of time remaining before the certificate authority expires, in milliseconds.</p>
     pub certificate_authority_expiry_in_milliseconds: Option<String>,
@@ -1769,7 +1769,7 @@ pub struct GroupCertificateConfiguration {
 }
 
 /// <p>Information about a group.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GroupInformation {
     /// <p>The ARN of the group.</p>
     #[serde(rename = "Arn")]
@@ -1802,7 +1802,7 @@ pub struct GroupInformation {
 }
 
 /// <p>Group owner related settings for local resources.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GroupOwnerSetting {
     /// <p>If true, GreenGrass automatically adds the specified Linux OS group owner of the resource to the Lambda process privileges. Thus the Lambda process will have the file access permissions of the added Linux group.</p>
     #[serde(rename = "AutoAddGroupOwner")]
@@ -1815,7 +1815,7 @@ pub struct GroupOwnerSetting {
 }
 
 /// <p>Information about a group version.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GroupVersion {
     /// <p>The ARN of the core definition version for this group.</p>
     #[serde(rename = "CoreDefinitionVersionArn")]
@@ -1843,7 +1843,7 @@ pub struct GroupVersion {
     pub subscription_definition_version_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListCoreDefinitionVersionsRequest {
     /// <p>The ID of the core definition.</p>
     #[serde(rename = "CoreDefinitionId")]
@@ -1858,7 +1858,7 @@ pub struct ListCoreDefinitionVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListCoreDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -1870,7 +1870,7 @@ pub struct ListCoreDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListCoreDefinitionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "MaxResults")]
@@ -1882,7 +1882,7 @@ pub struct ListCoreDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListCoreDefinitionsResponse {
     /// <p>Information about a definition.</p>
     #[serde(rename = "Definitions")]
@@ -1895,7 +1895,7 @@ pub struct ListCoreDefinitionsResponse {
 }
 
 /// <p>A list of definitions.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListDefinitionsResponse {
     /// <p>Information about a definition.</p>
     pub definitions: Option<Vec<DefinitionInformation>>,
@@ -1903,7 +1903,7 @@ pub struct ListDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListDeploymentsRequest {
     /// <p>The ID of the AWS Greengrass group.</p>
     #[serde(rename = "GroupId")]
@@ -1918,7 +1918,7 @@ pub struct ListDeploymentsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListDeploymentsResponse {
     /// <p>A list of deployments for the requested groups.</p>
     #[serde(rename = "Deployments")]
@@ -1930,7 +1930,7 @@ pub struct ListDeploymentsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListDeviceDefinitionVersionsRequest {
     /// <p>The ID of the device definition.</p>
     #[serde(rename = "DeviceDefinitionId")]
@@ -1945,7 +1945,7 @@ pub struct ListDeviceDefinitionVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListDeviceDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -1957,7 +1957,7 @@ pub struct ListDeviceDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListDeviceDefinitionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "MaxResults")]
@@ -1969,7 +1969,7 @@ pub struct ListDeviceDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListDeviceDefinitionsResponse {
     /// <p>Information about a definition.</p>
     #[serde(rename = "Definitions")]
@@ -1981,7 +1981,7 @@ pub struct ListDeviceDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListFunctionDefinitionVersionsRequest {
     /// <p>The ID of the Lambda function definition.</p>
     #[serde(rename = "FunctionDefinitionId")]
@@ -1996,7 +1996,7 @@ pub struct ListFunctionDefinitionVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListFunctionDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -2008,7 +2008,7 @@ pub struct ListFunctionDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListFunctionDefinitionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "MaxResults")]
@@ -2020,7 +2020,7 @@ pub struct ListFunctionDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListFunctionDefinitionsResponse {
     /// <p>Information about a definition.</p>
     #[serde(rename = "Definitions")]
@@ -2032,14 +2032,14 @@ pub struct ListFunctionDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListGroupCertificateAuthoritiesRequest {
     /// <p>The ID of the AWS Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListGroupCertificateAuthoritiesResponse {
     /// <p>A list of certificate authorities associated with the group.</p>
     #[serde(rename = "GroupCertificateAuthorities")]
@@ -2047,7 +2047,7 @@ pub struct ListGroupCertificateAuthoritiesResponse {
     pub group_certificate_authorities: Option<Vec<GroupCertificateAuthorityProperties>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListGroupVersionsRequest {
     /// <p>The ID of the AWS Greengrass group.</p>
     #[serde(rename = "GroupId")]
@@ -2062,7 +2062,7 @@ pub struct ListGroupVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListGroupVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -2074,7 +2074,7 @@ pub struct ListGroupVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListGroupsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "MaxResults")]
@@ -2086,7 +2086,7 @@ pub struct ListGroupsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListGroupsResponse {
     /// <p>Information about a group.</p>
     #[serde(rename = "Groups")]
@@ -2098,7 +2098,7 @@ pub struct ListGroupsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListLoggerDefinitionVersionsRequest {
     /// <p>The ID of the logger definition.</p>
     #[serde(rename = "LoggerDefinitionId")]
@@ -2113,7 +2113,7 @@ pub struct ListLoggerDefinitionVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListLoggerDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -2125,7 +2125,7 @@ pub struct ListLoggerDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListLoggerDefinitionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "MaxResults")]
@@ -2137,7 +2137,7 @@ pub struct ListLoggerDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListLoggerDefinitionsResponse {
     /// <p>Information about a definition.</p>
     #[serde(rename = "Definitions")]
@@ -2149,7 +2149,7 @@ pub struct ListLoggerDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListResourceDefinitionVersionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "MaxResults")]
@@ -2164,7 +2164,7 @@ pub struct ListResourceDefinitionVersionsRequest {
     pub resource_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListResourceDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -2176,7 +2176,7 @@ pub struct ListResourceDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListResourceDefinitionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "MaxResults")]
@@ -2188,7 +2188,7 @@ pub struct ListResourceDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListResourceDefinitionsResponse {
     /// <p>Information about a definition.</p>
     #[serde(rename = "Definitions")]
@@ -2200,7 +2200,7 @@ pub struct ListResourceDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListSubscriptionDefinitionVersionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "MaxResults")]
@@ -2215,7 +2215,7 @@ pub struct ListSubscriptionDefinitionVersionsRequest {
     pub subscription_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListSubscriptionDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -2227,7 +2227,7 @@ pub struct ListSubscriptionDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListSubscriptionDefinitionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "MaxResults")]
@@ -2239,7 +2239,7 @@ pub struct ListSubscriptionDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListSubscriptionDefinitionsResponse {
     /// <p>Information about a definition.</p>
     #[serde(rename = "Definitions")]
@@ -2252,7 +2252,7 @@ pub struct ListSubscriptionDefinitionsResponse {
 }
 
 /// <p>A list of versions.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     pub next_token: Option<String>,
@@ -2261,7 +2261,7 @@ pub struct ListVersionsResponse {
 }
 
 /// <p>Attributes that define a local device resource.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LocalDeviceResourceData {
     /// <p>Group/owner related settings for local resources.</p>
     #[serde(rename = "GroupOwnerSetting")]
@@ -2274,7 +2274,7 @@ pub struct LocalDeviceResourceData {
 }
 
 /// <p>Attributes that define a local volume resource.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LocalVolumeResourceData {
     /// <p>The absolute local path of the resource inside the lambda environment.</p>
     #[serde(rename = "DestinationPath")]
@@ -2291,7 +2291,7 @@ pub struct LocalVolumeResourceData {
 }
 
 /// <p>Information about a logger</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Logger {
     /// <p>The component that will be subject to logging.</p>
     #[serde(rename = "Component")]
@@ -2316,7 +2316,7 @@ pub struct Logger {
 }
 
 /// <p>Information about a logger definition version.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoggerDefinitionVersion {
     /// <p>A list of loggers.</p>
     #[serde(rename = "Loggers")]
@@ -2325,7 +2325,7 @@ pub struct LoggerDefinitionVersion {
 }
 
 /// <p>Information needed to reset deployments.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ResetDeploymentsRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -2340,7 +2340,7 @@ pub struct ResetDeploymentsRequest {
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ResetDeploymentsResponse {
     /// <p>The ARN of the deployment.</p>
     #[serde(rename = "DeploymentArn")]
@@ -2353,7 +2353,7 @@ pub struct ResetDeploymentsResponse {
 }
 
 /// <p>Information about a resource.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Resource {
     /// <p>The resource ID, used to refer to a resource in the Lambda function configuration. Max length is 128 characters with pattern &#39;&#39;[a-zA-Z0-9:_-]+&#39;&#39;. This must be unique within a Greengrass group.</p>
     #[serde(rename = "Id")]
@@ -2370,7 +2370,7 @@ pub struct Resource {
 }
 
 /// <p>A policy used by the function to access a resource.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResourceAccessPolicy {
     /// <p>The permissions that the Lambda function has to the resource. Can be one of &#39;&#39;rw&#39;&#39; (read/write) or &#39;&#39;ro&#39;&#39; (read-only).</p>
     #[serde(rename = "Permission")]
@@ -2383,7 +2383,7 @@ pub struct ResourceAccessPolicy {
 }
 
 /// <p>A container for resource data. The container takes only one of the following supported resource data types: &#39;&#39;LocalDeviceResourceData&#39;&#39;, &#39;&#39;LocalVolumeResourceData&#39;&#39;, &#39;&#39;SageMakerMachineLearningModelResourceData&#39;&#39;, &#39;&#39;S3MachineLearningModelResourceData&#39;&#39;.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResourceDataContainer {
     /// <p>Attributes that define the local device resource.</p>
     #[serde(rename = "LocalDeviceResourceData")]
@@ -2405,7 +2405,7 @@ pub struct ResourceDataContainer {
 }
 
 /// <p>Information about a resource definition version.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResourceDefinitionVersion {
     /// <p>A list of resources.</p>
     #[serde(rename = "Resources")]
@@ -2414,7 +2414,7 @@ pub struct ResourceDefinitionVersion {
 }
 
 /// <p>Attributes that define an S3 machine learning resource.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3MachineLearningModelResourceData {
     /// <p>The absolute local path of the resource inside the Lambda environment.</p>
     #[serde(rename = "DestinationPath")]
@@ -2427,7 +2427,7 @@ pub struct S3MachineLearningModelResourceData {
 }
 
 /// <p>Attributes that define an SageMaker machine learning resource.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SageMakerMachineLearningModelResourceData {
     /// <p>The absolute local path of the resource inside the Lambda environment.</p>
     #[serde(rename = "DestinationPath")]
@@ -2440,7 +2440,7 @@ pub struct SageMakerMachineLearningModelResourceData {
 }
 
 /// <p>Information about a subscription.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Subscription {
     /// <p>The id of the subscription.</p>
     #[serde(rename = "Id")]
@@ -2461,7 +2461,7 @@ pub struct Subscription {
 }
 
 /// <p>Information about a subscription definition version.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SubscriptionDefinitionVersion {
     /// <p>A list of subscriptions.</p>
     #[serde(rename = "Subscriptions")]
@@ -2470,7 +2470,7 @@ pub struct SubscriptionDefinitionVersion {
 }
 
 /// <p>Connectivity information.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateConnectivityInfoRequest {
     /// <p>A list of connectivity info.</p>
     #[serde(rename = "ConnectivityInfo")]
@@ -2481,7 +2481,7 @@ pub struct UpdateConnectivityInfoRequest {
     pub thing_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateConnectivityInfoResponse {
     /// <p>A message about the connectivity info update request.</p>
     #[serde(rename = "Message")]
@@ -2493,7 +2493,7 @@ pub struct UpdateConnectivityInfoResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateCoreDefinitionRequest {
     /// <p>The ID of the core definition.</p>
     #[serde(rename = "CoreDefinitionId")]
@@ -2504,10 +2504,10 @@ pub struct UpdateCoreDefinitionRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateCoreDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDeviceDefinitionRequest {
     /// <p>The ID of the device definition.</p>
     #[serde(rename = "DeviceDefinitionId")]
@@ -2518,10 +2518,10 @@ pub struct UpdateDeviceDefinitionRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateDeviceDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateFunctionDefinitionRequest {
     /// <p>The ID of the Lambda function definition.</p>
     #[serde(rename = "FunctionDefinitionId")]
@@ -2532,10 +2532,10 @@ pub struct UpdateFunctionDefinitionRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateFunctionDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateGroupCertificateConfigurationRequest {
     /// <p>The amount of time remaining before the certificate expires, in milliseconds.</p>
     #[serde(rename = "CertificateExpiryInMilliseconds")]
@@ -2546,7 +2546,7 @@ pub struct UpdateGroupCertificateConfigurationRequest {
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateGroupCertificateConfigurationResponse {
     /// <p>The amount of time remaining before the certificate authority expires, in milliseconds.</p>
     #[serde(rename = "CertificateAuthorityExpiryInMilliseconds")]
@@ -2562,7 +2562,7 @@ pub struct UpdateGroupCertificateConfigurationResponse {
     pub group_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateGroupRequest {
     /// <p>The ID of the AWS Greengrass group.</p>
     #[serde(rename = "GroupId")]
@@ -2573,10 +2573,10 @@ pub struct UpdateGroupRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateGroupResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateLoggerDefinitionRequest {
     /// <p>The ID of the logger definition.</p>
     #[serde(rename = "LoggerDefinitionId")]
@@ -2587,10 +2587,10 @@ pub struct UpdateLoggerDefinitionRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateLoggerDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateResourceDefinitionRequest {
     /// <p>The name of the definition.</p>
     #[serde(rename = "Name")]
@@ -2601,10 +2601,10 @@ pub struct UpdateResourceDefinitionRequest {
     pub resource_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateResourceDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateSubscriptionDefinitionRequest {
     /// <p>The name of the definition.</p>
     #[serde(rename = "Name")]
@@ -2615,11 +2615,11 @@ pub struct UpdateSubscriptionDefinitionRequest {
     pub subscription_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateSubscriptionDefinitionResponse {}
 
 /// <p>Information about a version.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct VersionInformation {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]

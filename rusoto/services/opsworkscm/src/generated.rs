@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Stores account attributes. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AccountAttribute {
     /// <p> The maximum allowed value. </p>
     #[serde(rename = "Maximum")]
@@ -47,7 +47,7 @@ pub struct AccountAttribute {
     pub used: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateNodeRequest {
     /// <p><p>Engine attributes used for associating the node. </p> <p class="title"> <b>Attributes accepted in a AssociateNode request for Chef</b> </p> <ul> <li> <p> <code>CHEF<em>ORGANIZATION</code>: The Chef organization with which the node is associated. By default only one organization named <code>default</code> can exist. </p> </li> <li> <p> <code>CHEF</em>NODE<em>PUBLIC</em>KEY</code>: A PEM-formatted public key. This key is required for the <code>chef-client</code> agent to access the Chef API. </p> </li> </ul> <p class="title"> <b>Attributes accepted in a AssociateNode request for Puppet</b> </p> <ul> <li> <p> <code>PUPPET<em>NODE</em>CSR</code>: A PEM-formatted certificate-signing request (CSR) that is created by the node. </p> </li> </ul></p>
     #[serde(rename = "EngineAttributes")]
@@ -60,7 +60,7 @@ pub struct AssociateNodeRequest {
     pub server_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AssociateNodeResponse {
     /// <p>Contains a token which can be passed to the <code>DescribeNodeAssociationStatus</code> API call to get the status of the association request. </p>
     #[serde(rename = "NodeAssociationStatusToken")]
@@ -69,7 +69,7 @@ pub struct AssociateNodeResponse {
 }
 
 /// <p>Describes a single backup. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Backup {
     /// <p>The ARN of the backup. </p>
     #[serde(rename = "BackupArn")]
@@ -161,7 +161,7 @@ pub struct Backup {
     pub user_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateBackupRequest {
     /// <p> A user-defined description of the backup. </p>
     #[serde(rename = "Description")]
@@ -172,7 +172,7 @@ pub struct CreateBackupRequest {
     pub server_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateBackupResponse {
     /// <p>Backup created by request.</p>
     #[serde(rename = "Backup")]
@@ -180,7 +180,7 @@ pub struct CreateBackupResponse {
     pub backup: Option<Backup>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateServerRequest {
     /// <p> Associate a public IP address with a server that you are launching. Valid values are <code>true</code> or <code>false</code>. The default value is <code>true</code>. </p>
     #[serde(rename = "AssociatePublicIpAddress")]
@@ -248,7 +248,7 @@ pub struct CreateServerRequest {
     pub subnet_ids: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateServerResponse {
     /// <p>The server that is created by the request. </p>
     #[serde(rename = "Server")]
@@ -256,30 +256,30 @@ pub struct CreateServerResponse {
     pub server: Option<Server>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteBackupRequest {
     /// <p>The ID of the backup to delete. Run the DescribeBackups command to get a list of backup IDs. Backup IDs are in the format <code>ServerName-yyyyMMddHHmmssSSS</code>. </p>
     #[serde(rename = "BackupId")]
     pub backup_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteBackupResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteServerRequest {
     /// <p>The ID of the server to delete.</p>
     #[serde(rename = "ServerName")]
     pub server_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteServerResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeAccountAttributesRequest {}
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeAccountAttributesResponse {
     /// <p> The attributes that are currently set for the account. </p>
     #[serde(rename = "Attributes")]
@@ -287,7 +287,7 @@ pub struct DescribeAccountAttributesResponse {
     pub attributes: Option<Vec<AccountAttribute>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeBackupsRequest {
     /// <p>Describes a single backup. </p>
     #[serde(rename = "BackupId")]
@@ -307,7 +307,7 @@ pub struct DescribeBackupsRequest {
     pub server_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeBackupsResponse {
     /// <p>Contains the response to a <code>DescribeBackups</code> request. </p>
     #[serde(rename = "Backups")]
@@ -319,7 +319,7 @@ pub struct DescribeBackupsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeEventsRequest {
     /// <p>To receive a paginated response, use this parameter to specify the maximum number of results to be returned with a single call. If the number of available results exceeds this maximum, the response includes a <code>NextToken</code> value that you can assign to the <code>NextToken</code> request parameter to get the next set of results. </p>
     #[serde(rename = "MaxResults")]
@@ -334,7 +334,7 @@ pub struct DescribeEventsRequest {
     pub server_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeEventsResponse {
     /// <p>NextToken is a string that is returned in some command responses. It indicates that not all entries have been returned, and that you must run at least one more request to get remaining items. To get remaining results, call <code>DescribeEvents</code> again, and assign the token from the previous results as the value of the <code>nextToken</code> parameter. If there are no more results, the response object's <code>nextToken</code> parameter value is <code>null</code>. Setting a <code>nextToken</code> value that was not returned in your previous results causes an <code>InvalidNextTokenException</code> to occur. </p>
     #[serde(rename = "NextToken")]
@@ -346,7 +346,7 @@ pub struct DescribeEventsResponse {
     pub server_events: Option<Vec<ServerEvent>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeNodeAssociationStatusRequest {
     /// <p>The token returned in either the AssociateNodeResponse or the DisassociateNodeResponse. </p>
     #[serde(rename = "NodeAssociationStatusToken")]
@@ -356,7 +356,7 @@ pub struct DescribeNodeAssociationStatusRequest {
     pub server_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeNodeAssociationStatusResponse {
     /// <p>Attributes specific to the node association. In Puppet, the attibute PUPPET_NODE_CERT contains the signed certificate (the result of the CSR). </p>
     #[serde(rename = "EngineAttributes")]
@@ -368,7 +368,7 @@ pub struct DescribeNodeAssociationStatusResponse {
     pub node_association_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeServersRequest {
     /// <p>To receive a paginated response, use this parameter to specify the maximum number of results to be returned with a single call. If the number of available results exceeds this maximum, the response includes a <code>NextToken</code> value that you can assign to the <code>NextToken</code> request parameter to get the next set of results. </p>
     #[serde(rename = "MaxResults")]
@@ -384,7 +384,7 @@ pub struct DescribeServersRequest {
     pub server_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeServersResponse {
     /// <p>NextToken is a string that is returned in some command responses. It indicates that not all entries have been returned, and that you must run at least one more request to get remaining items. To get remaining results, call <code>DescribeServers</code> again, and assign the token from the previous results as the value of the <code>nextToken</code> parameter. If there are no more results, the response object's <code>nextToken</code> parameter value is <code>null</code>. Setting a <code>nextToken</code> value that was not returned in your previous results causes an <code>InvalidNextTokenException</code> to occur. </p>
     #[serde(rename = "NextToken")]
@@ -396,7 +396,7 @@ pub struct DescribeServersResponse {
     pub servers: Option<Vec<Server>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateNodeRequest {
     /// <p><p>Engine attributes that are used for disassociating the node. No attributes are required for Puppet. </p> <p class="title"> <b>Attributes required in a DisassociateNode request for Chef</b> </p> <ul> <li> <p> <code>CHEF_ORGANIZATION</code>: The Chef organization with which the node was associated. By default only one organization named <code>default</code> can exist. </p> </li> </ul></p>
     #[serde(rename = "EngineAttributes")]
@@ -410,7 +410,7 @@ pub struct DisassociateNodeRequest {
     pub server_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DisassociateNodeResponse {
     /// <p>Contains a token which can be passed to the <code>DescribeNodeAssociationStatus</code> API call to get the status of the disassociation request. </p>
     #[serde(rename = "NodeAssociationStatusToken")]
@@ -419,7 +419,7 @@ pub struct DisassociateNodeResponse {
 }
 
 /// <p>A name and value pair that is specific to the engine of the server. </p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EngineAttribute {
     /// <p>The name of the engine attribute. </p>
     #[serde(rename = "Name")]
@@ -431,7 +431,7 @@ pub struct EngineAttribute {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RestoreServerRequest {
     /// <p> The ID of the backup that you want to use to restore a server. </p>
     #[serde(rename = "BackupId")]
@@ -449,11 +449,11 @@ pub struct RestoreServerRequest {
     pub server_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RestoreServerResponse {}
 
 /// <p>Describes a configuration management server. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Server {
     /// <p>Associate a public IP address with a server that you are launching. </p>
     #[serde(rename = "AssociatePublicIpAddress")]
@@ -550,7 +550,7 @@ pub struct Server {
 }
 
 /// <p>An event that is related to the server, such as the start of maintenance or backup. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ServerEvent {
     /// <p>The time when the event occurred. </p>
     #[serde(rename = "CreatedAt")]
@@ -570,7 +570,7 @@ pub struct ServerEvent {
     pub server_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartMaintenanceRequest {
     /// <p>Engine attributes that are specific to the server on which you want to run maintenance. </p>
     #[serde(rename = "EngineAttributes")]
@@ -581,7 +581,7 @@ pub struct StartMaintenanceRequest {
     pub server_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StartMaintenanceResponse {
     /// <p>Contains the response to a <code>StartMaintenance</code> request. </p>
     #[serde(rename = "Server")]
@@ -589,7 +589,7 @@ pub struct StartMaintenanceResponse {
     pub server: Option<Server>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateServerEngineAttributesRequest {
     /// <p>The name of the engine attribute to update. </p>
     #[serde(rename = "AttributeName")]
@@ -603,7 +603,7 @@ pub struct UpdateServerEngineAttributesRequest {
     pub server_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateServerEngineAttributesResponse {
     /// <p>Contains the response to an <code>UpdateServerEngineAttributes</code> request. </p>
     #[serde(rename = "Server")]
@@ -611,7 +611,7 @@ pub struct UpdateServerEngineAttributesResponse {
     pub server: Option<Server>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateServerRequest {
     /// <p>Sets the number of automated backups that you want to keep. </p>
     #[serde(rename = "BackupRetentionCount")]
@@ -632,7 +632,7 @@ pub struct UpdateServerRequest {
     pub server_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateServerResponse {
     /// <p>Contains the response to a <code>UpdateServer</code> request. </p>
     #[serde(rename = "Server")]

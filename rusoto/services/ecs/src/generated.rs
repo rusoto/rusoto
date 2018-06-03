@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>An object representing a container instance or task attachment.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Attachment {
     /// <p>Details of the attachment. For Elastic Network Interfaces, this includes the network interface ID, the MAC address, the subnet ID, and the private IPv4 address.</p>
     #[serde(rename = "details")]
@@ -52,7 +52,7 @@ pub struct Attachment {
 }
 
 /// <p>An object representing a change in state for a task attachment.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AttachmentStateChange {
     /// <p>The Amazon Resource Name (ARN) of the attachment.</p>
     #[serde(rename = "attachmentArn")]
@@ -63,7 +63,7 @@ pub struct AttachmentStateChange {
 }
 
 /// <p>An attribute is a name-value pair associated with an Amazon ECS object. Attributes enable you to extend the Amazon ECS data model by adding custom metadata to your resources. For more information, see <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-constraints.html#attributes">Attributes</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Attribute {
     /// <p>The name of the attribute. Up to 128 letters (uppercase and lowercase), numbers, hyphens, underscores, and periods are allowed.</p>
     #[serde(rename = "name")]
@@ -83,7 +83,7 @@ pub struct Attribute {
 }
 
 /// <p>An object representing the networking details for a task or service.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AwsVpcConfiguration {
     /// <p>Whether the task's elastic network interface receives a public IP address.</p>
     #[serde(rename = "assignPublicIp")]
@@ -99,7 +99,7 @@ pub struct AwsVpcConfiguration {
 }
 
 /// <p>A regional grouping of one or more container instances on which you can run task requests. Each account receives a default cluster the first time you use the Amazon ECS service, but you may also create other clusters. Clusters may contain more than one instance type simultaneously.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Cluster {
     /// <p>The number of services that are running on the cluster in an <code>ACTIVE</code> state. You can view these services with <a>ListServices</a>.</p>
     #[serde(rename = "activeServicesCount")]
@@ -136,7 +136,7 @@ pub struct Cluster {
 }
 
 /// <p>A Docker container that is part of a task.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Container {
     /// <p>The Amazon Resource Name (ARN) of the container.</p>
     #[serde(rename = "containerArn")]
@@ -177,7 +177,7 @@ pub struct Container {
 }
 
 /// <p>Container definitions are used in task definitions to describe the different containers that are launched as part of a task.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContainerDefinition {
     /// <p>The command that is passed to the container. This parameter maps to <code>Cmd</code> in the <a href="https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container">Create a container</a> section of the <a href="https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/">Docker Remote API</a> and the <code>COMMAND</code> parameter to <a href="https://docs.docker.com/engine/reference/run/">docker run</a>. For more information, see <a href="https://docs.docker.com/engine/reference/builder/#cmd">https://docs.docker.com/engine/reference/builder/#cmd</a>.</p>
     #[serde(rename = "command")]
@@ -294,7 +294,7 @@ pub struct ContainerDefinition {
 }
 
 /// <p>An EC2 instance that is running the Amazon ECS agent and has been registered with a cluster.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ContainerInstance {
     /// <p>This parameter returns <code>true</code> if the agent is connected to Amazon ECS. Registered instances with an agent that may be unhealthy or stopped return <code>false</code>. Instances without a connected agent can't accept placement requests.</p>
     #[serde(rename = "agentConnected")]
@@ -355,7 +355,7 @@ pub struct ContainerInstance {
 }
 
 /// <p>The overrides that should be sent to a container.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContainerOverride {
     /// <p>The command to send to the container that overrides the default command from the Docker image or the task definition. You must also specify a container name.</p>
     #[serde(rename = "command")]
@@ -384,7 +384,7 @@ pub struct ContainerOverride {
 }
 
 /// <p>An object representing a change in state for a container.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ContainerStateChange {
     /// <p>The name of the container.</p>
     #[serde(rename = "containerName")]
@@ -408,7 +408,7 @@ pub struct ContainerStateChange {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateClusterRequest {
     /// <p>The name of your cluster. If you do not specify a name for your cluster, you create a cluster named <code>default</code>. Up to 255 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed.</p>
     #[serde(rename = "clusterName")]
@@ -416,7 +416,7 @@ pub struct CreateClusterRequest {
     pub cluster_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateClusterResponse {
     /// <p>The full description of your new cluster.</p>
     #[serde(rename = "cluster")]
@@ -424,7 +424,7 @@ pub struct CreateClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateServiceRequest {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. Up to 32 ASCII characters are allowed.</p>
     #[serde(rename = "clientToken")]
@@ -485,7 +485,7 @@ pub struct CreateServiceRequest {
     pub task_definition: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateServiceResponse {
     /// <p>The full description of your service following the create call.</p>
     #[serde(rename = "service")]
@@ -493,7 +493,7 @@ pub struct CreateServiceResponse {
     pub service: Option<Service>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteAttributesRequest {
     /// <p>The attributes to delete from your resource. You can specify up to 10 attributes per request. For custom attributes, specify the attribute name and target ID, but do not specify the value. If you specify the target ID using the short form, you must also specify the target type.</p>
     #[serde(rename = "attributes")]
@@ -504,7 +504,7 @@ pub struct DeleteAttributesRequest {
     pub cluster: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteAttributesResponse {
     /// <p>A list of attribute objects that were successfully deleted from your resource.</p>
     #[serde(rename = "attributes")]
@@ -512,14 +512,14 @@ pub struct DeleteAttributesResponse {
     pub attributes: Option<Vec<Attribute>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteClusterRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster to delete.</p>
     #[serde(rename = "cluster")]
     pub cluster: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteClusterResponse {
     /// <p>The full description of the deleted cluster.</p>
     #[serde(rename = "cluster")]
@@ -527,7 +527,7 @@ pub struct DeleteClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteServiceRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the service to delete. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -538,7 +538,7 @@ pub struct DeleteServiceRequest {
     pub service: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteServiceResponse {
     /// <p>The full description of the deleted service.</p>
     #[serde(rename = "service")]
@@ -547,7 +547,7 @@ pub struct DeleteServiceResponse {
 }
 
 /// <p>The details of an Amazon ECS service deployment.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Deployment {
     /// <p>The Unix time stamp for when the service was created.</p>
     #[serde(rename = "createdAt")]
@@ -596,7 +596,7 @@ pub struct Deployment {
 }
 
 /// <p>Optional deployment parameters that control how many tasks run during the deployment and the ordering of stopping and starting tasks.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeploymentConfiguration {
     /// <p>The upper limit (as a percentage of the service's <code>desiredCount</code>) of the number of tasks that are allowed in the <code>RUNNING</code> or <code>PENDING</code> state in a service during a deployment. The maximum number of tasks during a deployment is the <code>desiredCount</code> multiplied by <code>maximumPercent</code>/100, rounded down to the nearest integer value.</p>
     #[serde(rename = "maximumPercent")]
@@ -608,7 +608,7 @@ pub struct DeploymentConfiguration {
     pub minimum_healthy_percent: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeregisterContainerInstanceRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the container instance to deregister. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -623,7 +623,7 @@ pub struct DeregisterContainerInstanceRequest {
     pub force: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeregisterContainerInstanceResponse {
     /// <p>The container instance that was deregistered.</p>
     #[serde(rename = "containerInstance")]
@@ -631,14 +631,14 @@ pub struct DeregisterContainerInstanceResponse {
     pub container_instance: Option<ContainerInstance>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeregisterTaskDefinitionRequest {
     /// <p>The <code>family</code> and <code>revision</code> (<code>family:revision</code>) or full Amazon Resource Name (ARN) of the task definition to deregister. You must specify a <code>revision</code>.</p>
     #[serde(rename = "taskDefinition")]
     pub task_definition: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeregisterTaskDefinitionResponse {
     /// <p>The full description of the deregistered task.</p>
     #[serde(rename = "taskDefinition")]
@@ -646,7 +646,7 @@ pub struct DeregisterTaskDefinitionResponse {
     pub task_definition: Option<TaskDefinition>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeClustersRequest {
     /// <p>A list of up to 100 cluster names or full cluster Amazon Resource Name (ARN) entries. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "clusters")]
@@ -658,7 +658,7 @@ pub struct DescribeClustersRequest {
     pub include: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeClustersResponse {
     /// <p>The list of clusters.</p>
     #[serde(rename = "clusters")]
@@ -670,7 +670,7 @@ pub struct DescribeClustersResponse {
     pub failures: Option<Vec<Failure>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeContainerInstancesRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the container instances to describe. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -681,7 +681,7 @@ pub struct DescribeContainerInstancesRequest {
     pub container_instances: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeContainerInstancesResponse {
     /// <p>The list of container instances.</p>
     #[serde(rename = "containerInstances")]
@@ -693,7 +693,7 @@ pub struct DescribeContainerInstancesResponse {
     pub failures: Option<Vec<Failure>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeServicesRequest {
     /// <p>The short name or full Amazon Resource Name (ARN)the cluster that hosts the service to describe. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -704,7 +704,7 @@ pub struct DescribeServicesRequest {
     pub services: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeServicesResponse {
     /// <p>Any failures associated with the call.</p>
     #[serde(rename = "failures")]
@@ -716,14 +716,14 @@ pub struct DescribeServicesResponse {
     pub services: Option<Vec<Service>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeTaskDefinitionRequest {
     /// <p>The <code>family</code> for the latest <code>ACTIVE</code> revision, <code>family</code> and <code>revision</code> (<code>family:revision</code>) for a specific revision in the family, or full Amazon Resource Name (ARN) of the task definition to describe.</p>
     #[serde(rename = "taskDefinition")]
     pub task_definition: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeTaskDefinitionResponse {
     /// <p>The full task definition description.</p>
     #[serde(rename = "taskDefinition")]
@@ -731,7 +731,7 @@ pub struct DescribeTaskDefinitionResponse {
     pub task_definition: Option<TaskDefinition>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeTasksRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the task to describe. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -742,7 +742,7 @@ pub struct DescribeTasksRequest {
     pub tasks: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeTasksResponse {
     /// <p>Any failures associated with the call.</p>
     #[serde(rename = "failures")]
@@ -755,7 +755,7 @@ pub struct DescribeTasksResponse {
 }
 
 /// <p>An object representing a container instance host device.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Device {
     /// <p>The path inside the container at which to expose the host device.</p>
     #[serde(rename = "containerPath")]
@@ -770,7 +770,7 @@ pub struct Device {
     pub permissions: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DiscoverPollEndpointRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that the container instance belongs to.</p>
     #[serde(rename = "cluster")]
@@ -782,7 +782,7 @@ pub struct DiscoverPollEndpointRequest {
     pub container_instance: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DiscoverPollEndpointResponse {
     /// <p>The endpoint for the Amazon ECS agent to poll.</p>
     #[serde(rename = "endpoint")]
@@ -795,7 +795,7 @@ pub struct DiscoverPollEndpointResponse {
 }
 
 /// <p>A failed resource.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Failure {
     /// <p>The Amazon Resource Name (ARN) of the failed resource.</p>
     #[serde(rename = "arn")]
@@ -808,7 +808,7 @@ pub struct Failure {
 }
 
 /// <p>An object representing a container health check. Health check parameters that are specified in a container definition override any Docker health checks that exist in the container image (such as those specified in a parent image or from the image's Dockerfile).</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HealthCheck {
     /// <p>A string array representing the command that the container runs to determine if it is healthy. The string array must start with <code>CMD</code> to execute the command arguments directly, or <code>CMD-SHELL</code> to run the command with the container's default shell. For example:</p> <p> <code>[ "CMD-SHELL", "curl -f http://localhost/ || exit 1" ]</code> </p> <p>An exit code of 0 indicates success, and non-zero exit code indicates failure. For more information, see <code>HealthCheck</code> in the <a href="https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container">Create a container</a> section of the <a href="https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/">Docker Remote API</a>.</p>
     #[serde(rename = "command")]
@@ -832,7 +832,7 @@ pub struct HealthCheck {
 }
 
 /// <p>Hostnames and IP address entries that are added to the <code>/etc/hosts</code> file of a container via the <code>extraHosts</code> parameter of its <a>ContainerDefinition</a>. </p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HostEntry {
     /// <p>The hostname to use in the <code>/etc/hosts</code> entry.</p>
     #[serde(rename = "hostname")]
@@ -843,7 +843,7 @@ pub struct HostEntry {
 }
 
 /// <p>Details on a container instance host volume.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HostVolumeProperties {
     /// <p>The path on the host container instance that is presented to the container. If this parameter is empty, then the Docker daemon has assigned a host path for you. If the <code>host</code> parameter contains a <code>sourcePath</code> file location, then the data volume persists at the specified location on the host container instance until you delete it manually. If the <code>sourcePath</code> value does not exist on the host container instance, the Docker daemon creates it. If the location does exist, the contents of the source path folder are exported.</p> <p>If you are using the Fargate launch type, the <code>sourcePath</code> parameter is not supported.</p>
     #[serde(rename = "sourcePath")]
@@ -852,7 +852,7 @@ pub struct HostVolumeProperties {
 }
 
 /// <p>The Linux capabilities for the container that are added to or dropped from the default configuration provided by Docker. For more information on the default capabilities and the non-default available capabilities, see <a href="https://docs.docker.com/engine/reference/run/#runtime-privilege-and-linux-capabilities">Runtime privilege and Linux capabilities</a> in the <i>Docker run reference</i>. For more detailed information on these Linux capabilities, see the <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">capabilities(7)</a> Linux manual page.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KernelCapabilities {
     /// <p>The Linux capabilities for the container that have been added to the default configuration provided by Docker. This parameter maps to <code>CapAdd</code> in the <a href="https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container">Create a container</a> section of the <a href="https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/">Docker Remote API</a> and the <code>--cap-add</code> option to <a href="https://docs.docker.com/engine/reference/run/">docker run</a>.</p> <note> <p>If you are using tasks that use the Fargate launch type, the <code>add</code> parameter is not supported.</p> </note> <p>Valid values: <code>"ALL" | "AUDIT_CONTROL" | "AUDIT_WRITE" | "BLOCK_SUSPEND" | "CHOWN" | "DAC_OVERRIDE" | "DAC_READ_SEARCH" | "FOWNER" | "FSETID" | "IPC_LOCK" | "IPC_OWNER" | "KILL" | "LEASE" | "LINUX_IMMUTABLE" | "MAC_ADMIN" | "MAC_OVERRIDE" | "MKNOD" | "NET_ADMIN" | "NET_BIND_SERVICE" | "NET_BROADCAST" | "NET_RAW" | "SETFCAP" | "SETGID" | "SETPCAP" | "SETUID" | "SYS_ADMIN" | "SYS_BOOT" | "SYS_CHROOT" | "SYS_MODULE" | "SYS_NICE" | "SYS_PACCT" | "SYS_PTRACE" | "SYS_RAWIO" | "SYS_RESOURCE" | "SYS_TIME" | "SYS_TTY_CONFIG" | "SYSLOG" | "WAKE_ALARM"</code> </p>
     #[serde(rename = "add")]
@@ -865,7 +865,7 @@ pub struct KernelCapabilities {
 }
 
 /// <p>A key and value pair object.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KeyValuePair {
     /// <p>The name of the key value pair. For environment variables, this is the name of the environment variable.</p>
     #[serde(rename = "name")]
@@ -878,7 +878,7 @@ pub struct KeyValuePair {
 }
 
 /// <p>Linux-specific options that are applied to the container, such as Linux <a>KernelCapabilities</a>.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LinuxParameters {
     /// <p><p>The Linux capabilities for the container that are added to or dropped from the default configuration provided by Docker.</p> <note> <p>If you are using tasks that use the Fargate launch type, <code>capabilities</code> is supported but the <code>add</code> parameter is not supported.</p> </note></p>
     #[serde(rename = "capabilities")]
@@ -902,7 +902,7 @@ pub struct LinuxParameters {
     pub tmpfs: Option<Vec<Tmpfs>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListAttributesRequest {
     /// <p>The name of the attribute with which to filter the results. </p>
     #[serde(rename = "attributeName")]
@@ -929,7 +929,7 @@ pub struct ListAttributesRequest {
     pub target_type: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListAttributesResponse {
     /// <p>A list of attribute objects that meet the criteria of the request.</p>
     #[serde(rename = "attributes")]
@@ -941,7 +941,7 @@ pub struct ListAttributesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListClustersRequest {
     /// <p>The maximum number of cluster results returned by <code>ListClusters</code> in paginated output. When this parameter is used, <code>ListClusters</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListClusters</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListClusters</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>
     #[serde(rename = "maxResults")]
@@ -953,7 +953,7 @@ pub struct ListClustersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListClustersResponse {
     /// <p>The list of full Amazon Resource Name (ARN) entries for each cluster associated with your account.</p>
     #[serde(rename = "clusterArns")]
@@ -965,7 +965,7 @@ pub struct ListClustersResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListContainerInstancesRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the container instances to list. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -989,7 +989,7 @@ pub struct ListContainerInstancesRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListContainerInstancesResponse {
     /// <p>The list of container instances with full ARN entries for each container instance associated with the specified cluster.</p>
     #[serde(rename = "containerInstanceArns")]
@@ -1001,7 +1001,7 @@ pub struct ListContainerInstancesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListServicesRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the services to list. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -1021,7 +1021,7 @@ pub struct ListServicesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListServicesResponse {
     /// <p>The <code>nextToken</code> value to include in a future <code>ListServices</code> request. When the results of a <code>ListServices</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
@@ -1033,7 +1033,7 @@ pub struct ListServicesResponse {
     pub service_arns: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTaskDefinitionFamiliesRequest {
     /// <p>The <code>familyPrefix</code> is a string that is used to filter the results of <code>ListTaskDefinitionFamilies</code>. If you specify a <code>familyPrefix</code>, only task definition family names that begin with the <code>familyPrefix</code> string are returned.</p>
     #[serde(rename = "familyPrefix")]
@@ -1053,7 +1053,7 @@ pub struct ListTaskDefinitionFamiliesRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListTaskDefinitionFamiliesResponse {
     /// <p>The list of task definition family names that match the <code>ListTaskDefinitionFamilies</code> request.</p>
     #[serde(rename = "families")]
@@ -1065,7 +1065,7 @@ pub struct ListTaskDefinitionFamiliesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTaskDefinitionsRequest {
     /// <p>The full family name with which to filter the <code>ListTaskDefinitions</code> results. Specifying a <code>familyPrefix</code> limits the listed task definitions to task definition revisions that belong to that family.</p>
     #[serde(rename = "familyPrefix")]
@@ -1089,7 +1089,7 @@ pub struct ListTaskDefinitionsRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListTaskDefinitionsResponse {
     /// <p>The <code>nextToken</code> value to include in a future <code>ListTaskDefinitions</code> request. When the results of a <code>ListTaskDefinitions</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
@@ -1101,7 +1101,7 @@ pub struct ListTaskDefinitionsResponse {
     pub task_definition_arns: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTasksRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the tasks to list. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -1141,7 +1141,7 @@ pub struct ListTasksRequest {
     pub started_by: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListTasksResponse {
     /// <p>The <code>nextToken</code> value to include in a future <code>ListTasks</code> request. When the results of a <code>ListTasks</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
@@ -1154,7 +1154,7 @@ pub struct ListTasksResponse {
 }
 
 /// <p>Details on a load balancer that is used with a service.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoadBalancer {
     /// <p>The name of the container (as it appears in a container definition) to associate with the load balancer.</p>
     #[serde(rename = "containerName")]
@@ -1175,7 +1175,7 @@ pub struct LoadBalancer {
 }
 
 /// <p>Log configuration options to send to a custom log driver for the container.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LogConfiguration {
     /// <p>The log driver to use for the container. The valid values listed for this parameter are log drivers that the Amazon ECS container agent can communicate with by default. If using the Fargate launch type, the only supported value is <code>awslogs</code>. For more information about using the <code>awslogs</code> driver, see <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_awslogs.html">Using the awslogs Log Driver</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <note> <p>If you have a custom driver that is not listed above that you would like to work with the Amazon ECS container agent, you can fork the Amazon ECS container agent project that is <a href="https://github.com/aws/amazon-ecs-agent">available on GitHub</a> and customize it to work with that driver. We encourage you to submit pull requests for changes that you would like to have included. However, Amazon Web Services does not currently support running modified copies of this software.</p> </note> <p>This parameter requires version 1.18 of the Docker Remote API or greater on your container instance. To check the Docker Remote API version on your container instance, log in to your container instance and run the following command: <code>sudo docker version | grep "Server API version"</code> </p>
     #[serde(rename = "logDriver")]
@@ -1187,7 +1187,7 @@ pub struct LogConfiguration {
 }
 
 /// <p>Details on a volume mount point that is used in a container definition.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MountPoint {
     /// <p>The path on the container to mount the host volume at.</p>
     #[serde(rename = "containerPath")]
@@ -1204,7 +1204,7 @@ pub struct MountPoint {
 }
 
 /// <p>Details on the network bindings between a container and its host container instance. After a task reaches the <code>RUNNING</code> status, manual and automatic host and container port assignments are visible in the <code>networkBindings</code> section of <a>DescribeTasks</a> API responses.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NetworkBinding {
     /// <p>The IP address that the container is bound to on the container instance.</p>
     #[serde(rename = "bindIP")]
@@ -1225,7 +1225,7 @@ pub struct NetworkBinding {
 }
 
 /// <p>An object representing the network configuration for a task or service.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NetworkConfiguration {
     /// <p>The VPC subnets and security groups associated with a task.</p>
     #[serde(rename = "awsvpcConfiguration")]
@@ -1234,7 +1234,7 @@ pub struct NetworkConfiguration {
 }
 
 /// <p>An object representing the Elastic Network Interface for tasks that use the <code>awsvpc</code> network mode.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct NetworkInterface {
     /// <p>The attachment ID for the network interface.</p>
     #[serde(rename = "attachmentId")]
@@ -1251,7 +1251,7 @@ pub struct NetworkInterface {
 }
 
 /// <p>An object representing a constraint on task placement. For more information, see <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-constraints.html">Task Placement Constraints</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PlacementConstraint {
     /// <p>A cluster query language expression to apply to the constraint. Note you cannot specify an expression if the constraint type is <code>distinctInstance</code>. For more information, see <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html">Cluster Query Language</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "expression")]
@@ -1264,7 +1264,7 @@ pub struct PlacementConstraint {
 }
 
 /// <p>The task placement strategy for a task or service. For more information, see <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-strategies.html">Task Placement Strategies</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PlacementStrategy {
     /// <p>The field to apply the placement strategy against. For the <code>spread</code> placement strategy, valid values are <code>instanceId</code> (or <code>host</code>, which has the same effect), or any platform or custom attribute that is applied to a container instance, such as <code>attribute:ecs.availability-zone</code>. For the <code>binpack</code> placement strategy, valid values are <code>cpu</code> and <code>memory</code>. For the <code>random</code> placement strategy, this field is not used.</p>
     #[serde(rename = "field")]
@@ -1277,7 +1277,7 @@ pub struct PlacementStrategy {
 }
 
 /// <p>Port mappings allow containers to access ports on the host container instance to send or receive traffic. Port mappings are specified as part of the container definition.</p> <p>If using containers in a task with the <code>awsvpc</code> or <code>host</code> network mode, exposed ports should be specified using <code>containerPort</code>. The <code>hostPort</code> can be left blank or it must be the same value as the <code>containerPort</code>.</p> <p>After a task reaches the <code>RUNNING</code> status, manual and automatic host and container port assignments are visible in the <code>networkBindings</code> section of <a>DescribeTasks</a> API responses.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PortMapping {
     /// <p>The port number on the container that is bound to the user-specified or automatically assigned host port.</p> <p>If using containers in a task with the <code>awsvpc</code> or <code>host</code> network mode, exposed ports should be specified using <code>containerPort</code>.</p> <p>If using containers in a task with the <code>bridge</code> network mode and you specify a container port and not a host port, your container automatically receives a host port in the ephemeral port range (for more information, see <code>hostPort</code>). Port mappings that are automatically assigned in this way do not count toward the 100 reserved ports limit of a container instance.</p>
     #[serde(rename = "containerPort")]
@@ -1293,7 +1293,7 @@ pub struct PortMapping {
     pub protocol: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutAttributesRequest {
     /// <p>The attributes to apply to your resource. You can specify up to 10 custom attributes per resource. You can specify up to 10 attributes in a single call.</p>
     #[serde(rename = "attributes")]
@@ -1304,7 +1304,7 @@ pub struct PutAttributesRequest {
     pub cluster: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutAttributesResponse {
     /// <p>The attributes applied to your resource.</p>
     #[serde(rename = "attributes")]
@@ -1312,7 +1312,7 @@ pub struct PutAttributesResponse {
     pub attributes: Option<Vec<Attribute>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterContainerInstanceRequest {
     /// <p>The container instance attributes that this container instance supports.</p>
     #[serde(rename = "attributes")]
@@ -1344,7 +1344,7 @@ pub struct RegisterContainerInstanceRequest {
     pub version_info: Option<VersionInfo>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RegisterContainerInstanceResponse {
     /// <p>The container instance that was registered.</p>
     #[serde(rename = "containerInstance")]
@@ -1352,7 +1352,7 @@ pub struct RegisterContainerInstanceResponse {
     pub container_instance: Option<ContainerInstance>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterTaskDefinitionRequest {
     /// <p>A list of container definitions in JSON format that describe the different containers that make up your task.</p>
     #[serde(rename = "containerDefinitions")]
@@ -1394,7 +1394,7 @@ pub struct RegisterTaskDefinitionRequest {
     pub volumes: Option<Vec<Volume>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RegisterTaskDefinitionResponse {
     /// <p>The full description of the registered task definition.</p>
     #[serde(rename = "taskDefinition")]
@@ -1403,7 +1403,7 @@ pub struct RegisterTaskDefinitionResponse {
 }
 
 /// <p>Describes the resources available for a container instance.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Resource {
     /// <p>When the <code>doubleValue</code> type is set, the value of the resource must be a double precision floating-point type.</p>
     #[serde(rename = "doubleValue")]
@@ -1431,7 +1431,7 @@ pub struct Resource {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RunTaskRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster on which to run your task. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -1478,7 +1478,7 @@ pub struct RunTaskRequest {
     pub task_definition: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RunTaskResponse {
     /// <p>Any failures associated with the call.</p>
     #[serde(rename = "failures")]
@@ -1491,7 +1491,7 @@ pub struct RunTaskResponse {
 }
 
 /// <p>Details on a service within a cluster</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Service {
     /// <p>The Amazon Resource Name (ARN) of the cluster that hosts the service.</p>
     #[serde(rename = "clusterArn")]
@@ -1580,7 +1580,7 @@ pub struct Service {
 }
 
 /// <p>Details on an event associated with a service.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ServiceEvent {
     /// <p>The Unix time stamp for when the event was triggered.</p>
     #[serde(rename = "createdAt")]
@@ -1597,7 +1597,7 @@ pub struct ServiceEvent {
 }
 
 /// <p>Details of the service registry.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ServiceRegistry {
     /// <p>The port value used if your Service Discovery service specified an SRV record.</p>
     #[serde(rename = "port")]
@@ -1609,7 +1609,7 @@ pub struct ServiceRegistry {
     pub registry_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartTaskRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster on which to start your task. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -1639,7 +1639,7 @@ pub struct StartTaskRequest {
     pub task_definition: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StartTaskResponse {
     /// <p>Any failures associated with the call.</p>
     #[serde(rename = "failures")]
@@ -1651,7 +1651,7 @@ pub struct StartTaskResponse {
     pub tasks: Option<Vec<Task>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopTaskRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the task to stop. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -1666,7 +1666,7 @@ pub struct StopTaskRequest {
     pub task: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StopTaskResponse {
     /// <p>The task that was stopped.</p>
     #[serde(rename = "task")]
@@ -1674,7 +1674,7 @@ pub struct StopTaskResponse {
     pub task: Option<Task>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SubmitContainerStateChangeRequest {
     /// <p>The short name or full ARN of the cluster that hosts the container.</p>
     #[serde(rename = "cluster")]
@@ -1706,7 +1706,7 @@ pub struct SubmitContainerStateChangeRequest {
     pub task: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SubmitContainerStateChangeResponse {
     /// <p>Acknowledgement of the state change.</p>
     #[serde(rename = "acknowledgment")]
@@ -1714,7 +1714,7 @@ pub struct SubmitContainerStateChangeResponse {
     pub acknowledgment: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SubmitTaskStateChangeRequest {
     /// <p>Any attachments associated with the state change request.</p>
     #[serde(rename = "attachments")]
@@ -1754,7 +1754,7 @@ pub struct SubmitTaskStateChangeRequest {
     pub task: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SubmitTaskStateChangeResponse {
     /// <p>Acknowledgement of the state change.</p>
     #[serde(rename = "acknowledgment")]
@@ -1763,7 +1763,7 @@ pub struct SubmitTaskStateChangeResponse {
 }
 
 /// <p>Details on a task in a cluster.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Task {
     /// <p>The Elastic Network Adapter associated with the task if the task uses the <code>awsvpc</code> network mode.</p>
     #[serde(rename = "attachments")]
@@ -1876,7 +1876,7 @@ pub struct Task {
 }
 
 /// <p>Details of a task definition.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TaskDefinition {
     /// <p>The launch type to use with your task. For more information, see <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "compatibilities")]
@@ -1941,7 +1941,7 @@ pub struct TaskDefinition {
 }
 
 /// <p>An object representing a constraint on task placement in the task definition.</p> <p>If you are using the Fargate launch type, task placement constraints are not supported.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-constraints.html">Task Placement Constraints</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TaskDefinitionPlacementConstraint {
     /// <p>A cluster query language expression to apply to the constraint. For more information, see <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html">Cluster Query Language</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "expression")]
@@ -1954,7 +1954,7 @@ pub struct TaskDefinitionPlacementConstraint {
 }
 
 /// <p>The overrides associated with a task.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TaskOverride {
     /// <p>One or more container overrides sent to a task.</p>
     #[serde(rename = "containerOverrides")]
@@ -1971,7 +1971,7 @@ pub struct TaskOverride {
 }
 
 /// <p>The container path, mount options, and size of the tmpfs mount.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tmpfs {
     /// <p>The absolute file path where the tmpfs volume will be mounted.</p>
     #[serde(rename = "containerPath")]
@@ -1986,7 +1986,7 @@ pub struct Tmpfs {
 }
 
 /// <p>The <code>ulimit</code> settings to pass to the container.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Ulimit {
     /// <p>The hard limit for the ulimit type.</p>
     #[serde(rename = "hardLimit")]
@@ -1999,7 +1999,7 @@ pub struct Ulimit {
     pub soft_limit: i64,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateContainerAgentRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that your container instance is running on. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -2010,7 +2010,7 @@ pub struct UpdateContainerAgentRequest {
     pub container_instance: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateContainerAgentResponse {
     /// <p>The container instance for which the container agent was updated.</p>
     #[serde(rename = "containerInstance")]
@@ -2018,7 +2018,7 @@ pub struct UpdateContainerAgentResponse {
     pub container_instance: Option<ContainerInstance>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateContainerInstancesStateRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the container instance to update. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -2032,7 +2032,7 @@ pub struct UpdateContainerInstancesStateRequest {
     pub status: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateContainerInstancesStateResponse {
     /// <p>The list of container instances.</p>
     #[serde(rename = "containerInstances")]
@@ -2044,7 +2044,7 @@ pub struct UpdateContainerInstancesStateResponse {
     pub failures: Option<Vec<Failure>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateServiceRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that your service is running on. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
@@ -2083,7 +2083,7 @@ pub struct UpdateServiceRequest {
     pub task_definition: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateServiceResponse {
     /// <p>The full description of your service following the update call.</p>
     #[serde(rename = "service")]
@@ -2092,7 +2092,7 @@ pub struct UpdateServiceResponse {
 }
 
 /// <p>The Docker and Amazon ECS container agent version information about a container instance.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VersionInfo {
     /// <p>The Git commit hash for the Amazon ECS container agent build on the <a href="https://github.com/aws/amazon-ecs-agent/commits/master">amazon-ecs-agent </a> GitHub repository.</p>
     #[serde(rename = "agentHash")]
@@ -2109,7 +2109,7 @@ pub struct VersionInfo {
 }
 
 /// <p>A data volume used in a task definition.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Volume {
     /// <p>The contents of the <code>host</code> parameter determine whether your data volume persists on the host container instance and where it is stored. If the host parameter is empty, then the Docker daemon assigns a host path for your data volume, but the data is not guaranteed to persist after the containers associated with it stop running.</p> <p>Windows containers can mount whole directories on the same drive as <code>$env:ProgramData</code>. Windows containers cannot mount directories on a different drive, and mount point cannot be across drives. For example, you can mount <code>C:\my\path:C:\my\path</code> and <code>D:\:D:\</code>, but not <code>D:\my\path:C:\my\path</code> or <code>D:\:C:\my\path</code>.</p>
     #[serde(rename = "host")]
@@ -2122,7 +2122,7 @@ pub struct Volume {
 }
 
 /// <p>Details on a data volume from another container in the same task definition.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VolumeFrom {
     /// <p>If this value is <code>true</code>, the container has read-only access to the volume. If this value is <code>false</code>, then the container can write to the volume. The default value is <code>false</code>.</p>
     #[serde(rename = "readOnly")]

@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Describes an application in the application catalog.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Application {
     /// <p>The application name for display.</p>
     #[serde(rename = "DisplayName")]
@@ -63,7 +63,7 @@ pub struct Application {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateFleetRequest {
     /// <p>The name of the fleet. </p>
     #[serde(rename = "FleetName")]
@@ -73,11 +73,11 @@ pub struct AssociateFleetRequest {
     pub stack_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AssociateFleetResult {}
 
 /// <p>Describes the capacity for a fleet.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ComputeCapacity {
     /// <p>The desired number of streaming instances.</p>
     #[serde(rename = "DesiredInstances")]
@@ -85,7 +85,7 @@ pub struct ComputeCapacity {
 }
 
 /// <p>Describes the capacity status for a fleet.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ComputeCapacityStatus {
     /// <p>The number of currently available instances that can be used to stream sessions.</p>
     #[serde(rename = "Available")]
@@ -104,7 +104,7 @@ pub struct ComputeCapacityStatus {
     pub running: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CopyImageRequest {
     /// <p>The description that the image will have when it is copied to the destination.</p>
     #[serde(rename = "DestinationImageDescription")]
@@ -121,7 +121,7 @@ pub struct CopyImageRequest {
     pub source_image_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CopyImageResponse {
     /// <p>The name of the destination image.</p>
     #[serde(rename = "DestinationImageName")]
@@ -129,7 +129,7 @@ pub struct CopyImageResponse {
     pub destination_image_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDirectoryConfigRequest {
     /// <p>The fully qualified name of the directory (for example, corp.example.com).</p>
     #[serde(rename = "DirectoryName")]
@@ -142,7 +142,7 @@ pub struct CreateDirectoryConfigRequest {
     pub service_account_credentials: ServiceAccountCredentials,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateDirectoryConfigResult {
     /// <p>Information about the directory configuration.</p>
     #[serde(rename = "DirectoryConfig")]
@@ -150,7 +150,7 @@ pub struct CreateDirectoryConfigResult {
     pub directory_config: Option<DirectoryConfig>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateFleetRequest {
     /// <p>The desired capacity for the fleet.</p>
     #[serde(rename = "ComputeCapacity")]
@@ -198,7 +198,7 @@ pub struct CreateFleetRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateFleetResult {
     /// <p>Information about the fleet.</p>
     #[serde(rename = "Fleet")]
@@ -206,7 +206,7 @@ pub struct CreateFleetResult {
     pub fleet: Option<Fleet>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateImageBuilderRequest {
     /// <p>The version of the AppStream 2.0 agent to use for this image builder. To use the latest version of the AppStream 2.0 agent, specify [LATEST]. </p>
     #[serde(rename = "AppstreamAgentVersion")]
@@ -243,7 +243,7 @@ pub struct CreateImageBuilderRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateImageBuilderResult {
     /// <p>Information about the image builder.</p>
     #[serde(rename = "ImageBuilder")]
@@ -251,7 +251,7 @@ pub struct CreateImageBuilderResult {
     pub image_builder: Option<ImageBuilder>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateImageBuilderStreamingURLRequest {
     /// <p>The name of the image builder.</p>
     #[serde(rename = "Name")]
@@ -262,7 +262,7 @@ pub struct CreateImageBuilderStreamingURLRequest {
     pub validity: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateImageBuilderStreamingURLResult {
     /// <p>The elapsed time, in seconds after the Unix epoch, when this URL expires.</p>
     #[serde(rename = "Expires")]
@@ -274,7 +274,7 @@ pub struct CreateImageBuilderStreamingURLResult {
     pub streaming_url: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateStackRequest {
     /// <p>The description for display.</p>
     #[serde(rename = "Description")]
@@ -301,7 +301,7 @@ pub struct CreateStackRequest {
     pub storage_connectors: Option<Vec<StorageConnector>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateStackResult {
     /// <p>Information about the stack.</p>
     #[serde(rename = "Stack")]
@@ -309,7 +309,7 @@ pub struct CreateStackResult {
     pub stack: Option<Stack>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateStreamingURLRequest {
     /// <p>The name of the application to launch after the session starts. This is the name that you specified as <b>Name</b> in the Image Assistant.</p>
     #[serde(rename = "ApplicationId")]
@@ -334,7 +334,7 @@ pub struct CreateStreamingURLRequest {
     pub validity: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateStreamingURLResult {
     /// <p>The elapsed time, in seconds after the Unix epoch, when this URL expires.</p>
     #[serde(rename = "Expires")]
@@ -346,34 +346,34 @@ pub struct CreateStreamingURLResult {
     pub streaming_url: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDirectoryConfigRequest {
     /// <p>The name of the directory configuration.</p>
     #[serde(rename = "DirectoryName")]
     pub directory_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteDirectoryConfigResult {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteFleetRequest {
     /// <p>The name of the fleet.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteFleetResult {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteImageBuilderRequest {
     /// <p>The name of the image builder.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteImageBuilderResult {
     /// <p>Information about the image builder.</p>
     #[serde(rename = "ImageBuilder")]
@@ -381,14 +381,14 @@ pub struct DeleteImageBuilderResult {
     pub image_builder: Option<ImageBuilder>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteImageRequest {
     /// <p>The name of the image.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteImageResult {
     /// <p>Information about the image.</p>
     #[serde(rename = "Image")]
@@ -396,17 +396,17 @@ pub struct DeleteImageResult {
     pub image: Option<Image>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteStackRequest {
     /// <p>The name of the stack.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteStackResult {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeDirectoryConfigsRequest {
     /// <p>The directory names.</p>
     #[serde(rename = "DirectoryNames")]
@@ -422,7 +422,7 @@ pub struct DescribeDirectoryConfigsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeDirectoryConfigsResult {
     /// <p>Information about the directory configurations. Note that although the response syntax in this topic includes the account password, this password is not returned in the actual response. </p>
     #[serde(rename = "DirectoryConfigs")]
@@ -434,7 +434,7 @@ pub struct DescribeDirectoryConfigsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeFleetsRequest {
     /// <p>The names of the fleets to describe.</p>
     #[serde(rename = "Names")]
@@ -446,7 +446,7 @@ pub struct DescribeFleetsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeFleetsResult {
     /// <p>Information about the fleets.</p>
     #[serde(rename = "Fleets")]
@@ -458,7 +458,7 @@ pub struct DescribeFleetsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeImageBuildersRequest {
     /// <p>The maximum size of each page of results.</p>
     #[serde(rename = "MaxResults")]
@@ -474,7 +474,7 @@ pub struct DescribeImageBuildersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeImageBuildersResult {
     /// <p>Information about the image builders.</p>
     #[serde(rename = "ImageBuilders")]
@@ -486,7 +486,7 @@ pub struct DescribeImageBuildersResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeImagesRequest {
     /// <p>The names of the images to describe.</p>
     #[serde(rename = "Names")]
@@ -494,7 +494,7 @@ pub struct DescribeImagesRequest {
     pub names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeImagesResult {
     /// <p>Information about the images.</p>
     #[serde(rename = "Images")]
@@ -502,7 +502,7 @@ pub struct DescribeImagesResult {
     pub images: Option<Vec<Image>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeSessionsRequest {
     /// <p>The authentication method. Specify <code>API</code> for a user authenticated using a streaming URL or <code>SAML</code> for a SAML federated user. The default is to authenticate users using a streaming URL.</p>
     #[serde(rename = "AuthenticationType")]
@@ -528,7 +528,7 @@ pub struct DescribeSessionsRequest {
     pub user_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeSessionsResult {
     /// <p>The pagination token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
     #[serde(rename = "NextToken")]
@@ -540,7 +540,7 @@ pub struct DescribeSessionsResult {
     pub sessions: Option<Vec<Session>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeStacksRequest {
     /// <p>The names of the stacks to describe.</p>
     #[serde(rename = "Names")]
@@ -552,7 +552,7 @@ pub struct DescribeStacksRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeStacksResult {
     /// <p>The pagination token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
     #[serde(rename = "NextToken")]
@@ -565,7 +565,7 @@ pub struct DescribeStacksResult {
 }
 
 /// <p>Configuration information for the directory used to join domains.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DirectoryConfig {
     /// <p>The time the directory configuration was created.</p>
     #[serde(rename = "CreatedTime")]
@@ -584,7 +584,7 @@ pub struct DirectoryConfig {
     pub service_account_credentials: Option<ServiceAccountCredentials>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateFleetRequest {
     /// <p>The name of the fleet.</p>
     #[serde(rename = "FleetName")]
@@ -594,11 +594,11 @@ pub struct DisassociateFleetRequest {
     pub stack_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DisassociateFleetResult {}
 
 /// <p>Contains the information needed to join a Microsoft Active Directory domain.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DomainJoinInfo {
     /// <p>The fully qualified name of the directory (for example, corp.example.com).</p>
     #[serde(rename = "DirectoryName")]
@@ -610,18 +610,18 @@ pub struct DomainJoinInfo {
     pub organizational_unit_distinguished_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ExpireSessionRequest {
     /// <p>The ID of the streaming session.</p>
     #[serde(rename = "SessionId")]
     pub session_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ExpireSessionResult {}
 
 /// <p>Contains the parameters for a fleet.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Fleet {
     /// <p>The ARN for the fleet.</p>
     #[serde(rename = "Arn")]
@@ -684,7 +684,7 @@ pub struct Fleet {
 }
 
 /// <p>Describes a fleet error.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct FleetError {
     /// <p>The error code.</p>
     #[serde(rename = "ErrorCode")]
@@ -697,7 +697,7 @@ pub struct FleetError {
 }
 
 /// <p>Describes an image.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Image {
     /// <p>The applications associated with the image.</p>
     #[serde(rename = "Applications")]
@@ -757,7 +757,7 @@ pub struct Image {
 }
 
 /// <p>Describes a streaming instance used for editing an image. New images are created from a snapshot through an image builder.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ImageBuilder {
     /// <p>The version of the AppStream 2.0 agent that is currently being used by this image builder. </p>
     #[serde(rename = "AppstreamAgentVersion")]
@@ -821,7 +821,7 @@ pub struct ImageBuilder {
 }
 
 /// <p>Describes the reason why the last image builder state change occurred.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ImageBuilderStateChangeReason {
     /// <p>The state change reason code.</p>
     #[serde(rename = "Code")]
@@ -834,7 +834,7 @@ pub struct ImageBuilderStateChangeReason {
 }
 
 /// <p>Describes the reason why the last image state change occurred.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ImageStateChangeReason {
     /// <p>The state change reason code.</p>
     #[serde(rename = "Code")]
@@ -846,7 +846,7 @@ pub struct ImageStateChangeReason {
     pub message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListAssociatedFleetsRequest {
     /// <p>The pagination token to use to retrieve the next page of results for this operation. If this value is null, it retrieves the first page.</p>
     #[serde(rename = "NextToken")]
@@ -857,7 +857,7 @@ pub struct ListAssociatedFleetsRequest {
     pub stack_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListAssociatedFleetsResult {
     /// <p>The names of the fleets.</p>
     #[serde(rename = "Names")]
@@ -869,7 +869,7 @@ pub struct ListAssociatedFleetsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListAssociatedStacksRequest {
     /// <p>The name of the fleet.</p>
     #[serde(rename = "FleetName")]
@@ -880,7 +880,7 @@ pub struct ListAssociatedStacksRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListAssociatedStacksResult {
     /// <p>The names of the stacks.</p>
     #[serde(rename = "Names")]
@@ -892,14 +892,14 @@ pub struct ListAssociatedStacksResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListTagsForResourceResponse {
     /// <p>The information about the tags.</p>
     #[serde(rename = "Tags")]
@@ -908,7 +908,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>Describes a resource error.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ResourceError {
     /// <p>The error code.</p>
     #[serde(rename = "ErrorCode")]
@@ -925,7 +925,7 @@ pub struct ResourceError {
 }
 
 /// <p>Describes the credentials for the service account used by the streaming instance to connect to the directory.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ServiceAccountCredentials {
     /// <p>The user name of the account. This account must have the following privileges: create computer objects, join computers to the domain, and change/reset the password on descendant computer objects for the organizational units specified.</p>
     #[serde(rename = "AccountName")]
@@ -936,7 +936,7 @@ pub struct ServiceAccountCredentials {
 }
 
 /// <p>Describes a streaming session.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Session {
     /// <p>The authentication method. The user is authenticated using a streaming URL (<code>API</code>) or SAML federation (<code>SAML</code>).</p>
     #[serde(rename = "AuthenticationType")]
@@ -960,7 +960,7 @@ pub struct Session {
 }
 
 /// <p>Describes a stack.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Stack {
     /// <p>The ARN of the stack.</p>
     #[serde(rename = "Arn")]
@@ -1000,7 +1000,7 @@ pub struct Stack {
 }
 
 /// <p>Describes a stack error.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StackError {
     /// <p>The error code.</p>
     #[serde(rename = "ErrorCode")]
@@ -1012,17 +1012,17 @@ pub struct StackError {
     pub error_message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartFleetRequest {
     /// <p>The name of the fleet.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StartFleetResult {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartImageBuilderRequest {
     /// <p>The version of the AppStream 2.0 agent to use for this image builder. To use the latest version of the AppStream 2.0 agent, specify [LATEST]. </p>
     #[serde(rename = "AppstreamAgentVersion")]
@@ -1033,7 +1033,7 @@ pub struct StartImageBuilderRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StartImageBuilderResult {
     /// <p>Information about the image builder.</p>
     #[serde(rename = "ImageBuilder")]
@@ -1041,24 +1041,24 @@ pub struct StartImageBuilderResult {
     pub image_builder: Option<ImageBuilder>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopFleetRequest {
     /// <p>The name of the fleet.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StopFleetResult {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopImageBuilderRequest {
     /// <p>The name of the image builder.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StopImageBuilderResult {
     /// <p>Information about the image builder.</p>
     #[serde(rename = "ImageBuilder")]
@@ -1067,7 +1067,7 @@ pub struct StopImageBuilderResult {
 }
 
 /// <p>Describes a storage connector.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StorageConnector {
     /// <p>The type of storage connector.</p>
     #[serde(rename = "ConnectorType")]
@@ -1078,7 +1078,7 @@ pub struct StorageConnector {
     pub resource_identifier: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "ResourceArn")]
@@ -1088,10 +1088,10 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TagResourceResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "ResourceArn")]
@@ -1101,10 +1101,10 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDirectoryConfigRequest {
     /// <p>The name of the directory configuration.</p>
     #[serde(rename = "DirectoryName")]
@@ -1119,7 +1119,7 @@ pub struct UpdateDirectoryConfigRequest {
     pub service_account_credentials: Option<ServiceAccountCredentials>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateDirectoryConfigResult {
     /// <p>Information about the directory configuration.</p>
     #[serde(rename = "DirectoryConfig")]
@@ -1127,7 +1127,7 @@ pub struct UpdateDirectoryConfigResult {
     pub directory_config: Option<DirectoryConfig>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateFleetRequest {
     /// <p>The fleet attributes to delete.</p>
     #[serde(rename = "AttributesToDelete")]
@@ -1178,7 +1178,7 @@ pub struct UpdateFleetRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateFleetResult {
     /// <p>Information about the fleet.</p>
     #[serde(rename = "Fleet")]
@@ -1186,7 +1186,7 @@ pub struct UpdateFleetResult {
     pub fleet: Option<Fleet>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateStackRequest {
     /// <p>The stack attributes to delete.</p>
     #[serde(rename = "AttributesToDelete")]
@@ -1217,7 +1217,7 @@ pub struct UpdateStackRequest {
     pub storage_connectors: Option<Vec<StorageConnector>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateStackResult {
     /// <p>Information about the stack.</p>
     #[serde(rename = "Stack")]
@@ -1226,7 +1226,7 @@ pub struct UpdateStackResult {
 }
 
 /// <p>Describes VPC configuration information.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VpcConfig {
     /// <p>The security groups for the fleet.</p>
     #[serde(rename = "SecurityGroupIds")]

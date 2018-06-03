@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>The details of a DDoS attack.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AttackDetail {
     /// <p>List of counters that describe the attack for the specified time period.</p>
     #[serde(rename = "AttackCounters")]
@@ -68,7 +68,7 @@ pub struct AttackDetail {
 }
 
 /// <p>Details of the described attack.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AttackProperty {
     /// <p>The type of DDoS event that was observed. <code>NETWORK</code> indicates layer 3 and layer 4 events and <code>APPLICATION</code> indicates layer 7 events.</p>
     #[serde(rename = "AttackLayer")]
@@ -93,7 +93,7 @@ pub struct AttackProperty {
 }
 
 /// <p>Summarizes all DDoS attacks for a specified time period.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AttackSummary {
     /// <p>The unique identifier (ID) of the attack.</p>
     #[serde(rename = "AttackId")]
@@ -118,7 +118,7 @@ pub struct AttackSummary {
 }
 
 /// <p>Describes the attack.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AttackVectorDescription {
     /// <p><p>The attack type. Valid values:</p> <ul> <li> <p>UDP<em>TRAFFIC</p> </li> <li> <p>UDP</em>FRAGMENT</p> </li> <li> <p>GENERIC<em>UDP</em>REFLECTION</p> </li> <li> <p>DNS<em>REFLECTION</p> </li> <li> <p>NTP</em>REFLECTION</p> </li> <li> <p>CHARGEN<em>REFLECTION</p> </li> <li> <p>SSDP</em>REFLECTION</p> </li> <li> <p>PORT<em>MAPPER</p> </li> <li> <p>RIP</em>REFLECTION</p> </li> <li> <p>SNMP<em>REFLECTION</p> </li> <li> <p>MSSQL</em>REFLECTION</p> </li> <li> <p>NET<em>BIOS</em>REFLECTION</p> </li> <li> <p>SYN<em>FLOOD</p> </li> <li> <p>ACK</em>FLOOD</p> </li> <li> <p>REQUEST_FLOOD</p> </li> </ul></p>
     #[serde(rename = "VectorType")]
@@ -126,7 +126,7 @@ pub struct AttackVectorDescription {
 }
 
 /// <p>A contributor to the attack and their contribution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Contributor {
     /// <p>The name of the contributor. This is dependent on the <code>AttackPropertyIdentifier</code>. For example, if the <code>AttackPropertyIdentifier</code> is <code>SOURCE_COUNTRY</code>, the <code>Name</code> could be <code>United States</code>.</p>
     #[serde(rename = "Name")]
@@ -138,7 +138,7 @@ pub struct Contributor {
     pub value: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateProtectionRequest {
     /// <p>Friendly name for the <code>Protection</code> you are creating.</p>
     #[serde(rename = "Name")]
@@ -148,7 +148,7 @@ pub struct CreateProtectionRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateProtectionResponse {
     /// <p>The unique identifier (ID) for the <a>Protection</a> object that is created.</p>
     #[serde(rename = "ProtectionId")]
@@ -156,36 +156,36 @@ pub struct CreateProtectionResponse {
     pub protection_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateSubscriptionRequest {}
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateSubscriptionResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteProtectionRequest {
     /// <p>The unique identifier (ID) for the <a>Protection</a> object to be deleted.</p>
     #[serde(rename = "ProtectionId")]
     pub protection_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteProtectionResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteSubscriptionRequest {}
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteSubscriptionResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeAttackRequest {
     /// <p>The unique identifier (ID) for the attack that to be described.</p>
     #[serde(rename = "AttackId")]
     pub attack_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeAttackResponse {
     /// <p>The attack that is described.</p>
     #[serde(rename = "Attack")]
@@ -193,14 +193,14 @@ pub struct DescribeAttackResponse {
     pub attack: Option<AttackDetail>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeProtectionRequest {
     /// <p>The unique identifier (ID) for the <a>Protection</a> object that is described.</p>
     #[serde(rename = "ProtectionId")]
     pub protection_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeProtectionResponse {
     /// <p>The <a>Protection</a> object that is described.</p>
     #[serde(rename = "Protection")]
@@ -208,10 +208,10 @@ pub struct DescribeProtectionResponse {
     pub protection: Option<Protection>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeSubscriptionRequest {}
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeSubscriptionResponse {
     /// <p>The AWS Shield Advanced subscription details for an account.</p>
     #[serde(rename = "Subscription")]
@@ -219,17 +219,17 @@ pub struct DescribeSubscriptionResponse {
     pub subscription: Option<Subscription>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetSubscriptionStateRequest {}
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetSubscriptionStateResponse {
     /// <p>The status of the subscription.</p>
     #[serde(rename = "SubscriptionState")]
     pub subscription_state: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListAttacksRequest {
     /// <p>The end of the time period for the attacks. This is a <code>timestamp</code> type. The sample request above indicates a <code>number</code> type because the default used by WAF is Unix time in seconds. However any valid <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#parameter-types">timestamp format</a> is allowed. </p>
     #[serde(rename = "EndTime")]
@@ -253,7 +253,7 @@ pub struct ListAttacksRequest {
     pub start_time: Option<TimeRange>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListAttacksResponse {
     /// <p>The attack information for the specified time range.</p>
     #[serde(rename = "AttackSummaries")]
@@ -265,7 +265,7 @@ pub struct ListAttacksResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListProtectionsRequest {
     /// <p>The maximum number of <a>Protection</a> objects to be returned. If this is left blank the first 20 results will be returned.</p>
     #[serde(rename = "MaxResults")]
@@ -277,7 +277,7 @@ pub struct ListProtectionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListProtectionsResponse {
     /// <p>If you specify a value for <code>MaxResults</code> and you have more Protections than the value of MaxResults, AWS Shield Advanced returns a NextToken value in the response that allows you to list another group of Protections. For the second and subsequent ListProtections requests, specify the value of NextToken from the previous response to get information about another batch of Protections.</p>
     #[serde(rename = "NextToken")]
@@ -290,7 +290,7 @@ pub struct ListProtectionsResponse {
 }
 
 /// <p>The mitigation applied to a DDoS attack.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Mitigation {
     /// <p>The name of the mitigation taken for this attack.</p>
     #[serde(rename = "MitigationName")]
@@ -299,7 +299,7 @@ pub struct Mitigation {
 }
 
 /// <p>An object that represents a resource that is under DDoS protection.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Protection {
     /// <p>The unique identifier (ID) of the protection.</p>
     #[serde(rename = "Id")]
@@ -316,7 +316,7 @@ pub struct Protection {
 }
 
 /// <p>The attack information for the specified SubResource.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SubResourceSummary {
     /// <p>The list of attack types and associated counters.</p>
     #[serde(rename = "AttackVectors")]
@@ -337,7 +337,7 @@ pub struct SubResourceSummary {
 }
 
 /// <p>Information about the AWS Shield Advanced subscription for an account.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Subscription {
     /// <p>The start time of the subscription, in Unix time in seconds. For more information see <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#parameter-types">timestamp</a>.</p>
     #[serde(rename = "StartTime")]
@@ -350,7 +350,7 @@ pub struct Subscription {
 }
 
 /// <p>A summary of information about the attack.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SummarizedAttackVector {
     /// <p>The list of counters that describe the details of the attack.</p>
     #[serde(rename = "VectorCounters")]
@@ -362,7 +362,7 @@ pub struct SummarizedAttackVector {
 }
 
 /// <p>The counter that describes a DDoS attack.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SummarizedCounter {
     /// <p>The average value of the counter for a specified time period.</p>
     #[serde(rename = "Average")]
@@ -391,7 +391,7 @@ pub struct SummarizedCounter {
 }
 
 /// <p>The time range.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TimeRange {
     /// <p>The start time, in Unix time in seconds. For more information see <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#parameter-types">timestamp</a>.</p>
     #[serde(rename = "FromInclusive")]

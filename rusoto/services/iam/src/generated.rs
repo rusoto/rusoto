@@ -44,7 +44,7 @@ enum DeserializerNext {
     Element(String),
 }
 /// <p><p>Contains information about an AWS access key.</p> <p> This data type is used as a response element in the <a>CreateAccessKey</a> and <a>ListAccessKeys</a> operations. </p> <note> <p>The <code>SecretAccessKey</code> value is returned only in response to <a>CreateAccessKey</a>. You can get a secret access key only when you first create an access key; you cannot recover the secret access key later. If you lose a secret access key, you must create a new access key.</p> </note></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccessKey {
     /// <p>The ID for this access key.</p>
     pub access_key_id: String,
@@ -132,7 +132,7 @@ impl AccessKeyIdTypeDeserializer {
     }
 }
 /// <p>Contains information about the last time an AWS access key was used.</p> <p>This data type is used as a response element in the <a>GetAccessKeyLastUsed</a> operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccessKeyLastUsed {
     /// <p><p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the access key was most recently used. This field is null in the following situations:</p> <ul> <li> <p>The user does not have an access key.</p> </li> <li> <p>An access key exists but has never been used, at least not since IAM started tracking this information on April 22nd, 2015.</p> </li> <li> <p>There is no sign-in data associated with the user</p> </li> </ul></p>
     pub last_used_date: String,
@@ -190,7 +190,7 @@ impl AccessKeyLastUsedDeserializer {
     }
 }
 /// <p>Contains information about an AWS access key, without its secret key.</p> <p>This data type is used as a response element in the <a>ListAccessKeys</a> operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccessKeyMetadata {
     /// <p>The ID for this access key.</p>
     pub access_key_id: Option<String>,
@@ -395,7 +395,7 @@ impl ActionNameTypeDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddClientIDToOpenIDConnectProviderRequest {
     /// <p>The client ID (also known as audience) to add to the IAM OpenID Connect provider resource.</p>
     pub client_id: String,
@@ -423,7 +423,7 @@ impl AddClientIDToOpenIDConnectProviderRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddRoleToInstanceProfileRequest {
     /// <p>The name of the instance profile to update.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub instance_profile_name: String,
@@ -451,7 +451,7 @@ impl AddRoleToInstanceProfileRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddUserToGroupRequest {
     /// <p>The name of the group to update.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -533,7 +533,7 @@ impl ArnTypeDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AttachGroupPolicyRequest {
     /// <p>The name (friendly name, not ARN) of the group to attach the policy to.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -561,7 +561,7 @@ impl AttachGroupPolicyRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AttachRolePolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy you want to attach.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -589,7 +589,7 @@ impl AttachRolePolicyRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AttachUserPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy you want to attach.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -660,7 +660,7 @@ impl AttachedPoliciesListTypeDeserializer {
     }
 }
 /// <p>Contains information about an attached policy.</p> <p>An attached policy is a managed policy that has been attached to a user, group, or role. This data type is used as a response element in the <a>ListAttachedGroupPolicies</a>, <a>ListAttachedRolePolicies</a>, <a>ListAttachedUserPolicies</a>, and <a>GetAccountAuthorizationDetails</a> operations. </p> <p>For more information about managed policies, refer to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AttachedPolicy {
     pub policy_arn: Option<String>,
     /// <p>The friendly name of the attached policy.</p>
@@ -853,7 +853,7 @@ impl CertificateListTypeDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ChangePasswordRequest {
     /// <p>The new password. The new password must conform to the AWS account's password policy, if one exists.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> that is used to validate this parameter is a string of characters. That string can include almost any printable ASCII character from the space (\u0020) through the end of the ASCII character range (\u00FF). You can also include the tab (\u0009), line feed (\u000A), and carriage return (\u000D) characters. Any of these characters are valid in a password. However, many tools, such as the AWS Management Console, might restrict the ability to type certain characters because they have special meaning within that tool.</p>
     pub new_password: String,
@@ -962,7 +962,7 @@ impl ColumnNumberDeserializer {
     }
 }
 /// <p>Contains information about a condition context key. It includes the name of the key and specifies the value (or values, if the context key supports multiple values) to use in the simulation. This information is used when evaluating the <code>Condition</code> elements of the input policies.</p> <p>This data type is used as an input parameter to <code> <a>SimulateCustomPolicy</a> </code> and <code> <a>SimulateCustomPolicy</a> </code>.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ContextEntry {
     /// <p>The full name of a condition context key, including the service prefix. For example, <code>aws:SourceIp</code> or <code>s3:VersionId</code>.</p>
     pub context_key_name: Option<String>,
@@ -1082,7 +1082,7 @@ impl ContextKeyValueListTypeSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateAccessKeyRequest {
     /// <p>The name of the IAM user that the new key will belong to.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
@@ -1107,7 +1107,7 @@ impl CreateAccessKeyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreateAccessKey</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateAccessKeyResponse {
     /// <p>A structure with details about the access key.</p>
     pub access_key: AccessKey,
@@ -1153,7 +1153,7 @@ impl CreateAccessKeyResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateAccountAliasRequest {
     /// <p>The account alias to create.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of lowercase letters, digits, and dashes. You cannot start or finish with a dash, nor can you have two dashes in a row.</p>
     pub account_alias: String,
@@ -1175,7 +1175,7 @@ impl CreateAccountAliasRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateGroupRequest {
     /// <p>The name of the group to create. Do not include the path in this value.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-. The group name must be unique within the account. Group names are not distinguished by case. For example, you cannot create groups named both "ADMINS" and "admins".</p>
     pub group_name: String,
@@ -1206,7 +1206,7 @@ impl CreateGroupRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreateGroup</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateGroupResponse {
     /// <p>A structure containing details about the new group.</p>
     pub group: Group,
@@ -1251,7 +1251,7 @@ impl CreateGroupResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateInstanceProfileRequest {
     /// <p>The name of the instance profile to create.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub instance_profile_name: String,
@@ -1282,7 +1282,7 @@ impl CreateInstanceProfileRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreateInstanceProfile</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateInstanceProfileResponse {
     /// <p>A structure containing details about the new instance profile.</p>
     pub instance_profile: InstanceProfile,
@@ -1330,7 +1330,7 @@ impl CreateInstanceProfileResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateLoginProfileRequest {
     /// <p>The new password for the user.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> that is used to validate this parameter is a string of characters. That string can include almost any printable ASCII character from the space (\u0020) through the end of the ASCII character range (\u00FF). You can also include the tab (\u0009), line feed (\u000A), and carriage return (\u000D) characters. Any of these characters are valid in a password. However, many tools, such as the AWS Management Console, might restrict the ability to type certain characters because they have special meaning within that tool.</p>
     pub password: String,
@@ -1367,7 +1367,7 @@ impl CreateLoginProfileRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreateLoginProfile</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateLoginProfileResponse {
     /// <p>A structure containing the user name and password create date.</p>
     pub login_profile: LoginProfile,
@@ -1413,7 +1413,7 @@ impl CreateLoginProfileResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateOpenIDConnectProviderRequest {
     /// <p>A list of client IDs (also known as audiences). When a mobile or web app registers with an OpenID Connect provider, they establish a value that identifies the application. (This is the value that's sent as the <code>client_id</code> parameter on OAuth requests.)</p> <p>You can register multiple client IDs with the same provider. For example, you might have multiple applications that use the same OIDC provider. You cannot register more than 100 client IDs with a single IAM OIDC provider.</p> <p>There is no defined format for a client ID. The <code>CreateOpenIDConnectProviderRequest</code> operation accepts client IDs up to 255 characters long.</p>
     pub client_id_list: Option<Vec<String>>,
@@ -1452,7 +1452,7 @@ impl CreateOpenIDConnectProviderRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreateOpenIDConnectProvider</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateOpenIDConnectProviderResponse {
     /// <p>The Amazon Resource Name (ARN) of the new IAM OpenID Connect provider that is created. For more information, see <a>OpenIDConnectProviderListEntry</a>. </p>
     pub open_id_connect_provider_arn: Option<String>,
@@ -1499,7 +1499,7 @@ impl CreateOpenIDConnectProviderResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreatePolicyRequest {
     /// <p>A friendly description of the policy.</p> <p>Typically used to store information about the permissions defined in the policy. For example, "Grants access to production DynamoDB tables."</p> <p>The policy description is immutable. After a value is assigned, it cannot be changed.</p>
     pub description: Option<String>,
@@ -1544,7 +1544,7 @@ impl CreatePolicyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreatePolicy</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreatePolicyResponse {
     /// <p>A structure containing details about the new policy.</p>
     pub policy: Option<Policy>,
@@ -1589,7 +1589,7 @@ impl CreatePolicyResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreatePolicyVersionRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy to which you want to add a new version.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -1626,7 +1626,7 @@ impl CreatePolicyVersionRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreatePolicyVersion</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreatePolicyVersionResponse {
     /// <p>A structure containing details about the new policy version.</p>
     pub policy_version: Option<PolicyVersion>,
@@ -1674,7 +1674,7 @@ impl CreatePolicyVersionResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateRoleRequest {
     /// <p><p>The trust relationship policy document that grants an entity permission to assume the role.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub assume_role_policy_document: String,
@@ -1727,7 +1727,7 @@ impl CreateRoleRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreateRole</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateRoleResponse {
     /// <p>A structure containing details about the new role.</p>
     pub role: Role,
@@ -1772,7 +1772,7 @@ impl CreateRoleResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateSAMLProviderRequest {
     /// <p>The name of the provider to create.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub name: String,
@@ -1801,7 +1801,7 @@ impl CreateSAMLProviderRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreateSAMLProvider</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateSAMLProviderResponse {
     /// <p>The Amazon Resource Name (ARN) of the new SAML provider resource in IAM.</p>
     pub saml_provider_arn: Option<String>,
@@ -1849,7 +1849,7 @@ impl CreateSAMLProviderResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateServiceLinkedRoleRequest {
     /// <p>The AWS service to which this role is attached. You use a string similar to a URL but without the http:// in front. For example: <code>elasticbeanstalk.amazonaws.com</code> </p>
     pub aws_service_name: String,
@@ -1887,7 +1887,7 @@ impl CreateServiceLinkedRoleRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateServiceLinkedRoleResponse {
     /// <p>A <a>Role</a> object that contains details about the newly created role.</p>
     pub role: Option<Role>,
@@ -1932,7 +1932,7 @@ impl CreateServiceLinkedRoleResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateServiceSpecificCredentialRequest {
     /// <p>The name of the AWS service that is to be associated with the credentials. The service you specify here is the only service that can be accessed using these credentials.</p>
     pub service_name: String,
@@ -1960,7 +1960,7 @@ impl CreateServiceSpecificCredentialRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateServiceSpecificCredentialResponse {
     /// <p><p>A structure that contains information about the newly created service-specific credential.</p> <important> <p>This is the only time that the password for this credential set is available. It cannot be recovered later. Instead, you will have to reset the password with <a>ResetServiceSpecificCredential</a>.</p> </important></p>
     pub service_specific_credential: Option<ServiceSpecificCredential>,
@@ -2009,7 +2009,7 @@ impl CreateServiceSpecificCredentialResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateUserRequest {
     /// <p> The path for the user name. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path: Option<String>,
@@ -2040,7 +2040,7 @@ impl CreateUserRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreateUser</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateUserResponse {
     /// <p>A structure with details about the new IAM user.</p>
     pub user: Option<User>,
@@ -2085,7 +2085,7 @@ impl CreateUserResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVirtualMFADeviceRequest {
     /// <p> The path for the virtual MFA device. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path: Option<String>,
@@ -2116,7 +2116,7 @@ impl CreateVirtualMFADeviceRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreateVirtualMFADevice</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVirtualMFADeviceResponse {
     /// <p>A structure containing details about the new virtual MFA device.</p>
     pub virtual_mfa_device: VirtualMFADevice,
@@ -2178,7 +2178,7 @@ impl DateTypeDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeactivateMFADeviceRequest {
     /// <p>The serial number that uniquely identifies the MFA device. For virtual MFA devices, the serial number is the device ARN.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@:/-</p>
     pub serial_number: String,
@@ -2206,7 +2206,7 @@ impl DeactivateMFADeviceRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteAccessKeyRequest {
     /// <p>The access key ID for the access key ID and secret access key you want to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub access_key_id: String,
@@ -2236,7 +2236,7 @@ impl DeleteAccessKeyRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteAccountAliasRequest {
     /// <p>The name of the account alias to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of lowercase letters, digits, and dashes. You cannot start or finish with a dash, nor can you have two dashes in a row.</p>
     pub account_alias: String,
@@ -2258,7 +2258,7 @@ impl DeleteAccountAliasRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteGroupPolicyRequest {
     /// <p>The name (friendly name, not ARN) identifying the group that the policy is embedded in.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -2286,7 +2286,7 @@ impl DeleteGroupPolicyRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteGroupRequest {
     /// <p>The name of the IAM group to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -2308,7 +2308,7 @@ impl DeleteGroupRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteInstanceProfileRequest {
     /// <p>The name of the instance profile to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub instance_profile_name: String,
@@ -2330,7 +2330,7 @@ impl DeleteInstanceProfileRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteLoginProfileRequest {
     /// <p>The name of the user whose password you want to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
@@ -2352,7 +2352,7 @@ impl DeleteLoginProfileRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteOpenIDConnectProviderRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM OpenID Connect provider resource object to delete. You can get a list of OpenID Connect provider resource ARNs by using the <a>ListOpenIDConnectProviders</a> operation.</p>
     pub open_id_connect_provider_arn: String,
@@ -2374,7 +2374,7 @@ impl DeleteOpenIDConnectProviderRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeletePolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy you want to delete.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -2396,7 +2396,7 @@ impl DeletePolicyRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeletePolicyVersionRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy from which you want to delete a version.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -2424,7 +2424,7 @@ impl DeletePolicyVersionRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteRolePolicyRequest {
     /// <p>The name of the inline policy to delete from the specified IAM role.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub policy_name: String,
@@ -2452,7 +2452,7 @@ impl DeleteRolePolicyRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteRoleRequest {
     /// <p>The name of the role to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
@@ -2474,7 +2474,7 @@ impl DeleteRoleRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteSAMLProviderRequest {
     /// <p>The Amazon Resource Name (ARN) of the SAML provider to delete.</p>
     pub saml_provider_arn: String,
@@ -2496,7 +2496,7 @@ impl DeleteSAMLProviderRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteSSHPublicKeyRequest {
     /// <p>The unique identifier for the SSH public key.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub ssh_public_key_id: String,
@@ -2524,7 +2524,7 @@ impl DeleteSSHPublicKeyRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteServerCertificateRequest {
     /// <p>The name of the server certificate you want to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub server_certificate_name: String,
@@ -2546,7 +2546,7 @@ impl DeleteServerCertificateRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteServiceLinkedRoleRequest {
     /// <p>The name of the service-linked role to be deleted.</p>
     pub role_name: String,
@@ -2568,7 +2568,7 @@ impl DeleteServiceLinkedRoleRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteServiceLinkedRoleResponse {
     /// <p>The deletion task identifier that you can use to check the status of the deletion. This identifier is returned in the format <code>task/aws-service-role/&lt;service-principal-name&gt;/&lt;role-name&gt;/&lt;task-uuid&gt;</code>.</p>
     pub deletion_task_id: String,
@@ -2616,7 +2616,7 @@ impl DeleteServiceLinkedRoleResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteServiceSpecificCredentialRequest {
     /// <p>The unique identifier of the service-specific credential. You can get this value by calling <a>ListServiceSpecificCredentials</a>.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub service_specific_credential_id: String,
@@ -2646,7 +2646,7 @@ impl DeleteServiceSpecificCredentialRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteSigningCertificateRequest {
     /// <p>The ID of the signing certificate to delete.</p> <p>The format of this parameter, as described by its <a href="http://wikipedia.org/wiki/regex">regex</a> pattern, is a string of characters that can be upper- or lower-cased letters or digits.</p>
     pub certificate_id: String,
@@ -2676,7 +2676,7 @@ impl DeleteSigningCertificateRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteUserPolicyRequest {
     /// <p>The name identifying the policy document to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub policy_name: String,
@@ -2704,7 +2704,7 @@ impl DeleteUserPolicyRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteUserRequest {
     /// <p>The name of the user to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
@@ -2726,7 +2726,7 @@ impl DeleteUserRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteVirtualMFADeviceRequest {
     /// <p>The serial number that uniquely identifies the MFA device. For virtual MFA devices, the serial number is the same as the ARN.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@:/-</p>
     pub serial_number: String,
@@ -2749,7 +2749,7 @@ impl DeleteVirtualMFADeviceRequestSerializer {
 }
 
 /// <p>The reason that the service-linked role deletion failed.</p> <p>This data type is used as a response element in the <a>GetServiceLinkedRoleDeletionStatus</a> operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeletionTaskFailureReasonType {
     /// <p>A short description of the reason that the service-linked role deletion failed.</p>
     pub reason: Option<String>,
@@ -2830,7 +2830,7 @@ impl DeletionTaskStatusTypeDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DetachGroupPolicyRequest {
     /// <p>The name (friendly name, not ARN) of the IAM group to detach the policy from.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -2858,7 +2858,7 @@ impl DetachGroupPolicyRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DetachRolePolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy you want to detach.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -2886,7 +2886,7 @@ impl DetachRolePolicyRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DetachUserPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy you want to detach.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -2914,7 +2914,7 @@ impl DetachUserPolicyRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EnableMFADeviceRequest {
     /// <p><p>An authentication code emitted by the device. </p> <p>The format for this parameter is a string of six digits.</p> <important> <p>Submit your request immediately after generating the authentication codes. If you generate the codes and then wait too long to submit the request, the MFA device successfully associates with the user but the MFA device becomes out of sync. This happens because time-based one-time passwords (TOTP) expire after a short period of time. If this happens, you can <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_sync.html">resync the device</a>.</p> </important></p>
     pub authentication_code_1: String,
@@ -3007,7 +3007,7 @@ impl EvalDecisionSourceTypeDeserializer {
     }
 }
 /// <p>Contains the results of a simulation.</p> <p>This data type is used by the return parameter of <code> <a>SimulateCustomPolicy</a> </code> and <code> <a>SimulatePrincipalPolicy</a> </code>.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EvaluationResult {
     /// <p>The name of the API operation tested on the indicated resource.</p>
     pub eval_action_name: String,
@@ -3173,7 +3173,7 @@ impl ExistingUserNameTypeDeserializer {
     }
 }
 /// <p>Contains the response to a successful <a>GenerateCredentialReport</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GenerateCredentialReportResponse {
     /// <p>Information about the credential report.</p>
     pub description: Option<String>,
@@ -3229,7 +3229,7 @@ impl GenerateCredentialReportResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetAccessKeyLastUsedRequest {
     /// <p>The identifier of an access key.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub access_key_id: String,
@@ -3252,7 +3252,7 @@ impl GetAccessKeyLastUsedRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetAccessKeyLastUsed</a> request. It is also returned as a member of the <a>AccessKeyMetaData</a> structure returned by the <a>ListAccessKeys</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetAccessKeyLastUsedResponse {
     /// <p>Contains information about the last time the access key was used.</p>
     pub access_key_last_used: Option<AccessKeyLastUsed>,
@@ -3306,7 +3306,7 @@ impl GetAccessKeyLastUsedResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetAccountAuthorizationDetailsRequest {
     /// <p>A list of entity types used to filter the results. Only the entities that match the types you specify are included in the output. Use the value <code>LocalManagedPolicy</code> to include customer managed policies.</p> <p>The format for this parameter is a comma-separated (if more than one) list of strings. Each string value in the list must be one of the valid values listed below.</p>
     pub filter: Option<Vec<String>>,
@@ -3348,7 +3348,7 @@ impl GetAccountAuthorizationDetailsRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetAccountAuthorizationDetails</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetAccountAuthorizationDetailsResponse {
     /// <p>A list containing information about IAM groups.</p>
     pub group_detail_list: Option<Vec<GroupDetail>>,
@@ -3431,7 +3431,7 @@ impl GetAccountAuthorizationDetailsResponseDeserializer {
     }
 }
 /// <p>Contains the response to a successful <a>GetAccountPasswordPolicy</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetAccountPasswordPolicyResponse {
     /// <p>A structure that contains details about the account's password policy.</p>
     pub password_policy: PasswordPolicy,
@@ -3480,7 +3480,7 @@ impl GetAccountPasswordPolicyResponseDeserializer {
     }
 }
 /// <p>Contains the response to a successful <a>GetAccountSummary</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetAccountSummaryResponse {
     /// <p>A set of key value pairs containing information about IAM entity usage and IAM quotas.</p>
     pub summary_map: Option<::std::collections::HashMap<String, i64>>,
@@ -3528,7 +3528,7 @@ impl GetAccountSummaryResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetContextKeysForCustomPolicyRequest {
     /// <p><p>A list of policies for which you want the list of context keys referenced in those policies. Each document is specified as a string containing the complete, valid JSON text of an IAM policy.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub policy_input_list: Vec<String>,
@@ -3552,7 +3552,7 @@ impl GetContextKeysForCustomPolicyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetContextKeysForPrincipalPolicy</a> or <a>GetContextKeysForCustomPolicy</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetContextKeysForPolicyResponse {
     /// <p>The list of context keys that are referenced in the input policies.</p>
     pub context_key_names: Option<Vec<String>>,
@@ -3602,7 +3602,7 @@ impl GetContextKeysForPolicyResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetContextKeysForPrincipalPolicyRequest {
     /// <p><p>An optional list of additional policies for which you want the list of context keys that are referenced.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub policy_input_list: Option<Vec<String>>,
@@ -3634,7 +3634,7 @@ impl GetContextKeysForPrincipalPolicyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetCredentialReport</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetCredentialReportResponse {
     /// <p>Contains the credential report. The report is Base64-encoded.</p>
     pub content: Option<Vec<u8>>,
@@ -3697,7 +3697,7 @@ impl GetCredentialReportResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetGroupPolicyRequest {
     /// <p>The name of the group the policy is associated with.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -3726,7 +3726,7 @@ impl GetGroupPolicyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetGroupPolicy</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetGroupPolicyResponse {
     /// <p>The group the policy is associated with.</p>
     pub group_name: String,
@@ -3786,7 +3786,7 @@ impl GetGroupPolicyResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetGroupRequest {
     /// <p>The name of the group.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -3825,7 +3825,7 @@ impl GetGroupRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetGroup</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetGroupResponse {
     /// <p>A structure that contains details about the group.</p>
     pub group: Group,
@@ -3889,7 +3889,7 @@ impl GetGroupResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetInstanceProfileRequest {
     /// <p>The name of the instance profile to get information about.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub instance_profile_name: String,
@@ -3912,7 +3912,7 @@ impl GetInstanceProfileRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetInstanceProfile</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetInstanceProfileResponse {
     /// <p>A structure containing details about the instance profile.</p>
     pub instance_profile: InstanceProfile,
@@ -3960,7 +3960,7 @@ impl GetInstanceProfileResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetLoginProfileRequest {
     /// <p>The name of the user whose login profile you want to retrieve.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
@@ -3983,7 +3983,7 @@ impl GetLoginProfileRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetLoginProfile</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetLoginProfileResponse {
     /// <p>A structure containing the user name and password create date for the user.</p>
     pub login_profile: LoginProfile,
@@ -4029,7 +4029,7 @@ impl GetLoginProfileResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetOpenIDConnectProviderRequest {
     /// <p>The Amazon Resource Name (ARN) of the OIDC provider resource object in IAM to get information for. You can get a list of OIDC provider resource ARNs by using the <a>ListOpenIDConnectProviders</a> operation.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub open_id_connect_provider_arn: String,
@@ -4052,7 +4052,7 @@ impl GetOpenIDConnectProviderRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetOpenIDConnectProvider</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetOpenIDConnectProviderResponse {
     /// <p>A list of client IDs (also known as audiences) that are associated with the specified IAM OIDC provider resource object. For more information, see <a>CreateOpenIDConnectProvider</a>.</p>
     pub client_id_list: Option<Vec<String>>,
@@ -4120,7 +4120,7 @@ impl GetOpenIDConnectProviderResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the managed policy that you want information about.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -4143,7 +4143,7 @@ impl GetPolicyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetPolicy</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetPolicyResponse {
     /// <p>A structure containing details about the policy.</p>
     pub policy: Option<Policy>,
@@ -4188,7 +4188,7 @@ impl GetPolicyResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetPolicyVersionRequest {
     /// <p>The Amazon Resource Name (ARN) of the managed policy that you want information about.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -4217,7 +4217,7 @@ impl GetPolicyVersionRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetPolicyVersion</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetPolicyVersionResponse {
     /// <p>A structure containing details about the policy version.</p>
     pub policy_version: Option<PolicyVersion>,
@@ -4265,7 +4265,7 @@ impl GetPolicyVersionResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetRolePolicyRequest {
     /// <p>The name of the policy document to get.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub policy_name: String,
@@ -4294,7 +4294,7 @@ impl GetRolePolicyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetRolePolicy</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetRolePolicyResponse {
     /// <p>The policy document.</p>
     pub policy_document: String,
@@ -4354,7 +4354,7 @@ impl GetRolePolicyResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetRoleRequest {
     /// <p>The name of the IAM role to get information about.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
@@ -4377,7 +4377,7 @@ impl GetRoleRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetRole</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetRoleResponse {
     /// <p>A structure containing details about the IAM role.</p>
     pub role: Role,
@@ -4422,7 +4422,7 @@ impl GetRoleResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetSAMLProviderRequest {
     /// <p>The Amazon Resource Name (ARN) of the SAML provider resource object in IAM to get information about.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub saml_provider_arn: String,
@@ -4445,7 +4445,7 @@ impl GetSAMLProviderRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetSAMLProvider</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetSAMLProviderResponse {
     /// <p>The date and time when the SAML provider was created.</p>
     pub create_date: Option<String>,
@@ -4506,7 +4506,7 @@ impl GetSAMLProviderResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetSSHPublicKeyRequest {
     /// <p>Specifies the public key encoding format to use in the response. To retrieve the public key in ssh-rsa format, use <code>SSH</code>. To retrieve the public key in PEM format, use <code>PEM</code>.</p>
     pub encoding: String,
@@ -4541,7 +4541,7 @@ impl GetSSHPublicKeyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetSSHPublicKey</a> request.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetSSHPublicKeyResponse {
     /// <p>A structure containing details about the SSH public key.</p>
     pub ssh_public_key: Option<SSHPublicKey>,
@@ -4589,7 +4589,7 @@ impl GetSSHPublicKeyResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetServerCertificateRequest {
     /// <p>The name of the server certificate you want to retrieve information about.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub server_certificate_name: String,
@@ -4612,7 +4612,7 @@ impl GetServerCertificateRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetServerCertificate</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetServerCertificateResponse {
     /// <p>A structure containing details about the server certificate.</p>
     pub server_certificate: ServerCertificate,
@@ -4660,7 +4660,7 @@ impl GetServerCertificateResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetServiceLinkedRoleDeletionStatusRequest {
     /// <p>The deletion task identifier. This identifier is returned by the <a>DeleteServiceLinkedRole</a> operation in the format <code>task/aws-service-role/&lt;service-principal-name&gt;/&lt;role-name&gt;/&lt;task-uuid&gt;</code>.</p>
     pub deletion_task_id: String,
@@ -4682,7 +4682,7 @@ impl GetServiceLinkedRoleDeletionStatusRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetServiceLinkedRoleDeletionStatusResponse {
     /// <p>An object that contains details about the reason the deletion failed.</p>
     pub reason: Option<DeletionTaskFailureReasonType>,
@@ -4736,7 +4736,7 @@ impl GetServiceLinkedRoleDeletionStatusResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetUserPolicyRequest {
     /// <p>The name of the policy document to get.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub policy_name: String,
@@ -4765,7 +4765,7 @@ impl GetUserPolicyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetUserPolicy</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetUserPolicyResponse {
     /// <p>The policy document.</p>
     pub policy_document: String,
@@ -4826,7 +4826,7 @@ impl GetUserPolicyResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetUserRequest {
     /// <p>The name of the user to get information about.</p> <p>This parameter is optional. If it is not included, it defaults to the user making the request. This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
@@ -4851,7 +4851,7 @@ impl GetUserRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetUser</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetUserResponse {
     /// <p>A structure containing details about the IAM user.</p>
     pub user: User,
@@ -4897,7 +4897,7 @@ impl GetUserResponseDeserializer {
     }
 }
 /// <p><p>Contains information about an IAM group entity.</p> <p>This data type is used as a response element in the following operations:</p> <ul> <li> <p> <a>CreateGroup</a> </p> </li> <li> <p> <a>GetGroup</a> </p> </li> <li> <p> <a>ListGroups</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Group {
     /// <p> The Amazon Resource Name (ARN) specifying the group. For more information about ARNs and how to use them in policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>
     pub arn: String,
@@ -4965,7 +4965,7 @@ impl GroupDeserializer {
     }
 }
 /// <p>Contains information about an IAM group, including all of the group's policies.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GroupDetail {
     pub arn: Option<String>,
     /// <p>A list of the managed policies attached to the group.</p>
@@ -5201,7 +5201,7 @@ impl IdTypeDeserializer {
     }
 }
 /// <p><p>Contains information about an instance profile.</p> <p>This data type is used as a response element in the following operations:</p> <ul> <li> <p> <a>CreateInstanceProfile</a> </p> </li> <li> <p> <a>GetInstanceProfile</a> </p> </li> <li> <p> <a>ListInstanceProfiles</a> </p> </li> <li> <p> <a>ListInstanceProfilesForRole</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceProfile {
     /// <p> The Amazon Resource Name (ARN) specifying the instance profile. For more information about ARNs and how to use them in policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>
     pub arn: String,
@@ -5347,7 +5347,7 @@ impl LineNumberDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListAccessKeysRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -5388,7 +5388,7 @@ impl ListAccessKeysRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListAccessKeys</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListAccessKeysResponse {
     /// <p>A list of objects containing metadata about the access keys.</p>
     pub access_key_metadata: Vec<AccessKeyMetadata>,
@@ -5451,7 +5451,7 @@ impl ListAccessKeysResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListAccountAliasesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -5484,7 +5484,7 @@ impl ListAccountAliasesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListAccountAliases</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListAccountAliasesResponse {
     /// <p>A list of aliases associated with the account. AWS supports only one alias per account.</p>
     pub account_aliases: Vec<String>,
@@ -5546,7 +5546,7 @@ impl ListAccountAliasesResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListAttachedGroupPoliciesRequest {
     /// <p>The name (friendly name, not ARN) of the group to list attached policies for.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -5593,7 +5593,7 @@ impl ListAttachedGroupPoliciesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListAttachedGroupPolicies</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListAttachedGroupPoliciesResponse {
     /// <p>A list of the attached policies.</p>
     pub attached_policies: Option<Vec<AttachedPolicy>>,
@@ -5656,7 +5656,7 @@ impl ListAttachedGroupPoliciesResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListAttachedRolePoliciesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -5703,7 +5703,7 @@ impl ListAttachedRolePoliciesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListAttachedRolePolicies</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListAttachedRolePoliciesResponse {
     /// <p>A list of the attached policies.</p>
     pub attached_policies: Option<Vec<AttachedPolicy>>,
@@ -5766,7 +5766,7 @@ impl ListAttachedRolePoliciesResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListAttachedUserPoliciesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -5813,7 +5813,7 @@ impl ListAttachedUserPoliciesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListAttachedUserPolicies</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListAttachedUserPoliciesResponse {
     /// <p>A list of the attached policies.</p>
     pub attached_policies: Option<Vec<AttachedPolicy>>,
@@ -5876,7 +5876,7 @@ impl ListAttachedUserPoliciesResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListEntitiesForPolicyRequest {
     /// <p>The entity type to use for filtering the results.</p> <p>For example, when <code>EntityFilter</code> is <code>Role</code>, only the roles that are attached to the specified policy are returned. This parameter is optional. If it is not included, all attached entities (users, groups, and roles) are returned. The argument for this parameter must be one of the valid values listed below.</p>
     pub entity_filter: Option<String>,
@@ -5931,7 +5931,7 @@ impl ListEntitiesForPolicyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListEntitiesForPolicy</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListEntitiesForPolicyResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
     pub is_truncated: Option<bool>,
@@ -6008,7 +6008,7 @@ impl ListEntitiesForPolicyResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListGroupPoliciesRequest {
     /// <p>The name of the group to list policies for.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -6047,7 +6047,7 @@ impl ListGroupPoliciesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListGroupPolicies</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListGroupPoliciesResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
     pub is_truncated: Option<bool>,
@@ -6109,7 +6109,7 @@ impl ListGroupPoliciesResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListGroupsForUserRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -6148,7 +6148,7 @@ impl ListGroupsForUserRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListGroupsForUser</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListGroupsForUserResponse {
     /// <p>A list of groups.</p>
     pub groups: Vec<Group>,
@@ -6207,7 +6207,7 @@ impl ListGroupsForUserResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListGroupsRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -6248,7 +6248,7 @@ impl ListGroupsRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListGroups</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListGroupsResponse {
     /// <p>A list of groups.</p>
     pub groups: Vec<Group>,
@@ -6307,7 +6307,7 @@ impl ListGroupsResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListInstanceProfilesForRoleRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -6346,7 +6346,7 @@ impl ListInstanceProfilesForRoleRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListInstanceProfilesForRole</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListInstanceProfilesForRoleResponse {
     /// <p>A list of instance profiles.</p>
     pub instance_profiles: Vec<InstanceProfile>,
@@ -6409,7 +6409,7 @@ impl ListInstanceProfilesForRoleResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListInstanceProfilesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -6450,7 +6450,7 @@ impl ListInstanceProfilesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListInstanceProfiles</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListInstanceProfilesResponse {
     /// <p>A list of instance profiles.</p>
     pub instance_profiles: Vec<InstanceProfile>,
@@ -6513,7 +6513,7 @@ impl ListInstanceProfilesResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListMFADevicesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -6554,7 +6554,7 @@ impl ListMFADevicesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListMFADevices</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListMFADevicesResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
     pub is_truncated: Option<bool>,
@@ -6616,7 +6616,7 @@ impl ListMFADevicesResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListOpenIDConnectProvidersRequest {}
 
 /// Serialize `ListOpenIDConnectProvidersRequest` contents to a `SignedRequest`.
@@ -6631,7 +6631,7 @@ impl ListOpenIDConnectProvidersRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListOpenIDConnectProviders</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListOpenIDConnectProvidersResponse {
     /// <p>The list of IAM OIDC provider resource objects defined in the AWS account.</p>
     pub open_id_connect_provider_list: Option<Vec<OpenIDConnectProviderListEntry>>,
@@ -6681,7 +6681,7 @@ impl ListOpenIDConnectProvidersResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListPoliciesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -6738,7 +6738,7 @@ impl ListPoliciesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListPolicies</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListPoliciesResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
     pub is_truncated: Option<bool>,
@@ -6799,7 +6799,7 @@ impl ListPoliciesResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListPolicyVersionsRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -6838,7 +6838,7 @@ impl ListPolicyVersionsRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListPolicyVersions</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListPolicyVersionsResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
     pub is_truncated: Option<bool>,
@@ -6901,7 +6901,7 @@ impl ListPolicyVersionsResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListRolePoliciesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -6940,7 +6940,7 @@ impl ListRolePoliciesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListRolePolicies</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListRolePoliciesResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
     pub is_truncated: Option<bool>,
@@ -7002,7 +7002,7 @@ impl ListRolePoliciesResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListRolesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -7043,7 +7043,7 @@ impl ListRolesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListRoles</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListRolesResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
     pub is_truncated: Option<bool>,
@@ -7102,7 +7102,7 @@ impl ListRolesResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListSAMLProvidersRequest {}
 
 /// Serialize `ListSAMLProvidersRequest` contents to a `SignedRequest`.
@@ -7117,7 +7117,7 @@ impl ListSAMLProvidersRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListSAMLProviders</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListSAMLProvidersResponse {
     /// <p>The list of SAML provider resource objects defined in IAM for this AWS account.</p>
     pub saml_provider_list: Option<Vec<SAMLProviderListEntry>>,
@@ -7166,7 +7166,7 @@ impl ListSAMLProvidersResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListSSHPublicKeysRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -7207,7 +7207,7 @@ impl ListSSHPublicKeysRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListSSHPublicKeys</a> request.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListSSHPublicKeysResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
     pub is_truncated: Option<bool>,
@@ -7268,7 +7268,7 @@ impl ListSSHPublicKeysResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListServerCertificatesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -7309,7 +7309,7 @@ impl ListServerCertificatesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListServerCertificates</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListServerCertificatesResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
     pub is_truncated: Option<bool>,
@@ -7372,7 +7372,7 @@ impl ListServerCertificatesResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListServiceSpecificCredentialsRequest {
     /// <p>Filters the returned results to only those for the specified AWS service. If not specified, then AWS returns service-specific credentials for all services.</p>
     pub service_name: Option<String>,
@@ -7404,7 +7404,7 @@ impl ListServiceSpecificCredentialsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListServiceSpecificCredentialsResponse {
     /// <p>A list of structures that each contain details about a service-specific credential.</p>
     pub service_specific_credentials: Option<Vec<ServiceSpecificCredentialMetadata>>,
@@ -7454,7 +7454,7 @@ impl ListServiceSpecificCredentialsResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListSigningCertificatesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -7495,7 +7495,7 @@ impl ListSigningCertificatesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListSigningCertificates</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListSigningCertificatesResponse {
     /// <p>A list of the user's signing certificate information.</p>
     pub certificates: Vec<SigningCertificate>,
@@ -7557,7 +7557,7 @@ impl ListSigningCertificatesResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListUserPoliciesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -7596,7 +7596,7 @@ impl ListUserPoliciesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListUserPolicies</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListUserPoliciesResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
     pub is_truncated: Option<bool>,
@@ -7658,7 +7658,7 @@ impl ListUserPoliciesResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListUsersRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
@@ -7699,7 +7699,7 @@ impl ListUsersRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListUsers</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListUsersResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
     pub is_truncated: Option<bool>,
@@ -7758,7 +7758,7 @@ impl ListUsersResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListVirtualMFADevicesRequest {
     /// <p> The status (<code>Unassigned</code> or <code>Assigned</code>) of the devices to list. If you do not specify an <code>AssignmentStatus</code>, the operation defaults to <code>Any</code> which lists both assigned and unassigned virtual MFA devices.</p>
     pub assignment_status: Option<String>,
@@ -7799,7 +7799,7 @@ impl ListVirtualMFADevicesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListVirtualMFADevices</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListVirtualMFADevicesResponse {
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
     pub is_truncated: Option<bool>,
@@ -7863,7 +7863,7 @@ impl ListVirtualMFADevicesResponseDeserializer {
     }
 }
 /// <p>Contains the user name and password create date for a user.</p> <p> This data type is used as a response element in the <a>CreateLoginProfile</a> and <a>GetLoginProfile</a> operations. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LoginProfile {
     /// <p>The date when the password for the user was created.</p>
     pub create_date: String,
@@ -7923,7 +7923,7 @@ impl LoginProfileDeserializer {
     }
 }
 /// <p>Contains information about an MFA device.</p> <p>This data type is used as a response element in the <a>ListMFADevices</a> operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct MFADevice {
     /// <p>The date when the MFA device was enabled for the user.</p>
     pub enable_date: String,
@@ -7984,7 +7984,7 @@ impl MFADeviceDeserializer {
     }
 }
 /// <p>Contains information about a managed policy, including the policy's ARN, versions, and the number of principal entities (users, groups, and roles) that the policy is attached to.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> operation.</p> <p>For more information about managed policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ManagedPolicyDetail {
     pub arn: Option<String>,
     /// <p>The number of principal entities (users, groups, and roles) that the policy is attached to.</p>
@@ -8224,7 +8224,7 @@ impl MinimumPasswordLengthTypeDeserializer {
     }
 }
 /// <p>Contains the Amazon Resource Name (ARN) for an IAM OpenID Connect provider.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct OpenIDConnectProviderListEntry {
     pub arn: Option<String>,
 }
@@ -8327,7 +8327,7 @@ impl OpenIDConnectProviderUrlTypeDeserializer {
     }
 }
 /// <p>Contains information about AWS Organizations's effect on a policy simulation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct OrganizationsDecisionDetail {
     /// <p>Specifies whether the simulated operation is allowed by the AWS Organizations service control policies that impact the simulated user's account.</p>
     pub allowed_by_organizations: Option<bool>,
@@ -8375,7 +8375,7 @@ impl OrganizationsDecisionDetailDeserializer {
     }
 }
 /// <p>Contains information about the account password policy.</p> <p> This data type is used as a response element in the <a>GetAccountPasswordPolicy</a> operation. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PasswordPolicy {
     /// <p>Specifies whether IAM users are allowed to change their own password.</p>
     pub allow_users_to_change_password: Option<bool>,
@@ -8528,7 +8528,7 @@ impl PathTypeDeserializer {
     }
 }
 /// <p>Contains information about a managed policy.</p> <p>This data type is used as a response element in the <a>CreatePolicy</a>, <a>GetPolicy</a>, and <a>ListPolicies</a> operations. </p> <p>For more information about managed policies, refer to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Policy {
     pub arn: Option<String>,
     /// <p>The number of entities (users, groups, and roles) that the policy is attached to.</p>
@@ -8648,7 +8648,7 @@ impl PolicyDescriptionTypeDeserializer {
     }
 }
 /// <p>Contains information about an IAM policy, including the policy document.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PolicyDetail {
     /// <p>The policy document.</p>
     pub policy_document: Option<String>,
@@ -8814,7 +8814,7 @@ impl PolicyEvaluationDecisionTypeDeserializer {
     }
 }
 /// <p>Contains information about a group that a managed policy is attached to.</p> <p>This data type is used as a response element in the <a>ListEntitiesForPolicy</a> operation. </p> <p>For more information about managed policies, refer to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PolicyGroup {
     /// <p>The stable and unique string identifying the group. For more information about IDs, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p>
     pub group_id: Option<String>,
@@ -9033,7 +9033,7 @@ impl PolicyPathTypeDeserializer {
     }
 }
 /// <p>Contains information about a role that a managed policy is attached to.</p> <p>This data type is used as a response element in the <a>ListEntitiesForPolicy</a> operation. </p> <p>For more information about managed policies, refer to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PolicyRole {
     /// <p>The stable and unique string identifying the role. For more information about IDs, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p>
     pub role_id: Option<String>,
@@ -9140,7 +9140,7 @@ impl PolicySourceTypeDeserializer {
     }
 }
 /// <p>Contains information about a user that a managed policy is attached to.</p> <p>This data type is used as a response element in the <a>ListEntitiesForPolicy</a> operation. </p> <p>For more information about managed policies, refer to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PolicyUser {
     /// <p>The stable and unique string identifying the user. For more information about IDs, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p>
     pub user_id: Option<String>,
@@ -9233,7 +9233,7 @@ impl PolicyUserListTypeDeserializer {
     }
 }
 /// <p>Contains information about a version of a managed policy.</p> <p>This data type is used as a response element in the <a>CreatePolicyVersion</a>, <a>GetPolicyVersion</a>, <a>ListPolicyVersions</a>, and <a>GetAccountAuthorizationDetails</a> operations. </p> <p>For more information about managed policies, refer to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PolicyVersion {
     /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the policy version was created.</p>
     pub create_date: Option<String>,
@@ -9317,7 +9317,7 @@ impl PolicyVersionIdTypeDeserializer {
     }
 }
 /// <p>Contains the row and column of a location of a <code>Statement</code> element in a policy document.</p> <p>This data type is used as a member of the <code> <a>Statement</a> </code> type.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Position {
     /// <p>The column in the line containing the specified position in the document.</p>
     pub column: Option<i64>,
@@ -9410,7 +9410,7 @@ impl PublicKeyMaterialTypeDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutGroupPolicyRequest {
     /// <p>The name of the group to associate the policy with.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -9444,7 +9444,7 @@ impl PutGroupPolicyRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutRolePolicyRequest {
     /// <p><p>The policy document.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub policy_document: String,
@@ -9478,7 +9478,7 @@ impl PutRolePolicyRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutUserPolicyRequest {
     /// <p><p>The policy document.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub policy_document: String,
@@ -9540,7 +9540,7 @@ impl RegionNameTypeDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RemoveClientIDFromOpenIDConnectProviderRequest {
     /// <p>The client ID (also known as audience) to remove from the IAM OIDC provider resource. For more information about client IDs, see <a>CreateOpenIDConnectProvider</a>.</p>
     pub client_id: String,
@@ -9572,7 +9572,7 @@ impl RemoveClientIDFromOpenIDConnectProviderRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RemoveRoleFromInstanceProfileRequest {
     /// <p>The name of the instance profile to update.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub instance_profile_name: String,
@@ -9600,7 +9600,7 @@ impl RemoveRoleFromInstanceProfileRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RemoveUserFromGroupRequest {
     /// <p>The name of the group to update.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -9684,7 +9684,7 @@ impl ReportStateTypeDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResetServiceSpecificCredentialRequest {
     /// <p>The unique identifier of the service-specific credential.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub service_specific_credential_id: String,
@@ -9714,7 +9714,7 @@ impl ResetServiceSpecificCredentialRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResetServiceSpecificCredentialResponse {
     /// <p><p>A structure with details about the updated service-specific credential, including the new password.</p> <important> <p>This is the <b>only</b> time that you can access the password. You cannot recover the password later, but you can reset it again.</p> </important></p>
     pub service_specific_credential: Option<ServiceSpecificCredential>,
@@ -9790,7 +9790,7 @@ impl ResourceNameTypeDeserializer {
     }
 }
 /// <p>Contains the result of the simulation of a single API operation call on a single resource.</p> <p>This data type is used by a member of the <a>EvaluationResult</a> data type.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResourceSpecificResult {
     /// <p>Additional details about the results of the evaluation decision. When there are both IAM policies and resource policies, this parameter explains how each set of policies contributes to the final evaluation decision. When simulating cross-account access to a resource, both the resource-based policy and the caller's IAM policy must grant access.</p>
     pub eval_decision_details: Option<::std::collections::HashMap<String, String>>,
@@ -9915,7 +9915,7 @@ impl ResourceSpecificResultListTypeDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResyncMFADeviceRequest {
     /// <p>An authentication code emitted by the device.</p> <p>The format for this parameter is a sequence of six digits.</p>
     pub authentication_code_1: String,
@@ -9956,7 +9956,7 @@ impl ResyncMFADeviceRequestSerializer {
 }
 
 /// <p>Contains information about an IAM role. This structure is returned as a response element in several API operations that interact with roles.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Role {
     /// <p> The Amazon Resource Name (ARN) specifying the role. For more information about ARNs and how to use them in policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i> guide. </p>
     pub arn: String,
@@ -10064,7 +10064,7 @@ impl RoleDescriptionTypeDeserializer {
     }
 }
 /// <p>Contains information about an IAM role, including all of the role's policies.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RoleDetail {
     pub arn: Option<String>,
     /// <p>The trust policy that grants permission to assume the role.</p>
@@ -10316,7 +10316,7 @@ impl RoleUsageListTypeDeserializer {
     }
 }
 /// <p>An object that contains details about how a service-linked role is used, if that information is returned by the service.</p> <p>This data type is used as a response element in the <a>GetServiceLinkedRoleDeletionStatus</a> operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RoleUsageType {
     /// <p>The name of the region where the service-linked role is being used.</p>
     pub region: Option<String>,
@@ -10386,7 +10386,7 @@ impl SAMLMetadataDocumentTypeDeserializer {
     }
 }
 /// <p>Contains the list of SAML providers for this account.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SAMLProviderListEntry {
     /// <p>The Amazon Resource Name (ARN) of the SAML provider.</p>
     pub arn: Option<String>,
@@ -10486,7 +10486,7 @@ impl SAMLProviderListTypeDeserializer {
     }
 }
 /// <p>Contains information about an SSH public key.</p> <p>This data type is used as a response element in the <a>GetSSHPublicKey</a> and <a>UploadSSHPublicKey</a> operations. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SSHPublicKey {
     /// <p>The MD5 message digest of the SSH public key.</p>
     pub fingerprint: String,
@@ -10611,7 +10611,7 @@ impl SSHPublicKeyListTypeDeserializer {
     }
 }
 /// <p>Contains information about an SSH public key, without the key's body or fingerprint.</p> <p>This data type is used as a response element in the <a>ListSSHPublicKeys</a> operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SSHPublicKeyMetadata {
     /// <p>The unique identifier for the SSH public key.</p>
     pub ssh_public_key_id: String,
@@ -10691,7 +10691,7 @@ impl SerialNumberTypeDeserializer {
     }
 }
 /// <p>Contains information about a server certificate.</p> <p> This data type is used as a response element in the <a>GetServerCertificate</a> operation. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ServerCertificate {
     /// <p>The contents of the public key certificate.</p>
     pub certificate_body: String,
@@ -10758,7 +10758,7 @@ impl ServerCertificateDeserializer {
     }
 }
 /// <p>Contains information about a server certificate without its certificate body, certificate chain, and private key.</p> <p> This data type is used as a response element in the <a>UploadServerCertificate</a> and <a>ListServerCertificates</a> operations. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ServerCertificateMetadata {
     /// <p> The Amazon Resource Name (ARN) specifying the server certificate. For more information about ARNs and how to use them in policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>
     pub arn: String,
@@ -10922,7 +10922,7 @@ impl ServicePasswordDeserializer {
     }
 }
 /// <p>Contains the details of a service-specific credential.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ServiceSpecificCredential {
     /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the service-specific credential were created.</p>
     pub create_date: String,
@@ -11025,7 +11025,7 @@ impl ServiceSpecificCredentialIdDeserializer {
     }
 }
 /// <p>Contains additional details about a service-specific credential.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ServiceSpecificCredentialMetadata {
     /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the service-specific credential were created.</p>
     pub create_date: String,
@@ -11163,7 +11163,7 @@ impl ServiceUserNameDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SetDefaultPolicyVersionRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy whose default version you want to set.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -11192,7 +11192,7 @@ impl SetDefaultPolicyVersionRequestSerializer {
 }
 
 /// <p>Contains information about an X.509 signing certificate.</p> <p>This data type is used as a response element in the <a>UploadSigningCertificate</a> and <a>ListSigningCertificates</a> operations. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SigningCertificate {
     /// <p>The contents of the signing certificate.</p>
     pub certificate_body: String,
@@ -11265,7 +11265,7 @@ impl SigningCertificateDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SimulateCustomPolicyRequest {
     /// <p>A list of names of API operations to evaluate in the simulation. Each operation is evaluated against each resource. Each operation must include the service identifier, such as <code>iam:CreateUser</code>.</p>
     pub action_names: Vec<String>,
@@ -11362,7 +11362,7 @@ impl SimulateCustomPolicyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>SimulatePrincipalPolicy</a> or <a>SimulateCustomPolicy</a> request.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SimulatePolicyResponse {
     /// <p>The results of the simulation.</p>
     pub evaluation_results: Option<Vec<EvaluationResult>>,
@@ -11425,7 +11425,7 @@ impl SimulatePolicyResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SimulatePrincipalPolicyRequest {
     /// <p>A list of names of API operations to evaluate in the simulation. Each operation is evaluated for each resource. Each operation must include the service identifier, such as <code>iam:CreateUser</code>.</p>
     pub action_names: Vec<String>,
@@ -11541,7 +11541,7 @@ impl SimulationPolicyListTypeSerializer {
 }
 
 /// <p>Contains a reference to a <code>Statement</code> element in a policy document that determines the result of the simulation.</p> <p>This data type is used by the <code>MatchedStatements</code> member of the <code> <a>EvaluationResult</a> </code> type.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Statement {
     /// <p>The row and column of the end of a <code>Statement</code> in an IAM policy.</p>
     pub end_position: Option<Position>,
@@ -11798,7 +11798,7 @@ impl ThumbprintTypeDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateAccessKeyRequest {
     /// <p>The access key ID of the secret access key you want to update.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub access_key_id: String,
@@ -11834,7 +11834,7 @@ impl UpdateAccessKeyRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateAccountPasswordPolicyRequest {
     /// <p> Allows all IAM users in your account to use the AWS Management Console to change their own passwords. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/HowToPwdIAMUser.html">Letting IAM Users Change Their Own Passwords</a> in the <i>IAM User Guide</i>.</p> <p>If you do not specify a value for this parameter, then the operation uses the default value of <code>false</code>. The result is that IAM users in the account do not automatically have permissions to change their own password.</p>
     pub allow_users_to_change_password: Option<bool>,
@@ -11922,7 +11922,7 @@ impl UpdateAccountPasswordPolicyRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateAssumeRolePolicyRequest {
     /// <p><p>The policy that grants an entity permission to assume the role.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub policy_document: String,
@@ -11950,7 +11950,7 @@ impl UpdateAssumeRolePolicyRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateGroupRequest {
     /// <p>Name of the IAM group to update. If you're changing the name of the group, this is the original name.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -11988,7 +11988,7 @@ impl UpdateGroupRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateLoginProfileRequest {
     /// <p>The new password for the specified IAM user.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul> <p>However, the format can be further restricted by the account administrator by setting a password policy on the AWS account. For more information, see <a>UpdateAccountPasswordPolicy</a>.</p>
     pub password: Option<String>,
@@ -12026,7 +12026,7 @@ impl UpdateLoginProfileRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateOpenIDConnectProviderThumbprintRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM OIDC provider resource object for which you want to update the thumbprint. You can get a list of OIDC provider ARNs by using the <a>ListOpenIDConnectProviders</a> operation.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub open_id_connect_provider_arn: String,
@@ -12059,7 +12059,7 @@ impl UpdateOpenIDConnectProviderThumbprintRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateRoleDescriptionRequest {
     /// <p>The new description that you want to apply to the specified role.</p>
     pub description: String,
@@ -12087,7 +12087,7 @@ impl UpdateRoleDescriptionRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateRoleDescriptionResponse {
     /// <p>A structure that contains details about the modified role.</p>
     pub role: Option<Role>,
@@ -12132,7 +12132,7 @@ impl UpdateRoleDescriptionResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateRoleRequest {
     /// <p>The new description that you want to apply to the specified role.</p>
     pub description: Option<String>,
@@ -12170,7 +12170,7 @@ impl UpdateRoleRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateRoleResponse {}
 
 struct UpdateRoleResponseDeserializer;
@@ -12189,7 +12189,7 @@ impl UpdateRoleResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateSAMLProviderRequest {
     /// <p>An XML document generated by an identity provider (IdP) that supports SAML 2.0. The document includes the issuer's name, expiration information, and keys that can be used to validate the SAML authentication response (assertions) that are received from the IdP. You must generate the metadata document using the identity management software that is used as your organization's IdP.</p>
     pub saml_metadata_document: String,
@@ -12218,7 +12218,7 @@ impl UpdateSAMLProviderRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>UpdateSAMLProvider</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateSAMLProviderResponse {
     /// <p>The Amazon Resource Name (ARN) of the SAML provider that was updated.</p>
     pub saml_provider_arn: Option<String>,
@@ -12266,7 +12266,7 @@ impl UpdateSAMLProviderResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateSSHPublicKeyRequest {
     /// <p>The unique identifier for the SSH public key.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub ssh_public_key_id: String,
@@ -12300,7 +12300,7 @@ impl UpdateSSHPublicKeyRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateServerCertificateRequest {
     /// <p>The new path for the server certificate. Include this only if you are updating the server certificate's path.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub new_path: Option<String>,
@@ -12338,7 +12338,7 @@ impl UpdateServerCertificateRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateServiceSpecificCredentialRequest {
     /// <p>The unique identifier of the service-specific credential.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub service_specific_credential_id: String,
@@ -12374,7 +12374,7 @@ impl UpdateServiceSpecificCredentialRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateSigningCertificateRequest {
     /// <p>The ID of the signing certificate you want to update.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub certificate_id: String,
@@ -12410,7 +12410,7 @@ impl UpdateSigningCertificateRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateUserRequest {
     /// <p>New path for the IAM user. Include this parameter only if you're changing the user's path.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub new_path: Option<String>,
@@ -12448,7 +12448,7 @@ impl UpdateUserRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UploadSSHPublicKeyRequest {
     /// <p><p>The SSH public key. The public key must be encoded in ssh-rsa format or PEM format.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub ssh_public_key_body: String,
@@ -12477,7 +12477,7 @@ impl UploadSSHPublicKeyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>UploadSSHPublicKey</a> request.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UploadSSHPublicKeyResponse {
     /// <p>Contains information about the SSH public key.</p>
     pub ssh_public_key: Option<SSHPublicKey>,
@@ -12525,7 +12525,7 @@ impl UploadSSHPublicKeyResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UploadServerCertificateRequest {
     /// <p><p>The contents of the public key certificate in PEM-encoded format.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub certificate_body: String,
@@ -12576,7 +12576,7 @@ impl UploadServerCertificateRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>UploadServerCertificate</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UploadServerCertificateResponse {
     /// <p>The meta information of the uploaded server certificate without its certificate body, certificate chain, and private key.</p>
     pub server_certificate_metadata: Option<ServerCertificateMetadata>,
@@ -12625,7 +12625,7 @@ impl UploadServerCertificateResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UploadSigningCertificateRequest {
     /// <p><p>The contents of the signing certificate.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub certificate_body: String,
@@ -12656,7 +12656,7 @@ impl UploadSigningCertificateRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>UploadSigningCertificate</a> request. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UploadSigningCertificateResponse {
     /// <p>Information about the certificate.</p>
     pub certificate: SigningCertificate,
@@ -12705,7 +12705,7 @@ impl UploadSigningCertificateResponseDeserializer {
     }
 }
 /// <p><p>Contains information about an IAM user entity.</p> <p>This data type is used as a response element in the following operations:</p> <ul> <li> <p> <a>CreateUser</a> </p> </li> <li> <p> <a>GetUser</a> </p> </li> <li> <p> <a>ListUsers</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct User {
     /// <p>The Amazon Resource Name (ARN) that identifies the user. For more information about ARNs and how to use ARNs in policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>
     pub arn: String,
@@ -12781,7 +12781,7 @@ impl UserDeserializer {
     }
 }
 /// <p>Contains information about an IAM user, including all the user's policies and all the IAM groups the user is in.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UserDetail {
     pub arn: Option<String>,
     /// <p>A list of the managed policies attached to the user.</p>
@@ -12967,7 +12967,7 @@ impl UserNameTypeDeserializer {
     }
 }
 /// <p>Contains information about a virtual MFA device.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VirtualMFADevice {
     /// <p> The Base32 seed defined as specified in <a href="https://tools.ietf.org/html/rfc3548.txt">RFC3548</a>. The <code>Base32StringSeed</code> is Base64-encoded. </p>
     pub base_32_string_seed: Option<Vec<u8>>,

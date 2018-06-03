@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>ActivateGatewayInput$ActivationKey</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayName</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayRegion</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayTimezone</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayType</a> </p> </li> <li> <p> <a>ActivateGatewayInput$TapeDriveType</a> </p> </li> <li> <p> <a>ActivateGatewayInput$MediumChangerType</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ActivateGatewayInput {
     /// <p>Your gateway activation key. You can obtain the activation key by sending an HTTP GET request with redirects enabled to the gateway IP address (port 80). The redirect URL returned in the response provides you the activation key for your gateway in the query string parameter <code>activationKey</code>. It may also include other activation-related parameters, however, these are merely defaults -- the arguments you pass to the <code>ActivateGateway</code> API call determine the actual configuration of your gateway. </p> <p>For more information, see https://docs.aws.amazon.com/storagegateway/latest/userguide/get-activation-key.html in the Storage Gateway User Guide.</p>
     #[serde(rename = "ActivationKey")]
@@ -60,14 +60,14 @@ pub struct ActivateGatewayInput {
 }
 
 /// <p><p>AWS Storage Gateway returns the Amazon Resource Name (ARN) of the activated gateway. It is a string made of information such as your account, gateway name, and region. This ARN is used to reference the gateway in other API operations as well as resource-based authorization.</p> <note> <p>For gateways activated prior to September 02, 2015, the gateway ARN contains the gateway name rather than the gateway ID. Changing the name of the gateway has no effect on the gateway ARN.</p> </note></p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivateGatewayOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddCacheInput {
     #[serde(rename = "DiskIds")]
     pub disk_ids: Vec<String>,
@@ -75,7 +75,7 @@ pub struct AddCacheInput {
     pub gateway_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AddCacheOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -83,7 +83,7 @@ pub struct AddCacheOutput {
 }
 
 /// <p>AddTagsToResourceInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddTagsToResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the resource you want to add tags to.</p>
     #[serde(rename = "ResourceARN")]
@@ -94,7 +94,7 @@ pub struct AddTagsToResourceInput {
 }
 
 /// <p>AddTagsToResourceOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AddTagsToResourceOutput {
     /// <p>The Amazon Resource Name (ARN) of the resource you want to add tags to.</p>
     #[serde(rename = "ResourceARN")]
@@ -102,7 +102,7 @@ pub struct AddTagsToResourceOutput {
     pub resource_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddUploadBufferInput {
     #[serde(rename = "DiskIds")]
     pub disk_ids: Vec<String>,
@@ -110,7 +110,7 @@ pub struct AddUploadBufferInput {
     pub gateway_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AddUploadBufferOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -118,7 +118,7 @@ pub struct AddUploadBufferOutput {
 }
 
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>AddWorkingStorageInput$DiskIds</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddWorkingStorageInput {
     /// <p>An array of strings that identify disks that are to be configured as working storage. Each string have a minimum length of 1 and maximum length of 300. You can get the disk IDs from the <a>ListLocalDisks</a> API.</p>
     #[serde(rename = "DiskIds")]
@@ -128,7 +128,7 @@ pub struct AddWorkingStorageInput {
 }
 
 /// <p>A JSON object containing the of the gateway for which working storage was configured.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AddWorkingStorageOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -136,7 +136,7 @@ pub struct AddWorkingStorageOutput {
 }
 
 /// <p>Describes an iSCSI cached volume.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CachediSCSIVolume {
     /// <p>The date the volume was created. Volumes created prior to March 28, 2017 don’t have this time stamp.</p>
     #[serde(rename = "CreatedDate")]
@@ -181,7 +181,7 @@ pub struct CachediSCSIVolume {
 }
 
 /// <p>CancelArchivalInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CancelArchivalInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -191,7 +191,7 @@ pub struct CancelArchivalInput {
 }
 
 /// <p>CancelArchivalOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CancelArchivalOutput {
     /// <p>The Amazon Resource Name (ARN) of the virtual tape for which archiving was canceled.</p>
     #[serde(rename = "TapeARN")]
@@ -200,7 +200,7 @@ pub struct CancelArchivalOutput {
 }
 
 /// <p>CancelRetrievalInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CancelRetrievalInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -210,7 +210,7 @@ pub struct CancelRetrievalInput {
 }
 
 /// <p>CancelRetrievalOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CancelRetrievalOutput {
     /// <p>The Amazon Resource Name (ARN) of the virtual tape for which retrieval was canceled.</p>
     #[serde(rename = "TapeARN")]
@@ -219,7 +219,7 @@ pub struct CancelRetrievalOutput {
 }
 
 /// <p>Describes Challenge-Handshake Authentication Protocol (CHAP) information that supports authentication between your gateway and iSCSI initiators.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ChapInfo {
     /// <p>The iSCSI initiator that connects to the target.</p>
     #[serde(rename = "InitiatorName")]
@@ -239,7 +239,7 @@ pub struct ChapInfo {
     pub target_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateCachediSCSIVolumeInput {
     #[serde(rename = "ClientToken")]
     pub client_token: String,
@@ -260,7 +260,7 @@ pub struct CreateCachediSCSIVolumeInput {
     pub volume_size_in_bytes: i64,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateCachediSCSIVolumeOutput {
     #[serde(rename = "TargetARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -271,7 +271,7 @@ pub struct CreateCachediSCSIVolumeOutput {
 }
 
 /// <p>CreateNFSFileShareInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateNFSFileShareInput {
     /// <p>The list of clients that are allowed to access the file gateway. The list must contain either valid IP addresses or valid CIDR blocks. </p>
     #[serde(rename = "ClientList")]
@@ -328,7 +328,7 @@ pub struct CreateNFSFileShareInput {
 }
 
 /// <p>CreateNFSFileShareOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateNFSFileShareOutput {
     /// <p>The Amazon Resource Name (ARN) of the newly created file share. </p>
     #[serde(rename = "FileShareARN")]
@@ -336,7 +336,7 @@ pub struct CreateNFSFileShareOutput {
     pub file_share_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateSnapshotFromVolumeRecoveryPointInput {
     #[serde(rename = "SnapshotDescription")]
     pub snapshot_description: String,
@@ -344,7 +344,7 @@ pub struct CreateSnapshotFromVolumeRecoveryPointInput {
     pub volume_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateSnapshotFromVolumeRecoveryPointOutput {
     #[serde(rename = "SnapshotId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -358,7 +358,7 @@ pub struct CreateSnapshotFromVolumeRecoveryPointOutput {
 }
 
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>CreateSnapshotInput$SnapshotDescription</a> </p> </li> <li> <p> <a>CreateSnapshotInput$VolumeARN</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateSnapshotInput {
     /// <p>Textual description of the snapshot that appears in the Amazon EC2 console, Elastic Block Store snapshots panel in the <b>Description</b> field, and in the AWS Storage Gateway snapshot <b>Details</b> pane, <b>Description</b> field</p>
     #[serde(rename = "SnapshotDescription")]
@@ -369,7 +369,7 @@ pub struct CreateSnapshotInput {
 }
 
 /// <p>A JSON object containing the following fields:</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateSnapshotOutput {
     /// <p>The snapshot ID that is used to refer to the snapshot in future operations such as describing snapshots (Amazon Elastic Compute Cloud API <code>DescribeSnapshots</code>) or creating a volume from a snapshot (<a>CreateStorediSCSIVolume</a>).</p>
     #[serde(rename = "SnapshotId")]
@@ -382,7 +382,7 @@ pub struct CreateSnapshotOutput {
 }
 
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>CreateStorediSCSIVolumeInput$DiskId</a> </p> </li> <li> <p> <a>CreateStorediSCSIVolumeInput$NetworkInterfaceId</a> </p> </li> <li> <p> <a>CreateStorediSCSIVolumeInput$PreserveExistingData</a> </p> </li> <li> <p> <a>CreateStorediSCSIVolumeInput$SnapshotId</a> </p> </li> <li> <p> <a>CreateStorediSCSIVolumeInput$TargetName</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateStorediSCSIVolumeInput {
     /// <p>The unique identifier for the gateway local disk that is configured as a stored volume. Use <a href="http://docs.aws.amazon.com/storagegateway/latest/userguide/API_ListLocalDisks.html">ListLocalDisks</a> to list disk IDs for a gateway.</p>
     #[serde(rename = "DiskId")]
@@ -405,7 +405,7 @@ pub struct CreateStorediSCSIVolumeInput {
 }
 
 /// <p>A JSON object containing the following fields:</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateStorediSCSIVolumeOutput {
     /// <p>he Amazon Resource Name (ARN) of the volume target that includes the iSCSI name that initiators can use to connect to the target.</p>
     #[serde(rename = "TargetARN")]
@@ -422,7 +422,7 @@ pub struct CreateStorediSCSIVolumeOutput {
 }
 
 /// <p>CreateTapeWithBarcodeInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateTapeWithBarcodeInput {
     /// <p>The unique Amazon Resource Name (ARN) that represents the gateway to associate the virtual tape with. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>
     #[serde(rename = "GatewayARN")]
@@ -436,7 +436,7 @@ pub struct CreateTapeWithBarcodeInput {
 }
 
 /// <p>CreateTapeOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateTapeWithBarcodeOutput {
     /// <p>A unique Amazon Resource Name (ARN) that represents the virtual tape that was created.</p>
     #[serde(rename = "TapeARN")]
@@ -445,7 +445,7 @@ pub struct CreateTapeWithBarcodeOutput {
 }
 
 /// <p>CreateTapesInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateTapesInput {
     /// <p><p>A unique identifier that you use to retry a request. If you retry a request, use the same <code>ClientToken</code> you specified in the initial request.</p> <note> <p>Using the same <code>ClientToken</code> prevents creating the tape multiple times.</p> </note></p>
     #[serde(rename = "ClientToken")]
@@ -465,7 +465,7 @@ pub struct CreateTapesInput {
 }
 
 /// <p>CreateTapeOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateTapesOutput {
     /// <p>A list of unique Amazon Resource Names (ARNs) that represents the virtual tapes that were created.</p>
     #[serde(rename = "TapeARNs")]
@@ -474,7 +474,7 @@ pub struct CreateTapesOutput {
 }
 
 /// <p><p>A JSON object containing the following fields:</p> <ul> <li> <p> <a>DeleteBandwidthRateLimitInput$BandwidthType</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteBandwidthRateLimitInput {
     /// <p>One of the BandwidthType values that indicates the gateway bandwidth rate limit to delete.</p> <p>Valid Values: <code>Upload</code>, <code>Download</code>, <code>All</code>.</p>
     #[serde(rename = "BandwidthType")]
@@ -484,7 +484,7 @@ pub struct DeleteBandwidthRateLimitInput {
 }
 
 /// <p>A JSON object containing the of the gateway whose bandwidth rate information was deleted.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteBandwidthRateLimitOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -492,7 +492,7 @@ pub struct DeleteBandwidthRateLimitOutput {
 }
 
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>DeleteChapCredentialsInput$InitiatorName</a> </p> </li> <li> <p> <a>DeleteChapCredentialsInput$TargetARN</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteChapCredentialsInput {
     /// <p>The iSCSI initiator that connects to the target.</p>
     #[serde(rename = "InitiatorName")]
@@ -503,7 +503,7 @@ pub struct DeleteChapCredentialsInput {
 }
 
 /// <p>A JSON object containing the following fields:</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteChapCredentialsOutput {
     /// <p>The iSCSI initiator that connects to the target.</p>
     #[serde(rename = "InitiatorName")]
@@ -516,7 +516,7 @@ pub struct DeleteChapCredentialsOutput {
 }
 
 /// <p>DeleteFileShareInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteFileShareInput {
     /// <p>The Amazon Resource Name (ARN) of the file share to be deleted. </p>
     #[serde(rename = "FileShareARN")]
@@ -528,7 +528,7 @@ pub struct DeleteFileShareInput {
 }
 
 /// <p>DeleteFileShareOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteFileShareOutput {
     /// <p>The Amazon Resource Name (ARN) of the deleted file share. </p>
     #[serde(rename = "FileShareARN")]
@@ -537,27 +537,27 @@ pub struct DeleteFileShareOutput {
 }
 
 /// <p>A JSON object containing the ID of the gateway to delete.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteGatewayInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
 }
 
 /// <p>A JSON object containing the ID of the deleted gateway.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteGatewayOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteSnapshotScheduleInput {
     #[serde(rename = "VolumeARN")]
     pub volume_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteSnapshotScheduleOutput {
     #[serde(rename = "VolumeARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -565,7 +565,7 @@ pub struct DeleteSnapshotScheduleOutput {
 }
 
 /// <p>DeleteTapeArchiveInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteTapeArchiveInput {
     /// <p>The Amazon Resource Name (ARN) of the virtual tape to delete from the virtual tape shelf (VTS).</p>
     #[serde(rename = "TapeARN")]
@@ -573,7 +573,7 @@ pub struct DeleteTapeArchiveInput {
 }
 
 /// <p>DeleteTapeArchiveOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteTapeArchiveOutput {
     /// <p>The Amazon Resource Name (ARN) of the virtual tape that was deleted from the virtual tape shelf (VTS).</p>
     #[serde(rename = "TapeARN")]
@@ -582,7 +582,7 @@ pub struct DeleteTapeArchiveOutput {
 }
 
 /// <p>DeleteTapeInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteTapeInput {
     /// <p>The unique Amazon Resource Name (ARN) of the gateway that the virtual tape to delete is associated with. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>
     #[serde(rename = "GatewayARN")]
@@ -593,7 +593,7 @@ pub struct DeleteTapeInput {
 }
 
 /// <p>DeleteTapeOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteTapeOutput {
     /// <p>The Amazon Resource Name (ARN) of the deleted virtual tape.</p>
     #[serde(rename = "TapeARN")]
@@ -602,7 +602,7 @@ pub struct DeleteTapeOutput {
 }
 
 /// <p>A JSON object containing the <a>DeleteVolumeInput$VolumeARN</a> to delete.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteVolumeInput {
     /// <p>The Amazon Resource Name (ARN) of the volume. Use the <a>ListVolumes</a> operation to return a list of gateway volumes.</p>
     #[serde(rename = "VolumeARN")]
@@ -610,7 +610,7 @@ pub struct DeleteVolumeInput {
 }
 
 /// <p>A JSON object containing the of the storage volume that was deleted</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteVolumeOutput {
     /// <p>The Amazon Resource Name (ARN) of the storage volume that was deleted. It is the same ARN you provided in the request.</p>
     #[serde(rename = "VolumeARN")]
@@ -619,14 +619,14 @@ pub struct DeleteVolumeOutput {
 }
 
 /// <p>A JSON object containing the of the gateway.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeBandwidthRateLimitInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
 }
 
 /// <p>A JSON object containing the following fields:</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeBandwidthRateLimitOutput {
     /// <p>The average download bandwidth rate limit in bits per second. This field does not appear in the response if the download rate limit is not set.</p>
     #[serde(rename = "AverageDownloadRateLimitInBitsPerSec")]
@@ -641,13 +641,13 @@ pub struct DescribeBandwidthRateLimitOutput {
     pub gateway_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeCacheInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeCacheOutput {
     #[serde(rename = "CacheAllocatedInBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -672,14 +672,14 @@ pub struct DescribeCacheOutput {
     pub gateway_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeCachediSCSIVolumesInput {
     #[serde(rename = "VolumeARNs")]
     pub volume_ar_ns: Vec<String>,
 }
 
 /// <p>A JSON object containing the following fields:</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeCachediSCSIVolumesOutput {
     /// <p>An array of objects where each object contains metadata about one cached volume.</p>
     #[serde(rename = "CachediSCSIVolumes")]
@@ -688,7 +688,7 @@ pub struct DescribeCachediSCSIVolumesOutput {
 }
 
 /// <p>A JSON object containing the Amazon Resource Name (ARN) of the iSCSI volume target.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeChapCredentialsInput {
     /// <p>The Amazon Resource Name (ARN) of the iSCSI volume target. Use the <a>DescribeStorediSCSIVolumes</a> operation to return to retrieve the TargetARN for specified VolumeARN.</p>
     #[serde(rename = "TargetARN")]
@@ -696,7 +696,7 @@ pub struct DescribeChapCredentialsInput {
 }
 
 /// <p>A JSON object containing a .</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeChapCredentialsOutput {
     /// <p><p>An array of <a>ChapInfo</a> objects that represent CHAP credentials. Each object in the array contains CHAP credential information for one target-initiator pair. If no CHAP credentials are set, an empty array is returned. CHAP credential information is provided in a JSON object with the following fields:</p> <ul> <li> <p> <b>InitiatorName</b>: The iSCSI initiator that connects to the target.</p> </li> <li> <p> <b>SecretToAuthenticateInitiator</b>: The secret key that the initiator (for example, the Windows client) must provide to participate in mutual CHAP with the target.</p> </li> <li> <p> <b>SecretToAuthenticateTarget</b>: The secret key that the target must provide to participate in mutual CHAP with the initiator (e.g. Windows client).</p> </li> <li> <p> <b>TargetARN</b>: The Amazon Resource Name (ARN) of the storage volume.</p> </li> </ul></p>
     #[serde(rename = "ChapCredentials")]
@@ -705,14 +705,14 @@ pub struct DescribeChapCredentialsOutput {
 }
 
 /// <p>A JSON object containing the ID of the gateway.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeGatewayInformationInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
 }
 
 /// <p>A JSON object containing the following fields:</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeGatewayInformationOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -752,14 +752,14 @@ pub struct DescribeGatewayInformationOutput {
 }
 
 /// <p>A JSON object containing the of the gateway.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeMaintenanceStartTimeInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
 }
 
 /// <p><p>A JSON object containing the following fields:</p> <ul> <li> <p> <a>DescribeMaintenanceStartTimeOutput$DayOfWeek</a> </p> </li> <li> <p> <a>DescribeMaintenanceStartTimeOutput$HourOfDay</a> </p> </li> <li> <p> <a>DescribeMaintenanceStartTimeOutput$MinuteOfHour</a> </p> </li> <li> <p> <a>DescribeMaintenanceStartTimeOutput$Timezone</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeMaintenanceStartTimeOutput {
     /// <p>An ordinal number between 0 and 6 that represents the day of the week, where 0 represents Sunday and 6 represents Saturday. The day of week is in the time zone of the gateway.</p>
     #[serde(rename = "DayOfWeek")]
@@ -782,7 +782,7 @@ pub struct DescribeMaintenanceStartTimeOutput {
 }
 
 /// <p>DescribeNFSFileSharesInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeNFSFileSharesInput {
     /// <p>An array containing the Amazon Resource Name (ARN) of each file share to be described. </p>
     #[serde(rename = "FileShareARNList")]
@@ -790,7 +790,7 @@ pub struct DescribeNFSFileSharesInput {
 }
 
 /// <p>DescribeNFSFileSharesOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeNFSFileSharesOutput {
     /// <p>An array containing a description for each requested file share. </p>
     #[serde(rename = "NFSFileShareInfoList")]
@@ -799,14 +799,14 @@ pub struct DescribeNFSFileSharesOutput {
 }
 
 /// <p>A JSON object containing the <a>DescribeSnapshotScheduleInput$VolumeARN</a> of the volume.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeSnapshotScheduleInput {
     /// <p>The Amazon Resource Name (ARN) of the volume. Use the <a>ListVolumes</a> operation to return a list of gateway volumes.</p>
     #[serde(rename = "VolumeARN")]
     pub volume_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeSnapshotScheduleOutput {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -826,14 +826,14 @@ pub struct DescribeSnapshotScheduleOutput {
 }
 
 /// <p>A JSON object containing a list of <a>DescribeStorediSCSIVolumesInput$VolumeARNs</a>.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeStorediSCSIVolumesInput {
     /// <p>An array of strings where each string represents the Amazon Resource Name (ARN) of a stored volume. All of the specified stored volumes must from the same gateway. Use <a>ListVolumes</a> to get volume ARNs for a gateway.</p>
     #[serde(rename = "VolumeARNs")]
     pub volume_ar_ns: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeStorediSCSIVolumesOutput {
     #[serde(rename = "StorediSCSIVolumes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -841,7 +841,7 @@ pub struct DescribeStorediSCSIVolumesOutput {
 }
 
 /// <p>DescribeTapeArchivesInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeTapeArchivesInput {
     /// <p>Specifies that the number of virtual tapes descried be limited to the specified number.</p>
     #[serde(rename = "Limit")]
@@ -858,7 +858,7 @@ pub struct DescribeTapeArchivesInput {
 }
 
 /// <p>DescribeTapeArchivesOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeTapeArchivesOutput {
     /// <p>An opaque string that indicates the position at which the virtual tapes that were fetched for description ended. Use this marker in your next request to fetch the next set of virtual tapes in the virtual tape shelf (VTS). If there are no more virtual tapes to describe, this field does not appear in the response.</p>
     #[serde(rename = "Marker")]
@@ -871,7 +871,7 @@ pub struct DescribeTapeArchivesOutput {
 }
 
 /// <p>DescribeTapeRecoveryPointsInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeTapeRecoveryPointsInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -886,7 +886,7 @@ pub struct DescribeTapeRecoveryPointsInput {
 }
 
 /// <p>DescribeTapeRecoveryPointsOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeTapeRecoveryPointsOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -902,7 +902,7 @@ pub struct DescribeTapeRecoveryPointsOutput {
 }
 
 /// <p>DescribeTapesInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeTapesInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -921,7 +921,7 @@ pub struct DescribeTapesInput {
 }
 
 /// <p>DescribeTapesOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeTapesOutput {
     /// <p>An opaque string which can be used as part of a subsequent DescribeTapes call to retrieve the next page of results.</p> <p>If a response does not contain a marker, then there are no more results to be retrieved.</p>
     #[serde(rename = "Marker")]
@@ -933,13 +933,13 @@ pub struct DescribeTapesOutput {
     pub tapes: Option<Vec<Tape>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeUploadBufferInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeUploadBufferOutput {
     #[serde(rename = "DiskIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -956,7 +956,7 @@ pub struct DescribeUploadBufferOutput {
 }
 
 /// <p>DescribeVTLDevicesInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeVTLDevicesInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -975,7 +975,7 @@ pub struct DescribeVTLDevicesInput {
 }
 
 /// <p>DescribeVTLDevicesOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeVTLDevicesOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -991,14 +991,14 @@ pub struct DescribeVTLDevicesOutput {
 }
 
 /// <p>A JSON object containing the of the gateway.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeWorkingStorageInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
 }
 
 /// <p>A JSON object containing the following fields:</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeWorkingStorageOutput {
     /// <p>An array of the gateway's local disk IDs that are configured as working storage. Each local disk ID is specified as a string (minimum length of 1 and maximum length of 300). If no local disks are configured as working storage, then the DiskIds array is empty.</p>
     #[serde(rename = "DiskIds")]
@@ -1018,7 +1018,7 @@ pub struct DescribeWorkingStorageOutput {
 }
 
 /// <p>Lists iSCSI information about a VTL device.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeviceiSCSIAttributes {
     /// <p>Indicates whether mutual CHAP is enabled for the iSCSI target.</p>
     #[serde(rename = "ChapEnabled")]
@@ -1039,14 +1039,14 @@ pub struct DeviceiSCSIAttributes {
 }
 
 /// <p>DisableGatewayInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisableGatewayInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
 }
 
 /// <p>DisableGatewayOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DisableGatewayOutput {
     /// <p>The unique Amazon Resource Name of the disabled gateway.</p>
     #[serde(rename = "GatewayARN")]
@@ -1054,7 +1054,7 @@ pub struct DisableGatewayOutput {
     pub gateway_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Disk {
     #[serde(rename = "DiskAllocationResource")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1080,7 +1080,7 @@ pub struct Disk {
 }
 
 /// <p>Describes a file share.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct FileShareInfo {
     #[serde(rename = "FileShareARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1097,7 +1097,7 @@ pub struct FileShareInfo {
 }
 
 /// <p>Describes a gateway object.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GatewayInfo {
     /// <p>The Amazon Resource Name (ARN) of the gateway. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>
     #[serde(rename = "GatewayARN")]
@@ -1122,7 +1122,7 @@ pub struct GatewayInfo {
 }
 
 /// <p>ListFileShareInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListFileSharesInput {
     /// <p>The Amazon resource Name (ARN) of the gateway whose file shares you want to list. If this field is not present, all file shares under your account are listed.</p>
     #[serde(rename = "GatewayARN")]
@@ -1139,7 +1139,7 @@ pub struct ListFileSharesInput {
 }
 
 /// <p>ListFileShareOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListFileSharesOutput {
     /// <p>An array of information about the file gateway's file shares. </p>
     #[serde(rename = "FileShareInfoList")]
@@ -1156,7 +1156,7 @@ pub struct ListFileSharesOutput {
 }
 
 /// <p><p>A JSON object containing zero or more of the following fields:</p> <ul> <li> <p> <a>ListGatewaysInput$Limit</a> </p> </li> <li> <p> <a>ListGatewaysInput$Marker</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListGatewaysInput {
     /// <p>Specifies that the list of gateways returned be limited to the specified number of items.</p>
     #[serde(rename = "Limit")]
@@ -1168,7 +1168,7 @@ pub struct ListGatewaysInput {
     pub marker: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListGatewaysOutput {
     #[serde(rename = "Gateways")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1179,13 +1179,13 @@ pub struct ListGatewaysOutput {
 }
 
 /// <p>A JSON object containing the of the gateway.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListLocalDisksInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListLocalDisksOutput {
     #[serde(rename = "Disks")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1196,7 +1196,7 @@ pub struct ListLocalDisksOutput {
 }
 
 /// <p>ListTagsForResourceInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTagsForResourceInput {
     /// <p>Specifies that the list of tags returned be limited to the specified number of items.</p>
     #[serde(rename = "Limit")]
@@ -1212,7 +1212,7 @@ pub struct ListTagsForResourceInput {
 }
 
 /// <p>ListTagsForResourceOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListTagsForResourceOutput {
     /// <p>An opaque string that indicates the position at which to stop returning the list of tags.</p>
     #[serde(rename = "Marker")]
@@ -1229,7 +1229,7 @@ pub struct ListTagsForResourceOutput {
 }
 
 /// <p><p>A JSON object that contains one or more of the following fields:</p> <ul> <li> <p> <a>ListTapesInput$Limit</a> </p> </li> <li> <p> <a>ListTapesInput$Marker</a> </p> </li> <li> <p> <a>ListTapesInput$TapeARNs</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTapesInput {
     /// <p>An optional number limit for the tapes in the list returned by this call.</p>
     #[serde(rename = "Limit")]
@@ -1245,7 +1245,7 @@ pub struct ListTapesInput {
 }
 
 /// <p><p>A JSON object containing the following fields:</p> <ul> <li> <p> <a>ListTapesOutput$Marker</a> </p> </li> <li> <p> <a>ListTapesOutput$VolumeInfos</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListTapesOutput {
     /// <p>A string that indicates the position at which to begin returning the next list of tapes. Use the marker in your next request to continue pagination of tapes. If there are no more tapes to list, this element does not appear in the response body.</p>
     #[serde(rename = "Marker")]
@@ -1257,7 +1257,7 @@ pub struct ListTapesOutput {
 }
 
 /// <p>ListVolumeInitiatorsInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListVolumeInitiatorsInput {
     /// <p>The Amazon Resource Name (ARN) of the volume. Use the <a>ListVolumes</a> operation to return a list of gateway volumes for the gateway.</p>
     #[serde(rename = "VolumeARN")]
@@ -1265,7 +1265,7 @@ pub struct ListVolumeInitiatorsInput {
 }
 
 /// <p>ListVolumeInitiatorsOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListVolumeInitiatorsOutput {
     /// <p>The host names and port numbers of all iSCSI initiators that are connected to the gateway.</p>
     #[serde(rename = "Initiators")]
@@ -1273,13 +1273,13 @@ pub struct ListVolumeInitiatorsOutput {
     pub initiators: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListVolumeRecoveryPointsInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListVolumeRecoveryPointsOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1290,7 +1290,7 @@ pub struct ListVolumeRecoveryPointsOutput {
 }
 
 /// <p><p>A JSON object that contains one or more of the following fields:</p> <ul> <li> <p> <a>ListVolumesInput$Limit</a> </p> </li> <li> <p> <a>ListVolumesInput$Marker</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListVolumesInput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1305,7 +1305,7 @@ pub struct ListVolumesInput {
     pub marker: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListVolumesOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1319,7 +1319,7 @@ pub struct ListVolumesOutput {
 }
 
 /// <p>Describes file share default values. Files and folders stored as Amazon S3 objects in S3 buckets don't, by default, have Unix file permissions assigned to them. Upon discovery in an S3 bucket by Storage Gateway, the S3 objects that represent files and folders are assigned these default Unix permissions. This operation is only supported in the file gateway type.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NFSFileShareDefaults {
     /// <p>The Unix directory mode in the form "nnnn". For example, "0666" represents the default access mode for all directories inside the file share. The default value is 0777.</p>
     #[serde(rename = "DirectoryMode")]
@@ -1340,7 +1340,7 @@ pub struct NFSFileShareDefaults {
 }
 
 /// <p>The Unix file permissions and ownership information assigned, by default, to native S3 objects when file gateway discovers them in S3 buckets. This operation is only supported in file gateways.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct NFSFileShareInfo {
     #[serde(rename = "ClientList")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1401,7 +1401,7 @@ pub struct NFSFileShareInfo {
 }
 
 /// <p>Describes a gateway's network interface.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct NetworkInterface {
     /// <p>The Internet Protocol version 4 (IPv4) address of the interface.</p>
     #[serde(rename = "Ipv4Address")]
@@ -1417,13 +1417,13 @@ pub struct NetworkInterface {
     pub mac_address: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct NotifyWhenUploadedInput {
     #[serde(rename = "FileShareARN")]
     pub file_share_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct NotifyWhenUploadedOutput {
     #[serde(rename = "FileShareARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1433,13 +1433,13 @@ pub struct NotifyWhenUploadedOutput {
     pub notification_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RefreshCacheInput {
     #[serde(rename = "FileShareARN")]
     pub file_share_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RefreshCacheOutput {
     #[serde(rename = "FileShareARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1447,7 +1447,7 @@ pub struct RefreshCacheOutput {
 }
 
 /// <p>RemoveTagsFromResourceInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemoveTagsFromResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the resource you want to remove the tags from.</p>
     #[serde(rename = "ResourceARN")]
@@ -1458,7 +1458,7 @@ pub struct RemoveTagsFromResourceInput {
 }
 
 /// <p>RemoveTagsFromResourceOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RemoveTagsFromResourceOutput {
     /// <p>The Amazon Resource Name (ARN) of the resource that the tags were removed from.</p>
     #[serde(rename = "ResourceARN")]
@@ -1466,13 +1466,13 @@ pub struct RemoveTagsFromResourceOutput {
     pub resource_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ResetCacheInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ResetCacheOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1480,7 +1480,7 @@ pub struct ResetCacheOutput {
 }
 
 /// <p>RetrieveTapeArchiveInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RetrieveTapeArchiveInput {
     /// <p>The Amazon Resource Name (ARN) of the gateway you want to retrieve the virtual tape to. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p> <p>You retrieve archived virtual tapes to only one gateway and the gateway must be a tape gateway.</p>
     #[serde(rename = "GatewayARN")]
@@ -1491,7 +1491,7 @@ pub struct RetrieveTapeArchiveInput {
 }
 
 /// <p>RetrieveTapeArchiveOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RetrieveTapeArchiveOutput {
     /// <p>The Amazon Resource Name (ARN) of the retrieved virtual tape.</p>
     #[serde(rename = "TapeARN")]
@@ -1500,7 +1500,7 @@ pub struct RetrieveTapeArchiveOutput {
 }
 
 /// <p>RetrieveTapeRecoveryPointInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RetrieveTapeRecoveryPointInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -1510,7 +1510,7 @@ pub struct RetrieveTapeRecoveryPointInput {
 }
 
 /// <p>RetrieveTapeRecoveryPointOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RetrieveTapeRecoveryPointOutput {
     /// <p>The Amazon Resource Name (ARN) of the virtual tape for which the recovery point was retrieved.</p>
     #[serde(rename = "TapeARN")]
@@ -1519,7 +1519,7 @@ pub struct RetrieveTapeRecoveryPointOutput {
 }
 
 /// <p>SetLocalConsolePasswordInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SetLocalConsolePasswordInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -1528,7 +1528,7 @@ pub struct SetLocalConsolePasswordInput {
     pub local_console_password: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SetLocalConsolePasswordOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1536,14 +1536,14 @@ pub struct SetLocalConsolePasswordOutput {
 }
 
 /// <p>A JSON object containing the of the gateway to shut down.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ShutdownGatewayInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
 }
 
 /// <p>A JSON object containing the of the gateway that was shut down.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ShutdownGatewayOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1551,14 +1551,14 @@ pub struct ShutdownGatewayOutput {
 }
 
 /// <p>A JSON object containing the of the gateway to start.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartGatewayInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
 }
 
 /// <p>A JSON object containing the of the gateway that was restarted.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StartGatewayOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1566,7 +1566,7 @@ pub struct StartGatewayOutput {
 }
 
 /// <p>Provides additional information about an error that was returned by the service as an or. See the <code>errorCode</code> and <code>errorDetails</code> members for more information about the error.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StorageGatewayError {
     /// <p>Additional information about the error.</p>
     pub error_code: Option<String>,
@@ -1575,7 +1575,7 @@ pub struct StorageGatewayError {
 }
 
 /// <p>Describes an iSCSI stored volume.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StorediSCSIVolume {
     /// <p>The date the volume was created. Volumes created prior to March 28, 2017 don’t have this time stamp.</p>
     #[serde(rename = "CreatedDate")]
@@ -1627,7 +1627,7 @@ pub struct StorediSCSIVolume {
     pub volumei_scsi_attributes: Option<VolumeiSCSIAttributes>,
 }
 
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
     #[serde(rename = "Key")]
     pub key: String,
@@ -1636,7 +1636,7 @@ pub struct Tag {
 }
 
 /// <p>Describes a virtual tape object.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Tape {
     /// <p>For archiving virtual tapes, indicates how much data remains to be uploaded before archiving is complete.</p> <p>Range: 0 (not started) to 100 (complete).</p>
     #[serde(rename = "Progress")]
@@ -1673,7 +1673,7 @@ pub struct Tape {
 }
 
 /// <p>Represents a virtual tape that is archived in the virtual tape shelf (VTS).</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TapeArchive {
     /// <p>The time that the archiving of the virtual tape was completed.</p> <p>The string format of the completion time is in the ISO8601 extended YYYY-MM-DD'T'HH:MM:SS'Z' format.</p>
     #[serde(rename = "CompletionTime")]
@@ -1709,7 +1709,7 @@ pub struct TapeArchive {
 }
 
 /// <p>Describes a virtual tape.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TapeInfo {
     /// <p>The Amazon Resource Name (ARN) of the gateway. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>
     #[serde(rename = "GatewayARN")]
@@ -1734,7 +1734,7 @@ pub struct TapeInfo {
 }
 
 /// <p>Describes a recovery point.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TapeRecoveryPointInfo {
     /// <p>The Amazon Resource Name (ARN) of the virtual tape.</p>
     #[serde(rename = "TapeARN")]
@@ -1754,7 +1754,7 @@ pub struct TapeRecoveryPointInfo {
 }
 
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>UpdateBandwidthRateLimitInput$AverageDownloadRateLimitInBitsPerSec</a> </p> </li> <li> <p> <a>UpdateBandwidthRateLimitInput$AverageUploadRateLimitInBitsPerSec</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateBandwidthRateLimitInput {
     /// <p>The average download bandwidth rate limit in bits per second.</p>
     #[serde(rename = "AverageDownloadRateLimitInBitsPerSec")]
@@ -1769,7 +1769,7 @@ pub struct UpdateBandwidthRateLimitInput {
 }
 
 /// <p>A JSON object containing the of the gateway whose throttle information was updated.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateBandwidthRateLimitOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1777,7 +1777,7 @@ pub struct UpdateBandwidthRateLimitOutput {
 }
 
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>UpdateChapCredentialsInput$InitiatorName</a> </p> </li> <li> <p> <a>UpdateChapCredentialsInput$SecretToAuthenticateInitiator</a> </p> </li> <li> <p> <a>UpdateChapCredentialsInput$SecretToAuthenticateTarget</a> </p> </li> <li> <p> <a>UpdateChapCredentialsInput$TargetARN</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateChapCredentialsInput {
     /// <p>The iSCSI initiator that connects to the target.</p>
     #[serde(rename = "InitiatorName")]
@@ -1795,7 +1795,7 @@ pub struct UpdateChapCredentialsInput {
 }
 
 /// <p>A JSON object containing the following fields:</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateChapCredentialsOutput {
     /// <p>The iSCSI initiator that connects to the target. This is the same initiator name specified in the request.</p>
     #[serde(rename = "InitiatorName")]
@@ -1807,7 +1807,7 @@ pub struct UpdateChapCredentialsOutput {
     pub target_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateGatewayInformationInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
@@ -1820,7 +1820,7 @@ pub struct UpdateGatewayInformationInput {
 }
 
 /// <p>A JSON object containing the ARN of the gateway that was updated.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateGatewayInformationOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1831,14 +1831,14 @@ pub struct UpdateGatewayInformationOutput {
 }
 
 /// <p>A JSON object containing the of the gateway to update.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateGatewaySoftwareNowInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
 }
 
 /// <p>A JSON object containing the of the gateway that was updated.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateGatewaySoftwareNowOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1846,7 +1846,7 @@ pub struct UpdateGatewaySoftwareNowOutput {
 }
 
 /// <p><p>A JSON object containing the following fields:</p> <ul> <li> <p> <a>UpdateMaintenanceStartTimeInput$DayOfWeek</a> </p> </li> <li> <p> <a>UpdateMaintenanceStartTimeInput$HourOfDay</a> </p> </li> <li> <p> <a>UpdateMaintenanceStartTimeInput$MinuteOfHour</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateMaintenanceStartTimeInput {
     /// <p>The maintenance start time day of the week represented as an ordinal number from 0 to 6, where 0 represents Sunday and 6 Saturday.</p>
     #[serde(rename = "DayOfWeek")]
@@ -1862,7 +1862,7 @@ pub struct UpdateMaintenanceStartTimeInput {
 }
 
 /// <p>A JSON object containing the of the gateway whose maintenance start time is updated.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateMaintenanceStartTimeOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1870,7 +1870,7 @@ pub struct UpdateMaintenanceStartTimeOutput {
 }
 
 /// <p>UpdateNFSFileShareInput</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateNFSFileShareInput {
     /// <p>The list of clients that are allowed to access the file gateway. The list must contain either valid IP addresses or valid CIDR blocks.</p>
     #[serde(rename = "ClientList")]
@@ -1918,7 +1918,7 @@ pub struct UpdateNFSFileShareInput {
 }
 
 /// <p>UpdateNFSFileShareOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateNFSFileShareOutput {
     /// <p>The Amazon Resource Name (ARN) of the updated file share. </p>
     #[serde(rename = "FileShareARN")]
@@ -1927,7 +1927,7 @@ pub struct UpdateNFSFileShareOutput {
 }
 
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>UpdateSnapshotScheduleInput$Description</a> </p> </li> <li> <p> <a>UpdateSnapshotScheduleInput$RecurrenceInHours</a> </p> </li> <li> <p> <a>UpdateSnapshotScheduleInput$StartAt</a> </p> </li> <li> <p> <a>UpdateSnapshotScheduleInput$VolumeARN</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateSnapshotScheduleInput {
     /// <p>Optional description of the snapshot that overwrites the existing description.</p>
     #[serde(rename = "Description")]
@@ -1945,7 +1945,7 @@ pub struct UpdateSnapshotScheduleInput {
 }
 
 /// <p>A JSON object containing the of the updated storage volume.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateSnapshotScheduleOutput {
     /// <p><p/></p>
     #[serde(rename = "VolumeARN")]
@@ -1953,7 +1953,7 @@ pub struct UpdateSnapshotScheduleOutput {
     pub volume_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateVTLDeviceTypeInput {
     /// <p>The type of medium changer you want to select.</p> <p> Valid Values: "STK-L700", "AWS-Gateway-VTL"</p>
     #[serde(rename = "DeviceType")]
@@ -1964,7 +1964,7 @@ pub struct UpdateVTLDeviceTypeInput {
 }
 
 /// <p>UpdateVTLDeviceTypeOutput</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateVTLDeviceTypeOutput {
     /// <p>The Amazon Resource Name (ARN) of the medium changer you have selected.</p>
     #[serde(rename = "VTLDeviceARN")]
@@ -1973,7 +1973,7 @@ pub struct UpdateVTLDeviceTypeOutput {
 }
 
 /// <p>Represents a device object associated with a tape gateway.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct VTLDevice {
     /// <p>A list of iSCSI information about a VTL device.</p>
     #[serde(rename = "DeviceiSCSIAttributes")]
@@ -1995,7 +1995,7 @@ pub struct VTLDevice {
 }
 
 /// <p>Describes a storage volume object.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct VolumeInfo {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2021,7 +2021,7 @@ pub struct VolumeInfo {
     pub volume_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct VolumeRecoveryPointInfo {
     #[serde(rename = "VolumeARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2038,7 +2038,7 @@ pub struct VolumeRecoveryPointInfo {
 }
 
 /// <p>Lists iSCSI information about a volume.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct VolumeiSCSIAttributes {
     /// <p>Indicates whether mutual CHAP is enabled for the iSCSI target.</p>
     #[serde(rename = "ChapEnabled")]

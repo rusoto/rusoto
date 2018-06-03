@@ -30,14 +30,14 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AllocateStaticIpRequest {
     /// <p>The name of the static IP address.</p>
     #[serde(rename = "staticIpName")]
     pub static_ip_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AllocateStaticIpResult {
     /// <p>An array of key-value pairs containing information about the static IP address you allocated.</p>
     #[serde(rename = "operations")]
@@ -45,7 +45,7 @@ pub struct AllocateStaticIpResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AttachDiskRequest {
     /// <p>The unique Lightsail disk name (e.g., <code>my-disk</code>).</p>
     #[serde(rename = "diskName")]
@@ -58,7 +58,7 @@ pub struct AttachDiskRequest {
     pub instance_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AttachDiskResult {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
@@ -66,7 +66,7 @@ pub struct AttachDiskResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AttachInstancesToLoadBalancerRequest {
     /// <p>An array of strings representing the instance name(s) you want to attach to your load balancer.</p> <p>An instance must be <code>running</code> before you can attach it to your load balancer.</p> <p>There are no additional limits on the number of instances you can attach to your load balancer, aside from the limit of Lightsail instances you can create in your account (20).</p>
     #[serde(rename = "instanceNames")]
@@ -76,7 +76,7 @@ pub struct AttachInstancesToLoadBalancerRequest {
     pub load_balancer_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AttachInstancesToLoadBalancerResult {
     /// <p>An object representing the API operations.</p>
     #[serde(rename = "operations")]
@@ -84,7 +84,7 @@ pub struct AttachInstancesToLoadBalancerResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AttachLoadBalancerTlsCertificateRequest {
     /// <p>The name of your SSL/TLS certificate.</p>
     #[serde(rename = "certificateName")]
@@ -94,7 +94,7 @@ pub struct AttachLoadBalancerTlsCertificateRequest {
     pub load_balancer_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AttachLoadBalancerTlsCertificateResult {
     /// <p>An object representing the API operations.</p> <p>These SSL/TLS certificates are only usable by Lightsail load balancers. You can't get the certificate and use it for another purpose.</p>
     #[serde(rename = "operations")]
@@ -102,7 +102,7 @@ pub struct AttachLoadBalancerTlsCertificateResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AttachStaticIpRequest {
     /// <p>The instance name to which you want to attach the static IP address.</p>
     #[serde(rename = "instanceName")]
@@ -112,7 +112,7 @@ pub struct AttachStaticIpRequest {
     pub static_ip_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AttachStaticIpResult {
     /// <p>An array of key-value pairs containing information about your API operations.</p>
     #[serde(rename = "operations")]
@@ -121,7 +121,7 @@ pub struct AttachStaticIpResult {
 }
 
 /// <p>Describes an Availability Zone.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AvailabilityZone {
     /// <p>The state of the Availability Zone.</p>
     #[serde(rename = "state")]
@@ -134,7 +134,7 @@ pub struct AvailabilityZone {
 }
 
 /// <p>Describes a blueprint (a virtual private server image).</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Blueprint {
     /// <p>The ID for the virtual private server image (e.g., <code>app_wordpress_4_4</code> or <code>app_lamp_7_0</code>).</p>
     #[serde(rename = "blueprintId")]
@@ -187,7 +187,7 @@ pub struct Blueprint {
 }
 
 /// <p>Describes a bundle, which is a set of specs describing your virtual private server (or <i>instance</i>).</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Bundle {
     /// <p>The bundle ID (e.g., <code>micro_1_0</code>).</p>
     #[serde(rename = "bundleId")]
@@ -235,7 +235,7 @@ pub struct Bundle {
     pub transfer_per_month_in_gb: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CloseInstancePublicPortsRequest {
     /// <p>The name of the instance on which you're attempting to close the public ports.</p>
     #[serde(rename = "instanceName")]
@@ -245,7 +245,7 @@ pub struct CloseInstancePublicPortsRequest {
     pub port_info: PortInfo,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CloseInstancePublicPortsResult {
     /// <p>An array of key-value pairs that contains information about the operation.</p>
     #[serde(rename = "operation")]
@@ -253,7 +253,7 @@ pub struct CloseInstancePublicPortsResult {
     pub operation: Option<Operation>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDiskFromSnapshotRequest {
     /// <p>The Availability Zone where you want to create the disk (e.g., <code>us-east-2a</code>). Choose the same Availability Zone as the Lightsail instance where you want to create the disk.</p> <p>Use the GetRegions operation to list the Availability Zones where Lightsail is currently available.</p>
     #[serde(rename = "availabilityZone")]
@@ -269,7 +269,7 @@ pub struct CreateDiskFromSnapshotRequest {
     pub size_in_gb: i64,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateDiskFromSnapshotResult {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
@@ -277,7 +277,7 @@ pub struct CreateDiskFromSnapshotResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDiskRequest {
     /// <p>The Availability Zone where you want to create the disk (e.g., <code>us-east-2a</code>). Choose the same Availability Zone as the Lightsail instance where you want to create the disk.</p> <p>Use the GetRegions operation to list the Availability Zones where Lightsail is currently available.</p>
     #[serde(rename = "availabilityZone")]
@@ -290,7 +290,7 @@ pub struct CreateDiskRequest {
     pub size_in_gb: i64,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateDiskResult {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
@@ -298,7 +298,7 @@ pub struct CreateDiskResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDiskSnapshotRequest {
     /// <p>The unique name of the source disk (e.g., <code>my-source-disk</code>).</p>
     #[serde(rename = "diskName")]
@@ -308,7 +308,7 @@ pub struct CreateDiskSnapshotRequest {
     pub disk_snapshot_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateDiskSnapshotResult {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
@@ -316,7 +316,7 @@ pub struct CreateDiskSnapshotResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDomainEntryRequest {
     /// <p>An array of key-value pairs containing information about the domain entry request.</p>
     #[serde(rename = "domainEntry")]
@@ -326,7 +326,7 @@ pub struct CreateDomainEntryRequest {
     pub domain_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateDomainEntryResult {
     /// <p>An array of key-value pairs containing information about the operation.</p>
     #[serde(rename = "operation")]
@@ -334,14 +334,14 @@ pub struct CreateDomainEntryResult {
     pub operation: Option<Operation>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDomainRequest {
     /// <p><p>The domain name to manage (e.g., <code>example.com</code>).</p> <note> <p>You cannot register a new domain name using Lightsail. You must register a domain name using Amazon Route 53 or another domain name registrar. If you have already registered your domain, you can enter its name in this parameter to manage the DNS records for that domain.</p> </note></p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateDomainResult {
     /// <p>An array of key-value pairs containing information about the domain resource you created.</p>
     #[serde(rename = "operation")]
@@ -349,7 +349,7 @@ pub struct CreateDomainResult {
     pub operation: Option<Operation>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateInstanceSnapshotRequest {
     /// <p>The Lightsail instance on which to base your snapshot.</p>
     #[serde(rename = "instanceName")]
@@ -359,7 +359,7 @@ pub struct CreateInstanceSnapshotRequest {
     pub instance_snapshot_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateInstanceSnapshotResult {
     /// <p>An array of key-value pairs containing information about the results of your create instances snapshot request.</p>
     #[serde(rename = "operations")]
@@ -367,7 +367,7 @@ pub struct CreateInstanceSnapshotResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateInstancesFromSnapshotRequest {
     /// <p>An object containing information about one or more disk mappings.</p>
     #[serde(rename = "attachedDiskMapping")]
@@ -395,7 +395,7 @@ pub struct CreateInstancesFromSnapshotRequest {
     pub user_data: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateInstancesFromSnapshotResult {
     /// <p>An array of key-value pairs containing information about the results of your create instances from snapshot request.</p>
     #[serde(rename = "operations")]
@@ -403,7 +403,7 @@ pub struct CreateInstancesFromSnapshotResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateInstancesRequest {
     /// <p>The Availability Zone in which to create your instance. Use the following format: <code>us-east-2a</code> (case sensitive). You can get a list of availability zones by using the <a href="http://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_GetRegions.html">get regions</a> operation. Be sure to add the <code>include availability zones</code> parameter to your request.</p>
     #[serde(rename = "availabilityZone")]
@@ -427,7 +427,7 @@ pub struct CreateInstancesRequest {
     pub user_data: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateInstancesResult {
     /// <p>An array of key-value pairs containing information about the results of your create instances request.</p>
     #[serde(rename = "operations")]
@@ -435,14 +435,14 @@ pub struct CreateInstancesResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateKeyPairRequest {
     /// <p>The name for your new key pair.</p>
     #[serde(rename = "keyPairName")]
     pub key_pair_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateKeyPairResult {
     /// <p>An array of key-value pairs containing information about the new key pair you just created.</p>
     #[serde(rename = "keyPair")]
@@ -462,7 +462,7 @@ pub struct CreateKeyPairResult {
     pub public_key_base_64: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateLoadBalancerRequest {
     /// <p>The optional alternative domains and subdomains to use with your SSL/TLS certificate (e.g., <code>www.example.com</code>, <code>example.com</code>, <code>m.example.com</code>, <code>blog.example.com</code>).</p>
     #[serde(rename = "certificateAlternativeNames")]
@@ -488,7 +488,7 @@ pub struct CreateLoadBalancerRequest {
     pub load_balancer_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateLoadBalancerResult {
     /// <p>An object containing information about the API operations.</p>
     #[serde(rename = "operations")]
@@ -496,7 +496,7 @@ pub struct CreateLoadBalancerResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateLoadBalancerTlsCertificateRequest {
     /// <p>An array of strings listing alternative domains and subdomains for your SSL/TLS certificate. Lightsail will de-dupe the names for you. You can have a maximum of 9 alternative names (in addition to the 1 primary domain). We do not support wildcards (e.g., <code>*.example.com</code>).</p>
     #[serde(rename = "certificateAlternativeNames")]
@@ -513,7 +513,7 @@ pub struct CreateLoadBalancerTlsCertificateRequest {
     pub load_balancer_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateLoadBalancerTlsCertificateResult {
     /// <p>An object containing information about the API operations.</p>
     #[serde(rename = "operations")]
@@ -521,14 +521,14 @@ pub struct CreateLoadBalancerTlsCertificateResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDiskRequest {
     /// <p>The unique name of the disk you want to delete (e.g., <code>my-disk</code>).</p>
     #[serde(rename = "diskName")]
     pub disk_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteDiskResult {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
@@ -536,14 +536,14 @@ pub struct DeleteDiskResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDiskSnapshotRequest {
     /// <p>The name of the disk snapshot you want to delete (e.g., <code>my-disk-snapshot</code>).</p>
     #[serde(rename = "diskSnapshotName")]
     pub disk_snapshot_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteDiskSnapshotResult {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
@@ -551,7 +551,7 @@ pub struct DeleteDiskSnapshotResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDomainEntryRequest {
     /// <p>An array of key-value pairs containing information about your domain entries.</p>
     #[serde(rename = "domainEntry")]
@@ -561,7 +561,7 @@ pub struct DeleteDomainEntryRequest {
     pub domain_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteDomainEntryResult {
     /// <p>An array of key-value pairs containing information about the results of your delete domain entry request.</p>
     #[serde(rename = "operation")]
@@ -569,14 +569,14 @@ pub struct DeleteDomainEntryResult {
     pub operation: Option<Operation>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDomainRequest {
     /// <p>The specific domain name to delete.</p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteDomainResult {
     /// <p>An array of key-value pairs containing information about the results of your delete domain request.</p>
     #[serde(rename = "operation")]
@@ -584,14 +584,14 @@ pub struct DeleteDomainResult {
     pub operation: Option<Operation>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteInstanceRequest {
     /// <p>The name of the instance to delete.</p>
     #[serde(rename = "instanceName")]
     pub instance_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteInstanceResult {
     /// <p>An array of key-value pairs containing information about the results of your delete instance request.</p>
     #[serde(rename = "operations")]
@@ -599,14 +599,14 @@ pub struct DeleteInstanceResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteInstanceSnapshotRequest {
     /// <p>The name of the snapshot to delete.</p>
     #[serde(rename = "instanceSnapshotName")]
     pub instance_snapshot_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteInstanceSnapshotResult {
     /// <p>An array of key-value pairs containing information about the results of your delete instance snapshot request.</p>
     #[serde(rename = "operations")]
@@ -614,14 +614,14 @@ pub struct DeleteInstanceSnapshotResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteKeyPairRequest {
     /// <p>The name of the key pair to delete.</p>
     #[serde(rename = "keyPairName")]
     pub key_pair_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteKeyPairResult {
     /// <p>An array of key-value pairs containing information about the results of your delete key pair request.</p>
     #[serde(rename = "operation")]
@@ -629,14 +629,14 @@ pub struct DeleteKeyPairResult {
     pub operation: Option<Operation>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteLoadBalancerRequest {
     /// <p>The name of the load balancer you want to delete.</p>
     #[serde(rename = "loadBalancerName")]
     pub load_balancer_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteLoadBalancerResult {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
@@ -644,7 +644,7 @@ pub struct DeleteLoadBalancerResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteLoadBalancerTlsCertificateRequest {
     /// <p>The SSL/TLS certificate name.</p>
     #[serde(rename = "certificateName")]
@@ -658,7 +658,7 @@ pub struct DeleteLoadBalancerTlsCertificateRequest {
     pub load_balancer_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteLoadBalancerTlsCertificateResult {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
@@ -666,14 +666,14 @@ pub struct DeleteLoadBalancerTlsCertificateResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetachDiskRequest {
     /// <p>The unique name of the disk you want to detach from your instance (e.g., <code>my-disk</code>).</p>
     #[serde(rename = "diskName")]
     pub disk_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DetachDiskResult {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
@@ -681,7 +681,7 @@ pub struct DetachDiskResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetachInstancesFromLoadBalancerRequest {
     /// <p>An array of strings containing the names of the instances you want to detach from the load balancer.</p>
     #[serde(rename = "instanceNames")]
@@ -691,7 +691,7 @@ pub struct DetachInstancesFromLoadBalancerRequest {
     pub load_balancer_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DetachInstancesFromLoadBalancerResult {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
@@ -699,14 +699,14 @@ pub struct DetachInstancesFromLoadBalancerResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetachStaticIpRequest {
     /// <p>The name of the static IP to detach from the instance.</p>
     #[serde(rename = "staticIpName")]
     pub static_ip_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DetachStaticIpResult {
     /// <p>An array of key-value pairs containing information about the results of your detach static IP request.</p>
     #[serde(rename = "operations")]
@@ -715,7 +715,7 @@ pub struct DetachStaticIpResult {
 }
 
 /// <p>Describes a system disk or an block storage disk.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Disk {
     /// <p>The Amazon Resource Name (ARN) of the disk.</p>
     #[serde(rename = "arn")]
@@ -772,7 +772,7 @@ pub struct Disk {
 }
 
 /// <p>Describes a block storage disk mapping.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DiskMap {
     /// <p>The new disk name (e.g., <code>my-new-disk</code>).</p>
     #[serde(rename = "newDiskName")]
@@ -785,7 +785,7 @@ pub struct DiskMap {
 }
 
 /// <p>Describes a block storage disk snapshot.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DiskSnapshot {
     /// <p>The Amazon Resource Name (ARN) of the disk snapshot.</p>
     #[serde(rename = "arn")]
@@ -834,7 +834,7 @@ pub struct DiskSnapshot {
 }
 
 /// <p>Describes a domain where you are storing recordsets in Lightsail.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Domain {
     /// <p>The Amazon Resource Name (ARN) of the domain recordset (e.g., <code>arn:aws:lightsail:global:123456789101:Domain/824cede0-abc7-4f84-8dbc-12345EXAMPLE</code>).</p>
     #[serde(rename = "arn")]
@@ -867,7 +867,7 @@ pub struct Domain {
 }
 
 /// <p>Describes a domain recordset entry.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DomainEntry {
     /// <p>The ID of the domain recordset entry.</p>
     #[serde(rename = "id")]
@@ -891,10 +891,10 @@ pub struct DomainEntry {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DownloadDefaultKeyPairRequest {}
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DownloadDefaultKeyPairResult {
     /// <p>A base64-encoded RSA private key.</p>
     #[serde(rename = "privateKeyBase64")]
@@ -906,7 +906,7 @@ pub struct DownloadDefaultKeyPairResult {
     pub public_key_base_64: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetActiveNamesRequest {
     /// <p>A token used for paginating results from your get active names request.</p>
     #[serde(rename = "pageToken")]
@@ -914,7 +914,7 @@ pub struct GetActiveNamesRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetActiveNamesResult {
     /// <p>The list of active names returned by the get active names request.</p>
     #[serde(rename = "activeNames")]
@@ -926,7 +926,7 @@ pub struct GetActiveNamesResult {
     pub next_page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetBlueprintsRequest {
     /// <p>A Boolean value indicating whether to include inactive results in your request.</p>
     #[serde(rename = "includeInactive")]
@@ -938,7 +938,7 @@ pub struct GetBlueprintsRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetBlueprintsResult {
     /// <p>An array of key-value pairs that contains information about the available blueprints.</p>
     #[serde(rename = "blueprints")]
@@ -950,7 +950,7 @@ pub struct GetBlueprintsResult {
     pub next_page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetBundlesRequest {
     /// <p>A Boolean value that indicates whether to include inactive bundle results in your request.</p>
     #[serde(rename = "includeInactive")]
@@ -962,7 +962,7 @@ pub struct GetBundlesRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetBundlesResult {
     /// <p>An array of key-value pairs that contains information about the available bundles.</p>
     #[serde(rename = "bundles")]
@@ -974,14 +974,14 @@ pub struct GetBundlesResult {
     pub next_page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDiskRequest {
     /// <p>The name of the disk (e.g., <code>my-disk</code>).</p>
     #[serde(rename = "diskName")]
     pub disk_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetDiskResult {
     /// <p>An object containing information about the disk.</p>
     #[serde(rename = "disk")]
@@ -989,14 +989,14 @@ pub struct GetDiskResult {
     pub disk: Option<Disk>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDiskSnapshotRequest {
     /// <p>The name of the disk snapshot (e.g., <code>my-disk-snapshot</code>).</p>
     #[serde(rename = "diskSnapshotName")]
     pub disk_snapshot_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetDiskSnapshotResult {
     /// <p>An object containing information about the disk snapshot.</p>
     #[serde(rename = "diskSnapshot")]
@@ -1004,7 +1004,7 @@ pub struct GetDiskSnapshotResult {
     pub disk_snapshot: Option<DiskSnapshot>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDiskSnapshotsRequest {
     /// <p>A token used for advancing to the next page of results from your GetDiskSnapshots request.</p>
     #[serde(rename = "pageToken")]
@@ -1012,7 +1012,7 @@ pub struct GetDiskSnapshotsRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetDiskSnapshotsResult {
     /// <p>An array of objects containing information about all block storage disk snapshots.</p>
     #[serde(rename = "diskSnapshots")]
@@ -1024,7 +1024,7 @@ pub struct GetDiskSnapshotsResult {
     pub next_page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDisksRequest {
     /// <p>A token used for advancing to the next page of results from your GetDisks request.</p>
     #[serde(rename = "pageToken")]
@@ -1032,7 +1032,7 @@ pub struct GetDisksRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetDisksResult {
     /// <p>An array of objects containing information about all block storage disks.</p>
     #[serde(rename = "disks")]
@@ -1044,14 +1044,14 @@ pub struct GetDisksResult {
     pub next_page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDomainRequest {
     /// <p>The domain name for which your want to return information about.</p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetDomainResult {
     /// <p>An array of key-value pairs containing information about your get domain request.</p>
     #[serde(rename = "domain")]
@@ -1059,7 +1059,7 @@ pub struct GetDomainResult {
     pub domain: Option<Domain>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDomainsRequest {
     /// <p>A token used for advancing to the next page of results from your get domains request.</p>
     #[serde(rename = "pageToken")]
@@ -1067,7 +1067,7 @@ pub struct GetDomainsRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetDomainsResult {
     /// <p>An array of key-value pairs containing information about each of the domain entries in the user's account.</p>
     #[serde(rename = "domains")]
@@ -1079,7 +1079,7 @@ pub struct GetDomainsResult {
     pub next_page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetInstanceAccessDetailsRequest {
     /// <p>The name of the instance to access.</p>
     #[serde(rename = "instanceName")]
@@ -1090,7 +1090,7 @@ pub struct GetInstanceAccessDetailsRequest {
     pub protocol: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetInstanceAccessDetailsResult {
     /// <p>An array of key-value pairs containing information about a get instance access request.</p>
     #[serde(rename = "accessDetails")]
@@ -1098,7 +1098,7 @@ pub struct GetInstanceAccessDetailsResult {
     pub access_details: Option<InstanceAccessDetails>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetInstanceMetricDataRequest {
     /// <p>The end time of the time period.</p>
     #[serde(rename = "endTime")]
@@ -1123,7 +1123,7 @@ pub struct GetInstanceMetricDataRequest {
     pub unit: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetInstanceMetricDataResult {
     /// <p>An array of key-value pairs containing information about the results of your get instance metric data request.</p>
     #[serde(rename = "metricData")]
@@ -1135,14 +1135,14 @@ pub struct GetInstanceMetricDataResult {
     pub metric_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetInstancePortStatesRequest {
     /// <p>The name of the instance.</p>
     #[serde(rename = "instanceName")]
     pub instance_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetInstancePortStatesResult {
     /// <p>Information about the port states resulting from your request.</p>
     #[serde(rename = "portStates")]
@@ -1150,14 +1150,14 @@ pub struct GetInstancePortStatesResult {
     pub port_states: Option<Vec<InstancePortState>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetInstanceRequest {
     /// <p>The name of the instance.</p>
     #[serde(rename = "instanceName")]
     pub instance_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetInstanceResult {
     /// <p>An array of key-value pairs containing information about the specified instance.</p>
     #[serde(rename = "instance")]
@@ -1165,14 +1165,14 @@ pub struct GetInstanceResult {
     pub instance: Option<Instance>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetInstanceSnapshotRequest {
     /// <p>The name of the snapshot for which you are requesting information.</p>
     #[serde(rename = "instanceSnapshotName")]
     pub instance_snapshot_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetInstanceSnapshotResult {
     /// <p>An array of key-value pairs containing information about the results of your get instance snapshot request.</p>
     #[serde(rename = "instanceSnapshot")]
@@ -1180,7 +1180,7 @@ pub struct GetInstanceSnapshotResult {
     pub instance_snapshot: Option<InstanceSnapshot>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetInstanceSnapshotsRequest {
     /// <p>A token used for advancing to the next page of results from your get instance snapshots request.</p>
     #[serde(rename = "pageToken")]
@@ -1188,7 +1188,7 @@ pub struct GetInstanceSnapshotsRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetInstanceSnapshotsResult {
     /// <p>An array of key-value pairs containing information about the results of your get instance snapshots request.</p>
     #[serde(rename = "instanceSnapshots")]
@@ -1200,14 +1200,14 @@ pub struct GetInstanceSnapshotsResult {
     pub next_page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetInstanceStateRequest {
     /// <p>The name of the instance to get state information about.</p>
     #[serde(rename = "instanceName")]
     pub instance_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetInstanceStateResult {
     /// <p>The state of the instance.</p>
     #[serde(rename = "state")]
@@ -1215,7 +1215,7 @@ pub struct GetInstanceStateResult {
     pub state: Option<InstanceState>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetInstancesRequest {
     /// <p>A token used for advancing to the next page of results from your get instances request.</p>
     #[serde(rename = "pageToken")]
@@ -1223,7 +1223,7 @@ pub struct GetInstancesRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetInstancesResult {
     /// <p>An array of key-value pairs containing information about your instances.</p>
     #[serde(rename = "instances")]
@@ -1235,14 +1235,14 @@ pub struct GetInstancesResult {
     pub next_page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetKeyPairRequest {
     /// <p>The name of the key pair for which you are requesting information.</p>
     #[serde(rename = "keyPairName")]
     pub key_pair_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetKeyPairResult {
     /// <p>An array of key-value pairs containing information about the key pair.</p>
     #[serde(rename = "keyPair")]
@@ -1250,7 +1250,7 @@ pub struct GetKeyPairResult {
     pub key_pair: Option<KeyPair>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetKeyPairsRequest {
     /// <p>A token used for advancing to the next page of results from your get key pairs request.</p>
     #[serde(rename = "pageToken")]
@@ -1258,7 +1258,7 @@ pub struct GetKeyPairsRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetKeyPairsResult {
     /// <p>An array of key-value pairs containing information about the key pairs.</p>
     #[serde(rename = "keyPairs")]
@@ -1270,7 +1270,7 @@ pub struct GetKeyPairsResult {
     pub next_page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetLoadBalancerMetricDataRequest {
     /// <p>The end time of the period.</p>
     #[serde(rename = "endTime")]
@@ -1295,7 +1295,7 @@ pub struct GetLoadBalancerMetricDataRequest {
     pub unit: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetLoadBalancerMetricDataResult {
     /// <p>An array of metric datapoint objects.</p>
     #[serde(rename = "metricData")]
@@ -1307,14 +1307,14 @@ pub struct GetLoadBalancerMetricDataResult {
     pub metric_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetLoadBalancerRequest {
     /// <p>The name of the load balancer.</p>
     #[serde(rename = "loadBalancerName")]
     pub load_balancer_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetLoadBalancerResult {
     /// <p>An object containing information about your load balancer.</p>
     #[serde(rename = "loadBalancer")]
@@ -1322,14 +1322,14 @@ pub struct GetLoadBalancerResult {
     pub load_balancer: Option<LoadBalancer>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetLoadBalancerTlsCertificatesRequest {
     /// <p>The name of the load balancer you associated with your SSL/TLS certificate.</p>
     #[serde(rename = "loadBalancerName")]
     pub load_balancer_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetLoadBalancerTlsCertificatesResult {
     /// <p>An array of LoadBalancerTlsCertificate objects describing your SSL/TLS certificates.</p>
     #[serde(rename = "tlsCertificates")]
@@ -1337,7 +1337,7 @@ pub struct GetLoadBalancerTlsCertificatesResult {
     pub tls_certificates: Option<Vec<LoadBalancerTlsCertificate>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetLoadBalancersRequest {
     /// <p>A token used for paginating the results from your GetLoadBalancers request.</p>
     #[serde(rename = "pageToken")]
@@ -1345,7 +1345,7 @@ pub struct GetLoadBalancersRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetLoadBalancersResult {
     /// <p>An array of LoadBalancer objects describing your load balancers.</p>
     #[serde(rename = "loadBalancers")]
@@ -1357,14 +1357,14 @@ pub struct GetLoadBalancersResult {
     pub next_page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetOperationRequest {
     /// <p>A GUID used to identify the operation.</p>
     #[serde(rename = "operationId")]
     pub operation_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetOperationResult {
     /// <p>An array of key-value pairs containing information about the results of your get operation request.</p>
     #[serde(rename = "operation")]
@@ -1372,7 +1372,7 @@ pub struct GetOperationResult {
     pub operation: Option<Operation>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetOperationsForResourceRequest {
     /// <p>A token used for advancing to the next page of results from your get operations for resource request.</p>
     #[serde(rename = "pageToken")]
@@ -1383,7 +1383,7 @@ pub struct GetOperationsForResourceRequest {
     pub resource_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetOperationsForResourceResult {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
     #[serde(rename = "nextPageToken")]
@@ -1395,7 +1395,7 @@ pub struct GetOperationsForResourceResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetOperationsRequest {
     /// <p>A token used for advancing to the next page of results from your get operations request.</p>
     #[serde(rename = "pageToken")]
@@ -1403,7 +1403,7 @@ pub struct GetOperationsRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetOperationsResult {
     /// <p>A token used for advancing to the next page of results from your get operations request.</p>
     #[serde(rename = "nextPageToken")]
@@ -1415,7 +1415,7 @@ pub struct GetOperationsResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetRegionsRequest {
     /// <p>A Boolean value indicating whether to also include Availability Zones in your get regions request. Availability Zones are indicated with a letter: e.g., <code>us-east-2a</code>.</p>
     #[serde(rename = "includeAvailabilityZones")]
@@ -1423,7 +1423,7 @@ pub struct GetRegionsRequest {
     pub include_availability_zones: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetRegionsResult {
     /// <p>An array of key-value pairs containing information about your get regions request.</p>
     #[serde(rename = "regions")]
@@ -1431,14 +1431,14 @@ pub struct GetRegionsResult {
     pub regions: Option<Vec<Region>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetStaticIpRequest {
     /// <p>The name of the static IP in Lightsail.</p>
     #[serde(rename = "staticIpName")]
     pub static_ip_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetStaticIpResult {
     /// <p>An array of key-value pairs containing information about the requested static IP.</p>
     #[serde(rename = "staticIp")]
@@ -1446,7 +1446,7 @@ pub struct GetStaticIpResult {
     pub static_ip: Option<StaticIp>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetStaticIpsRequest {
     /// <p>A token used for advancing to the next page of results from your get static IPs request.</p>
     #[serde(rename = "pageToken")]
@@ -1454,7 +1454,7 @@ pub struct GetStaticIpsRequest {
     pub page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetStaticIpsResult {
     /// <p>A token used for advancing to the next page of results from your get static IPs request.</p>
     #[serde(rename = "nextPageToken")]
@@ -1466,7 +1466,7 @@ pub struct GetStaticIpsResult {
     pub static_ips: Option<Vec<StaticIp>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ImportKeyPairRequest {
     /// <p>The name of the key pair for which you want to import the public key.</p>
     #[serde(rename = "keyPairName")]
@@ -1476,7 +1476,7 @@ pub struct ImportKeyPairRequest {
     pub public_key_base_64: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ImportKeyPairResult {
     /// <p>An array of key-value pairs containing information about the request operation.</p>
     #[serde(rename = "operation")]
@@ -1485,7 +1485,7 @@ pub struct ImportKeyPairResult {
 }
 
 /// <p>Describes an instance (a virtual private server).</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Instance {
     /// <p>The Amazon Resource Name (ARN) of the instance (e.g., <code>arn:aws:lightsail:us-east-2:123456789101:Instance/244ad76f-8aad-4741-809f-12345EXAMPLE</code>).</p>
     #[serde(rename = "arn")]
@@ -1562,7 +1562,7 @@ pub struct Instance {
 }
 
 /// <p>The parameters for gaining temporary access to one of your Amazon Lightsail instances.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InstanceAccessDetails {
     /// <p>For SSH access, the public key to use when accessing your instance For OpenSSH clients (e.g., command line SSH), you should save this value to <code>tempkey-cert.pub</code>.</p>
     #[serde(rename = "certKey")]
@@ -1603,7 +1603,7 @@ pub struct InstanceAccessDetails {
 }
 
 /// <p>Describes the hardware for the instance.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InstanceHardware {
     /// <p>The number of vCPUs the instance has.</p>
     #[serde(rename = "cpuCount")]
@@ -1620,7 +1620,7 @@ pub struct InstanceHardware {
 }
 
 /// <p>Describes information about the health of the instance.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InstanceHealthSummary {
     /// <p>Describes the overall instance health. Valid values are below.</p>
     #[serde(rename = "instanceHealth")]
@@ -1637,7 +1637,7 @@ pub struct InstanceHealthSummary {
 }
 
 /// <p>Describes monthly data transfer rates and port information for an instance.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InstanceNetworking {
     /// <p>The amount of data in GB allocated for monthly data transfers.</p>
     #[serde(rename = "monthlyTransfer")]
@@ -1650,7 +1650,7 @@ pub struct InstanceNetworking {
 }
 
 /// <p>Describes information about the instance ports.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InstancePortInfo {
     /// <p>The access direction (<code>inbound</code> or <code>outbound</code>).</p>
     #[serde(rename = "accessDirection")]
@@ -1683,7 +1683,7 @@ pub struct InstancePortInfo {
 }
 
 /// <p>Describes the port state.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InstancePortState {
     /// <p>The first port in the range.</p>
     #[serde(rename = "fromPort")]
@@ -1704,7 +1704,7 @@ pub struct InstancePortState {
 }
 
 /// <p>Describes the snapshot of the virtual private server, or <i>instance</i>.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InstanceSnapshot {
     /// <p>The Amazon Resource Name (ARN) of the snapshot (e.g., <code>arn:aws:lightsail:us-east-2:123456789101:InstanceSnapshot/d23b5706-3322-4d83-81e5-12345EXAMPLE</code>).</p>
     #[serde(rename = "arn")]
@@ -1765,7 +1765,7 @@ pub struct InstanceSnapshot {
 }
 
 /// <p>Describes the virtual private server (or <i>instance</i>) status.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InstanceState {
     /// <p>The status code for the instance.</p>
     #[serde(rename = "code")]
@@ -1777,10 +1777,10 @@ pub struct InstanceState {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct IsVpcPeeredRequest {}
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct IsVpcPeeredResult {
     /// <p>Returns <code>true</code> if the Lightsail VPC is peered; otherwise, <code>false</code>.</p>
     #[serde(rename = "isPeered")]
@@ -1789,7 +1789,7 @@ pub struct IsVpcPeeredResult {
 }
 
 /// <p>Describes the SSH key pair.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct KeyPair {
     /// <p>The Amazon Resource Name (ARN) of the key pair (e.g., <code>arn:aws:lightsail:us-east-2:123456789101:KeyPair/05859e3d-331d-48ba-9034-12345EXAMPLE</code>).</p>
     #[serde(rename = "arn")]
@@ -1822,7 +1822,7 @@ pub struct KeyPair {
 }
 
 /// <p>Describes the Lightsail load balancer.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LoadBalancer {
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     #[serde(rename = "arn")]
@@ -1887,7 +1887,7 @@ pub struct LoadBalancer {
 }
 
 /// <p>Describes a load balancer SSL/TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LoadBalancerTlsCertificate {
     /// <p>The Amazon Resource Name (ARN) of the SSL/TLS certificate.</p>
     #[serde(rename = "arn")]
@@ -1988,7 +1988,7 @@ pub struct LoadBalancerTlsCertificate {
 }
 
 /// <p>Contains information about the domain names on an SSL/TLS certificate that you will use to validate domain ownership.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LoadBalancerTlsCertificateDomainValidationOption {
     /// <p>The fully qualified domain name in the certificate request.</p>
     #[serde(rename = "domainName")]
@@ -2001,7 +2001,7 @@ pub struct LoadBalancerTlsCertificateDomainValidationOption {
 }
 
 /// <p>Describes the validation record of each domain name in the SSL/TLS certificate.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LoadBalancerTlsCertificateDomainValidationRecord {
     /// <p>The domain name against which your SSL/TLS certificate was validated.</p>
     #[serde(rename = "domainName")]
@@ -2026,7 +2026,7 @@ pub struct LoadBalancerTlsCertificateDomainValidationRecord {
 }
 
 /// <p>Contains information about the status of Lightsail's managed renewal for the certificate.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LoadBalancerTlsCertificateRenewalSummary {
     /// <p>Contains information about the validation of each domain name in the certificate, as it pertains to Lightsail's managed renewal. This is different from the initial validation that occurs as a result of the RequestCertificate request.</p>
     #[serde(rename = "domainValidationOptions")]
@@ -2039,7 +2039,7 @@ pub struct LoadBalancerTlsCertificateRenewalSummary {
 }
 
 /// <p>Provides a summary of SSL/TLS certificate metadata.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LoadBalancerTlsCertificateSummary {
     /// <p>When <code>true</code>, the SSL/TLS certificate is attached to the Lightsail load balancer.</p>
     #[serde(rename = "isAttached")]
@@ -2052,7 +2052,7 @@ pub struct LoadBalancerTlsCertificateSummary {
 }
 
 /// <p>Describes the metric data point.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct MetricDatapoint {
     /// <p>The average.</p>
     #[serde(rename = "average")]
@@ -2085,7 +2085,7 @@ pub struct MetricDatapoint {
 }
 
 /// <p>Describes the monthly data transfer in and out of your virtual private server (or <i>instance</i>).</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct MonthlyTransfer {
     /// <p>The amount allocated per month (in GB).</p>
     #[serde(rename = "gbPerMonthAllocated")]
@@ -2093,7 +2093,7 @@ pub struct MonthlyTransfer {
     pub gb_per_month_allocated: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct OpenInstancePublicPortsRequest {
     /// <p>The name of the instance for which you want to open the public ports.</p>
     #[serde(rename = "instanceName")]
@@ -2103,7 +2103,7 @@ pub struct OpenInstancePublicPortsRequest {
     pub port_info: PortInfo,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct OpenInstancePublicPortsResult {
     /// <p>An array of key-value pairs containing information about the request operation.</p>
     #[serde(rename = "operation")]
@@ -2112,7 +2112,7 @@ pub struct OpenInstancePublicPortsResult {
 }
 
 /// <p>Describes the API operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Operation {
     /// <p>The timestamp when the operation was initialized (e.g., <code>1479816991.349</code>).</p>
     #[serde(rename = "createdAt")]
@@ -2165,7 +2165,7 @@ pub struct Operation {
 }
 
 /// <p>The password data for the Windows Server-based instance, including the ciphertext and the key pair name.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PasswordData {
     /// <p><p>The encrypted password. Ciphertext will be an empty string if access to your new instance is not ready yet. When you create an instance, it can take up to 15 minutes for the instance to be ready.</p> <note> <p>If you use the default key pair (<code>LightsailDefaultKeyPair</code>), the decrypted password will be available in the password field.</p> <p>If you are using a custom key pair, you need to use your own means of decryption.</p> <p>If you change the Administrator password on the instance, Lightsail will continue to return the original ciphertext value. When accessing the instance using RDP, you need to manually enter the Administrator password after changing it from the default.</p> </note></p>
     #[serde(rename = "ciphertext")]
@@ -2177,10 +2177,10 @@ pub struct PasswordData {
     pub key_pair_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PeerVpcRequest {}
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PeerVpcResult {
     /// <p>An array of key-value pairs containing information about the request operation.</p>
     #[serde(rename = "operation")]
@@ -2189,7 +2189,7 @@ pub struct PeerVpcResult {
 }
 
 /// <p>Describes information about the ports on your virtual private server (or <i>instance</i>).</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PortInfo {
     /// <p>The first port in the range.</p>
     #[serde(rename = "fromPort")]
@@ -2205,7 +2205,7 @@ pub struct PortInfo {
     pub to_port: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutInstancePublicPortsRequest {
     /// <p>The Lightsail instance name of the public port(s) you are setting.</p>
     #[serde(rename = "instanceName")]
@@ -2215,7 +2215,7 @@ pub struct PutInstancePublicPortsRequest {
     pub port_infos: Vec<PortInfo>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutInstancePublicPortsResult {
     /// <p>Describes metadata about the operation you just executed.</p>
     #[serde(rename = "operation")]
@@ -2223,14 +2223,14 @@ pub struct PutInstancePublicPortsResult {
     pub operation: Option<Operation>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RebootInstanceRequest {
     /// <p>The name of the instance to reboot.</p>
     #[serde(rename = "instanceName")]
     pub instance_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RebootInstanceResult {
     /// <p>An array of key-value pairs containing information about the request operations.</p>
     #[serde(rename = "operations")]
@@ -2239,7 +2239,7 @@ pub struct RebootInstanceResult {
 }
 
 /// <p>Describes the AWS Region.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Region {
     /// <p>The Availability Zones. Follows the format <code>us-east-2a</code> (case-sensitive).</p>
     #[serde(rename = "availabilityZones")]
@@ -2263,14 +2263,14 @@ pub struct Region {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ReleaseStaticIpRequest {
     /// <p>The name of the static IP to delete.</p>
     #[serde(rename = "staticIpName")]
     pub static_ip_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ReleaseStaticIpResult {
     /// <p>An array of key-value pairs containing information about the request operation.</p>
     #[serde(rename = "operations")]
@@ -2279,7 +2279,7 @@ pub struct ReleaseStaticIpResult {
 }
 
 /// <p>Describes the resource location.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ResourceLocation {
     /// <p>The Availability Zone. Follows the format <code>us-east-2a</code> (case-sensitive).</p>
     #[serde(rename = "availabilityZone")]
@@ -2291,14 +2291,14 @@ pub struct ResourceLocation {
     pub region_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartInstanceRequest {
     /// <p>The name of the instance (a virtual private server) to start.</p>
     #[serde(rename = "instanceName")]
     pub instance_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StartInstanceResult {
     /// <p>An array of key-value pairs containing information about the request operation.</p>
     #[serde(rename = "operations")]
@@ -2307,7 +2307,7 @@ pub struct StartInstanceResult {
 }
 
 /// <p>Describes the static IP.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StaticIp {
     /// <p>The Amazon Resource Name (ARN) of the static IP (e.g., <code>arn:aws:lightsail:us-east-2:123456789101:StaticIp/9cbb4a9e-f8e3-4dfe-b57e-12345EXAMPLE</code>).</p>
     #[serde(rename = "arn")]
@@ -2347,7 +2347,7 @@ pub struct StaticIp {
     pub support_code: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopInstanceRequest {
     /// <p><p>When set to <code>True</code>, forces a Lightsail instance that is stuck in a <code>stopping</code> state to stop.</p> <important> <p>Only use the <code>force</code> parameter if your instance is stuck in the <code>stopping</code> state. In any other state, your instance should stop normally without adding this parameter to your API request.</p> </important></p>
     #[serde(rename = "force")]
@@ -2358,7 +2358,7 @@ pub struct StopInstanceRequest {
     pub instance_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StopInstanceResult {
     /// <p>An array of key-value pairs containing information about the request operation.</p>
     #[serde(rename = "operations")]
@@ -2366,10 +2366,10 @@ pub struct StopInstanceResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UnpeerVpcRequest {}
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UnpeerVpcResult {
     /// <p>An array of key-value pairs containing information about the request operation.</p>
     #[serde(rename = "operation")]
@@ -2377,7 +2377,7 @@ pub struct UnpeerVpcResult {
     pub operation: Option<Operation>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDomainEntryRequest {
     /// <p>An array of key-value pairs containing information about the domain entry.</p>
     #[serde(rename = "domainEntry")]
@@ -2387,7 +2387,7 @@ pub struct UpdateDomainEntryRequest {
     pub domain_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateDomainEntryResult {
     /// <p>An array of key-value pairs containing information about the request operation.</p>
     #[serde(rename = "operations")]
@@ -2395,7 +2395,7 @@ pub struct UpdateDomainEntryResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateLoadBalancerAttributeRequest {
     /// <p>The name of the attribute you want to update. Valid values are below.</p>
     #[serde(rename = "attributeName")]
@@ -2408,7 +2408,7 @@ pub struct UpdateLoadBalancerAttributeRequest {
     pub load_balancer_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateLoadBalancerAttributeResult {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]

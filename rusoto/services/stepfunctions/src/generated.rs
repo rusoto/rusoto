@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Contains details about an activity which failed during an execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivityFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -44,7 +44,7 @@ pub struct ActivityFailedEventDetails {
 }
 
 /// <p>Contains details about an activity.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivityListItem {
     /// <p>The Amazon Resource Name (ARN) that identifies the activity.</p>
     #[serde(rename = "activityArn")]
@@ -58,7 +58,7 @@ pub struct ActivityListItem {
 }
 
 /// <p>Contains details about an activity schedule failure which occurred during an execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivityScheduleFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -71,7 +71,7 @@ pub struct ActivityScheduleFailedEventDetails {
 }
 
 /// <p>Contains details about an activity scheduled during an execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivityScheduledEventDetails {
     /// <p>The maximum allowed duration between two heartbeats for the activity task.</p>
     #[serde(rename = "heartbeatInSeconds")]
@@ -91,7 +91,7 @@ pub struct ActivityScheduledEventDetails {
 }
 
 /// <p>Contains details about the start of an activity during an execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivityStartedEventDetails {
     /// <p>The name of the worker that the task is assigned to. These names are provided by the workers when calling <a>GetActivityTask</a>.</p>
     #[serde(rename = "workerName")]
@@ -100,7 +100,7 @@ pub struct ActivityStartedEventDetails {
 }
 
 /// <p>Contains details about an activity which successfully terminated during an execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivitySucceededEventDetails {
     /// <p>The JSON data output by the activity task.</p>
     #[serde(rename = "output")]
@@ -109,7 +109,7 @@ pub struct ActivitySucceededEventDetails {
 }
 
 /// <p>Contains details about an activity timeout which occurred during an execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivityTimedOutEventDetails {
     /// <p>A more detailed explanation of the cause of the timeout.</p>
     #[serde(rename = "cause")]
@@ -121,14 +121,14 @@ pub struct ActivityTimedOutEventDetails {
     pub error: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateActivityInput {
     /// <p><p>The name of the activity to create. This name must be unique for your AWS account and region for 90 days. For more information, see <a href="http://docs.aws.amazon.com/step-functions/latest/dg/limits.html#service-limits-state-machine-executions"> Limits Related to State Machine Executions</a> in the <i>AWS Step Functions Developer Guide</i>.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateActivityOutput {
     /// <p>The Amazon Resource Name (ARN) that identifies the created activity.</p>
     #[serde(rename = "activityArn")]
@@ -138,7 +138,7 @@ pub struct CreateActivityOutput {
     pub creation_date: f64,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateStateMachineInput {
     /// <p>The Amazon States Language definition of the state machine.</p>
     #[serde(rename = "definition")]
@@ -151,7 +151,7 @@ pub struct CreateStateMachineInput {
     pub role_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateStateMachineOutput {
     /// <p>The date the state machine is created.</p>
     #[serde(rename = "creationDate")]
@@ -161,34 +161,34 @@ pub struct CreateStateMachineOutput {
     pub state_machine_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteActivityInput {
     /// <p>The Amazon Resource Name (ARN) of the activity to delete.</p>
     #[serde(rename = "activityArn")]
     pub activity_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteActivityOutput {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteStateMachineInput {
     /// <p>The Amazon Resource Name (ARN) of the state machine to delete.</p>
     #[serde(rename = "stateMachineArn")]
     pub state_machine_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteStateMachineOutput {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeActivityInput {
     /// <p>The Amazon Resource Name (ARN) of the activity to describe.</p>
     #[serde(rename = "activityArn")]
     pub activity_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeActivityOutput {
     /// <p>The Amazon Resource Name (ARN) that identifies the activity.</p>
     #[serde(rename = "activityArn")]
@@ -201,14 +201,14 @@ pub struct DescribeActivityOutput {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeExecutionInput {
     /// <p>The Amazon Resource Name (ARN) of the execution to describe.</p>
     #[serde(rename = "executionArn")]
     pub execution_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeExecutionOutput {
     /// <p>The Amazon Resource Name (ARN) that identifies the execution.</p>
     #[serde(rename = "executionArn")]
@@ -239,14 +239,14 @@ pub struct DescribeExecutionOutput {
     pub stop_date: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeStateMachineForExecutionInput {
     /// <p>The Amazon Resource Name (ARN) of the execution you want state machine information for.</p>
     #[serde(rename = "executionArn")]
     pub execution_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeStateMachineForExecutionOutput {
     /// <p>The Amazon States Language definition of the state machine.</p>
     #[serde(rename = "definition")]
@@ -265,14 +265,14 @@ pub struct DescribeStateMachineForExecutionOutput {
     pub update_date: f64,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeStateMachineInput {
     /// <p>The Amazon Resource Name (ARN) of the state machine to describe.</p>
     #[serde(rename = "stateMachineArn")]
     pub state_machine_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeStateMachineOutput {
     /// <p>The date the state machine is created.</p>
     #[serde(rename = "creationDate")]
@@ -296,7 +296,7 @@ pub struct DescribeStateMachineOutput {
 }
 
 /// <p>Contains details about an abort of an execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ExecutionAbortedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -309,7 +309,7 @@ pub struct ExecutionAbortedEventDetails {
 }
 
 /// <p>Contains details about an execution failure event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ExecutionFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -322,7 +322,7 @@ pub struct ExecutionFailedEventDetails {
 }
 
 /// <p>Contains details about an execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ExecutionListItem {
     /// <p>The Amazon Resource Name (ARN) that identifies the execution.</p>
     #[serde(rename = "executionArn")]
@@ -346,7 +346,7 @@ pub struct ExecutionListItem {
 }
 
 /// <p>Contains details about the start of the execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ExecutionStartedEventDetails {
     /// <p>The JSON data input to the execution.</p>
     #[serde(rename = "input")]
@@ -359,7 +359,7 @@ pub struct ExecutionStartedEventDetails {
 }
 
 /// <p>Contains details about the successful termination of the execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ExecutionSucceededEventDetails {
     /// <p>The JSON data output by the execution.</p>
     #[serde(rename = "output")]
@@ -368,7 +368,7 @@ pub struct ExecutionSucceededEventDetails {
 }
 
 /// <p>Contains details about the execution timeout which occurred during the execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ExecutionTimedOutEventDetails {
     /// <p>A more detailed explanation of the cause of the timeout.</p>
     #[serde(rename = "cause")]
@@ -380,7 +380,7 @@ pub struct ExecutionTimedOutEventDetails {
     pub error: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetActivityTaskInput {
     /// <p>The Amazon Resource Name (ARN) of the activity to retrieve tasks from (assigned when you create the task using <a>CreateActivity</a>.)</p>
     #[serde(rename = "activityArn")]
@@ -391,7 +391,7 @@ pub struct GetActivityTaskInput {
     pub worker_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetActivityTaskOutput {
     /// <p>The string that contains the JSON input data for the task.</p>
     #[serde(rename = "input")]
@@ -403,7 +403,7 @@ pub struct GetActivityTaskOutput {
     pub task_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetExecutionHistoryInput {
     /// <p>The Amazon Resource Name (ARN) of the execution.</p>
     #[serde(rename = "executionArn")]
@@ -422,7 +422,7 @@ pub struct GetExecutionHistoryInput {
     pub reverse_order: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetExecutionHistoryOutput {
     /// <p>The list of events that occurred in the execution.</p>
     #[serde(rename = "events")]
@@ -434,7 +434,7 @@ pub struct GetExecutionHistoryOutput {
 }
 
 /// <p>Contains details about the events of an execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct HistoryEvent {
     #[serde(rename = "activityFailedEventDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -513,7 +513,7 @@ pub struct HistoryEvent {
 }
 
 /// <p>Contains details about a lambda function which failed during an execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LambdaFunctionFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -526,7 +526,7 @@ pub struct LambdaFunctionFailedEventDetails {
 }
 
 /// <p>Contains details about a failed lambda function schedule event which occurred during an execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LambdaFunctionScheduleFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -539,7 +539,7 @@ pub struct LambdaFunctionScheduleFailedEventDetails {
 }
 
 /// <p>Contains details about a lambda function scheduled during an execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LambdaFunctionScheduledEventDetails {
     /// <p>The JSON data input to the lambda function.</p>
     #[serde(rename = "input")]
@@ -555,7 +555,7 @@ pub struct LambdaFunctionScheduledEventDetails {
 }
 
 /// <p>Contains details about a lambda function which failed to start during an execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LambdaFunctionStartFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -568,7 +568,7 @@ pub struct LambdaFunctionStartFailedEventDetails {
 }
 
 /// <p>Contains details about a lambda function which successfully terminated during an execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LambdaFunctionSucceededEventDetails {
     /// <p>The JSON data output by the lambda function.</p>
     #[serde(rename = "output")]
@@ -577,7 +577,7 @@ pub struct LambdaFunctionSucceededEventDetails {
 }
 
 /// <p>Contains details about a lambda function timeout which occurred during an execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LambdaFunctionTimedOutEventDetails {
     /// <p>A more detailed explanation of the cause of the timeout.</p>
     #[serde(rename = "cause")]
@@ -589,7 +589,7 @@ pub struct LambdaFunctionTimedOutEventDetails {
     pub error: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListActivitiesInput {
     /// <p>The maximum number of results that are returned per call. You can use <code>nextToken</code> to obtain further pages of results. The default is 100 and the maximum allowed page size is 100. A value of 0 uses the default.</p> <p>This is only an upper limit. The actual number of results returned per call might be fewer than the specified maximum.</p>
     #[serde(rename = "maxResults")]
@@ -601,7 +601,7 @@ pub struct ListActivitiesInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListActivitiesOutput {
     /// <p>The list of activities.</p>
     #[serde(rename = "activities")]
@@ -612,7 +612,7 @@ pub struct ListActivitiesOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListExecutionsInput {
     /// <p>The maximum number of results that are returned per call. You can use <code>nextToken</code> to obtain further pages of results. The default is 100 and the maximum allowed page size is 100. A value of 0 uses the default.</p> <p>This is only an upper limit. The actual number of results returned per call might be fewer than the specified maximum.</p>
     #[serde(rename = "maxResults")]
@@ -631,7 +631,7 @@ pub struct ListExecutionsInput {
     pub status_filter: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListExecutionsOutput {
     /// <p>The list of matching executions.</p>
     #[serde(rename = "executions")]
@@ -642,7 +642,7 @@ pub struct ListExecutionsOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListStateMachinesInput {
     /// <p>The maximum number of results that are returned per call. You can use <code>nextToken</code> to obtain further pages of results. The default is 100 and the maximum allowed page size is 100. A value of 0 uses the default.</p> <p>This is only an upper limit. The actual number of results returned per call might be fewer than the specified maximum.</p>
     #[serde(rename = "maxResults")]
@@ -654,7 +654,7 @@ pub struct ListStateMachinesInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListStateMachinesOutput {
     /// <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>
     #[serde(rename = "nextToken")]
@@ -664,7 +664,7 @@ pub struct ListStateMachinesOutput {
     pub state_machines: Vec<StateMachineListItem>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SendTaskFailureInput {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -679,20 +679,20 @@ pub struct SendTaskFailureInput {
     pub task_token: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SendTaskFailureOutput {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SendTaskHeartbeatInput {
     /// <p>The token that represents this task. Task tokens are generated by the service when the tasks are assigned to a worker (see <a>GetActivityTaskOutput$taskToken</a>).</p>
     #[serde(rename = "taskToken")]
     pub task_token: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SendTaskHeartbeatOutput {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SendTaskSuccessInput {
     /// <p>The JSON output of the task.</p>
     #[serde(rename = "output")]
@@ -702,10 +702,10 @@ pub struct SendTaskSuccessInput {
     pub task_token: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SendTaskSuccessOutput {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartExecutionInput {
     /// <p><p>The string that contains the JSON input data for the execution, for example:</p> <p> <code>&quot;input&quot;: &quot;{&quot;first_name&quot; : &quot;test&quot;}&quot;</code> </p> <note> <p>If you don&#39;t include any JSON input data, you still must include the two braces, for example: <code>&quot;input&quot;: &quot;{}&quot;</code> </p> </note></p>
     #[serde(rename = "input")]
@@ -720,7 +720,7 @@ pub struct StartExecutionInput {
     pub state_machine_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StartExecutionOutput {
     /// <p>The Amazon Resource Name (ARN) that identifies the execution.</p>
     #[serde(rename = "executionArn")]
@@ -731,7 +731,7 @@ pub struct StartExecutionOutput {
 }
 
 /// <p>Contains details about a state entered during an execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StateEnteredEventDetails {
     /// <p>The string that contains the JSON input data for the state.</p>
     #[serde(rename = "input")]
@@ -743,7 +743,7 @@ pub struct StateEnteredEventDetails {
 }
 
 /// <p>Contains details about an exit from a state during an execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StateExitedEventDetails {
     /// <p><p>The name of the state.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
@@ -755,7 +755,7 @@ pub struct StateExitedEventDetails {
 }
 
 /// <p>Contains details about the state machine.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StateMachineListItem {
     /// <p>The date the state machine is created.</p>
     #[serde(rename = "creationDate")]
@@ -768,7 +768,7 @@ pub struct StateMachineListItem {
     pub state_machine_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopExecutionInput {
     /// <p>A more detailed explanation of the cause of the termination.</p>
     #[serde(rename = "cause")]
@@ -783,14 +783,14 @@ pub struct StopExecutionInput {
     pub execution_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StopExecutionOutput {
     /// <p>The date the execution is stopped.</p>
     #[serde(rename = "stopDate")]
     pub stop_date: f64,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateStateMachineInput {
     /// <p>The Amazon States Language definition of the state machine.</p>
     #[serde(rename = "definition")]
@@ -805,7 +805,7 @@ pub struct UpdateStateMachineInput {
     pub state_machine_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateStateMachineOutput {
     /// <p>The date and time the state machine was updated.</p>
     #[serde(rename = "updateDate")]

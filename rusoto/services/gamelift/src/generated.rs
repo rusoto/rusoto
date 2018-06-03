@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AcceptMatchInput {
     /// <p>Player response to the proposed match.</p>
     #[serde(rename = "AcceptanceType")]
@@ -44,11 +44,11 @@ pub struct AcceptMatchInput {
     pub ticket_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AcceptMatchOutput {}
 
 /// <p><p>Properties describing a fleet alias.</p> <p>Alias-related operations include:</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Alias {
     /// <p>Unique identifier for an alias; alias ARNs are unique across all regions.</p>
     #[serde(rename = "AliasArn")]
@@ -81,7 +81,7 @@ pub struct Alias {
 }
 
 /// <p>Values for use in <a>Player</a> attribute key:value pairs. This object lets you specify an attribute value using any of the valid data types: string, number, string array or data map. Each <code>AttributeValue</code> object can use only one of the available properties.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributeValue {
     /// <p>For number values, expressed as double.</p>
     #[serde(rename = "N")]
@@ -102,7 +102,7 @@ pub struct AttributeValue {
 }
 
 /// <p>Temporary access credentials used for uploading game build files to Amazon GameLift. They are valid for a limited time. If they expire before you upload your game build, get a new set by calling <a>RequestUploadCredentials</a>.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AwsCredentials {
     /// <p>Temporary key allowing access to the Amazon GameLift S3 account.</p>
     #[serde(rename = "AccessKeyId")]
@@ -119,7 +119,7 @@ pub struct AwsCredentials {
 }
 
 /// <p><p>Properties describing a game build.</p> <p>Build-related operations include:</p> <ul> <li> <p> <a>CreateBuild</a> </p> </li> <li> <p> <a>ListBuilds</a> </p> </li> <li> <p> <a>DescribeBuild</a> </p> </li> <li> <p> <a>UpdateBuild</a> </p> </li> <li> <p> <a>DeleteBuild</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Build {
     /// <p>Unique identifier for a build.</p>
     #[serde(rename = "BuildId")]
@@ -152,7 +152,7 @@ pub struct Build {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateAliasInput {
     /// <p>Human-readable description of an alias.</p>
     #[serde(rename = "Description")]
@@ -167,7 +167,7 @@ pub struct CreateAliasInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateAliasOutput {
     /// <p>Object that describes the newly created alias record.</p>
     #[serde(rename = "Alias")]
@@ -176,7 +176,7 @@ pub struct CreateAliasOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateBuildInput {
     /// <p>Descriptive label that is associated with a build. Build names do not need to be unique. You can use <a>UpdateBuild</a> to change this value later. </p>
     #[serde(rename = "Name")]
@@ -197,7 +197,7 @@ pub struct CreateBuildInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateBuildOutput {
     /// <p>The newly created build record, including a unique build ID and status. </p>
     #[serde(rename = "Build")]
@@ -214,7 +214,7 @@ pub struct CreateBuildOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateFleetInput {
     /// <p>Unique identifier for a build to be deployed on the new fleet. The build must have been successfully uploaded to Amazon GameLift and be in a <code>READY</code> status. This fleet setting cannot be changed once the fleet is created.</p>
     #[serde(rename = "BuildId")]
@@ -276,7 +276,7 @@ pub struct CreateFleetInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateFleetOutput {
     /// <p>Properties for the newly created fleet.</p>
     #[serde(rename = "FleetAttributes")]
@@ -285,7 +285,7 @@ pub struct CreateFleetOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateGameSessionInput {
     /// <p>Unique identifier for an alias associated with the fleet to create a game session in. Each request must reference either a fleet ID or alias ID, but not both.</p>
     #[serde(rename = "AliasId")]
@@ -325,7 +325,7 @@ pub struct CreateGameSessionInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateGameSessionOutput {
     /// <p>Object that describes the newly created game session record.</p>
     #[serde(rename = "GameSession")]
@@ -334,7 +334,7 @@ pub struct CreateGameSessionOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateGameSessionQueueInput {
     /// <p>List of fleets that can be used to fulfill game session placement requests in the queue. Fleets are identified by either a fleet ARN or a fleet alias ARN. Destinations are listed in default preference order.</p>
     #[serde(rename = "Destinations")]
@@ -354,7 +354,7 @@ pub struct CreateGameSessionQueueInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateGameSessionQueueOutput {
     /// <p>Object that describes the newly created game session queue.</p>
     #[serde(rename = "GameSessionQueue")]
@@ -363,7 +363,7 @@ pub struct CreateGameSessionQueueOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateMatchmakingConfigurationInput {
     /// <p>Flag that determines whether or not a match that was created with this configuration must be accepted by the matched players. To require acceptance, set to TRUE.</p>
     #[serde(rename = "AcceptanceRequired")]
@@ -411,7 +411,7 @@ pub struct CreateMatchmakingConfigurationInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateMatchmakingConfigurationOutput {
     /// <p>Object that describes the newly created matchmaking configuration.</p>
     #[serde(rename = "Configuration")]
@@ -420,7 +420,7 @@ pub struct CreateMatchmakingConfigurationOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateMatchmakingRuleSetInput {
     /// <p>Unique identifier for a matchmaking rule set. This name is used to identify the rule set associated with a matchmaking configuration.</p>
     #[serde(rename = "Name")]
@@ -431,7 +431,7 @@ pub struct CreateMatchmakingRuleSetInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateMatchmakingRuleSetOutput {
     /// <p>Object that describes the newly created matchmaking rule set.</p>
     #[serde(rename = "RuleSet")]
@@ -439,7 +439,7 @@ pub struct CreateMatchmakingRuleSetOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreatePlayerSessionInput {
     /// <p>Unique identifier for the game session to add a player to.</p>
     #[serde(rename = "GameSessionId")]
@@ -454,7 +454,7 @@ pub struct CreatePlayerSessionInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreatePlayerSessionOutput {
     /// <p>Object that describes the newly created player session record.</p>
     #[serde(rename = "PlayerSession")]
@@ -463,7 +463,7 @@ pub struct CreatePlayerSessionOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreatePlayerSessionsInput {
     /// <p>Unique identifier for the game session to add players to.</p>
     #[serde(rename = "GameSessionId")]
@@ -478,7 +478,7 @@ pub struct CreatePlayerSessionsInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreatePlayerSessionsOutput {
     /// <p>Collection of player session objects created for the added players.</p>
     #[serde(rename = "PlayerSessions")]
@@ -487,7 +487,7 @@ pub struct CreatePlayerSessionsOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateVpcPeeringAuthorizationInput {
     /// <p>Unique identifier for the AWS account that you use to manage your Amazon GameLift fleet. You can find your Account ID in the AWS Management Console under account settings.</p>
     #[serde(rename = "GameLiftAwsAccountId")]
@@ -498,7 +498,7 @@ pub struct CreateVpcPeeringAuthorizationInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateVpcPeeringAuthorizationOutput {
     /// <p>Details on the requested VPC peering authorization, including expiration.</p>
     #[serde(rename = "VpcPeeringAuthorization")]
@@ -507,7 +507,7 @@ pub struct CreateVpcPeeringAuthorizationOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateVpcPeeringConnectionInput {
     /// <p>Unique identifier for a fleet. This tells Amazon GameLift which GameLift VPC to peer with. </p>
     #[serde(rename = "FleetId")]
@@ -520,11 +520,11 @@ pub struct CreateVpcPeeringConnectionInput {
     pub peer_vpc_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateVpcPeeringConnectionOutput {}
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteAliasInput {
     /// <p>Unique identifier for a fleet alias. Specify the alias you want to delete.</p>
     #[serde(rename = "AliasId")]
@@ -532,7 +532,7 @@ pub struct DeleteAliasInput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteBuildInput {
     /// <p>Unique identifier for a build to delete.</p>
     #[serde(rename = "BuildId")]
@@ -540,7 +540,7 @@ pub struct DeleteBuildInput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteFleetInput {
     /// <p>Unique identifier for a fleet to be deleted.</p>
     #[serde(rename = "FleetId")]
@@ -548,29 +548,29 @@ pub struct DeleteFleetInput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteGameSessionQueueInput {
     /// <p>Descriptive label that is associated with game session queue. Queue names must be unique within each region.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteGameSessionQueueOutput {}
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteMatchmakingConfigurationInput {
     /// <p>Unique identifier for a matchmaking configuration</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteMatchmakingConfigurationOutput {}
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteScalingPolicyInput {
     /// <p>Unique identifier for a fleet to be deleted.</p>
     #[serde(rename = "FleetId")]
@@ -581,7 +581,7 @@ pub struct DeleteScalingPolicyInput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteVpcPeeringAuthorizationInput {
     /// <p>Unique identifier for the AWS account that you use to manage your Amazon GameLift fleet. You can find your Account ID in the AWS Management Console under account settings.</p>
     #[serde(rename = "GameLiftAwsAccountId")]
@@ -591,11 +591,11 @@ pub struct DeleteVpcPeeringAuthorizationInput {
     pub peer_vpc_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteVpcPeeringAuthorizationOutput {}
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteVpcPeeringConnectionInput {
     /// <p>Unique identifier for a fleet. This value must match the fleet ID referenced in the VPC peering connection record.</p>
     #[serde(rename = "FleetId")]
@@ -605,11 +605,11 @@ pub struct DeleteVpcPeeringConnectionInput {
     pub vpc_peering_connection_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteVpcPeeringConnectionOutput {}
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeAliasInput {
     /// <p>Unique identifier for a fleet alias. Specify the alias you want to retrieve.</p>
     #[serde(rename = "AliasId")]
@@ -617,7 +617,7 @@ pub struct DescribeAliasInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeAliasOutput {
     /// <p>Object that contains the requested alias.</p>
     #[serde(rename = "Alias")]
@@ -626,7 +626,7 @@ pub struct DescribeAliasOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeBuildInput {
     /// <p>Unique identifier for a build to retrieve properties for.</p>
     #[serde(rename = "BuildId")]
@@ -634,7 +634,7 @@ pub struct DescribeBuildInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeBuildOutput {
     /// <p>Set of properties describing the requested build.</p>
     #[serde(rename = "Build")]
@@ -643,7 +643,7 @@ pub struct DescribeBuildOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeEC2InstanceLimitsInput {
     /// <p>Name of an EC2 instance type that is supported in Amazon GameLift. A fleet instance type determines the computing resources of each instance in the fleet, including CPU, memory, storage, and networking capacity. Amazon GameLift supports the following EC2 instance types. See <a href="http://aws.amazon.com/ec2/instance-types/">Amazon EC2 Instance Types</a> for detailed descriptions. Leave this parameter blank to retrieve limits for all types.</p>
     #[serde(rename = "EC2InstanceType")]
@@ -652,7 +652,7 @@ pub struct DescribeEC2InstanceLimitsInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeEC2InstanceLimitsOutput {
     /// <p>Object that contains the maximum number of instances for the specified instance type.</p>
     #[serde(rename = "EC2InstanceLimits")]
@@ -661,7 +661,7 @@ pub struct DescribeEC2InstanceLimitsOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeFleetAttributesInput {
     /// <p>Unique identifier for a fleet(s) to retrieve attributes for. To request attributes for all fleets, leave this parameter empty.</p>
     #[serde(rename = "FleetIds")]
@@ -678,7 +678,7 @@ pub struct DescribeFleetAttributesInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeFleetAttributesOutput {
     /// <p>Collection of objects containing attribute metadata for each requested fleet ID.</p>
     #[serde(rename = "FleetAttributes")]
@@ -691,7 +691,7 @@ pub struct DescribeFleetAttributesOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeFleetCapacityInput {
     /// <p>Unique identifier for a fleet(s) to retrieve capacity information for. To request capacity information for all fleets, leave this parameter empty.</p>
     #[serde(rename = "FleetIds")]
@@ -708,7 +708,7 @@ pub struct DescribeFleetCapacityInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeFleetCapacityOutput {
     /// <p>Collection of objects containing capacity information for each requested fleet ID. Leave this parameter empty to retrieve capacity information for all fleets.</p>
     #[serde(rename = "FleetCapacity")]
@@ -721,7 +721,7 @@ pub struct DescribeFleetCapacityOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeFleetEventsInput {
     /// <p>Most recent date to retrieve event logs for. If no end time is specified, this call returns entries from the specified start time up to the present. Format is a number expressed in Unix time as milliseconds (ex: "1469498468.057").</p>
     #[serde(rename = "EndTime")]
@@ -745,7 +745,7 @@ pub struct DescribeFleetEventsInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeFleetEventsOutput {
     /// <p>Collection of objects containing event log entries for the specified fleet.</p>
     #[serde(rename = "Events")]
@@ -758,7 +758,7 @@ pub struct DescribeFleetEventsOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeFleetPortSettingsInput {
     /// <p>Unique identifier for a fleet to retrieve port settings for.</p>
     #[serde(rename = "FleetId")]
@@ -766,7 +766,7 @@ pub struct DescribeFleetPortSettingsInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeFleetPortSettingsOutput {
     /// <p>Object that contains port settings for the requested fleet ID.</p>
     #[serde(rename = "InboundPermissions")]
@@ -775,7 +775,7 @@ pub struct DescribeFleetPortSettingsOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeFleetUtilizationInput {
     /// <p>Unique identifier for a fleet(s) to retrieve utilization data for. To request utilization data for all fleets, leave this parameter empty.</p>
     #[serde(rename = "FleetIds")]
@@ -792,7 +792,7 @@ pub struct DescribeFleetUtilizationInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeFleetUtilizationOutput {
     /// <p>Collection of objects containing utilization information for each requested fleet ID.</p>
     #[serde(rename = "FleetUtilization")]
@@ -805,7 +805,7 @@ pub struct DescribeFleetUtilizationOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeGameSessionDetailsInput {
     /// <p>Unique identifier for an alias associated with the fleet to retrieve all game sessions for.</p>
     #[serde(rename = "AliasId")]
@@ -834,7 +834,7 @@ pub struct DescribeGameSessionDetailsInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeGameSessionDetailsOutput {
     /// <p>Collection of objects containing game session properties and the protection policy currently in force for each session matching the request.</p>
     #[serde(rename = "GameSessionDetails")]
@@ -847,7 +847,7 @@ pub struct DescribeGameSessionDetailsOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeGameSessionPlacementInput {
     /// <p>Unique identifier for a game session placement to retrieve.</p>
     #[serde(rename = "PlacementId")]
@@ -855,7 +855,7 @@ pub struct DescribeGameSessionPlacementInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeGameSessionPlacementOutput {
     /// <p>Object that describes the requested game session placement.</p>
     #[serde(rename = "GameSessionPlacement")]
@@ -864,7 +864,7 @@ pub struct DescribeGameSessionPlacementOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeGameSessionQueuesInput {
     /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>
     #[serde(rename = "Limit")]
@@ -881,7 +881,7 @@ pub struct DescribeGameSessionQueuesInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeGameSessionQueuesOutput {
     /// <p>Collection of objects that describes the requested game session queues.</p>
     #[serde(rename = "GameSessionQueues")]
@@ -894,7 +894,7 @@ pub struct DescribeGameSessionQueuesOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeGameSessionsInput {
     /// <p>Unique identifier for an alias associated with the fleet to retrieve all game sessions for. </p>
     #[serde(rename = "AliasId")]
@@ -923,7 +923,7 @@ pub struct DescribeGameSessionsInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeGameSessionsOutput {
     /// <p>Collection of objects containing game session properties for each session matching the request.</p>
     #[serde(rename = "GameSessions")]
@@ -936,7 +936,7 @@ pub struct DescribeGameSessionsOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeInstancesInput {
     /// <p>Unique identifier for a fleet to retrieve instance information for.</p>
     #[serde(rename = "FleetId")]
@@ -956,7 +956,7 @@ pub struct DescribeInstancesInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeInstancesOutput {
     /// <p>Collection of objects containing properties for each instance returned.</p>
     #[serde(rename = "Instances")]
@@ -969,7 +969,7 @@ pub struct DescribeInstancesOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeMatchmakingConfigurationsInput {
     /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages. This parameter is limited to 10.</p>
     #[serde(rename = "Limit")]
@@ -990,7 +990,7 @@ pub struct DescribeMatchmakingConfigurationsInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeMatchmakingConfigurationsOutput {
     /// <p>Collection of requested matchmaking configuration objects.</p>
     #[serde(rename = "Configurations")]
@@ -1003,7 +1003,7 @@ pub struct DescribeMatchmakingConfigurationsOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeMatchmakingInput {
     /// <p>Unique identifier for a matchmaking ticket. You can include up to 10 ID values. </p>
     #[serde(rename = "TicketIds")]
@@ -1011,7 +1011,7 @@ pub struct DescribeMatchmakingInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeMatchmakingOutput {
     /// <p>Collection of existing matchmaking ticket objects matching the request.</p>
     #[serde(rename = "TicketList")]
@@ -1020,7 +1020,7 @@ pub struct DescribeMatchmakingOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeMatchmakingRuleSetsInput {
     /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>
     #[serde(rename = "Limit")]
@@ -1037,7 +1037,7 @@ pub struct DescribeMatchmakingRuleSetsInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeMatchmakingRuleSetsOutput {
     /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
     #[serde(rename = "NextToken")]
@@ -1049,7 +1049,7 @@ pub struct DescribeMatchmakingRuleSetsOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribePlayerSessionsInput {
     /// <p>Unique identifier for the game session to retrieve player sessions for.</p>
     #[serde(rename = "GameSessionId")]
@@ -1078,7 +1078,7 @@ pub struct DescribePlayerSessionsInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribePlayerSessionsOutput {
     /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
     #[serde(rename = "NextToken")]
@@ -1091,7 +1091,7 @@ pub struct DescribePlayerSessionsOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeRuntimeConfigurationInput {
     /// <p>Unique identifier for a fleet to get the run-time configuration for.</p>
     #[serde(rename = "FleetId")]
@@ -1099,7 +1099,7 @@ pub struct DescribeRuntimeConfigurationInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeRuntimeConfigurationOutput {
     /// <p>Instructions describing how server processes should be launched and maintained on each instance in the fleet.</p>
     #[serde(rename = "RuntimeConfiguration")]
@@ -1108,7 +1108,7 @@ pub struct DescribeRuntimeConfigurationOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeScalingPoliciesInput {
     /// <p>Unique identifier for a fleet to retrieve scaling policies for.</p>
     #[serde(rename = "FleetId")]
@@ -1128,7 +1128,7 @@ pub struct DescribeScalingPoliciesInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeScalingPoliciesOutput {
     /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
     #[serde(rename = "NextToken")]
@@ -1140,10 +1140,10 @@ pub struct DescribeScalingPoliciesOutput {
     pub scaling_policies: Option<Vec<ScalingPolicy>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeVpcPeeringAuthorizationsInput {}
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeVpcPeeringAuthorizationsOutput {
     /// <p>Collection of objects that describe all valid VPC peering operations for the current AWS account.</p>
     #[serde(rename = "VpcPeeringAuthorizations")]
@@ -1152,7 +1152,7 @@ pub struct DescribeVpcPeeringAuthorizationsOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeVpcPeeringConnectionsInput {
     /// <p>Unique identifier for a fleet.</p>
     #[serde(rename = "FleetId")]
@@ -1161,7 +1161,7 @@ pub struct DescribeVpcPeeringConnectionsInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeVpcPeeringConnectionsOutput {
     /// <p>Collection of VPC peering connection records that match the request.</p>
     #[serde(rename = "VpcPeeringConnections")]
@@ -1170,7 +1170,7 @@ pub struct DescribeVpcPeeringConnectionsOutput {
 }
 
 /// <p>Player information for use when creating player sessions using a game session placement request with <a>StartGameSessionPlacement</a>.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DesiredPlayerSession {
     /// <p>Developer-defined information related to a player. Amazon GameLift does not use this data, so it can be formatted as needed for use in the game.</p>
     #[serde(rename = "PlayerData")]
@@ -1183,7 +1183,7 @@ pub struct DesiredPlayerSession {
 }
 
 /// <p><p>Current status of fleet capacity. The number of active instances should match or be in the process of matching the number of desired instances. Pending and terminating counts are non-zero only if fleet capacity is adjusting to an <a>UpdateFleetCapacity</a> request, or if access to resources is temporarily affected.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct EC2InstanceCounts {
     /// <p>Actual number of active instances in the fleet.</p>
     #[serde(rename = "ACTIVE")]
@@ -1216,7 +1216,7 @@ pub struct EC2InstanceCounts {
 }
 
 /// <p>Maximum number of instances allowed based on the Amazon Elastic Compute Cloud (Amazon EC2) instance type. Instance limits can be retrieved by calling <a>DescribeEC2InstanceLimits</a>.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct EC2InstanceLimit {
     /// <p>Number of instances of the specified type that are currently in use by this AWS account.</p>
     #[serde(rename = "CurrentInstances")]
@@ -1233,7 +1233,7 @@ pub struct EC2InstanceLimit {
 }
 
 /// <p>Log entry describing an event that involves Amazon GameLift resources (such as a fleet). In addition to tracking activity, event codes and messages can provide additional information for troubleshooting and debugging problems.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Event {
     /// <p><p>Type of event being logged. The following events are currently in use:</p> <p> <b>Fleet creation events:</b> </p> <ul> <li> <p>FLEET<em>CREATED -- A fleet record was successfully created with a status of <code>NEW</code>. Event messaging includes the fleet ID.</p> </li> <li> <p>FLEET</em>STATE<em>DOWNLOADING -- Fleet status changed from <code>NEW</code> to <code>DOWNLOADING</code>. The compressed build has started downloading to a fleet instance for installation.</p> </li> <li> <p> FLEET</em>BINARY<em>DOWNLOAD</em>FAILED -- The build failed to download to the fleet instance.</p> </li> <li> <p>FLEET<em>CREATION</em>EXTRACTING<em>BUILD – The game server build was successfully downloaded to an instance, and the build files are now being extracted from the uploaded build and saved to an instance. Failure at this stage prevents a fleet from moving to <code>ACTIVE</code> status. Logs for this stage display a list of the files that are extracted and saved on the instance. Access the logs by using the URL in <i>PreSignedLogUrl</i>.</p> </li> <li> <p>FLEET</em>CREATION<em>RUNNING</em>INSTALLER – The game server build files were successfully extracted, and the Amazon GameLift is now running the build&#39;s install script (if one is included). Failure in this stage prevents a fleet from moving to <code>ACTIVE</code> status. Logs for this stage list the installation steps and whether or not the install completed successfully. Access the logs by using the URL in <i>PreSignedLogUrl</i>. </p> </li> <li> <p>FLEET<em>CREATION</em>VALIDATING<em>RUNTIME</em>CONFIG -- The build process was successful, and the Amazon GameLift is now verifying that the game server launch paths, which are specified in the fleet&#39;s run-time configuration, exist. If any listed launch path exists, Amazon GameLift tries to launch a game server process and waits for the process to report ready. Failures in this stage prevent a fleet from moving to <code>ACTIVE</code> status. Logs for this stage list the launch paths in the run-time configuration and indicate whether each is found. Access the logs by using the URL in <i>PreSignedLogUrl</i>. </p> </li> <li> <p>FLEET<em>STATE</em>VALIDATING -- Fleet status changed from <code>DOWNLOADING</code> to <code>VALIDATING</code>.</p> </li> <li> <p> FLEET<em>VALIDATION</em>LAUNCH<em>PATH</em>NOT<em>FOUND -- Validation of the run-time configuration failed because the executable specified in a launch path does not exist on the instance.</p> </li> <li> <p>FLEET</em>STATE<em>BUILDING -- Fleet status changed from <code>VALIDATING</code> to <code>BUILDING</code>.</p> </li> <li> <p>FLEET</em>VALIDATION<em>EXECUTABLE</em>RUNTIME<em>FAILURE -- Validation of the run-time configuration failed because the executable specified in a launch path failed to run on the fleet instance.</p> </li> <li> <p>FLEET</em>STATE<em>ACTIVATING -- Fleet status changed from <code>BUILDING</code> to <code>ACTIVATING</code>. </p> </li> <li> <p> FLEET</em>ACTIVATION<em>FAILED - The fleet failed to successfully complete one of the steps in the fleet activation process. This event code indicates that the game build was successfully downloaded to a fleet instance, built, and validated, but was not able to start a server process. A possible reason for failure is that the game server is not reporting &quot;process ready&quot; to the Amazon GameLift service.</p> </li> <li> <p>FLEET</em>STATE<em>ACTIVE -- The fleet&#39;s status changed from <code>ACTIVATING</code> to <code>ACTIVE</code>. The fleet is now ready to host game sessions.</p> </li> </ul> <p> <b>VPC peering events:</b> </p> <ul> <li> <p>FLEET</em>VPC<em>PEERING</em>SUCCEEDED -- A VPC peering connection has been established between the VPC for an Amazon GameLift fleet and a VPC in your AWS account.</p> </li> <li> <p>FLEET<em>VPC</em>PEERING<em>FAILED -- A requested VPC peering connection has failed. Event details and status information (see <a>DescribeVpcPeeringConnections</a>) provide additional detail. A common reason for peering failure is that the two VPCs have overlapping CIDR blocks of IPv4 addresses. To resolve this, change the CIDR block for the VPC in your AWS account. For more information on VPC peering failures, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/PeeringGuide/invalid-peering-configurations.html">http://docs.aws.amazon.com/AmazonVPC/latest/PeeringGuide/invalid-peering-configurations.html</a> </p> </li> <li> <p>FLEET</em>VPC<em>PEERING</em>DELETED -- A VPC peering connection has been successfully deleted.</p> </li> </ul> <p> <b>Spot instance events:</b> </p> <ul> <li> <p> INSTANCE<em>INTERRUPTED -- A spot instance was interrupted by EC2 with a two-minute notification.</p> </li> </ul> <p> <b>Other fleet events:</b> </p> <ul> <li> <p>FLEET</em>SCALING<em>EVENT -- A change was made to the fleet&#39;s capacity settings (desired instances, minimum/maximum scaling limits). Event messaging includes the new capacity settings.</p> </li> <li> <p>FLEET</em>NEW<em>GAME</em>SESSION<em>PROTECTION</em>POLICY<em>UPDATED -- A change was made to the fleet&#39;s game session protection policy setting. Event messaging includes both the old and new policy setting. </p> </li> <li> <p>FLEET</em>DELETED -- A request to delete a fleet was initiated.</p> </li> <li> <p> GENERIC_EVENT -- An unspecified event has occurred.</p> </li> </ul></p>
     #[serde(rename = "EventCode")]
@@ -1262,7 +1262,7 @@ pub struct Event {
 }
 
 /// <p><p>General properties describing a fleet.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct FleetAttributes {
     /// <p>Unique identifier for a build.</p>
     #[serde(rename = "BuildId")]
@@ -1335,7 +1335,7 @@ pub struct FleetAttributes {
 }
 
 /// <p><p>Information about the fleet&#39;s capacity. Fleet capacity is measured in EC2 instances. By default, new fleets have a capacity of one instance, but can be updated as needed. The maximum number of instances for a fleet is determined by the fleet&#39;s instance type.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct FleetCapacity {
     /// <p>Unique identifier for a fleet.</p>
     #[serde(rename = "FleetId")]
@@ -1352,7 +1352,7 @@ pub struct FleetCapacity {
 }
 
 /// <p><p>Current status of fleet utilization, including the number of game and player sessions being hosted.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct FleetUtilization {
     /// <p>Number of active game sessions currently being hosted on all instances in the fleet.</p>
     #[serde(rename = "ActiveGameSessionCount")]
@@ -1377,7 +1377,7 @@ pub struct FleetUtilization {
 }
 
 /// <p>Set of key-value pairs that contain information about a game session. When included in a game session request, these properties communicate details to be used when setting up the new game session, such as to specify a game mode, level, or map. Game properties are passed to the game server process when initiating a new game session; the server process uses the properties as appropriate. For more information, see the <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-client-api.html#gamelift-sdk-client-api-create"> Amazon GameLift Developer Guide</a>.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GameProperty {
     /// <p>Game property identifier.</p>
     #[serde(rename = "Key")]
@@ -1388,7 +1388,7 @@ pub struct GameProperty {
 }
 
 /// <p><p>Properties describing a game session.</p> <p>A game session in ACTIVE status can host players. When a game session ends, its status is set to <code>TERMINATED</code>. </p> <p>Once the session ends, the game session object is retained for 30 days. This means you can reuse idempotency token values after this time. Game session logs are retained for 14 days.</p> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul></p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GameSession {
     /// <p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
     #[serde(rename = "CreationTime")]
@@ -1457,7 +1457,7 @@ pub struct GameSession {
 }
 
 /// <p>Connection information for the new game session that is created with matchmaking. (with <a>StartMatchmaking</a>). Once a match is set, the FlexMatch engine places the match and creates a new game session for it. This information, including the game session endpoint and player sessions for each player in the original matchmaking request, is added to the <a>MatchmakingTicket</a>, which can be retrieved by calling <a>DescribeMatchmaking</a>.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GameSessionConnectionInfo {
     /// <p>Amazon Resource Name (<a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html">ARN</a>) that is assigned to a game session and uniquely identifies it.</p>
     #[serde(rename = "GameSessionArn")]
@@ -1478,7 +1478,7 @@ pub struct GameSessionConnectionInfo {
 }
 
 /// <p>A game session's properties plus the protection policy currently in force.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GameSessionDetail {
     /// <p>Object that describes a game session.</p>
     #[serde(rename = "GameSession")]
@@ -1491,7 +1491,7 @@ pub struct GameSessionDetail {
 }
 
 /// <p><p>Object that describes a <a>StartGameSessionPlacement</a> request. This object includes the full details of the original request plus the current status and start/end time stamps.</p> <p>Game session placement-related operations include:</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GameSessionPlacement {
     /// <p>Time stamp indicating when this request was completed, canceled, or timed out.</p>
     #[serde(rename = "EndTime")]
@@ -1564,7 +1564,7 @@ pub struct GameSessionPlacement {
 }
 
 /// <p><p>Configuration of a queue that is used to process game session placement requests. The queue configuration identifies several game features:</p> <ul> <li> <p>The destinations where a new game session can potentially be hosted. Amazon GameLift tries these destinations in an order based on either the queue&#39;s default order or player latency information, if provided in a placement request. With latency information, Amazon GameLift can place game sessions where the majority of players are reporting the lowest possible latency. </p> </li> <li> <p>The length of time that placement requests can wait in the queue before timing out. </p> </li> <li> <p>A set of optional latency policies that protect individual players from high latencies, preventing game sessions from being placed where any individual player is reporting latency higher than a policy&#39;s maximum.</p> </li> </ul> <p>Queue-related operations include:</p> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>DescribeGameSessionQueues</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>DeleteGameSessionQueue</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GameSessionQueue {
     /// <p>List of fleets that can be used to fulfill game session placement requests in the queue. Fleets are identified by either a fleet ARN or a fleet alias ARN. Destinations are listed in default preference order.</p>
     #[serde(rename = "Destinations")]
@@ -1589,7 +1589,7 @@ pub struct GameSessionQueue {
 }
 
 /// <p><p>Fleet designated in a game session queue. Requests for new game sessions in the queue are fulfilled by starting a new game session on any destination configured for a queue. </p> <p>Queue-related operations include:</p> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>DescribeGameSessionQueues</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>DeleteGameSessionQueue</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GameSessionQueueDestination {
     /// <p>Amazon Resource Name (ARN) assigned to fleet or fleet alias. ARNs, which include a fleet ID or alias ID and a region name, provide a unique identifier across all regions. </p>
     #[serde(rename = "DestinationArn")]
@@ -1598,7 +1598,7 @@ pub struct GameSessionQueueDestination {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetGameSessionLogUrlInput {
     /// <p>Unique identifier for the game session to get logs for.</p>
     #[serde(rename = "GameSessionId")]
@@ -1606,7 +1606,7 @@ pub struct GetGameSessionLogUrlInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetGameSessionLogUrlOutput {
     /// <p>Location of the requested game session logs, available for download.</p>
     #[serde(rename = "PreSignedUrl")]
@@ -1615,7 +1615,7 @@ pub struct GetGameSessionLogUrlOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetInstanceAccessInput {
     /// <p>Unique identifier for a fleet that contains the instance you want access to. The fleet can be in any of the following statuses: <code>ACTIVATING</code>, <code>ACTIVE</code>, or <code>ERROR</code>. Fleets with an <code>ERROR</code> status may be accessible for a short time before they are deleted.</p>
     #[serde(rename = "FleetId")]
@@ -1626,7 +1626,7 @@ pub struct GetInstanceAccessInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetInstanceAccessOutput {
     /// <p>Object that contains connection information for a fleet instance, including IP address and access credentials.</p>
     #[serde(rename = "InstanceAccess")]
@@ -1635,7 +1635,7 @@ pub struct GetInstanceAccessOutput {
 }
 
 /// <p>Properties that describe an instance of a virtual computing resource that hosts one or more game servers. A fleet may contain zero or more instances.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Instance {
     /// <p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
     #[serde(rename = "CreationTime")]
@@ -1668,7 +1668,7 @@ pub struct Instance {
 }
 
 /// <p>Information required to remotely connect to a fleet instance. Access is requested by calling <a>GetInstanceAccess</a>. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InstanceAccess {
     /// <p>Credentials required to access the instance.</p>
     #[serde(rename = "Credentials")]
@@ -1693,7 +1693,7 @@ pub struct InstanceAccess {
 }
 
 /// <p>Set of credentials required to remotely access a fleet instance. Access credentials are requested by calling <a>GetInstanceAccess</a> and returned in an <a>InstanceAccess</a> object.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InstanceCredentials {
     /// <p>Secret string. For Windows instances, the secret is a password for use with Windows Remote Desktop. For Linux instances, it is a private key (which must be saved as a <code>.pem</code> file) for use with SSH.</p>
     #[serde(rename = "Secret")]
@@ -1706,7 +1706,7 @@ pub struct InstanceCredentials {
 }
 
 /// <p>A range of IP addresses and port settings that allow inbound traffic to connect to server processes on Amazon GameLift. Each game session hosted on a fleet is assigned a unique combination of IP address and port number, which must fall into the fleet's allowed ranges. This combination is included in the <a>GameSession</a> object. </p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct IpPermission {
     /// <p>Starting value for a range of allowed port numbers.</p>
     #[serde(rename = "FromPort")]
@@ -1723,7 +1723,7 @@ pub struct IpPermission {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListAliasesInput {
     /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>
     #[serde(rename = "Limit")]
@@ -1744,7 +1744,7 @@ pub struct ListAliasesInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListAliasesOutput {
     /// <p>Collection of alias records that match the list request.</p>
     #[serde(rename = "Aliases")]
@@ -1757,7 +1757,7 @@ pub struct ListAliasesOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListBuildsInput {
     /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>
     #[serde(rename = "Limit")]
@@ -1774,7 +1774,7 @@ pub struct ListBuildsInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListBuildsOutput {
     /// <p>Collection of build records that match the request.</p>
     #[serde(rename = "Builds")]
@@ -1787,7 +1787,7 @@ pub struct ListBuildsOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListFleetsInput {
     /// <p>Unique identifier for a build to return fleets for. Use this parameter to return only fleets using the specified build. To retrieve all fleets, leave this parameter empty.</p>
     #[serde(rename = "BuildId")]
@@ -1804,7 +1804,7 @@ pub struct ListFleetsInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListFleetsOutput {
     /// <p>Set of fleet IDs matching the list request. You can retrieve additional information about all returned fleets by passing this result set to a call to <a>DescribeFleetAttributes</a>, <a>DescribeFleetCapacity</a>, or <a>DescribeFleetUtilization</a>.</p>
     #[serde(rename = "FleetIds")]
@@ -1817,7 +1817,7 @@ pub struct ListFleetsOutput {
 }
 
 /// <p>Represents a new player session that is created as a result of a successful FlexMatch match. A successful match automatically creates new player sessions for every player ID in the original matchmaking request. </p> <p>When players connect to the match's game session, they must include both player ID and player session ID in order to claim their assigned player slot.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct MatchedPlayerSession {
     /// <p>Unique identifier for a player </p>
     #[serde(rename = "PlayerId")]
@@ -1830,7 +1830,7 @@ pub struct MatchedPlayerSession {
 }
 
 /// <p>Guidelines for use with FlexMatch to match players into games. All matchmaking requests must specify a matchmaking configuration.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct MatchmakingConfiguration {
     /// <p>Flag that determines whether or not a match that was created with this configuration must be accepted by the matched players. To require acceptance, set to TRUE.</p>
     #[serde(rename = "AcceptanceRequired")]
@@ -1887,7 +1887,7 @@ pub struct MatchmakingConfiguration {
 }
 
 /// <p><p>Set of rule statements, used with FlexMatch, that determine how to build a certain kind of player match. Each rule set describes a type of group to be created and defines the parameters for acceptable player matches. Rule sets are used in <a>MatchmakingConfiguration</a> objects.</p> <p>A rule set may define the following elements for a match. For detailed information and examples showing how to construct a rule set, see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/match-rulesets.html">Build a FlexMatch Rule Set</a>. </p> <ul> <li> <p>Teams -- Required. A rule set must define one or multiple teams for the match and set minimum and maximum team sizes. For example, a rule set might describe a 4x4 match that requires all eight slots to be filled. </p> </li> <li> <p>Player attributes -- Optional. These attributes specify a set of player characteristics to evaluate when looking for a match. Matchmaking requests that use a rule set with player attributes must provide the corresponding attribute values. For example, an attribute might specify a player&#39;s skill or level.</p> </li> <li> <p>Rules -- Optional. Rules define how to evaluate potential players for a match based on player attributes. A rule might specify minimum requirements for individual players, teams, or entire matches. For example, a rule might require each player to meet a certain skill level, each team to have at least one player in a certain role, or the match to have a minimum average skill level. or may describe an entire group--such as all teams must be evenly matched or have at least one player in a certain role. </p> </li> <li> <p>Expansions -- Optional. Expansions allow you to relax the rules after a period of time when no acceptable matches are found. This feature lets you balance getting players into games in a reasonable amount of time instead of making them wait indefinitely for the best possible match. For example, you might use an expansion to increase the maximum skill variance between players after 30 seconds.</p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct MatchmakingRuleSet {
     /// <p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
     #[serde(rename = "CreationTime")]
@@ -1903,7 +1903,7 @@ pub struct MatchmakingRuleSet {
 }
 
 /// <p>Ticket generated to track the progress of a matchmaking request. Each ticket is uniquely identified by a ticket ID, supplied by the requester, when creating a matchmaking request with <a>StartMatchmaking</a>. Tickets can be retrieved by calling <a>DescribeMatchmaking</a> with the ticket ID.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct MatchmakingTicket {
     /// <p>Name of the <a>MatchmakingConfiguration</a> that is used with this ticket. Matchmaking configurations determine how players are grouped into a match and how a new game session is created for the match.</p>
     #[serde(rename = "ConfigurationName")]
@@ -1948,7 +1948,7 @@ pub struct MatchmakingTicket {
 }
 
 /// <p><p>Information about a player session that was created as part of a <a>StartGameSessionPlacement</a> request. This object contains only the player ID and player session ID. To retrieve full details on a player session, call <a>DescribePlayerSessions</a> with the player session ID.</p> <p>Player-session-related operations include:</p> <ul> <li> <p> <a>CreatePlayerSession</a> </p> </li> <li> <p> <a>CreatePlayerSessions</a> </p> </li> <li> <p> <a>DescribePlayerSessions</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul></p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PlacedPlayerSession {
     /// <p>Unique identifier for a player that is associated with this player session.</p>
     #[serde(rename = "PlayerId")]
@@ -1961,7 +1961,7 @@ pub struct PlacedPlayerSession {
 }
 
 /// <p>Represents a player in matchmaking. When starting a matchmaking request, a player has a player ID, attributes, and may have latency data. Team information is added after a match has been successfully completed.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Player {
     /// <p>Set of values, expressed in milliseconds, indicating the amount of latency that a player experiences when connected to AWS regions. If this property is present, FlexMatch considers placing the match only in regions for which latency is reported. </p> <p>If a matchmaker has a rule that evaluates player latency, players must report latency in order to be matched. If no latency is reported in this scenario, FlexMatch assumes that no regions are available to the player and the ticket is not matchable. </p>
     #[serde(rename = "LatencyInMs")]
@@ -1982,7 +1982,7 @@ pub struct Player {
 }
 
 /// <p>Regional latency information for a player, used when requesting a new game session with <a>StartGameSessionPlacement</a>. This value indicates the amount of time lag that exists when the player is connected to a fleet in the specified region. The relative difference between a player's latency values for multiple regions are used to determine which fleets are best suited to place a new game session for the player. </p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PlayerLatency {
     /// <p>Amount of time that represents the time lag experienced by the player when connected to the specified region.</p>
     #[serde(rename = "LatencyInMilliseconds")]
@@ -1999,7 +1999,7 @@ pub struct PlayerLatency {
 }
 
 /// <p><p>Queue setting that determines the highest latency allowed for individual players when placing a game session. When a latency policy is in force, a game session cannot be placed at any destination in a region where a player is reporting latency higher than the cap. Latency policies are only enforced when the placement request contains player latency information.</p> <p>Queue-related operations include:</p> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>DescribeGameSessionQueues</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>DeleteGameSessionQueue</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PlayerLatencyPolicy {
     /// <p>The maximum latency value that is allowed for any player, in milliseconds. All policies must have a value set for this property.</p>
     #[serde(rename = "MaximumIndividualPlayerLatencyMilliseconds")]
@@ -2012,7 +2012,7 @@ pub struct PlayerLatencyPolicy {
 }
 
 /// <p><p>Properties describing a player session. Player session objects are created either by creating a player session for a specific game session, or as part of a game session placement. A player session represents either a player reservation for a game session (status <code>RESERVED</code>) or actual player activity in a game session (status <code>ACTIVE</code>). A player session object (including player data) is automatically passed to a game session when the player connects to the game session and is validated.</p> <p>When a player disconnects, the player session status changes to <code>COMPLETED</code>. Once the session ends, the player session object is retained for 30 days and then removed.</p> <p>Player-session-related operations include:</p> <ul> <li> <p> <a>CreatePlayerSession</a> </p> </li> <li> <p> <a>CreatePlayerSessions</a> </p> </li> <li> <p> <a>DescribePlayerSessions</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul></p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PlayerSession {
     /// <p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
     #[serde(rename = "CreationTime")]
@@ -2057,7 +2057,7 @@ pub struct PlayerSession {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutScalingPolicyInput {
     /// <p>Comparison operator to use when measuring the metric against the threshold value.</p>
     #[serde(rename = "ComparisonOperator")]
@@ -2086,7 +2086,7 @@ pub struct PutScalingPolicyInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutScalingPolicyOutput {
     /// <p>Descriptive label that is associated with a scaling policy. Policy names do not need to be unique.</p>
     #[serde(rename = "Name")]
@@ -2095,7 +2095,7 @@ pub struct PutScalingPolicyOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RequestUploadCredentialsInput {
     /// <p>Unique identifier for a build to get credentials for.</p>
     #[serde(rename = "BuildId")]
@@ -2103,7 +2103,7 @@ pub struct RequestUploadCredentialsInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RequestUploadCredentialsOutput {
     /// <p>Amazon S3 path and key, identifying where the game build files are stored.</p>
     #[serde(rename = "StorageLocation")]
@@ -2116,7 +2116,7 @@ pub struct RequestUploadCredentialsOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ResolveAliasInput {
     /// <p>Unique identifier for the alias you want to resolve.</p>
     #[serde(rename = "AliasId")]
@@ -2124,7 +2124,7 @@ pub struct ResolveAliasInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ResolveAliasOutput {
     /// <p>Fleet identifier that is associated with the requested alias.</p>
     #[serde(rename = "FleetId")]
@@ -2133,7 +2133,7 @@ pub struct ResolveAliasOutput {
 }
 
 /// <p>Policy that limits the number of game sessions a player can create on the same fleet. This optional policy gives game owners control over how players can consume available game server resources. A resource creation policy makes the following statement: "An individual player can create a maximum number of new game sessions within a specified time period".</p> <p>The policy is evaluated when a player tries to create a new game session. For example, with a policy of 10 new game sessions and a time period of 60 minutes, on receiving a <code>CreateGameSession</code> request, Amazon GameLift checks that the player (identified by <code>CreatorId</code>) has created fewer than 10 game sessions in the past 60 minutes.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResourceCreationLimitPolicy {
     /// <p>Maximum number of game sessions that an individual can create during the policy period. </p>
     #[serde(rename = "NewGameSessionsPerCreator")]
@@ -2146,7 +2146,7 @@ pub struct ResourceCreationLimitPolicy {
 }
 
 /// <p><p>Routing configuration for a fleet alias.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RoutingStrategy {
     /// <p>Unique identifier for a fleet that the alias points to.</p>
     #[serde(rename = "FleetId")]
@@ -2163,7 +2163,7 @@ pub struct RoutingStrategy {
 }
 
 /// <p><p>A collection of server process configurations that describe what processes to run on each instance in a fleet. All fleets must have a run-time configuration. Each instance in the fleet launches the server processes specified in the run-time configuration and launches new ones as existing processes end. Each instance regularly checks for an updated run-time configuration and follows the new instructions. </p> <p>The run-time configuration enables the instances in a fleet to run multiple processes simultaneously. Potential scenarios are as follows: (1) Run multiple processes of a single game server executable to maximize usage of your hosting resources. (2) Run one or more processes of different build executables, such as your game server executable and a related program, or two or more different versions of a game server. (3) Run multiple processes of a single game server but with different launch parameters, for example to run one process on each instance in debug mode.</p> <p>A Amazon GameLift instance is limited to 50 processes running simultaneously. A run-time configuration must specify fewer than this limit. To calculate the total number of processes specified in a run-time configuration, add the values of the <code>ConcurrentExecutions</code> parameter for each <code> <a>ServerProcess</a> </code> object in the run-time configuration.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RuntimeConfiguration {
     /// <p>Maximum amount of time (in seconds) that a game session can remain in status <code>ACTIVATING</code>. If the game session is not active before the timeout, activation is terminated and the game session status is changed to <code>TERMINATED</code>.</p>
     #[serde(rename = "GameSessionActivationTimeoutSeconds")]
@@ -2180,7 +2180,7 @@ pub struct RuntimeConfiguration {
 }
 
 /// <p>Location in Amazon Simple Storage Service (Amazon S3) where build files can be stored for access by Amazon GameLift. This location is specified in a <a>CreateBuild</a> request. For more details, see the <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-build-cli-uploading.html#gamelift-build-cli-uploading-create-build">Create a Build with Files in Amazon S3</a>.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3Location {
     /// <p>Amazon S3 bucket identifier. This is the name of your S3 bucket.</p>
     #[serde(rename = "Bucket")]
@@ -2197,7 +2197,7 @@ pub struct S3Location {
 }
 
 /// <p><p>Rule that controls how a fleet is scaled. Scaling policies are uniquely identified by the combination of name and fleet ID.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ScalingPolicy {
     /// <p>Comparison operator to use when measuring a metric against the threshold value.</p>
     #[serde(rename = "ComparisonOperator")]
@@ -2238,7 +2238,7 @@ pub struct ScalingPolicy {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SearchGameSessionsInput {
     /// <p>Unique identifier for an alias associated with the fleet to search for active game sessions. Each request must reference either a fleet ID or alias ID, but not both.</p>
     #[serde(rename = "AliasId")]
@@ -2267,7 +2267,7 @@ pub struct SearchGameSessionsInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SearchGameSessionsOutput {
     /// <p>Collection of objects containing game session properties for each session matching the request.</p>
     #[serde(rename = "GameSessions")]
@@ -2280,7 +2280,7 @@ pub struct SearchGameSessionsOutput {
 }
 
 /// <p>A set of instructions for launching server processes on each instance in a fleet. Each instruction set identifies the location of the server executable, optional launch parameters, and the number of server processes with this configuration to maintain concurrently on the instance. Server process configurations make up a fleet's <code> <a>RuntimeConfiguration</a> </code>.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ServerProcess {
     /// <p>Number of server processes using this configuration to run concurrently on an instance.</p>
     #[serde(rename = "ConcurrentExecutions")]
@@ -2295,7 +2295,7 @@ pub struct ServerProcess {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartGameSessionPlacementInput {
     /// <p>Set of information on each player to create a player session for.</p>
     #[serde(rename = "DesiredPlayerSessions")]
@@ -2329,7 +2329,7 @@ pub struct StartGameSessionPlacementInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StartGameSessionPlacementOutput {
     /// <p>Object that describes the newly created game session placement. This object includes all the information provided in the request, as well as start/end time stamps and placement status. </p>
     #[serde(rename = "GameSessionPlacement")]
@@ -2338,7 +2338,7 @@ pub struct StartGameSessionPlacementOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartMatchBackfillInput {
     /// <p>Name of the matchmaker to use for this request. The name of the matchmaker that was used with the original game session is listed in the <a>GameSession</a> object, <code>MatchmakerData</code> property. This property contains a matchmaking configuration ARN value, which includes the matchmaker name. (In the ARN value "arn:aws:gamelift:us-west-2:111122223333:matchmakingconfiguration/MM-4v4", the matchmaking configuration name is "MM-4v4".) Use only the name for this parameter.</p>
     #[serde(rename = "ConfigurationName")]
@@ -2356,7 +2356,7 @@ pub struct StartMatchBackfillInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StartMatchBackfillOutput {
     /// <p>Ticket representing the backfill matchmaking request. This object includes the information in the request, ticket status, and match results as generated during the matchmaking process.</p>
     #[serde(rename = "MatchmakingTicket")]
@@ -2365,7 +2365,7 @@ pub struct StartMatchBackfillOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartMatchmakingInput {
     /// <p>Name of the matchmaking configuration to use for this request. Matchmaking configurations must exist in the same region as this request.</p>
     #[serde(rename = "ConfigurationName")]
@@ -2380,7 +2380,7 @@ pub struct StartMatchmakingInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StartMatchmakingOutput {
     /// <p>Ticket representing the matchmaking request. This object include the information included in the request, ticket status, and match results as generated during the matchmaking process.</p>
     #[serde(rename = "MatchmakingTicket")]
@@ -2389,7 +2389,7 @@ pub struct StartMatchmakingOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopGameSessionPlacementInput {
     /// <p>Unique identifier for a game session placement to cancel.</p>
     #[serde(rename = "PlacementId")]
@@ -2397,7 +2397,7 @@ pub struct StopGameSessionPlacementInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StopGameSessionPlacementOutput {
     /// <p>Object that describes the canceled game session placement, with <code>CANCELLED</code> status and an end time stamp. </p>
     #[serde(rename = "GameSessionPlacement")]
@@ -2406,18 +2406,18 @@ pub struct StopGameSessionPlacementOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopMatchmakingInput {
     /// <p>Unique identifier for a matchmaking ticket.</p>
     #[serde(rename = "TicketId")]
     pub ticket_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StopMatchmakingOutput {}
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateAliasInput {
     /// <p>Unique identifier for a fleet alias. Specify the alias you want to update.</p>
     #[serde(rename = "AliasId")]
@@ -2437,7 +2437,7 @@ pub struct UpdateAliasInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateAliasOutput {
     /// <p>Object that contains the updated alias configuration.</p>
     #[serde(rename = "Alias")]
@@ -2446,7 +2446,7 @@ pub struct UpdateAliasOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateBuildInput {
     /// <p>Unique identifier for a build to update.</p>
     #[serde(rename = "BuildId")]
@@ -2462,7 +2462,7 @@ pub struct UpdateBuildInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateBuildOutput {
     /// <p>Object that contains the updated build record.</p>
     #[serde(rename = "Build")]
@@ -2471,7 +2471,7 @@ pub struct UpdateBuildOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateFleetAttributesInput {
     /// <p>Human-readable description of a fleet.</p>
     #[serde(rename = "Description")]
@@ -2499,7 +2499,7 @@ pub struct UpdateFleetAttributesInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateFleetAttributesOutput {
     /// <p>Unique identifier for a fleet that was updated.</p>
     #[serde(rename = "FleetId")]
@@ -2508,7 +2508,7 @@ pub struct UpdateFleetAttributesOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateFleetCapacityInput {
     /// <p>Number of EC2 instances you want this fleet to host.</p>
     #[serde(rename = "DesiredInstances")]
@@ -2528,7 +2528,7 @@ pub struct UpdateFleetCapacityInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateFleetCapacityOutput {
     /// <p>Unique identifier for a fleet that was updated.</p>
     #[serde(rename = "FleetId")]
@@ -2537,7 +2537,7 @@ pub struct UpdateFleetCapacityOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateFleetPortSettingsInput {
     /// <p>Unique identifier for a fleet to update port settings for.</p>
     #[serde(rename = "FleetId")]
@@ -2553,7 +2553,7 @@ pub struct UpdateFleetPortSettingsInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateFleetPortSettingsOutput {
     /// <p>Unique identifier for a fleet that was updated.</p>
     #[serde(rename = "FleetId")]
@@ -2562,7 +2562,7 @@ pub struct UpdateFleetPortSettingsOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateGameSessionInput {
     /// <p>Unique identifier for the game session to update.</p>
     #[serde(rename = "GameSessionId")]
@@ -2586,7 +2586,7 @@ pub struct UpdateGameSessionInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateGameSessionOutput {
     /// <p>Object that contains the updated game session metadata.</p>
     #[serde(rename = "GameSession")]
@@ -2595,7 +2595,7 @@ pub struct UpdateGameSessionOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateGameSessionQueueInput {
     /// <p>List of fleets that can be used to fulfill game session placement requests in the queue. Fleets are identified by either a fleet ARN or a fleet alias ARN. Destinations are listed in default preference order. When updating this list, provide a complete list of destinations.</p>
     #[serde(rename = "Destinations")]
@@ -2615,7 +2615,7 @@ pub struct UpdateGameSessionQueueInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateGameSessionQueueOutput {
     /// <p>Object that describes the newly updated game session queue.</p>
     #[serde(rename = "GameSessionQueue")]
@@ -2624,7 +2624,7 @@ pub struct UpdateGameSessionQueueOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateMatchmakingConfigurationInput {
     /// <p>Flag that determines whether or not a match that was created with this configuration must be accepted by the matched players. To require acceptance, set to TRUE.</p>
     #[serde(rename = "AcceptanceRequired")]
@@ -2676,7 +2676,7 @@ pub struct UpdateMatchmakingConfigurationInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateMatchmakingConfigurationOutput {
     /// <p>Object that describes the updated matchmaking configuration.</p>
     #[serde(rename = "Configuration")]
@@ -2685,7 +2685,7 @@ pub struct UpdateMatchmakingConfigurationOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateRuntimeConfigurationInput {
     /// <p>Unique identifier for a fleet to update run-time configuration for.</p>
     #[serde(rename = "FleetId")]
@@ -2696,7 +2696,7 @@ pub struct UpdateRuntimeConfigurationInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateRuntimeConfigurationOutput {
     /// <p>The run-time configuration currently in force. If the update was successful, this object matches the one in the request.</p>
     #[serde(rename = "RuntimeConfiguration")]
@@ -2705,7 +2705,7 @@ pub struct UpdateRuntimeConfigurationOutput {
 }
 
 /// <p>Represents the input for a request action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ValidateMatchmakingRuleSetInput {
     /// <p>Collection of matchmaking rules to validate, formatted as a JSON string.</p>
     #[serde(rename = "RuleSetBody")]
@@ -2713,7 +2713,7 @@ pub struct ValidateMatchmakingRuleSetInput {
 }
 
 /// <p>Represents the returned data in response to a request action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ValidateMatchmakingRuleSetOutput {
     /// <p>Response indicating whether or not the rule set is valid.</p>
     #[serde(rename = "Valid")]
@@ -2722,7 +2722,7 @@ pub struct ValidateMatchmakingRuleSetOutput {
 }
 
 /// <p><p>Represents an authorization for a VPC peering connection between the VPC for an Amazon GameLift fleet and another VPC on an account you have access to. This authorization must exist and be valid for the peering connection to be established. Authorizations are valid for 24 hours after they are issued.</p> <p>VPC peering connection operations include:</p> <ul> <li> <p> <a>CreateVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>DescribeVpcPeeringAuthorizations</a> </p> </li> <li> <p> <a>DeleteVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>CreateVpcPeeringConnection</a> </p> </li> <li> <p> <a>DescribeVpcPeeringConnections</a> </p> </li> <li> <p> <a>DeleteVpcPeeringConnection</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct VpcPeeringAuthorization {
     /// <p>Time stamp indicating when this authorization was issued. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
     #[serde(rename = "CreationTime")]
@@ -2747,7 +2747,7 @@ pub struct VpcPeeringAuthorization {
 }
 
 /// <p><p>Represents a peering connection between a VPC on one of your AWS accounts and the VPC for your Amazon GameLift fleets. This record may be for an active peering connection or a pending connection that has not yet been established.</p> <p>VPC peering connection operations include:</p> <ul> <li> <p> <a>CreateVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>DescribeVpcPeeringAuthorizations</a> </p> </li> <li> <p> <a>DeleteVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>CreateVpcPeeringConnection</a> </p> </li> <li> <p> <a>DescribeVpcPeeringConnections</a> </p> </li> <li> <p> <a>DeleteVpcPeeringConnection</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct VpcPeeringConnection {
     /// <p>Unique identifier for a fleet. This ID determines the ID of the Amazon GameLift VPC for your fleet.</p>
     #[serde(rename = "FleetId")]
@@ -2776,7 +2776,7 @@ pub struct VpcPeeringConnection {
 }
 
 /// <p>Represents status information for a VPC peering connection. Status is associated with a <a>VpcPeeringConnection</a> object. Status codes and messages are provided from EC2 (see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_VpcPeeringConnectionStateReason.html">VpcPeeringConnectionStateReason</a>). Connection status information is also communicated as a fleet <a>Event</a>.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct VpcPeeringConnectionStatus {
     /// <p>Code indicating the status of a VPC peering connection.</p>
     #[serde(rename = "Code")]

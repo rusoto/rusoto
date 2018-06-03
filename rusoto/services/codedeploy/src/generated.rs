@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Represents the input of, and adds tags to, an on-premises instance operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddTagsToOnPremisesInstancesInput {
     /// <p>The names of the on-premises instances to which to add tags.</p>
     #[serde(rename = "instanceNames")]
@@ -42,7 +42,7 @@ pub struct AddTagsToOnPremisesInstancesInput {
 }
 
 /// <p>Information about an alarm.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Alarm {
     /// <p>The name of the alarm. Maximum length is 255 characters. Each alarm name can be used only once in a list of alarms.</p>
     #[serde(rename = "name")]
@@ -51,7 +51,7 @@ pub struct Alarm {
 }
 
 /// <p>Information about alarms associated with the deployment group.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AlarmConfiguration {
     /// <p>A list of alarms configured for the deployment group. A maximum of 10 alarms can be added to a deployment group.</p>
     #[serde(rename = "alarms")]
@@ -68,7 +68,7 @@ pub struct AlarmConfiguration {
 }
 
 /// <p>Information about an application.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ApplicationInfo {
     /// <p>The application ID.</p>
     #[serde(rename = "applicationId")]
@@ -97,7 +97,7 @@ pub struct ApplicationInfo {
 }
 
 /// <p>Information about a configuration for automatically rolling back to a previous version of an application revision when a deployment doesn't complete successfully.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AutoRollbackConfiguration {
     /// <p>Indicates whether a defined automatic rollback configuration is currently enabled.</p>
     #[serde(rename = "enabled")]
@@ -110,7 +110,7 @@ pub struct AutoRollbackConfiguration {
 }
 
 /// <p>Information about an Auto Scaling group.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AutoScalingGroup {
     /// <p>An Auto Scaling lifecycle event hook name.</p>
     #[serde(rename = "hook")]
@@ -123,7 +123,7 @@ pub struct AutoScalingGroup {
 }
 
 /// <p>Represents the input of a BatchGetApplicationRevisions operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetApplicationRevisionsInput {
     /// <p>The name of an AWS CodeDeploy application about which to get revision information.</p>
     #[serde(rename = "applicationName")]
@@ -134,7 +134,7 @@ pub struct BatchGetApplicationRevisionsInput {
 }
 
 /// <p>Represents the output of a BatchGetApplicationRevisions operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BatchGetApplicationRevisionsOutput {
     /// <p>The name of the application that corresponds to the revisions.</p>
     #[serde(rename = "applicationName")]
@@ -151,7 +151,7 @@ pub struct BatchGetApplicationRevisionsOutput {
 }
 
 /// <p>Represents the input of a BatchGetApplications operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetApplicationsInput {
     /// <p>A list of application names separated by spaces.</p>
     #[serde(rename = "applicationNames")]
@@ -159,7 +159,7 @@ pub struct BatchGetApplicationsInput {
 }
 
 /// <p>Represents the output of a BatchGetApplications operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BatchGetApplicationsOutput {
     /// <p>Information about the applications.</p>
     #[serde(rename = "applicationsInfo")]
@@ -168,7 +168,7 @@ pub struct BatchGetApplicationsOutput {
 }
 
 /// <p>Represents the input of a BatchGetDeploymentGroups operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetDeploymentGroupsInput {
     /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
@@ -179,7 +179,7 @@ pub struct BatchGetDeploymentGroupsInput {
 }
 
 /// <p>Represents the output of a BatchGetDeploymentGroups operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BatchGetDeploymentGroupsOutput {
     /// <p>Information about the deployment groups.</p>
     #[serde(rename = "deploymentGroupsInfo")]
@@ -192,7 +192,7 @@ pub struct BatchGetDeploymentGroupsOutput {
 }
 
 /// <p>Represents the input of a BatchGetDeploymentInstances operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetDeploymentInstancesInput {
     /// <p>The unique ID of a deployment.</p>
     #[serde(rename = "deploymentId")]
@@ -203,7 +203,7 @@ pub struct BatchGetDeploymentInstancesInput {
 }
 
 /// <p>Represents the output of a BatchGetDeploymentInstances operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BatchGetDeploymentInstancesOutput {
     /// <p>Information about errors that may have occurred during the API call.</p>
     #[serde(rename = "errorMessage")]
@@ -216,7 +216,7 @@ pub struct BatchGetDeploymentInstancesOutput {
 }
 
 /// <p>Represents the input of a BatchGetDeployments operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetDeploymentsInput {
     /// <p>A list of deployment IDs, separated by spaces.</p>
     #[serde(rename = "deploymentIds")]
@@ -224,7 +224,7 @@ pub struct BatchGetDeploymentsInput {
 }
 
 /// <p>Represents the output of a BatchGetDeployments operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BatchGetDeploymentsOutput {
     /// <p>Information about the deployments.</p>
     #[serde(rename = "deploymentsInfo")]
@@ -233,7 +233,7 @@ pub struct BatchGetDeploymentsOutput {
 }
 
 /// <p>Represents the input of a BatchGetOnPremisesInstances operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetOnPremisesInstancesInput {
     /// <p>The names of the on-premises instances about which to get information.</p>
     #[serde(rename = "instanceNames")]
@@ -241,7 +241,7 @@ pub struct BatchGetOnPremisesInstancesInput {
 }
 
 /// <p>Represents the output of a BatchGetOnPremisesInstances operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BatchGetOnPremisesInstancesOutput {
     /// <p>Information about the on-premises instances.</p>
     #[serde(rename = "instanceInfos")]
@@ -250,7 +250,7 @@ pub struct BatchGetOnPremisesInstancesOutput {
 }
 
 /// <p>Information about blue/green deployment options for a deployment group.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BlueGreenDeploymentConfiguration {
     /// <p>Information about the action to take when newly provisioned instances are ready to receive traffic in a blue/green deployment.</p>
     #[serde(rename = "deploymentReadyOption")]
@@ -267,7 +267,7 @@ pub struct BlueGreenDeploymentConfiguration {
 }
 
 /// <p>Information about whether instances in the original environment are terminated when a blue/green deployment is successful.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BlueInstanceTerminationOption {
     /// <p><p>The action to take on instances in the original environment after a successful blue/green deployment.</p> <ul> <li> <p>TERMINATE: Instances are terminated after a specified wait time.</p> </li> <li> <p>KEEP_ALIVE: Instances are left running after they are deregistered from the load balancer and removed from the deployment group.</p> </li> </ul></p>
     #[serde(rename = "action")]
@@ -279,7 +279,7 @@ pub struct BlueInstanceTerminationOption {
     pub termination_wait_time_in_minutes: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ContinueDeploymentInput {
     /// <p>The deployment ID of the blue/green deployment for which you want to start rerouting traffic to the replacement environment.</p>
     #[serde(rename = "deploymentId")]
@@ -288,7 +288,7 @@ pub struct ContinueDeploymentInput {
 }
 
 /// <p>Represents the input of a CreateApplication operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateApplicationInput {
     /// <p>The name of the application. This name must be unique with the applicable IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
@@ -300,7 +300,7 @@ pub struct CreateApplicationInput {
 }
 
 /// <p>Represents the output of a CreateApplication operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateApplicationOutput {
     /// <p>A unique application ID.</p>
     #[serde(rename = "applicationId")]
@@ -309,7 +309,7 @@ pub struct CreateApplicationOutput {
 }
 
 /// <p>Represents the input of a CreateDeploymentConfig operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDeploymentConfigInput {
     /// <p>The destination platform type for the deployment (<code>Lambda</code> or <code>Server</code>&gt;).</p>
     #[serde(rename = "computePlatform")]
@@ -329,7 +329,7 @@ pub struct CreateDeploymentConfigInput {
 }
 
 /// <p>Represents the output of a CreateDeploymentConfig operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateDeploymentConfigOutput {
     /// <p>A unique deployment configuration ID.</p>
     #[serde(rename = "deploymentConfigId")]
@@ -338,7 +338,7 @@ pub struct CreateDeploymentConfigOutput {
 }
 
 /// <p>Represents the input of a CreateDeploymentGroup operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDeploymentGroupInput {
     /// <p>Information to add about Amazon CloudWatch alarms when the deployment group is created.</p>
     #[serde(rename = "alarmConfiguration")]
@@ -400,7 +400,7 @@ pub struct CreateDeploymentGroupInput {
 }
 
 /// <p>Represents the output of a CreateDeploymentGroup operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateDeploymentGroupOutput {
     /// <p>A unique deployment group ID.</p>
     #[serde(rename = "deploymentGroupId")]
@@ -409,7 +409,7 @@ pub struct CreateDeploymentGroupOutput {
 }
 
 /// <p>Represents the input of a CreateDeployment operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDeploymentInput {
     /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
@@ -453,7 +453,7 @@ pub struct CreateDeploymentInput {
 }
 
 /// <p>Represents the output of a CreateDeployment operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateDeploymentOutput {
     /// <p>A unique deployment ID.</p>
     #[serde(rename = "deploymentId")]
@@ -462,7 +462,7 @@ pub struct CreateDeploymentOutput {
 }
 
 /// <p>Represents the input of a DeleteApplication operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteApplicationInput {
     /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
@@ -470,7 +470,7 @@ pub struct DeleteApplicationInput {
 }
 
 /// <p>Represents the input of a DeleteDeploymentConfig operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDeploymentConfigInput {
     /// <p>The name of a deployment configuration associated with the applicable IAM user or AWS account.</p>
     #[serde(rename = "deploymentConfigName")]
@@ -478,7 +478,7 @@ pub struct DeleteDeploymentConfigInput {
 }
 
 /// <p>Represents the input of a DeleteDeploymentGroup operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDeploymentGroupInput {
     /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
@@ -489,7 +489,7 @@ pub struct DeleteDeploymentGroupInput {
 }
 
 /// <p>Represents the output of a DeleteDeploymentGroup operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteDeploymentGroupOutput {
     /// <p>If the output contains no data, and the corresponding deployment group contained at least one Auto Scaling group, AWS CodeDeploy successfully removed all corresponding Auto Scaling lifecycle event hooks from the Amazon EC2 instances in the Auto Scaling group. If the output contains data, AWS CodeDeploy could not remove some Auto Scaling lifecycle event hooks from the Amazon EC2 instances in the Auto Scaling group.</p>
     #[serde(rename = "hooksNotCleanedUp")]
@@ -498,7 +498,7 @@ pub struct DeleteDeploymentGroupOutput {
 }
 
 /// <p>Represents the input of a DeleteGitHubAccount operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteGitHubAccountTokenInput {
     /// <p>The name of the GitHub account connection to delete.</p>
     #[serde(rename = "tokenName")]
@@ -507,7 +507,7 @@ pub struct DeleteGitHubAccountTokenInput {
 }
 
 /// <p>Represents the output of a DeleteGitHubAccountToken operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteGitHubAccountTokenOutput {
     /// <p>The name of the GitHub account connection that was deleted.</p>
     #[serde(rename = "tokenName")]
@@ -516,7 +516,7 @@ pub struct DeleteGitHubAccountTokenOutput {
 }
 
 /// <p>Information about a deployment configuration.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeploymentConfigInfo {
     /// <p>The destination platform type for the deployment (<code>Lambda</code> or <code>Server</code>).</p>
     #[serde(rename = "computePlatform")]
@@ -545,7 +545,7 @@ pub struct DeploymentConfigInfo {
 }
 
 /// <p>Information about a deployment group.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeploymentGroupInfo {
     /// <p>A list of alarms associated with the deployment group.</p>
     #[serde(rename = "alarmConfiguration")]
@@ -630,7 +630,7 @@ pub struct DeploymentGroupInfo {
 }
 
 /// <p>Information about a deployment.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeploymentInfo {
     /// <p>Provides information about the results of a deployment, such as whether instances in the original environment in a blue/green deployment were not terminated.</p>
     #[serde(rename = "additionalDeploymentStatusInfo")]
@@ -743,7 +743,7 @@ pub struct DeploymentInfo {
 }
 
 /// <p>Information about the deployment status of the instances in the deployment.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeploymentOverview {
     /// <p>The number of instances in the deployment in a failed state.</p>
     #[serde(rename = "Failed")]
@@ -772,7 +772,7 @@ pub struct DeploymentOverview {
 }
 
 /// <p>Information about how traffic is rerouted to instances in a replacement environment in a blue/green deployment.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeploymentReadyOption {
     /// <p><p>Information about when to reroute traffic from an original environment to a replacement environment in a blue/green deployment.</p> <ul> <li> <p>CONTINUE<em>DEPLOYMENT: Register new instances with the load balancer immediately after the new application revision is installed on the instances in the replacement environment.</p> </li> <li> <p>STOP</em>DEPLOYMENT: Do not register new instances with load balancer unless traffic is rerouted manually. If traffic is not rerouted manually before the end of the specified wait period, the deployment status is changed to Stopped.</p> </li> </ul></p>
     #[serde(rename = "actionOnTimeout")]
@@ -785,7 +785,7 @@ pub struct DeploymentReadyOption {
 }
 
 /// <p>Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeploymentStyle {
     /// <p>Indicates whether to route deployment traffic behind a load balancer.</p>
     #[serde(rename = "deploymentOption")]
@@ -798,7 +798,7 @@ pub struct DeploymentStyle {
 }
 
 /// <p>Represents the input of a DeregisterOnPremisesInstance operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeregisterOnPremisesInstanceInput {
     /// <p>The name of the on-premises instance to deregister.</p>
     #[serde(rename = "instanceName")]
@@ -806,7 +806,7 @@ pub struct DeregisterOnPremisesInstanceInput {
 }
 
 /// <p>Diagnostic information about executable scripts that are part of a deployment.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Diagnostics {
     /// <p><p>The associated error code:</p> <ul> <li> <p>Success: The specified script ran.</p> </li> <li> <p>ScriptMissing: The specified script was not found in the specified location.</p> </li> <li> <p>ScriptNotExecutable: The specified script is not a recognized executable file type.</p> </li> <li> <p>ScriptTimedOut: The specified script did not finish running in the specified time period.</p> </li> <li> <p>ScriptFailed: The specified script failed to run as expected.</p> </li> <li> <p>UnknownError: The specified script did not run for an unknown reason.</p> </li> </ul></p>
     #[serde(rename = "errorCode")]
@@ -827,7 +827,7 @@ pub struct Diagnostics {
 }
 
 /// <p>Information about an EC2 tag filter.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EC2TagFilter {
     /// <p>The tag filter key.</p>
     #[serde(rename = "Key")]
@@ -844,7 +844,7 @@ pub struct EC2TagFilter {
 }
 
 /// <p>Information about groups of EC2 instance tags.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EC2TagSet {
     /// <p>A list containing other lists of EC2 instance tag groups. In order for an instance to be included in the deployment group, it must be identified by all the tag groups in the list.</p>
     #[serde(rename = "ec2TagSetList")]
@@ -853,7 +853,7 @@ pub struct EC2TagSet {
 }
 
 /// <p>Information about a load balancer in Elastic Load Balancing to use in a deployment. Instances are registered directly with a load balancer, and traffic is routed to the load balancer.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ELBInfo {
     /// <p>For blue/green deployments, the name of the load balancer that will be used to route traffic from original instances to replacement instances in a blue/green deployment. For in-place deployments, the name of the load balancer that instances are deregistered from so they are not serving traffic during a deployment, and then re-registered with after the deployment completes.</p>
     #[serde(rename = "name")]
@@ -862,7 +862,7 @@ pub struct ELBInfo {
 }
 
 /// <p>Information about a deployment error.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ErrorInformation {
     /// <p><p>For information about additional error codes, see <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide/error-codes.html">Error Codes for AWS CodeDeploy</a> in the <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide">AWS CodeDeploy User Guide</a>.</p> <p>The error code:</p> <ul> <li> <p>APPLICATION<em>MISSING: The application was missing. This error code will most likely be raised if the application is deleted after the deployment is created but before it is started.</p> </li> <li> <p>DEPLOYMENT</em>GROUP<em>MISSING: The deployment group was missing. This error code will most likely be raised if the deployment group is deleted after the deployment is created but before it is started.</p> </li> <li> <p>HEALTH</em>CONSTRAINTS: The deployment failed on too many instances to be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>HEALTH<em>CONSTRAINTS</em>INVALID: The revision cannot be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>IAM<em>ROLE</em>MISSING: The service role cannot be accessed.</p> </li> <li> <p>IAM<em>ROLE</em>PERMISSIONS: The service role does not have the correct permissions.</p> </li> <li> <p>INTERNAL<em>ERROR: There was an internal error.</p> </li> <li> <p>NO</em>EC2<em>SUBSCRIPTION: The calling account is not subscribed to the Amazon EC2 service.</p> </li> <li> <p>NO</em>INSTANCES: No instance were specified, or no instance can be found.</p> </li> <li> <p>OVER<em>MAX</em>INSTANCES: The maximum number of instance was exceeded.</p> </li> <li> <p>THROTTLED: The operation was throttled because the calling account exceeded the throttling limits of one or more AWS services.</p> </li> <li> <p>TIMEOUT: The deployment has timed out.</p> </li> <li> <p>REVISION_MISSING: The revision ID was missing. This error code will most likely be raised if the revision is deleted after the deployment is created but before it is started.</p> </li> </ul></p>
     #[serde(rename = "code")]
@@ -875,7 +875,7 @@ pub struct ErrorInformation {
 }
 
 /// <p>Information about an application revision.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GenericRevisionInfo {
     /// <p>The deployment groups for which this is the current target revision.</p>
     #[serde(rename = "deploymentGroups")]
@@ -900,7 +900,7 @@ pub struct GenericRevisionInfo {
 }
 
 /// <p>Represents the input of a GetApplication operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetApplicationInput {
     /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
@@ -908,7 +908,7 @@ pub struct GetApplicationInput {
 }
 
 /// <p>Represents the output of a GetApplication operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetApplicationOutput {
     /// <p>Information about the application.</p>
     #[serde(rename = "application")]
@@ -917,7 +917,7 @@ pub struct GetApplicationOutput {
 }
 
 /// <p>Represents the input of a GetApplicationRevision operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetApplicationRevisionInput {
     /// <p>The name of the application that corresponds to the revision.</p>
     #[serde(rename = "applicationName")]
@@ -928,7 +928,7 @@ pub struct GetApplicationRevisionInput {
 }
 
 /// <p>Represents the output of a GetApplicationRevision operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetApplicationRevisionOutput {
     /// <p>The name of the application that corresponds to the revision.</p>
     #[serde(rename = "applicationName")]
@@ -945,7 +945,7 @@ pub struct GetApplicationRevisionOutput {
 }
 
 /// <p>Represents the input of a GetDeploymentConfig operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDeploymentConfigInput {
     /// <p>The name of a deployment configuration associated with the applicable IAM user or AWS account.</p>
     #[serde(rename = "deploymentConfigName")]
@@ -953,7 +953,7 @@ pub struct GetDeploymentConfigInput {
 }
 
 /// <p>Represents the output of a GetDeploymentConfig operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetDeploymentConfigOutput {
     /// <p>Information about the deployment configuration.</p>
     #[serde(rename = "deploymentConfigInfo")]
@@ -962,7 +962,7 @@ pub struct GetDeploymentConfigOutput {
 }
 
 /// <p>Represents the input of a GetDeploymentGroup operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDeploymentGroupInput {
     /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
@@ -973,7 +973,7 @@ pub struct GetDeploymentGroupInput {
 }
 
 /// <p>Represents the output of a GetDeploymentGroup operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetDeploymentGroupOutput {
     /// <p>Information about the deployment group.</p>
     #[serde(rename = "deploymentGroupInfo")]
@@ -982,7 +982,7 @@ pub struct GetDeploymentGroupOutput {
 }
 
 /// <p>Represents the input of a GetDeployment operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDeploymentInput {
     /// <p>A deployment ID associated with the applicable IAM user or AWS account.</p>
     #[serde(rename = "deploymentId")]
@@ -990,7 +990,7 @@ pub struct GetDeploymentInput {
 }
 
 /// <p>Represents the input of a GetDeploymentInstance operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDeploymentInstanceInput {
     /// <p>The unique ID of a deployment.</p>
     #[serde(rename = "deploymentId")]
@@ -1001,7 +1001,7 @@ pub struct GetDeploymentInstanceInput {
 }
 
 /// <p>Represents the output of a GetDeploymentInstance operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetDeploymentInstanceOutput {
     /// <p>Information about the instance.</p>
     #[serde(rename = "instanceSummary")]
@@ -1010,7 +1010,7 @@ pub struct GetDeploymentInstanceOutput {
 }
 
 /// <p>Represents the output of a GetDeployment operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetDeploymentOutput {
     /// <p>Information about the deployment.</p>
     #[serde(rename = "deploymentInfo")]
@@ -1019,7 +1019,7 @@ pub struct GetDeploymentOutput {
 }
 
 /// <p>Represents the input of a GetOnPremisesInstance operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetOnPremisesInstanceInput {
     /// <p>The name of the on-premises instance about which to get information.</p>
     #[serde(rename = "instanceName")]
@@ -1027,7 +1027,7 @@ pub struct GetOnPremisesInstanceInput {
 }
 
 /// <p>Represents the output of a GetOnPremisesInstance operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetOnPremisesInstanceOutput {
     /// <p>Information about the on-premises instance.</p>
     #[serde(rename = "instanceInfo")]
@@ -1036,7 +1036,7 @@ pub struct GetOnPremisesInstanceOutput {
 }
 
 /// <p>Information about the location of application artifacts stored in GitHub.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GitHubLocation {
     /// <p>The SHA1 commit ID of the GitHub commit that represents the bundled artifacts for the application revision.</p>
     #[serde(rename = "commitId")]
@@ -1049,7 +1049,7 @@ pub struct GitHubLocation {
 }
 
 /// <p>Information about the instances that belong to the replacement environment in a blue/green deployment.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GreenFleetProvisioningOption {
     /// <p><p>The method used to add instances to a replacement environment.</p> <ul> <li> <p>DISCOVER<em>EXISTING: Use instances that already exist or will be created manually.</p> </li> <li> <p>COPY</em>AUTO<em>SCALING</em>GROUP: Use settings from a specified Auto Scaling group to define and create instances in a new Auto Scaling group.</p> </li> </ul></p>
     #[serde(rename = "action")]
@@ -1058,7 +1058,7 @@ pub struct GreenFleetProvisioningOption {
 }
 
 /// <p>Information about an on-premises instance.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InstanceInfo {
     /// <p>If the on-premises instance was deregistered, the time at which the on-premises instance was deregistered.</p>
     #[serde(rename = "deregisterTime")]
@@ -1091,7 +1091,7 @@ pub struct InstanceInfo {
 }
 
 /// <p>Information about an instance in a deployment.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InstanceSummary {
     /// <p>The deployment ID.</p>
     #[serde(rename = "deploymentId")]
@@ -1120,7 +1120,7 @@ pub struct InstanceSummary {
 }
 
 /// <p>Information about the most recent attempted or successful deployment to a deployment group.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LastDeploymentInfo {
     /// <p>A timestamp indicating when the most recent deployment to the deployment group started.</p>
     #[serde(rename = "createTime")]
@@ -1141,7 +1141,7 @@ pub struct LastDeploymentInfo {
 }
 
 /// <p>Information about a deployment lifecycle event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LifecycleEvent {
     /// <p>Diagnostic information about the deployment lifecycle event.</p>
     #[serde(rename = "diagnostics")]
@@ -1166,7 +1166,7 @@ pub struct LifecycleEvent {
 }
 
 /// <p>Represents the input of a ListApplicationRevisions operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListApplicationRevisionsInput {
     /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
@@ -1198,7 +1198,7 @@ pub struct ListApplicationRevisionsInput {
 }
 
 /// <p>Represents the output of a ListApplicationRevisions operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListApplicationRevisionsOutput {
     /// <p>If a large amount of information is returned, an identifier will also be returned. It can be used in a subsequent list application revisions call to return the next set of application revisions in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1211,7 +1211,7 @@ pub struct ListApplicationRevisionsOutput {
 }
 
 /// <p>Represents the input of a ListApplications operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListApplicationsInput {
     /// <p>An identifier returned from the previous list applications call. It can be used to return the next set of applications in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1220,7 +1220,7 @@ pub struct ListApplicationsInput {
 }
 
 /// <p>Represents the output of a ListApplications operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListApplicationsOutput {
     /// <p>A list of application names.</p>
     #[serde(rename = "applications")]
@@ -1233,7 +1233,7 @@ pub struct ListApplicationsOutput {
 }
 
 /// <p>Represents the input of a ListDeploymentConfigs operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListDeploymentConfigsInput {
     /// <p>An identifier returned from the previous list deployment configurations call. It can be used to return the next set of deployment configurations in the list. </p>
     #[serde(rename = "nextToken")]
@@ -1242,7 +1242,7 @@ pub struct ListDeploymentConfigsInput {
 }
 
 /// <p>Represents the output of a ListDeploymentConfigs operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListDeploymentConfigsOutput {
     /// <p>A list of deployment configurations, including built-in configurations such as CodeDeployDefault.OneAtATime.</p>
     #[serde(rename = "deploymentConfigsList")]
@@ -1255,7 +1255,7 @@ pub struct ListDeploymentConfigsOutput {
 }
 
 /// <p>Represents the input of a ListDeploymentGroups operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListDeploymentGroupsInput {
     /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
@@ -1267,7 +1267,7 @@ pub struct ListDeploymentGroupsInput {
 }
 
 /// <p>Represents the output of a ListDeploymentGroups operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListDeploymentGroupsOutput {
     /// <p>The application name.</p>
     #[serde(rename = "applicationName")]
@@ -1284,7 +1284,7 @@ pub struct ListDeploymentGroupsOutput {
 }
 
 /// <p>Represents the input of a ListDeploymentInstances operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListDeploymentInstancesInput {
     /// <p>The unique ID of a deployment.</p>
     #[serde(rename = "deploymentId")]
@@ -1304,7 +1304,7 @@ pub struct ListDeploymentInstancesInput {
 }
 
 /// <p>Represents the output of a ListDeploymentInstances operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListDeploymentInstancesOutput {
     /// <p>A list of instance IDs.</p>
     #[serde(rename = "instancesList")]
@@ -1317,7 +1317,7 @@ pub struct ListDeploymentInstancesOutput {
 }
 
 /// <p>Represents the input of a ListDeployments operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListDeploymentsInput {
     /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
@@ -1342,7 +1342,7 @@ pub struct ListDeploymentsInput {
 }
 
 /// <p>Represents the output of a ListDeployments operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListDeploymentsOutput {
     /// <p>A list of deployment IDs.</p>
     #[serde(rename = "deployments")]
@@ -1355,7 +1355,7 @@ pub struct ListDeploymentsOutput {
 }
 
 /// <p>Represents the input of a ListGitHubAccountTokenNames operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListGitHubAccountTokenNamesInput {
     /// <p>An identifier returned from the previous ListGitHubAccountTokenNames call. It can be used to return the next set of names in the list. </p>
     #[serde(rename = "nextToken")]
@@ -1364,7 +1364,7 @@ pub struct ListGitHubAccountTokenNamesInput {
 }
 
 /// <p>Represents the output of a ListGitHubAccountTokenNames operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListGitHubAccountTokenNamesOutput {
     /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent ListGitHubAccountTokenNames call to return the next set of names in the list. </p>
     #[serde(rename = "nextToken")]
@@ -1377,7 +1377,7 @@ pub struct ListGitHubAccountTokenNamesOutput {
 }
 
 /// <p>Represents the input of a ListOnPremisesInstances operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListOnPremisesInstancesInput {
     /// <p>An identifier returned from the previous list on-premises instances call. It can be used to return the next set of on-premises instances in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1394,7 +1394,7 @@ pub struct ListOnPremisesInstancesInput {
 }
 
 /// <p>Represents the output of list on-premises instances operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListOnPremisesInstancesOutput {
     /// <p>The list of matching on-premises instance names.</p>
     #[serde(rename = "instanceNames")]
@@ -1407,7 +1407,7 @@ pub struct ListOnPremisesInstancesOutput {
 }
 
 /// <p>Information about the Elastic Load Balancing load balancer or target group used in a deployment.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoadBalancerInfo {
     /// <p>An array containing information about the load balancer to use for load balancing in a deployment. In Elastic Load Balancing, load balancers are used with Classic Load Balancers.</p>
     #[serde(rename = "elbInfoList")]
@@ -1420,7 +1420,7 @@ pub struct LoadBalancerInfo {
 }
 
 /// <p>Information about minimum healthy instance.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MinimumHealthyHosts {
     /// <p>The minimum healthy instance type:</p> <ul> <li> <p>HOST_COUNT: The minimum number of healthy instance as an absolute value.</p> </li> <li> <p>FLEET_PERCENT: The minimum number of healthy instance as a percentage of the total number of instance in the deployment.</p> </li> </ul> <p>In an example of nine instance, if a HOST_COUNT of six is specified, deploy to up to three instances at a time. The deployment will be successful if six or more instances are deployed to successfully; otherwise, the deployment fails. If a FLEET_PERCENT of 40 is specified, deploy to up to five instance at a time. The deployment will be successful if four or more instance are deployed to successfully; otherwise, the deployment fails.</p> <note> <p>In a call to the get deployment configuration operation, CodeDeployDefault.OneAtATime will return a minimum healthy instance type of MOST_CONCURRENCY and a value of 1. This means a deployment to only one instance at a time. (You cannot set the type to MOST_CONCURRENCY, only to HOST_COUNT or FLEET_PERCENT.) In addition, with CodeDeployDefault.OneAtATime, AWS CodeDeploy will try to ensure that all instances but one are kept in a healthy state during the deployment. Although this allows one instance at a time to be taken offline for a new deployment, it also means that if the deployment to the last instance fails, the overall deployment still succeeds.</p> </note> <p>For more information, see <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide/instances-health.html">AWS CodeDeploy Instance Health</a> in the <i>AWS CodeDeploy User Guide</i>.</p>
     #[serde(rename = "type")]
@@ -1433,7 +1433,7 @@ pub struct MinimumHealthyHosts {
 }
 
 /// <p>Information about groups of on-premises instance tags.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct OnPremisesTagSet {
     /// <p>A list containing other lists of on-premises instance tag groups. In order for an instance to be included in the deployment group, it must be identified by all the tag groups in the list.</p>
     #[serde(rename = "onPremisesTagSetList")]
@@ -1441,7 +1441,7 @@ pub struct OnPremisesTagSet {
     pub on_premises_tag_set_list: Option<Vec<Vec<TagFilter>>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutLifecycleEventHookExecutionStatusInput {
     /// <p>The ID of the deployment. Pass this ID to a Lambda function that validates a deployment lifecycle event.</p>
     #[serde(rename = "deploymentId")]
@@ -1457,7 +1457,7 @@ pub struct PutLifecycleEventHookExecutionStatusInput {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutLifecycleEventHookExecutionStatusOutput {
     /// <p>The execution ID of the lifecycle event hook. A hook is specified in the <code>hooks</code> section of the deployment's AppSpec file.</p>
     #[serde(rename = "lifecycleEventHookExecutionId")]
@@ -1466,7 +1466,7 @@ pub struct PutLifecycleEventHookExecutionStatusOutput {
 }
 
 /// <p>A revision for an AWS Lambda deployment that is a YAML-formatted or JSON-formatted string. For AWS Lambda deployments, the revision is the same as the AppSpec file.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RawString {
     /// <p>The YAML-formatted or JSON-formatted revision string. It includes information about which Lambda function to update and optional Lambda functions that validate deployment lifecycle events.</p>
     #[serde(rename = "content")]
@@ -1479,7 +1479,7 @@ pub struct RawString {
 }
 
 /// <p>Represents the input of a RegisterApplicationRevision operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterApplicationRevisionInput {
     /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
@@ -1494,7 +1494,7 @@ pub struct RegisterApplicationRevisionInput {
 }
 
 /// <p>Represents the input of the register on-premises instance operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterOnPremisesInstanceInput {
     /// <p>The ARN of the IAM session to associate with the on-premises instance.</p>
     #[serde(rename = "iamSessionArn")]
@@ -1510,7 +1510,7 @@ pub struct RegisterOnPremisesInstanceInput {
 }
 
 /// <p>Represents the input of a RemoveTagsFromOnPremisesInstances operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemoveTagsFromOnPremisesInstancesInput {
     /// <p>The names of the on-premises instances from which to remove tags.</p>
     #[serde(rename = "instanceNames")]
@@ -1521,7 +1521,7 @@ pub struct RemoveTagsFromOnPremisesInstancesInput {
 }
 
 /// <p>Information about an application revision.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RevisionInfo {
     /// <p>Information about an application revision, including usage details and associated deployment groups.</p>
     #[serde(rename = "genericRevisionInfo")]
@@ -1534,7 +1534,7 @@ pub struct RevisionInfo {
 }
 
 /// <p>Information about the location of an application revision.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RevisionLocation {
     /// <p>Information about the location of application artifacts stored in GitHub.</p>
     #[serde(rename = "gitHubLocation")]
@@ -1555,7 +1555,7 @@ pub struct RevisionLocation {
 }
 
 /// <p>Information about a deployment rollback.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RollbackInfo {
     /// <p>The ID of the deployment rollback.</p>
     #[serde(rename = "rollbackDeploymentId")]
@@ -1572,7 +1572,7 @@ pub struct RollbackInfo {
 }
 
 /// <p>Information about the location of application artifacts stored in Amazon S3.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3Location {
     /// <p>The name of the Amazon S3 bucket where the application revision is stored.</p>
     #[serde(rename = "bucket")]
@@ -1596,7 +1596,7 @@ pub struct S3Location {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SkipWaitTimeForInstanceTerminationInput {
     /// <p>The ID of the blue/green deployment for which you want to skip the instance termination wait time.</p>
     #[serde(rename = "deploymentId")]
@@ -1605,7 +1605,7 @@ pub struct SkipWaitTimeForInstanceTerminationInput {
 }
 
 /// <p>Represents the input of a StopDeployment operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopDeploymentInput {
     /// <p>Indicates, when a deployment is stopped, whether instances that have been updated should be rolled back to the previous version of the application revision.</p>
     #[serde(rename = "autoRollbackEnabled")]
@@ -1617,7 +1617,7 @@ pub struct StopDeploymentInput {
 }
 
 /// <p>Represents the output of a StopDeployment operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StopDeploymentOutput {
     /// <p><p>The status of the stop deployment operation:</p> <ul> <li> <p>Pending: The stop operation is pending.</p> </li> <li> <p>Succeeded: The stop operation was successful.</p> </li> </ul></p>
     #[serde(rename = "status")]
@@ -1630,7 +1630,7 @@ pub struct StopDeploymentOutput {
 }
 
 /// <p>Information about a tag.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
     /// <p>The tag's key.</p>
     #[serde(rename = "Key")]
@@ -1643,7 +1643,7 @@ pub struct Tag {
 }
 
 /// <p>Information about an on-premises instance tag filter.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TagFilter {
     /// <p>The on-premises instance tag filter key.</p>
     #[serde(rename = "Key")]
@@ -1660,7 +1660,7 @@ pub struct TagFilter {
 }
 
 /// <p>Information about a target group in Elastic Load Balancing to use in a deployment. Instances are registered as targets in a target group, and traffic is routed to the target group.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TargetGroupInfo {
     /// <p>For blue/green deployments, the name of the target group that instances in the original environment are deregistered from, and instances in the replacement environment registered with. For in-place deployments, the name of the target group that instances are deregistered from, so they are not serving traffic during a deployment, and then re-registered with after the deployment completes. </p>
     #[serde(rename = "name")]
@@ -1669,7 +1669,7 @@ pub struct TargetGroupInfo {
 }
 
 /// <p>Information about the instances to be used in the replacement environment in a blue/green deployment.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TargetInstances {
     /// <p>The names of one or more Auto Scaling groups to identify a replacement environment for a blue/green deployment.</p>
     #[serde(rename = "autoScalingGroups")]
@@ -1686,7 +1686,7 @@ pub struct TargetInstances {
 }
 
 /// <p>A configuration that shifts traffic from one version of a Lambda function to another in two increments. The original and target Lambda function versions are specified in the deployment's AppSpec file.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TimeBasedCanary {
     /// <p>The number of minutes between the first and second traffic shifts of a <code>TimeBasedCanary</code> deployment.</p>
     #[serde(rename = "canaryInterval")]
@@ -1699,7 +1699,7 @@ pub struct TimeBasedCanary {
 }
 
 /// <p>A configuration that shifts traffic from one version of a Lambda function to another in equal increments, with an equal number of minutes between each increment. The original and target Lambda function versions are specified in the deployment's AppSpec file.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TimeBasedLinear {
     /// <p>The number of minutes between each incremental traffic shift of a <code>TimeBasedLinear</code> deployment.</p>
     #[serde(rename = "linearInterval")]
@@ -1712,7 +1712,7 @@ pub struct TimeBasedLinear {
 }
 
 /// <p>Information about a time range.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TimeRange {
     /// <p><p>The end time of the time range.</p> <note> <p>Specify null to leave the end time open-ended.</p> </note></p>
     #[serde(rename = "end")]
@@ -1725,7 +1725,7 @@ pub struct TimeRange {
 }
 
 /// <p>The configuration that specifies how traffic is shifted from one version of a Lambda function to another version during an AWS Lambda deployment.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TrafficRoutingConfig {
     /// <p>A configuration that shifts traffic from one version of a Lambda function to another in two increments. The original and target Lambda function versions are specified in the deployment's AppSpec file.</p>
     #[serde(rename = "timeBasedCanary")]
@@ -1742,7 +1742,7 @@ pub struct TrafficRoutingConfig {
 }
 
 /// <p>Information about notification triggers for the deployment group.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TriggerConfig {
     /// <p>The event type or types for which notifications are triggered.</p>
     #[serde(rename = "triggerEvents")]
@@ -1759,7 +1759,7 @@ pub struct TriggerConfig {
 }
 
 /// <p>Represents the input of an UpdateApplication operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateApplicationInput {
     /// <p>The current name of the application you want to change.</p>
     #[serde(rename = "applicationName")]
@@ -1772,7 +1772,7 @@ pub struct UpdateApplicationInput {
 }
 
 /// <p>Represents the input of an UpdateDeploymentGroup operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDeploymentGroupInput {
     /// <p>Information to add or change about Amazon CloudWatch alarms when the deployment group is updated.</p>
     #[serde(rename = "alarmConfiguration")]
@@ -1839,7 +1839,7 @@ pub struct UpdateDeploymentGroupInput {
 }
 
 /// <p>Represents the output of an UpdateDeploymentGroup operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateDeploymentGroupOutput {
     /// <p>If the output contains no data, and the corresponding deployment group contained at least one Auto Scaling group, AWS CodeDeploy successfully removed all corresponding Auto Scaling lifecycle event hooks from the AWS account. If the output contains data, AWS CodeDeploy could not remove some Auto Scaling lifecycle event hooks from the AWS account.</p>
     #[serde(rename = "hooksNotCleanedUp")]

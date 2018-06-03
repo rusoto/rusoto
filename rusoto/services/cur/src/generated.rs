@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Request of DeleteReportDefinition</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteReportDefinitionRequest {
     #[serde(rename = "ReportName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -39,7 +39,7 @@ pub struct DeleteReportDefinitionRequest {
 }
 
 /// <p>Response of DeleteReportDefinition</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteReportDefinitionResponse {
     #[serde(rename = "ResponseMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -47,7 +47,7 @@ pub struct DeleteReportDefinitionResponse {
 }
 
 /// <p>Request of DescribeReportDefinitions</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeReportDefinitionsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -58,7 +58,7 @@ pub struct DescribeReportDefinitionsRequest {
 }
 
 /// <p>Response of DescribeReportDefinitions</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeReportDefinitionsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -69,18 +69,18 @@ pub struct DescribeReportDefinitionsResponse {
 }
 
 /// <p>Request of PutReportDefinition</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutReportDefinitionRequest {
     #[serde(rename = "ReportDefinition")]
     pub report_definition: ReportDefinition,
 }
 
 /// <p>Response of PutReportDefinition</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutReportDefinitionResponse {}
 
 /// <p>The definition of AWS Cost and Usage Report. Customer can specify the report name, time unit, report format, compression format, S3 bucket and additional artifacts and schema elements in the definition.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReportDefinition {
     #[serde(rename = "AdditionalArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]

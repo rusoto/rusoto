@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>An address book with attributes.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AddressBook {
     /// <p>The ARN of the address book.</p>
     #[serde(rename = "AddressBookArn")]
@@ -48,7 +48,7 @@ pub struct AddressBook {
 }
 
 /// <p>Information related to an address book.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AddressBookData {
     /// <p>The ARN of the address book.</p>
     #[serde(rename = "AddressBookArn")]
@@ -64,7 +64,7 @@ pub struct AddressBookData {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateContactWithAddressBookRequest {
     /// <p>The ARN of the address book with which to associate the contact.</p>
     #[serde(rename = "AddressBookArn")]
@@ -74,10 +74,10 @@ pub struct AssociateContactWithAddressBookRequest {
     pub contact_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AssociateContactWithAddressBookResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateDeviceWithRoomRequest {
     /// <p>The ARN of the device to associate to a room. Required.</p>
     #[serde(rename = "DeviceArn")]
@@ -89,10 +89,10 @@ pub struct AssociateDeviceWithRoomRequest {
     pub room_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AssociateDeviceWithRoomResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateSkillGroupWithRoomRequest {
     /// <p>The ARN of the room with which to associate the skill group. Required.</p>
     #[serde(rename = "RoomArn")]
@@ -104,11 +104,11 @@ pub struct AssociateSkillGroupWithRoomRequest {
     pub skill_group_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AssociateSkillGroupWithRoomResponse {}
 
 /// <p>A contact with attributes.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Contact {
     /// <p>The ARN of the contact.</p>
     #[serde(rename = "ContactArn")]
@@ -133,7 +133,7 @@ pub struct Contact {
 }
 
 /// <p>Information related to a contact.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ContactData {
     /// <p>The ARN of the contact.</p>
     #[serde(rename = "ContactArn")]
@@ -157,7 +157,7 @@ pub struct ContactData {
     pub phone_number: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateAddressBookRequest {
     /// <p>A unique, user-specified identifier for the request that ensures idempotency.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -172,7 +172,7 @@ pub struct CreateAddressBookRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateAddressBookResponse {
     /// <p>The ARN of the newly created address book.</p>
     #[serde(rename = "AddressBookArn")]
@@ -180,7 +180,7 @@ pub struct CreateAddressBookResponse {
     pub address_book_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateContactRequest {
     /// <p>A unique, user-specified identifier for this request that ensures idempotency.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -202,7 +202,7 @@ pub struct CreateContactRequest {
     pub phone_number: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateContactResponse {
     /// <p>The ARN of the newly created address book.</p>
     #[serde(rename = "ContactArn")]
@@ -210,7 +210,7 @@ pub struct CreateContactResponse {
     pub contact_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateProfileRequest {
     /// <p>The valid address for the room.</p>
     #[serde(rename = "Address")]
@@ -248,7 +248,7 @@ pub struct CreateProfileRequest {
     pub wake_word: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateProfileResponse {
     /// <p>The ARN of the newly created room profile in the response.</p>
     #[serde(rename = "ProfileArn")]
@@ -256,7 +256,7 @@ pub struct CreateProfileResponse {
     pub profile_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateRoomRequest {
     /// <p>A unique, user-specified identifier for this request that ensures idempotency. </p>
     #[serde(rename = "ClientRequestToken")]
@@ -283,7 +283,7 @@ pub struct CreateRoomRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateRoomResponse {
     /// <p>The ARN of the newly created room in the response.</p>
     #[serde(rename = "RoomArn")]
@@ -291,7 +291,7 @@ pub struct CreateRoomResponse {
     pub room_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateSkillGroupRequest {
     /// <p>A unique, user-specified identifier for this request that ensures idempotency. </p>
     #[serde(rename = "ClientRequestToken")]
@@ -306,7 +306,7 @@ pub struct CreateSkillGroupRequest {
     pub skill_group_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateSkillGroupResponse {
     /// <p>The ARN of the newly created skill group in the response.</p>
     #[serde(rename = "SkillGroupArn")]
@@ -314,7 +314,7 @@ pub struct CreateSkillGroupResponse {
     pub skill_group_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateUserRequest {
     /// <p>A unique, user-specified identifier for this request that ensures idempotency. </p>
     #[serde(rename = "ClientRequestToken")]
@@ -341,7 +341,7 @@ pub struct CreateUserRequest {
     pub user_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateUserResponse {
     /// <p>The ARN of the newly created user in the response.</p>
     #[serde(rename = "UserArn")]
@@ -349,27 +349,27 @@ pub struct CreateUserResponse {
     pub user_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteAddressBookRequest {
     /// <p>The ARN of the address book to delete.</p>
     #[serde(rename = "AddressBookArn")]
     pub address_book_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteAddressBookResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteContactRequest {
     /// <p>The ARN of the contact to delete.</p>
     #[serde(rename = "ContactArn")]
     pub contact_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteContactResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteProfileRequest {
     /// <p>The ARN of the room profile to delete. Required.</p>
     #[serde(rename = "ProfileArn")]
@@ -377,10 +377,10 @@ pub struct DeleteProfileRequest {
     pub profile_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteProfileResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteRoomRequest {
     /// <p>The ARN of the room to delete. Required.</p>
     #[serde(rename = "RoomArn")]
@@ -388,10 +388,10 @@ pub struct DeleteRoomRequest {
     pub room_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteRoomResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteRoomSkillParameterRequest {
     /// <p>The room skill parameter key for which to remove details.</p>
     #[serde(rename = "ParameterKey")]
@@ -405,10 +405,10 @@ pub struct DeleteRoomSkillParameterRequest {
     pub skill_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteRoomSkillParameterResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteSkillGroupRequest {
     /// <p>The ARN of the skill group to delete. Required.</p>
     #[serde(rename = "SkillGroupArn")]
@@ -416,10 +416,10 @@ pub struct DeleteSkillGroupRequest {
     pub skill_group_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteSkillGroupResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteUserRequest {
     /// <p>The ARN of the user's enrollment in the organization. Required.</p>
     #[serde(rename = "EnrollmentId")]
@@ -430,11 +430,11 @@ pub struct DeleteUserRequest {
     pub user_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteUserResponse {}
 
 /// <p>A device with attributes.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Device {
     /// <p>The ARN of a device.</p>
     #[serde(rename = "DeviceArn")]
@@ -475,7 +475,7 @@ pub struct Device {
 }
 
 /// <p>Device attributes.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeviceData {
     /// <p>The ARN of a device.</p>
     #[serde(rename = "DeviceArn")]
@@ -520,7 +520,7 @@ pub struct DeviceData {
 }
 
 /// <p>Details of a device’s status.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeviceStatusDetail {
     /// <p>The device status detail code.</p>
     #[serde(rename = "Code")]
@@ -529,7 +529,7 @@ pub struct DeviceStatusDetail {
 }
 
 /// <p>Detailed information about a device's status.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeviceStatusInfo {
     /// <p>One or more device status detail descriptions.</p>
     #[serde(rename = "DeviceStatusDetails")]
@@ -537,7 +537,7 @@ pub struct DeviceStatusInfo {
     pub device_status_details: Option<Vec<DeviceStatusDetail>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateContactFromAddressBookRequest {
     /// <p>The ARN of the address from which to disassociate the contact.</p>
     #[serde(rename = "AddressBookArn")]
@@ -547,10 +547,10 @@ pub struct DisassociateContactFromAddressBookRequest {
     pub contact_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DisassociateContactFromAddressBookResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateDeviceFromRoomRequest {
     /// <p>The ARN of the device to disassociate from a room. Required.</p>
     #[serde(rename = "DeviceArn")]
@@ -558,10 +558,10 @@ pub struct DisassociateDeviceFromRoomRequest {
     pub device_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DisassociateDeviceFromRoomResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateSkillGroupFromRoomRequest {
     /// <p>The ARN of the room from which the skill group is to be disassociated. Required.</p>
     #[serde(rename = "RoomArn")]
@@ -573,11 +573,11 @@ pub struct DisassociateSkillGroupFromRoomRequest {
     pub skill_group_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DisassociateSkillGroupFromRoomResponse {}
 
 /// <p>A filter name and value pair that is used to return a more specific list of results. Filters can be used to match a set of resources by various criteria.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct Filter {
     /// <p>The key of a filter.</p>
     #[serde(rename = "Key")]
@@ -587,14 +587,14 @@ pub struct Filter {
     pub values: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetAddressBookRequest {
     /// <p>The ARN of the address book for which to request details.</p>
     #[serde(rename = "AddressBookArn")]
     pub address_book_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetAddressBookResponse {
     /// <p>The details of the requested address book.</p>
     #[serde(rename = "AddressBook")]
@@ -602,14 +602,14 @@ pub struct GetAddressBookResponse {
     pub address_book: Option<AddressBook>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetContactRequest {
     /// <p>The ARN of the contact for which to request details.</p>
     #[serde(rename = "ContactArn")]
     pub contact_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetContactResponse {
     /// <p>The details of the requested contact.</p>
     #[serde(rename = "Contact")]
@@ -617,7 +617,7 @@ pub struct GetContactResponse {
     pub contact: Option<Contact>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDeviceRequest {
     /// <p>The ARN of the device for which to request details. Required.</p>
     #[serde(rename = "DeviceArn")]
@@ -625,7 +625,7 @@ pub struct GetDeviceRequest {
     pub device_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetDeviceResponse {
     /// <p>The details of the device requested. Required.</p>
     #[serde(rename = "Device")]
@@ -633,7 +633,7 @@ pub struct GetDeviceResponse {
     pub device: Option<Device>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetProfileRequest {
     /// <p>The ARN of the room profile for which to request details. Required.</p>
     #[serde(rename = "ProfileArn")]
@@ -641,7 +641,7 @@ pub struct GetProfileRequest {
     pub profile_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetProfileResponse {
     /// <p>The details of the room profile requested. Required.</p>
     #[serde(rename = "Profile")]
@@ -649,7 +649,7 @@ pub struct GetProfileResponse {
     pub profile: Option<Profile>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetRoomRequest {
     /// <p>The ARN of the room for which to request details. Required.</p>
     #[serde(rename = "RoomArn")]
@@ -657,7 +657,7 @@ pub struct GetRoomRequest {
     pub room_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetRoomResponse {
     /// <p>The details of the room requested.</p>
     #[serde(rename = "Room")]
@@ -665,7 +665,7 @@ pub struct GetRoomResponse {
     pub room: Option<Room>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetRoomSkillParameterRequest {
     /// <p>The room skill parameter key for which to get details. Required.</p>
     #[serde(rename = "ParameterKey")]
@@ -679,7 +679,7 @@ pub struct GetRoomSkillParameterRequest {
     pub skill_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetRoomSkillParameterResponse {
     /// <p>The details of the room skill parameter requested. Required.</p>
     #[serde(rename = "RoomSkillParameter")]
@@ -687,7 +687,7 @@ pub struct GetRoomSkillParameterResponse {
     pub room_skill_parameter: Option<RoomSkillParameter>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetSkillGroupRequest {
     /// <p>The ARN of the skill group for which to get details. Required.</p>
     #[serde(rename = "SkillGroupArn")]
@@ -695,7 +695,7 @@ pub struct GetSkillGroupRequest {
     pub skill_group_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetSkillGroupResponse {
     /// <p>The details of the skill group requested. Required.</p>
     #[serde(rename = "SkillGroup")]
@@ -703,7 +703,7 @@ pub struct GetSkillGroupResponse {
     pub skill_group: Option<SkillGroup>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListSkillsRequest {
     /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved. Required.</p>
     #[serde(rename = "MaxResults")]
@@ -719,7 +719,7 @@ pub struct ListSkillsRequest {
     pub skill_group_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListSkillsResponse {
     /// <p>The token returned to indicate that there is more data available.</p>
     #[serde(rename = "NextToken")]
@@ -731,7 +731,7 @@ pub struct ListSkillsResponse {
     pub skill_summaries: Option<Vec<SkillSummary>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTagsRequest {
     /// <p>The ARN of the specific resource for which to list tags. Required.</p>
     #[serde(rename = "Arn")]
@@ -746,7 +746,7 @@ pub struct ListTagsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListTagsResponse {
     /// <p>The token returned to indicate that there is more data available.</p>
     #[serde(rename = "NextToken")]
@@ -759,7 +759,7 @@ pub struct ListTagsResponse {
 }
 
 /// <p>A room profile with attributes.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Profile {
     /// <p>The address of a room profile.</p>
     #[serde(rename = "Address")]
@@ -804,7 +804,7 @@ pub struct Profile {
 }
 
 /// <p>The data of a room profile.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ProfileData {
     /// <p>The address of a room profile.</p>
     #[serde(rename = "Address")]
@@ -836,7 +836,7 @@ pub struct ProfileData {
     pub wake_word: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutRoomSkillParameterRequest {
     /// <p>The ARN of the room associated with the room skill parameter. Required.</p>
     #[serde(rename = "RoomArn")]
@@ -850,10 +850,10 @@ pub struct PutRoomSkillParameterRequest {
     pub skill_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutRoomSkillParameterResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ResolveRoomRequest {
     /// <p>The ARN of the skill that was requested. Required.</p>
     #[serde(rename = "SkillId")]
@@ -863,7 +863,7 @@ pub struct ResolveRoomRequest {
     pub user_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ResolveRoomResponse {
     /// <p>The ARN of the room from which the skill request was invoked.</p>
     #[serde(rename = "RoomArn")]
@@ -879,7 +879,7 @@ pub struct ResolveRoomResponse {
     pub room_skill_parameters: Option<Vec<RoomSkillParameter>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RevokeInvitationRequest {
     /// <p>The ARN of the enrollment invitation to revoke. Required.</p>
     #[serde(rename = "EnrollmentId")]
@@ -891,11 +891,11 @@ pub struct RevokeInvitationRequest {
     pub user_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RevokeInvitationResponse {}
 
 /// <p>A room with attributes.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Room {
     /// <p>The description of a room.</p>
     #[serde(rename = "Description")]
@@ -920,7 +920,7 @@ pub struct Room {
 }
 
 /// <p>The data of a room.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RoomData {
     /// <p>The description of a room.</p>
     #[serde(rename = "Description")]
@@ -949,7 +949,7 @@ pub struct RoomData {
 }
 
 /// <p>A skill parameter associated with a room.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RoomSkillParameter {
     /// <p>The parameter key of a room skill parameter. ParameterKey is an enumerated type that only takes “DEFAULT” or “SCOPE” as valid values.</p>
     #[serde(rename = "ParameterKey")]
@@ -959,7 +959,7 @@ pub struct RoomSkillParameter {
     pub parameter_value: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SearchAddressBooksRequest {
     /// <p>The filters to use to list a specified set of address books. The supported filter key is AddressBookName.</p>
     #[serde(rename = "Filters")]
@@ -979,7 +979,7 @@ pub struct SearchAddressBooksRequest {
     pub sort_criteria: Option<Vec<Sort>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SearchAddressBooksResponse {
     /// <p>The address books that meet the specified set of filter criteria, in sort order.</p>
     #[serde(rename = "AddressBooks")]
@@ -995,7 +995,7 @@ pub struct SearchAddressBooksResponse {
     pub total_count: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SearchContactsRequest {
     /// <p>The filters to use to list a specified set of address books. The supported filter keys are DisplayName, FirstName, LastName, and AddressBookArns.</p>
     #[serde(rename = "Filters")]
@@ -1015,7 +1015,7 @@ pub struct SearchContactsRequest {
     pub sort_criteria: Option<Vec<Sort>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SearchContactsResponse {
     /// <p>The contacts that meet the specified set of filter criteria, in sort order.</p>
     #[serde(rename = "Contacts")]
@@ -1031,7 +1031,7 @@ pub struct SearchContactsResponse {
     pub total_count: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SearchDevicesRequest {
     /// <p>The filters to use to list a specified set of devices. Supported filter keys are DeviceName, DeviceStatus, DeviceStatusDetailCode, RoomName, DeviceType, DeviceSerialNumber, and UnassociatedOnly.</p>
     #[serde(rename = "Filters")]
@@ -1051,7 +1051,7 @@ pub struct SearchDevicesRequest {
     pub sort_criteria: Option<Vec<Sort>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SearchDevicesResponse {
     /// <p>The devices that meet the specified set of filter criteria, in sort order.</p>
     #[serde(rename = "Devices")]
@@ -1067,7 +1067,7 @@ pub struct SearchDevicesResponse {
     pub total_count: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SearchProfilesRequest {
     /// <p>The filters to use to list a specified set of room profiles. Supported filter keys are ProfileName and Address. Required. </p>
     #[serde(rename = "Filters")]
@@ -1087,7 +1087,7 @@ pub struct SearchProfilesRequest {
     pub sort_criteria: Option<Vec<Sort>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SearchProfilesResponse {
     /// <p>The token returned to indicate that there is more data available.</p>
     #[serde(rename = "NextToken")]
@@ -1103,7 +1103,7 @@ pub struct SearchProfilesResponse {
     pub total_count: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SearchRoomsRequest {
     /// <p>The filters to use to list a specified set of rooms. The supported filter keys are RoomName and ProfileName.</p>
     #[serde(rename = "Filters")]
@@ -1123,7 +1123,7 @@ pub struct SearchRoomsRequest {
     pub sort_criteria: Option<Vec<Sort>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SearchRoomsResponse {
     /// <p>The token returned to indicate that there is more data available.</p>
     #[serde(rename = "NextToken")]
@@ -1139,7 +1139,7 @@ pub struct SearchRoomsResponse {
     pub total_count: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SearchSkillGroupsRequest {
     /// <p>The filters to use to list a specified set of skill groups. The supported filter key is SkillGroupName. </p>
     #[serde(rename = "Filters")]
@@ -1159,7 +1159,7 @@ pub struct SearchSkillGroupsRequest {
     pub sort_criteria: Option<Vec<Sort>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SearchSkillGroupsResponse {
     /// <p>The token returned to indicate that there is more data available.</p>
     #[serde(rename = "NextToken")]
@@ -1175,7 +1175,7 @@ pub struct SearchSkillGroupsResponse {
     pub total_count: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SearchUsersRequest {
     /// <p>The filters to use for listing a specific set of users. Required. Supported filter keys are UserId, FirstName, LastName, Email, and EnrollmentStatus.</p>
     #[serde(rename = "Filters")]
@@ -1195,7 +1195,7 @@ pub struct SearchUsersRequest {
     pub sort_criteria: Option<Vec<Sort>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SearchUsersResponse {
     /// <p>The token returned to indicate that there is more data available.</p>
     #[serde(rename = "NextToken")]
@@ -1211,7 +1211,7 @@ pub struct SearchUsersResponse {
     pub users: Option<Vec<UserData>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SendInvitationRequest {
     /// <p>The ARN of the user to whom to send an invitation. Required.</p>
     #[serde(rename = "UserArn")]
@@ -1219,11 +1219,11 @@ pub struct SendInvitationRequest {
     pub user_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SendInvitationResponse {}
 
 /// <p>A skill group with attributes.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SkillGroup {
     /// <p>The description of a skill group.</p>
     #[serde(rename = "Description")]
@@ -1240,7 +1240,7 @@ pub struct SkillGroup {
 }
 
 /// <p>The attributes of a skill group.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SkillGroupData {
     /// <p>The description of a skill group.</p>
     #[serde(rename = "Description")]
@@ -1257,7 +1257,7 @@ pub struct SkillGroupData {
 }
 
 /// <p>The summary of skills.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SkillSummary {
     /// <p>The ARN of the skill summary.</p>
     #[serde(rename = "SkillId")]
@@ -1274,7 +1274,7 @@ pub struct SkillSummary {
 }
 
 /// <p>An object representing a sort criteria. </p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct Sort {
     /// <p>The sort key of a sort object.</p>
     #[serde(rename = "Key")]
@@ -1284,7 +1284,7 @@ pub struct Sort {
     pub value: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartDeviceSyncRequest {
     /// <p>The ARN of the device to sync. Required.</p>
     #[serde(rename = "DeviceArn")]
@@ -1299,11 +1299,11 @@ pub struct StartDeviceSyncRequest {
     pub room_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StartDeviceSyncResponse {}
 
 /// <p>A key-value pair that can be associated with a resource. </p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
     /// <p>The key of a tag. Tag keys are case-sensitive. </p>
     #[serde(rename = "Key")]
@@ -1315,7 +1315,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TagResourceRequest {
     /// <p>The ARN of the resource to which to add metadata tags. Required. </p>
     #[serde(rename = "Arn")]
@@ -1325,10 +1325,10 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TagResourceResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UntagResourceRequest {
     /// <p>The ARN of the resource from which to remove metadata tags. Required. </p>
     #[serde(rename = "Arn")]
@@ -1338,10 +1338,10 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateAddressBookRequest {
     /// <p>The ARN of the room to update.</p>
     #[serde(rename = "AddressBookArn")]
@@ -1356,10 +1356,10 @@ pub struct UpdateAddressBookRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateAddressBookResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateContactRequest {
     /// <p>The ARN of the contact to update.</p>
     #[serde(rename = "ContactArn")]
@@ -1382,10 +1382,10 @@ pub struct UpdateContactRequest {
     pub phone_number: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateContactResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDeviceRequest {
     /// <p>The ARN of the device to update. Required.</p>
     #[serde(rename = "DeviceArn")]
@@ -1397,10 +1397,10 @@ pub struct UpdateDeviceRequest {
     pub device_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateDeviceResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateProfileRequest {
     /// <p>The updated address for the room profile.</p>
     #[serde(rename = "Address")]
@@ -1444,10 +1444,10 @@ pub struct UpdateProfileRequest {
     pub wake_word: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateProfileResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateRoomRequest {
     /// <p>The updated description for the room.</p>
     #[serde(rename = "Description")]
@@ -1471,10 +1471,10 @@ pub struct UpdateRoomRequest {
     pub room_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateRoomResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateSkillGroupRequest {
     /// <p>The updated description for the skill group.</p>
     #[serde(rename = "Description")]
@@ -1490,11 +1490,11 @@ pub struct UpdateSkillGroupRequest {
     pub skill_group_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateSkillGroupResponse {}
 
 /// <p>Information related to a user.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UserData {
     /// <p>The email of a user.</p>
     #[serde(rename = "Email")]

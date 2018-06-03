@@ -58,7 +58,7 @@ impl AccountDeserializer {
     }
 }
 /// <p>Structure that contains the results of the account gate function which AWS CloudFormation invokes, if present, before proceeding with a stack set operation in an account and region.</p> <p>For each account and region, AWS CloudFormation lets you specify a Lamdba function that encapsulates any requirements that must be met before CloudFormation can proceed with a stack set operation in that account and region. CloudFormation invokes the function each time a stack set operation is requested for that account and region; if the function returns <code>FAILED</code>, CloudFormation cancels the operation in that account and region, and sets the stack set operation result status for that account and region to <code>FAILED</code>. </p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-account-gating.html">Configuring a target account gate</a>.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccountGateResult {
     /// <p><p>The status of the account gate function.</p> <ul> <li> <p> <code>SUCCEEDED</code>: The account gate function has determined that the account and region passes any requirements for a stack set operation to occur. AWS CloudFormation proceeds with the stack operation in that account and region. </p> </li> <li> <p> <code>FAILED</code>: The account gate function has determined that the account and region does not meet the requirements for a stack set operation to occur. AWS CloudFormation cancels the stack set operation in that account and region, and sets the stack set operation result status for that account and region to <code>FAILED</code>. </p> </li> <li> <p> <code>SKIPPED</code>: AWS CloudFormation has skipped calling the account gate function for this account and region, for one of the following reasons:</p> <ul> <li> <p>An account gate function has not been specified for the account and region. AWS CloudFormation proceeds with the stack set operation in this account and region.</p> </li> <li> <p>The <code>AWSCloudFormationStackSetExecutionRole</code> of the stack set adminstration account lacks permissions to invoke the function. AWS CloudFormation proceeds with the stack set operation in this account and region.</p> </li> <li> <p>Either no action is necessary, or no action is possible, on the stack. AWS CloudFormation skips the stack set operation in this account and region.</p> </li> </ul> </li> </ul></p>
     pub status: Option<String>,
@@ -141,7 +141,7 @@ impl AccountGateStatusReasonDeserializer {
     }
 }
 /// <p>The AccountLimit data type.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccountLimit {
     /// <p>The name of the account limit. Currently, the only account limit is <code>StackLimit</code>.</p>
     pub name: Option<String>,
@@ -312,7 +312,7 @@ impl ArnDeserializer {
     }
 }
 /// <p>The input for the <a>CancelUpdateStack</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelUpdateStackInput {
     /// <p>A unique identifier for this <code>CancelUpdateStack</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to cancel an update on a stack with the same name. You might retry <code>CancelUpdateStack</code> requests to ensure that AWS CloudFormation successfully received them.</p>
     pub client_request_token: Option<String>,
@@ -437,7 +437,7 @@ impl CausingEntityDeserializer {
     }
 }
 /// <p>The <code>Change</code> structure describes the changes AWS CloudFormation will perform if you execute the change set.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Change {
     /// <p>A <code>ResourceChange</code> structure that describes the resource and action that AWS CloudFormation will perform.</p>
     pub resource_change: Option<ResourceChange>,
@@ -603,7 +603,7 @@ impl ChangeSetSummariesDeserializer {
     }
 }
 /// <p>The <code>ChangeSetSummary</code> structure describes a change set, its status, and the stack with which it's associated.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ChangeSetSummary {
     /// <p>The ID of the change set.</p>
     pub change_set_id: Option<String>,
@@ -791,7 +791,7 @@ impl ClientRequestTokenDeserializer {
     }
 }
 /// <p>The input for the <a>ContinueUpdateRollback</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ContinueUpdateRollbackInput {
     /// <p>A unique identifier for this <code>ContinueUpdateRollback</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to continue the rollback to a stack with the same name. You might retry <code>ContinueUpdateRollback</code> requests to ensure that AWS CloudFormation successfully received them.</p>
     pub client_request_token: Option<String>,
@@ -839,7 +839,7 @@ impl ContinueUpdateRollbackInputSerializer {
 }
 
 /// <p>The output for a <a>ContinueUpdateRollback</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ContinueUpdateRollbackOutput {}
 
 struct ContinueUpdateRollbackOutputDeserializer;
@@ -859,7 +859,7 @@ impl ContinueUpdateRollbackOutputDeserializer {
     }
 }
 /// <p>The input for the <a>CreateChangeSet</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateChangeSetInput {
     /// <p>A list of values that you must specify before AWS CloudFormation can update certain stacks. Some stack templates might include resources that can affect permissions in your AWS account, for example, by creating new AWS Identity and Access Management (IAM) users. For those stacks, you must explicitly acknowledge their capabilities by specifying this parameter.</p> <p>The only valid values are <code>CAPABILITY_IAM</code> and <code>CAPABILITY_NAMED_IAM</code>. The following resources require you to specify this parameter: <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html"> AWS::IAM::AccessKey</a>, <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html"> AWS::IAM::Group</a>, <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html"> AWS::IAM::InstanceProfile</a>, <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html"> AWS::IAM::Policy</a>, <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html"> AWS::IAM::Role</a>, <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html"> AWS::IAM::User</a>, and <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html"> AWS::IAM::UserToGroupAddition</a>. If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <p>If you have IAM resources, you can specify either capability. If you have IAM resources with custom names, you must specify <code>CAPABILITY_NAMED_IAM</code>. If you don't specify this parameter, this action returns an <code>InsufficientCapabilities</code> error.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p>
     pub capabilities: Option<Vec<String>>,
@@ -994,7 +994,7 @@ impl CreateChangeSetInputSerializer {
 }
 
 /// <p>The output for the <a>CreateChangeSet</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateChangeSetOutput {
     /// <p>The Amazon Resource Name (ARN) of the change set.</p>
     pub id: Option<String>,
@@ -1046,7 +1046,7 @@ impl CreateChangeSetOutputDeserializer {
     }
 }
 /// <p>The input for <a>CreateStack</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateStackInput {
     /// <p>A list of values that you must specify before AWS CloudFormation can create certain stacks. Some stack templates might include resources that can affect permissions in your AWS account, for example, by creating new AWS Identity and Access Management (IAM) users. For those stacks, you must explicitly acknowledge their capabilities by specifying this parameter.</p> <p>The only valid values are <code>CAPABILITY_IAM</code> and <code>CAPABILITY_NAMED_IAM</code>. The following resources require you to specify this parameter: <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html"> AWS::IAM::AccessKey</a>, <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html"> AWS::IAM::Group</a>, <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html"> AWS::IAM::InstanceProfile</a>, <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html"> AWS::IAM::Policy</a>, <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html"> AWS::IAM::Role</a>, <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html"> AWS::IAM::User</a>, and <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html"> AWS::IAM::UserToGroupAddition</a>. If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <p>If you have IAM resources, you can specify either capability. If you have IAM resources with custom names, you must specify <code>CAPABILITY_NAMED_IAM</code>. If you don't specify this parameter, this action returns an <code>InsufficientCapabilities</code> error.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p>
     pub capabilities: Option<Vec<String>>,
@@ -1198,7 +1198,7 @@ impl CreateStackInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateStackInstancesInput {
     /// <p>The names of one or more AWS accounts that you want to create stack instances in the specified region(s) for.</p>
     pub accounts: Vec<String>,
@@ -1256,7 +1256,7 @@ impl CreateStackInstancesInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateStackInstancesOutput {
     /// <p>The unique identifier for this stack set operation.</p>
     pub operation_id: Option<String>,
@@ -1305,7 +1305,7 @@ impl CreateStackInstancesOutputDeserializer {
     }
 }
 /// <p>The output for a <a>CreateStack</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateStackOutput {
     /// <p>Unique identifier of the stack.</p>
     pub stack_id: Option<String>,
@@ -1351,7 +1351,7 @@ impl CreateStackOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateStackSetInput {
     /// <p>The Amazon Resource Number (ARN) of the IAM role to use to create this stack set. </p> <p>Specify an IAM role only if you are using customized administrator roles to control which users or groups can manage specific stack sets within the same administrator account. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs.html">Define Permissions for Multiple Administrators</a> in the <i>AWS CloudFormation User Guide</i>.</p>
     pub administration_role_arn: Option<String>,
@@ -1436,7 +1436,7 @@ impl CreateStackSetInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateStackSetOutput {
     /// <p>The ID of the stack set that you're creating.</p>
     pub stack_set_id: Option<String>,
@@ -1499,7 +1499,7 @@ impl CreationTimeDeserializer {
     }
 }
 /// <p>The input for the <a>DeleteChangeSet</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteChangeSetInput {
     /// <p>The name or Amazon Resource Name (ARN) of the change set that you want to delete.</p>
     pub change_set_name: String,
@@ -1530,7 +1530,7 @@ impl DeleteChangeSetInputSerializer {
 }
 
 /// <p>The output for the <a>DeleteChangeSet</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteChangeSetOutput {}
 
 struct DeleteChangeSetOutputDeserializer;
@@ -1550,7 +1550,7 @@ impl DeleteChangeSetOutputDeserializer {
     }
 }
 /// <p>The input for <a>DeleteStack</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteStackInput {
     /// <p>A unique identifier for this <code>DeleteStack</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to delete a stack with the same name. You might retry <code>DeleteStack</code> requests to ensure that AWS CloudFormation successfully received them.</p> <p>All events triggered by a given stack operation are assigned the same client request token, which you can use to track operations. For example, if you execute a <code>CreateStack</code> operation with the token <code>token1</code>, then all the <code>StackEvents</code> generated by that operation will have <code>ClientRequestToken</code> set as <code>token1</code>.</p> <p>In the console, stack operations display the client request token on the Events tab. Stack operations that are initiated from the console use the token format <i>Console-StackOperation-ID</i>, which helps you easily identify the stack operation . For example, if you create a stack using the console, each stack event would be assigned the same token in the following format: <code>Console-CreateStack-7f59c3cf-00d2-40c7-b2ff-e75db0987002</code>. </p>
     pub client_request_token: Option<String>,
@@ -1597,7 +1597,7 @@ impl DeleteStackInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteStackInstancesInput {
     /// <p>The names of the AWS accounts that you want to delete stack instances for.</p>
     pub accounts: Vec<String>,
@@ -1652,7 +1652,7 @@ impl DeleteStackInstancesInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteStackInstancesOutput {
     /// <p>The unique identifier for this stack set operation.</p>
     pub operation_id: Option<String>,
@@ -1700,7 +1700,7 @@ impl DeleteStackInstancesOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteStackSetInput {
     /// <p>The name or unique ID of the stack set that you're deleting. You can obtain this value by running <a>ListStackSets</a>.</p>
     pub stack_set_name: String,
@@ -1722,7 +1722,7 @@ impl DeleteStackSetInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteStackSetOutput {}
 
 struct DeleteStackSetOutputDeserializer;
@@ -1756,7 +1756,7 @@ impl DeletionTimeDeserializer {
     }
 }
 /// <p>The input for the <a>DescribeAccountLimits</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeAccountLimitsInput {
     /// <p>A string that identifies the next page of limits that you want to retrieve.</p>
     pub next_token: Option<String>,
@@ -1781,7 +1781,7 @@ impl DescribeAccountLimitsInputSerializer {
 }
 
 /// <p>The output for the <a>DescribeAccountLimits</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeAccountLimitsOutput {
     /// <p>An account limit structure that contain a list of AWS CloudFormation account limits and their values.</p>
     pub account_limits: Option<Vec<AccountLimit>>,
@@ -1836,7 +1836,7 @@ impl DescribeAccountLimitsOutputDeserializer {
     }
 }
 /// <p>The input for the <a>DescribeChangeSet</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeChangeSetInput {
     /// <p>The name or Amazon Resource Name (ARN) of the change set that you want to describe.</p>
     pub change_set_name: String,
@@ -1875,7 +1875,7 @@ impl DescribeChangeSetInputSerializer {
 }
 
 /// <p>The output for the <a>DescribeChangeSet</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeChangeSetOutput {
     /// <p>If you execute the change set, the list of capabilities that were explicitly acknowledged when the change set was created.</p>
     pub capabilities: Option<Vec<String>>,
@@ -2030,7 +2030,7 @@ impl DescribeChangeSetOutputDeserializer {
     }
 }
 /// <p>The input for <a>DescribeStackEvents</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeStackEventsInput {
     /// <p>A string that identifies the next page of events that you want to retrieve.</p>
     pub next_token: Option<String>,
@@ -2063,7 +2063,7 @@ impl DescribeStackEventsInputSerializer {
 }
 
 /// <p>The output for a <a>DescribeStackEvents</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeStackEventsOutput {
     /// <p>If the output exceeds 1 MB in size, a string that identifies the next page of events. If no additional page exists, this value is null.</p>
     pub next_token: Option<String>,
@@ -2117,7 +2117,7 @@ impl DescribeStackEventsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeStackInstanceInput {
     /// <p>The ID of an AWS account that's associated with this stack instance.</p>
     pub stack_instance_account: String,
@@ -2151,7 +2151,7 @@ impl DescribeStackInstanceInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeStackInstanceOutput {
     /// <p>The stack instance that matches the specified request parameters.</p>
     pub stack_instance: Option<StackInstance>,
@@ -2200,7 +2200,7 @@ impl DescribeStackInstanceOutputDeserializer {
     }
 }
 /// <p>The input for <a>DescribeStackResource</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeStackResourceInput {
     /// <p>The logical name of the resource as specified in the template.</p> <p>Default: There is no default value.</p>
     pub logical_resource_id: String,
@@ -2229,7 +2229,7 @@ impl DescribeStackResourceInputSerializer {
 }
 
 /// <p>The output for a <a>DescribeStackResource</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeStackResourceOutput {
     /// <p>A <code>StackResourceDetail</code> structure containing the description of the specified resource in the specified stack.</p>
     pub stack_resource_detail: Option<StackResourceDetail>,
@@ -2279,7 +2279,7 @@ impl DescribeStackResourceOutputDeserializer {
     }
 }
 /// <p>The input for <a>DescribeStackResources</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeStackResourcesInput {
     /// <p>The logical name of the resource as specified in the template.</p> <p>Default: There is no default value.</p>
     pub logical_resource_id: Option<String>,
@@ -2320,7 +2320,7 @@ impl DescribeStackResourcesInputSerializer {
 }
 
 /// <p>The output for a <a>DescribeStackResources</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeStackResourcesOutput {
     /// <p>A list of <code>StackResource</code> structures.</p>
     pub stack_resources: Option<Vec<StackResource>>,
@@ -2368,7 +2368,7 @@ impl DescribeStackResourcesOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeStackSetInput {
     /// <p>The name or unique ID of the stack set whose description you want.</p>
     pub stack_set_name: String,
@@ -2390,7 +2390,7 @@ impl DescribeStackSetInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeStackSetOperationInput {
     /// <p>The unique ID of the stack set operation. </p>
     pub operation_id: String,
@@ -2418,7 +2418,7 @@ impl DescribeStackSetOperationInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeStackSetOperationOutput {
     /// <p>The specified stack set operation.</p>
     pub stack_set_operation: Option<StackSetOperation>,
@@ -2465,7 +2465,7 @@ impl DescribeStackSetOperationOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeStackSetOutput {
     /// <p>The specified stack set.</p>
     pub stack_set: Option<StackSet>,
@@ -2512,7 +2512,7 @@ impl DescribeStackSetOutputDeserializer {
     }
 }
 /// <p>The input for <a>DescribeStacks</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeStacksInput {
     /// <p>A string that identifies the next page of stacks that you want to retrieve.</p>
     pub next_token: Option<String>,
@@ -2545,7 +2545,7 @@ impl DescribeStacksInputSerializer {
 }
 
 /// <p>The output for a <a>DescribeStacks</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeStacksOutput {
     /// <p>If the output exceeds 1 MB in size, a string that identifies the next page of stacks. If no additional page exists, this value is null.</p>
     pub next_token: Option<String>,
@@ -2639,7 +2639,7 @@ impl EnableTerminationProtectionDeserializer {
     }
 }
 /// <p>The input for an <a>EstimateTemplateCost</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EstimateTemplateCostInput {
     /// <p>A list of <code>Parameter</code> structures that specify input parameters.</p>
     pub parameters: Option<Vec<Parameter>>,
@@ -2681,7 +2681,7 @@ impl EstimateTemplateCostInputSerializer {
 }
 
 /// <p>The output for a <a>EstimateTemplateCost</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EstimateTemplateCostOutput {
     /// <p>An AWS Simple Monthly Calculator URL with a query string that describes the resources required to run the template.</p>
     pub url: Option<String>,
@@ -2755,7 +2755,7 @@ impl EventIdDeserializer {
     }
 }
 /// <p>The input for the <a>ExecuteChangeSet</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ExecuteChangeSetInput {
     /// <p>The name or ARN of the change set that you want use to update the specified stack.</p>
     pub change_set_name: String,
@@ -2794,7 +2794,7 @@ impl ExecuteChangeSetInputSerializer {
 }
 
 /// <p>The output for the <a>ExecuteChangeSet</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ExecuteChangeSetOutput {}
 
 struct ExecuteChangeSetOutputDeserializer;
@@ -2828,7 +2828,7 @@ impl ExecutionStatusDeserializer {
     }
 }
 /// <p>The <code>Export</code> structure describes the exported output values for a stack.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Export {
     /// <p>The stack that contains the exported output name and value.</p>
     pub exporting_stack_id: Option<String>,
@@ -2984,7 +2984,7 @@ impl FailureTolerancePercentageDeserializer {
     }
 }
 /// <p>The input for the <a>GetStackPolicy</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetStackPolicyInput {
     /// <p>The name or unique stack ID that is associated with the stack whose policy you want to get.</p>
     pub stack_name: String,
@@ -3007,7 +3007,7 @@ impl GetStackPolicyInputSerializer {
 }
 
 /// <p>The output for the <a>GetStackPolicy</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetStackPolicyOutput {
     /// <p>Structure containing the stack policy body. (For more information, go to <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/protect-stack-resources.html"> Prevent Updates to Stack Resources</a> in the AWS CloudFormation User Guide.)</p>
     pub stack_policy_body: Option<String>,
@@ -3055,7 +3055,7 @@ impl GetStackPolicyOutputDeserializer {
     }
 }
 /// <p>The input for a <a>GetTemplate</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetTemplateInput {
     /// <p>The name or Amazon Resource Name (ARN) of a change set for which AWS CloudFormation returns the associated template. If you specify a name, you must also specify the <code>StackName</code>.</p>
     pub change_set_name: Option<String>,
@@ -3096,7 +3096,7 @@ impl GetTemplateInputSerializer {
 }
 
 /// <p>The output for <a>GetTemplate</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetTemplateOutput {
     /// <p>The stage of the template that you can retrieve. For stacks, the <code>Original</code> and <code>Processed</code> templates are always available. For change sets, the <code>Original</code> template is always available. After AWS CloudFormation finishes creating the change set, the <code>Processed</code> template becomes available.</p>
     pub stages_available: Option<Vec<String>>,
@@ -3153,7 +3153,7 @@ impl GetTemplateOutputDeserializer {
     }
 }
 /// <p>The input for the <a>GetTemplateSummary</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetTemplateSummaryInput {
     /// <p>The name or the stack ID that is associated with the stack, which are not always interchangeable. For running stacks, you can specify either the stack's name or its unique stack ID. For deleted stack, you must specify the unique stack ID.</p> <p>Conditional: You must specify only one of the following parameters: <code>StackName</code>, <code>StackSetName</code>, <code>TemplateBody</code>, or <code>TemplateURL</code>.</p>
     pub stack_name: Option<String>,
@@ -3202,7 +3202,7 @@ impl GetTemplateSummaryInputSerializer {
 }
 
 /// <p>The output for the <a>GetTemplateSummary</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetTemplateSummaryOutput {
     /// <p>The capabilities found within the template. If your template contains IAM resources, you must specify the CAPABILITY_IAM or CAPABILITY_NAMED_IAM value for this parameter when you use the <a>CreateStack</a> or <a>UpdateStack</a> actions with your template; otherwise, those actions return an InsufficientCapabilities error.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p>
     pub capabilities: Option<Vec<String>>,
@@ -3384,7 +3384,7 @@ impl LimitValueDeserializer {
     }
 }
 /// <p>The input for the <a>ListChangeSets</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListChangeSetsInput {
     /// <p>A string (provided by the <a>ListChangeSets</a> response output) that identifies the next page of change sets that you want to retrieve.</p>
     pub next_token: Option<String>,
@@ -3415,7 +3415,7 @@ impl ListChangeSetsInputSerializer {
 }
 
 /// <p>The output for the <a>ListChangeSets</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListChangeSetsOutput {
     /// <p>If the output exceeds 1 MB, a string that identifies the next page of change sets. If there is no additional page, this value is null.</p>
     pub next_token: Option<String>,
@@ -3469,7 +3469,7 @@ impl ListChangeSetsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListExportsInput {
     /// <p>A string (provided by the <a>ListExports</a> response output) that identifies the next page of exported output values that you asked to retrieve.</p>
     pub next_token: Option<String>,
@@ -3493,7 +3493,7 @@ impl ListExportsInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListExportsOutput {
     /// <p>The output for the <a>ListExports</a> action.</p>
     pub exports: Option<Vec<Export>>,
@@ -3545,7 +3545,7 @@ impl ListExportsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListImportsInput {
     /// <p>The name of the exported output value. AWS CloudFormation returns the stack names that are importing this value. </p>
     pub export_name: String,
@@ -3575,7 +3575,7 @@ impl ListImportsInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListImportsOutput {
     /// <p>A list of stack names that are importing the specified exported output value. </p>
     pub imports: Option<Vec<String>>,
@@ -3627,7 +3627,7 @@ impl ListImportsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListStackInstancesInput {
     /// <p>The maximum number of results to be returned with a single call. If the number of available results exceeds this maximum, the response includes a <code>NextToken</code> value that you can assign to the <code>NextToken</code> request parameter to get the next set of results.</p>
     pub max_results: Option<i64>,
@@ -3681,7 +3681,7 @@ impl ListStackInstancesInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListStackInstancesOutput {
     /// <p>If the request doesn't return all of the remaining results, <code>NextToken</code> is set to a token. To retrieve the next set of results, call <code>ListStackInstances</code> again and assign that token to the request object's <code>NextToken</code> parameter. If the request returns all results, <code>NextToken</code> is set to <code>null</code>.</p>
     pub next_token: Option<String>,
@@ -3735,7 +3735,7 @@ impl ListStackInstancesOutputDeserializer {
     }
 }
 /// <p>The input for the <a>ListStackResource</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListStackResourcesInput {
     /// <p>A string that identifies the next page of stack resources that you want to retrieve.</p>
     pub next_token: Option<String>,
@@ -3766,7 +3766,7 @@ impl ListStackResourcesInputSerializer {
 }
 
 /// <p>The output for a <a>ListStackResources</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListStackResourcesOutput {
     /// <p>If the output exceeds 1 MB, a string that identifies the next page of stack resources. If no additional page exists, this value is null.</p>
     pub next_token: Option<String>,
@@ -3821,7 +3821,7 @@ impl ListStackResourcesOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListStackSetOperationResultsInput {
     /// <p>The maximum number of results to be returned with a single call. If the number of available results exceeds this maximum, the response includes a <code>NextToken</code> value that you can assign to the <code>NextToken</code> request parameter to get the next set of results.</p>
     pub max_results: Option<i64>,
@@ -3865,7 +3865,7 @@ impl ListStackSetOperationResultsInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListStackSetOperationResultsOutput {
     /// <p>If the request doesn't return all results, <code>NextToken</code> is set to a token. To retrieve the next set of results, call <code>ListOperationResults</code> again and assign that token to the request object's <code>NextToken</code> parameter. If there are no remaining results, <code>NextToken</code> is set to <code>null</code>.</p>
     pub next_token: Option<String>,
@@ -3921,7 +3921,7 @@ impl ListStackSetOperationResultsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListStackSetOperationsInput {
     /// <p>The maximum number of results to be returned with a single call. If the number of available results exceeds this maximum, the response includes a <code>NextToken</code> value that you can assign to the <code>NextToken</code> request parameter to get the next set of results.</p>
     pub max_results: Option<i64>,
@@ -3959,7 +3959,7 @@ impl ListStackSetOperationsInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListStackSetOperationsOutput {
     /// <p>If the request doesn't return all results, <code>NextToken</code> is set to a token. To retrieve the next set of results, call <code>ListOperationResults</code> again and assign that token to the request object's <code>NextToken</code> parameter. If there are no remaining results, <code>NextToken</code> is set to <code>null</code>.</p>
     pub next_token: Option<String>,
@@ -4012,7 +4012,7 @@ impl ListStackSetOperationsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListStackSetsInput {
     /// <p>The maximum number of results to be returned with a single call. If the number of available results exceeds this maximum, the response includes a <code>NextToken</code> value that you can assign to the <code>NextToken</code> request parameter to get the next set of results.</p>
     pub max_results: Option<i64>,
@@ -4052,7 +4052,7 @@ impl ListStackSetsInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListStackSetsOutput {
     /// <p>If the request doesn't return all of the remaining results, <code>NextToken</code> is set to a token. To retrieve the next set of results, call <code>ListStackInstances</code> again and assign that token to the request object's <code>NextToken</code> parameter. If the request returns all results, <code>NextToken</code> is set to <code>null</code>.</p>
     pub next_token: Option<String>,
@@ -4107,7 +4107,7 @@ impl ListStackSetsOutputDeserializer {
     }
 }
 /// <p>The input for <a>ListStacks</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListStacksInput {
     /// <p>A string that identifies the next page of stacks that you want to retrieve.</p>
     pub next_token: Option<String>,
@@ -4141,7 +4141,7 @@ impl ListStacksInputSerializer {
 }
 
 /// <p>The output for <a>ListStacks</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListStacksOutput {
     /// <p>If the output exceeds 1 MB in size, a string that identifies the next page of stacks. If no additional page exists, this value is null.</p>
     pub next_token: Option<String>,
@@ -4362,7 +4362,7 @@ impl NotificationARNsSerializer {
 }
 
 /// <p>The Output data type.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Output {
     /// <p>User defined description associated with the output.</p>
     pub description: Option<String>,
@@ -4501,7 +4501,7 @@ impl OutputsDeserializer {
     }
 }
 /// <p>The Parameter data type.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Parameter {
     /// <p>The key associated with the parameter. If you don't specify a key and value for a particular parameter, AWS CloudFormation uses the default value that is specified in your template.</p>
     pub parameter_key: Option<String>,
@@ -4610,7 +4610,7 @@ impl ParameterSerializer {
 }
 
 /// <p>A set of criteria that AWS CloudFormation uses to validate parameter values. Although other constraints might be defined in the stack template, AWS CloudFormation returns only the <code>AllowedValues</code> property.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ParameterConstraints {
     /// <p>A list of values that are permitted for a parameter.</p>
     pub allowed_values: Option<Vec<String>>,
@@ -4659,7 +4659,7 @@ impl ParameterConstraintsDeserializer {
     }
 }
 /// <p>The ParameterDeclaration data type.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ParameterDeclaration {
     /// <p>The default value of the parameter.</p>
     pub default_value: Option<String>,
@@ -5032,7 +5032,7 @@ impl ResourceAttributeDeserializer {
     }
 }
 /// <p>The <code>ResourceChange</code> structure describes the resource and the action that AWS CloudFormation will perform on it if you execute this change set.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResourceChange {
     /// <p>The action that AWS CloudFormation takes on the resource, such as <code>Add</code> (adds a new resource), <code>Modify</code> (changes a resource), or <code>Remove</code> (deletes a resource).</p>
     pub action: Option<String>,
@@ -5123,7 +5123,7 @@ impl ResourceChangeDeserializer {
     }
 }
 /// <p>For a resource with <code>Modify</code> as the action, the <code>ResourceChange</code> structure describes the changes AWS CloudFormation will make to that resource.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResourceChangeDetail {
     /// <p>The identity of the entity that triggered this change. This entity is a member of the group that is specified by the <code>ChangeSource</code> field. For example, if you modified the value of the <code>KeyPairName</code> parameter, the <code>CausingEntity</code> is the name of the parameter (<code>KeyPairName</code>).</p> <p>If the <code>ChangeSource</code> value is <code>DirectModification</code>, no value is given for <code>CausingEntity</code>.</p>
     pub causing_entity: Option<String>,
@@ -5279,7 +5279,7 @@ impl ResourceStatusReasonDeserializer {
     }
 }
 /// <p>The field that AWS CloudFormation will change, such as the name of a resource's property, and whether the resource will be recreated.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResourceTargetDefinition {
     /// <p>Indicates which resource attribute is triggering this update, such as a change in the resource attribute's <code>Metadata</code>, <code>Properties</code>, or <code>Tags</code>.</p>
     pub attribute: Option<String>,
@@ -5458,7 +5458,7 @@ impl RoleARNDeserializer {
     }
 }
 /// <p>Structure containing the rollback triggers for AWS CloudFormation to monitor during stack creation and updating operations, and for the specified monitoring period afterwards.</p> <p>Rollback triggers enable you to have AWS CloudFormation monitor the state of your application during stack creation and updating, and to roll back that operation if the application breaches the threshold of any of the alarms you've specified. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-rollback-triggers.html">Monitor and Roll Back Stack Operations</a>.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RollbackConfiguration {
     /// <p>The amount of time, in minutes, during which CloudFormation should monitor all the rollback triggers after the stack creation or update operation deploys all necessary resources.</p> <p>The default is 0 minutes.</p> <p>If you specify a monitoring period but do not specify any rollback triggers, CloudFormation still waits the specified period of time before cleaning up old resources after update operations. You can use this monitoring period to perform any manual stack validation desired, and manually cancel the stack creation or update (using <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CancelUpdateStack.html">CancelUpdateStack</a>, for example) as necessary.</p> <p>If you specify 0 for this parameter, CloudFormation still monitors the specified rollback triggers during stack creation and update operations. Then, for update operations, it begins disposing of old resources immediately once the operation completes.</p>
     pub monitoring_time_in_minutes: Option<i64>,
@@ -5541,7 +5541,7 @@ impl RollbackConfigurationSerializer {
 }
 
 /// <p>A rollback trigger AWS CloudFormation monitors during creation and updating of stacks. If any of the alarms you specify goes to ALARM state during the stack operation or within the specified monitoring period afterwards, CloudFormation rolls back the entire stack operation. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RollbackTrigger {
     /// <p>The Amazon Resource Name (ARN) of the rollback trigger.</p> <p>If a specified trigger is missing, the entire stack operation fails and is rolled back. </p>
     pub arn: String,
@@ -5709,7 +5709,7 @@ impl ScopeDeserializer {
     }
 }
 /// <p>The input for the <a>SetStackPolicy</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SetStackPolicyInput {
     /// <p>The name or unique stack ID that you want to associate a policy with.</p>
     pub stack_name: String,
@@ -5748,7 +5748,7 @@ impl SetStackPolicyInputSerializer {
 }
 
 /// <p>The input for the <a>SignalResource</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SignalResourceInput {
     /// <p>The logical ID of the resource that you want to signal. The logical ID is the name of the resource that given in the template.</p>
     pub logical_resource_id: String,
@@ -5789,7 +5789,7 @@ impl SignalResourceInputSerializer {
 }
 
 /// <p>The Stack data type.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Stack {
     /// <p>The capabilities allowed in the stack.</p>
     pub capabilities: Option<Vec<String>>,
@@ -5975,7 +5975,7 @@ impl StackDeserializer {
     }
 }
 /// <p>The StackEvent data type.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StackEvent {
     /// <p>The token passed to the operation that generated this event.</p> <p>All events triggered by a given stack operation are assigned the same client request token, which you can use to track operations. For example, if you execute a <code>CreateStack</code> operation with the token <code>token1</code>, then all the <code>StackEvents</code> generated by that operation will have <code>ClientRequestToken</code> set as <code>token1</code>.</p> <p>In the console, stack operations display the client request token on the Events tab. Stack operations that are initiated from the console use the token format <i>Console-StackOperation-ID</i>, which helps you easily identify the stack operation . For example, if you create a stack using the console, each stack event would be assigned the same token in the following format: <code>Console-CreateStack-7f59c3cf-00d2-40c7-b2ff-e75db0987002</code>. </p>
     pub client_request_token: Option<String>,
@@ -6151,7 +6151,7 @@ impl StackIdDeserializer {
     }
 }
 /// <p>An AWS CloudFormation stack, in a specific account and region, that's part of a stack set operation. A stack instance is a reference to an attempted or actual stack in a given account within a given region. A stack instance can exist without a stack—for example, if the stack couldn't be created for some reason. A stack instance is associated with only one stack set. Each stack instance contains the ID of its associated stack set, as well as the ID of the actual stack and the stack status.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StackInstance {
     /// <p>The name of the AWS account that the stack instance is associated with.</p>
     pub account: Option<String>,
@@ -6294,7 +6294,7 @@ impl StackInstanceSummariesDeserializer {
     }
 }
 /// <p>The structure that contains summary information about a stack instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StackInstanceSummary {
     /// <p>The name of the AWS account that the stack instance is associated with.</p>
     pub account: Option<String>,
@@ -6401,7 +6401,7 @@ impl StackPolicyBodyDeserializer {
     }
 }
 /// <p>The StackResource data type.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StackResource {
     /// <p>User defined description associated with the resource.</p>
     pub description: Option<String>,
@@ -6508,7 +6508,7 @@ impl StackResourceDeserializer {
     }
 }
 /// <p>Contains detailed information about the specified stack resource.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StackResourceDetail {
     /// <p>User defined description associated with the resource.</p>
     pub description: Option<String>,
@@ -6665,7 +6665,7 @@ impl StackResourceSummariesDeserializer {
     }
 }
 /// <p>Contains high-level information about the specified stack resource.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StackResourceSummary {
     /// <p>Time the status was updated.</p>
     pub last_updated_timestamp: String,
@@ -6796,7 +6796,7 @@ impl StackResourcesDeserializer {
     }
 }
 /// <p>A structure that contains information about a stack set. A stack set enables you to provision stacks into AWS accounts and across regions by using a single CloudFormation template. In the stack set, you specify the template to use, as well as any parameters and capabilities that the template requires. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StackSet {
     /// <p>The Amazon Resource Number (ARN) of the IAM role used to create or update the stack set.</p> <p>Use customized administrator roles to control which users or groups can manage specific stack sets within the same administrator account. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs.html">Define Permissions for Multiple Administrators</a> in the <i>AWS CloudFormation User Guide</i>.</p>
     pub administration_role_arn: Option<String>,
@@ -6955,7 +6955,7 @@ impl StackSetNameDeserializer {
     }
 }
 /// <p>The structure that contains information about a stack set operation. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StackSetOperation {
     /// <p>The type of stack set operation: <code>CREATE</code>, <code>UPDATE</code>, or <code>DELETE</code>. Create and delete operations affect only the specified stack set instances that are associated with the specified stack set. Update operations affect both the stack set itself, as well as <i>all</i> associated stack set instances.</p>
     pub action: Option<String>,
@@ -7080,7 +7080,7 @@ impl StackSetOperationActionDeserializer {
     }
 }
 /// <p>The user-specified preferences for how AWS CloudFormation performs a stack set operation. </p> <p>For more information on maximum concurrent accounts and failure tolerance, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html#stackset-ops-options">Stack set operation options</a>.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StackSetOperationPreferences {
     /// <p>The number of accounts, per region, for which this operation can fail before AWS CloudFormation stops the operation in that region. If the operation is stopped in a region, AWS CloudFormation doesn't attempt the operation in any subsequent regions.</p> <p>Conditional: You must specify either <code>FailureToleranceCount</code> or <code>FailureTolerancePercentage</code> (but not both).</p>
     pub failure_tolerance_count: Option<i64>,
@@ -7267,7 +7267,7 @@ impl StackSetOperationResultSummariesDeserializer {
     }
 }
 /// <p>The structure that contains information about a specified operation's results for a given account in a given region.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StackSetOperationResultSummary {
     /// <p>The name of the AWS account for this operation result.</p>
     pub account: Option<String>,
@@ -7395,7 +7395,7 @@ impl StackSetOperationSummariesDeserializer {
     }
 }
 /// <p>The structures that contain summary information about the specified operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StackSetOperationSummary {
     /// <p>The type of operation: <code>CREATE</code>, <code>UPDATE</code>, or <code>DELETE</code>. Create and delete operations affect only the specified stack instances that are associated with the specified stack set. Update operations affect both the stack set itself as well as <i>all</i> associated stack set instances.</p>
     pub action: Option<String>,
@@ -7530,7 +7530,7 @@ impl StackSetSummariesDeserializer {
     }
 }
 /// <p>The structures that contain summary information about the specified stack set.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StackSetSummary {
     /// <p>A description of the stack set that you specify when the stack set is created or updated.</p>
     pub description: Option<String>,
@@ -7682,7 +7682,7 @@ impl StackSummariesDeserializer {
     }
 }
 /// <p>The StackSummary Data Type</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StackSummary {
     /// <p>The time the stack was created.</p>
     pub creation_time: String,
@@ -7870,7 +7870,7 @@ impl StageListDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StopStackSetOperationInput {
     /// <p>The ID of the stack operation. </p>
     pub operation_id: String,
@@ -7898,7 +7898,7 @@ impl StopStackSetOperationInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StopStackSetOperationOutput {}
 
 struct StopStackSetOperationOutputDeserializer;
@@ -7918,7 +7918,7 @@ impl StopStackSetOperationOutputDeserializer {
     }
 }
 /// <p>The Tag type enables you to specify a key-value pair that can be used to store information about an AWS CloudFormation stack.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Tag {
     /// <p> <i>Required</i>. A string used to identify this tag. You can specify a maximum of 128 characters for a tag key. Tags owned by Amazon Web Services (AWS) have the reserved prefix: <code>aws:</code>.</p>
     pub key: String,
@@ -8098,7 +8098,7 @@ impl TemplateDescriptionDeserializer {
     }
 }
 /// <p>The TemplateParameter data type.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct TemplateParameter {
     /// <p>The default value associated with the parameter.</p>
     pub default_value: Option<String>,
@@ -8322,7 +8322,7 @@ impl TypeDeserializer {
     }
 }
 /// <p>The input for an <a>UpdateStack</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateStackInput {
     /// <p>A list of values that you must specify before AWS CloudFormation can update certain stacks. Some stack templates might include resources that can affect permissions in your AWS account, for example, by creating new AWS Identity and Access Management (IAM) users. For those stacks, you must explicitly acknowledge their capabilities by specifying this parameter.</p> <p>The only valid values are <code>CAPABILITY_IAM</code> and <code>CAPABILITY_NAMED_IAM</code>. The following resources require you to specify this parameter: <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html"> AWS::IAM::AccessKey</a>, <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html"> AWS::IAM::Group</a>, <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html"> AWS::IAM::InstanceProfile</a>, <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html"> AWS::IAM::Policy</a>, <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html"> AWS::IAM::Role</a>, <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html"> AWS::IAM::User</a>, and <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html"> AWS::IAM::UserToGroupAddition</a>. If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <p>If you have IAM resources, you can specify either capability. If you have IAM resources with custom names, you must specify <code>CAPABILITY_NAMED_IAM</code>. If you don't specify this parameter, this action returns an <code>InsufficientCapabilities</code> error.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p>
     pub capabilities: Option<Vec<String>>,
@@ -8466,7 +8466,7 @@ impl UpdateStackInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateStackInstancesInput {
     /// <p>The names of one or more AWS accounts for which you want to update parameter values for stack instances. The overridden parameter values will be applied to all stack instances in the specified accounts and regions.</p>
     pub accounts: Vec<String>,
@@ -8524,7 +8524,7 @@ impl UpdateStackInstancesInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateStackInstancesOutput {
     /// <p>The unique identifier for this stack set operation. </p>
     pub operation_id: Option<String>,
@@ -8573,7 +8573,7 @@ impl UpdateStackInstancesOutputDeserializer {
     }
 }
 /// <p>The output for an <a>UpdateStack</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateStackOutput {
     /// <p>Unique identifier of the stack.</p>
     pub stack_id: Option<String>,
@@ -8619,7 +8619,7 @@ impl UpdateStackOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateStackSetInput {
     /// <p>The Amazon Resource Number (ARN) of the IAM role to use to update this stack set.</p> <p>Specify an IAM role only if you are using customized administrator roles to control which users or groups can manage specific stack sets within the same administrator account. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs.html">Define Permissions for Multiple Administrators</a> in the <i>AWS CloudFormation User Guide</i>.</p> <p> If you specify a customized administrator role, AWS CloudFormation uses that role to update the stack. If you do not specify a customized administrator role, AWS CloudFormation performs the update using the role previously associated with the stack set, so long as you have permissions to perform operations on the stack set.</p>
     pub administration_role_arn: Option<String>,
@@ -8721,7 +8721,7 @@ impl UpdateStackSetInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateStackSetOutput {
     /// <p>The unique ID for this stack set operation.</p>
     pub operation_id: Option<String>,
@@ -8769,7 +8769,7 @@ impl UpdateStackSetOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateTerminationProtectionInput {
     /// <p>Whether to enable termination protection on the specified stack.</p>
     pub enable_termination_protection: bool,
@@ -8799,7 +8799,7 @@ impl UpdateTerminationProtectionInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateTerminationProtectionOutput {
     /// <p>The unique ID of the stack.</p>
     pub stack_id: Option<String>,
@@ -8874,7 +8874,7 @@ impl UsePreviousValueDeserializer {
     }
 }
 /// <p>The input for <a>ValidateTemplate</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ValidateTemplateInput {
     /// <p>Structure containing the template body with a minimum length of 1 byte and a maximum length of 51,200 bytes. For more information, go to <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html">Template Anatomy</a> in the AWS CloudFormation User Guide.</p> <p>Conditional: You must pass <code>TemplateURL</code> or <code>TemplateBody</code>. If both are passed, only <code>TemplateBody</code> is used.</p>
     pub template_body: Option<String>,
@@ -8907,7 +8907,7 @@ impl ValidateTemplateInputSerializer {
 }
 
 /// <p>The output for <a>ValidateTemplate</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ValidateTemplateOutput {
     /// <p>The capabilities found within the template. If your template contains IAM resources, you must specify the CAPABILITY_IAM or CAPABILITY_NAMED_IAM value for this parameter when you use the <a>CreateStack</a> or <a>UpdateStack</a> actions with your template; otherwise, those actions return an InsufficientCapabilities error.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p>
     pub capabilities: Option<Vec<String>>,

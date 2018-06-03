@@ -30,14 +30,14 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchDeleteBuildsInput {
     /// <p>The IDs of the builds to delete.</p>
     #[serde(rename = "ids")]
     pub ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BatchDeleteBuildsOutput {
     /// <p>The IDs of the builds that were successfully deleted.</p>
     #[serde(rename = "buildsDeleted")]
@@ -49,14 +49,14 @@ pub struct BatchDeleteBuildsOutput {
     pub builds_not_deleted: Option<Vec<BuildNotDeleted>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetBuildsInput {
     /// <p>The IDs of the builds.</p>
     #[serde(rename = "ids")]
     pub ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BatchGetBuildsOutput {
     /// <p>Information about the requested builds.</p>
     #[serde(rename = "builds")]
@@ -68,14 +68,14 @@ pub struct BatchGetBuildsOutput {
     pub builds_not_found: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetProjectsInput {
     /// <p>The names of the build projects.</p>
     #[serde(rename = "names")]
     pub names: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BatchGetProjectsOutput {
     /// <p>Information about the requested build projects.</p>
     #[serde(rename = "projects")]
@@ -88,7 +88,7 @@ pub struct BatchGetProjectsOutput {
 }
 
 /// <p>Information about a build.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Build {
     /// <p>The Amazon Resource Name (ARN) of the build.</p>
     #[serde(rename = "arn")]
@@ -169,7 +169,7 @@ pub struct Build {
 }
 
 /// <p>Information about build output artifacts.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BuildArtifacts {
     /// <p>Information about the location of the build artifacts.</p>
     #[serde(rename = "location")]
@@ -186,7 +186,7 @@ pub struct BuildArtifacts {
 }
 
 /// <p>Information about a build that could not be successfully deleted.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BuildNotDeleted {
     /// <p>The ID of the build that could not be successfully deleted.</p>
     #[serde(rename = "id")]
@@ -199,7 +199,7 @@ pub struct BuildNotDeleted {
 }
 
 /// <p>Information about a stage for a build.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BuildPhase {
     /// <p>Additional information about a build phase, especially to help troubleshoot a failed build.</p>
     #[serde(rename = "contexts")]
@@ -227,7 +227,7 @@ pub struct BuildPhase {
     pub start_time: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateProjectInput {
     /// <p>Information about the build output artifacts for the build project.</p>
     #[serde(rename = "artifacts")]
@@ -275,7 +275,7 @@ pub struct CreateProjectInput {
     pub vpc_config: Option<VpcConfig>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateProjectOutput {
     /// <p>Information about the build project that was created.</p>
     #[serde(rename = "project")]
@@ -283,7 +283,7 @@ pub struct CreateProjectOutput {
     pub project: Option<Project>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateWebhookInput {
     /// <p>A regular expression used to determine which branches in a repository are built when a webhook is triggered. If the name of a branch matches the regular expression, then it is built. If it doesn't match, then it is not. If branchFilter is empty, then all branches are built.</p>
     #[serde(rename = "branchFilter")]
@@ -294,7 +294,7 @@ pub struct CreateWebhookInput {
     pub project_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateWebhookOutput {
     /// <p>Information about a webhook in GitHub that connects repository events to a build project in AWS CodeBuild.</p>
     #[serde(rename = "webhook")]
@@ -302,28 +302,28 @@ pub struct CreateWebhookOutput {
     pub webhook: Option<Webhook>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteProjectInput {
     /// <p>The name of the build project.</p>
     #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteProjectOutput {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteWebhookInput {
     /// <p>The name of the AWS CodeBuild project.</p>
     #[serde(rename = "projectName")]
     pub project_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteWebhookOutput {}
 
 /// <p>Information about a Docker image that is managed by AWS CodeBuild.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct EnvironmentImage {
     /// <p>The description of the Docker image.</p>
     #[serde(rename = "description")]
@@ -340,7 +340,7 @@ pub struct EnvironmentImage {
 }
 
 /// <p>A set of Docker images that are related by programming language and are managed by AWS CodeBuild.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct EnvironmentLanguage {
     /// <p>The list of Docker images that are related by the specified programming language.</p>
     #[serde(rename = "images")]
@@ -353,7 +353,7 @@ pub struct EnvironmentLanguage {
 }
 
 /// <p>A set of Docker images that are related by platform and are managed by AWS CodeBuild.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct EnvironmentPlatform {
     /// <p>The list of programming languages that are available for the specified platform.</p>
     #[serde(rename = "languages")]
@@ -366,7 +366,7 @@ pub struct EnvironmentPlatform {
 }
 
 /// <p>Information about an environment variable for a build project or a build.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EnvironmentVariable {
     /// <p>The name or key of the environment variable.</p>
     #[serde(rename = "name")]
@@ -380,17 +380,17 @@ pub struct EnvironmentVariable {
     pub value: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct InvalidateProjectCacheInput {
     /// <p>The name of the AWS CodeBuild build project that the cache will be reset for.</p>
     #[serde(rename = "projectName")]
     pub project_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InvalidateProjectCacheOutput {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListBuildsForProjectInput {
     /// <p>During a previous call, if there are more than 100 items in the list, only the first 100 items are returned, along with a unique string called a <i>next token</i>. To get the next batch of items in the list, call this operation again, adding the next token to the call. To get all of the items in the list, keep calling this operation with each subsequent next token that is returned, until no more next tokens are returned.</p>
     #[serde(rename = "nextToken")]
@@ -405,7 +405,7 @@ pub struct ListBuildsForProjectInput {
     pub sort_order: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListBuildsForProjectOutput {
     /// <p>A list of build IDs for the specified build project, with each build ID representing a single build.</p>
     #[serde(rename = "ids")]
@@ -417,7 +417,7 @@ pub struct ListBuildsForProjectOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListBuildsInput {
     /// <p>During a previous call, if there are more than 100 items in the list, only the first 100 items are returned, along with a unique string called a <i>next token</i>. To get the next batch of items in the list, call this operation again, adding the next token to the call. To get all of the items in the list, keep calling this operation with each subsequent next token that is returned, until no more next tokens are returned.</p>
     #[serde(rename = "nextToken")]
@@ -429,7 +429,7 @@ pub struct ListBuildsInput {
     pub sort_order: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListBuildsOutput {
     /// <p>A list of build IDs, with each build ID representing a single build.</p>
     #[serde(rename = "ids")]
@@ -441,10 +441,10 @@ pub struct ListBuildsOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListCuratedEnvironmentImagesInput {}
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListCuratedEnvironmentImagesOutput {
     /// <p>Information about supported platforms for Docker images that are managed by AWS CodeBuild.</p>
     #[serde(rename = "platforms")]
@@ -452,7 +452,7 @@ pub struct ListCuratedEnvironmentImagesOutput {
     pub platforms: Option<Vec<EnvironmentPlatform>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListProjectsInput {
     /// <p>During a previous call, if there are more than 100 items in the list, only the first 100 items are returned, along with a unique string called a <i>next token</i>. To get the next batch of items in the list, call this operation again, adding the next token to the call. To get all of the items in the list, keep calling this operation with each subsequent next token that is returned, until no more next tokens are returned.</p>
     #[serde(rename = "nextToken")]
@@ -468,7 +468,7 @@ pub struct ListProjectsInput {
     pub sort_order: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListProjectsOutput {
     /// <p>If there are more than 100 items in the list, only the first 100 items are returned, along with a unique string called a <i>next token</i>. To get the next batch of items in the list, call this operation again, adding the next token to the call.</p>
     #[serde(rename = "nextToken")]
@@ -481,7 +481,7 @@ pub struct ListProjectsOutput {
 }
 
 /// <p>Information about build logs in Amazon CloudWatch Logs.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LogsLocation {
     /// <p>The URL to an individual build log in Amazon CloudWatch Logs.</p>
     #[serde(rename = "deepLink")]
@@ -498,7 +498,7 @@ pub struct LogsLocation {
 }
 
 /// <p>Describes a network interface.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct NetworkInterface {
     /// <p>The ID of the network interface.</p>
     #[serde(rename = "networkInterfaceId")]
@@ -511,7 +511,7 @@ pub struct NetworkInterface {
 }
 
 /// <p>Additional information about a build phase that has an error. You can use this information to help troubleshoot a failed build.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PhaseContext {
     /// <p>An explanation of the build phase's context. This explanation might include a command ID and an exit code.</p>
     #[serde(rename = "message")]
@@ -524,7 +524,7 @@ pub struct PhaseContext {
 }
 
 /// <p>Information about a build project.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Project {
     /// <p>The Amazon Resource Name (ARN) of the build project.</p>
     #[serde(rename = "arn")]
@@ -593,7 +593,7 @@ pub struct Project {
 }
 
 /// <p>Information about the build output artifacts for the build project.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProjectArtifacts {
     /// <p><p>Information about the build output artifact location, as follows:</p> <ul> <li> <p>If <code>type</code> is set to <code>CODEPIPELINE</code>, then AWS CodePipeline will ignore this value if specified. This is because AWS CodePipeline manages its build output locations instead of AWS CodeBuild.</p> </li> <li> <p>If <code>type</code> is set to <code>NO_ARTIFACTS</code>, then this value will be ignored if specified, because no build output will be produced.</p> </li> <li> <p>If <code>type</code> is set to <code>S3</code>, this is the name of the output bucket.</p> </li> </ul></p>
     #[serde(rename = "location")]
@@ -621,7 +621,7 @@ pub struct ProjectArtifacts {
 }
 
 /// <p>Information about the build badge for the build project.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ProjectBadge {
     /// <p>Set this to true to generate a publicly-accessible URL for your project's build badge.</p>
     #[serde(rename = "badgeEnabled")]
@@ -634,7 +634,7 @@ pub struct ProjectBadge {
 }
 
 /// <p>Information about the cache for the build project.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProjectCache {
     /// <p><p>Information about the cache location, as follows: </p> <ul> <li> <p> <code>NO_CACHE</code>: This value will be ignored.</p> </li> <li> <p> <code>S3</code>: This is the S3 bucket name/prefix.</p> </li> </ul></p>
     #[serde(rename = "location")]
@@ -646,7 +646,7 @@ pub struct ProjectCache {
 }
 
 /// <p>Information about the build environment of the build project.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProjectEnvironment {
     /// <p>The certificate to use with this build project.</p>
     #[serde(rename = "certificate")]
@@ -672,7 +672,7 @@ pub struct ProjectEnvironment {
 }
 
 /// <p>Information about the build input source code for the build project.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProjectSource {
     /// <p>Information about the authorization settings for AWS CodeBuild to access the source code to be built.</p> <p>This information is for the AWS CodeBuild console's use only. Your code should not get or set this information directly (unless the build project's source <code>type</code> value is <code>BITBUCKET</code> or <code>GITHUB</code>).</p>
     #[serde(rename = "auth")]
@@ -700,7 +700,7 @@ pub struct ProjectSource {
 }
 
 /// <p>Information about the authorization settings for AWS CodeBuild to access the source code to be built.</p> <p>This information is for the AWS CodeBuild console's use only. Your code should not get or set this information directly (unless the build project's source <code>type</code> value is <code>BITBUCKET</code> or <code>GITHUB</code>).</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SourceAuth {
     /// <p>The resource value that applies to the specified authorization type.</p>
     #[serde(rename = "resource")]
@@ -711,7 +711,7 @@ pub struct SourceAuth {
     pub type_: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartBuildInput {
     /// <p>Build output artifact settings that override, for this build only, the latest ones already defined in the build project.</p>
     #[serde(rename = "artifactsOverride")]
@@ -742,7 +742,7 @@ pub struct StartBuildInput {
     pub timeout_in_minutes_override: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StartBuildOutput {
     /// <p>Information about the build to be run.</p>
     #[serde(rename = "build")]
@@ -750,14 +750,14 @@ pub struct StartBuildOutput {
     pub build: Option<Build>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopBuildInput {
     /// <p>The ID of the build.</p>
     #[serde(rename = "id")]
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StopBuildOutput {
     /// <p>Information about the build.</p>
     #[serde(rename = "build")]
@@ -766,7 +766,7 @@ pub struct StopBuildOutput {
 }
 
 /// <p>A tag, consisting of a key and a value.</p> <p>This tag is available for use by AWS services that support tags in AWS CodeBuild.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
     /// <p>The tag's key.</p>
     #[serde(rename = "key")]
@@ -778,7 +778,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateProjectInput {
     /// <p>Information to be changed about the build output artifacts for the build project.</p>
     #[serde(rename = "artifacts")]
@@ -829,7 +829,7 @@ pub struct UpdateProjectInput {
     pub vpc_config: Option<VpcConfig>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateProjectOutput {
     /// <p>Information about the build project that was changed.</p>
     #[serde(rename = "project")]
@@ -837,7 +837,7 @@ pub struct UpdateProjectOutput {
     pub project: Option<Project>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateWebhookInput {
     /// <p>A regular expression used to determine which branches in a repository are built when a webhook is triggered. If the name of a branch matches the regular expression, then it is built. If it doesn't match, then it is not. If branchFilter is empty, then all branches are built.</p>
     #[serde(rename = "branchFilter")]
@@ -852,7 +852,7 @@ pub struct UpdateWebhookInput {
     pub rotate_secret: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateWebhookOutput {
     /// <p> Information about a repository's webhook that is associated with a project in AWS CodeBuild. </p>
     #[serde(rename = "webhook")]
@@ -861,7 +861,7 @@ pub struct UpdateWebhookOutput {
 }
 
 /// <p>Information about the VPC configuration that AWS CodeBuild will access.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VpcConfig {
     /// <p>A list of one or more security groups IDs in your Amazon VPC.</p>
     #[serde(rename = "securityGroupIds")]
@@ -878,7 +878,7 @@ pub struct VpcConfig {
 }
 
 /// <p>Information about a webhook in GitHub that connects repository events to a build project in AWS CodeBuild.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Webhook {
     /// <p>A regular expression used to determine which branches in a repository are built when a webhook is triggered. If the name of a branch matches the regular expression, then it is built. If it doesn't match, then it is not. If branchFilter is empty, then all branches are built.</p>
     #[serde(rename = "branchFilter")]

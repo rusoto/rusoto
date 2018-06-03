@@ -44,7 +44,7 @@ enum DeserializerNext {
     Element(String),
 }
 /// <p>Data returned by the <b>DescribeAccountAttributes</b> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccountAttributesMessage {
     /// <p>A list of <a>AccountQuota</a> objects. Within this list, each quota has a name, a count of usage toward the quota maximum, and a maximum value for the quota.</p>
     pub account_quotas: Option<Vec<AccountQuota>>,
@@ -93,7 +93,7 @@ impl AccountAttributesMessageDeserializer {
     }
 }
 /// <p>Describes a quota for an AWS account, for example, the number of DB instances allowed.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccountQuota {
     /// <p>The name of the Amazon RDS quota for this AWS account.</p>
     pub account_quota_name: Option<String>,
@@ -194,7 +194,7 @@ impl AccountQuotaListDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddRoleToDBClusterMessage {
     /// <p>The name of the DB cluster to associate the IAM role with.</p>
     pub db_cluster_identifier: String,
@@ -223,7 +223,7 @@ impl AddRoleToDBClusterMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddSourceIdentifierToSubscriptionMessage {
     /// <p><p>The identifier of the event source to be added.</p> <p>Constraints:</p> <ul> <li> <p>If the source type is a DB instance, then a <code>DBInstanceIdentifier</code> must be supplied.</p> </li> <li> <p>If the source type is a DB security group, a <code>DBSecurityGroupName</code> must be supplied.</p> </li> <li> <p>If the source type is a DB parameter group, a <code>DBParameterGroupName</code> must be supplied.</p> </li> <li> <p>If the source type is a DB snapshot, a <code>DBSnapshotIdentifier</code> must be supplied.</p> </li> </ul></p>
     pub source_identifier: String,
@@ -251,7 +251,7 @@ impl AddSourceIdentifierToSubscriptionMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddSourceIdentifierToSubscriptionResult {
     pub event_subscription: Option<EventSubscription>,
 }
@@ -298,7 +298,7 @@ impl AddSourceIdentifierToSubscriptionResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddTagsToResourceMessage {
     /// <p>The Amazon RDS resource that the tags are added to. This value is an Amazon Resource Name (ARN). For information about creating an ARN, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing"> Constructing an RDS Amazon Resource Name (ARN)</a>.</p>
     pub resource_name: String,
@@ -338,7 +338,7 @@ impl ApplyMethodDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ApplyPendingMaintenanceActionMessage {
     /// <p>The pending maintenance action to apply to this resource.</p> <p>Valid values: <code>system-update</code>, <code>db-upgrade</code> </p>
     pub apply_action: String,
@@ -372,7 +372,7 @@ impl ApplyPendingMaintenanceActionMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ApplyPendingMaintenanceActionResult {
     pub resource_pending_maintenance_actions: Option<ResourcePendingMaintenanceActions>,
 }
@@ -477,7 +477,7 @@ impl AttributeValueListSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AuthorizeDBSecurityGroupIngressMessage {
     /// <p>The IP range to authorize.</p>
     pub cidrip: Option<String>,
@@ -531,7 +531,7 @@ impl AuthorizeDBSecurityGroupIngressMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AuthorizeDBSecurityGroupIngressResult {
     pub db_security_group: Option<DBSecurityGroup>,
 }
@@ -578,7 +578,7 @@ impl AuthorizeDBSecurityGroupIngressResultDeserializer {
     }
 }
 /// <p><p>Contains Availability Zone information.</p> <p> This data type is used as an element in the following data type:</p> <ul> <li> <p> <a>OrderableDBInstanceOption</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AvailabilityZone {
     /// <p>The name of the availability zone.</p>
     pub name: Option<String>,
@@ -750,7 +750,7 @@ impl BooleanOptionalDeserializer {
     }
 }
 /// <p>A CA certificate for an AWS account.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Certificate {
     /// <p>The Amazon Resource Name (ARN) for the certificate.</p>
     pub certificate_arn: Option<String>,
@@ -876,7 +876,7 @@ impl CertificateListDeserializer {
     }
 }
 /// <p>Data returned by the <b>DescribeCertificates</b> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CertificateMessage {
     /// <p>The list of <a>Certificate</a> objects for the AWS account.</p>
     pub certificates: Option<Vec<Certificate>>,
@@ -930,7 +930,7 @@ impl CertificateMessageDeserializer {
     }
 }
 /// <p> This data type is used as a response element in the action <a>DescribeDBEngineVersions</a>. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CharacterSet {
     /// <p>The description of the character set.</p>
     pub character_set_description: Option<String>,
@@ -986,7 +986,7 @@ impl CharacterSetDeserializer {
     }
 }
 /// <p>The configuration setting for the log types to be enabled for export to CloudWatch Logs for a specific DB instance or DB cluster.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CloudwatchLogsExportConfiguration {
     /// <p>The list of log types to disable.</p>
     pub disable_log_types: Option<Vec<String>>,
@@ -1020,7 +1020,7 @@ impl CloudwatchLogsExportConfigurationSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyDBClusterParameterGroupMessage {
     /// <p><p>The identifier or Amazon Resource Name (ARN) for the source DB cluster parameter group. For information about creating an ARN, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing"> Constructing an RDS Amazon Resource Name (ARN)</a>. </p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid DB cluster parameter group.</p> </li> <li> <p>If the source DB cluster parameter group is in the same AWS Region as the copy, specify a valid DB parameter group identifier, for example <code>my-db-cluster-param-group</code>, or a valid ARN.</p> </li> <li> <p>If the source DB parameter group is in a different AWS Region than the copy, specify a valid DB cluster parameter group ARN, for example <code>arn:aws:rds:us-east-1:123456789012:cluster-pg:custom-cluster-group1</code>.</p> </li> </ul></p>
     pub source_db_cluster_parameter_group_identifier: String,
@@ -1061,7 +1061,7 @@ impl CopyDBClusterParameterGroupMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyDBClusterParameterGroupResult {
     pub db_cluster_parameter_group: Option<DBClusterParameterGroup>,
 }
@@ -1110,7 +1110,7 @@ impl CopyDBClusterParameterGroupResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyDBClusterSnapshotMessage {
     /// <p>True to copy all tags from the source DB cluster snapshot to the target DB cluster snapshot, and otherwise false. The default is false.</p>
     pub copy_tags: Option<bool>,
@@ -1168,7 +1168,7 @@ impl CopyDBClusterSnapshotMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyDBClusterSnapshotResult {
     pub db_cluster_snapshot: Option<DBClusterSnapshot>,
 }
@@ -1215,7 +1215,7 @@ impl CopyDBClusterSnapshotResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyDBParameterGroupMessage {
     /// <p><p> The identifier or ARN for the source DB parameter group. For information about creating an ARN, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing"> Constructing an RDS Amazon Resource Name (ARN)</a>. </p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid DB parameter group.</p> </li> <li> <p>Must specify a valid DB parameter group identifier, for example <code>my-db-param-group</code>, or a valid ARN.</p> </li> </ul></p>
     pub source_db_parameter_group_identifier: String,
@@ -1254,7 +1254,7 @@ impl CopyDBParameterGroupMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyDBParameterGroupResult {
     pub db_parameter_group: Option<DBParameterGroup>,
 }
@@ -1301,7 +1301,7 @@ impl CopyDBParameterGroupResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyDBSnapshotMessage {
     /// <p>True to copy all tags from the source DB snapshot to the target DB snapshot, and otherwise false. The default is false.</p>
     pub copy_tags: Option<bool>,
@@ -1365,7 +1365,7 @@ impl CopyDBSnapshotMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyDBSnapshotResult {
     pub db_snapshot: Option<DBSnapshot>,
 }
@@ -1413,7 +1413,7 @@ impl CopyDBSnapshotResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyOptionGroupMessage {
     /// <p><p>The identifier or ARN for the source option group. For information about creating an ARN, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing"> Constructing an RDS Amazon Resource Name (ARN)</a>. </p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid option group.</p> </li> <li> <p>If the source option group is in the same AWS Region as the copy, specify a valid option group identifier, for example <code>my-option-group</code>, or a valid ARN.</p> </li> <li> <p>If the source option group is in a different AWS Region than the copy, specify a valid option group ARN, for example <code>arn:aws:rds:us-west-2:123456789012:og:special-options</code>.</p> </li> </ul></p>
     pub source_option_group_identifier: String,
@@ -1451,7 +1451,7 @@ impl CopyOptionGroupMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyOptionGroupResult {
     pub option_group: Option<OptionGroup>,
 }
@@ -1499,7 +1499,7 @@ impl CopyOptionGroupResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBClusterMessage {
     /// <p>A list of EC2 Availability Zones that instances in the DB cluster can be created in. For information on AWS Regions and Availability Zones, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html">Regions and Availability Zones</a>. </p>
     pub availability_zones: Option<Vec<String>>,
@@ -1686,7 +1686,7 @@ impl CreateDBClusterMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBClusterParameterGroupMessage {
     /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must match the name of an existing DBClusterParameterGroup.</p> </li> </ul> <note> <p>This value is stored as a lowercase string.</p> </note></p>
     pub db_cluster_parameter_group_name: String,
@@ -1724,7 +1724,7 @@ impl CreateDBClusterParameterGroupMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBClusterParameterGroupResult {
     pub db_cluster_parameter_group: Option<DBClusterParameterGroup>,
 }
@@ -1772,7 +1772,7 @@ impl CreateDBClusterParameterGroupResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -1818,7 +1818,7 @@ impl CreateDBClusterResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBClusterSnapshotMessage {
     /// <p>The identifier of the DB cluster to create a snapshot for. This parameter is not case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBCluster.</p> </li> </ul> <p>Example: <code>my-cluster1</code> </p>
     pub db_cluster_identifier: String,
@@ -1851,7 +1851,7 @@ impl CreateDBClusterSnapshotMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBClusterSnapshotResult {
     pub db_cluster_snapshot: Option<DBClusterSnapshot>,
 }
@@ -1898,7 +1898,7 @@ impl CreateDBClusterSnapshotResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBInstanceMessage {
     /// <p><p>The amount of storage (in gibibytes) to allocate for the DB instance.</p> <p>Type: Integer</p> <p> <b>Amazon Aurora</b> </p> <p>Not applicable. Aurora cluster volumes automatically grow as the amount of data in your database increases, though you are only charged for the space that you use in an Aurora cluster volume.</p> <p> <b>MySQL</b> </p> <p>Constraints to the amount of storage for each storage type are the following: </p> <ul> <li> <p>General Purpose (SSD) storage (gp2): Must be an integer from 20 to 16384.</p> </li> <li> <p>Provisioned IOPS storage (io1): Must be an integer from 100 to 16384.</p> </li> <li> <p>Magnetic storage (standard): Must be an integer from 5 to 3072.</p> </li> </ul> <p> <b>MariaDB</b> </p> <p>Constraints to the amount of storage for each storage type are the following: </p> <ul> <li> <p>General Purpose (SSD) storage (gp2): Must be an integer from 20 to 16384.</p> </li> <li> <p>Provisioned IOPS storage (io1): Must be an integer from 100 to 16384.</p> </li> <li> <p>Magnetic storage (standard): Must be an integer from 5 to 3072.</p> </li> </ul> <p> <b>PostgreSQL</b> </p> <p>Constraints to the amount of storage for each storage type are the following: </p> <ul> <li> <p>General Purpose (SSD) storage (gp2): Must be an integer from 20 to 16384.</p> </li> <li> <p>Provisioned IOPS storage (io1): Must be an integer from 100 to 16384.</p> </li> <li> <p>Magnetic storage (standard): Must be an integer from 5 to 3072.</p> </li> </ul> <p> <b>Oracle</b> </p> <p>Constraints to the amount of storage for each storage type are the following: </p> <ul> <li> <p>General Purpose (SSD) storage (gp2): Must be an integer from 20 to 16384.</p> </li> <li> <p>Provisioned IOPS storage (io1): Must be an integer from 100 to 16384.</p> </li> <li> <p>Magnetic storage (standard): Must be an integer from 10 to 3072.</p> </li> </ul> <p> <b>SQL Server</b> </p> <p>Constraints to the amount of storage for each storage type are the following: </p> <ul> <li> <p>General Purpose (SSD) storage (gp2):</p> <ul> <li> <p>Enterprise and Standard editions: Must be an integer from 200 to 16384.</p> </li> <li> <p>Web and Express editions: Must be an integer from 20 to 16384.</p> </li> </ul> </li> <li> <p>Provisioned IOPS storage (io1):</p> <ul> <li> <p>Enterprise and Standard editions: Must be an integer from 200 to 16384.</p> </li> <li> <p>Web and Express editions: Must be an integer from 100 to 16384.</p> </li> </ul> </li> <li> <p>Magnetic storage (standard):</p> <ul> <li> <p>Enterprise and Standard editions: Must be an integer from 200 to 1024.</p> </li> <li> <p>Web and Express editions: Must be an integer from 20 to 1024.</p> </li> </ul> </li> </ul></p>
     pub allocated_storage: Option<i64>,
@@ -2243,7 +2243,7 @@ impl CreateDBInstanceMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBInstanceReadReplicaMessage {
     /// <p>Indicates that minor engine upgrades are applied automatically to the Read Replica during the maintenance window.</p> <p>Default: Inherits from the source DB instance</p>
     pub auto_minor_version_upgrade: Option<bool>,
@@ -2428,7 +2428,7 @@ impl CreateDBInstanceReadReplicaMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBInstanceReadReplicaResult {
     pub db_instance: Option<DBInstance>,
 }
@@ -2475,7 +2475,7 @@ impl CreateDBInstanceReadReplicaResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBInstanceResult {
     pub db_instance: Option<DBInstance>,
 }
@@ -2523,7 +2523,7 @@ impl CreateDBInstanceResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBParameterGroupMessage {
     /// <p>The DB parameter group family name. A DB parameter group can be associated with one and only one DB parameter group family, and can be applied only to a DB instance running a database engine and engine version compatible with that DB parameter group family.</p>
     pub db_parameter_group_family: String,
@@ -2561,7 +2561,7 @@ impl CreateDBParameterGroupMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBParameterGroupResult {
     pub db_parameter_group: Option<DBParameterGroup>,
 }
@@ -2608,7 +2608,7 @@ impl CreateDBParameterGroupResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBSecurityGroupMessage {
     /// <p>The description for the DB security group.</p>
     pub db_security_group_description: String,
@@ -2640,7 +2640,7 @@ impl CreateDBSecurityGroupMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBSecurityGroupResult {
     pub db_security_group: Option<DBSecurityGroup>,
 }
@@ -2687,7 +2687,7 @@ impl CreateDBSecurityGroupResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBSnapshotMessage {
     /// <p><p>The identifier of the DB instance that you want to create the snapshot of.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBInstance.</p> </li> </ul></p>
     pub db_instance_identifier: String,
@@ -2719,7 +2719,7 @@ impl CreateDBSnapshotMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBSnapshotResult {
     pub db_snapshot: Option<DBSnapshot>,
 }
@@ -2767,7 +2767,7 @@ impl CreateDBSnapshotResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBSubnetGroupMessage {
     /// <p>The description for the DB subnet group.</p>
     pub db_subnet_group_description: String,
@@ -2806,7 +2806,7 @@ impl CreateDBSubnetGroupMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBSubnetGroupResult {
     pub db_subnet_group: Option<DBSubnetGroup>,
 }
@@ -2854,7 +2854,7 @@ impl CreateDBSubnetGroupResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateEventSubscriptionMessage {
     /// <p> A Boolean value; set to <b>true</b> to activate the subscription, set to <b>false</b> to create the subscription but not active it. </p>
     pub enabled: Option<bool>,
@@ -2920,7 +2920,7 @@ impl CreateEventSubscriptionMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateEventSubscriptionResult {
     pub event_subscription: Option<EventSubscription>,
 }
@@ -2967,7 +2967,7 @@ impl CreateEventSubscriptionResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateOptionGroupMessage {
     /// <p>Specifies the name of the engine that this option group should be associated with.</p>
     pub engine_name: String,
@@ -3011,7 +3011,7 @@ impl CreateOptionGroupMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateOptionGroupResult {
     pub option_group: Option<OptionGroup>,
 }
@@ -3059,7 +3059,7 @@ impl CreateOptionGroupResultDeserializer {
     }
 }
 /// <p>Contains the details of an Amazon RDS DB cluster. </p> <p>This data type is used as a response element in the <a>DescribeDBClusters</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBCluster {
     /// <p>For all database engines except Amazon Aurora, <code>AllocatedStorage</code> specifies the allocated storage size in gibibytes (GiB). For Aurora, <code>AllocatedStorage</code> always returns 1, because Aurora DB cluster storage size is not fixed, but instead automatically adjusts as needed.</p>
     pub allocated_storage: Option<i64>,
@@ -3400,7 +3400,7 @@ impl DBClusterListDeserializer {
     }
 }
 /// <p>Contains information about an instance that is part of a DB cluster.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBClusterMember {
     /// <p>Specifies the status of the DB cluster parameter group for this member of the DB cluster.</p>
     pub db_cluster_parameter_group_status: Option<String>,
@@ -3515,7 +3515,7 @@ impl DBClusterMemberListDeserializer {
     }
 }
 /// <p>Contains the result of a successful invocation of the <a>DescribeDBClusters</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBClusterMessage {
     /// <p>Contains a list of DB clusters for the user.</p>
     pub db_clusters: Option<Vec<DBCluster>>,
@@ -3612,7 +3612,7 @@ impl DBClusterOptionGroupMembershipsDeserializer {
     }
 }
 /// <p>Contains status information for a DB cluster option group.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBClusterOptionGroupStatus {
     /// <p>Specifies the name of the DB cluster option group.</p>
     pub db_cluster_option_group_name: Option<String>,
@@ -3665,7 +3665,7 @@ impl DBClusterOptionGroupStatusDeserializer {
     }
 }
 /// <p>Contains the details of an Amazon RDS DB cluster parameter group. </p> <p>This data type is used as a response element in the <a>DescribeDBClusterParameterGroups</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBClusterParameterGroup {
     /// <p>The Amazon Resource Name (ARN) for the DB cluster parameter group.</p>
     pub db_cluster_parameter_group_arn: Option<String>,
@@ -3733,7 +3733,7 @@ impl DBClusterParameterGroupDeserializer {
     }
 }
 /// <p>Provides details about a DB cluster parameter group including the parameters in the DB cluster parameter group.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBClusterParameterGroupDetails {
     /// <p> An optional pagination token provided by a previous DescribeDBClusterParameters request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
     pub marker: Option<String>,
@@ -3830,7 +3830,7 @@ impl DBClusterParameterGroupListDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBClusterParameterGroupNameMessage {
     /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 letters or numbers.</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <note> <p>This value is stored as a lowercase string.</p> </note></p>
     pub db_cluster_parameter_group_name: Option<String>,
@@ -3878,7 +3878,7 @@ impl DBClusterParameterGroupNameMessageDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBClusterParameterGroupsMessage {
     /// <p>A list of DB cluster parameter groups.</p>
     pub db_cluster_parameter_groups: Option<Vec<DBClusterParameterGroup>>,
@@ -3933,7 +3933,7 @@ impl DBClusterParameterGroupsMessageDeserializer {
     }
 }
 /// <p>Describes an AWS Identity and Access Management (IAM) role that is associated with a DB cluster.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBClusterRole {
     /// <p>The Amazon Resource Name (ARN) of the IAM role that is associated with the DB cluster.</p>
     pub role_arn: Option<String>,
@@ -4028,7 +4028,7 @@ impl DBClusterRolesDeserializer {
     }
 }
 /// <p>Contains the details for an Amazon RDS DB cluster snapshot </p> <p>This data type is used as a response element in the <a>DescribeDBClusterSnapshots</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBClusterSnapshot {
     /// <p>Specifies the allocated storage size in gibibytes (GiB).</p>
     pub allocated_storage: Option<i64>,
@@ -4209,7 +4209,7 @@ impl DBClusterSnapshotDeserializer {
     }
 }
 /// <p>Contains the name and values of a manual DB cluster snapshot attribute.</p> <p>Manual DB cluster snapshot attributes are used to authorize other AWS accounts to restore a manual DB cluster snapshot. For more information, see the <a>ModifyDBClusterSnapshotAttribute</a> API action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBClusterSnapshotAttribute {
     /// <p>The name of the manual DB cluster snapshot attribute.</p> <p>The attribute named <code>restore</code> refers to the list of AWS accounts that have permission to copy or restore the manual DB cluster snapshot. For more information, see the <a>ModifyDBClusterSnapshotAttribute</a> API action.</p>
     pub attribute_name: Option<String>,
@@ -4308,7 +4308,7 @@ impl DBClusterSnapshotAttributeListDeserializer {
     }
 }
 /// <p>Contains the results of a successful call to the <a>DescribeDBClusterSnapshotAttributes</a> API action.</p> <p>Manual DB cluster snapshot attributes are used to authorize other AWS accounts to copy or restore a manual DB cluster snapshot. For more information, see the <a>ModifyDBClusterSnapshotAttribute</a> API action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBClusterSnapshotAttributesResult {
     /// <p>The list of attributes and values for the manual DB cluster snapshot.</p>
     pub db_cluster_snapshot_attributes: Option<Vec<DBClusterSnapshotAttribute>>,
@@ -4409,7 +4409,7 @@ impl DBClusterSnapshotListDeserializer {
     }
 }
 /// <p> Provides a list of DB cluster snapshots for the user as the result of a call to the <a>DescribeDBClusterSnapshots</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBClusterSnapshotMessage {
     /// <p>Provides a list of DB cluster snapshots for the user.</p>
     pub db_cluster_snapshots: Option<Vec<DBClusterSnapshot>>,
@@ -4464,7 +4464,7 @@ impl DBClusterSnapshotMessageDeserializer {
     }
 }
 /// <p> This data type is used as a response element in the action <a>DescribeDBEngineVersions</a>. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBEngineVersion {
     /// <p>The description of the database engine.</p>
     pub db_engine_description: Option<String>,
@@ -4641,7 +4641,7 @@ impl DBEngineVersionListDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <a>DescribeDBEngineVersions</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBEngineVersionMessage {
     /// <p> A list of <code>DBEngineVersion</code> elements. </p>
     pub db_engine_versions: Option<Vec<DBEngineVersion>>,
@@ -4694,7 +4694,7 @@ impl DBEngineVersionMessageDeserializer {
     }
 }
 /// <p>Contains the details of an Amazon RDS DB instance. </p> <p>This data type is used as a response element in the <a>DescribeDBInstances</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBInstance {
     /// <p>Specifies the allocated storage size specified in gibibytes.</p>
     pub allocated_storage: Option<i64>,
@@ -5183,7 +5183,7 @@ impl DBInstanceListDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <a>DescribeDBInstances</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBInstanceMessage {
     /// <p> A list of <a>DBInstance</a> instances. </p>
     pub db_instances: Option<Vec<DBInstance>>,
@@ -5237,7 +5237,7 @@ impl DBInstanceMessageDeserializer {
     }
 }
 /// <p>Provides a list of status information for a DB instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBInstanceStatusInfo {
     /// <p>Details of the error if there is an error for the instance. If the instance is not in an error state, this value is blank.</p>
     pub message: Option<String>,
@@ -5342,7 +5342,7 @@ impl DBInstanceStatusInfoListDeserializer {
     }
 }
 /// <p>Contains the details of an Amazon RDS DB parameter group. </p> <p>This data type is used as a response element in the <a>DescribeDBParameterGroups</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBParameterGroup {
     /// <p>The Amazon Resource Name (ARN) for the DB parameter group.</p>
     pub db_parameter_group_arn: Option<String>,
@@ -5412,7 +5412,7 @@ impl DBParameterGroupDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <a>DescribeDBParameters</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBParameterGroupDetails {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
@@ -5509,7 +5509,7 @@ impl DBParameterGroupListDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <a>ModifyDBParameterGroup</a> or <a>ResetDBParameterGroup</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBParameterGroupNameMessage {
     /// <p>Provides the name of the DB parameter group.</p>
     pub db_parameter_group_name: Option<String>,
@@ -5558,7 +5558,7 @@ impl DBParameterGroupNameMessageDeserializer {
     }
 }
 /// <p><p>The status of the DB parameter group.</p> <p>This data type is used as a response element in the following actions:</p> <ul> <li> <p> <a>CreateDBInstance</a> </p> </li> <li> <p> <a>CreateDBInstanceReadReplica</a> </p> </li> <li> <p> <a>DeleteDBInstance</a> </p> </li> <li> <p> <a>ModifyDBInstance</a> </p> </li> <li> <p> <a>RebootDBInstance</a> </p> </li> <li> <p> <a>RestoreDBInstanceFromDBSnapshot</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBParameterGroupStatus {
     /// <p>The name of the DP parameter group.</p>
     pub db_parameter_group_name: Option<String>,
@@ -5658,7 +5658,7 @@ impl DBParameterGroupStatusListDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <a>DescribeDBParameterGroups</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBParameterGroupsMessage {
     /// <p> A list of <a>DBParameterGroup</a> instances. </p>
     pub db_parameter_groups: Option<Vec<DBParameterGroup>>,
@@ -5713,7 +5713,7 @@ impl DBParameterGroupsMessageDeserializer {
     }
 }
 /// <p>Contains the details for an Amazon RDS DB security group. </p> <p>This data type is used as a response element in the <a>DescribeDBSecurityGroups</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBSecurityGroup {
     /// <p>The Amazon Resource Name (ARN) for the DB security group.</p>
     pub db_security_group_arn: Option<String>,
@@ -5804,7 +5804,7 @@ impl DBSecurityGroupDeserializer {
     }
 }
 /// <p><p>This data type is used as a response element in the following actions:</p> <ul> <li> <p> <a>ModifyDBInstance</a> </p> </li> <li> <p> <a>RebootDBInstance</a> </p> </li> <li> <p> <a>RestoreDBInstanceFromDBSnapshot</a> </p> </li> <li> <p> <a>RestoreDBInstanceToPointInTime</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBSecurityGroupMembership {
     /// <p>The name of the DB security group.</p>
     pub db_security_group_name: Option<String>,
@@ -5901,7 +5901,7 @@ impl DBSecurityGroupMembershipListDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <a>DescribeDBSecurityGroups</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBSecurityGroupMessage {
     /// <p> A list of <a>DBSecurityGroup</a> instances. </p>
     pub db_security_groups: Option<Vec<DBSecurityGroup>>,
@@ -6009,7 +6009,7 @@ impl DBSecurityGroupsDeserializer {
     }
 }
 /// <p>Contains the details of an Amazon RDS DB snapshot. </p> <p>This data type is used as a response element in the <a>DescribeDBSnapshots</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBSnapshot {
     /// <p>Specifies the allocated storage size in gibibytes (GiB).</p>
     pub allocated_storage: Option<i64>,
@@ -6231,7 +6231,7 @@ impl DBSnapshotDeserializer {
     }
 }
 /// <p>Contains the name and values of a manual DB snapshot attribute</p> <p>Manual DB snapshot attributes are used to authorize other AWS accounts to restore a manual DB snapshot. For more information, see the <a>ModifyDBSnapshotAttribute</a> API.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBSnapshotAttribute {
     /// <p>The name of the manual DB snapshot attribute.</p> <p>The attribute named <code>restore</code> refers to the list of AWS accounts that have permission to copy or restore the manual DB cluster snapshot. For more information, see the <a>ModifyDBSnapshotAttribute</a> API action.</p>
     pub attribute_name: Option<String>,
@@ -6330,7 +6330,7 @@ impl DBSnapshotAttributeListDeserializer {
     }
 }
 /// <p>Contains the results of a successful call to the <a>DescribeDBSnapshotAttributes</a> API action.</p> <p>Manual DB snapshot attributes are used to authorize other AWS accounts to copy or restore a manual DB snapshot. For more information, see the <a>ModifyDBSnapshotAttribute</a> API action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBSnapshotAttributesResult {
     /// <p>The list of attributes and values for the manual DB snapshot.</p>
     pub db_snapshot_attributes: Option<Vec<DBSnapshotAttribute>>,
@@ -6431,7 +6431,7 @@ impl DBSnapshotListDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <a>DescribeDBSnapshots</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBSnapshotMessage {
     /// <p> A list of <a>DBSnapshot</a> instances. </p>
     pub db_snapshots: Option<Vec<DBSnapshot>>,
@@ -6485,7 +6485,7 @@ impl DBSnapshotMessageDeserializer {
     }
 }
 /// <p>Contains the details of an Amazon RDS DB subnet group. </p> <p>This data type is used as a response element in the <a>DescribeDBSubnetGroups</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBSubnetGroup {
     /// <p>The Amazon Resource Name (ARN) for the DB subnet group.</p>
     pub db_subnet_group_arn: Option<String>,
@@ -6568,7 +6568,7 @@ impl DBSubnetGroupDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <a>DescribeDBSubnetGroups</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBSubnetGroupMessage {
     /// <p> A list of <a>DBSubnetGroup</a> instances. </p>
     pub db_subnet_groups: Option<Vec<DBSubnetGroup>>,
@@ -6665,7 +6665,7 @@ impl DBSubnetGroupsDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDBClusterMessage {
     /// <p><p>The DB cluster identifier for the DB cluster to be deleted. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match an existing DBClusterIdentifier.</p> </li> </ul></p>
     pub db_cluster_identifier: String,
@@ -6704,7 +6704,7 @@ impl DeleteDBClusterMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDBClusterParameterGroupMessage {
     /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be the name of an existing DB cluster parameter group.</p> </li> <li> <p>You can&#39;t delete a default DB cluster parameter group.</p> </li> <li> <p>Cannot be associated with any DB clusters.</p> </li> </ul></p>
     pub db_cluster_parameter_group_name: String,
@@ -6726,7 +6726,7 @@ impl DeleteDBClusterParameterGroupMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -6772,7 +6772,7 @@ impl DeleteDBClusterResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDBClusterSnapshotMessage {
     /// <p>The identifier of the DB cluster snapshot to delete.</p> <p>Constraints: Must be the name of an existing DB cluster snapshot in the <code>available</code> state.</p>
     pub db_cluster_snapshot_identifier: String,
@@ -6794,7 +6794,7 @@ impl DeleteDBClusterSnapshotMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDBClusterSnapshotResult {
     pub db_cluster_snapshot: Option<DBClusterSnapshot>,
 }
@@ -6841,7 +6841,7 @@ impl DeleteDBClusterSnapshotResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDBInstanceMessage {
     /// <p><p>The DB instance identifier for the DB instance to be deleted. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the name of an existing DB instance.</p> </li> </ul></p>
     pub db_instance_identifier: String,
@@ -6879,7 +6879,7 @@ impl DeleteDBInstanceMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDBInstanceResult {
     pub db_instance: Option<DBInstance>,
 }
@@ -6927,7 +6927,7 @@ impl DeleteDBInstanceResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDBParameterGroupMessage {
     /// <p><p>The name of the DB parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be the name of an existing DB parameter group</p> </li> <li> <p>You can&#39;t delete a default DB parameter group</p> </li> <li> <p>Cannot be associated with any DB instances</p> </li> </ul></p>
     pub db_parameter_group_name: String,
@@ -6950,7 +6950,7 @@ impl DeleteDBParameterGroupMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDBSecurityGroupMessage {
     /// <p><p>The name of the DB security group to delete.</p> <note> <p>You can&#39;t delete the default DB security group.</p> </note> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 letters, numbers, or hyphens.</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> <li> <p>Must not be &quot;Default&quot;</p> </li> </ul></p>
     pub db_security_group_name: String,
@@ -6973,7 +6973,7 @@ impl DeleteDBSecurityGroupMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDBSnapshotMessage {
     /// <p>The DBSnapshot identifier.</p> <p>Constraints: Must be the name of an existing DB snapshot in the <code>available</code> state.</p>
     pub db_snapshot_identifier: String,
@@ -6995,7 +6995,7 @@ impl DeleteDBSnapshotMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDBSnapshotResult {
     pub db_snapshot: Option<DBSnapshot>,
 }
@@ -7043,7 +7043,7 @@ impl DeleteDBSnapshotResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDBSubnetGroupMessage {
     /// <p>The name of the database subnet group to delete.</p> <note> <p>You can't delete the default subnet group.</p> </note> <p>Constraints:</p> <p>Constraints: Must match the name of an existing DBSubnetGroup. Must not be default.</p> <p>Example: <code>mySubnetgroup</code> </p>
     pub db_subnet_group_name: String,
@@ -7066,7 +7066,7 @@ impl DeleteDBSubnetGroupMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteEventSubscriptionMessage {
     /// <p>The name of the RDS event notification subscription you want to delete.</p>
     pub subscription_name: String,
@@ -7088,7 +7088,7 @@ impl DeleteEventSubscriptionMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteEventSubscriptionResult {
     pub event_subscription: Option<EventSubscription>,
 }
@@ -7135,7 +7135,7 @@ impl DeleteEventSubscriptionResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteOptionGroupMessage {
     /// <p><p>The name of the option group to be deleted.</p> <note> <p>You can&#39;t delete default option groups.</p> </note></p>
     pub option_group_name: String,
@@ -7158,7 +7158,7 @@ impl DeleteOptionGroupMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeAccountAttributesMessage {}
 
 /// Serialize `DescribeAccountAttributesMessage` contents to a `SignedRequest`.
@@ -7173,7 +7173,7 @@ impl DescribeAccountAttributesMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeCertificatesMessage {
     /// <p><p>The user-supplied certificate identifier. If this parameter is specified, information for only the identified certificate is returned. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match an existing CertificateIdentifier.</p> </li> </ul></p>
     pub certificate_identifier: Option<String>,
@@ -7223,7 +7223,7 @@ impl DescribeCertificatesMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBClusterParameterGroupsMessage {
     /// <p><p>The name of a specific DB cluster parameter group to return details for.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBClusterParameterGroup.</p> </li> </ul></p>
     pub db_cluster_parameter_group_name: Option<String>,
@@ -7273,7 +7273,7 @@ impl DescribeDBClusterParameterGroupsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBClusterParametersMessage {
     /// <p><p>The name of a specific DB cluster parameter group to return parameter details for.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBClusterParameterGroup.</p> </li> </ul></p>
     pub db_cluster_parameter_group_name: String,
@@ -7329,7 +7329,7 @@ impl DescribeDBClusterParametersMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBClusterSnapshotAttributesMessage {
     /// <p>The identifier for the DB cluster snapshot to describe the attributes for.</p>
     pub db_cluster_snapshot_identifier: String,
@@ -7355,7 +7355,7 @@ impl DescribeDBClusterSnapshotAttributesMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBClusterSnapshotAttributesResult {
     pub db_cluster_snapshot_attributes_result: Option<DBClusterSnapshotAttributesResult>,
 }
@@ -7405,7 +7405,7 @@ impl DescribeDBClusterSnapshotAttributesResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBClusterSnapshotsMessage {
     /// <p><p>The ID of the DB cluster to retrieve the list of DB cluster snapshots for. This parameter can&#39;t be used in conjunction with the <code>DBClusterSnapshotIdentifier</code> parameter. This parameter is not case-sensitive. </p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the identifier of an existing DBCluster.</p> </li> </ul></p>
     pub db_cluster_identifier: Option<String>,
@@ -7487,7 +7487,7 @@ impl DescribeDBClusterSnapshotsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBClustersMessage {
     /// <p><p>The user-supplied DB cluster identifier. If this parameter is specified, information from only the specific DB cluster is returned. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match an existing DBClusterIdentifier.</p> </li> </ul></p>
     pub db_cluster_identifier: Option<String>,
@@ -7536,7 +7536,7 @@ impl DescribeDBClustersMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBEngineVersionsMessage {
     /// <p><p>The name of a specific DB parameter group family to return details for.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match an existing DBParameterGroupFamily.</p> </li> </ul></p>
     pub db_parameter_group_family: Option<String>,
@@ -7626,7 +7626,7 @@ impl DescribeDBEngineVersionsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBInstancesMessage {
     /// <p><p>The user-supplied instance identifier. If this parameter is specified, information from only the specific DB instance is returned. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the identifier of an existing DBInstance.</p> </li> </ul></p>
     pub db_instance_identifier: Option<String>,
@@ -7676,7 +7676,7 @@ impl DescribeDBInstancesMessageSerializer {
 }
 
 /// <p>This data type is used as a response element to <a>DescribeDBLogFiles</a>.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBLogFilesDetails {
     /// <p>A POSIX timestamp when the last log entry was written.</p>
     pub last_written: Option<i64>,
@@ -7777,7 +7777,7 @@ impl DescribeDBLogFilesListDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBLogFilesMessage {
     /// <p><p>The customer-assigned name of the DB instance that contains the log files you want to list.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBInstance.</p> </li> </ul></p>
     pub db_instance_identifier: String,
@@ -7849,7 +7849,7 @@ impl DescribeDBLogFilesMessageSerializer {
 }
 
 /// <p> The response from a call to <a>DescribeDBLogFiles</a>. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBLogFilesResponse {
     /// <p>The DB log files returned.</p>
     pub describe_db_log_files: Option<Vec<DescribeDBLogFilesDetails>>,
@@ -7904,7 +7904,7 @@ impl DescribeDBLogFilesResponseDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBParameterGroupsMessage {
     /// <p><p>The name of a specific DB parameter group to return details for.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBClusterParameterGroup.</p> </li> </ul></p>
     pub db_parameter_group_name: Option<String>,
@@ -7953,7 +7953,7 @@ impl DescribeDBParameterGroupsMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBParametersMessage {
     /// <p><p>The name of a specific DB parameter group to return details for.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBParameterGroup.</p> </li> </ul></p>
     pub db_parameter_group_name: String,
@@ -8009,7 +8009,7 @@ impl DescribeDBParametersMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBSecurityGroupsMessage {
     /// <p>The name of the DB security group to return details for.</p>
     pub db_security_group_name: Option<String>,
@@ -8059,7 +8059,7 @@ impl DescribeDBSecurityGroupsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBSnapshotAttributesMessage {
     /// <p>The identifier for the DB snapshot to describe the attributes for.</p>
     pub db_snapshot_identifier: String,
@@ -8081,7 +8081,7 @@ impl DescribeDBSnapshotAttributesMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBSnapshotAttributesResult {
     pub db_snapshot_attributes_result: Option<DBSnapshotAttributesResult>,
 }
@@ -8130,7 +8130,7 @@ impl DescribeDBSnapshotAttributesResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBSnapshotsMessage {
     /// <p><p>The ID of the DB instance to retrieve the list of DB snapshots for. This parameter can&#39;t be used in conjunction with <code>DBSnapshotIdentifier</code>. This parameter is not case-sensitive. </p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the identifier of an existing DBInstance.</p> </li> </ul></p>
     pub db_instance_identifier: Option<String>,
@@ -8212,7 +8212,7 @@ impl DescribeDBSnapshotsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBSubnetGroupsMessage {
     /// <p>The name of the DB subnet group to return details for.</p>
     pub db_subnet_group_name: Option<String>,
@@ -8262,7 +8262,7 @@ impl DescribeDBSubnetGroupsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeEngineDefaultClusterParametersMessage {
     /// <p>The name of the DB cluster parameter group family to return engine parameter information for.</p>
     pub db_parameter_group_family: String,
@@ -8313,7 +8313,7 @@ impl DescribeEngineDefaultClusterParametersMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeEngineDefaultClusterParametersResult {
     pub engine_defaults: Option<EngineDefaults>,
 }
@@ -8361,7 +8361,7 @@ impl DescribeEngineDefaultClusterParametersResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeEngineDefaultParametersMessage {
     /// <p>The name of the DB parameter group family.</p>
     pub db_parameter_group_family: String,
@@ -8408,7 +8408,7 @@ impl DescribeEngineDefaultParametersMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeEngineDefaultParametersResult {
     pub engine_defaults: Option<EngineDefaults>,
 }
@@ -8456,7 +8456,7 @@ impl DescribeEngineDefaultParametersResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeEventCategoriesMessage {
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
@@ -8490,7 +8490,7 @@ impl DescribeEventCategoriesMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeEventSubscriptionsMessage {
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
@@ -8540,7 +8540,7 @@ impl DescribeEventSubscriptionsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeEventsMessage {
     /// <p>The number of minutes to retrieve events for.</p> <p>Default: 60</p>
     pub duration: Option<i64>,
@@ -8631,7 +8631,7 @@ impl DescribeEventsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeOptionGroupOptionsMessage {
     /// <p>A required parameter. Options available for the given engine name are described.</p>
     pub engine_name: String,
@@ -8687,7 +8687,7 @@ impl DescribeOptionGroupOptionsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeOptionGroupsMessage {
     /// <p>Filters the list of option groups to only include groups associated with a specific database engine.</p>
     pub engine_name: Option<String>,
@@ -8753,7 +8753,7 @@ impl DescribeOptionGroupsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeOrderableDBInstanceOptionsMessage {
     /// <p>The DB instance class filter value. Specify this parameter to show only the available offerings matching the specified DB instance class.</p>
     pub db_instance_class: Option<String>,
@@ -8833,7 +8833,7 @@ impl DescribeOrderableDBInstanceOptionsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribePendingMaintenanceActionsMessage {
     /// <p><p>A filter that specifies one or more resources to return pending maintenance actions for.</p> <p>Supported filters:</p> <ul> <li> <p> <code>db-cluster-id</code> - Accepts DB cluster identifiers and DB cluster Amazon Resource Names (ARNs). The results list will only include pending maintenance actions for the DB clusters identified by these ARNs.</p> </li> <li> <p> <code>db-instance-id</code> - Accepts DB instance identifiers and DB instance ARNs. The results list will only include pending maintenance actions for the DB instances identified by these ARNs.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
@@ -8883,7 +8883,7 @@ impl DescribePendingMaintenanceActionsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeReservedDBInstancesMessage {
     /// <p>The DB instance class filter value. Specify this parameter to show only those reservations matching the specified DB instances class.</p>
     pub db_instance_class: Option<String>,
@@ -8981,7 +8981,7 @@ impl DescribeReservedDBInstancesMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeReservedDBInstancesOfferingsMessage {
     /// <p>The DB instance class filter value. Specify this parameter to show only the available offerings matching the specified DB instance class.</p>
     pub db_instance_class: Option<String>,
@@ -9075,7 +9075,7 @@ impl DescribeReservedDBInstancesOfferingsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSourceRegionsMessage {
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
@@ -9125,7 +9125,7 @@ impl DescribeSourceRegionsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeValidDBInstanceModificationsMessage {
     /// <p>The customer identifier or the ARN of your DB instance. </p>
     pub db_instance_identifier: String,
@@ -9151,7 +9151,7 @@ impl DescribeValidDBInstanceModificationsMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeValidDBInstanceModificationsResult {
     pub valid_db_instance_modifications_message: Option<ValidDBInstanceModificationsMessage>,
 }
@@ -9201,7 +9201,7 @@ impl DescribeValidDBInstanceModificationsResultDeserializer {
     }
 }
 /// <p>An Active Directory Domain membership record associated with the DB instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DomainMembership {
     /// <p>The identifier of the Active Directory Domain.</p>
     pub domain: Option<String>,
@@ -9334,7 +9334,7 @@ impl DoubleOptionalDeserializer {
     }
 }
 /// <p>A range of double values.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DoubleRange {
     /// <p>The minimum value in the range.</p>
     pub from: Option<f64>,
@@ -9428,7 +9428,7 @@ impl DoubleRangeListDeserializer {
     }
 }
 /// <p>This data type is used as a response element to <a>DownloadDBLogFilePortion</a>.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DownloadDBLogFilePortionDetails {
     /// <p>Boolean value that if true, indicates there is more data to be downloaded.</p>
     pub additional_data_pending: Option<bool>,
@@ -9488,7 +9488,7 @@ impl DownloadDBLogFilePortionDetailsDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DownloadDBLogFilePortionMessage {
     /// <p><p>The customer-assigned name of the DB instance that contains the log files you want to list.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBInstance.</p> </li> </ul></p>
     pub db_instance_identifier: String,
@@ -9533,7 +9533,7 @@ impl DownloadDBLogFilePortionMessageSerializer {
 }
 
 /// <p><p>This data type is used as a response element in the following actions:</p> <ul> <li> <p> <a>AuthorizeDBSecurityGroupIngress</a> </p> </li> <li> <p> <a>DescribeDBSecurityGroups</a> </p> </li> <li> <p> <a>RevokeDBSecurityGroupIngress</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EC2SecurityGroup {
     /// <p>Specifies the id of the EC2 security group.</p>
     pub ec2_security_group_id: Option<String>,
@@ -9645,7 +9645,7 @@ impl EC2SecurityGroupListDeserializer {
     }
 }
 /// <p><p>This data type is used as a response element in the following actions:</p> <ul> <li> <p> <a>CreateDBInstance</a> </p> </li> <li> <p> <a>DescribeDBInstances</a> </p> </li> <li> <p> <a>DeleteDBInstance</a> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Endpoint {
     /// <p>Specifies the DNS address of the DB instance.</p>
     pub address: Option<String>,
@@ -9702,7 +9702,7 @@ impl EndpointDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <a>DescribeEngineDefaultParameters</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EngineDefaults {
     /// <p>Specifies the name of the DB parameter group family that the engine default parameters apply to.</p>
     pub db_parameter_group_family: Option<String>,
@@ -9763,7 +9763,7 @@ impl EngineDefaultsDeserializer {
     }
 }
 /// <p> This data type is used as a response element in the <a>DescribeEvents</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Event {
     /// <p>Specifies the date and time of the event.</p>
     pub date: Option<String>,
@@ -9898,7 +9898,7 @@ impl EventCategoriesListSerializer {
 }
 
 /// <p>Contains the results of a successful invocation of the <a>DescribeEventCategories</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EventCategoriesMap {
     /// <p>The event categories for the specified source type</p>
     pub event_categories: Option<Vec<String>>,
@@ -9995,7 +9995,7 @@ impl EventCategoriesMapListDeserializer {
     }
 }
 /// <p>Data returned from the <b>DescribeEventCategories</b> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EventCategoriesMessage {
     /// <p>A list of EventCategoriesMap data types.</p>
     pub event_categories_map_list: Option<Vec<EventCategoriesMap>>,
@@ -10085,7 +10085,7 @@ impl EventListDeserializer {
     }
 }
 /// <p>Contains the results of a successful invocation of the <a>DescribeEventSubscriptions</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EventSubscription {
     /// <p>The RDS event notification subscription Id.</p>
     pub cust_subscription_id: Option<String>,
@@ -10240,7 +10240,7 @@ impl EventSubscriptionsListDeserializer {
     }
 }
 /// <p>Data returned by the <b>DescribeEventSubscriptions</b> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EventSubscriptionsMessage {
     /// <p>A list of EventSubscriptions data types.</p>
     pub event_subscriptions_list: Option<Vec<EventSubscription>>,
@@ -10295,7 +10295,7 @@ impl EventSubscriptionsMessageDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <a>DescribeEvents</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EventsMessage {
     /// <p> A list of <a>Event</a> instances. </p>
     pub events: Option<Vec<Event>>,
@@ -10347,7 +10347,7 @@ impl EventsMessageDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct FailoverDBClusterMessage {
     /// <p><p>A DB cluster identifier to force a failover for. This parameter is not case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBCluster.</p> </li> </ul></p>
     pub db_cluster_identifier: Option<String>,
@@ -10379,7 +10379,7 @@ impl FailoverDBClusterMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct FailoverDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -10425,7 +10425,7 @@ impl FailoverDBClusterResultDeserializer {
     }
 }
 /// <p>This type is not currently supported.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Filter {
     /// <p>This parameter is not currently supported.</p>
     pub name: String,
@@ -10477,7 +10477,7 @@ impl FilterValueListSerializer {
 }
 
 /// <p> This data type is used as a response element in the <a>DescribeDBSecurityGroups</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct IPRange {
     /// <p>Specifies the IP range.</p>
     pub cidrip: Option<String>,
@@ -10608,7 +10608,7 @@ impl KeyListSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListTagsForResourceMessage {
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
@@ -10706,7 +10706,7 @@ impl LongDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyDBClusterMessage {
     /// <p>A value that specifies whether the modifications in this request and any pending modifications are asynchronously applied as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the DB cluster. If this parameter is set to <code>false</code>, changes to the DB cluster are applied during the next maintenance window.</p> <p>The <code>ApplyImmediately</code> parameter only affects the <code>NewDBClusterIdentifier</code> and <code>MasterUserPassword</code> values. If you set the <code>ApplyImmediately</code> parameter value to false, then changes to the <code>NewDBClusterIdentifier</code> and <code>MasterUserPassword</code> values are applied during the next maintenance window. All other changes are applied immediately, regardless of the value of the <code>ApplyImmediately</code> parameter.</p> <p>Default: <code>false</code> </p>
     pub apply_immediately: Option<bool>,
@@ -10818,7 +10818,7 @@ impl ModifyDBClusterMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyDBClusterParameterGroupMessage {
     /// <p>The name of the DB cluster parameter group to modify.</p>
     pub db_cluster_parameter_group_name: String,
@@ -10847,7 +10847,7 @@ impl ModifyDBClusterParameterGroupMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -10893,7 +10893,7 @@ impl ModifyDBClusterResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyDBClusterSnapshotAttributeMessage {
     /// <p>The name of the DB cluster snapshot attribute to modify.</p> <p>To manage authorization for other AWS accounts to copy or restore a manual DB cluster snapshot, set this value to <code>restore</code>.</p>
     pub attribute_name: String,
@@ -10939,7 +10939,7 @@ impl ModifyDBClusterSnapshotAttributeMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyDBClusterSnapshotAttributeResult {
     pub db_cluster_snapshot_attributes_result: Option<DBClusterSnapshotAttributesResult>,
 }
@@ -10989,7 +10989,7 @@ impl ModifyDBClusterSnapshotAttributeResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyDBInstanceMessage {
     /// <p>The new amount of storage (in gibibytes) to allocate for the DB instance. </p> <p>For MariaDB, MySQL, Oracle, and PostgreSQL, the value supplied must be at least 10% greater than the current value. Values that are not at least 10% greater than the existing value are rounded up so that they are 10% greater than the current value. </p> <p>For the valid values for allocated storage for each engine, see <a>CreateDBInstance</a>. </p>
     pub allocated_storage: Option<i64>,
@@ -11294,7 +11294,7 @@ impl ModifyDBInstanceMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyDBInstanceResult {
     pub db_instance: Option<DBInstance>,
 }
@@ -11342,7 +11342,7 @@ impl ModifyDBInstanceResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyDBParameterGroupMessage {
     /// <p><p>The name of the DB parameter group.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBParameterGroup.</p> </li> </ul></p>
     pub db_parameter_group_name: String,
@@ -11372,7 +11372,7 @@ impl ModifyDBParameterGroupMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyDBSnapshotAttributeMessage {
     /// <p>The name of the DB snapshot attribute to modify.</p> <p>To manage authorization for other AWS accounts to copy or restore a manual DB snapshot, set this value to <code>restore</code>.</p>
     pub attribute_name: String,
@@ -11418,7 +11418,7 @@ impl ModifyDBSnapshotAttributeMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyDBSnapshotAttributeResult {
     pub db_snapshot_attributes_result: Option<DBSnapshotAttributesResult>,
 }
@@ -11466,7 +11466,7 @@ impl ModifyDBSnapshotAttributeResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyDBSnapshotMessage {
     /// <p>The identifier of the DB snapshot to modify.</p>
     pub db_snapshot_identifier: String,
@@ -11504,7 +11504,7 @@ impl ModifyDBSnapshotMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyDBSnapshotResult {
     pub db_snapshot: Option<DBSnapshot>,
 }
@@ -11552,7 +11552,7 @@ impl ModifyDBSnapshotResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyDBSubnetGroupMessage {
     /// <p>The description for the DB subnet group.</p>
     pub db_subnet_group_description: Option<String>,
@@ -11589,7 +11589,7 @@ impl ModifyDBSubnetGroupMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyDBSubnetGroupResult {
     pub db_subnet_group: Option<DBSubnetGroup>,
 }
@@ -11637,7 +11637,7 @@ impl ModifyDBSubnetGroupResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyEventSubscriptionMessage {
     /// <p> A Boolean value; set to <b>true</b> to activate the subscription. </p>
     pub enabled: Option<bool>,
@@ -11692,7 +11692,7 @@ impl ModifyEventSubscriptionMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyEventSubscriptionResult {
     pub event_subscription: Option<EventSubscription>,
 }
@@ -11739,7 +11739,7 @@ impl ModifyEventSubscriptionResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyOptionGroupMessage {
     /// <p>Indicates whether the changes should be applied immediately, or during the next maintenance window for each instance associated with the option group.</p>
     pub apply_immediately: Option<bool>,
@@ -11787,7 +11787,7 @@ impl ModifyOptionGroupMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyOptionGroupResult {
     pub option_group: Option<OptionGroup>,
 }
@@ -11835,7 +11835,7 @@ impl ModifyOptionGroupResultDeserializer {
     }
 }
 /// <p>Option details.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RDSOption {
     /// <p>If the option requires access to a port, then this DB security group allows access to the port.</p>
     pub db_security_group_memberships: Option<Vec<DBSecurityGroupMembership>>,
@@ -11947,7 +11947,7 @@ impl RDSOptionDeserializer {
     }
 }
 /// <p>A list of all available options</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct OptionConfiguration {
     /// <p>A list of DBSecurityGroupMemebrship name strings used for this option.</p>
     pub db_security_group_memberships: Option<Vec<String>>,
@@ -12024,7 +12024,7 @@ impl OptionConfigurationListSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct OptionGroup {
     /// <p>Indicates whether this option group can be applied to both VPC and non-VPC instances. The value <code>true</code> indicates the option group can be applied to both VPC and non-VPC instances. </p>
     pub allows_vpc_and_non_vpc_instance_memberships: Option<bool>,
@@ -12123,7 +12123,7 @@ impl OptionGroupDeserializer {
     }
 }
 /// <p>Provides information on the option groups the DB instance is a member of.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct OptionGroupMembership {
     /// <p>The name of the option group that the instance belongs to.</p>
     pub option_group_name: Option<String>,
@@ -12220,7 +12220,7 @@ impl OptionGroupMembershipListDeserializer {
     }
 }
 /// <p>Available option.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct OptionGroupOption {
     /// <p>If the option requires a port, specifies the default port for the option.</p>
     pub default_port: Option<i64>,
@@ -12383,7 +12383,7 @@ impl OptionGroupOptionDeserializer {
     }
 }
 /// <p>Option group option settings are used to display settings available for each option with their default values and other information. These values are used with the DescribeOptionGroupOptions action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct OptionGroupOptionSetting {
     /// <p>Indicates the acceptable values for the option group option.</p>
     pub allowed_values: Option<String>,
@@ -12595,7 +12595,7 @@ impl OptionGroupOptionsListDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct OptionGroupOptionsMessage {
     /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
@@ -12649,7 +12649,7 @@ impl OptionGroupOptionsMessageDeserializer {
     }
 }
 /// <p>List of option groups.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct OptionGroups {
     /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
@@ -12757,7 +12757,7 @@ impl OptionNamesListSerializer {
 }
 
 /// <p>Option settings are the actual settings being applied or configured for that option. It is used when you modify an option group or describe option groups. For example, the NATIVE_NETWORK_ENCRYPTION option has a setting called SQLNET.ENCRYPTION_SERVER that can have several different values.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct OptionSetting {
     /// <p>The allowed values of the option setting.</p>
     pub allowed_values: Option<String>,
@@ -12978,7 +12978,7 @@ impl OptionSettingsListSerializer {
 }
 
 /// <p>The version for an option. Option group option versions are returned by the <a>DescribeOptionGroupOptions</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct OptionVersion {
     /// <p>True if the version is the default version of the option, and otherwise false.</p>
     pub is_default: Option<bool>,
@@ -13153,7 +13153,7 @@ impl OptionsListDeserializer {
     }
 }
 /// <p>Contains a list of available options for a DB instance.</p> <p> This data type is used as a response element in the <a>DescribeOrderableDBInstanceOptions</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct OrderableDBInstanceOption {
     /// <p>A list of Availability Zones for a DB instance.</p>
     pub availability_zones: Option<Vec<AvailabilityZone>>,
@@ -13382,7 +13382,7 @@ impl OrderableDBInstanceOptionsListDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <a>DescribeOrderableDBInstanceOptions</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct OrderableDBInstanceOptionsMessage {
     /// <p> An optional pagination token provided by a previous OrderableDBInstanceOptions request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
     pub marker: Option<String>,
@@ -13438,7 +13438,7 @@ impl OrderableDBInstanceOptionsMessageDeserializer {
     }
 }
 /// <p> This data type is used as a request parameter in the <a>ModifyDBParameterGroup</a> and <a>ResetDBParameterGroup</a> actions. </p> <p>This data type is used as a response element in the <a>DescribeEngineDefaultParameters</a> and <a>DescribeDBParameters</a> actions.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Parameter {
     /// <p>Specifies the valid range of values for the parameter.</p>
     pub allowed_values: Option<String>,
@@ -13675,7 +13675,7 @@ impl ParametersListSerializer {
 }
 
 /// <p>A list of the log types whose configuration is still pending. In other words, these log types are in the process of being activated or deactivated.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PendingCloudwatchLogsExports {
     /// <p>Log types that are in the process of being enabled. After they are enabled, these log types are exported to CloudWatch Logs.</p>
     pub log_types_to_disable: Option<Vec<String>>,
@@ -13731,7 +13731,7 @@ impl PendingCloudwatchLogsExportsDeserializer {
     }
 }
 /// <p>Provides information about a pending maintenance action for a resource.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PendingMaintenanceAction {
     /// <p>The type of pending maintenance action that is available for the resource.</p>
     pub action: Option<String>,
@@ -13901,7 +13901,7 @@ impl PendingMaintenanceActionsDeserializer {
     }
 }
 /// <p>Data returned from the <b>DescribePendingMaintenanceActions</b> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PendingMaintenanceActionsMessage {
     /// <p> An optional pagination token provided by a previous <code>DescribePendingMaintenanceActions</code> request. If this parameter is specified, the response includes only records beyond the marker, up to a number of records specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
@@ -13956,7 +13956,7 @@ impl PendingMaintenanceActionsMessageDeserializer {
     }
 }
 /// <p> This data type is used as a response element in the <a>ModifyDBInstance</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PendingModifiedValues {
     /// <p> Contains the new <code>AllocatedStorage</code> size for the DB instance that will be applied or is currently being applied. </p>
     pub allocated_storage: Option<i64>,
@@ -14101,7 +14101,7 @@ impl PendingModifiedValuesDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PromoteReadReplicaDBClusterMessage {
     /// <p>The identifier of the DB cluster Read Replica to promote. This parameter is not case-sensitive. </p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBCluster Read Replica.</p> </li> </ul> <p>Example: <code>my-cluster-replica1</code> </p>
     pub db_cluster_identifier: String,
@@ -14123,7 +14123,7 @@ impl PromoteReadReplicaDBClusterMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PromoteReadReplicaDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -14169,7 +14169,7 @@ impl PromoteReadReplicaDBClusterResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PromoteReadReplicaMessage {
     /// <p><p>The number of days to retain automated backups. Setting this parameter to a positive number enables backups. Setting this parameter to 0 disables automated backups.</p> <p>Default: 1</p> <p>Constraints:</p> <ul> <li> <p>Must be a value from 0 to 8</p> </li> </ul></p>
     pub backup_retention_period: Option<i64>,
@@ -14207,7 +14207,7 @@ impl PromoteReadReplicaMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PromoteReadReplicaResult {
     pub db_instance: Option<DBInstance>,
 }
@@ -14255,7 +14255,7 @@ impl PromoteReadReplicaResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PurchaseReservedDBInstancesOfferingMessage {
     /// <p>The number of instances to reserve.</p> <p>Default: <code>1</code> </p>
     pub db_instance_count: Option<i64>,
@@ -14301,7 +14301,7 @@ impl PurchaseReservedDBInstancesOfferingMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PurchaseReservedDBInstancesOfferingResult {
     pub reserved_db_instance: Option<ReservedDBInstance>,
 }
@@ -14350,7 +14350,7 @@ impl PurchaseReservedDBInstancesOfferingResultDeserializer {
     }
 }
 /// <p>A range of integer values.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Range {
     /// <p>The minimum value in the range.</p>
     pub from: Option<i64>,
@@ -14577,7 +14577,7 @@ impl ReadReplicaIdentifierListDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RebootDBInstanceMessage {
     /// <p><p>The DB instance identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBInstance.</p> </li> </ul></p>
     pub db_instance_identifier: String,
@@ -14607,7 +14607,7 @@ impl RebootDBInstanceMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RebootDBInstanceResult {
     pub db_instance: Option<DBInstance>,
 }
@@ -14655,7 +14655,7 @@ impl RebootDBInstanceResultDeserializer {
     }
 }
 /// <p> This data type is used as a response element in the <a>DescribeReservedDBInstances</a> and <a>DescribeReservedDBInstancesOfferings</a> actions. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RecurringCharge {
     /// <p>The amount of the recurring charge.</p>
     pub recurring_charge_amount: Option<f64>,
@@ -14753,7 +14753,7 @@ impl RecurringChargeListDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RemoveRoleFromDBClusterMessage {
     /// <p>The name of the DB cluster to disassociate the IAM role from.</p>
     pub db_cluster_identifier: String,
@@ -14782,7 +14782,7 @@ impl RemoveRoleFromDBClusterMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RemoveSourceIdentifierFromSubscriptionMessage {
     /// <p> The source identifier to be removed from the subscription, such as the <b>DB instance identifier</b> for a DB instance or the name of a security group. </p>
     pub source_identifier: String,
@@ -14814,7 +14814,7 @@ impl RemoveSourceIdentifierFromSubscriptionMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RemoveSourceIdentifierFromSubscriptionResult {
     pub event_subscription: Option<EventSubscription>,
 }
@@ -14861,7 +14861,7 @@ impl RemoveSourceIdentifierFromSubscriptionResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RemoveTagsFromResourceMessage {
     /// <p>The Amazon RDS resource that the tags are removed from. This value is an Amazon Resource Name (ARN). For information about creating an ARN, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing"> Constructing an RDS Amazon Resource Name (ARN)</a>.</p>
     pub resource_name: String,
@@ -14887,7 +14887,7 @@ impl RemoveTagsFromResourceMessageSerializer {
 }
 
 /// <p> This data type is used as a response element in the <a>DescribeReservedDBInstances</a> and <a>PurchaseReservedDBInstancesOffering</a> actions. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReservedDBInstance {
     /// <p>The currency code for the reserved DB instance.</p>
     pub currency_code: Option<String>,
@@ -15072,7 +15072,7 @@ impl ReservedDBInstanceListDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <a>DescribeReservedDBInstances</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReservedDBInstanceMessage {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
@@ -15127,7 +15127,7 @@ impl ReservedDBInstanceMessageDeserializer {
     }
 }
 /// <p> This data type is used as a response element in the <a>DescribeReservedDBInstancesOfferings</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReservedDBInstancesOffering {
     /// <p>The currency code for the reserved DB instance offering.</p>
     pub currency_code: Option<String>,
@@ -15277,7 +15277,7 @@ impl ReservedDBInstancesOfferingListDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <a>DescribeReservedDBInstancesOfferings</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReservedDBInstancesOfferingMessage {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
@@ -15333,7 +15333,7 @@ impl ReservedDBInstancesOfferingMessageDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResetDBClusterParameterGroupMessage {
     /// <p>The name of the DB cluster parameter group to reset.</p>
     pub db_cluster_parameter_group_name: String,
@@ -15373,7 +15373,7 @@ impl ResetDBClusterParameterGroupMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResetDBParameterGroupMessage {
     /// <p><p>The name of the DB parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must match the name of an existing DBParameterGroup.</p> </li> </ul></p>
     pub db_parameter_group_name: String,
@@ -15413,7 +15413,7 @@ impl ResetDBParameterGroupMessageSerializer {
 }
 
 /// <p>Describes the pending maintenance actions for a resource.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResourcePendingMaintenanceActions {
     /// <p>A list that provides details about the pending maintenance actions for the resource.</p>
     pub pending_maintenance_action_details: Option<Vec<PendingMaintenanceAction>>,
@@ -15471,7 +15471,7 @@ impl ResourcePendingMaintenanceActionsDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreDBClusterFromS3Message {
     /// <p>A list of EC2 Availability Zones that instances in the restored DB cluster can be created in.</p>
     pub availability_zones: Option<Vec<String>>,
@@ -15669,7 +15669,7 @@ impl RestoreDBClusterFromS3MessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreDBClusterFromS3Result {
     pub db_cluster: Option<DBCluster>,
 }
@@ -15715,7 +15715,7 @@ impl RestoreDBClusterFromS3ResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreDBClusterFromSnapshotMessage {
     /// <p>Provides the list of EC2 Availability Zones that instances in the restored DB cluster can be created in.</p>
     pub availability_zones: Option<Vec<String>>,
@@ -15828,7 +15828,7 @@ impl RestoreDBClusterFromSnapshotMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreDBClusterFromSnapshotResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -15874,7 +15874,7 @@ impl RestoreDBClusterFromSnapshotResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreDBClusterToPointInTimeMessage {
     /// <p><p>The name of the new DB cluster to be created.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul></p>
     pub db_cluster_identifier: String,
@@ -15979,7 +15979,7 @@ impl RestoreDBClusterToPointInTimeMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreDBClusterToPointInTimeResult {
     pub db_cluster: Option<DBCluster>,
 }
@@ -16025,7 +16025,7 @@ impl RestoreDBClusterToPointInTimeResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreDBInstanceFromDBSnapshotMessage {
     /// <p>Indicates that minor version upgrades are applied automatically to the DB instance during the maintenance window.</p>
     pub auto_minor_version_upgrade: Option<bool>,
@@ -16218,7 +16218,7 @@ impl RestoreDBInstanceFromDBSnapshotMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreDBInstanceFromDBSnapshotResult {
     pub db_instance: Option<DBInstance>,
 }
@@ -16265,7 +16265,7 @@ impl RestoreDBInstanceFromDBSnapshotResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreDBInstanceFromS3Message {
     /// <p><p>The amount of storage (in gigabytes) to allocate initially for the DB instance. Follow the allocation rules specified in <a>CreateDBInstance</a>. </p> <note> <p>Be sure to allocate enough memory for your new DB instance so that the restore operation can succeed. You can also allocate additional memory for future growth. </p> </note></p>
     pub allocated_storage: Option<i64>,
@@ -16579,7 +16579,7 @@ impl RestoreDBInstanceFromS3MessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreDBInstanceFromS3Result {
     pub db_instance: Option<DBInstance>,
 }
@@ -16627,7 +16627,7 @@ impl RestoreDBInstanceFromS3ResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreDBInstanceToPointInTimeMessage {
     /// <p>Indicates that minor version upgrades are applied automatically to the DB instance during the maintenance window.</p>
     pub auto_minor_version_upgrade: Option<bool>,
@@ -16836,7 +16836,7 @@ impl RestoreDBInstanceToPointInTimeMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreDBInstanceToPointInTimeResult {
     pub db_instance: Option<DBInstance>,
 }
@@ -16884,7 +16884,7 @@ impl RestoreDBInstanceToPointInTimeResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RevokeDBSecurityGroupIngressMessage {
     /// <p> The IP range to revoke access from. Must be a valid CIDR range. If <code>CIDRIP</code> is specified, <code>EC2SecurityGroupName</code>, <code>EC2SecurityGroupId</code> and <code>EC2SecurityGroupOwnerId</code> can't be provided. </p>
     pub cidrip: Option<String>,
@@ -16938,7 +16938,7 @@ impl RevokeDBSecurityGroupIngressMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RevokeDBSecurityGroupIngressResult {
     pub db_security_group: Option<DBSecurityGroup>,
 }
@@ -17037,7 +17037,7 @@ impl SourceIdsListSerializer {
 }
 
 /// <p>Contains an AWS Region name as the result of a successful call to the <a>DescribeSourceRegions</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SourceRegion {
     /// <p>The endpoint for the source AWS Region endpoint.</p>
     pub endpoint: Option<String>,
@@ -17138,7 +17138,7 @@ impl SourceRegionListDeserializer {
     }
 }
 /// <p>Contains the result of a successful invocation of the <a>DescribeSourceRegions</a> action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SourceRegionMessage {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
@@ -17205,7 +17205,7 @@ impl SourceTypeDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StartDBInstanceMessage {
     /// <p> The user-supplied instance identifier. </p>
     pub db_instance_identifier: String,
@@ -17227,7 +17227,7 @@ impl StartDBInstanceMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StartDBInstanceResult {
     pub db_instance: Option<DBInstance>,
 }
@@ -17274,7 +17274,7 @@ impl StartDBInstanceResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StopDBInstanceMessage {
     /// <p> The user-supplied instance identifier. </p>
     pub db_instance_identifier: String,
@@ -17304,7 +17304,7 @@ impl StopDBInstanceMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StopDBInstanceResult {
     pub db_instance: Option<DBInstance>,
 }
@@ -17366,7 +17366,7 @@ impl StringDeserializer {
     }
 }
 /// <p> This data type is used as a response element in the <a>DescribeDBSubnetGroups</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Subnet {
     pub subnet_availability_zone: Option<AvailabilityZone>,
     /// <p>Specifies the identifier of the subnet.</p>
@@ -17578,7 +17578,7 @@ impl TStampDeserializer {
     }
 }
 /// <p>Metadata assigned to an Amazon RDS resource consisting of a key-value pair.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Tag {
     /// <p>A key is the required name of the tag. The string value can be from 1 to 128 Unicode characters in length and can't be prefixed with "aws:" or "rds:". The string can only contain only the set of Unicode letters, digits, white-space, '_', '.', '/', '=', '+', '-' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*)$").</p>
     pub key: Option<String>,
@@ -17706,7 +17706,7 @@ impl TagListSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct TagListMessage {
     /// <p>List of tags returned by the ListTagsForResource operation.</p>
     pub tag_list: Option<Vec<Tag>>,
@@ -17753,7 +17753,7 @@ impl TagListMessageDeserializer {
     }
 }
 /// <p>A time zone associated with a <a>DBInstance</a> or a <a>DBSnapshot</a>. This data type is an element in the response to the <a>DescribeDBInstances</a>, the <a>DescribeDBSnapshots</a>, and the <a>DescribeDBEngineVersions</a> actions. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Timezone {
     /// <p>The name of the time zone.</p>
     pub timezone_name: Option<String>,
@@ -17800,7 +17800,7 @@ impl TimezoneDeserializer {
     }
 }
 /// <p>The version of the database engine that a DB instance can be upgraded to.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpgradeTarget {
     /// <p>A value that indicates whether the target version is applied to any source DB instances that have AutoMinorVersionUpgrade set to true.</p>
     pub auto_upgrade: Option<bool>,
@@ -17873,7 +17873,7 @@ impl UpgradeTargetDeserializer {
     }
 }
 /// <p>Information about valid modifications that you can make to your DB instance. Contains the result of a successful call to the <a>DescribeValidDBInstanceModifications</a> action. You can use this information when you call <a>ModifyDBInstance</a>. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ValidDBInstanceModificationsMessage {
     /// <p>Valid storage options for your DB instance. </p>
     pub storage: Option<Vec<ValidStorageOptions>>,
@@ -17921,7 +17921,7 @@ impl ValidDBInstanceModificationsMessageDeserializer {
     }
 }
 /// <p>Information about valid modifications that you can make to your DB instance. Contains the result of a successful call to the <a>DescribeValidDBInstanceModifications</a> action. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ValidStorageOptions {
     /// <p>The valid range of Provisioned IOPS to gibibytes of storage multiplier. For example, 3-10, which means that provisioned IOPS can be between 3 and 10 times storage. </p>
     pub iops_to_storage_ratio: Option<Vec<DoubleRange>>,
@@ -18089,7 +18089,7 @@ impl VpcSecurityGroupIdListSerializer {
 }
 
 /// <p>This data type is used as a response element for queries on VPC security group membership.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VpcSecurityGroupMembership {
     /// <p>The status of the VPC security group.</p>
     pub status: Option<String>,
