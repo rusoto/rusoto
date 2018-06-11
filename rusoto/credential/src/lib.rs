@@ -13,7 +13,7 @@ extern crate hyper;
 extern crate hyper_tls;
 extern crate regex;
 extern crate serde_json;
-extern crate tokio_core;
+extern crate tokio_timer;
 
 pub use environment::{EnvironmentProvider, EnvironmentProviderFuture};
 pub use container::{ContainerProvider, ContainerProviderFuture};
@@ -45,9 +45,7 @@ use chrono::{DateTime, Duration as ChronoDuration, ParseError, Utc};
 use futures::{Async, Future, Poll};
 use futures::future::{err, Either, Shared, SharedItem};
 use hyper::Error as HyperError;
-use hyper::error::UriError;
 use serde_json::{from_str as json_from_str, Value};
-use tokio_core::reactor::Handle;
 
 /// AWS API access credentials, including access key, secret key, token (for IAM profiles),
 /// expiration timestamp, and claims from federated login.
@@ -152,10 +150,10 @@ impl CredentialsError {
     /// * `message` - The Error message for this CredentialsError.
     pub fn new<S>(message: S) -> CredentialsError
     where
-        S: Into<String>,
+        S: ToString,
     {
         CredentialsError {
-            message: message.into(),
+            message: message.to_string(),
         }
     }
 }
@@ -180,12 +178,6 @@ impl From<ParseError> for CredentialsError {
 
 impl From<IoError> for CredentialsError {
     fn from(err: IoError) -> CredentialsError {
-        CredentialsError::new(err.description())
-    }
-}
-
-impl From<UriError> for CredentialsError {
-    fn from(err: UriError) -> CredentialsError {
         CredentialsError::new(err.description())
     }
 }
@@ -379,8 +371,8 @@ pub type DefaultCredentialsProvider = AutoRefreshingProvider<ChainProvider>;
 impl DefaultCredentialsProvider {
     /// Creates a new DefaultCredentials Provider. If you're looking for
     /// Thread Safety look at DefaultCredentialsProviderSync.
-    pub fn new(handle: &Handle) -> Result<DefaultCredentialsProvider, CredentialsError> {
-        AutoRefreshingProvider::with_refcell(ChainProvider::new(handle))
+    pub fn new() -> Result<DefaultCredentialsProvider, CredentialsError> {
+        AutoRefreshingProvider::with_refcell(ChainProvider::new())
     }
 }
 
@@ -397,8 +389,8 @@ pub type DefaultCredentialsProviderSync = AutoRefreshingProviderSync<ChainProvid
 
 impl DefaultCredentialsProviderSync {
     /// Creates a new Thread Safe Default Credentials Provider.
-    pub fn new(handle: &Handle) -> Result<DefaultCredentialsProviderSync, CredentialsError> {
-        AutoRefreshingProviderSync::with_mutex(ChainProvider::new(handle))
+    pub fn new() -> Result<DefaultCredentialsProviderSync, CredentialsError> {
+        AutoRefreshingProviderSync::with_mutex(ChainProvider::new())
     }
 }
 
@@ -419,17 +411,13 @@ impl DefaultCredentialsProviderSync {
 ///
 /// ```rust
 /// extern crate rusoto_credential;
-/// extern crate tokio_core;
 ///
 /// use std::time::Duration;
 ///
 /// use rusoto_credential::ChainProvider;
-/// use tokio_core::reactor::Core;
 ///
 /// fn main() {
-///   let core = Core::new().unwrap();
-///
-///   let mut provider = ChainProvider::new(&core.handle());
+///   let mut provider = ChainProvider::new();
 ///   // you can overwrite the default timeout like this:
 ///   provider.set_timeout(Duration::from_secs(60));
 ///
@@ -493,23 +481,22 @@ impl ProvideAwsCredentials for ChainProvider {
 
 impl ChainProvider {
     /// Create a new `ChainProvider` using a `ProfileProvider` with the default settings.
-    pub fn new(handle: &Handle) -> ChainProvider {
+    pub fn new() -> ChainProvider {
         ChainProvider {
             profile_provider: ProfileProvider::new().ok(),
-            instance_metadata_provider: InstanceMetadataProvider::new(handle),
-            container_provider: ContainerProvider::new(handle),
+            instance_metadata_provider: InstanceMetadataProvider::new(),
+            container_provider: ContainerProvider::new(),
         }
     }
 
     /// Create a new `ChainProvider` using the provided `ProfileProvider`.
     pub fn with_profile_provider(
-        handle: &Handle,
         profile_provider: ProfileProvider,
     ) -> ChainProvider {
         ChainProvider {
             profile_provider: Some(profile_provider),
-            instance_metadata_provider: InstanceMetadataProvider::new(handle),
-            container_provider: ContainerProvider::new(handle),
+            instance_metadata_provider: InstanceMetadataProvider::new(),
+            container_provider: ContainerProvider::new(),
         }
     }
 }
@@ -590,6 +577,14 @@ mod tests {
     use test_utils::{is_secret_hidden_behind_asterisks, SECRET};
 
     use super::*;
+
+    #[test]
+    fn providers_are_send_and_sync() {
+        fn is_send_and_sync<T: Send + Sync>() {}
+
+        is_send_and_sync::<ChainProvider>();
+        is_send_and_sync::<AutoRefreshingProviderSync<ChainProvider>>();
+    }
 
     #[test]
     fn profile_provider_finds_right_credentials_in_file() {
