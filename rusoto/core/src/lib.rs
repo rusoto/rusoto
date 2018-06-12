@@ -25,7 +25,7 @@ pub extern crate rusoto_credential as credential;
 extern crate serde;
 extern crate sha2;
 extern crate time;
-extern crate tokio_core;
+extern crate tokio_timer;
 extern crate url;
 extern crate xml;
 
@@ -36,7 +36,6 @@ pub mod param;
 pub mod region;
 pub mod request;
 pub mod signature;
-pub mod reactor;
 
 #[doc(hidden)]
 pub use client_inner::ClientInner;

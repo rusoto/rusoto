@@ -12,20 +12,21 @@ use std::io;
 use std::collections::hash_map::{self, HashMap};
 use std::rc::Rc;
 use std::sync::Arc;
-use std::time::Duration;
+use std::time::{Instant, Duration};
 use std::mem;
 
 use futures::{Async, Future, Poll, Stream};
-use futures::future::{Either, Select2};
-use hyper::client::{Connect, FutureResponse as HyperFutureResponse};
-use hyper::{Client as HyperClient, Request as HyperRequest, Response as HyperResponse};
+use hyper::client::{ResponseFuture as HyperResponseFuture};
+use hyper::client::connect::Connect;
+use hyper::{Client as HyperClient, Body, Request as HyperRequest, Response as HyperResponse};
 use hyper::Error as HyperError;
-use hyper::header::{Headers as HyperHeaders, UserAgent};
+use hyper::header::{HeaderMap as HyperHeaders, HeaderValue as HyperHeaderValue, HeaderName as HyperHeaderName};
+use hyper::body::Payload;
 use hyper::StatusCode;
 use hyper::Method;
 use hyper::client::HttpConnector;
 use hyper_tls::HttpsConnector;
-use tokio_core::reactor::{Handle, Timeout};
+use tokio_timer::Deadline;
 
 use log::Level::Debug;
 
@@ -37,8 +38,8 @@ include!(concat!(env!("OUT_DIR"), "/user_agent_vars.rs"));
 // Use a lazy static to cache the default User-Agent header
 // because it never changes once it's been computed.
 lazy_static! {
-    static ref DEFAULT_USER_AGENT: Vec<Vec<u8>> = vec![format!("rusoto/{} rust/{} {}",
-            env!("CARGO_PKG_VERSION"), RUST_VERSION, env::consts::OS).as_bytes().to_vec()];
+    static ref DEFAULT_USER_AGENT: String = format!("rusoto/{} rust/{} {}",
+            env!("CARGO_PKG_VERSION"), RUST_VERSION, env::consts::OS);
 }
 
 /// HTTP headers
@@ -133,16 +134,16 @@ impl HttpResponse {
         }
     }
 
-    fn from_hyper(hyper_response: HyperResponse) -> HttpResponse {
+    fn from_hyper(hyper_response: HyperResponse<Body>) -> HttpResponse {
         let status = hyper_response.status();
-        let headers = Headers::new(hyper_response.headers().iter().map(|h| (h.name(), h.value_string())));
-        let body = hyper_response.body()
+        let headers = Headers::new(hyper_response.headers().iter().map(|(h, v)| {
+            let value_string = v.to_str().unwrap().to_owned();
+            (h.as_str(), value_string)
+        }));
+        let body = hyper_response.into_body()
             .map(|chunk| chunk.as_ref().to_vec())
             .map_err(|err| {
-                match err {
-                    HyperError::Io(io_err) => io_err,
-                    _ => io::Error::new(io::ErrorKind::Other, err)
-                }
+                io::Error::new(io::ErrorKind::Other, err)
             });
 
         HttpResponse {
@@ -210,8 +211,8 @@ impl<D: DispatchSignedRequest> DispatchSignedRequest for Arc<D> {
 pub struct HttpClientFuture(ClientFutureInner);
 
 enum ClientFutureInner {
-    Hyper(HyperFutureResponse),
-    HyperWithTimeout(Select2<HyperFutureResponse, Timeout>),
+    Hyper(HyperResponseFuture),
+    HyperWithTimeout(Deadline<HyperResponseFuture>),
     Error(String)
 }
 
@@ -225,18 +226,21 @@ impl Future for HttpClientFuture {
                 Err(HttpDispatchError { message: message.clone() }),
             ClientFutureInner::Hyper(ref mut hyper_future) =>
                 Ok(hyper_future.poll()?.map(HttpResponse::from_hyper)),
-            ClientFutureInner::HyperWithTimeout(ref mut select_future) => {
-                match select_future.poll() {
-                    Err(Either::A((hyper_err, _))) =>
-                        Err(hyper_err.into()),
-                    Err(Either::B((io_err, _))) =>
-                        Err(io_err.into()),
+            ClientFutureInner::HyperWithTimeout(ref mut deadline_future) => {
+                match deadline_future.poll() {
+                    Err(deadline_err) => {
+                        if deadline_err.is_elapsed() {
+                            Err(HttpDispatchError { message: "Request timed out".into() })
+                        } else if deadline_err.is_inner() {
+                            Err(deadline_err.into_inner().unwrap().into())
+                        } else {
+                            Err(HttpDispatchError { message: format!("deadline error: {}", deadline_err) })
+                        }
+                    },
                     Ok(Async::NotReady) =>
                         Ok(Async::NotReady),
-                    Ok(Async::Ready(Either::A((hyper_res, _)))) =>
+                    Ok(Async::Ready(hyper_res)) =>
                         Ok(Async::Ready(HttpResponse::from_hyper(hyper_res))),
-                    Ok(Async::Ready(Either::B(((), _)))) =>
-                        Err(HttpDispatchError { message: "Request timed out".into() })
                 }
             }
         }
@@ -244,38 +248,61 @@ impl Future for HttpClientFuture {
 }
 
 struct HttpClientPayload {
-    inner: SignedRequestPayload
+    inner: Option<SignedRequestPayload>
 }
 
-impl Stream for HttpClientPayload {
-    type Item = Vec<u8>;
-    type Error = HyperError;
+impl Payload for HttpClientPayload {
+    type Data = io::Cursor<Vec<u8>>;
+    type Error = io::Error;
 
-    fn poll(&mut self) -> Poll<Option<Self::Item>, Self::Error> {
+    fn poll_data(&mut self) -> Poll<Option<Self::Data>, Self::Error> {
         match self.inner {
-            SignedRequestPayload::Buffer(ref mut buffer) => {
+            None => Ok(Async::Ready(None)),
+            Some(SignedRequestPayload::Buffer(ref mut buffer)) => {
                 if buffer.len() == 0 {
                     Ok(Async::Ready(None))
                 } else {
-                    Ok(Async::Ready(Some(buffer.split_off(0))))
+                    Ok(Async::Ready(Some(io::Cursor::new(buffer.split_off(0)))))
                 }
             },
-            SignedRequestPayload::Stream(_, ref mut stream) =>
-                Ok(stream.poll()?)
+            Some(SignedRequestPayload::Stream(_, ref mut stream)) => {
+                match stream.poll()? {
+                    Async::NotReady => Ok(Async::NotReady),
+                    Async::Ready(None) => Ok(Async::Ready(None)),
+                    Async::Ready(Some(buffer)) => Ok(Async::Ready(Some(io::Cursor::new(buffer))))
+                }
+            }
+        }
+    }
+
+    fn is_end_stream(&self) -> bool {
+        match self.inner {
+            None => true,
+            Some(SignedRequestPayload::Buffer(ref buffer)) => buffer.len() == 0,
+            Some(SignedRequestPayload::Stream(_, _)) => false
+        }
+    }
+
+    fn content_length(&self) -> Option<u64> {
+        match self.inner {
+            None => Some(0),
+            Some(SignedRequestPayload::Buffer(ref buffer)) =>
+                Some(buffer.len() as u64),
+            Some(SignedRequestPayload::Stream(hint, _)) =>
+                hint.map(|s| s as u64)
         }
     }
 }
 
 /// Http client for use with AWS services.
 pub struct HttpClient<C = HttpsConnector<HttpConnector>> {
-    inner: HyperClient<C, HttpClientPayload>,
-    handle: Handle,
+    inner: HyperClient<C, HttpClientPayload>
 }
 
 impl HttpClient {
     /// Create a tls-enabled http client.
-    pub fn new(handle: &Handle) -> Result<Self, TlsError> {
-        let connector = match HttpsConnector::new(4, handle) {
+    pub fn new() -> Result<Self, TlsError> {
+        let connector = match HttpsConnector::new(4) {
             Ok(connector) => connector,
             Err(tls_error) => {
                 return Err(TlsError {
@@ -284,38 +311,39 @@ impl HttpClient {
             }
         };
 
-        Ok(Self::from_connector(connector, handle))
+        Ok(Self::from_connector(connector))
     }
 }
 
 impl<C> HttpClient<C>
 where
     C: Connect,
+    C::Future: 'static
 {
     /// Allows for a custom connector to be used with the HttpClient
-    pub fn from_connector(connector: C, handle: &Handle) -> Self {
-        let inner = HyperClient::configure()
-            .body()
-            .connector(connector)
-            .build(handle);
+    pub fn from_connector(connector: C) -> Self {
+        let inner = HyperClient::builder()
+            .build(connector);
 
         HttpClient {
-            inner,
-            handle: handle.clone(),
+            inner
         }
     }
 }
 
-impl<C: Connect> DispatchSignedRequest for HttpClient<C> {
+impl<C> DispatchSignedRequest for HttpClient<C>
+    where C: Connect + 'static,
+          C::Future: 'static
+{
     type Future = HttpClientFuture;
 
     fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> Self::Future {
         let hyper_method = match request.method().as_ref() {
-            "POST" => Method::Post,
-            "PUT" => Method::Put,
-            "DELETE" => Method::Delete,
-            "GET" => Method::Get,
-            "HEAD" => Method::Head,
+            "POST" => Method::POST,
+            "PUT" => Method::PUT,
+            "DELETE" => Method::DELETE,
+            "GET" => Method::GET,
+            "HEAD" => Method::HEAD,
             v => {
                 return HttpClientFuture(ClientFutureInner::Error(format!("Unsupported HTTP verb {}", v)))
             }
@@ -324,12 +352,26 @@ impl<C: Connect> DispatchSignedRequest for HttpClient<C> {
         // translate the headers map to a format Hyper likes
         let mut hyper_headers = HyperHeaders::new();
         for h in request.headers().iter() {
-            hyper_headers.set_raw(h.0.to_owned(), h.1.to_owned());
+            let header_name = match h.0.parse::<HyperHeaderName>() {
+                Ok(name) => name,
+                Err(err) => {
+                    return HttpClientFuture(ClientFutureInner::Error(format!("error parsing header name: {}", err)));
+                }
+            };
+            for v in h.1.iter() {
+                let header_value = match HyperHeaderValue::from_bytes(v) {
+                    Ok(value) => value,
+                    Err(err) => {
+                        return HttpClientFuture(ClientFutureInner::Error(format!("error parsing header value: {}", err)));
+                    }
+                };
+                hyper_headers.append(&header_name, header_value);
+            }
         }
 
         // Add a default user-agent header if one is not already present.
-        if !hyper_headers.has::<UserAgent>() {
-            hyper_headers.set_raw("user-agent".to_owned(), DEFAULT_USER_AGENT.clone());
+        if !hyper_headers.contains_key("user-agent") {
+            hyper_headers.insert("user-agent", DEFAULT_USER_AGENT.parse().unwrap());
         }
 
         let mut final_uri = format!("{}://{}{}", request.scheme(), request.hostname(), request.canonical_path());
@@ -352,28 +394,31 @@ impl<C: Connect> DispatchSignedRequest for HttpClient<C> {
                    hyper_method,
                    final_uri,
                    payload);
-            for h in hyper_headers.iter() {
-                debug!("{}:{}", h.name(), h.value_string());
+            for (h, v) in hyper_headers.iter() {
+                debug!("{}:{:?}", h.as_str(), v);
             }
         }
 
-        let mut hyper_request = HyperRequest::new(hyper_method, final_uri.parse().expect("error parsing uri"));
-        *hyper_request.headers_mut() = hyper_headers;
+        let mut http_request_builder = HyperRequest::builder();
+        http_request_builder.method(hyper_method);
+        http_request_builder.uri(final_uri);
 
-        if let Some(payload_contents) = request.payload {
-            hyper_request.set_body(HttpClientPayload { inner: payload_contents });
-        }
+        let body = HttpClientPayload { inner: request.payload };
+        let mut http_request = match http_request_builder.body(body) {
+            Ok(request) => request,
+            Err(err) => {
+                return HttpClientFuture(ClientFutureInner::Error(format!("error building request: {}", err)));
+            }
+        };
+
+        *http_request.headers_mut() = hyper_headers;
 
         let inner = match timeout {
-            None => ClientFutureInner::Hyper(self.inner.request(hyper_request)),
+            None => ClientFutureInner::Hyper(self.inner.request(http_request)),
             Some(duration) => {
-                match Timeout::new(duration, &self.handle) {
-                    Err(err) => ClientFutureInner::Error(format!("Error creating timeout future {}", err)),
-                    Ok(timeout_future) => {
-                        let future = self.inner.request(hyper_request).select2(timeout_future);
-                        ClientFutureInner::HyperWithTimeout(future)
-                    }
-                }
+                let deadline = Instant::now() + duration;
+                let future = Deadline::new(self.inner.request(http_request), deadline);
+                ClientFutureInner::HyperWithTimeout(future)
             }
         };
 
@@ -404,6 +449,20 @@ mod tests {
     use super::*;
     use Region;
     use signature::SignedRequest;
+
+    #[test]
+    fn http_client_is_send_and_sync() {
+        fn is_send_and_sync<T: Send + Sync>() {}
+
+        is_send_and_sync::<HttpClient>();
+    }
+
+    #[test]
+    fn http_client_future_is_send() {
+        fn is_send<T: Send>() {}
+
+        is_send::<HttpClientFuture>();
+    }
 
     #[test]
     fn custom_region_http() {
