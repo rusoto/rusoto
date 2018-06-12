@@ -441,7 +441,7 @@ impl ChainProvider {
 
 /// Future returned from `ChainProvider`.
 pub struct ChainProviderFuture {
-    inner: Box<Future<Item = AwsCredentials, Error = CredentialsError>>,
+    inner: Box<Future<Item = AwsCredentials, Error = CredentialsError> + Send>,
 }
 
 impl Future for ChainProviderFuture {
@@ -584,6 +584,14 @@ mod tests {
 
         is_send_and_sync::<ChainProvider>();
         is_send_and_sync::<AutoRefreshingProviderSync<ChainProvider>>();
+    }
+
+    #[test]
+    fn provider_futures_are_send() {
+        fn is_send<T: Send>() {}
+
+        is_send::<ChainProviderFuture>();
+        is_send::<AutoRefreshingProviderFuture<ChainProvider>>();
     }
 
     #[test]
