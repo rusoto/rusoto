@@ -41,7 +41,7 @@ impl GenerateProtocol for JsonGenerator {
                     {payload}
 
                     let future = self.inner.sign_and_dispatch(request, |response| {{
-                        if response.status == StatusCode::Ok {{
+                        if response.status == StatusCode::OK {{
                             {ok_response}
                         }} else {{
                             future::Either::B(response.buffer().from_err().and_then(|response| {{

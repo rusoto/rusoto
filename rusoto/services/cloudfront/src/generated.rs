@@ -11922,9 +11922,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateCloudFrontOriginAccessIdentityError::from_body(
@@ -11988,9 +11988,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateDistributionError::from_body(
@@ -12055,9 +12055,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateDistributionWithTagsError::from_body(
@@ -12122,9 +12122,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateInvalidationError::from_body(
@@ -12182,9 +12182,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateStreamingDistributionError::from_body(
@@ -12252,9 +12252,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateStreamingDistributionWithTagsError::from_body(
@@ -12317,9 +12317,9 @@ where
         }
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteCloudFrontOriginAccessIdentityError::from_body(
@@ -12349,9 +12349,9 @@ where
         }
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDistributionError::from_body(
@@ -12379,9 +12379,9 @@ where
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteServiceLinkedRoleError::from_body(
@@ -12411,9 +12411,9 @@ where
         }
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteStreamingDistributionError::from_body(
@@ -12443,9 +12443,9 @@ where
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetCloudFrontOriginAccessIdentityError::from_body(
@@ -12503,9 +12503,9 @@ where
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetCloudFrontOriginAccessIdentityConfigError::from_body(
@@ -12557,9 +12557,9 @@ where
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetDistributionError::from_body(
@@ -12609,9 +12609,9 @@ where
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetDistributionConfigError::from_body(
@@ -12665,9 +12665,9 @@ where
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetInvalidationError::from_body(
@@ -12713,9 +12713,9 @@ where
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetStreamingDistributionError::from_body(
@@ -12769,9 +12769,9 @@ where
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetStreamingDistributionConfigError::from_body(
@@ -12835,9 +12835,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListCloudFrontOriginAccessIdentitiesError::from_body(
@@ -12894,9 +12894,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListDistributionsError::from_body(
@@ -12954,9 +12954,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListDistributionsByWebACLIdError::from_body(
@@ -13014,9 +13014,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListInvalidationsError::from_body(
@@ -13071,9 +13071,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListStreamingDistributionsError::from_body(
@@ -13123,9 +13123,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListTagsForResourceError::from_body(
@@ -13176,9 +13176,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(TagResourceError::from_body(
@@ -13209,9 +13209,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UntagResourceError::from_body(
@@ -13255,9 +13255,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateCloudFrontOriginAccessIdentityError::from_body(
@@ -13321,9 +13321,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateDistributionError::from_body(
@@ -13388,9 +13388,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateStreamingDistributionError::from_body(

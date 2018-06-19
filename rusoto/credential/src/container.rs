@@ -1,17 +1,18 @@
 //! The Credentials provider to read from a task's IAM Role.
 
-use std::error::Error;
 use std::time::Duration;
 
 use futures::{Async, Future, Poll};
 use futures::future::{FutureResult, err};
-use hyper::{Uri, Request, Method};
-use hyper::header::Authorization;
+use hyper::{Uri, Request, Body};
+use hyper::header::HeaderValue;
 use tokio_core::reactor::Handle;
 
 use {AwsCredentials, CredentialsError, ProvideAwsCredentials,
      parse_credentials_from_aws_service, non_empty_env_var};
 use request::{HttpClient, HttpClientFuture};
+
+use hyper::header::AUTHORIZATION;
 
 // The following constants are documented in AWS' ECS developers guide,
 // see https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html.
@@ -121,7 +122,7 @@ fn credentials_from_container(client: &HttpClient, timeout: Duration) -> Result<
     Ok(client.request(request_from_env_vars()?, timeout))
 }
 
-fn request_from_env_vars() -> Result<Request, CredentialsError> {
+fn request_from_env_vars() -> Result<Request<Body>, CredentialsError> {
     let relative_uri = non_empty_env_var(AWS_CONTAINER_CREDENTIALS_RELATIVE_URI).map(
         |path| format!("http://{}{}", AWS_CREDENTIALS_PROVIDER_IP, path)
     );
@@ -131,7 +132,13 @@ fn request_from_env_vars() -> Result<Request, CredentialsError> {
             Some(ref uri) => {
                 let mut request = new_request(uri, AWS_CONTAINER_CREDENTIALS_FULL_URI)?;
                 let token = non_empty_env_var(AWS_CONTAINER_AUTHORIZATION_TOKEN);
-                token.map(|t| request.headers_mut().set(Authorization(t)));
+                token.map(|t| {
+                    Ok(request.headers_mut().insert(AUTHORIZATION,
+                        match HeaderValue::from_str(&t) {
+                            Err(e) => return Err(e),
+                            Ok(v)  => v
+                        }))
+                });
                 Ok(request)
             },
             None => Err(CredentialsError::new(
@@ -141,16 +148,21 @@ fn request_from_env_vars() -> Result<Request, CredentialsError> {
     }
 }
 
-fn new_request(uri: &str, env_var_name: &str) -> Result<Request, CredentialsError> {
-    uri.parse::<Uri>().map(
-            |uri| Request::new(Method::Get, uri)
-        ).or_else(|error| Err(
-             CredentialsError::new(
-                 format!("Error while parsing URI '{}' derived from environment variable '{}': {}",
-                         uri, env_var_name, error.description())
-             )
-        )
-    )
+fn new_request(uri: &str, env_var_name: &str) -> Result<Request<Body>, CredentialsError> {
+
+    let uri = match uri.parse::<Uri>() {
+        Err(err) => return Err(CredentialsError::new(
+            format!("Error while parsing URI '{}' derived from environment variable '{}': {}",
+                uri, env_var_name, err))),
+        Ok(v) => v,
+    };
+
+    match Request::get(&uri).body(Body::empty()) {
+        Err(err) => return Err(CredentialsError::new(
+            format!("Error while constructing request for '{}' derived from environment variable '{}': {}",
+                uri, env_var_name, err))),
+        Ok(v) => Ok(v),
+    }
 }
 
 #[cfg(test)]

@@ -15348,7 +15348,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CloneReceiptRuleSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -15399,7 +15399,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateConfigurationSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -15453,7 +15453,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateConfigurationSetEventDestinationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -15509,7 +15509,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateConfigurationSetTrackingOptionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -15562,7 +15562,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateCustomVerificationEmailTemplateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -15590,7 +15590,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateReceiptFilterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -15641,7 +15641,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateReceiptRuleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -15692,7 +15692,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateReceiptRuleSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -15743,7 +15743,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateTemplateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -15794,7 +15794,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteConfigurationSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -15848,7 +15848,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteConfigurationSetEventDestinationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -15904,7 +15904,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteConfigurationSetTrackingOptionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -15957,7 +15957,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteCustomVerificationEmailTemplateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -15985,7 +15985,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteIdentityError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -16036,7 +16036,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteIdentityPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -16087,7 +16087,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteReceiptFilterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -16138,7 +16138,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteReceiptRuleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -16189,7 +16189,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteReceiptRuleSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -16240,7 +16240,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteTemplateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -16291,7 +16291,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteVerifiedEmailAddressError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -16319,7 +16319,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeActiveReceiptRuleSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -16372,7 +16372,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeConfigurationSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -16423,7 +16423,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReceiptRuleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -16474,7 +16474,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReceiptRuleSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -16524,7 +16524,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetAccountSendingEnabledError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -16578,7 +16578,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetCustomVerificationEmailTemplateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -16631,7 +16631,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetIdentityDkimAttributesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -16685,7 +16685,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetIdentityMailFromDomainAttributesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -16741,7 +16741,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetIdentityNotificationAttributesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -16794,7 +16794,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetIdentityPoliciesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -16848,7 +16848,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetIdentityVerificationAttributesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -16898,7 +16898,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetSendQuotaError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -16948,7 +16948,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetSendStatisticsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -16999,7 +16999,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetTemplateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -17050,7 +17050,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListConfigurationSetsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -17104,7 +17104,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListCustomVerificationEmailTemplatesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -17157,7 +17157,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListIdentitiesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -17208,7 +17208,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListIdentityPoliciesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -17259,7 +17259,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListReceiptFiltersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -17310,7 +17310,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListReceiptRuleSetsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -17361,7 +17361,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListTemplatesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -17411,7 +17411,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListVerifiedEmailAddressesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -17462,7 +17462,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutIdentityPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -17513,7 +17513,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ReorderReceiptRuleSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -17564,7 +17564,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SendBounceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -17615,7 +17615,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SendBulkTemplatedEmailError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -17666,7 +17666,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SendCustomVerificationEmailError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -17719,7 +17719,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SendEmailError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -17770,7 +17770,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SendRawEmailError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -17821,7 +17821,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SendTemplatedEmailError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -17872,7 +17872,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SetActiveReceiptRuleSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -17923,7 +17923,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SetIdentityDkimEnabledError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -17977,7 +17977,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SetIdentityFeedbackForwardingEnabledError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18037,7 +18037,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SetIdentityHeadersInNotificationsEnabledError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18090,7 +18090,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SetIdentityMailFromDomainError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18141,7 +18141,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SetIdentityNotificationTopicError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18194,7 +18194,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SetReceiptRulePositionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18245,7 +18245,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(TestRenderTemplateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18296,7 +18296,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateAccountSendingEnabledError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18327,7 +18327,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateConfigurationSetEventDestinationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18384,7 +18384,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(
                         UpdateConfigurationSetReputationMetricsEnabledError::from_body(
@@ -18414,7 +18414,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateConfigurationSetSendingEnabledError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18445,7 +18445,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateConfigurationSetTrackingOptionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18498,7 +18498,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateCustomVerificationEmailTemplateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18526,7 +18526,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateReceiptRuleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18577,7 +18577,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateTemplateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18628,7 +18628,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(VerifyDomainDkimError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18679,7 +18679,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(VerifyDomainIdentityError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18730,7 +18730,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(VerifyEmailAddressError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18758,7 +18758,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(VerifyEmailIdentityError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),

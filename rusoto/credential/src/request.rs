@@ -7,7 +7,7 @@ use futures::{Async, Future, Poll, Stream};
 use futures::future::{Either, Select2};
 use futures::stream::Concat2;
 use hyper::{Client as HyperClient, Body, Request};
-use hyper::client::{FutureResponse as HyperFutureResponse, HttpConnector};
+use hyper::client::{ResponseFuture as HyperFutureResponse, HttpConnector};
 use tokio_core::reactor::{Handle, Timeout};
 
 use super::CredentialsError;
@@ -39,7 +39,7 @@ impl Future for RequestFuture {
                                 message: format!("Invalid Response Code: {}", res.status())
                             })
                         } else {
-                            *self = RequestFuture::Buffering(res.body().concat2());
+                            *self = RequestFuture::Buffering(res.into_body().concat2());
                             self.poll()
                         }
                     }
@@ -105,12 +105,12 @@ impl HttpClient {
     /// Create an http client.
     pub fn new(handle: &Handle) -> HttpClient {
         HttpClient {
-            inner: HyperClient::configure().build(handle),
+            inner: HyperClient::new(),
             handle: handle.clone()
         }
     }
 
-    pub fn request(&self, request: Request, timeout: Duration) -> HttpClientFuture {
+    pub fn request(&self, request: Request<Body>, timeout: Duration) -> HttpClientFuture {
         let request_future = RequestFuture::Waiting(self.inner.request(request));
 
         let inner = match Timeout::new(timeout, &self.handle) {

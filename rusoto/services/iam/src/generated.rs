@@ -24998,7 +24998,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AddClientIDToOpenIDConnectProviderError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25026,7 +25026,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AddRoleToInstanceProfileError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25054,7 +25054,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AddUserToGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25082,7 +25082,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AttachGroupPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25110,7 +25110,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AttachRolePolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25138,7 +25138,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AttachUserPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25166,7 +25166,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ChangePasswordError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25194,7 +25194,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateAccessKeyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25245,7 +25245,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateAccountAliasError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25273,7 +25273,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25324,7 +25324,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateInstanceProfileError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25375,7 +25375,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateLoginProfileError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25426,7 +25426,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateOpenIDConnectProviderError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25479,7 +25479,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreatePolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25530,7 +25530,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreatePolicyVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25581,7 +25581,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateRoleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25632,7 +25632,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateSAMLProviderError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25683,7 +25683,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateServiceLinkedRoleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25735,7 +25735,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateServiceSpecificCredentialError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25788,7 +25788,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateUserError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25839,7 +25839,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateVirtualMFADeviceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25890,7 +25890,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeactivateMFADeviceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25918,7 +25918,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteAccessKeyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25946,7 +25946,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteAccountAliasError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25971,7 +25971,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteAccountPasswordPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -25996,7 +25996,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26024,7 +26024,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteGroupPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26052,7 +26052,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteInstanceProfileError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26080,7 +26080,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteLoginProfileError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26108,7 +26108,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteOpenIDConnectProviderError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26133,7 +26133,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeletePolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26161,7 +26161,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeletePolicyVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26186,7 +26186,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteRoleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26214,7 +26214,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteRolePolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26242,7 +26242,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteSAMLProviderError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26270,7 +26270,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteSSHPublicKeyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26298,7 +26298,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteServerCertificateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26326,7 +26326,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteServiceLinkedRoleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26377,7 +26377,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteServiceSpecificCredentialError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26405,7 +26405,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteSigningCertificateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26430,7 +26430,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteUserError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26458,7 +26458,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteUserPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26486,7 +26486,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteVirtualMFADeviceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26514,7 +26514,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DetachGroupPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26542,7 +26542,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DetachRolePolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26570,7 +26570,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DetachUserPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26598,7 +26598,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(EnableMFADeviceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26625,7 +26625,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GenerateCredentialReportError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26676,7 +26676,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetAccessKeyLastUsedError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26728,7 +26728,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetAccountAuthorizationDetailsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26780,7 +26780,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetAccountPasswordPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26830,7 +26830,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetAccountSummaryError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26881,7 +26881,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetContextKeysForCustomPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26932,7 +26932,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetContextKeysForPrincipalPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -26982,7 +26982,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetCredentialReportError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -27030,7 +27030,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -27081,7 +27081,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetGroupPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -27132,7 +27132,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetInstanceProfileError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -27183,7 +27183,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetLoginProfileError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -27234,7 +27234,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetOpenIDConnectProviderError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -27285,7 +27285,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -27336,7 +27336,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetPolicyVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -27384,7 +27384,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetRoleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -27435,7 +27435,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetRolePolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -27486,7 +27486,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetSAMLProviderError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -27537,7 +27537,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetSSHPublicKeyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -27588,7 +27588,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetServerCertificateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -27642,7 +27642,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetServiceLinkedRoleDeletionStatusError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -27692,7 +27692,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetUserError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -27743,7 +27743,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetUserPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -27794,7 +27794,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListAccessKeysError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -27845,7 +27845,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListAccountAliasesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -27896,7 +27896,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListAttachedGroupPoliciesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -27947,7 +27947,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListAttachedRolePoliciesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -27998,7 +27998,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListAttachedUserPoliciesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28049,7 +28049,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListEntitiesForPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28100,7 +28100,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListGroupPoliciesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28151,7 +28151,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListGroupsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28202,7 +28202,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListGroupsForUserError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28253,7 +28253,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListInstanceProfilesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28304,7 +28304,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListInstanceProfilesForRoleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28357,7 +28357,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListMFADevicesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28408,7 +28408,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListOpenIDConnectProvidersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28459,7 +28459,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListPoliciesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28510,7 +28510,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListPolicyVersionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28561,7 +28561,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListRolePoliciesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28612,7 +28612,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListRolesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28663,7 +28663,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListSAMLProvidersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28714,7 +28714,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListSSHPublicKeysError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28765,7 +28765,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListServerCertificatesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28817,7 +28817,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListServiceSpecificCredentialsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28870,7 +28870,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListSigningCertificatesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28921,7 +28921,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListUserPoliciesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28972,7 +28972,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListUsersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29023,7 +29023,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListVirtualMFADevicesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29074,7 +29074,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutGroupPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29099,7 +29099,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutRolePolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29124,7 +29124,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutUserPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29156,7 +29156,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RemoveClientIDFromOpenIDConnectProviderError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29184,7 +29184,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RemoveRoleFromInstanceProfileError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29212,7 +29212,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RemoveUserFromGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29241,7 +29241,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ResetServiceSpecificCredentialError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29294,7 +29294,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ResyncMFADeviceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29322,7 +29322,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SetDefaultPolicyVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29350,7 +29350,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SimulateCustomPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29401,7 +29401,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SimulatePrincipalPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29452,7 +29452,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateAccessKeyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29480,7 +29480,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateAccountPasswordPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29508,7 +29508,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateAssumeRolePolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29533,7 +29533,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29561,7 +29561,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateLoginProfileError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29589,7 +29589,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateOpenIDConnectProviderThumbprintError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29617,7 +29617,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateRoleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29668,7 +29668,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateRoleDescriptionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29719,7 +29719,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateSAMLProviderError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29770,7 +29770,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateSSHPublicKeyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29798,7 +29798,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateServerCertificateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29826,7 +29826,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateServiceSpecificCredentialError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29854,7 +29854,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateSigningCertificateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29879,7 +29879,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateUserError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29907,7 +29907,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UploadSSHPublicKeyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29958,7 +29958,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UploadServerCertificateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -30009,7 +30009,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UploadSigningCertificateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),

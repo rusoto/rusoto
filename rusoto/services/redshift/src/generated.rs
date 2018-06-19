@@ -17917,7 +17917,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AuthorizeClusterSecurityGroupIngressError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -17970,7 +17970,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AuthorizeSnapshotAccessError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18021,7 +18021,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CopyClusterSnapshotError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18072,7 +18072,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateClusterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18123,7 +18123,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateClusterParameterGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18174,7 +18174,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateClusterSecurityGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18225,7 +18225,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateClusterSnapshotError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18276,7 +18276,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateClusterSubnetGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18327,7 +18327,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateEventSubscriptionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18378,7 +18378,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateHsmClientCertificateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18429,7 +18429,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateHsmConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18480,7 +18480,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateSnapshotCopyGrantError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18528,7 +18528,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateTagsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18556,7 +18556,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteClusterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18607,7 +18607,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteClusterParameterGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18635,7 +18635,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteClusterSecurityGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18663,7 +18663,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteClusterSnapshotError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18714,7 +18714,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteClusterSubnetGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18742,7 +18742,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteEventSubscriptionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18770,7 +18770,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteHsmClientCertificateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18798,7 +18798,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteHsmConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18826,7 +18826,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteSnapshotCopyGrantError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18851,7 +18851,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteTagsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18879,7 +18879,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClusterParameterGroupsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18930,7 +18930,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClusterParametersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -18981,7 +18981,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClusterSecurityGroupsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -19032,7 +19032,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClusterSnapshotsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -19083,7 +19083,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClusterSubnetGroupsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -19134,7 +19134,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClusterVersionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -19185,7 +19185,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClustersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -19237,7 +19237,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDefaultClusterParametersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -19290,7 +19290,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEventCategoriesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -19341,7 +19341,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEventSubscriptionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -19392,7 +19392,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEventsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -19443,7 +19443,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeHsmClientCertificatesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -19494,7 +19494,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeHsmConfigurationsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -19545,7 +19545,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLoggingStatusError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -19596,7 +19596,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeOrderableClusterOptionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -19647,7 +19647,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReservedNodeOfferingsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -19698,7 +19698,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReservedNodesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -19749,7 +19749,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeResizeError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -19800,7 +19800,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSnapshotCopyGrantsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -19851,7 +19851,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeTableRestoreStatusError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -19902,7 +19902,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeTagsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -19953,7 +19953,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DisableLoggingError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -20004,7 +20004,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DisableSnapshotCopyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -20055,7 +20055,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(EnableLoggingError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -20106,7 +20106,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(EnableSnapshotCopyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -20157,7 +20157,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetClusterCredentialsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -20208,7 +20208,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyClusterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -20259,7 +20259,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyClusterIamRolesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -20310,7 +20310,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyClusterParameterGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -20361,7 +20361,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyClusterSubnetGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -20412,7 +20412,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyEventSubscriptionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -20464,7 +20464,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifySnapshotCopyRetentionPeriodError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -20517,7 +20517,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PurchaseReservedNodeOfferingError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -20568,7 +20568,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RebootClusterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -20619,7 +20619,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ResetClusterParameterGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -20670,7 +20670,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RestoreFromClusterSnapshotError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -20722,7 +20722,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RestoreTableFromClusterSnapshotError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -20776,7 +20776,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RevokeClusterSecurityGroupIngressError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -20829,7 +20829,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RevokeSnapshotAccessError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -20880,7 +20880,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RotateEncryptionKeyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),

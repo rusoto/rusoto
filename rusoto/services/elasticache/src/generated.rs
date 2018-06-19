@@ -12880,7 +12880,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AddTagsToResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -12934,7 +12934,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AuthorizeCacheSecurityGroupIngressError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -12987,7 +12987,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CopySnapshotError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13038,7 +13038,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateCacheClusterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13089,7 +13089,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateCacheParameterGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13140,7 +13140,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateCacheSecurityGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13191,7 +13191,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateCacheSubnetGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13242,7 +13242,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateReplicationGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13293,7 +13293,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateSnapshotError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13344,7 +13344,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteCacheClusterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13395,7 +13395,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteCacheParameterGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13423,7 +13423,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteCacheSecurityGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13451,7 +13451,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteCacheSubnetGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13479,7 +13479,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteReplicationGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13530,7 +13530,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteSnapshotError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13581,7 +13581,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeCacheClustersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13632,7 +13632,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeCacheEngineVersionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13683,7 +13683,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeCacheParameterGroupsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13734,7 +13734,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeCacheParametersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13785,7 +13785,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeCacheSecurityGroupsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13836,7 +13836,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeCacheSubnetGroupsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13888,7 +13888,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEngineDefaultParametersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13941,7 +13941,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEventsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13992,7 +13992,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReplicationGroupsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14043,7 +14043,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReservedCacheNodesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14095,7 +14095,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReservedCacheNodesOfferingsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14146,7 +14146,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSnapshotsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14198,7 +14198,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListAllowedNodeTypeModificationsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14251,7 +14251,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListTagsForResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14302,7 +14302,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyCacheClusterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14353,7 +14353,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyCacheParameterGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14404,7 +14404,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyCacheSubnetGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14455,7 +14455,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyReplicationGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14513,7 +14513,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyReplicationGroupShardConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14569,7 +14569,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PurchaseReservedCacheNodesOfferingError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14622,7 +14622,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RebootCacheClusterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14673,7 +14673,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RemoveTagsFromResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14724,7 +14724,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ResetCacheParameterGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14776,7 +14776,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RevokeCacheSecurityGroupIngressError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14829,7 +14829,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(TestFailoverError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),

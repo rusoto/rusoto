@@ -28058,7 +28058,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AddRoleToDBClusterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28087,7 +28087,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AddSourceIdentifierToSubscriptionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28140,7 +28140,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AddTagsToResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28168,7 +28168,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ApplyPendingMaintenanceActionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28222,7 +28222,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AuthorizeDBSecurityGroupIngressError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28275,7 +28275,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CopyDBClusterParameterGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28326,7 +28326,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CopyDBClusterSnapshotError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28377,7 +28377,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CopyDBParameterGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28428,7 +28428,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CopyDBSnapshotError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28479,7 +28479,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CopyOptionGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28530,7 +28530,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateDBClusterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28581,7 +28581,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateDBClusterParameterGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28634,7 +28634,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateDBClusterSnapshotError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28685,7 +28685,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateDBInstanceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28736,7 +28736,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateDBInstanceReadReplicaError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28787,7 +28787,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateDBParameterGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28838,7 +28838,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateDBSecurityGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28889,7 +28889,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateDBSnapshotError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28940,7 +28940,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateDBSubnetGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -28991,7 +28991,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateEventSubscriptionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29042,7 +29042,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateOptionGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29093,7 +29093,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDBClusterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29144,7 +29144,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDBClusterParameterGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29172,7 +29172,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDBClusterSnapshotError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29223,7 +29223,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDBInstanceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29274,7 +29274,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDBParameterGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29302,7 +29302,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDBSecurityGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29330,7 +29330,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDBSnapshotError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29381,7 +29381,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDBSubnetGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29409,7 +29409,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteEventSubscriptionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29460,7 +29460,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteOptionGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29488,7 +29488,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAccountAttributesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29539,7 +29539,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeCertificatesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29590,7 +29590,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBClusterParameterGroupsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29641,7 +29641,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBClusterParametersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29695,7 +29695,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBClusterSnapshotAttributesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29748,7 +29748,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBClusterSnapshotsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29799,7 +29799,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBClustersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29850,7 +29850,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBEngineVersionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29901,7 +29901,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBInstancesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -29952,7 +29952,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBLogFilesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -30003,7 +30003,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBParameterGroupsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -30054,7 +30054,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBParametersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -30105,7 +30105,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBSecurityGroupsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -30156,7 +30156,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBSnapshotAttributesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -30207,7 +30207,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBSnapshotsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -30258,7 +30258,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBSubnetGroupsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -30312,7 +30312,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEngineDefaultClusterParametersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -30366,7 +30366,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEngineDefaultParametersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -30419,7 +30419,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEventCategoriesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -30470,7 +30470,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEventSubscriptionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -30521,7 +30521,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEventsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -30572,7 +30572,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeOptionGroupOptionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -30623,7 +30623,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeOptionGroupsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -30675,7 +30675,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeOrderableDBInstanceOptionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -30727,7 +30727,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribePendingMaintenanceActionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -30778,7 +30778,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReservedDBInstancesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -30830,7 +30830,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReservedDBInstancesOfferingsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -30881,7 +30881,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSourceRegionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -30935,7 +30935,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeValidDBInstanceModificationsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -30988,7 +30988,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DownloadDBLogFilePortionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -31039,7 +31039,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(FailoverDBClusterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -31090,7 +31090,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListTagsForResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -31141,7 +31141,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyDBClusterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -31192,7 +31192,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyDBClusterParameterGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -31244,7 +31244,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyDBClusterSnapshotAttributeError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -31297,7 +31297,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyDBInstanceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -31348,7 +31348,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyDBParameterGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -31399,7 +31399,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyDBSnapshotError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -31450,7 +31450,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyDBSnapshotAttributeError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -31501,7 +31501,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyDBSubnetGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -31552,7 +31552,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyEventSubscriptionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -31603,7 +31603,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyOptionGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -31654,7 +31654,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PromoteReadReplicaError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -31705,7 +31705,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PromoteReadReplicaDBClusterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -31759,7 +31759,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PurchaseReservedDBInstancesOfferingError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -31812,7 +31812,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RebootDBInstanceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -31863,7 +31863,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RemoveRoleFromDBClusterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -31894,7 +31894,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RemoveSourceIdentifierFromSubscriptionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -31947,7 +31947,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RemoveTagsFromResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -31975,7 +31975,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ResetDBClusterParameterGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -32026,7 +32026,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ResetDBParameterGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -32077,7 +32077,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RestoreDBClusterFromS3Error::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -32128,7 +32128,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RestoreDBClusterFromSnapshotError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -32179,7 +32179,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RestoreDBClusterToPointInTimeError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -32233,7 +32233,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RestoreDBInstanceFromDBSnapshotError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -32286,7 +32286,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RestoreDBInstanceFromS3Error::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -32338,7 +32338,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RestoreDBInstanceToPointInTimeError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -32391,7 +32391,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RevokeDBSecurityGroupIngressError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -32442,7 +32442,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(StartDBInstanceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -32493,7 +32493,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(StopDBInstanceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),

@@ -101,7 +101,7 @@ impl <'b> Service <'b> {
 
         dependencies.insert("futures".to_owned(), cargo::Dependency::Simple("0.1.16".into()));
         dependencies.insert("tokio-core".to_owned(), cargo::Dependency::Simple("0.1.10".into()));
-        dependencies.insert("hyper".to_owned(), cargo::Dependency::Simple("0.11.0".into()));
+        dependencies.insert("hyper".to_owned(), cargo::Dependency::Simple("0.12.1".into()));
         dependencies.insert("rusoto_core".to_owned(), cargo::Dependency::Extended {
             path: Some("../../core".into()),
             version: Some(self.config.core_version.clone()),

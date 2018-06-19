@@ -3294,7 +3294,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3334,7 +3334,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3374,7 +3374,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3414,7 +3414,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3454,7 +3454,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3494,7 +3494,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3534,7 +3534,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3574,7 +3574,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3611,7 +3611,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3651,7 +3651,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3691,7 +3691,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3728,7 +3728,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3765,7 +3765,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3802,7 +3802,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3839,7 +3839,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3876,7 +3876,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3917,7 +3917,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3957,7 +3957,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3994,7 +3994,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -4034,7 +4034,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -4074,7 +4074,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -4114,7 +4114,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -4154,7 +4154,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -4191,7 +4191,7 @@ where
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status == StatusCode::OK {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 

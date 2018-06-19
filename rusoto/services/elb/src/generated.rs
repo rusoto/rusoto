@@ -8450,7 +8450,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AddTagsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8502,7 +8502,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ApplySecurityGroupsToLoadBalancerError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8555,7 +8555,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AttachLoadBalancerToSubnetsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8606,7 +8606,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ConfigureHealthCheckError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8658,7 +8658,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateAppCookieStickinessPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8712,7 +8712,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateLBCookieStickinessPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8765,7 +8765,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateLoadBalancerError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8816,7 +8816,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateLoadBalancerListenersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8867,7 +8867,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateLoadBalancerPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8918,7 +8918,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteLoadBalancerError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8969,7 +8969,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteLoadBalancerListenersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -9020,7 +9020,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteLoadBalancerPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -9071,7 +9071,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeregisterInstancesFromLoadBalancerError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -9122,7 +9122,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAccountLimitsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -9173,7 +9173,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeInstanceHealthError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -9225,7 +9225,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLoadBalancerAttributesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -9278,7 +9278,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLoadBalancerPoliciesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -9330,7 +9330,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLoadBalancerPolicyTypesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -9383,7 +9383,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLoadBalancersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -9434,7 +9434,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeTagsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -9485,7 +9485,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DetachLoadBalancerFromSubnetsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -9539,7 +9539,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DisableAvailabilityZonesForLoadBalancerError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -9590,7 +9590,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(EnableAvailabilityZonesForLoadBalancerError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -9641,7 +9641,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyLoadBalancerAttributesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -9692,7 +9692,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RegisterInstancesWithLoadBalancerError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -9743,7 +9743,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RemoveTagsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -9797,7 +9797,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SetLoadBalancerListenerSSLCertificateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -9853,7 +9853,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SetLoadBalancerPoliciesForBackendServerError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -9907,7 +9907,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SetLoadBalancerPoliciesOfListenerError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
