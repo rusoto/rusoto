@@ -15571,9 +15571,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AssociateVPCWithHostedZoneError::from_body(
@@ -15631,9 +15631,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ChangeResourceRecordSetsError::from_body(
@@ -15692,9 +15692,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ChangeTagsForResourceError::from_body(
@@ -15749,9 +15749,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateHealthCheckError::from_body(
@@ -15808,9 +15808,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateHostedZoneError::from_body(
@@ -15867,9 +15867,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateQueryLoggingConfigError::from_body(
@@ -15926,9 +15926,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateReusableDelegationSetError::from_body(
@@ -15987,9 +15987,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateTrafficPolicyError::from_body(
@@ -16046,9 +16046,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateTrafficPolicyInstanceError::from_body(
@@ -16107,9 +16107,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateTrafficPolicyVersionError::from_body(
@@ -16172,9 +16172,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateVPCAssociationAuthorizationError::from_body(
@@ -16225,9 +16225,9 @@ where
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteHealthCheckError::from_body(
@@ -16273,9 +16273,9 @@ where
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteHostedZoneError::from_body(
@@ -16321,9 +16321,9 @@ where
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteQueryLoggingConfigError::from_body(
@@ -16369,9 +16369,9 @@ where
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteReusableDelegationSetError::from_body(
@@ -16423,9 +16423,9 @@ where
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteTrafficPolicyError::from_body(
@@ -16471,9 +16471,9 @@ where
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteTrafficPolicyInstanceError::from_body(
@@ -16536,9 +16536,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteVPCAssociationAuthorizationError::from_body(
@@ -16599,9 +16599,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DisassociateVPCFromHostedZoneError::from_body(
@@ -16649,9 +16649,9 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetAccountLimitError::from_body(
@@ -16697,9 +16697,9 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetChangeError::from_body(
@@ -16745,9 +16745,9 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetCheckerIpRangesError::from_body(
@@ -16805,9 +16805,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetGeoLocationError::from_body(
@@ -16856,9 +16856,9 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetHealthCheckError::from_body(
@@ -16904,9 +16904,9 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetHealthCheckCountError::from_body(
@@ -16956,9 +16956,9 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetHealthCheckLastFailureReasonError::from_body(
@@ -17009,9 +17009,9 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetHealthCheckStatusError::from_body(
@@ -17057,9 +17057,9 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetHostedZoneError::from_body(
@@ -17105,9 +17105,9 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetHostedZoneCountError::from_body(
@@ -17153,9 +17153,9 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetHostedZoneLimitError::from_body(
@@ -17201,9 +17201,9 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetQueryLoggingConfigError::from_body(
@@ -17249,9 +17249,9 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetReusableDelegationSetError::from_body(
@@ -17298,9 +17298,9 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetReusableDelegationSetLimitError::from_body(
@@ -17352,9 +17352,9 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetTrafficPolicyError::from_body(
@@ -17400,9 +17400,9 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetTrafficPolicyInstanceError::from_body(
@@ -17449,9 +17449,9 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetTrafficPolicyInstanceCountError::from_body(
@@ -17514,9 +17514,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListGeoLocationsError::from_body(
@@ -17571,9 +17571,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListHealthChecksError::from_body(
@@ -17631,9 +17631,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListHostedZonesError::from_body(
@@ -17691,9 +17691,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListHostedZonesByNameError::from_body(
@@ -17751,9 +17751,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListQueryLoggingConfigsError::from_body(
@@ -17817,9 +17817,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListResourceRecordSetsError::from_body(
@@ -17874,9 +17874,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListReusableDelegationSetsError::from_body(
@@ -17926,9 +17926,9 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListTagsForResourceError::from_body(
@@ -17986,9 +17986,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListTagsForResourcesError::from_body(
@@ -18043,9 +18043,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListTrafficPoliciesError::from_body(
@@ -18106,9 +18106,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListTrafficPolicyInstancesError::from_body(
@@ -18170,9 +18170,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListTrafficPolicyInstancesByHostedZoneError::from_body(
@@ -18240,9 +18240,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListTrafficPolicyInstancesByPolicyError::from_body(
@@ -18299,9 +18299,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListTrafficPolicyVersionsError::from_body(
@@ -18360,9 +18360,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListVPCAssociationAuthorizationsError::from_body(
@@ -18425,9 +18425,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(TestDNSAnswerError::from_body(
@@ -18485,9 +18485,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateHealthCheckError::from_body(
@@ -18542,9 +18542,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateHostedZoneCommentError::from_body(
@@ -18603,9 +18603,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateTrafficPolicyCommentError::from_body(
@@ -18660,9 +18660,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateTrafficPolicyInstanceError::from_body(

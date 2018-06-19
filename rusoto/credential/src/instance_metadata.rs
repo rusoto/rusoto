@@ -4,7 +4,7 @@ use std::time::Duration;
 
 use futures::{Future, Poll};
 use futures::future::{FutureResult, result};
-use hyper::{Uri, Request, Method};
+use hyper::{Uri, Request, Body};
 use tokio_core::reactor::Handle;
 
 use {AwsCredentials, CredentialsError, ProvideAwsCredentials,
@@ -125,8 +125,15 @@ fn get_role_name(client: &HttpClient, timeout: Duration) -> Result<HttpClientFut
         AWS_CREDENTIALS_PROVIDER_IP,
         AWS_CREDENTIALS_PROVIDER_PATH
     );
-    let uri = role_name_address.parse::<Uri>()?;
-    Ok(client.request(Request::new(Method::Get, uri), timeout))
+    let uri = match role_name_address.parse::<Uri>() {
+        Err(e) => return Err(CredentialsError::new(format!("{}", e))),
+        Ok(v)  => v,
+    };
+
+    match Request::get(uri).body(Body::empty()) {
+        Err(e) => Err(CredentialsError::new(format!("{}", e))),
+        Ok(v)  => Ok(client.request(v, timeout))
+    }
 }
 
 /// Gets the credentials for an EC2 Instances IAM Role.
@@ -142,6 +149,13 @@ fn get_credentials_from_role(
         role_name
     );
 
-    let uri = credentials_provider_url.parse::<Uri>()?;
-    Ok(client.request(Request::new(Method::Get, uri), timeout))
+    let uri = match credentials_provider_url.parse::<Uri>() {
+        Err(e) => return Err(CredentialsError::new(format!("{}", e))),
+        Ok(v)  => v,
+    };
+
+    match Request::get(uri).body(Body::empty()) {
+        Err(e) => Err(CredentialsError::new(format!("{}", e))),
+        Ok(v)  => Ok(client.request(v, timeout))
+    }
 }

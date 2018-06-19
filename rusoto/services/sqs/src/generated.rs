@@ -4207,7 +4207,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AddPermissionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -4235,7 +4235,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ChangeMessageVisibilityError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -4263,7 +4263,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ChangeMessageVisibilityBatchError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -4314,7 +4314,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateQueueError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -4362,7 +4362,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteMessageError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -4390,7 +4390,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteMessageBatchError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -4438,7 +4438,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteQueueError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -4466,7 +4466,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetQueueAttributesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -4517,7 +4517,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetQueueUrlError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -4568,7 +4568,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListDeadLetterSourceQueuesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -4619,7 +4619,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListQueueTagsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -4670,7 +4670,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListQueuesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -4718,7 +4718,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PurgeQueueError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -4746,7 +4746,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ReceiveMessageError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -4797,7 +4797,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RemovePermissionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -4825,7 +4825,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SendMessageError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -4876,7 +4876,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SendMessageBatchError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -4927,7 +4927,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SetQueueAttributesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -4952,7 +4952,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(TagQueueError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -4977,7 +4977,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UntagQueueError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),

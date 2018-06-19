@@ -5016,7 +5016,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteAlarmsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -5044,7 +5044,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDashboardsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -5095,7 +5095,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAlarmHistoryError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -5146,7 +5146,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAlarmsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -5197,7 +5197,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAlarmsForMetricError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -5248,7 +5248,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DisableAlarmActionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -5276,7 +5276,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(EnableAlarmActionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -5304,7 +5304,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetDashboardError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -5355,7 +5355,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetMetricDataError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -5406,7 +5406,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetMetricStatisticsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -5457,7 +5457,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListDashboardsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -5508,7 +5508,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListMetricsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -5559,7 +5559,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutDashboardError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -5610,7 +5610,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutMetricAlarmError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -5635,7 +5635,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutMetricDataError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -5660,7 +5660,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SetAlarmStateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),

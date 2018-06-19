@@ -22315,9 +22315,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AbortMultipartUploadError::from_body(
@@ -22385,9 +22385,9 @@ where
         }
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CompleteMultipartUploadError::from_body(
@@ -22623,9 +22623,9 @@ where
         }
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CopyObjectError::from_body(
@@ -22752,9 +22752,9 @@ where
         }
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateBucketError::from_body(
@@ -22912,9 +22912,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateMultipartUploadError::from_body(
@@ -22996,9 +22996,9 @@ where
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketError::from_body(
@@ -23029,9 +23029,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketAnalyticsConfigurationError::from_body(
@@ -23061,9 +23061,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketCorsError::from_body(
@@ -23093,9 +23093,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketEncryptionError::from_body(
@@ -23126,9 +23126,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketInventoryConfigurationError::from_body(
@@ -23158,9 +23158,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketLifecycleError::from_body(
@@ -23191,9 +23191,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketMetricsConfigurationError::from_body(
@@ -23223,9 +23223,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketPolicyError::from_body(
@@ -23255,9 +23255,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketReplicationError::from_body(
@@ -23287,9 +23287,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketTaggingError::from_body(
@@ -23319,9 +23319,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketWebsiteError::from_body(
@@ -23360,9 +23360,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteObjectError::from_body(
@@ -23427,9 +23427,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteObjectTaggingError::from_body(
@@ -23494,9 +23494,9 @@ where
         request.set_content_md5_header();
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteObjectsError::from_body(
@@ -23551,9 +23551,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketAccelerateConfigurationError::from_body(
@@ -23605,9 +23605,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketAclError::from_body(
@@ -23659,9 +23659,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketAnalyticsConfigurationError::from_body(
@@ -23713,9 +23713,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketCorsError::from_body(
@@ -23765,9 +23765,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketEncryptionError::from_body(
@@ -23819,9 +23819,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketInventoryConfigurationError::from_body(
@@ -23873,9 +23873,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketLifecycleError::from_body(
@@ -23926,9 +23926,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketLifecycleConfigurationError::from_body(
@@ -23980,9 +23980,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketLocationError::from_body(
@@ -24032,9 +24032,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketLoggingError::from_body(
@@ -24085,9 +24085,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketMetricsConfigurationError::from_body(
@@ -24139,9 +24139,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketNotificationError::from_body(
@@ -24193,9 +24193,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketNotificationConfigurationError::from_body(
@@ -24245,9 +24245,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketPolicyError::from_body(
@@ -24282,9 +24282,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketReplicationError::from_body(
@@ -24334,9 +24334,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketRequestPaymentError::from_body(
@@ -24386,9 +24386,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketTaggingError::from_body(
@@ -24438,9 +24438,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketVersioningError::from_body(
@@ -24490,9 +24490,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketWebsiteError::from_body(
@@ -24606,9 +24606,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetObjectError::from_body(
@@ -24773,9 +24773,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetObjectAclError::from_body(
@@ -24832,9 +24832,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetObjectTaggingError::from_body(
@@ -24891,9 +24891,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetObjectTorrentError::from_body(
@@ -24925,9 +24925,9 @@ where
         let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(HeadBucketError::from_body(
@@ -25006,9 +25006,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(HeadObjectError::from_body(
@@ -25178,9 +25178,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListBucketAnalyticsConfigurationsError::from_body(
@@ -25236,9 +25236,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListBucketInventoryConfigurationsError::from_body(
@@ -25294,9 +25294,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListBucketMetricsConfigurationsError::from_body(
@@ -25341,9 +25341,9 @@ where
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListBucketsError::from_body(
@@ -25411,9 +25411,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListMultipartUploadsError::from_body(
@@ -25481,9 +25481,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListObjectVersionsError::from_body(
@@ -25550,9 +25550,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListObjectsError::from_body(
@@ -25626,9 +25626,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListObjectsV2Error::from_body(
@@ -25684,9 +25684,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListPartsError::from_body(
@@ -25755,9 +25755,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketAccelerateConfigurationError::from_body(
@@ -25822,9 +25822,9 @@ where
         }
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketAclError::from_body(
@@ -25862,9 +25862,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketAnalyticsConfigurationError::from_body(
@@ -25902,9 +25902,9 @@ where
         request.set_content_md5_header();
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketCorsError::from_body(
@@ -25944,9 +25944,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketEncryptionError::from_body(
@@ -25984,9 +25984,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketInventoryConfigurationError::from_body(
@@ -26031,9 +26031,9 @@ where
         request.set_content_md5_header();
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketLifecycleError::from_body(
@@ -26075,9 +26075,9 @@ where
         request.set_content_md5_header();
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketLifecycleConfigurationError::from_body(
@@ -26117,9 +26117,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketLoggingError::from_body(
@@ -26157,9 +26157,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketMetricsConfigurationError::from_body(
@@ -26199,9 +26199,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketNotificationError::from_body(
@@ -26238,9 +26238,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketNotificationConfigurationError::from_body(
@@ -26284,9 +26284,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketPolicyError::from_body(
@@ -26327,9 +26327,9 @@ where
         request.set_content_md5_header();
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketReplicationError::from_body(
@@ -26369,9 +26369,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketRequestPaymentError::from_body(
@@ -26408,9 +26408,9 @@ where
         request.set_content_md5_header();
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketTaggingError::from_body(
@@ -26454,9 +26454,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketVersioningError::from_body(
@@ -26496,9 +26496,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketWebsiteError::from_body(
@@ -26638,9 +26638,9 @@ where
         }
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutObjectError::from_body(
@@ -26778,9 +26778,9 @@ where
         }
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutObjectAclError::from_body(
@@ -26843,9 +26843,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutObjectTaggingError::from_body(
@@ -26916,9 +26916,9 @@ where
         }
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RestoreObjectError::from_body(
@@ -27005,9 +27005,9 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SelectObjectContentError::from_body(
@@ -27093,9 +27093,9 @@ where
         }
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UploadPartError::from_body(
@@ -27262,9 +27262,9 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
+            if response.status != StatusCode::OK
+                && response.status != StatusCode::NO_CONTENT
+                && response.status != StatusCode::PARTIAL_CONTENT
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UploadPartCopyError::from_body(

@@ -40,7 +40,7 @@ pub struct MockRequestDispatcher {
 impl MockRequestDispatcher {
     pub fn with_status(status: u16) -> MockRequestDispatcher {
         MockRequestDispatcher {
-            status: StatusCode::try_from(status).unwrap(),
+            status: StatusCode::from_u16(status).unwrap(),
             body: b"".to_vec(),
             headers: HashMap::new(),
             request_checker: None,

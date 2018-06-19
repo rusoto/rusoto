@@ -7912,7 +7912,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(BuildSuggestersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -7963,7 +7963,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateDomainError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8014,7 +8014,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DefineAnalysisSchemeError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8065,7 +8065,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DefineExpressionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8116,7 +8116,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DefineIndexFieldError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8167,7 +8167,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DefineSuggesterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8218,7 +8218,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteAnalysisSchemeError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8269,7 +8269,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDomainError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8320,7 +8320,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteExpressionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8371,7 +8371,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteIndexFieldError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8422,7 +8422,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteSuggesterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8473,7 +8473,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAnalysisSchemesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8524,7 +8524,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAvailabilityOptionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8577,7 +8577,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDomainsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8628,7 +8628,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeExpressionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8679,7 +8679,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeIndexFieldsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8730,7 +8730,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeScalingParametersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8782,7 +8782,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeServiceAccessPoliciesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8835,7 +8835,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSuggestersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8886,7 +8886,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(IndexDocumentsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8934,7 +8934,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListDomainNamesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -8985,7 +8985,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateAvailabilityOptionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -9036,7 +9036,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateScalingParametersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -9087,7 +9087,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateServiceAccessPoliciesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),

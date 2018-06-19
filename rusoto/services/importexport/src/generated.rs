@@ -2100,7 +2100,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CancelJobError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -2153,7 +2153,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateJobError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -2209,7 +2209,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetShippingLabelError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -2262,7 +2262,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetStatusError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -2311,7 +2311,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListJobsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -2364,7 +2364,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateJobError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),

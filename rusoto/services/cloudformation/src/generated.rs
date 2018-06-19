@@ -12621,7 +12621,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CancelUpdateStackError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -12649,7 +12649,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ContinueUpdateRollbackError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -12700,7 +12700,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateChangeSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -12751,7 +12751,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateStackError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -12802,7 +12802,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateStackInstancesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -12853,7 +12853,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateStackSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -12904,7 +12904,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteChangeSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -12952,7 +12952,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteStackError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -12980,7 +12980,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteStackInstancesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13031,7 +13031,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteStackSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13082,7 +13082,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAccountLimitsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13133,7 +13133,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeChangeSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13184,7 +13184,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeStackEventsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13235,7 +13235,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeStackInstanceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13286,7 +13286,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeStackResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13337,7 +13337,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeStackResourcesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13388,7 +13388,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeStackSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13439,7 +13439,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeStackSetOperationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13490,7 +13490,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeStacksError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13541,7 +13541,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(EstimateTemplateCostError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13592,7 +13592,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ExecuteChangeSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13643,7 +13643,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetStackPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13694,7 +13694,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetTemplateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13745,7 +13745,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetTemplateSummaryError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13796,7 +13796,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListChangeSetsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13847,7 +13847,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListExportsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13898,7 +13898,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListImportsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -13949,7 +13949,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListStackInstancesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14000,7 +14000,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListStackResourcesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14051,7 +14051,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListStackSetOperationResultsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14102,7 +14102,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListStackSetOperationsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14153,7 +14153,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListStackSetsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14204,7 +14204,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListStacksError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14255,7 +14255,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SetStackPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14280,7 +14280,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SignalResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14308,7 +14308,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(StopStackSetOperationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14359,7 +14359,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateStackError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14410,7 +14410,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateStackInstancesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14461,7 +14461,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateStackSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14512,7 +14512,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateTerminationProtectionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -14563,7 +14563,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ValidateTemplateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),

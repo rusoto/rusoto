@@ -45,7 +45,6 @@ use chrono::{DateTime, Duration as ChronoDuration, ParseError, Utc};
 use futures::{Async, Future, Poll};
 use futures::future::{err, Either, Shared, SharedItem};
 use hyper::Error as HyperError;
-use hyper::error::UriError;
 use serde_json::{from_str as json_from_str, Value};
 use tokio_core::reactor::Handle;
 
@@ -180,12 +179,6 @@ impl From<ParseError> for CredentialsError {
 
 impl From<IoError> for CredentialsError {
     fn from(err: IoError) -> CredentialsError {
-        CredentialsError::new(err.description())
-    }
-}
-
-impl From<UriError> for CredentialsError {
-    fn from(err: UriError) -> CredentialsError {
         CredentialsError::new(err.description())
     }
 }

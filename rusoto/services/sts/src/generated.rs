@@ -1956,7 +1956,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AssumeRoleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -2007,7 +2007,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AssumeRoleWithSAMLError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -2058,7 +2058,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AssumeRoleWithWebIdentityError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -2109,7 +2109,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DecodeAuthorizationMessageError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -2160,7 +2160,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetCallerIdentityError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -2211,7 +2211,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetFederationTokenError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
@@ -2262,7 +2262,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
+            if response.status != StatusCode::OK {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetSessionTokenError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
