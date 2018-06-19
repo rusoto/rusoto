@@ -6,13 +6,13 @@ use super::client_inner::ClientInnerFuture;
 
 /// Future that is returned from all rusoto service APIs.
 pub struct RusotoFuture<T, E> {
-    inner: Box<ClientInnerFuture<Item=T, Error=E>>
+    inner: Box<ClientInnerFuture<Item=T, Error=E> + Send>
 }
 
 impl<T, E> RusotoFuture<T, E> {
     #[doc(hidden)]
     pub fn new<F>(future: F) -> RusotoFuture<T, E>
-        where F: ClientInnerFuture<Item=T, Error=E> + 'static
+        where F: ClientInnerFuture<Item=T, Error=E> + 'static + Send
     {
         RusotoFuture { inner: Box::new(future) }
     }

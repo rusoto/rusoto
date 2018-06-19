@@ -62,6 +62,13 @@ impl<P, D, F> ClientInnerFuture for SignAndDispatch<P, D, F>
     }
 }
 
+unsafe impl<P, D, F> Send for SignAndDispatch<P, D, F>
+    where P: ProvideAwsCredentials,
+          D: DispatchSignedRequest,
+          F: IntoFuture,
+          F::Error: From<HttpDispatchError> + From<CredentialsError>
+{}
+
 enum SignAndDispatchState<P: ProvideAwsCredentials, D: DispatchSignedRequest, F: IntoFuture> {
     Lazy { request: SignedRequest },
     FetchingCredentials { future: P::Future, request: SignedRequest },

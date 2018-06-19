@@ -153,6 +153,7 @@ impl HttpResponse {
     }
 }
 
+unsafe impl Send for BufferedHttpResponseFuture {}
 
 #[derive(Debug, PartialEq)]
 /// An error produced when invalid request types are sent.
