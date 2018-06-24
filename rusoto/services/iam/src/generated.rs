@@ -411,13 +411,10 @@ impl AddClientIDToOpenIDConnectProviderRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "ClientID"),
-            &obj.client_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ClientID"), &obj.client_id);
         params.put(
             &format!("{}{}", prefix, "OpenIDConnectProviderArn"),
-            &obj.open_id_connect_provider_arn.replace("+", "%2B"),
+            &obj.open_id_connect_provider_arn,
         );
     }
 }
@@ -441,12 +438,9 @@ impl AddRoleToInstanceProfileRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "InstanceProfileName"),
-            &obj.instance_profile_name.replace("+", "%2B"),
+            &obj.instance_profile_name,
         );
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -467,14 +461,8 @@ impl AddUserToGroupRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -549,14 +537,8 @@ impl AttachGroupPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
     }
 }
 
@@ -577,14 +559,8 @@ impl AttachRolePolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -605,14 +581,8 @@ impl AttachUserPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -869,14 +839,8 @@ impl ChangePasswordRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "NewPassword"),
-            &obj.new_password.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "OldPassword"),
-            &obj.old_password.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "NewPassword"), &obj.new_password);
+        params.put(&format!("{}{}", prefix, "OldPassword"), &obj.old_password);
     }
 }
 
@@ -981,16 +945,10 @@ impl ContextEntrySerializer {
         }
 
         if let Some(ref field_value) = obj.context_key_name {
-            params.put(
-                &format!("{}{}", prefix, "ContextKeyName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ContextKeyName"), &field_value);
         }
         if let Some(ref field_value) = obj.context_key_type {
-            params.put(
-                &format!("{}{}", prefix, "ContextKeyType"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ContextKeyType"), &field_value);
         }
         if let Some(ref field_value) = obj.context_key_values {
             ContextKeyValueListTypeSerializer::serialize(
@@ -1097,10 +1055,7 @@ impl CreateAccessKeyRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -1167,10 +1122,7 @@ impl CreateAccountAliasRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "AccountAlias"),
-            &obj.account_alias.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "AccountAlias"), &obj.account_alias);
     }
 }
 
@@ -1191,15 +1143,9 @@ impl CreateGroupRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
         if let Some(ref field_value) = obj.path {
-            params.put(
-                &format!("{}{}", prefix, "Path"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Path"), &field_value);
         }
     }
 }
@@ -1269,13 +1215,10 @@ impl CreateInstanceProfileRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "InstanceProfileName"),
-            &obj.instance_profile_name.replace("+", "%2B"),
+            &obj.instance_profile_name,
         );
         if let Some(ref field_value) = obj.path {
-            params.put(
-                &format!("{}{}", prefix, "Path"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Path"), &field_value);
         }
     }
 }
@@ -1348,20 +1291,14 @@ impl CreateLoginProfileRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Password"),
-            &obj.password.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Password"), &obj.password);
         if let Some(ref field_value) = obj.password_reset_required {
             params.put(
                 &format!("{}{}", prefix, "PasswordResetRequired"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -1443,10 +1380,7 @@ impl CreateOpenIDConnectProviderRequestSerializer {
             &format!("{}{}", prefix, "ThumbprintList"),
             &obj.thumbprint_list,
         );
-        params.put(
-            &format!("{}{}", prefix, "Url"),
-            &obj.url.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Url"), &obj.url);
     }
 }
 
@@ -1520,25 +1454,16 @@ impl CreatePolicyRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.description {
-            params.put(
-                &format!("{}{}", prefix, "Description"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.path {
-            params.put(
-                &format!("{}{}", prefix, "Path"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Path"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "PolicyDocument"),
-            &obj.policy_document.replace("+", "%2B"),
+            &obj.policy_document,
         );
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
     }
 }
 
@@ -1607,18 +1532,15 @@ impl CreatePolicyVersionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
         params.put(
             &format!("{}{}", prefix, "PolicyDocument"),
-            &obj.policy_document.replace("+", "%2B"),
+            &obj.policy_document,
         );
         if let Some(ref field_value) = obj.set_as_default {
             params.put(
                 &format!("{}{}", prefix, "SetAsDefault"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -1698,30 +1620,21 @@ impl CreateRoleRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AssumeRolePolicyDocument"),
-            &obj.assume_role_policy_document.replace("+", "%2B"),
+            &obj.assume_role_policy_document,
         );
         if let Some(ref field_value) = obj.description {
-            params.put(
-                &format!("{}{}", prefix, "Description"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.max_session_duration {
             params.put(
                 &format!("{}{}", prefix, "MaxSessionDuration"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path {
-            params.put(
-                &format!("{}{}", prefix, "Path"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Path"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -1788,13 +1701,10 @@ impl CreateSAMLProviderRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Name"),
-            &obj.name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
         params.put(
             &format!("{}{}", prefix, "SAMLMetadataDocument"),
-            &obj.saml_metadata_document.replace("+", "%2B"),
+            &obj.saml_metadata_document,
         );
     }
 }
@@ -1869,19 +1779,13 @@ impl CreateServiceLinkedRoleRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AWSServiceName"),
-            &obj.aws_service_name.replace("+", "%2B"),
+            &obj.aws_service_name,
         );
         if let Some(ref field_value) = obj.custom_suffix {
-            params.put(
-                &format!("{}{}", prefix, "CustomSuffix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "CustomSuffix"), &field_value);
         }
         if let Some(ref field_value) = obj.description {
-            params.put(
-                &format!("{}{}", prefix, "Description"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
     }
 }
@@ -1948,14 +1852,8 @@ impl CreateServiceSpecificCredentialRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "ServiceName"),
-            &obj.service_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ServiceName"), &obj.service_name);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -2026,15 +1924,9 @@ impl CreateUserRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.path {
-            params.put(
-                &format!("{}{}", prefix, "Path"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Path"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -2102,14 +1994,11 @@ impl CreateVirtualMFADeviceRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.path {
-            params.put(
-                &format!("{}{}", prefix, "Path"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Path"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "VirtualMFADeviceName"),
-            &obj.virtual_mfa_device_name.replace("+", "%2B"),
+            &obj.virtual_mfa_device_name,
         );
     }
 }
@@ -2194,14 +2083,8 @@ impl DeactivateMFADeviceRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "SerialNumber"),
-            &obj.serial_number.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "SerialNumber"), &obj.serial_number);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -2222,15 +2105,9 @@ impl DeleteAccessKeyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "AccessKeyId"),
-            &obj.access_key_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "AccessKeyId"), &obj.access_key_id);
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -2250,10 +2127,7 @@ impl DeleteAccountAliasRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "AccountAlias"),
-            &obj.account_alias.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "AccountAlias"), &obj.account_alias);
     }
 }
 
@@ -2274,14 +2148,8 @@ impl DeleteGroupPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
     }
 }
 
@@ -2300,10 +2168,7 @@ impl DeleteGroupRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
     }
 }
 
@@ -2324,7 +2189,7 @@ impl DeleteInstanceProfileRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "InstanceProfileName"),
-            &obj.instance_profile_name.replace("+", "%2B"),
+            &obj.instance_profile_name,
         );
     }
 }
@@ -2344,10 +2209,7 @@ impl DeleteLoginProfileRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -2368,7 +2230,7 @@ impl DeleteOpenIDConnectProviderRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "OpenIDConnectProviderArn"),
-            &obj.open_id_connect_provider_arn.replace("+", "%2B"),
+            &obj.open_id_connect_provider_arn,
         );
     }
 }
@@ -2388,10 +2250,7 @@ impl DeletePolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
     }
 }
 
@@ -2412,14 +2271,8 @@ impl DeletePolicyVersionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "VersionId"),
-            &obj.version_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        params.put(&format!("{}{}", prefix, "VersionId"), &obj.version_id);
     }
 }
 
@@ -2440,14 +2293,8 @@ impl DeleteRolePolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -2466,10 +2313,7 @@ impl DeleteRoleRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -2490,7 +2334,7 @@ impl DeleteSAMLProviderRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SAMLProviderArn"),
-            &obj.saml_provider_arn.replace("+", "%2B"),
+            &obj.saml_provider_arn,
         );
     }
 }
@@ -2514,12 +2358,9 @@ impl DeleteSSHPublicKeyRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SSHPublicKeyId"),
-            &obj.ssh_public_key_id.replace("+", "%2B"),
+            &obj.ssh_public_key_id,
         );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -2540,7 +2381,7 @@ impl DeleteServerCertificateRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ServerCertificateName"),
-            &obj.server_certificate_name.replace("+", "%2B"),
+            &obj.server_certificate_name,
         );
     }
 }
@@ -2560,10 +2401,7 @@ impl DeleteServiceLinkedRoleRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -2634,13 +2472,10 @@ impl DeleteServiceSpecificCredentialRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ServiceSpecificCredentialId"),
-            &obj.service_specific_credential_id.replace("+", "%2B"),
+            &obj.service_specific_credential_id,
         );
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -2664,13 +2499,10 @@ impl DeleteSigningCertificateRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CertificateId"),
-            &obj.certificate_id.replace("+", "%2B"),
+            &obj.certificate_id,
         );
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -2692,14 +2524,8 @@ impl DeleteUserPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -2718,10 +2544,7 @@ impl DeleteUserRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -2740,10 +2563,7 @@ impl DeleteVirtualMFADeviceRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "SerialNumber"),
-            &obj.serial_number.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "SerialNumber"), &obj.serial_number);
     }
 }
 
@@ -2846,14 +2666,8 @@ impl DetachGroupPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
     }
 }
 
@@ -2874,14 +2688,8 @@ impl DetachRolePolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -2902,14 +2710,8 @@ impl DetachUserPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -2936,20 +2738,14 @@ impl EnableMFADeviceRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AuthenticationCode1"),
-            &obj.authentication_code_1.replace("+", "%2B"),
+            &obj.authentication_code_1,
         );
         params.put(
             &format!("{}{}", prefix, "AuthenticationCode2"),
-            &obj.authentication_code_2.replace("+", "%2B"),
+            &obj.authentication_code_2,
         );
-        params.put(
-            &format!("{}{}", prefix, "SerialNumber"),
-            &obj.serial_number.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "SerialNumber"), &obj.serial_number);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -3243,10 +3039,7 @@ impl GetAccessKeyLastUsedRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "AccessKeyId"),
-            &obj.access_key_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "AccessKeyId"), &obj.access_key_id);
     }
 }
 
@@ -3332,15 +3125,12 @@ impl GetAccountAuthorizationDetailsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -3627,7 +3417,7 @@ impl GetContextKeysForPrincipalPolicyRequestSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "PolicySourceArn"),
-            &obj.policy_source_arn.replace("+", "%2B"),
+            &obj.policy_source_arn,
         );
     }
 }
@@ -3713,14 +3503,8 @@ impl GetGroupPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
     }
 }
 
@@ -3804,20 +3588,14 @@ impl GetGroupRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -3905,7 +3683,7 @@ impl GetInstanceProfileRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "InstanceProfileName"),
-            &obj.instance_profile_name.replace("+", "%2B"),
+            &obj.instance_profile_name,
         );
     }
 }
@@ -3974,10 +3752,7 @@ impl GetLoginProfileRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -4045,7 +3820,7 @@ impl GetOpenIDConnectProviderRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "OpenIDConnectProviderArn"),
-            &obj.open_id_connect_provider_arn.replace("+", "%2B"),
+            &obj.open_id_connect_provider_arn,
         );
     }
 }
@@ -4134,10 +3909,7 @@ impl GetPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
     }
 }
 
@@ -4204,14 +3976,8 @@ impl GetPolicyVersionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "VersionId"),
-            &obj.version_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        params.put(&format!("{}{}", prefix, "VersionId"), &obj.version_id);
     }
 }
 
@@ -4281,14 +4047,8 @@ impl GetRolePolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -4368,10 +4128,7 @@ impl GetRoleRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -4438,7 +4195,7 @@ impl GetSAMLProviderRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SAMLProviderArn"),
-            &obj.saml_provider_arn.replace("+", "%2B"),
+            &obj.saml_provider_arn,
         );
     }
 }
@@ -4524,18 +4281,12 @@ impl GetSSHPublicKeyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Encoding"),
-            &obj.encoding.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Encoding"), &obj.encoding);
         params.put(
             &format!("{}{}", prefix, "SSHPublicKeyId"),
-            &obj.ssh_public_key_id.replace("+", "%2B"),
+            &obj.ssh_public_key_id,
         );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -4605,7 +4356,7 @@ impl GetServerCertificateRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ServerCertificateName"),
-            &obj.server_certificate_name.replace("+", "%2B"),
+            &obj.server_certificate_name,
         );
     }
 }
@@ -4676,7 +4427,7 @@ impl GetServiceLinkedRoleDeletionStatusRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "DeletionTaskId"),
-            &obj.deletion_task_id.replace("+", "%2B"),
+            &obj.deletion_task_id,
         );
     }
 }
@@ -4752,14 +4503,8 @@ impl GetUserPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -4841,10 +4586,7 @@ impl GetUserRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -5366,22 +5108,16 @@ impl ListAccessKeysRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -5468,15 +5204,12 @@ impl ListAccountAliasesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -5566,27 +5299,18 @@ impl ListAttachedGroupPoliciesRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(
-                &format!("{}{}", prefix, "PathPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
         }
     }
 }
@@ -5677,27 +5401,18 @@ impl ListAttachedRolePoliciesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(
-                &format!("{}{}", prefix, "PathPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -5787,27 +5502,18 @@ impl ListAttachedUserPoliciesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(
-                &format!("{}{}", prefix, "PathPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -5899,33 +5605,21 @@ impl ListEntitiesForPolicyRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.entity_filter {
-            params.put(
-                &format!("{}{}", prefix, "EntityFilter"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EntityFilter"), &field_value);
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(
-                &format!("{}{}", prefix, "PathPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
     }
 }
 
@@ -6026,20 +5720,14 @@ impl ListGroupPoliciesRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -6128,21 +5816,15 @@ impl ListGroupsForUserRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -6226,22 +5908,16 @@ impl ListGroupsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(
-                &format!("{}{}", prefix, "PathPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
         }
     }
 }
@@ -6326,21 +6002,15 @@ impl ListInstanceProfilesForRoleRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -6428,22 +6098,16 @@ impl ListInstanceProfilesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(
-                &format!("{}{}", prefix, "PathPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
         }
     }
 }
@@ -6532,22 +6196,16 @@ impl ListMFADevicesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -6704,34 +6362,25 @@ impl ListPoliciesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.only_attached {
             params.put(
                 &format!("{}{}", prefix, "OnlyAttached"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(
-                &format!("{}{}", prefix, "PathPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
         }
         if let Some(ref field_value) = obj.scope {
-            params.put(
-                &format!("{}{}", prefix, "Scope"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Scope"), &field_value);
         }
     }
 }
@@ -6818,21 +6467,15 @@ impl ListPolicyVersionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
     }
 }
 
@@ -6920,21 +6563,15 @@ impl ListRolePoliciesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -7021,22 +6658,16 @@ impl ListRolesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(
-                &format!("{}{}", prefix, "PathPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
         }
     }
 }
@@ -7185,22 +6816,16 @@ impl ListSSHPublicKeysRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -7287,22 +6912,16 @@ impl ListServerCertificatesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(
-                &format!("{}{}", prefix, "PathPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
         }
     }
 }
@@ -7389,16 +7008,10 @@ impl ListServiceSpecificCredentialsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.service_name {
-            params.put(
-                &format!("{}{}", prefix, "ServiceName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ServiceName"), &field_value);
         }
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -7473,22 +7086,16 @@ impl ListSigningCertificatesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -7576,21 +7183,15 @@ impl ListUserPoliciesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -7677,22 +7278,16 @@ impl ListUsersRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(
-                &format!("{}{}", prefix, "PathPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
         }
     }
 }
@@ -7777,21 +7372,15 @@ impl ListVirtualMFADevicesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.assignment_status {
-            params.put(
-                &format!("{}{}", prefix, "AssignmentStatus"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "AssignmentStatus"), &field_value);
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -9428,18 +9017,12 @@ impl PutGroupPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
         params.put(
             &format!("{}{}", prefix, "PolicyDocument"),
-            &obj.policy_document.replace("+", "%2B"),
+            &obj.policy_document,
         );
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
     }
 }
 
@@ -9464,16 +9047,10 @@ impl PutRolePolicyRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "PolicyDocument"),
-            &obj.policy_document.replace("+", "%2B"),
+            &obj.policy_document,
         );
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -9498,16 +9075,10 @@ impl PutUserPolicyRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "PolicyDocument"),
-            &obj.policy_document.replace("+", "%2B"),
+            &obj.policy_document,
         );
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -9560,13 +9131,10 @@ impl RemoveClientIDFromOpenIDConnectProviderRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "ClientID"),
-            &obj.client_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ClientID"), &obj.client_id);
         params.put(
             &format!("{}{}", prefix, "OpenIDConnectProviderArn"),
-            &obj.open_id_connect_provider_arn.replace("+", "%2B"),
+            &obj.open_id_connect_provider_arn,
         );
     }
 }
@@ -9590,12 +9158,9 @@ impl RemoveRoleFromInstanceProfileRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "InstanceProfileName"),
-            &obj.instance_profile_name.replace("+", "%2B"),
+            &obj.instance_profile_name,
         );
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -9616,14 +9181,8 @@ impl RemoveUserFromGroupRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -9702,13 +9261,10 @@ impl ResetServiceSpecificCredentialRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ServiceSpecificCredentialId"),
-            &obj.service_specific_credential_id.replace("+", "%2B"),
+            &obj.service_specific_credential_id,
         );
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -9937,20 +9493,14 @@ impl ResyncMFADeviceRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AuthenticationCode1"),
-            &obj.authentication_code_1.replace("+", "%2B"),
+            &obj.authentication_code_1,
         );
         params.put(
             &format!("{}{}", prefix, "AuthenticationCode2"),
-            &obj.authentication_code_2.replace("+", "%2B"),
+            &obj.authentication_code_2,
         );
-        params.put(
-            &format!("{}{}", prefix, "SerialNumber"),
-            &obj.serial_number.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "SerialNumber"), &obj.serial_number);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -11179,14 +10729,8 @@ impl SetDefaultPolicyVersionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "VersionId"),
-            &obj.version_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        params.put(&format!("{}{}", prefix, "VersionId"), &obj.version_id);
     }
 }
 
@@ -11303,10 +10847,7 @@ impl SimulateCustomPolicyRequestSerializer {
             &obj.action_names,
         );
         if let Some(ref field_value) = obj.caller_arn {
-            params.put(
-                &format!("{}{}", prefix, "CallerArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "CallerArn"), &field_value);
         }
         if let Some(ref field_value) = obj.context_entries {
             ContextEntryListTypeSerializer::serialize(
@@ -11316,15 +10857,12 @@ impl SimulateCustomPolicyRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         SimulationPolicyListTypeSerializer::serialize(
@@ -11342,20 +10880,14 @@ impl SimulateCustomPolicyRequestSerializer {
         if let Some(ref field_value) = obj.resource_handling_option {
             params.put(
                 &format!("{}{}", prefix, "ResourceHandlingOption"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.resource_owner {
-            params.put(
-                &format!("{}{}", prefix, "ResourceOwner"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ResourceOwner"), &field_value);
         }
         if let Some(ref field_value) = obj.resource_policy {
-            params.put(
-                &format!("{}{}", prefix, "ResourcePolicy"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ResourcePolicy"), &field_value);
         }
     }
 }
@@ -11465,10 +10997,7 @@ impl SimulatePrincipalPolicyRequestSerializer {
             &obj.action_names,
         );
         if let Some(ref field_value) = obj.caller_arn {
-            params.put(
-                &format!("{}{}", prefix, "CallerArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "CallerArn"), &field_value);
         }
         if let Some(ref field_value) = obj.context_entries {
             ContextEntryListTypeSerializer::serialize(
@@ -11478,15 +11007,12 @@ impl SimulatePrincipalPolicyRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.policy_input_list {
@@ -11498,7 +11024,7 @@ impl SimulatePrincipalPolicyRequestSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "PolicySourceArn"),
-            &obj.policy_source_arn.replace("+", "%2B"),
+            &obj.policy_source_arn,
         );
         if let Some(ref field_value) = obj.resource_arns {
             ResourceNameListTypeSerializer::serialize(
@@ -11510,20 +11036,14 @@ impl SimulatePrincipalPolicyRequestSerializer {
         if let Some(ref field_value) = obj.resource_handling_option {
             params.put(
                 &format!("{}{}", prefix, "ResourceHandlingOption"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.resource_owner {
-            params.put(
-                &format!("{}{}", prefix, "ResourceOwner"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ResourceOwner"), &field_value);
         }
         if let Some(ref field_value) = obj.resource_policy {
-            params.put(
-                &format!("{}{}", prefix, "ResourcePolicy"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ResourcePolicy"), &field_value);
         }
     }
 }
@@ -11816,19 +11336,10 @@ impl UpdateAccessKeyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "AccessKeyId"),
-            &obj.access_key_id.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "Status"),
-            &obj.status.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "AccessKeyId"), &obj.access_key_id);
+        params.put(&format!("{}{}", prefix, "Status"), &obj.status);
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -11867,55 +11378,55 @@ impl UpdateAccountPasswordPolicyRequestSerializer {
         if let Some(ref field_value) = obj.allow_users_to_change_password {
             params.put(
                 &format!("{}{}", prefix, "AllowUsersToChangePassword"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.hard_expiry {
             params.put(
                 &format!("{}{}", prefix, "HardExpiry"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.max_password_age {
             params.put(
                 &format!("{}{}", prefix, "MaxPasswordAge"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.minimum_password_length {
             params.put(
                 &format!("{}{}", prefix, "MinimumPasswordLength"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.password_reuse_prevention {
             params.put(
                 &format!("{}{}", prefix, "PasswordReusePrevention"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.require_lowercase_characters {
             params.put(
                 &format!("{}{}", prefix, "RequireLowercaseCharacters"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.require_numbers {
             params.put(
                 &format!("{}{}", prefix, "RequireNumbers"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.require_symbols {
             params.put(
                 &format!("{}{}", prefix, "RequireSymbols"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.require_uppercase_characters {
             params.put(
                 &format!("{}{}", prefix, "RequireUppercaseCharacters"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -11940,12 +11451,9 @@ impl UpdateAssumeRolePolicyRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "PolicyDocument"),
-            &obj.policy_document.replace("+", "%2B"),
+            &obj.policy_document,
         );
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -11968,21 +11476,12 @@ impl UpdateGroupRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
         if let Some(ref field_value) = obj.new_group_name {
-            params.put(
-                &format!("{}{}", prefix, "NewGroupName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NewGroupName"), &field_value);
         }
         if let Some(ref field_value) = obj.new_path {
-            params.put(
-                &format!("{}{}", prefix, "NewPath"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NewPath"), &field_value);
         }
     }
 }
@@ -12007,21 +11506,15 @@ impl UpdateLoginProfileRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.password {
-            params.put(
-                &format!("{}{}", prefix, "Password"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Password"), &field_value);
         }
         if let Some(ref field_value) = obj.password_reset_required {
             params.put(
                 &format!("{}{}", prefix, "PasswordResetRequired"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -12048,7 +11541,7 @@ impl UpdateOpenIDConnectProviderThumbprintRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "OpenIDConnectProviderArn"),
-            &obj.open_id_connect_provider_arn.replace("+", "%2B"),
+            &obj.open_id_connect_provider_arn,
         );
         ThumbprintListTypeSerializer::serialize(
             params,
@@ -12075,14 +11568,8 @@ impl UpdateRoleDescriptionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Description"),
-            &obj.description.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Description"), &obj.description);
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -12151,21 +11638,15 @@ impl UpdateRoleRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.description {
-            params.put(
-                &format!("{}{}", prefix, "Description"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.max_session_duration {
             params.put(
                 &format!("{}{}", prefix, "MaxSessionDuration"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -12207,11 +11688,11 @@ impl UpdateSAMLProviderRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SAMLMetadataDocument"),
-            &obj.saml_metadata_document.replace("+", "%2B"),
+            &obj.saml_metadata_document,
         );
         params.put(
             &format!("{}{}", prefix, "SAMLProviderArn"),
-            &obj.saml_provider_arn.replace("+", "%2B"),
+            &obj.saml_provider_arn,
         );
     }
 }
@@ -12286,16 +11767,10 @@ impl UpdateSSHPublicKeyRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SSHPublicKeyId"),
-            &obj.ssh_public_key_id.replace("+", "%2B"),
+            &obj.ssh_public_key_id,
         );
-        params.put(
-            &format!("{}{}", prefix, "Status"),
-            &obj.status.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Status"), &obj.status);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -12319,20 +11794,17 @@ impl UpdateServerCertificateRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.new_path {
-            params.put(
-                &format!("{}{}", prefix, "NewPath"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NewPath"), &field_value);
         }
         if let Some(ref field_value) = obj.new_server_certificate_name {
             params.put(
                 &format!("{}{}", prefix, "NewServerCertificateName"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         params.put(
             &format!("{}{}", prefix, "ServerCertificateName"),
-            &obj.server_certificate_name.replace("+", "%2B"),
+            &obj.server_certificate_name,
         );
     }
 }
@@ -12358,17 +11830,11 @@ impl UpdateServiceSpecificCredentialRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ServiceSpecificCredentialId"),
-            &obj.service_specific_credential_id.replace("+", "%2B"),
+            &obj.service_specific_credential_id,
         );
-        params.put(
-            &format!("{}{}", prefix, "Status"),
-            &obj.status.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Status"), &obj.status);
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -12394,17 +11860,11 @@ impl UpdateSigningCertificateRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CertificateId"),
-            &obj.certificate_id.replace("+", "%2B"),
+            &obj.certificate_id,
         );
-        params.put(
-            &format!("{}{}", prefix, "Status"),
-            &obj.status.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Status"), &obj.status);
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -12429,21 +11889,12 @@ impl UpdateUserRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.new_path {
-            params.put(
-                &format!("{}{}", prefix, "NewPath"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NewPath"), &field_value);
         }
         if let Some(ref field_value) = obj.new_user_name {
-            params.put(
-                &format!("{}{}", prefix, "NewUserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NewUserName"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -12466,12 +11917,9 @@ impl UploadSSHPublicKeyRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SSHPublicKeyBody"),
-            &obj.ssh_public_key_body.replace("+", "%2B"),
+            &obj.ssh_public_key_body,
         );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -12549,27 +11997,18 @@ impl UploadServerCertificateRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CertificateBody"),
-            &obj.certificate_body.replace("+", "%2B"),
+            &obj.certificate_body,
         );
         if let Some(ref field_value) = obj.certificate_chain {
-            params.put(
-                &format!("{}{}", prefix, "CertificateChain"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "CertificateChain"), &field_value);
         }
         if let Some(ref field_value) = obj.path {
-            params.put(
-                &format!("{}{}", prefix, "Path"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Path"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "PrivateKey"),
-            &obj.private_key.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PrivateKey"), &obj.private_key);
         params.put(
             &format!("{}{}", prefix, "ServerCertificateName"),
-            &obj.server_certificate_name.replace("+", "%2B"),
+            &obj.server_certificate_name,
         );
     }
 }
@@ -12643,13 +12082,10 @@ impl UploadSigningCertificateRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CertificateBody"),
-            &obj.certificate_body.replace("+", "%2B"),
+            &obj.certificate_body,
         );
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }

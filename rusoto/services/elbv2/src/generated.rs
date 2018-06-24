@@ -108,12 +108,9 @@ impl ActionSerializer {
 
         params.put(
             &format!("{}{}", prefix, "TargetGroupArn"),
-            &obj.target_group_arn.replace("+", "%2B"),
+            &obj.target_group_arn,
         );
-        params.put(
-            &format!("{}{}", prefix, "Type"),
-            &obj.type_.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Type"), &obj.type_);
     }
 }
 
@@ -205,10 +202,7 @@ impl AddListenerCertificatesInputSerializer {
             &format!("{}{}", prefix, "Certificates"),
             &obj.certificates,
         );
-        params.put(
-            &format!("{}{}", prefix, "ListenerArn"),
-            &obj.listener_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ListenerArn"), &obj.listener_arn);
     }
 }
 
@@ -503,15 +497,12 @@ impl CertificateSerializer {
         }
 
         if let Some(ref field_value) = obj.certificate_arn {
-            params.put(
-                &format!("{}{}", prefix, "CertificateArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "CertificateArn"), &field_value);
         }
         if let Some(ref field_value) = obj.is_default {
             params.put(
                 &format!("{}{}", prefix, "IsDefault"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -757,21 +748,12 @@ impl CreateListenerInputSerializer {
         );
         params.put(
             &format!("{}{}", prefix, "LoadBalancerArn"),
-            &obj.load_balancer_arn.replace("+", "%2B"),
+            &obj.load_balancer_arn,
         );
-        params.put(
-            &format!("{}{}", prefix, "Port"),
-            &obj.port.to_string().replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "Protocol"),
-            &obj.protocol.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Port"), &obj.port.to_string());
+        params.put(&format!("{}{}", prefix, "Protocol"), &obj.protocol);
         if let Some(ref field_value) = obj.ssl_policy {
-            params.put(
-                &format!("{}{}", prefix, "SslPolicy"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SslPolicy"), &field_value);
         }
     }
 }
@@ -852,20 +834,11 @@ impl CreateLoadBalancerInputSerializer {
         }
 
         if let Some(ref field_value) = obj.ip_address_type {
-            params.put(
-                &format!("{}{}", prefix, "IpAddressType"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "IpAddressType"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "Name"),
-            &obj.name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
         if let Some(ref field_value) = obj.scheme {
-            params.put(
-                &format!("{}{}", prefix, "Scheme"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Scheme"), &field_value);
         }
         if let Some(ref field_value) = obj.security_groups {
             SecurityGroupsSerializer::serialize(
@@ -888,10 +861,7 @@ impl CreateLoadBalancerInputSerializer {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
         if let Some(ref field_value) = obj.type_ {
-            params.put(
-                &format!("{}{}", prefix, "Type"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Type"), &field_value);
         }
     }
 }
@@ -971,13 +941,10 @@ impl CreateRuleInputSerializer {
             &format!("{}{}", prefix, "Conditions"),
             &obj.conditions,
         );
-        params.put(
-            &format!("{}{}", prefix, "ListenerArn"),
-            &obj.listener_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ListenerArn"), &obj.listener_arn);
         params.put(
             &format!("{}{}", prefix, "Priority"),
-            &obj.priority.to_string().replace("+", "%2B"),
+            &obj.priority.to_string(),
         );
     }
 }
@@ -1069,70 +1036,49 @@ impl CreateTargetGroupInputSerializer {
         if let Some(ref field_value) = obj.health_check_interval_seconds {
             params.put(
                 &format!("{}{}", prefix, "HealthCheckIntervalSeconds"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.health_check_path {
-            params.put(
-                &format!("{}{}", prefix, "HealthCheckPath"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "HealthCheckPath"), &field_value);
         }
         if let Some(ref field_value) = obj.health_check_port {
-            params.put(
-                &format!("{}{}", prefix, "HealthCheckPort"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "HealthCheckPort"), &field_value);
         }
         if let Some(ref field_value) = obj.health_check_protocol {
             params.put(
                 &format!("{}{}", prefix, "HealthCheckProtocol"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.health_check_timeout_seconds {
             params.put(
                 &format!("{}{}", prefix, "HealthCheckTimeoutSeconds"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.healthy_threshold_count {
             params.put(
                 &format!("{}{}", prefix, "HealthyThresholdCount"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.matcher {
             MatcherSerializer::serialize(params, &format!("{}{}", prefix, "Matcher"), field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "Name"),
-            &obj.name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "Port"),
-            &obj.port.to_string().replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "Protocol"),
-            &obj.protocol.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "Port"), &obj.port.to_string());
+        params.put(&format!("{}{}", prefix, "Protocol"), &obj.protocol);
         if let Some(ref field_value) = obj.target_type {
-            params.put(
-                &format!("{}{}", prefix, "TargetType"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TargetType"), &field_value);
         }
         if let Some(ref field_value) = obj.unhealthy_threshold_count {
             params.put(
                 &format!("{}{}", prefix, "UnhealthyThresholdCount"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "VpcId"),
-            &obj.vpc_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "VpcId"), &obj.vpc_id);
     }
 }
 
@@ -1241,10 +1187,7 @@ impl DeleteListenerInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "ListenerArn"),
-            &obj.listener_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ListenerArn"), &obj.listener_arn);
     }
 }
 
@@ -1284,7 +1227,7 @@ impl DeleteLoadBalancerInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "LoadBalancerArn"),
-            &obj.load_balancer_arn.replace("+", "%2B"),
+            &obj.load_balancer_arn,
         );
     }
 }
@@ -1323,10 +1266,7 @@ impl DeleteRuleInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "RuleArn"),
-            &obj.rule_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RuleArn"), &obj.rule_arn);
     }
 }
 
@@ -1366,7 +1306,7 @@ impl DeleteTargetGroupInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "TargetGroupArn"),
-            &obj.target_group_arn.replace("+", "%2B"),
+            &obj.target_group_arn,
         );
     }
 }
@@ -1409,7 +1349,7 @@ impl DeregisterTargetsInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "TargetGroupArn"),
-            &obj.target_group_arn.replace("+", "%2B"),
+            &obj.target_group_arn,
         );
         TargetDescriptionsSerializer::serialize(
             params,
@@ -1456,15 +1396,12 @@ impl DescribeAccountLimitsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.page_size {
             params.put(
                 &format!("{}{}", prefix, "PageSize"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -1540,20 +1477,14 @@ impl DescribeListenerCertificatesInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "ListenerArn"),
-            &obj.listener_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ListenerArn"), &obj.listener_arn);
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.page_size {
             params.put(
                 &format!("{}{}", prefix, "PageSize"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -1642,21 +1573,15 @@ impl DescribeListenersInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.load_balancer_arn {
-            params.put(
-                &format!("{}{}", prefix, "LoadBalancerArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "LoadBalancerArn"), &field_value);
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.page_size {
             params.put(
                 &format!("{}{}", prefix, "PageSize"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -1731,7 +1656,7 @@ impl DescribeLoadBalancerAttributesInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "LoadBalancerArn"),
-            &obj.load_balancer_arn.replace("+", "%2B"),
+            &obj.load_balancer_arn,
         );
     }
 }
@@ -1812,10 +1737,7 @@ impl DescribeLoadBalancersInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.names {
             LoadBalancerNamesSerializer::serialize(
@@ -1827,7 +1749,7 @@ impl DescribeLoadBalancersInputSerializer {
         if let Some(ref field_value) = obj.page_size {
             params.put(
                 &format!("{}{}", prefix, "PageSize"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -1909,21 +1831,15 @@ impl DescribeRulesInputSerializer {
         }
 
         if let Some(ref field_value) = obj.listener_arn {
-            params.put(
-                &format!("{}{}", prefix, "ListenerArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ListenerArn"), &field_value);
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.page_size {
             params.put(
                 &format!("{}{}", prefix, "PageSize"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.rule_arns {
@@ -2007,10 +1923,7 @@ impl DescribeSSLPoliciesInputSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.names {
             SslPolicyNamesSerializer::serialize(
@@ -2022,7 +1935,7 @@ impl DescribeSSLPoliciesInputSerializer {
         if let Some(ref field_value) = obj.page_size {
             params.put(
                 &format!("{}{}", prefix, "PageSize"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -2169,7 +2082,7 @@ impl DescribeTargetGroupAttributesInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "TargetGroupArn"),
-            &obj.target_group_arn.replace("+", "%2B"),
+            &obj.target_group_arn,
         );
     }
 }
@@ -2245,16 +2158,10 @@ impl DescribeTargetGroupsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.load_balancer_arn {
-            params.put(
-                &format!("{}{}", prefix, "LoadBalancerArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "LoadBalancerArn"), &field_value);
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.names {
             TargetGroupNamesSerializer::serialize(
@@ -2266,7 +2173,7 @@ impl DescribeTargetGroupsInputSerializer {
         if let Some(ref field_value) = obj.page_size {
             params.put(
                 &format!("{}{}", prefix, "PageSize"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.target_group_arns {
@@ -2352,7 +2259,7 @@ impl DescribeTargetHealthInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "TargetGroupArn"),
-            &obj.target_group_arn.replace("+", "%2B"),
+            &obj.target_group_arn,
         );
         if let Some(ref field_value) = obj.targets {
             TargetDescriptionsSerializer::serialize(
@@ -3198,16 +3105,10 @@ impl LoadBalancerAttributeSerializer {
         }
 
         if let Some(ref field_value) = obj.key {
-            params.put(
-                &format!("{}{}", prefix, "Key"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Key"), &field_value);
         }
         if let Some(ref field_value) = obj.value {
-            params.put(
-                &format!("{}{}", prefix, "Value"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Value"), &field_value);
         }
     }
 }
@@ -3526,10 +3427,7 @@ impl MatcherSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "HttpCode"),
-            &obj.http_code.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "HttpCode"), &obj.http_code);
     }
 }
 
@@ -3586,27 +3484,15 @@ impl ModifyListenerInputSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "ListenerArn"),
-            &obj.listener_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ListenerArn"), &obj.listener_arn);
         if let Some(ref field_value) = obj.port {
-            params.put(
-                &format!("{}{}", prefix, "Port"),
-                &field_value.to_string().replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Port"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.protocol {
-            params.put(
-                &format!("{}{}", prefix, "Protocol"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Protocol"), &field_value);
         }
         if let Some(ref field_value) = obj.ssl_policy {
-            params.put(
-                &format!("{}{}", prefix, "SslPolicy"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SslPolicy"), &field_value);
         }
     }
 }
@@ -3681,7 +3567,7 @@ impl ModifyLoadBalancerAttributesInputSerializer {
         );
         params.put(
             &format!("{}{}", prefix, "LoadBalancerArn"),
-            &obj.load_balancer_arn.replace("+", "%2B"),
+            &obj.load_balancer_arn,
         );
     }
 }
@@ -3762,10 +3648,7 @@ impl ModifyRuleInputSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "RuleArn"),
-            &obj.rule_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RuleArn"), &obj.rule_arn);
     }
 }
 
@@ -3838,7 +3721,7 @@ impl ModifyTargetGroupAttributesInputSerializer {
         );
         params.put(
             &format!("{}{}", prefix, "TargetGroupArn"),
-            &obj.target_group_arn.replace("+", "%2B"),
+            &obj.target_group_arn,
         );
     }
 }
@@ -3924,37 +3807,31 @@ impl ModifyTargetGroupInputSerializer {
         if let Some(ref field_value) = obj.health_check_interval_seconds {
             params.put(
                 &format!("{}{}", prefix, "HealthCheckIntervalSeconds"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.health_check_path {
-            params.put(
-                &format!("{}{}", prefix, "HealthCheckPath"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "HealthCheckPath"), &field_value);
         }
         if let Some(ref field_value) = obj.health_check_port {
-            params.put(
-                &format!("{}{}", prefix, "HealthCheckPort"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "HealthCheckPort"), &field_value);
         }
         if let Some(ref field_value) = obj.health_check_protocol {
             params.put(
                 &format!("{}{}", prefix, "HealthCheckProtocol"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.health_check_timeout_seconds {
             params.put(
                 &format!("{}{}", prefix, "HealthCheckTimeoutSeconds"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.healthy_threshold_count {
             params.put(
                 &format!("{}{}", prefix, "HealthyThresholdCount"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.matcher {
@@ -3962,12 +3839,12 @@ impl ModifyTargetGroupInputSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "TargetGroupArn"),
-            &obj.target_group_arn.replace("+", "%2B"),
+            &obj.target_group_arn,
         );
         if let Some(ref field_value) = obj.unhealthy_threshold_count {
             params.put(
                 &format!("{}{}", prefix, "UnhealthyThresholdCount"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -4096,7 +3973,7 @@ impl RegisterTargetsInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "TargetGroupArn"),
-            &obj.target_group_arn.replace("+", "%2B"),
+            &obj.target_group_arn,
         );
         TargetDescriptionsSerializer::serialize(
             params,
@@ -4147,10 +4024,7 @@ impl RemoveListenerCertificatesInputSerializer {
             &format!("{}{}", prefix, "Certificates"),
             &obj.certificates,
         );
-        params.put(
-            &format!("{}{}", prefix, "ListenerArn"),
-            &obj.listener_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ListenerArn"), &obj.listener_arn);
     }
 }
 
@@ -4408,10 +4282,7 @@ impl RuleConditionSerializer {
         }
 
         if let Some(ref field_value) = obj.field {
-            params.put(
-                &format!("{}{}", prefix, "Field"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Field"), &field_value);
         }
         if let Some(ref field_value) = obj.values {
             ListOfStringSerializer::serialize(
@@ -4509,14 +4380,11 @@ impl RulePriorityPairSerializer {
         if let Some(ref field_value) = obj.priority {
             params.put(
                 &format!("{}{}", prefix, "Priority"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.rule_arn {
-            params.put(
-                &format!("{}{}", prefix, "RuleArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "RuleArn"), &field_value);
         }
     }
 }
@@ -4648,11 +4516,11 @@ impl SetIpAddressTypeInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "IpAddressType"),
-            &obj.ip_address_type.replace("+", "%2B"),
+            &obj.ip_address_type,
         );
         params.put(
             &format!("{}{}", prefix, "LoadBalancerArn"),
-            &obj.load_balancer_arn.replace("+", "%2B"),
+            &obj.load_balancer_arn,
         );
     }
 }
@@ -4792,7 +4660,7 @@ impl SetSecurityGroupsInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "LoadBalancerArn"),
-            &obj.load_balancer_arn.replace("+", "%2B"),
+            &obj.load_balancer_arn,
         );
         SecurityGroupsSerializer::serialize(
             params,
@@ -4870,7 +4738,7 @@ impl SetSubnetsInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "LoadBalancerArn"),
-            &obj.load_balancer_arn.replace("+", "%2B"),
+            &obj.load_balancer_arn,
         );
         if let Some(ref field_value) = obj.subnet_mappings {
             SubnetMappingsSerializer::serialize(
@@ -5186,16 +5054,10 @@ impl SubnetMappingSerializer {
         }
 
         if let Some(ref field_value) = obj.allocation_id {
-            params.put(
-                &format!("{}{}", prefix, "AllocationId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "AllocationId"), &field_value);
         }
         if let Some(ref field_value) = obj.subnet_id {
-            params.put(
-                &format!("{}{}", prefix, "SubnetId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SubnetId"), &field_value);
         }
     }
 }
@@ -5283,15 +5145,9 @@ impl TagSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Key"),
-            &obj.key.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Key"), &obj.key);
         if let Some(ref field_value) = obj.value {
-            params.put(
-                &format!("{}{}", prefix, "Value"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Value"), &field_value);
         }
     }
 }
@@ -5554,17 +5410,11 @@ impl TargetDescriptionSerializer {
         }
 
         if let Some(ref field_value) = obj.availability_zone {
-            params.put(
-                &format!("{}{}", prefix, "AvailabilityZone"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "AvailabilityZone"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "Id"), &obj.id.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "Id"), &obj.id);
         if let Some(ref field_value) = obj.port {
-            params.put(
-                &format!("{}{}", prefix, "Port"),
-                &field_value.to_string().replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Port"), &field_value.to_string());
         }
     }
 }
@@ -5824,16 +5674,10 @@ impl TargetGroupAttributeSerializer {
         }
 
         if let Some(ref field_value) = obj.key {
-            params.put(
-                &format!("{}{}", prefix, "Key"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Key"), &field_value);
         }
         if let Some(ref field_value) = obj.value {
-            params.put(
-                &format!("{}{}", prefix, "Value"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Value"), &field_value);
         }
     }
 }

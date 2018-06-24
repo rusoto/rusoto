@@ -75,16 +75,10 @@ impl AbortEnvironmentUpdateMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.environment_id {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
     }
 }
@@ -548,10 +542,7 @@ impl ApplicationResourceLifecycleConfigSerializer {
         }
 
         if let Some(ref field_value) = obj.service_role {
-            params.put(
-                &format!("{}{}", prefix, "ServiceRole"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ServiceRole"), &field_value);
         }
         if let Some(ref field_value) = obj.version_lifecycle_config {
             ApplicationVersionLifecycleConfigSerializer::serialize(
@@ -998,21 +989,12 @@ impl ApplyEnvironmentManagedActionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "ActionId"),
-            &obj.action_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ActionId"), &obj.action_id);
         if let Some(ref field_value) = obj.environment_id {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
     }
 }
@@ -1310,29 +1292,20 @@ impl BuildConfigurationSerializer {
         }
 
         if let Some(ref field_value) = obj.artifact_name {
-            params.put(
-                &format!("{}{}", prefix, "ArtifactName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ArtifactName"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "CodeBuildServiceRole"),
-            &obj.code_build_service_role.replace("+", "%2B"),
+            &obj.code_build_service_role,
         );
         if let Some(ref field_value) = obj.compute_type {
-            params.put(
-                &format!("{}{}", prefix, "ComputeType"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ComputeType"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "Image"),
-            &obj.image.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Image"), &obj.image);
         if let Some(ref field_value) = obj.timeout_in_minutes {
             params.put(
                 &format!("{}{}", prefix, "TimeoutInMinutes"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -1539,10 +1512,7 @@ impl CheckDNSAvailabilityMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "CNAMEPrefix"),
-            &obj.cname_prefix.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "CNAMEPrefix"), &obj.cname_prefix);
     }
 }
 
@@ -1638,16 +1608,10 @@ impl ComposeEnvironmentsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.application_name {
-            params.put(
-                &format!("{}{}", prefix, "ApplicationName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ApplicationName"), &field_value);
         }
         if let Some(ref field_value) = obj.group_name {
-            params.put(
-                &format!("{}{}", prefix, "GroupName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "GroupName"), &field_value);
         }
         if let Some(ref field_value) = obj.version_labels {
             VersionLabelsSerializer::serialize(
@@ -2015,28 +1979,16 @@ impl ConfigurationOptionSettingSerializer {
         }
 
         if let Some(ref field_value) = obj.namespace {
-            params.put(
-                &format!("{}{}", prefix, "Namespace"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Namespace"), &field_value);
         }
         if let Some(ref field_value) = obj.option_name {
-            params.put(
-                &format!("{}{}", prefix, "OptionName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "OptionName"), &field_value);
         }
         if let Some(ref field_value) = obj.resource_name {
-            params.put(
-                &format!("{}{}", prefix, "ResourceName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ResourceName"), &field_value);
         }
         if let Some(ref field_value) = obj.value {
-            params.put(
-                &format!("{}{}", prefix, "Value"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Value"), &field_value);
         }
     }
 }
@@ -2546,13 +2498,10 @@ impl CreateApplicationMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name.replace("+", "%2B"),
+            &obj.application_name,
         );
         if let Some(ref field_value) = obj.description {
-            params.put(
-                &format!("{}{}", prefix, "Description"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.resource_lifecycle_config {
             ApplicationResourceLifecycleConfigSerializer::serialize(
@@ -2596,12 +2545,12 @@ impl CreateApplicationVersionMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name.replace("+", "%2B"),
+            &obj.application_name,
         );
         if let Some(ref field_value) = obj.auto_create_application {
             params.put(
                 &format!("{}{}", prefix, "AutoCreateApplication"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.build_configuration {
@@ -2612,15 +2561,12 @@ impl CreateApplicationVersionMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.description {
-            params.put(
-                &format!("{}{}", prefix, "Description"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.process {
             params.put(
                 &format!("{}{}", prefix, "Process"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.source_build_information {
@@ -2637,10 +2583,7 @@ impl CreateApplicationVersionMessageSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "VersionLabel"),
-            &obj.version_label.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "VersionLabel"), &obj.version_label);
     }
 }
 
@@ -2676,19 +2619,13 @@ impl CreateConfigurationTemplateMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name.replace("+", "%2B"),
+            &obj.application_name,
         );
         if let Some(ref field_value) = obj.description {
-            params.put(
-                &format!("{}{}", prefix, "Description"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.environment_id {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
         }
         if let Some(ref field_value) = obj.option_settings {
             ConfigurationOptionSettingsListSerializer::serialize(
@@ -2698,16 +2635,10 @@ impl CreateConfigurationTemplateMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.platform_arn {
-            params.put(
-                &format!("{}{}", prefix, "PlatformArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PlatformArn"), &field_value);
         }
         if let Some(ref field_value) = obj.solution_stack_name {
-            params.put(
-                &format!("{}{}", prefix, "SolutionStackName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SolutionStackName"), &field_value);
         }
         if let Some(ref field_value) = obj.source_configuration {
             SourceConfigurationSerializer::serialize(
@@ -2716,10 +2647,7 @@ impl CreateConfigurationTemplateMessageSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "TemplateName"),
-            &obj.template_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
     }
 }
 
@@ -2765,31 +2693,19 @@ impl CreateEnvironmentMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name.replace("+", "%2B"),
+            &obj.application_name,
         );
         if let Some(ref field_value) = obj.cname_prefix {
-            params.put(
-                &format!("{}{}", prefix, "CNAMEPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "CNAMEPrefix"), &field_value);
         }
         if let Some(ref field_value) = obj.description {
-            params.put(
-                &format!("{}{}", prefix, "Description"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
         if let Some(ref field_value) = obj.group_name {
-            params.put(
-                &format!("{}{}", prefix, "GroupName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "GroupName"), &field_value);
         }
         if let Some(ref field_value) = obj.option_settings {
             ConfigurationOptionSettingsListSerializer::serialize(
@@ -2806,25 +2722,16 @@ impl CreateEnvironmentMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.platform_arn {
-            params.put(
-                &format!("{}{}", prefix, "PlatformArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PlatformArn"), &field_value);
         }
         if let Some(ref field_value) = obj.solution_stack_name {
-            params.put(
-                &format!("{}{}", prefix, "SolutionStackName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SolutionStackName"), &field_value);
         }
         if let Some(ref field_value) = obj.tags {
             TagsSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
         if let Some(ref field_value) = obj.template_name {
-            params.put(
-                &format!("{}{}", prefix, "TemplateName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateName"), &field_value);
         }
         if let Some(ref field_value) = obj.tier {
             EnvironmentTierSerializer::serialize(
@@ -2834,10 +2741,7 @@ impl CreateEnvironmentMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.version_label {
-            params.put(
-                &format!("{}{}", prefix, "VersionLabel"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "VersionLabel"), &field_value);
         }
     }
 }
@@ -2867,10 +2771,7 @@ impl CreatePlatformVersionRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.environment_name {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
         if let Some(ref field_value) = obj.option_settings {
             ConfigurationOptionSettingsListSerializer::serialize(
@@ -2884,13 +2785,10 @@ impl CreatePlatformVersionRequestSerializer {
             &format!("{}{}", prefix, "PlatformDefinitionBundle"),
             &obj.platform_definition_bundle,
         );
-        params.put(
-            &format!("{}{}", prefix, "PlatformName"),
-            &obj.platform_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PlatformName"), &obj.platform_name);
         params.put(
             &format!("{}{}", prefix, "PlatformVersion"),
-            &obj.platform_version.replace("+", "%2B"),
+            &obj.platform_version,
         );
     }
 }
@@ -3139,12 +3037,12 @@ impl DeleteApplicationMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name.replace("+", "%2B"),
+            &obj.application_name,
         );
         if let Some(ref field_value) = obj.terminate_env_by_force {
             params.put(
                 &format!("{}{}", prefix, "TerminateEnvByForce"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -3172,18 +3070,15 @@ impl DeleteApplicationVersionMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name.replace("+", "%2B"),
+            &obj.application_name,
         );
         if let Some(ref field_value) = obj.delete_source_bundle {
             params.put(
                 &format!("{}{}", prefix, "DeleteSourceBundle"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "VersionLabel"),
-            &obj.version_label.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "VersionLabel"), &obj.version_label);
     }
 }
 
@@ -3207,12 +3102,9 @@ impl DeleteConfigurationTemplateMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name.replace("+", "%2B"),
+            &obj.application_name,
         );
-        params.put(
-            &format!("{}{}", prefix, "TemplateName"),
-            &obj.template_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
     }
 }
 
@@ -3236,11 +3128,11 @@ impl DeleteEnvironmentConfigurationMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name.replace("+", "%2B"),
+            &obj.application_name,
         );
         params.put(
             &format!("{}{}", prefix, "EnvironmentName"),
-            &obj.environment_name.replace("+", "%2B"),
+            &obj.environment_name,
         );
     }
 }
@@ -3261,10 +3153,7 @@ impl DeletePlatformVersionRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.platform_arn {
-            params.put(
-                &format!("{}{}", prefix, "PlatformArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PlatformArn"), &field_value);
         }
     }
 }
@@ -3468,22 +3357,16 @@ impl DescribeApplicationVersionsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.application_name {
-            params.put(
-                &format!("{}{}", prefix, "ApplicationName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ApplicationName"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(
                 &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
         if let Some(ref field_value) = obj.version_labels {
             VersionLabelsListSerializer::serialize(
@@ -3548,16 +3431,10 @@ impl DescribeConfigurationOptionsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.application_name {
-            params.put(
-                &format!("{}{}", prefix, "ApplicationName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ApplicationName"), &field_value);
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
         if let Some(ref field_value) = obj.options {
             OptionsSpecifierListSerializer::serialize(
@@ -3567,22 +3444,13 @@ impl DescribeConfigurationOptionsMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.platform_arn {
-            params.put(
-                &format!("{}{}", prefix, "PlatformArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PlatformArn"), &field_value);
         }
         if let Some(ref field_value) = obj.solution_stack_name {
-            params.put(
-                &format!("{}{}", prefix, "SolutionStackName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SolutionStackName"), &field_value);
         }
         if let Some(ref field_value) = obj.template_name {
-            params.put(
-                &format!("{}{}", prefix, "TemplateName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateName"), &field_value);
         }
     }
 }
@@ -3609,19 +3477,13 @@ impl DescribeConfigurationSettingsMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name.replace("+", "%2B"),
+            &obj.application_name,
         );
         if let Some(ref field_value) = obj.environment_name {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
         if let Some(ref field_value) = obj.template_name {
-            params.put(
-                &format!("{}{}", prefix, "TemplateName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateName"), &field_value);
         }
     }
 }
@@ -3654,16 +3516,10 @@ impl DescribeEnvironmentHealthRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.environment_id {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
     }
 }
@@ -3792,28 +3648,19 @@ impl DescribeEnvironmentManagedActionHistoryRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.environment_id {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
     }
 }
@@ -3895,22 +3742,13 @@ impl DescribeEnvironmentManagedActionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.environment_id {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
         if let Some(ref field_value) = obj.status {
-            params.put(
-                &format!("{}{}", prefix, "Status"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Status"), &field_value);
         }
     }
 }
@@ -3983,16 +3821,10 @@ impl DescribeEnvironmentResourcesMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.environment_id {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
     }
 }
@@ -4028,10 +3860,7 @@ impl DescribeEnvironmentsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.application_name {
-            params.put(
-                &format!("{}{}", prefix, "ApplicationName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ApplicationName"), &field_value);
         }
         if let Some(ref field_value) = obj.environment_ids {
             EnvironmentIdListSerializer::serialize(
@@ -4050,32 +3879,26 @@ impl DescribeEnvironmentsMessageSerializer {
         if let Some(ref field_value) = obj.include_deleted {
             params.put(
                 &format!("{}{}", prefix, "IncludeDeleted"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.included_deleted_back_to {
             params.put(
                 &format!("{}{}", prefix, "IncludedDeletedBackTo"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(
                 &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
         if let Some(ref field_value) = obj.version_label {
-            params.put(
-                &format!("{}{}", prefix, "VersionLabel"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "VersionLabel"), &field_value);
         }
     }
 }
@@ -4119,76 +3942,43 @@ impl DescribeEventsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.application_name {
-            params.put(
-                &format!("{}{}", prefix, "ApplicationName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ApplicationName"), &field_value);
         }
         if let Some(ref field_value) = obj.end_time {
-            params.put(
-                &format!("{}{}", prefix, "EndTime"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
         }
         if let Some(ref field_value) = obj.environment_id {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(
                 &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
         if let Some(ref field_value) = obj.platform_arn {
-            params.put(
-                &format!("{}{}", prefix, "PlatformArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PlatformArn"), &field_value);
         }
         if let Some(ref field_value) = obj.request_id {
-            params.put(
-                &format!("{}{}", prefix, "RequestId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "RequestId"), &field_value);
         }
         if let Some(ref field_value) = obj.severity {
-            params.put(
-                &format!("{}{}", prefix, "Severity"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Severity"), &field_value);
         }
         if let Some(ref field_value) = obj.start_time {
-            params.put(
-                &format!("{}{}", prefix, "StartTime"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
         }
         if let Some(ref field_value) = obj.template_name {
-            params.put(
-                &format!("{}{}", prefix, "TemplateName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateName"), &field_value);
         }
         if let Some(ref field_value) = obj.version_label {
-            params.put(
-                &format!("{}{}", prefix, "VersionLabel"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "VersionLabel"), &field_value);
         }
     }
 }
@@ -4223,22 +4013,13 @@ impl DescribeInstancesHealthRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.environment_id {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
     }
 }
@@ -4323,10 +4104,7 @@ impl DescribePlatformVersionRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.platform_arn {
-            params.put(
-                &format!("{}{}", prefix, "PlatformArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PlatformArn"), &field_value);
         }
     }
 }
@@ -5317,22 +5095,13 @@ impl EnvironmentTierSerializer {
         }
 
         if let Some(ref field_value) = obj.name {
-            params.put(
-                &format!("{}{}", prefix, "Name"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Name"), &field_value);
         }
         if let Some(ref field_value) = obj.type_ {
-            params.put(
-                &format!("{}{}", prefix, "Type"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Type"), &field_value);
         }
         if let Some(ref field_value) = obj.version {
-            params.put(
-                &format!("{}{}", prefix, "Version"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Version"), &field_value);
         }
     }
 }
@@ -6160,14 +5929,11 @@ impl ListPlatformVersionsRequestSerializer {
         if let Some(ref field_value) = obj.max_records {
             params.put(
                 &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
     }
 }
@@ -6242,10 +6008,7 @@ impl ListTagsForResourceMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "ResourceArn"),
-            &obj.resource_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ResourceArn"), &obj.resource_arn);
     }
 }
 
@@ -6898,17 +6661,17 @@ impl MaxAgeRuleSerializer {
         if let Some(ref field_value) = obj.delete_source_from_s3 {
             params.put(
                 &format!("{}{}", prefix, "DeleteSourceFromS3"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "Enabled"),
-            &obj.enabled.to_string().replace("+", "%2B"),
+            &obj.enabled.to_string(),
         );
         if let Some(ref field_value) = obj.max_age_in_days {
             params.put(
                 &format!("{}{}", prefix, "MaxAgeInDays"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -6986,17 +6749,17 @@ impl MaxCountRuleSerializer {
         if let Some(ref field_value) = obj.delete_source_from_s3 {
             params.put(
                 &format!("{}{}", prefix, "DeleteSourceFromS3"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "Enabled"),
-            &obj.enabled.to_string().replace("+", "%2B"),
+            &obj.enabled.to_string(),
         );
         if let Some(ref field_value) = obj.max_count {
             params.put(
                 &format!("{}{}", prefix, "MaxCount"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -7230,22 +6993,13 @@ impl OptionSpecificationSerializer {
         }
 
         if let Some(ref field_value) = obj.namespace {
-            params.put(
-                &format!("{}{}", prefix, "Namespace"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Namespace"), &field_value);
         }
         if let Some(ref field_value) = obj.option_name {
-            params.put(
-                &format!("{}{}", prefix, "OptionName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "OptionName"), &field_value);
         }
         if let Some(ref field_value) = obj.resource_name {
-            params.put(
-                &format!("{}{}", prefix, "ResourceName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ResourceName"), &field_value);
         }
     }
 }
@@ -7495,16 +7249,10 @@ impl PlatformFilterSerializer {
         }
 
         if let Some(ref field_value) = obj.operator {
-            params.put(
-                &format!("{}{}", prefix, "Operator"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Operator"), &field_value);
         }
         if let Some(ref field_value) = obj.type_ {
-            params.put(
-                &format!("{}{}", prefix, "Type"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Type"), &field_value);
         }
         if let Some(ref field_value) = obj.values {
             PlatformFilterValueListSerializer::serialize(
@@ -8038,16 +7786,10 @@ impl RebuildEnvironmentMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.environment_id {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
     }
 }
@@ -8129,21 +7871,12 @@ impl RequestEnvironmentInfoMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.environment_id {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "InfoType"),
-            &obj.info_type.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "InfoType"), &obj.info_type);
     }
 }
 
@@ -8407,16 +8140,10 @@ impl RestartAppServerMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.environment_id {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
     }
 }
@@ -8442,21 +8169,12 @@ impl RetrieveEnvironmentInfoMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.environment_id {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "InfoType"),
-            &obj.info_type.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "InfoType"), &obj.info_type);
     }
 }
 
@@ -8602,16 +8320,10 @@ impl S3LocationSerializer {
         }
 
         if let Some(ref field_value) = obj.s3_bucket {
-            params.put(
-                &format!("{}{}", prefix, "S3Bucket"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "S3Bucket"), &field_value);
         }
         if let Some(ref field_value) = obj.s3_key {
-            params.put(
-                &format!("{}{}", prefix, "S3Key"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "S3Key"), &field_value);
         }
     }
 }
@@ -8928,16 +8640,13 @@ impl SourceBuildInformationSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SourceLocation"),
-            &obj.source_location.replace("+", "%2B"),
+            &obj.source_location,
         );
         params.put(
             &format!("{}{}", prefix, "SourceRepository"),
-            &obj.source_repository.replace("+", "%2B"),
+            &obj.source_repository,
         );
-        params.put(
-            &format!("{}{}", prefix, "SourceType"),
-            &obj.source_type.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "SourceType"), &obj.source_type);
     }
 }
 
@@ -8960,16 +8669,10 @@ impl SourceConfigurationSerializer {
         }
 
         if let Some(ref field_value) = obj.application_name {
-            params.put(
-                &format!("{}{}", prefix, "ApplicationName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ApplicationName"), &field_value);
         }
         if let Some(ref field_value) = obj.template_name {
-            params.put(
-                &format!("{}{}", prefix, "TemplateName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateName"), &field_value);
         }
     }
 }
@@ -9240,25 +8943,25 @@ impl SwapEnvironmentCNAMEsMessageSerializer {
         if let Some(ref field_value) = obj.destination_environment_id {
             params.put(
                 &format!("{}{}", prefix, "DestinationEnvironmentId"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.destination_environment_name {
             params.put(
                 &format!("{}{}", prefix, "DestinationEnvironmentName"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.source_environment_id {
             params.put(
                 &format!("{}{}", prefix, "SourceEnvironmentId"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.source_environment_name {
             params.put(
                 &format!("{}{}", prefix, "SourceEnvironmentName"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
     }
@@ -9383,16 +9086,10 @@ impl TagSerializer {
         }
 
         if let Some(ref field_value) = obj.key {
-            params.put(
-                &format!("{}{}", prefix, "Key"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Key"), &field_value);
         }
         if let Some(ref field_value) = obj.value {
-            params.put(
-                &format!("{}{}", prefix, "Value"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Value"), &field_value);
         }
     }
 }
@@ -9524,27 +9221,21 @@ impl TerminateEnvironmentMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.environment_id {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
         if let Some(ref field_value) = obj.force_terminate {
             params.put(
                 &format!("{}{}", prefix, "ForceTerminate"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.terminate_resources {
             params.put(
                 &format!("{}{}", prefix, "TerminateResources"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -9684,13 +9375,10 @@ impl UpdateApplicationMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name.replace("+", "%2B"),
+            &obj.application_name,
         );
         if let Some(ref field_value) = obj.description {
-            params.put(
-                &format!("{}{}", prefix, "Description"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
     }
 }
@@ -9714,7 +9402,7 @@ impl UpdateApplicationResourceLifecycleMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name.replace("+", "%2B"),
+            &obj.application_name,
         );
         ApplicationResourceLifecycleConfigSerializer::serialize(
             params,
@@ -9746,18 +9434,12 @@ impl UpdateApplicationVersionMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name.replace("+", "%2B"),
+            &obj.application_name,
         );
         if let Some(ref field_value) = obj.description {
-            params.put(
-                &format!("{}{}", prefix, "Description"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "VersionLabel"),
-            &obj.version_label.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "VersionLabel"), &obj.version_label);
     }
 }
 
@@ -9787,13 +9469,10 @@ impl UpdateConfigurationTemplateMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name.replace("+", "%2B"),
+            &obj.application_name,
         );
         if let Some(ref field_value) = obj.description {
-            params.put(
-                &format!("{}{}", prefix, "Description"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.option_settings {
             ConfigurationOptionSettingsListSerializer::serialize(
@@ -9809,10 +9488,7 @@ impl UpdateConfigurationTemplateMessageSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "TemplateName"),
-            &obj.template_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
     }
 }
 
@@ -9869,34 +9545,19 @@ impl UpdateEnvironmentMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.application_name {
-            params.put(
-                &format!("{}{}", prefix, "ApplicationName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ApplicationName"), &field_value);
         }
         if let Some(ref field_value) = obj.description {
-            params.put(
-                &format!("{}{}", prefix, "Description"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.environment_id {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
         if let Some(ref field_value) = obj.group_name {
-            params.put(
-                &format!("{}{}", prefix, "GroupName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "GroupName"), &field_value);
         }
         if let Some(ref field_value) = obj.option_settings {
             ConfigurationOptionSettingsListSerializer::serialize(
@@ -9913,22 +9574,13 @@ impl UpdateEnvironmentMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.platform_arn {
-            params.put(
-                &format!("{}{}", prefix, "PlatformArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PlatformArn"), &field_value);
         }
         if let Some(ref field_value) = obj.solution_stack_name {
-            params.put(
-                &format!("{}{}", prefix, "SolutionStackName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SolutionStackName"), &field_value);
         }
         if let Some(ref field_value) = obj.template_name {
-            params.put(
-                &format!("{}{}", prefix, "TemplateName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateName"), &field_value);
         }
         if let Some(ref field_value) = obj.tier {
             EnvironmentTierSerializer::serialize(
@@ -9938,10 +9590,7 @@ impl UpdateEnvironmentMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.version_label {
-            params.put(
-                &format!("{}{}", prefix, "VersionLabel"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "VersionLabel"), &field_value);
         }
     }
 }
@@ -9965,10 +9614,7 @@ impl UpdateTagsForResourceMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "ResourceArn"),
-            &obj.resource_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ResourceArn"), &obj.resource_arn);
         if let Some(ref field_value) = obj.tags_to_add {
             TagListSerializer::serialize(
                 params,
@@ -10024,13 +9670,10 @@ impl ValidateConfigurationSettingsMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name.replace("+", "%2B"),
+            &obj.application_name,
         );
         if let Some(ref field_value) = obj.environment_name {
-            params.put(
-                &format!("{}{}", prefix, "EnvironmentName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
         }
         ConfigurationOptionSettingsListSerializer::serialize(
             params,
@@ -10038,10 +9681,7 @@ impl ValidateConfigurationSettingsMessageSerializer {
             &obj.option_settings,
         );
         if let Some(ref field_value) = obj.template_name {
-            params.put(
-                &format!("{}{}", prefix, "TemplateName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateName"), &field_value);
         }
     }
 }

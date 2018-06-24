@@ -122,23 +122,17 @@ impl AttributeSerializer {
         if let Some(ref field_value) = obj.alternate_name_encoding {
             params.put(
                 &format!("{}{}", prefix, "AlternateNameEncoding"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.alternate_value_encoding {
             params.put(
                 &format!("{}{}", prefix, "AlternateValueEncoding"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "Name"),
-            &obj.name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "Value"),
-            &obj.value.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "Value"), &obj.value);
     }
 }
 
@@ -207,10 +201,7 @@ impl BatchDeleteAttributesRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         DeletableItemListSerializer::serialize(
             params,
             &format!("{}{}", prefix, "Item"),
@@ -236,10 +227,7 @@ impl BatchPutAttributesRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         ReplaceableItemListSerializer::serialize(
             params,
             &format!("{}{}", prefix, "Item"),
@@ -263,10 +251,7 @@ impl CreateDomainRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
     }
 }
 
@@ -292,10 +277,7 @@ impl DeletableItemSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "ItemName"),
-            &obj.name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ItemName"), &obj.name);
     }
 }
 
@@ -338,10 +320,7 @@ impl DeleteAttributesRequestSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         if let Some(ref field_value) = obj.expected {
             UpdateConditionSerializer::serialize(
                 params,
@@ -349,10 +328,7 @@ impl DeleteAttributesRequestSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "ItemName"),
-            &obj.item_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ItemName"), &obj.item_name);
     }
 }
 
@@ -371,10 +347,7 @@ impl DeleteDomainRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
     }
 }
 
@@ -393,10 +366,7 @@ impl DomainMetadataRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
     }
 }
 
@@ -546,17 +516,11 @@ impl GetAttributesRequestSerializer {
         if let Some(ref field_value) = obj.consistent_read {
             params.put(
                 &format!("{}{}", prefix, "ConsistentRead"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "ItemName"),
-            &obj.item_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(&format!("{}{}", prefix, "ItemName"), &obj.item_name);
     }
 }
 
@@ -727,14 +691,11 @@ impl ListDomainsRequestSerializer {
         if let Some(ref field_value) = obj.max_number_of_domains {
             params.put(
                 &format!("{}{}", prefix, "MaxNumberOfDomains"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
     }
 }
@@ -833,10 +794,7 @@ impl PutAttributesRequestSerializer {
             &format!("{}{}", prefix, "Attribute"),
             &obj.attributes,
         );
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         if let Some(ref field_value) = obj.expected {
             UpdateConditionSerializer::serialize(
                 params,
@@ -844,10 +802,7 @@ impl PutAttributesRequestSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "ItemName"),
-            &obj.item_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ItemName"), &obj.item_name);
     }
 }
 
@@ -871,20 +826,14 @@ impl ReplaceableAttributeSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Name"),
-            &obj.name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
         if let Some(ref field_value) = obj.replace {
             params.put(
                 &format!("{}{}", prefix, "Replace"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "Value"),
-            &obj.value.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Value"), &obj.value);
     }
 }
 
@@ -922,10 +871,7 @@ impl ReplaceableItemSerializer {
             &format!("{}{}", prefix, "Attribute"),
             &obj.attributes,
         );
-        params.put(
-            &format!("{}{}", prefix, "ItemName"),
-            &obj.name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ItemName"), &obj.name);
     }
 }
 
@@ -962,18 +908,15 @@ impl SelectRequestSerializer {
         if let Some(ref field_value) = obj.consistent_read {
             params.put(
                 &format!("{}{}", prefix, "ConsistentRead"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "SelectExpression"),
-            &obj.select_expression.replace("+", "%2B"),
+            &obj.select_expression,
         );
     }
 }
@@ -1064,22 +1007,13 @@ impl UpdateConditionSerializer {
         }
 
         if let Some(ref field_value) = obj.exists {
-            params.put(
-                &format!("{}{}", prefix, "Exists"),
-                &field_value.to_string().replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Exists"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.name {
-            params.put(
-                &format!("{}{}", prefix, "Name"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Name"), &field_value);
         }
         if let Some(ref field_value) = obj.value {
-            params.put(
-                &format!("{}{}", prefix, "Value"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Value"), &field_value);
         }
     }
 }
