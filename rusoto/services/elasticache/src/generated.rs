@@ -33,6 +33,7 @@ use rusoto_core::xmlutil::{
     characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::reader::XmlEvent;
@@ -61,10 +62,7 @@ impl AddTagsToResourceMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "ResourceName"),
-            &obj.resource_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
         TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), &obj.tags);
     }
 }
@@ -139,15 +137,15 @@ impl AuthorizeCacheSecurityGroupIngressMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheSecurityGroupName"),
-            &obj.cache_security_group_name.replace("+", "%2B"),
+            &obj.cache_security_group_name,
         );
         params.put(
             &format!("{}{}", prefix, "EC2SecurityGroupName"),
-            &obj.ec2_security_group_name.replace("+", "%2B"),
+            &obj.ec2_security_group_name,
         );
         params.put(
             &format!("{}{}", prefix, "EC2SecurityGroupOwnerId"),
-            &obj.ec2_security_group_owner_id.replace("+", "%2B"),
+            &obj.ec2_security_group_owner_id,
         );
     }
 }
@@ -2138,17 +2136,14 @@ impl CopySnapshotMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SourceSnapshotName"),
-            &obj.source_snapshot_name.replace("+", "%2B"),
+            &obj.source_snapshot_name,
         );
         if let Some(ref field_value) = obj.target_bucket {
-            params.put(
-                &format!("{}{}", prefix, "TargetBucket"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TargetBucket"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TargetSnapshotName"),
-            &obj.target_snapshot_name.replace("+", "%2B"),
+            &obj.target_snapshot_name,
         );
     }
 }
@@ -2259,37 +2254,28 @@ impl CreateCacheClusterMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.az_mode {
-            params.put(
-                &format!("{}{}", prefix, "AZMode"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "AZMode"), &field_value);
         }
         if let Some(ref field_value) = obj.auth_token {
-            params.put(
-                &format!("{}{}", prefix, "AuthToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "AuthToken"), &field_value);
         }
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
             params.put(
                 &format!("{}{}", prefix, "AutoMinorVersionUpgrade"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "CacheClusterId"),
-            &obj.cache_cluster_id.replace("+", "%2B"),
+            &obj.cache_cluster_id,
         );
         if let Some(ref field_value) = obj.cache_node_type {
-            params.put(
-                &format!("{}{}", prefix, "CacheNodeType"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "CacheNodeType"), &field_value);
         }
         if let Some(ref field_value) = obj.cache_parameter_group_name {
             params.put(
                 &format!("{}{}", prefix, "CacheParameterGroupName"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.cache_security_group_names {
@@ -2302,43 +2288,34 @@ impl CreateCacheClusterMessageSerializer {
         if let Some(ref field_value) = obj.cache_subnet_group_name {
             params.put(
                 &format!("{}{}", prefix, "CacheSubnetGroupName"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.engine {
-            params.put(
-                &format!("{}{}", prefix, "Engine"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Engine"), &field_value);
         }
         if let Some(ref field_value) = obj.engine_version {
-            params.put(
-                &format!("{}{}", prefix, "EngineVersion"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EngineVersion"), &field_value);
         }
         if let Some(ref field_value) = obj.notification_topic_arn {
             params.put(
                 &format!("{}{}", prefix, "NotificationTopicArn"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.num_cache_nodes {
             params.put(
                 &format!("{}{}", prefix, "NumCacheNodes"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.port {
-            params.put(
-                &format!("{}{}", prefix, "Port"),
-                &field_value.to_string().replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Port"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.preferred_availability_zone {
             params.put(
                 &format!("{}{}", prefix, "PreferredAvailabilityZone"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.preferred_availability_zones {
@@ -2351,14 +2328,11 @@ impl CreateCacheClusterMessageSerializer {
         if let Some(ref field_value) = obj.preferred_maintenance_window {
             params.put(
                 &format!("{}{}", prefix, "PreferredMaintenanceWindow"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.replication_group_id {
-            params.put(
-                &format!("{}{}", prefix, "ReplicationGroupId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ReplicationGroupId"), &field_value);
         }
         if let Some(ref field_value) = obj.security_group_ids {
             SecurityGroupIdsListSerializer::serialize(
@@ -2375,22 +2349,16 @@ impl CreateCacheClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.snapshot_name {
-            params.put(
-                &format!("{}{}", prefix, "SnapshotName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SnapshotName"), &field_value);
         }
         if let Some(ref field_value) = obj.snapshot_retention_limit {
             params.put(
                 &format!("{}{}", prefix, "SnapshotRetentionLimit"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.snapshot_window {
-            params.put(
-                &format!("{}{}", prefix, "SnapshotWindow"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SnapshotWindow"), &field_value);
         }
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
@@ -2467,16 +2435,13 @@ impl CreateCacheParameterGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheParameterGroupFamily"),
-            &obj.cache_parameter_group_family.replace("+", "%2B"),
+            &obj.cache_parameter_group_family,
         );
         params.put(
             &format!("{}{}", prefix, "CacheParameterGroupName"),
-            &obj.cache_parameter_group_name.replace("+", "%2B"),
+            &obj.cache_parameter_group_name,
         );
-        params.put(
-            &format!("{}{}", prefix, "Description"),
-            &obj.description.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Description"), &obj.description);
     }
 }
 
@@ -2548,12 +2513,9 @@ impl CreateCacheSecurityGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheSecurityGroupName"),
-            &obj.cache_security_group_name.replace("+", "%2B"),
+            &obj.cache_security_group_name,
         );
-        params.put(
-            &format!("{}{}", prefix, "Description"),
-            &obj.description.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Description"), &obj.description);
     }
 }
 
@@ -2627,11 +2589,11 @@ impl CreateCacheSubnetGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheSubnetGroupDescription"),
-            &obj.cache_subnet_group_description.replace("+", "%2B"),
+            &obj.cache_subnet_group_description,
         );
         params.put(
             &format!("{}{}", prefix, "CacheSubnetGroupName"),
-            &obj.cache_subnet_group_name.replace("+", "%2B"),
+            &obj.cache_subnet_group_name,
         );
         SubnetIdentifierListSerializer::serialize(
             params,
@@ -2760,37 +2722,31 @@ impl CreateReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.at_rest_encryption_enabled {
             params.put(
                 &format!("{}{}", prefix, "AtRestEncryptionEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.auth_token {
-            params.put(
-                &format!("{}{}", prefix, "AuthToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "AuthToken"), &field_value);
         }
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
             params.put(
                 &format!("{}{}", prefix, "AutoMinorVersionUpgrade"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.automatic_failover_enabled {
             params.put(
                 &format!("{}{}", prefix, "AutomaticFailoverEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.cache_node_type {
-            params.put(
-                &format!("{}{}", prefix, "CacheNodeType"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "CacheNodeType"), &field_value);
         }
         if let Some(ref field_value) = obj.cache_parameter_group_name {
             params.put(
                 &format!("{}{}", prefix, "CacheParameterGroupName"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.cache_security_group_names {
@@ -2803,20 +2759,14 @@ impl CreateReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.cache_subnet_group_name {
             params.put(
                 &format!("{}{}", prefix, "CacheSubnetGroupName"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.engine {
-            params.put(
-                &format!("{}{}", prefix, "Engine"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Engine"), &field_value);
         }
         if let Some(ref field_value) = obj.engine_version {
-            params.put(
-                &format!("{}{}", prefix, "EngineVersion"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EngineVersion"), &field_value);
         }
         if let Some(ref field_value) = obj.node_group_configuration {
             NodeGroupConfigurationListSerializer::serialize(
@@ -2828,26 +2778,23 @@ impl CreateReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.notification_topic_arn {
             params.put(
                 &format!("{}{}", prefix, "NotificationTopicArn"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.num_cache_clusters {
             params.put(
                 &format!("{}{}", prefix, "NumCacheClusters"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.num_node_groups {
             params.put(
                 &format!("{}{}", prefix, "NumNodeGroups"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.port {
-            params.put(
-                &format!("{}{}", prefix, "Port"),
-                &field_value.to_string().replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Port"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.preferred_cache_cluster_a_zs {
             AvailabilityZonesListSerializer::serialize(
@@ -2859,28 +2806,25 @@ impl CreateReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.preferred_maintenance_window {
             params.put(
                 &format!("{}{}", prefix, "PreferredMaintenanceWindow"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.primary_cluster_id {
-            params.put(
-                &format!("{}{}", prefix, "PrimaryClusterId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PrimaryClusterId"), &field_value);
         }
         if let Some(ref field_value) = obj.replicas_per_node_group {
             params.put(
                 &format!("{}{}", prefix, "ReplicasPerNodeGroup"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "ReplicationGroupDescription"),
-            &obj.replication_group_description.replace("+", "%2B"),
+            &obj.replication_group_description,
         );
         params.put(
             &format!("{}{}", prefix, "ReplicationGroupId"),
-            &obj.replication_group_id.replace("+", "%2B"),
+            &obj.replication_group_id,
         );
         if let Some(ref field_value) = obj.security_group_ids {
             SecurityGroupIdsListSerializer::serialize(
@@ -2897,22 +2841,16 @@ impl CreateReplicationGroupMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.snapshot_name {
-            params.put(
-                &format!("{}{}", prefix, "SnapshotName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SnapshotName"), &field_value);
         }
         if let Some(ref field_value) = obj.snapshot_retention_limit {
             params.put(
                 &format!("{}{}", prefix, "SnapshotRetentionLimit"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.snapshot_window {
-            params.put(
-                &format!("{}{}", prefix, "SnapshotWindow"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SnapshotWindow"), &field_value);
         }
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
@@ -2920,7 +2858,7 @@ impl CreateReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.transit_encryption_enabled {
             params.put(
                 &format!("{}{}", prefix, "TransitEncryptionEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -2993,21 +2931,12 @@ impl CreateSnapshotMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cache_cluster_id {
-            params.put(
-                &format!("{}{}", prefix, "CacheClusterId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "CacheClusterId"), &field_value);
         }
         if let Some(ref field_value) = obj.replication_group_id {
-            params.put(
-                &format!("{}{}", prefix, "ReplicationGroupId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ReplicationGroupId"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "SnapshotName"),
-            &obj.snapshot_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "SnapshotName"), &obj.snapshot_name);
     }
 }
 
@@ -3076,12 +3005,12 @@ impl DeleteCacheClusterMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheClusterId"),
-            &obj.cache_cluster_id.replace("+", "%2B"),
+            &obj.cache_cluster_id,
         );
         if let Some(ref field_value) = obj.final_snapshot_identifier {
             params.put(
                 &format!("{}{}", prefix, "FinalSnapshotIdentifier"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
     }
@@ -3152,7 +3081,7 @@ impl DeleteCacheParameterGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheParameterGroupName"),
-            &obj.cache_parameter_group_name.replace("+", "%2B"),
+            &obj.cache_parameter_group_name,
         );
     }
 }
@@ -3175,7 +3104,7 @@ impl DeleteCacheSecurityGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheSecurityGroupName"),
-            &obj.cache_security_group_name.replace("+", "%2B"),
+            &obj.cache_security_group_name,
         );
     }
 }
@@ -3198,7 +3127,7 @@ impl DeleteCacheSubnetGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheSubnetGroupName"),
-            &obj.cache_subnet_group_name.replace("+", "%2B"),
+            &obj.cache_subnet_group_name,
         );
     }
 }
@@ -3226,17 +3155,17 @@ impl DeleteReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.final_snapshot_identifier {
             params.put(
                 &format!("{}{}", prefix, "FinalSnapshotIdentifier"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         params.put(
             &format!("{}{}", prefix, "ReplicationGroupId"),
-            &obj.replication_group_id.replace("+", "%2B"),
+            &obj.replication_group_id,
         );
         if let Some(ref field_value) = obj.retain_primary_cluster {
             params.put(
                 &format!("{}{}", prefix, "RetainPrimaryCluster"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -3304,10 +3233,7 @@ impl DeleteSnapshotMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "SnapshotName"),
-            &obj.snapshot_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "SnapshotName"), &obj.snapshot_name);
     }
 }
 
@@ -3381,33 +3307,27 @@ impl DescribeCacheClustersMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cache_cluster_id {
-            params.put(
-                &format!("{}{}", prefix, "CacheClusterId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "CacheClusterId"), &field_value);
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(
                 &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.show_cache_clusters_not_in_replication_groups {
             params.put(
                 &format!("{}{}", prefix, "ShowCacheClustersNotInReplicationGroups"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.show_cache_node_info {
             params.put(
                 &format!("{}{}", prefix, "ShowCacheNodeInfo"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -3442,37 +3362,28 @@ impl DescribeCacheEngineVersionsMessageSerializer {
         if let Some(ref field_value) = obj.cache_parameter_group_family {
             params.put(
                 &format!("{}{}", prefix, "CacheParameterGroupFamily"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.default_only {
             params.put(
                 &format!("{}{}", prefix, "DefaultOnly"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.engine {
-            params.put(
-                &format!("{}{}", prefix, "Engine"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Engine"), &field_value);
         }
         if let Some(ref field_value) = obj.engine_version {
-            params.put(
-                &format!("{}{}", prefix, "EngineVersion"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EngineVersion"), &field_value);
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(
                 &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -3501,19 +3412,16 @@ impl DescribeCacheParameterGroupsMessageSerializer {
         if let Some(ref field_value) = obj.cache_parameter_group_name {
             params.put(
                 &format!("{}{}", prefix, "CacheParameterGroupName"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(
                 &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -3543,25 +3451,19 @@ impl DescribeCacheParametersMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheParameterGroupName"),
-            &obj.cache_parameter_group_name.replace("+", "%2B"),
+            &obj.cache_parameter_group_name,
         );
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(
                 &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.source {
-            params.put(
-                &format!("{}{}", prefix, "Source"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Source"), &field_value);
         }
     }
 }
@@ -3589,19 +3491,16 @@ impl DescribeCacheSecurityGroupsMessageSerializer {
         if let Some(ref field_value) = obj.cache_security_group_name {
             params.put(
                 &format!("{}{}", prefix, "CacheSecurityGroupName"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(
                 &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -3630,19 +3529,16 @@ impl DescribeCacheSubnetGroupsMessageSerializer {
         if let Some(ref field_value) = obj.cache_subnet_group_name {
             params.put(
                 &format!("{}{}", prefix, "CacheSubnetGroupName"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(
                 &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -3670,18 +3566,15 @@ impl DescribeEngineDefaultParametersMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheParameterGroupFamily"),
-            &obj.cache_parameter_group_family.replace("+", "%2B"),
+            &obj.cache_parameter_group_family,
         );
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(
                 &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -3765,44 +3658,29 @@ impl DescribeEventsMessageSerializer {
         if let Some(ref field_value) = obj.duration {
             params.put(
                 &format!("{}{}", prefix, "Duration"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.end_time {
-            params.put(
-                &format!("{}{}", prefix, "EndTime"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(
                 &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.source_identifier {
-            params.put(
-                &format!("{}{}", prefix, "SourceIdentifier"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SourceIdentifier"), &field_value);
         }
         if let Some(ref field_value) = obj.source_type {
-            params.put(
-                &format!("{}{}", prefix, "SourceType"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SourceType"), &field_value);
         }
         if let Some(ref field_value) = obj.start_time {
-            params.put(
-                &format!("{}{}", prefix, "StartTime"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
         }
     }
 }
@@ -3828,22 +3706,16 @@ impl DescribeReplicationGroupsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(
                 &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.replication_group_id {
-            params.put(
-                &format!("{}{}", prefix, "ReplicationGroupId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ReplicationGroupId"), &field_value);
         }
     }
 }
@@ -3879,51 +3751,36 @@ impl DescribeReservedCacheNodesMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cache_node_type {
-            params.put(
-                &format!("{}{}", prefix, "CacheNodeType"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "CacheNodeType"), &field_value);
         }
         if let Some(ref field_value) = obj.duration {
-            params.put(
-                &format!("{}{}", prefix, "Duration"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Duration"), &field_value);
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(
                 &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.offering_type {
-            params.put(
-                &format!("{}{}", prefix, "OfferingType"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "OfferingType"), &field_value);
         }
         if let Some(ref field_value) = obj.product_description {
-            params.put(
-                &format!("{}{}", prefix, "ProductDescription"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ProductDescription"), &field_value);
         }
         if let Some(ref field_value) = obj.reserved_cache_node_id {
             params.put(
                 &format!("{}{}", prefix, "ReservedCacheNodeId"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.reserved_cache_nodes_offering_id {
             params.put(
                 &format!("{}{}", prefix, "ReservedCacheNodesOfferingId"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
     }
@@ -3962,45 +3819,30 @@ impl DescribeReservedCacheNodesOfferingsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cache_node_type {
-            params.put(
-                &format!("{}{}", prefix, "CacheNodeType"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "CacheNodeType"), &field_value);
         }
         if let Some(ref field_value) = obj.duration {
-            params.put(
-                &format!("{}{}", prefix, "Duration"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Duration"), &field_value);
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(
                 &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.offering_type {
-            params.put(
-                &format!("{}{}", prefix, "OfferingType"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "OfferingType"), &field_value);
         }
         if let Some(ref field_value) = obj.product_description {
-            params.put(
-                &format!("{}{}", prefix, "ProductDescription"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ProductDescription"), &field_value);
         }
         if let Some(ref field_value) = obj.reserved_cache_nodes_offering_id {
             params.put(
                 &format!("{}{}", prefix, "ReservedCacheNodesOfferingId"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
     }
@@ -4089,46 +3931,31 @@ impl DescribeSnapshotsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cache_cluster_id {
-            params.put(
-                &format!("{}{}", prefix, "CacheClusterId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "CacheClusterId"), &field_value);
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(
                 &format!("{}{}", prefix, "MaxRecords"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.replication_group_id {
-            params.put(
-                &format!("{}{}", prefix, "ReplicationGroupId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ReplicationGroupId"), &field_value);
         }
         if let Some(ref field_value) = obj.show_node_group_config {
             params.put(
                 &format!("{}{}", prefix, "ShowNodeGroupConfig"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.snapshot_name {
-            params.put(
-                &format!("{}{}", prefix, "SnapshotName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SnapshotName"), &field_value);
         }
         if let Some(ref field_value) = obj.snapshot_source {
-            params.put(
-                &format!("{}{}", prefix, "SnapshotSource"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SnapshotSource"), &field_value);
         }
     }
 }
@@ -4591,16 +4418,10 @@ impl ListAllowedNodeTypeModificationsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cache_cluster_id {
-            params.put(
-                &format!("{}{}", prefix, "CacheClusterId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "CacheClusterId"), &field_value);
         }
         if let Some(ref field_value) = obj.replication_group_id {
-            params.put(
-                &format!("{}{}", prefix, "ReplicationGroupId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ReplicationGroupId"), &field_value);
         }
     }
 }
@@ -4621,10 +4442,7 @@ impl ListTagsForResourceMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "ResourceName"),
-            &obj.resource_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
     }
 }
 
@@ -4677,26 +4495,23 @@ impl ModifyCacheClusterMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.az_mode {
-            params.put(
-                &format!("{}{}", prefix, "AZMode"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "AZMode"), &field_value);
         }
         if let Some(ref field_value) = obj.apply_immediately {
             params.put(
                 &format!("{}{}", prefix, "ApplyImmediately"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
             params.put(
                 &format!("{}{}", prefix, "AutoMinorVersionUpgrade"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "CacheClusterId"),
-            &obj.cache_cluster_id.replace("+", "%2B"),
+            &obj.cache_cluster_id,
         );
         if let Some(ref field_value) = obj.cache_node_ids_to_remove {
             CacheNodeIdsListSerializer::serialize(
@@ -4706,15 +4521,12 @@ impl ModifyCacheClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.cache_node_type {
-            params.put(
-                &format!("{}{}", prefix, "CacheNodeType"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "CacheNodeType"), &field_value);
         }
         if let Some(ref field_value) = obj.cache_parameter_group_name {
             params.put(
                 &format!("{}{}", prefix, "CacheParameterGroupName"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.cache_security_group_names {
@@ -4725,10 +4537,7 @@ impl ModifyCacheClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.engine_version {
-            params.put(
-                &format!("{}{}", prefix, "EngineVersion"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EngineVersion"), &field_value);
         }
         if let Some(ref field_value) = obj.new_availability_zones {
             PreferredAvailabilityZoneListSerializer::serialize(
@@ -4740,25 +4549,25 @@ impl ModifyCacheClusterMessageSerializer {
         if let Some(ref field_value) = obj.notification_topic_arn {
             params.put(
                 &format!("{}{}", prefix, "NotificationTopicArn"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.notification_topic_status {
             params.put(
                 &format!("{}{}", prefix, "NotificationTopicStatus"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.num_cache_nodes {
             params.put(
                 &format!("{}{}", prefix, "NumCacheNodes"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.preferred_maintenance_window {
             params.put(
                 &format!("{}{}", prefix, "PreferredMaintenanceWindow"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.security_group_ids {
@@ -4771,14 +4580,11 @@ impl ModifyCacheClusterMessageSerializer {
         if let Some(ref field_value) = obj.snapshot_retention_limit {
             params.put(
                 &format!("{}{}", prefix, "SnapshotRetentionLimit"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.snapshot_window {
-            params.put(
-                &format!("{}{}", prefix, "SnapshotWindow"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SnapshotWindow"), &field_value);
         }
     }
 }
@@ -4850,7 +4656,7 @@ impl ModifyCacheParameterGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheParameterGroupName"),
-            &obj.cache_parameter_group_name.replace("+", "%2B"),
+            &obj.cache_parameter_group_name,
         );
         ParameterNameValueListSerializer::serialize(
             params,
@@ -4883,12 +4689,12 @@ impl ModifyCacheSubnetGroupMessageSerializer {
         if let Some(ref field_value) = obj.cache_subnet_group_description {
             params.put(
                 &format!("{}{}", prefix, "CacheSubnetGroupDescription"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         params.put(
             &format!("{}{}", prefix, "CacheSubnetGroupName"),
-            &obj.cache_subnet_group_name.replace("+", "%2B"),
+            &obj.cache_subnet_group_name,
         );
         if let Some(ref field_value) = obj.subnet_ids {
             SubnetIdentifierListSerializer::serialize(
@@ -4999,31 +4805,28 @@ impl ModifyReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.apply_immediately {
             params.put(
                 &format!("{}{}", prefix, "ApplyImmediately"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
             params.put(
                 &format!("{}{}", prefix, "AutoMinorVersionUpgrade"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.automatic_failover_enabled {
             params.put(
                 &format!("{}{}", prefix, "AutomaticFailoverEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.cache_node_type {
-            params.put(
-                &format!("{}{}", prefix, "CacheNodeType"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "CacheNodeType"), &field_value);
         }
         if let Some(ref field_value) = obj.cache_parameter_group_name {
             params.put(
                 &format!("{}{}", prefix, "CacheParameterGroupName"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.cache_security_group_names {
@@ -5034,50 +4837,41 @@ impl ModifyReplicationGroupMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.engine_version {
-            params.put(
-                &format!("{}{}", prefix, "EngineVersion"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EngineVersion"), &field_value);
         }
         if let Some(ref field_value) = obj.node_group_id {
-            params.put(
-                &format!("{}{}", prefix, "NodeGroupId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NodeGroupId"), &field_value);
         }
         if let Some(ref field_value) = obj.notification_topic_arn {
             params.put(
                 &format!("{}{}", prefix, "NotificationTopicArn"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.notification_topic_status {
             params.put(
                 &format!("{}{}", prefix, "NotificationTopicStatus"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.preferred_maintenance_window {
             params.put(
                 &format!("{}{}", prefix, "PreferredMaintenanceWindow"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.primary_cluster_id {
-            params.put(
-                &format!("{}{}", prefix, "PrimaryClusterId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PrimaryClusterId"), &field_value);
         }
         if let Some(ref field_value) = obj.replication_group_description {
             params.put(
                 &format!("{}{}", prefix, "ReplicationGroupDescription"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         params.put(
             &format!("{}{}", prefix, "ReplicationGroupId"),
-            &obj.replication_group_id.replace("+", "%2B"),
+            &obj.replication_group_id,
         );
         if let Some(ref field_value) = obj.security_group_ids {
             SecurityGroupIdsListSerializer::serialize(
@@ -5089,19 +4883,16 @@ impl ModifyReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.snapshot_retention_limit {
             params.put(
                 &format!("{}{}", prefix, "SnapshotRetentionLimit"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.snapshot_window {
-            params.put(
-                &format!("{}{}", prefix, "SnapshotWindow"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SnapshotWindow"), &field_value);
         }
         if let Some(ref field_value) = obj.snapshotting_cluster_id {
             params.put(
                 &format!("{}{}", prefix, "SnapshottingClusterId"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
     }
@@ -5183,11 +4974,11 @@ impl ModifyReplicationGroupShardConfigurationMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplyImmediately"),
-            &obj.apply_immediately.to_string().replace("+", "%2B"),
+            &obj.apply_immediately.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "NodeGroupCount"),
-            &obj.node_group_count.to_string().replace("+", "%2B"),
+            &obj.node_group_count.to_string(),
         );
         if let Some(ref field_value) = obj.node_groups_to_remove {
             NodeGroupsToRemoveListSerializer::serialize(
@@ -5198,7 +4989,7 @@ impl ModifyReplicationGroupShardConfigurationMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "ReplicationGroupId"),
-            &obj.replication_group_id.replace("+", "%2B"),
+            &obj.replication_group_id,
         );
         if let Some(ref field_value) = obj.resharding_configuration {
             ReshardingConfigurationListSerializer::serialize(
@@ -5411,7 +5202,7 @@ impl NodeGroupConfigurationSerializer {
         if let Some(ref field_value) = obj.primary_availability_zone {
             params.put(
                 &format!("{}{}", prefix, "PrimaryAvailabilityZone"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.replica_availability_zones {
@@ -5424,14 +5215,11 @@ impl NodeGroupConfigurationSerializer {
         if let Some(ref field_value) = obj.replica_count {
             params.put(
                 &format!("{}{}", prefix, "ReplicaCount"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.slots {
-            params.put(
-                &format!("{}{}", prefix, "Slots"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Slots"), &field_value);
         }
     }
 }
@@ -5970,16 +5758,10 @@ impl ParameterNameValueSerializer {
         }
 
         if let Some(ref field_value) = obj.parameter_name {
-            params.put(
-                &format!("{}{}", prefix, "ParameterName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ParameterName"), &field_value);
         }
         if let Some(ref field_value) = obj.parameter_value {
-            params.put(
-                &format!("{}{}", prefix, "ParameterValue"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ParameterValue"), &field_value);
         }
     }
 }
@@ -6158,18 +5940,18 @@ impl PurchaseReservedCacheNodesOfferingMessageSerializer {
         if let Some(ref field_value) = obj.cache_node_count {
             params.put(
                 &format!("{}{}", prefix, "CacheNodeCount"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.reserved_cache_node_id {
             params.put(
                 &format!("{}{}", prefix, "ReservedCacheNodeId"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         params.put(
             &format!("{}{}", prefix, "ReservedCacheNodesOfferingId"),
-            &obj.reserved_cache_nodes_offering_id.replace("+", "%2B"),
+            &obj.reserved_cache_nodes_offering_id,
         );
     }
 }
@@ -6240,7 +6022,7 @@ impl RebootCacheClusterMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheClusterId"),
-            &obj.cache_cluster_id.replace("+", "%2B"),
+            &obj.cache_cluster_id,
         );
         CacheNodeIdsListSerializer::serialize(
             params,
@@ -6414,10 +6196,7 @@ impl RemoveTagsFromResourceMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "ResourceName"),
-            &obj.resource_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
         KeyListSerializer::serialize(params, &format!("{}{}", prefix, "TagKeys"), &obj.tag_keys);
     }
 }
@@ -7191,7 +6970,7 @@ impl ResetCacheParameterGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheParameterGroupName"),
-            &obj.cache_parameter_group_name.replace("+", "%2B"),
+            &obj.cache_parameter_group_name,
         );
         if let Some(ref field_value) = obj.parameter_name_values {
             ParameterNameValueListSerializer::serialize(
@@ -7203,7 +6982,7 @@ impl ResetCacheParameterGroupMessageSerializer {
         if let Some(ref field_value) = obj.reset_all_parameters {
             params.put(
                 &format!("{}{}", prefix, "ResetAllParameters"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -7317,15 +7096,15 @@ impl RevokeCacheSecurityGroupIngressMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheSecurityGroupName"),
-            &obj.cache_security_group_name.replace("+", "%2B"),
+            &obj.cache_security_group_name,
         );
         params.put(
             &format!("{}{}", prefix, "EC2SecurityGroupName"),
-            &obj.ec2_security_group_name.replace("+", "%2B"),
+            &obj.ec2_security_group_name,
         );
         params.put(
             &format!("{}{}", prefix, "EC2SecurityGroupOwnerId"),
-            &obj.ec2_security_group_owner_id.replace("+", "%2B"),
+            &obj.ec2_security_group_owner_id,
         );
     }
 }
@@ -8019,16 +7798,10 @@ impl TagSerializer {
         }
 
         if let Some(ref field_value) = obj.key {
-            params.put(
-                &format!("{}{}", prefix, "Key"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Key"), &field_value);
         }
         if let Some(ref field_value) = obj.value {
-            params.put(
-                &format!("{}{}", prefix, "Value"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Value"), &field_value);
         }
     }
 }
@@ -8149,13 +7922,10 @@ impl TestFailoverMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "NodeGroupId"),
-            &obj.node_group_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "NodeGroupId"), &obj.node_group_id);
         params.put(
             &format!("{}{}", prefix, "ReplicationGroupId"),
-            &obj.replication_group_id.replace("+", "%2B"),
+            &obj.replication_group_id,
         );
     }
 }
@@ -12877,7 +12647,10 @@ where
         params.put("Action", "AddTagsToResource");
         params.put("Version", "2015-02-02");
         AddTagsToResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -12931,7 +12704,10 @@ where
         params.put("Action", "AuthorizeCacheSecurityGroupIngress");
         params.put("Version", "2015-02-02");
         AuthorizeCacheSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -12984,7 +12760,10 @@ where
         params.put("Action", "CopySnapshot");
         params.put("Version", "2015-02-02");
         CopySnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13035,7 +12814,10 @@ where
         params.put("Action", "CreateCacheCluster");
         params.put("Version", "2015-02-02");
         CreateCacheClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13086,7 +12868,10 @@ where
         params.put("Action", "CreateCacheParameterGroup");
         params.put("Version", "2015-02-02");
         CreateCacheParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13137,7 +12922,10 @@ where
         params.put("Action", "CreateCacheSecurityGroup");
         params.put("Version", "2015-02-02");
         CreateCacheSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13188,7 +12976,10 @@ where
         params.put("Action", "CreateCacheSubnetGroup");
         params.put("Version", "2015-02-02");
         CreateCacheSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13239,7 +13030,10 @@ where
         params.put("Action", "CreateReplicationGroup");
         params.put("Version", "2015-02-02");
         CreateReplicationGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13290,7 +13084,10 @@ where
         params.put("Action", "CreateSnapshot");
         params.put("Version", "2015-02-02");
         CreateSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13341,7 +13138,10 @@ where
         params.put("Action", "DeleteCacheCluster");
         params.put("Version", "2015-02-02");
         DeleteCacheClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13392,7 +13192,10 @@ where
         params.put("Action", "DeleteCacheParameterGroup");
         params.put("Version", "2015-02-02");
         DeleteCacheParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13420,7 +13223,10 @@ where
         params.put("Action", "DeleteCacheSecurityGroup");
         params.put("Version", "2015-02-02");
         DeleteCacheSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13448,7 +13254,10 @@ where
         params.put("Action", "DeleteCacheSubnetGroup");
         params.put("Version", "2015-02-02");
         DeleteCacheSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13476,7 +13285,10 @@ where
         params.put("Action", "DeleteReplicationGroup");
         params.put("Version", "2015-02-02");
         DeleteReplicationGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13527,7 +13339,10 @@ where
         params.put("Action", "DeleteSnapshot");
         params.put("Version", "2015-02-02");
         DeleteSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13578,7 +13393,10 @@ where
         params.put("Action", "DescribeCacheClusters");
         params.put("Version", "2015-02-02");
         DescribeCacheClustersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13629,7 +13447,10 @@ where
         params.put("Action", "DescribeCacheEngineVersions");
         params.put("Version", "2015-02-02");
         DescribeCacheEngineVersionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13680,7 +13501,10 @@ where
         params.put("Action", "DescribeCacheParameterGroups");
         params.put("Version", "2015-02-02");
         DescribeCacheParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13731,7 +13555,10 @@ where
         params.put("Action", "DescribeCacheParameters");
         params.put("Version", "2015-02-02");
         DescribeCacheParametersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13782,7 +13609,10 @@ where
         params.put("Action", "DescribeCacheSecurityGroups");
         params.put("Version", "2015-02-02");
         DescribeCacheSecurityGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13833,7 +13663,10 @@ where
         params.put("Action", "DescribeCacheSubnetGroups");
         params.put("Version", "2015-02-02");
         DescribeCacheSubnetGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13885,7 +13718,10 @@ where
         params.put("Action", "DescribeEngineDefaultParameters");
         params.put("Version", "2015-02-02");
         DescribeEngineDefaultParametersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13938,7 +13774,10 @@ where
         params.put("Action", "DescribeEvents");
         params.put("Version", "2015-02-02");
         DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13989,7 +13828,10 @@ where
         params.put("Action", "DescribeReplicationGroups");
         params.put("Version", "2015-02-02");
         DescribeReplicationGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14040,7 +13882,10 @@ where
         params.put("Action", "DescribeReservedCacheNodes");
         params.put("Version", "2015-02-02");
         DescribeReservedCacheNodesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14092,7 +13937,10 @@ where
         params.put("Action", "DescribeReservedCacheNodesOfferings");
         params.put("Version", "2015-02-02");
         DescribeReservedCacheNodesOfferingsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14143,7 +13991,10 @@ where
         params.put("Action", "DescribeSnapshots");
         params.put("Version", "2015-02-02");
         DescribeSnapshotsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14195,7 +14046,10 @@ where
         params.put("Action", "ListAllowedNodeTypeModifications");
         params.put("Version", "2015-02-02");
         ListAllowedNodeTypeModificationsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14248,7 +14102,10 @@ where
         params.put("Action", "ListTagsForResource");
         params.put("Version", "2015-02-02");
         ListTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14299,7 +14156,10 @@ where
         params.put("Action", "ModifyCacheCluster");
         params.put("Version", "2015-02-02");
         ModifyCacheClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14350,7 +14210,10 @@ where
         params.put("Action", "ModifyCacheParameterGroup");
         params.put("Version", "2015-02-02");
         ModifyCacheParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14401,7 +14264,10 @@ where
         params.put("Action", "ModifyCacheSubnetGroup");
         params.put("Version", "2015-02-02");
         ModifyCacheSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14452,7 +14318,10 @@ where
         params.put("Action", "ModifyReplicationGroup");
         params.put("Version", "2015-02-02");
         ModifyReplicationGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14510,7 +14379,10 @@ where
             "",
             &input,
         );
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14566,7 +14438,10 @@ where
         params.put("Action", "PurchaseReservedCacheNodesOffering");
         params.put("Version", "2015-02-02");
         PurchaseReservedCacheNodesOfferingMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14619,7 +14494,10 @@ where
         params.put("Action", "RebootCacheCluster");
         params.put("Version", "2015-02-02");
         RebootCacheClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14670,7 +14548,10 @@ where
         params.put("Action", "RemoveTagsFromResource");
         params.put("Version", "2015-02-02");
         RemoveTagsFromResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14721,7 +14602,10 @@ where
         params.put("Action", "ResetCacheParameterGroup");
         params.put("Version", "2015-02-02");
         ResetCacheParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14773,7 +14657,10 @@ where
         params.put("Action", "RevokeCacheSecurityGroupIngress");
         params.put("Version", "2015-02-02");
         RevokeCacheSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14826,7 +14713,10 @@ where
         params.put("Action", "TestFailover");
         params.put("Version", "2015-02-02");
         TestFailoverMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {

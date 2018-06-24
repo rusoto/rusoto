@@ -36,7 +36,7 @@ impl GenerateProtocol for QueryGenerator {
                     params.put(\"Action\", \"{operation_name}\");
                     params.put(\"Version\", \"{api_version}\");
                     {serialize_input}
-                    request.set_params(params);
+                    {set_input_params}
 
                     let future = self.inner.sign_and_dispatch(request, |response| {{
                         if response.status != StatusCode::Ok {{
@@ -61,7 +61,8 @@ impl GenerateProtocol for QueryGenerator {
                      method_signature = generate_method_signature(operation_name, operation, service),
                      operation_name = &operation.name,
                      request_uri = &operation.http.request_uri,
-                     serialize_input = generate_method_input_serialization(operation))?;
+                     serialize_input = generate_method_input_serialization(operation),
+                     set_input_params = generate_set_input_params(operation))?;
         }
         Ok(())
     }
@@ -77,6 +78,7 @@ impl GenerateProtocol for QueryGenerator {
             use rusoto_core::xmlutil::{{Next, Peek, XmlParseError, XmlResponse}};
             use rusoto_core::xmlutil::{{characters, end_element, find_start_element, start_element, skip_tree, peek_at_name}};
             use rusoto_core::xmlerror::*;
+            use serde_urlencoded;
             use hyper::StatusCode;
 
             enum DeserializerNext {{
@@ -129,6 +131,14 @@ pub fn generate_method_input_serialization(operation: &Operation) -> String {
     } else {
         String::new()
     }
+}
+
+fn generate_set_input_params(operation: &Operation) -> String {
+    if operation.http.method != "POST" {
+        panic!("query protocol supports only POST method: {:?}", operation);
+    }
+    "request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap().into_bytes()));
+    request.set_content_type(\"application/x-www-form-urlencoded\".to_owned());".to_owned()
 }
 
 fn generate_serializer_body(service: &Service, shape: &Shape) -> String {
@@ -305,7 +315,7 @@ fn optional_primitive_field_serializer(service: &Service,
     let expression = serialize_primitive_expression(&member_shape.shape_type, "field_value");
 
     format!("if let Some(ref field_value) = obj.{field_name} {{
-                params.put(&format!(\"{{}}{{}}\", prefix, \"{tag_name}\"), {expression}.replace(\"+\", \"%2B\"));
+                params.put(&format!(\"{{}}{{}}\", prefix, \"{tag_name}\"), {expression});
             }}",
             field_name = generate_field_name(member_name),
             expression = expression,
@@ -321,7 +331,7 @@ fn required_primitive_field_serializer(service: &Service,
                                                     &format!("obj.{}",
                                                              generate_field_name(member_name)));
 
-    format!("params.put(&format!(\"{{}}{{}}\", prefix, \"{tag_name}\"), {expression}.replace(\"+\", \"%2B\"));",
+    format!("params.put(&format!(\"{{}}{{}}\", prefix, \"{tag_name}\"), {expression});",
             expression = expression,
             tag_name = member_location(service, member, member_name))
 }

@@ -33,6 +33,7 @@ use rusoto_core::xmlutil::{
     characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::reader::XmlEvent;
@@ -123,23 +124,17 @@ impl AttributeSerializer {
         if let Some(ref field_value) = obj.alternate_name_encoding {
             params.put(
                 &format!("{}{}", prefix, "AlternateNameEncoding"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.alternate_value_encoding {
             params.put(
                 &format!("{}{}", prefix, "AlternateValueEncoding"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "Name"),
-            &obj.name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "Value"),
-            &obj.value.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "Value"), &obj.value);
     }
 }
 
@@ -208,10 +203,7 @@ impl BatchDeleteAttributesRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         DeletableItemListSerializer::serialize(
             params,
             &format!("{}{}", prefix, "Item"),
@@ -237,10 +229,7 @@ impl BatchPutAttributesRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         ReplaceableItemListSerializer::serialize(
             params,
             &format!("{}{}", prefix, "Item"),
@@ -264,10 +253,7 @@ impl CreateDomainRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
     }
 }
 
@@ -293,10 +279,7 @@ impl DeletableItemSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "ItemName"),
-            &obj.name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ItemName"), &obj.name);
     }
 }
 
@@ -339,10 +322,7 @@ impl DeleteAttributesRequestSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         if let Some(ref field_value) = obj.expected {
             UpdateConditionSerializer::serialize(
                 params,
@@ -350,10 +330,7 @@ impl DeleteAttributesRequestSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "ItemName"),
-            &obj.item_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ItemName"), &obj.item_name);
     }
 }
 
@@ -372,10 +349,7 @@ impl DeleteDomainRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
     }
 }
 
@@ -394,10 +368,7 @@ impl DomainMetadataRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
     }
 }
 
@@ -547,17 +518,11 @@ impl GetAttributesRequestSerializer {
         if let Some(ref field_value) = obj.consistent_read {
             params.put(
                 &format!("{}{}", prefix, "ConsistentRead"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "ItemName"),
-            &obj.item_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(&format!("{}{}", prefix, "ItemName"), &obj.item_name);
     }
 }
 
@@ -728,14 +693,11 @@ impl ListDomainsRequestSerializer {
         if let Some(ref field_value) = obj.max_number_of_domains {
             params.put(
                 &format!("{}{}", prefix, "MaxNumberOfDomains"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
     }
 }
@@ -834,10 +796,7 @@ impl PutAttributesRequestSerializer {
             &format!("{}{}", prefix, "Attribute"),
             &obj.attributes,
         );
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         if let Some(ref field_value) = obj.expected {
             UpdateConditionSerializer::serialize(
                 params,
@@ -845,10 +804,7 @@ impl PutAttributesRequestSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "ItemName"),
-            &obj.item_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ItemName"), &obj.item_name);
     }
 }
 
@@ -872,20 +828,14 @@ impl ReplaceableAttributeSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Name"),
-            &obj.name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
         if let Some(ref field_value) = obj.replace {
             params.put(
                 &format!("{}{}", prefix, "Replace"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "Value"),
-            &obj.value.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Value"), &obj.value);
     }
 }
 
@@ -923,10 +873,7 @@ impl ReplaceableItemSerializer {
             &format!("{}{}", prefix, "Attribute"),
             &obj.attributes,
         );
-        params.put(
-            &format!("{}{}", prefix, "ItemName"),
-            &obj.name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ItemName"), &obj.name);
     }
 }
 
@@ -963,18 +910,15 @@ impl SelectRequestSerializer {
         if let Some(ref field_value) = obj.consistent_read {
             params.put(
                 &format!("{}{}", prefix, "ConsistentRead"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "SelectExpression"),
-            &obj.select_expression.replace("+", "%2B"),
+            &obj.select_expression,
         );
     }
 }
@@ -1065,22 +1009,13 @@ impl UpdateConditionSerializer {
         }
 
         if let Some(ref field_value) = obj.exists {
-            params.put(
-                &format!("{}{}", prefix, "Exists"),
-                &field_value.to_string().replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Exists"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.name {
-            params.put(
-                &format!("{}{}", prefix, "Name"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Name"), &field_value);
         }
         if let Some(ref field_value) = obj.value {
-            params.put(
-                &format!("{}{}", prefix, "Value"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Value"), &field_value);
         }
     }
 }
@@ -2149,7 +2084,10 @@ where
         params.put("Action", "BatchDeleteAttributes");
         params.put("Version", "2009-04-15");
         BatchDeleteAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -2177,7 +2115,10 @@ where
         params.put("Action", "BatchPutAttributes");
         params.put("Version", "2009-04-15");
         BatchPutAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -2202,7 +2143,10 @@ where
         params.put("Action", "CreateDomain");
         params.put("Version", "2009-04-15");
         CreateDomainRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -2230,7 +2174,10 @@ where
         params.put("Action", "DeleteAttributes");
         params.put("Version", "2009-04-15");
         DeleteAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -2255,7 +2202,10 @@ where
         params.put("Action", "DeleteDomain");
         params.put("Version", "2009-04-15");
         DeleteDomainRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -2283,7 +2233,10 @@ where
         params.put("Action", "DomainMetadata");
         params.put("Version", "2009-04-15");
         DomainMetadataRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -2334,7 +2287,10 @@ where
         params.put("Action", "GetAttributes");
         params.put("Version", "2009-04-15");
         GetAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -2385,7 +2341,10 @@ where
         params.put("Action", "ListDomains");
         params.put("Version", "2009-04-15");
         ListDomainsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -2433,7 +2392,10 @@ where
         params.put("Action", "PutAttributes");
         params.put("Version", "2009-04-15");
         PutAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -2458,7 +2420,10 @@ where
         params.put("Action", "Select");
         params.put("Version", "2009-04-15");
         SelectRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {

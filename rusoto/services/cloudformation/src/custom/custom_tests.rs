@@ -3,10 +3,13 @@ extern crate rusoto_mock;
 use ::{CloudFormation, CloudFormationClient, ListStacksInput};
 
 use rusoto_core::{Region, SignedRequest};
+use rusoto_core::signature::SignedRequestPayload;
+use rusoto_core::param::Params;
+use serde_urlencoded;
 use self::rusoto_mock::*;
 
 #[test]
-fn should_serialize_list_parameters_in_query_string() {
+fn should_serialize_list_parameters_in_request_body() {
     let mock = MockRequestDispatcher::with_status(200)
         .with_body(r#"<?xml version="1.0" encoding="UTF-8"?>
         <ListStacksResponse xmlns="http://cloudformation.amazonaws.com/doc/2010-05-15/">
@@ -44,11 +47,15 @@ fn should_serialize_list_parameters_in_query_string() {
         .with_request_checker(|request: &SignedRequest| {
             assert_eq!("POST", request.method);
             assert_eq!("/", request.path);
-            assert!(request.payload.is_none());
-            assert_eq!(Some(&Some("CREATE_IN_PROGRESS".to_owned())),
-                        request.params.get("StackStatusFilter.member.1"));
-            assert_eq!(Some(&Some("DELETE_COMPLETE".to_owned())),
-                        request.params.get("StackStatusFilter.member.2"));
+            if let Some(SignedRequestPayload::Buffer(ref buffer)) = request.payload {
+                let params: Params = serde_urlencoded::from_bytes(buffer).unwrap();
+                assert_eq!(Some(&Some("CREATE_IN_PROGRESS".to_owned())),
+                            params.get("StackStatusFilter.member.1"));
+                assert_eq!(Some(&Some("DELETE_COMPLETE".to_owned())),
+                            params.get("StackStatusFilter.member.2"));
+            } else {
+                panic!("Unexpected request.payload: {:?}", request.payload);
+            }
         });
 
     let filters = vec!["CREATE_IN_PROGRESS".to_owned(), "DELETE_COMPLETE".to_owned()];

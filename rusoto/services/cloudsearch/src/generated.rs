@@ -33,6 +33,7 @@ use rusoto_core::xmlutil::{
     characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::reader::XmlEvent;
@@ -227,32 +228,23 @@ impl AnalysisOptionsSerializer {
         if let Some(ref field_value) = obj.algorithmic_stemming {
             params.put(
                 &format!("{}{}", prefix, "AlgorithmicStemming"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.japanese_tokenization_dictionary {
             params.put(
                 &format!("{}{}", prefix, "JapaneseTokenizationDictionary"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.stemming_dictionary {
-            params.put(
-                &format!("{}{}", prefix, "StemmingDictionary"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "StemmingDictionary"), &field_value);
         }
         if let Some(ref field_value) = obj.stopwords {
-            params.put(
-                &format!("{}{}", prefix, "Stopwords"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Stopwords"), &field_value);
         }
         if let Some(ref field_value) = obj.synonyms {
-            params.put(
-                &format!("{}{}", prefix, "Synonyms"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Synonyms"), &field_value);
         }
     }
 }
@@ -338,11 +330,11 @@ impl AnalysisSchemeSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "AnalysisSchemeLanguage"),
-            &obj.analysis_scheme_language.replace("+", "%2B"),
+            &obj.analysis_scheme_language,
         );
         params.put(
             &format!("{}{}", prefix, "AnalysisSchemeName"),
-            &obj.analysis_scheme_name.replace("+", "%2B"),
+            &obj.analysis_scheme_name,
         );
     }
 }
@@ -532,10 +524,7 @@ impl BuildSuggestersRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
     }
 }
 
@@ -603,10 +592,7 @@ impl CreateDomainRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
     }
 }
 
@@ -749,34 +735,28 @@ impl DateArrayOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(
-                &format!("{}{}", prefix, "DefaultValue"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
         }
         if let Some(ref field_value) = obj.facet_enabled {
             params.put(
                 &format!("{}{}", prefix, "FacetEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.return_enabled {
             params.put(
                 &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.search_enabled {
             params.put(
                 &format!("{}{}", prefix, "SearchEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.source_fields {
-            params.put(
-                &format!("{}{}", prefix, "SourceFields"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SourceFields"), &field_value);
         }
     }
 }
@@ -878,40 +858,34 @@ impl DateOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(
-                &format!("{}{}", prefix, "DefaultValue"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
         }
         if let Some(ref field_value) = obj.facet_enabled {
             params.put(
                 &format!("{}{}", prefix, "FacetEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.return_enabled {
             params.put(
                 &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.search_enabled {
             params.put(
                 &format!("{}{}", prefix, "SearchEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.sort_enabled {
             params.put(
                 &format!("{}{}", prefix, "SortEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.source_field {
-            params.put(
-                &format!("{}{}", prefix, "SourceField"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SourceField"), &field_value);
         }
     }
 }
@@ -937,10 +911,7 @@ impl DefineAnalysisSchemeRequestSerializer {
             &format!("{}{}", prefix, "AnalysisScheme"),
             &obj.analysis_scheme,
         );
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
     }
 }
 
@@ -1008,10 +979,7 @@ impl DefineExpressionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         ExpressionSerializer::serialize(
             params,
             &format!("{}{}", prefix, "Expression"),
@@ -1085,10 +1053,7 @@ impl DefineIndexFieldRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         IndexFieldSerializer::serialize(
             params,
             &format!("{}{}", prefix, "IndexField"),
@@ -1161,10 +1126,7 @@ impl DefineSuggesterRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         SuggesterSerializer::serialize(
             params,
             &format!("{}{}", prefix, "Suggester"),
@@ -1238,12 +1200,9 @@ impl DeleteAnalysisSchemeRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AnalysisSchemeName"),
-            &obj.analysis_scheme_name.replace("+", "%2B"),
+            &obj.analysis_scheme_name,
         );
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
     }
 }
 
@@ -1312,10 +1271,7 @@ impl DeleteDomainRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
     }
 }
 
@@ -1384,13 +1340,10 @@ impl DeleteExpressionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         params.put(
             &format!("{}{}", prefix, "ExpressionName"),
-            &obj.expression_name.replace("+", "%2B"),
+            &obj.expression_name,
         );
     }
 }
@@ -1461,13 +1414,10 @@ impl DeleteIndexFieldRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         params.put(
             &format!("{}{}", prefix, "IndexFieldName"),
-            &obj.index_field_name.replace("+", "%2B"),
+            &obj.index_field_name,
         );
     }
 }
@@ -1538,13 +1488,10 @@ impl DeleteSuggesterRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         params.put(
             &format!("{}{}", prefix, "SuggesterName"),
-            &obj.suggester_name.replace("+", "%2B"),
+            &obj.suggester_name,
         );
     }
 }
@@ -1626,13 +1573,10 @@ impl DescribeAnalysisSchemesRequestSerializer {
         if let Some(ref field_value) = obj.deployed {
             params.put(
                 &format!("{}{}", prefix, "Deployed"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
     }
 }
 
@@ -1707,13 +1651,10 @@ impl DescribeAvailabilityOptionsRequestSerializer {
         if let Some(ref field_value) = obj.deployed {
             params.put(
                 &format!("{}{}", prefix, "Deployed"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
     }
 }
 
@@ -1864,13 +1805,10 @@ impl DescribeExpressionsRequestSerializer {
         if let Some(ref field_value) = obj.deployed {
             params.put(
                 &format!("{}{}", prefix, "Deployed"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         if let Some(ref field_value) = obj.expression_names {
             StandardNameListSerializer::serialize(
                 params,
@@ -1953,13 +1891,10 @@ impl DescribeIndexFieldsRequestSerializer {
         if let Some(ref field_value) = obj.deployed {
             params.put(
                 &format!("{}{}", prefix, "Deployed"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         if let Some(ref field_value) = obj.field_names {
             DynamicFieldNameListSerializer::serialize(
                 params,
@@ -2034,10 +1969,7 @@ impl DescribeScalingParametersRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
     }
 }
 
@@ -2111,13 +2043,10 @@ impl DescribeServiceAccessPoliciesRequestSerializer {
         if let Some(ref field_value) = obj.deployed {
             params.put(
                 &format!("{}{}", prefix, "Deployed"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
     }
 }
 
@@ -2193,13 +2122,10 @@ impl DescribeSuggestersRequestSerializer {
         if let Some(ref field_value) = obj.deployed {
             params.put(
                 &format!("{}{}", prefix, "Deployed"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         if let Some(ref field_value) = obj.suggester_names {
             StandardNameListSerializer::serialize(
                 params,
@@ -2332,21 +2258,12 @@ impl DocumentSuggesterOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.fuzzy_matching {
-            params.put(
-                &format!("{}{}", prefix, "FuzzyMatching"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "FuzzyMatching"), &field_value);
         }
         if let Some(ref field_value) = obj.sort_expression {
-            params.put(
-                &format!("{}{}", prefix, "SortExpression"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SortExpression"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "SourceField"),
-            &obj.source_field.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "SourceField"), &obj.source_field);
     }
 }
 
@@ -2681,32 +2598,29 @@ impl DoubleArrayOptionsSerializer {
         if let Some(ref field_value) = obj.default_value {
             params.put(
                 &format!("{}{}", prefix, "DefaultValue"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.facet_enabled {
             params.put(
                 &format!("{}{}", prefix, "FacetEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.return_enabled {
             params.put(
                 &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.search_enabled {
             params.put(
                 &format!("{}{}", prefix, "SearchEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.source_fields {
-            params.put(
-                &format!("{}{}", prefix, "SourceFields"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SourceFields"), &field_value);
         }
     }
 }
@@ -2809,38 +2723,35 @@ impl DoubleOptionsSerializer {
         if let Some(ref field_value) = obj.default_value {
             params.put(
                 &format!("{}{}", prefix, "DefaultValue"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.facet_enabled {
             params.put(
                 &format!("{}{}", prefix, "FacetEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.return_enabled {
             params.put(
                 &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.search_enabled {
             params.put(
                 &format!("{}{}", prefix, "SearchEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.sort_enabled {
             params.put(
                 &format!("{}{}", prefix, "SortEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.source_field {
-            params.put(
-                &format!("{}{}", prefix, "SourceField"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SourceField"), &field_value);
         }
     }
 }
@@ -2938,11 +2849,11 @@ impl ExpressionSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ExpressionName"),
-            &obj.expression_name.replace("+", "%2B"),
+            &obj.expression_name,
         );
         params.put(
             &format!("{}{}", prefix, "ExpressionValue"),
-            &obj.expression_value.replace("+", "%2B"),
+            &obj.expression_value,
         );
     }
 }
@@ -3150,10 +3061,7 @@ impl IndexDocumentsRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
     }
 }
 
@@ -3378,11 +3286,11 @@ impl IndexFieldSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "IndexFieldName"),
-            &obj.index_field_name.replace("+", "%2B"),
+            &obj.index_field_name,
         );
         params.put(
             &format!("{}{}", prefix, "IndexFieldType"),
-            &obj.index_field_type.replace("+", "%2B"),
+            &obj.index_field_type,
         );
         if let Some(ref field_value) = obj.int_array_options {
             IntArrayOptionsSerializer::serialize(
@@ -3646,32 +3554,29 @@ impl IntArrayOptionsSerializer {
         if let Some(ref field_value) = obj.default_value {
             params.put(
                 &format!("{}{}", prefix, "DefaultValue"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.facet_enabled {
             params.put(
                 &format!("{}{}", prefix, "FacetEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.return_enabled {
             params.put(
                 &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.search_enabled {
             params.put(
                 &format!("{}{}", prefix, "SearchEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.source_fields {
-            params.put(
-                &format!("{}{}", prefix, "SourceFields"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SourceFields"), &field_value);
         }
     }
 }
@@ -3774,38 +3679,35 @@ impl IntOptionsSerializer {
         if let Some(ref field_value) = obj.default_value {
             params.put(
                 &format!("{}{}", prefix, "DefaultValue"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.facet_enabled {
             params.put(
                 &format!("{}{}", prefix, "FacetEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.return_enabled {
             params.put(
                 &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.search_enabled {
             params.put(
                 &format!("{}{}", prefix, "SearchEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.sort_enabled {
             params.put(
                 &format!("{}{}", prefix, "SortEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.source_field {
-            params.put(
-                &format!("{}{}", prefix, "SourceField"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SourceField"), &field_value);
         }
     }
 }
@@ -3907,40 +3809,34 @@ impl LatLonOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(
-                &format!("{}{}", prefix, "DefaultValue"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
         }
         if let Some(ref field_value) = obj.facet_enabled {
             params.put(
                 &format!("{}{}", prefix, "FacetEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.return_enabled {
             params.put(
                 &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.search_enabled {
             params.put(
                 &format!("{}{}", prefix, "SearchEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.sort_enabled {
             params.put(
                 &format!("{}{}", prefix, "SortEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.source_field {
-            params.put(
-                &format!("{}{}", prefix, "SourceField"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SourceField"), &field_value);
         }
     }
 }
@@ -4141,34 +4037,28 @@ impl LiteralArrayOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(
-                &format!("{}{}", prefix, "DefaultValue"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
         }
         if let Some(ref field_value) = obj.facet_enabled {
             params.put(
                 &format!("{}{}", prefix, "FacetEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.return_enabled {
             params.put(
                 &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.search_enabled {
             params.put(
                 &format!("{}{}", prefix, "SearchEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.source_fields {
-            params.put(
-                &format!("{}{}", prefix, "SourceFields"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SourceFields"), &field_value);
         }
     }
 }
@@ -4270,40 +4160,34 @@ impl LiteralOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(
-                &format!("{}{}", prefix, "DefaultValue"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
         }
         if let Some(ref field_value) = obj.facet_enabled {
             params.put(
                 &format!("{}{}", prefix, "FacetEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.return_enabled {
             params.put(
                 &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.search_enabled {
             params.put(
                 &format!("{}{}", prefix, "SearchEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.sort_enabled {
             params.put(
                 &format!("{}{}", prefix, "SortEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.source_field {
-            params.put(
-                &format!("{}{}", prefix, "SourceField"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SourceField"), &field_value);
         }
     }
 }
@@ -4575,19 +4459,19 @@ impl ScalingParametersSerializer {
         if let Some(ref field_value) = obj.desired_instance_type {
             params.put(
                 &format!("{}{}", prefix, "DesiredInstanceType"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.desired_partition_count {
             params.put(
                 &format!("{}{}", prefix, "DesiredPartitionCount"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.desired_replication_count {
             params.put(
                 &format!("{}{}", prefix, "DesiredReplicationCount"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -4830,7 +4714,7 @@ impl SuggesterSerializer {
         );
         params.put(
             &format!("{}{}", prefix, "SuggesterName"),
-            &obj.suggester_name.replace("+", "%2B"),
+            &obj.suggester_name,
         );
     }
 }
@@ -5029,34 +4913,25 @@ impl TextArrayOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.analysis_scheme {
-            params.put(
-                &format!("{}{}", prefix, "AnalysisScheme"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "AnalysisScheme"), &field_value);
         }
         if let Some(ref field_value) = obj.default_value {
-            params.put(
-                &format!("{}{}", prefix, "DefaultValue"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
         }
         if let Some(ref field_value) = obj.highlight_enabled {
             params.put(
                 &format!("{}{}", prefix, "HighlightEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.return_enabled {
             params.put(
                 &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.source_fields {
-            params.put(
-                &format!("{}{}", prefix, "SourceFields"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SourceFields"), &field_value);
         }
     }
 }
@@ -5156,40 +5031,31 @@ impl TextOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.analysis_scheme {
-            params.put(
-                &format!("{}{}", prefix, "AnalysisScheme"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "AnalysisScheme"), &field_value);
         }
         if let Some(ref field_value) = obj.default_value {
-            params.put(
-                &format!("{}{}", prefix, "DefaultValue"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
         }
         if let Some(ref field_value) = obj.highlight_enabled {
             params.put(
                 &format!("{}{}", prefix, "HighlightEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.return_enabled {
             params.put(
                 &format!("{}{}", prefix, "ReturnEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.sort_enabled {
             params.put(
                 &format!("{}{}", prefix, "SortEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.source_field {
-            params.put(
-                &format!("{}{}", prefix, "SourceField"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SourceField"), &field_value);
         }
     }
 }
@@ -5225,13 +5091,10 @@ impl UpdateAvailabilityOptionsRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         params.put(
             &format!("{}{}", prefix, "MultiAZ"),
-            &obj.multi_az.to_string().replace("+", "%2B"),
+            &obj.multi_az.to_string(),
         );
     }
 }
@@ -5302,10 +5165,7 @@ impl UpdateScalingParametersRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
         ScalingParametersSerializer::serialize(
             params,
             &format!("{}{}", prefix, "ScalingParameters"),
@@ -5382,12 +5242,9 @@ impl UpdateServiceAccessPoliciesRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AccessPolicies"),
-            &obj.access_policies.replace("+", "%2B"),
+            &obj.access_policies,
         );
-        params.put(
-            &format!("{}{}", prefix, "DomainName"),
-            &obj.domain_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
     }
 }
 
@@ -7909,7 +7766,10 @@ where
         params.put("Action", "BuildSuggesters");
         params.put("Version", "2013-01-01");
         BuildSuggestersRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -7960,7 +7820,10 @@ where
         params.put("Action", "CreateDomain");
         params.put("Version", "2013-01-01");
         CreateDomainRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -8011,7 +7874,10 @@ where
         params.put("Action", "DefineAnalysisScheme");
         params.put("Version", "2013-01-01");
         DefineAnalysisSchemeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -8062,7 +7928,10 @@ where
         params.put("Action", "DefineExpression");
         params.put("Version", "2013-01-01");
         DefineExpressionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -8113,7 +7982,10 @@ where
         params.put("Action", "DefineIndexField");
         params.put("Version", "2013-01-01");
         DefineIndexFieldRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -8164,7 +8036,10 @@ where
         params.put("Action", "DefineSuggester");
         params.put("Version", "2013-01-01");
         DefineSuggesterRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -8215,7 +8090,10 @@ where
         params.put("Action", "DeleteAnalysisScheme");
         params.put("Version", "2013-01-01");
         DeleteAnalysisSchemeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -8266,7 +8144,10 @@ where
         params.put("Action", "DeleteDomain");
         params.put("Version", "2013-01-01");
         DeleteDomainRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -8317,7 +8198,10 @@ where
         params.put("Action", "DeleteExpression");
         params.put("Version", "2013-01-01");
         DeleteExpressionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -8368,7 +8252,10 @@ where
         params.put("Action", "DeleteIndexField");
         params.put("Version", "2013-01-01");
         DeleteIndexFieldRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -8419,7 +8306,10 @@ where
         params.put("Action", "DeleteSuggester");
         params.put("Version", "2013-01-01");
         DeleteSuggesterRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -8470,7 +8360,10 @@ where
         params.put("Action", "DescribeAnalysisSchemes");
         params.put("Version", "2013-01-01");
         DescribeAnalysisSchemesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -8521,7 +8414,10 @@ where
         params.put("Action", "DescribeAvailabilityOptions");
         params.put("Version", "2013-01-01");
         DescribeAvailabilityOptionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -8574,7 +8470,10 @@ where
         params.put("Action", "DescribeDomains");
         params.put("Version", "2013-01-01");
         DescribeDomainsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -8625,7 +8524,10 @@ where
         params.put("Action", "DescribeExpressions");
         params.put("Version", "2013-01-01");
         DescribeExpressionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -8676,7 +8578,10 @@ where
         params.put("Action", "DescribeIndexFields");
         params.put("Version", "2013-01-01");
         DescribeIndexFieldsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -8727,7 +8632,10 @@ where
         params.put("Action", "DescribeScalingParameters");
         params.put("Version", "2013-01-01");
         DescribeScalingParametersRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -8779,7 +8687,10 @@ where
         params.put("Action", "DescribeServiceAccessPolicies");
         params.put("Version", "2013-01-01");
         DescribeServiceAccessPoliciesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -8832,7 +8743,10 @@ where
         params.put("Action", "DescribeSuggesters");
         params.put("Version", "2013-01-01");
         DescribeSuggestersRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -8883,7 +8797,10 @@ where
         params.put("Action", "IndexDocuments");
         params.put("Version", "2013-01-01");
         IndexDocumentsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -8931,7 +8848,10 @@ where
         params.put("Action", "ListDomainNames");
         params.put("Version", "2013-01-01");
 
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -8982,7 +8902,10 @@ where
         params.put("Action", "UpdateAvailabilityOptions");
         params.put("Version", "2013-01-01");
         UpdateAvailabilityOptionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -9033,7 +8956,10 @@ where
         params.put("Action", "UpdateScalingParameters");
         params.put("Version", "2013-01-01");
         UpdateScalingParametersRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -9084,7 +9010,10 @@ where
         params.put("Action", "UpdateServiceAccessPolicies");
         params.put("Version", "2013-01-01");
         UpdateServiceAccessPoliciesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {

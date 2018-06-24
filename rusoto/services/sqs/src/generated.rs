@@ -33,6 +33,7 @@ use rusoto_core::xmlutil::{
     characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::reader::XmlEvent;
@@ -98,14 +99,8 @@ impl AddPermissionRequestSerializer {
             &format!("{}{}", prefix, "ActionName"),
             &obj.actions,
         );
-        params.put(
-            &format!("{}{}", prefix, "Label"),
-            &obj.label.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "QueueUrl"),
-            &obj.queue_url.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Label"), &obj.label);
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
     }
 }
 
@@ -315,10 +310,7 @@ impl ChangeMessageVisibilityBatchRequestSerializer {
             &format!("{}{}", prefix, "ChangeMessageVisibilityBatchRequestEntry"),
             &obj.entries,
         );
-        params.put(
-            &format!("{}{}", prefix, "QueueUrl"),
-            &obj.queue_url.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
     }
 }
 
@@ -342,15 +334,15 @@ impl ChangeMessageVisibilityBatchRequestEntrySerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Id"), &obj.id.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "Id"), &obj.id);
         params.put(
             &format!("{}{}", prefix, "ReceiptHandle"),
-            &obj.receipt_handle.replace("+", "%2B"),
+            &obj.receipt_handle,
         );
         if let Some(ref field_value) = obj.visibility_timeout {
             params.put(
                 &format!("{}{}", prefix, "VisibilityTimeout"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -521,17 +513,14 @@ impl ChangeMessageVisibilityRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "QueueUrl"),
-            &obj.queue_url.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
         params.put(
             &format!("{}{}", prefix, "ReceiptHandle"),
-            &obj.receipt_handle.replace("+", "%2B"),
+            &obj.receipt_handle,
         );
         params.put(
             &format!("{}{}", prefix, "VisibilityTimeout"),
-            &obj.visibility_timeout.to_string().replace("+", "%2B"),
+            &obj.visibility_timeout.to_string(),
         );
     }
 }
@@ -561,10 +550,7 @@ impl CreateQueueRequestSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "QueueName"),
-            &obj.queue_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "QueueName"), &obj.queue_name);
     }
 }
 
@@ -638,10 +624,7 @@ impl DeleteMessageBatchRequestSerializer {
             &format!("{}{}", prefix, "DeleteMessageBatchRequestEntry"),
             &obj.entries,
         );
-        params.put(
-            &format!("{}{}", prefix, "QueueUrl"),
-            &obj.queue_url.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
     }
 }
 
@@ -663,10 +646,10 @@ impl DeleteMessageBatchRequestEntrySerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Id"), &obj.id.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "Id"), &obj.id);
         params.put(
             &format!("{}{}", prefix, "ReceiptHandle"),
-            &obj.receipt_handle.replace("+", "%2B"),
+            &obj.receipt_handle,
         );
     }
 }
@@ -831,13 +814,10 @@ impl DeleteMessageRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "QueueUrl"),
-            &obj.queue_url.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
         params.put(
             &format!("{}{}", prefix, "ReceiptHandle"),
-            &obj.receipt_handle.replace("+", "%2B"),
+            &obj.receipt_handle,
         );
     }
 }
@@ -858,10 +838,7 @@ impl DeleteQueueRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "QueueUrl"),
-            &obj.queue_url.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
     }
 }
 
@@ -890,10 +867,7 @@ impl GetQueueAttributesRequestSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "QueueUrl"),
-            &obj.queue_url.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
     }
 }
 
@@ -964,14 +938,11 @@ impl GetQueueUrlRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "QueueName"),
-            &obj.queue_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "QueueName"), &obj.queue_name);
         if let Some(ref field_value) = obj.queue_owner_aws_account_id {
             params.put(
                 &format!("{}{}", prefix, "QueueOwnerAWSAccountId"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
     }
@@ -1040,10 +1011,7 @@ impl ListDeadLetterSourceQueuesRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "QueueUrl"),
-            &obj.queue_url.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
     }
 }
 
@@ -1109,10 +1077,7 @@ impl ListQueueTagsRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "QueueUrl"),
-            &obj.queue_url.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
     }
 }
 
@@ -1178,10 +1143,7 @@ impl ListQueuesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.queue_name_prefix {
-            params.put(
-                &format!("{}{}", prefix, "QueueNamePrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "QueueNamePrefix"), &field_value);
         }
     }
 }
@@ -1429,15 +1391,10 @@ impl MessageAttributeValueSerializer {
         if let Some(ref field_value) = obj.binary_value {
             params.put(
                 &format!("{}{}", prefix, "BinaryValue"),
-                ::std::str::from_utf8(&field_value)
-                    .unwrap()
-                    .replace("+", "%2B"),
+                ::std::str::from_utf8(&field_value).unwrap(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "DataType"),
-            &obj.data_type.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "DataType"), &obj.data_type);
         if let Some(ref field_value) = obj.string_list_values {
             StringListSerializer::serialize(
                 params,
@@ -1446,10 +1403,7 @@ impl MessageAttributeValueSerializer {
             );
         }
         if let Some(ref field_value) = obj.string_value {
-            params.put(
-                &format!("{}{}", prefix, "StringValue"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "StringValue"), &field_value);
         }
     }
 }
@@ -1574,10 +1528,7 @@ impl PurgeQueueRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "QueueUrl"),
-            &obj.queue_url.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
     }
 }
 
@@ -1695,7 +1646,7 @@ impl ReceiveMessageRequestSerializer {
         if let Some(ref field_value) = obj.max_number_of_messages {
             params.put(
                 &format!("{}{}", prefix, "MaxNumberOfMessages"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.message_attribute_names {
@@ -1705,26 +1656,23 @@ impl ReceiveMessageRequestSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "QueueUrl"),
-            &obj.queue_url.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
         if let Some(ref field_value) = obj.receive_request_attempt_id {
             params.put(
                 &format!("{}{}", prefix, "ReceiveRequestAttemptId"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.visibility_timeout {
             params.put(
                 &format!("{}{}", prefix, "VisibilityTimeout"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.wait_time_seconds {
             params.put(
                 &format!("{}{}", prefix, "WaitTimeSeconds"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -1795,14 +1743,8 @@ impl RemovePermissionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Label"),
-            &obj.label.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "QueueUrl"),
-            &obj.queue_url.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Label"), &obj.label);
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
     }
 }
 
@@ -1829,10 +1771,7 @@ impl SendMessageBatchRequestSerializer {
             &format!("{}{}", prefix, "SendMessageBatchRequestEntry"),
             &obj.entries,
         );
-        params.put(
-            &format!("{}{}", prefix, "QueueUrl"),
-            &obj.queue_url.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
     }
 }
 
@@ -1865,10 +1804,10 @@ impl SendMessageBatchRequestEntrySerializer {
         if let Some(ref field_value) = obj.delay_seconds {
             params.put(
                 &format!("{}{}", prefix, "DelaySeconds"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(&format!("{}{}", prefix, "Id"), &obj.id.replace("+", "%2B"));
+        params.put(&format!("{}{}", prefix, "Id"), &obj.id);
         if let Some(ref field_value) = obj.message_attributes {
             MessageBodyAttributeMapSerializer::serialize(
                 params,
@@ -1876,21 +1815,15 @@ impl SendMessageBatchRequestEntrySerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "MessageBody"),
-            &obj.message_body.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "MessageBody"), &obj.message_body);
         if let Some(ref field_value) = obj.message_deduplication_id {
             params.put(
                 &format!("{}{}", prefix, "MessageDeduplicationId"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.message_group_id {
-            params.put(
-                &format!("{}{}", prefix, "MessageGroupId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "MessageGroupId"), &field_value);
         }
     }
 }
@@ -2092,7 +2025,7 @@ impl SendMessageRequestSerializer {
         if let Some(ref field_value) = obj.delay_seconds {
             params.put(
                 &format!("{}{}", prefix, "DelaySeconds"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.message_attributes {
@@ -2102,26 +2035,17 @@ impl SendMessageRequestSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "MessageBody"),
-            &obj.message_body.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "MessageBody"), &obj.message_body);
         if let Some(ref field_value) = obj.message_deduplication_id {
             params.put(
                 &format!("{}{}", prefix, "MessageDeduplicationId"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.message_group_id {
-            params.put(
-                &format!("{}{}", prefix, "MessageGroupId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "MessageGroupId"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "QueueUrl"),
-            &obj.queue_url.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
     }
 }
 
@@ -2218,10 +2142,7 @@ impl SetQueueAttributesRequestSerializer {
             &format!("{}{}", prefix, "Attribute"),
             &obj.attributes,
         );
-        params.put(
-            &format!("{}{}", prefix, "QueueUrl"),
-            &obj.queue_url.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
     }
 }
 
@@ -2374,10 +2295,7 @@ impl TagQueueRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "QueueUrl"),
-            &obj.queue_url.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
         TagMapSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
     }
 }
@@ -2413,10 +2331,7 @@ impl UntagQueueRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "QueueUrl"),
-            &obj.queue_url.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
         TagKeyListSerializer::serialize(params, &format!("{}{}", prefix, "TagKey"), &obj.tag_keys);
     }
 }
@@ -4204,7 +4119,10 @@ where
         params.put("Action", "AddPermission");
         params.put("Version", "2012-11-05");
         AddPermissionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -4232,7 +4150,10 @@ where
         params.put("Action", "ChangeMessageVisibility");
         params.put("Version", "2012-11-05");
         ChangeMessageVisibilityRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -4260,7 +4181,10 @@ where
         params.put("Action", "ChangeMessageVisibilityBatch");
         params.put("Version", "2012-11-05");
         ChangeMessageVisibilityBatchRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -4311,7 +4235,10 @@ where
         params.put("Action", "CreateQueue");
         params.put("Version", "2012-11-05");
         CreateQueueRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -4359,7 +4286,10 @@ where
         params.put("Action", "DeleteMessage");
         params.put("Version", "2012-11-05");
         DeleteMessageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -4387,7 +4317,10 @@ where
         params.put("Action", "DeleteMessageBatch");
         params.put("Version", "2012-11-05");
         DeleteMessageBatchRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -4435,7 +4368,10 @@ where
         params.put("Action", "DeleteQueue");
         params.put("Version", "2012-11-05");
         DeleteQueueRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -4463,7 +4399,10 @@ where
         params.put("Action", "GetQueueAttributes");
         params.put("Version", "2012-11-05");
         GetQueueAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -4514,7 +4453,10 @@ where
         params.put("Action", "GetQueueUrl");
         params.put("Version", "2012-11-05");
         GetQueueUrlRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -4565,7 +4507,10 @@ where
         params.put("Action", "ListDeadLetterSourceQueues");
         params.put("Version", "2012-11-05");
         ListDeadLetterSourceQueuesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -4616,7 +4561,10 @@ where
         params.put("Action", "ListQueueTags");
         params.put("Version", "2012-11-05");
         ListQueueTagsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -4667,7 +4615,10 @@ where
         params.put("Action", "ListQueues");
         params.put("Version", "2012-11-05");
         ListQueuesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -4715,7 +4666,10 @@ where
         params.put("Action", "PurgeQueue");
         params.put("Version", "2012-11-05");
         PurgeQueueRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -4743,7 +4697,10 @@ where
         params.put("Action", "ReceiveMessage");
         params.put("Version", "2012-11-05");
         ReceiveMessageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -4794,7 +4751,10 @@ where
         params.put("Action", "RemovePermission");
         params.put("Version", "2012-11-05");
         RemovePermissionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -4822,7 +4782,10 @@ where
         params.put("Action", "SendMessage");
         params.put("Version", "2012-11-05");
         SendMessageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -4873,7 +4836,10 @@ where
         params.put("Action", "SendMessageBatch");
         params.put("Version", "2012-11-05");
         SendMessageBatchRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -4924,7 +4890,10 @@ where
         params.put("Action", "SetQueueAttributes");
         params.put("Version", "2012-11-05");
         SetQueueAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -4949,7 +4918,10 @@ where
         params.put("Action", "TagQueue");
         params.put("Version", "2012-11-05");
         TagQueueRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -4974,7 +4946,10 @@ where
         params.put("Action", "UntagQueue");
         params.put("Version", "2012-11-05");
         UntagQueueRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {

@@ -33,6 +33,7 @@ use rusoto_core::xmlutil::{
     characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::reader::XmlEvent;
@@ -330,15 +331,9 @@ impl CancelUpdateStackInputSerializer {
         }
 
         if let Some(ref field_value) = obj.client_request_token {
-            params.put(
-                &format!("{}{}", prefix, "ClientRequestToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "StackName"),
-            &obj.stack_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
     }
 }
 
@@ -813,10 +808,7 @@ impl ContinueUpdateRollbackInputSerializer {
         }
 
         if let Some(ref field_value) = obj.client_request_token {
-            params.put(
-                &format!("{}{}", prefix, "ClientRequestToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
         }
         if let Some(ref field_value) = obj.resources_to_skip {
             ResourcesToSkipSerializer::serialize(
@@ -826,15 +818,9 @@ impl ContinueUpdateRollbackInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.role_arn {
-            params.put(
-                &format!("{}{}", prefix, "RoleARN"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "RoleARN"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "StackName"),
-            &obj.stack_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
     }
 }
 
@@ -911,25 +897,16 @@ impl CreateChangeSetInputSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "ChangeSetName"),
-            &obj.change_set_name.replace("+", "%2B"),
+            &obj.change_set_name,
         );
         if let Some(ref field_value) = obj.change_set_type {
-            params.put(
-                &format!("{}{}", prefix, "ChangeSetType"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ChangeSetType"), &field_value);
         }
         if let Some(ref field_value) = obj.client_token {
-            params.put(
-                &format!("{}{}", prefix, "ClientToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
         }
         if let Some(ref field_value) = obj.description {
-            params.put(
-                &format!("{}{}", prefix, "Description"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.notification_ar_ns {
             NotificationARNsSerializer::serialize(
@@ -953,10 +930,7 @@ impl CreateChangeSetInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.role_arn {
-            params.put(
-                &format!("{}{}", prefix, "RoleARN"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "RoleARN"), &field_value);
         }
         if let Some(ref field_value) = obj.rollback_configuration {
             RollbackConfigurationSerializer::serialize(
@@ -965,29 +939,20 @@ impl CreateChangeSetInputSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "StackName"),
-            &obj.stack_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
         if let Some(ref field_value) = obj.tags {
             TagsSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
         if let Some(ref field_value) = obj.template_body {
-            params.put(
-                &format!("{}{}", prefix, "TemplateBody"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateBody"), &field_value);
         }
         if let Some(ref field_value) = obj.template_url {
-            params.put(
-                &format!("{}{}", prefix, "TemplateURL"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateURL"), &field_value);
         }
         if let Some(ref field_value) = obj.use_previous_template {
             params.put(
                 &format!("{}{}", prefix, "UsePreviousTemplate"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -1101,21 +1066,18 @@ impl CreateStackInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.client_request_token {
-            params.put(
-                &format!("{}{}", prefix, "ClientRequestToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
         }
         if let Some(ref field_value) = obj.disable_rollback {
             params.put(
                 &format!("{}{}", prefix, "DisableRollback"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.enable_termination_protection {
             params.put(
                 &format!("{}{}", prefix, "EnableTerminationProtection"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.notification_ar_ns {
@@ -1126,10 +1088,7 @@ impl CreateStackInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.on_failure {
-            params.put(
-                &format!("{}{}", prefix, "OnFailure"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "OnFailure"), &field_value);
         }
         if let Some(ref field_value) = obj.parameters {
             ParametersSerializer::serialize(
@@ -1146,10 +1105,7 @@ impl CreateStackInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.role_arn {
-            params.put(
-                &format!("{}{}", prefix, "RoleARN"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "RoleARN"), &field_value);
         }
         if let Some(ref field_value) = obj.rollback_configuration {
             RollbackConfigurationSerializer::serialize(
@@ -1158,41 +1114,26 @@ impl CreateStackInputSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "StackName"),
-            &obj.stack_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
         if let Some(ref field_value) = obj.stack_policy_body {
-            params.put(
-                &format!("{}{}", prefix, "StackPolicyBody"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "StackPolicyBody"), &field_value);
         }
         if let Some(ref field_value) = obj.stack_policy_url {
-            params.put(
-                &format!("{}{}", prefix, "StackPolicyURL"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "StackPolicyURL"), &field_value);
         }
         if let Some(ref field_value) = obj.tags {
             TagsSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
         if let Some(ref field_value) = obj.template_body {
-            params.put(
-                &format!("{}{}", prefix, "TemplateBody"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateBody"), &field_value);
         }
         if let Some(ref field_value) = obj.template_url {
-            params.put(
-                &format!("{}{}", prefix, "TemplateURL"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateURL"), &field_value);
         }
         if let Some(ref field_value) = obj.timeout_in_minutes {
             params.put(
                 &format!("{}{}", prefix, "TimeoutInMinutes"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -1229,10 +1170,7 @@ impl CreateStackInstancesInputSerializer {
             &obj.accounts,
         );
         if let Some(ref field_value) = obj.operation_id {
-            params.put(
-                &format!("{}{}", prefix, "OperationId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "OperationId"), &field_value);
         }
         if let Some(ref field_value) = obj.operation_preferences {
             StackSetOperationPreferencesSerializer::serialize(
@@ -1251,7 +1189,7 @@ impl CreateStackInstancesInputSerializer {
         RegionListSerializer::serialize(params, &format!("{}{}", prefix, "Regions"), &obj.regions);
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name.replace("+", "%2B"),
+            &obj.stack_set_name,
         );
     }
 }
@@ -1385,7 +1323,7 @@ impl CreateStackSetInputSerializer {
         if let Some(ref field_value) = obj.administration_role_arn {
             params.put(
                 &format!("{}{}", prefix, "AdministrationRoleARN"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.capabilities {
@@ -1396,16 +1334,10 @@ impl CreateStackSetInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.client_request_token {
-            params.put(
-                &format!("{}{}", prefix, "ClientRequestToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
         }
         if let Some(ref field_value) = obj.description {
-            params.put(
-                &format!("{}{}", prefix, "Description"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.parameters {
             ParametersSerializer::serialize(
@@ -1416,22 +1348,16 @@ impl CreateStackSetInputSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name.replace("+", "%2B"),
+            &obj.stack_set_name,
         );
         if let Some(ref field_value) = obj.tags {
             TagsSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
         if let Some(ref field_value) = obj.template_body {
-            params.put(
-                &format!("{}{}", prefix, "TemplateBody"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateBody"), &field_value);
         }
         if let Some(ref field_value) = obj.template_url {
-            params.put(
-                &format!("{}{}", prefix, "TemplateURL"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateURL"), &field_value);
         }
     }
 }
@@ -1518,13 +1444,10 @@ impl DeleteChangeSetInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ChangeSetName"),
-            &obj.change_set_name.replace("+", "%2B"),
+            &obj.change_set_name,
         );
         if let Some(ref field_value) = obj.stack_name {
-            params.put(
-                &format!("{}{}", prefix, "StackName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "StackName"), &field_value);
         }
     }
 }
@@ -1572,10 +1495,7 @@ impl DeleteStackInputSerializer {
         }
 
         if let Some(ref field_value) = obj.client_request_token {
-            params.put(
-                &format!("{}{}", prefix, "ClientRequestToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
         }
         if let Some(ref field_value) = obj.retain_resources {
             RetainResourcesSerializer::serialize(
@@ -1585,15 +1505,9 @@ impl DeleteStackInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.role_arn {
-            params.put(
-                &format!("{}{}", prefix, "RoleARN"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "RoleARN"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "StackName"),
-            &obj.stack_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
     }
 }
 
@@ -1628,10 +1542,7 @@ impl DeleteStackInstancesInputSerializer {
             &obj.accounts,
         );
         if let Some(ref field_value) = obj.operation_id {
-            params.put(
-                &format!("{}{}", prefix, "OperationId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "OperationId"), &field_value);
         }
         if let Some(ref field_value) = obj.operation_preferences {
             StackSetOperationPreferencesSerializer::serialize(
@@ -1643,11 +1554,11 @@ impl DeleteStackInstancesInputSerializer {
         RegionListSerializer::serialize(params, &format!("{}{}", prefix, "Regions"), &obj.regions);
         params.put(
             &format!("{}{}", prefix, "RetainStacks"),
-            &obj.retain_stacks.to_string().replace("+", "%2B"),
+            &obj.retain_stacks.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name.replace("+", "%2B"),
+            &obj.stack_set_name,
         );
     }
 }
@@ -1717,7 +1628,7 @@ impl DeleteStackSetInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name.replace("+", "%2B"),
+            &obj.stack_set_name,
         );
     }
 }
@@ -1772,10 +1683,7 @@ impl DescribeAccountLimitsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
     }
 }
@@ -1857,19 +1765,13 @@ impl DescribeChangeSetInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ChangeSetName"),
-            &obj.change_set_name.replace("+", "%2B"),
+            &obj.change_set_name,
         );
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
         if let Some(ref field_value) = obj.stack_name {
-            params.put(
-                &format!("{}{}", prefix, "StackName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "StackName"), &field_value);
         }
     }
 }
@@ -2048,16 +1950,10 @@ impl DescribeStackEventsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
         if let Some(ref field_value) = obj.stack_name {
-            params.put(
-                &format!("{}{}", prefix, "StackName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "StackName"), &field_value);
         }
     }
 }
@@ -2138,15 +2034,15 @@ impl DescribeStackInstanceInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "StackInstanceAccount"),
-            &obj.stack_instance_account.replace("+", "%2B"),
+            &obj.stack_instance_account,
         );
         params.put(
             &format!("{}{}", prefix, "StackInstanceRegion"),
-            &obj.stack_instance_region.replace("+", "%2B"),
+            &obj.stack_instance_region,
         );
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name.replace("+", "%2B"),
+            &obj.stack_set_name,
         );
     }
 }
@@ -2219,12 +2115,9 @@ impl DescribeStackResourceInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "LogicalResourceId"),
-            &obj.logical_resource_id.replace("+", "%2B"),
+            &obj.logical_resource_id,
         );
-        params.put(
-            &format!("{}{}", prefix, "StackName"),
-            &obj.stack_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
     }
 }
 
@@ -2299,22 +2192,13 @@ impl DescribeStackResourcesInputSerializer {
         }
 
         if let Some(ref field_value) = obj.logical_resource_id {
-            params.put(
-                &format!("{}{}", prefix, "LogicalResourceId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "LogicalResourceId"), &field_value);
         }
         if let Some(ref field_value) = obj.physical_resource_id {
-            params.put(
-                &format!("{}{}", prefix, "PhysicalResourceId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PhysicalResourceId"), &field_value);
         }
         if let Some(ref field_value) = obj.stack_name {
-            params.put(
-                &format!("{}{}", prefix, "StackName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "StackName"), &field_value);
         }
     }
 }
@@ -2385,7 +2269,7 @@ impl DescribeStackSetInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name.replace("+", "%2B"),
+            &obj.stack_set_name,
         );
     }
 }
@@ -2407,13 +2291,10 @@ impl DescribeStackSetOperationInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "OperationId"),
-            &obj.operation_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "OperationId"), &obj.operation_id);
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name.replace("+", "%2B"),
+            &obj.stack_set_name,
         );
     }
 }
@@ -2530,16 +2411,10 @@ impl DescribeStacksInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
         if let Some(ref field_value) = obj.stack_name {
-            params.put(
-                &format!("{}{}", prefix, "StackName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "StackName"), &field_value);
         }
     }
 }
@@ -2666,16 +2541,10 @@ impl EstimateTemplateCostInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.template_body {
-            params.put(
-                &format!("{}{}", prefix, "TemplateBody"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateBody"), &field_value);
         }
         if let Some(ref field_value) = obj.template_url {
-            params.put(
-                &format!("{}{}", prefix, "TemplateURL"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateURL"), &field_value);
         }
     }
 }
@@ -2776,19 +2645,13 @@ impl ExecuteChangeSetInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ChangeSetName"),
-            &obj.change_set_name.replace("+", "%2B"),
+            &obj.change_set_name,
         );
         if let Some(ref field_value) = obj.client_request_token {
-            params.put(
-                &format!("{}{}", prefix, "ClientRequestToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
         }
         if let Some(ref field_value) = obj.stack_name {
-            params.put(
-                &format!("{}{}", prefix, "StackName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "StackName"), &field_value);
         }
     }
 }
@@ -2999,10 +2862,7 @@ impl GetStackPolicyInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "StackName"),
-            &obj.stack_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
     }
 }
 
@@ -3075,22 +2935,13 @@ impl GetTemplateInputSerializer {
         }
 
         if let Some(ref field_value) = obj.change_set_name {
-            params.put(
-                &format!("{}{}", prefix, "ChangeSetName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ChangeSetName"), &field_value);
         }
         if let Some(ref field_value) = obj.stack_name {
-            params.put(
-                &format!("{}{}", prefix, "StackName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "StackName"), &field_value);
         }
         if let Some(ref field_value) = obj.template_stage {
-            params.put(
-                &format!("{}{}", prefix, "TemplateStage"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateStage"), &field_value);
         }
     }
 }
@@ -3175,28 +3026,16 @@ impl GetTemplateSummaryInputSerializer {
         }
 
         if let Some(ref field_value) = obj.stack_name {
-            params.put(
-                &format!("{}{}", prefix, "StackName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "StackName"), &field_value);
         }
         if let Some(ref field_value) = obj.stack_set_name {
-            params.put(
-                &format!("{}{}", prefix, "StackSetName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "StackSetName"), &field_value);
         }
         if let Some(ref field_value) = obj.template_body {
-            params.put(
-                &format!("{}{}", prefix, "TemplateBody"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateBody"), &field_value);
         }
         if let Some(ref field_value) = obj.template_url {
-            params.put(
-                &format!("{}{}", prefix, "TemplateURL"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateURL"), &field_value);
         }
     }
 }
@@ -3402,15 +3241,9 @@ impl ListChangeSetsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "StackName"),
-            &obj.stack_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
     }
 }
 
@@ -3485,10 +3318,7 @@ impl ListExportsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
     }
 }
@@ -3562,15 +3392,9 @@ impl ListImportsInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "ExportName"),
-            &obj.export_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ExportName"), &obj.export_name);
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
     }
 }
@@ -3653,30 +3477,27 @@ impl ListStackInstancesInputSerializer {
         if let Some(ref field_value) = obj.max_results {
             params.put(
                 &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
         if let Some(ref field_value) = obj.stack_instance_account {
             params.put(
                 &format!("{}{}", prefix, "StackInstanceAccount"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.stack_instance_region {
             params.put(
                 &format!("{}{}", prefix, "StackInstanceRegion"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name.replace("+", "%2B"),
+            &obj.stack_set_name,
         );
     }
 }
@@ -3753,15 +3574,9 @@ impl ListStackResourcesInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "StackName"),
-            &obj.stack_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
     }
 }
 
@@ -3845,22 +3660,16 @@ impl ListStackSetOperationResultsInputSerializer {
         if let Some(ref field_value) = obj.max_results {
             params.put(
                 &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "OperationId"),
-            &obj.operation_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "OperationId"), &obj.operation_id);
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name.replace("+", "%2B"),
+            &obj.stack_set_name,
         );
     }
 }
@@ -3943,18 +3752,15 @@ impl ListStackSetOperationsInputSerializer {
         if let Some(ref field_value) = obj.max_results {
             params.put(
                 &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name.replace("+", "%2B"),
+            &obj.stack_set_name,
         );
     }
 }
@@ -4034,20 +3840,14 @@ impl ListStackSetsInputSerializer {
         if let Some(ref field_value) = obj.max_results {
             params.put(
                 &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
         if let Some(ref field_value) = obj.status {
-            params.put(
-                &format!("{}{}", prefix, "Status"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Status"), &field_value);
         }
     }
 }
@@ -4125,10 +3925,7 @@ impl ListStacksInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
         if let Some(ref field_value) = obj.stack_status_filter {
             StackStatusFilterSerializer::serialize(
@@ -4583,27 +4380,18 @@ impl ParameterSerializer {
         }
 
         if let Some(ref field_value) = obj.parameter_key {
-            params.put(
-                &format!("{}{}", prefix, "ParameterKey"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ParameterKey"), &field_value);
         }
         if let Some(ref field_value) = obj.parameter_value {
-            params.put(
-                &format!("{}{}", prefix, "ParameterValue"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ParameterValue"), &field_value);
         }
         if let Some(ref field_value) = obj.resolved_value {
-            params.put(
-                &format!("{}{}", prefix, "ResolvedValue"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ResolvedValue"), &field_value);
         }
         if let Some(ref field_value) = obj.use_previous_value {
             params.put(
                 &format!("{}{}", prefix, "UsePreviousValue"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -5527,7 +5315,7 @@ impl RollbackConfigurationSerializer {
         if let Some(ref field_value) = obj.monitoring_time_in_minutes {
             params.put(
                 &format!("{}{}", prefix, "MonitoringTimeInMinutes"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.rollback_triggers {
@@ -5601,14 +5389,8 @@ impl RollbackTriggerSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Arn"),
-            &obj.arn.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "Type"),
-            &obj.type_.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Arn"), &obj.arn);
+        params.put(&format!("{}{}", prefix, "Type"), &obj.type_);
     }
 }
 
@@ -5728,21 +5510,12 @@ impl SetStackPolicyInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "StackName"),
-            &obj.stack_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
         if let Some(ref field_value) = obj.stack_policy_body {
-            params.put(
-                &format!("{}{}", prefix, "StackPolicyBody"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "StackPolicyBody"), &field_value);
         }
         if let Some(ref field_value) = obj.stack_policy_url {
-            params.put(
-                &format!("{}{}", prefix, "StackPolicyURL"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "StackPolicyURL"), &field_value);
         }
     }
 }
@@ -5771,20 +5544,11 @@ impl SignalResourceInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "LogicalResourceId"),
-            &obj.logical_resource_id.replace("+", "%2B"),
+            &obj.logical_resource_id,
         );
-        params.put(
-            &format!("{}{}", prefix, "StackName"),
-            &obj.stack_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "Status"),
-            &obj.status.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UniqueId"),
-            &obj.unique_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
+        params.put(&format!("{}{}", prefix, "Status"), &obj.status);
+        params.put(&format!("{}{}", prefix, "UniqueId"), &obj.unique_id);
     }
 }
 
@@ -7177,25 +6941,25 @@ impl StackSetOperationPreferencesSerializer {
         if let Some(ref field_value) = obj.failure_tolerance_count {
             params.put(
                 &format!("{}{}", prefix, "FailureToleranceCount"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.failure_tolerance_percentage {
             params.put(
                 &format!("{}{}", prefix, "FailureTolerancePercentage"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.max_concurrent_count {
             params.put(
                 &format!("{}{}", prefix, "MaxConcurrentCount"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.max_concurrent_percentage {
             params.put(
                 &format!("{}{}", prefix, "MaxConcurrentPercentage"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.region_order {
@@ -7887,13 +7651,10 @@ impl StopStackSetOperationInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "OperationId"),
-            &obj.operation_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "OperationId"), &obj.operation_id);
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name.replace("+", "%2B"),
+            &obj.stack_set_name,
         );
     }
 }
@@ -7978,14 +7739,8 @@ impl TagSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Key"),
-            &obj.key.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "Value"),
-            &obj.value.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Key"), &obj.key);
+        params.put(&format!("{}{}", prefix, "Value"), &obj.value);
     }
 }
 
@@ -8375,10 +8130,7 @@ impl UpdateStackInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.client_request_token {
-            params.put(
-                &format!("{}{}", prefix, "ClientRequestToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
         }
         if let Some(ref field_value) = obj.notification_ar_ns {
             NotificationARNsSerializer::serialize(
@@ -8402,10 +8154,7 @@ impl UpdateStackInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.role_arn {
-            params.put(
-                &format!("{}{}", prefix, "RoleARN"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "RoleARN"), &field_value);
         }
         if let Some(ref field_value) = obj.rollback_configuration {
             RollbackConfigurationSerializer::serialize(
@@ -8414,53 +8163,38 @@ impl UpdateStackInputSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "StackName"),
-            &obj.stack_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
         if let Some(ref field_value) = obj.stack_policy_body {
-            params.put(
-                &format!("{}{}", prefix, "StackPolicyBody"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "StackPolicyBody"), &field_value);
         }
         if let Some(ref field_value) = obj.stack_policy_during_update_body {
             params.put(
                 &format!("{}{}", prefix, "StackPolicyDuringUpdateBody"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.stack_policy_during_update_url {
             params.put(
                 &format!("{}{}", prefix, "StackPolicyDuringUpdateURL"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.stack_policy_url {
-            params.put(
-                &format!("{}{}", prefix, "StackPolicyURL"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "StackPolicyURL"), &field_value);
         }
         if let Some(ref field_value) = obj.tags {
             TagsSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
         if let Some(ref field_value) = obj.template_body {
-            params.put(
-                &format!("{}{}", prefix, "TemplateBody"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateBody"), &field_value);
         }
         if let Some(ref field_value) = obj.template_url {
-            params.put(
-                &format!("{}{}", prefix, "TemplateURL"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateURL"), &field_value);
         }
         if let Some(ref field_value) = obj.use_previous_template {
             params.put(
                 &format!("{}{}", prefix, "UsePreviousTemplate"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -8497,10 +8231,7 @@ impl UpdateStackInstancesInputSerializer {
             &obj.accounts,
         );
         if let Some(ref field_value) = obj.operation_id {
-            params.put(
-                &format!("{}{}", prefix, "OperationId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "OperationId"), &field_value);
         }
         if let Some(ref field_value) = obj.operation_preferences {
             StackSetOperationPreferencesSerializer::serialize(
@@ -8519,7 +8250,7 @@ impl UpdateStackInstancesInputSerializer {
         RegionListSerializer::serialize(params, &format!("{}{}", prefix, "Regions"), &obj.regions);
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name.replace("+", "%2B"),
+            &obj.stack_set_name,
         );
     }
 }
@@ -8657,7 +8388,7 @@ impl UpdateStackSetInputSerializer {
         if let Some(ref field_value) = obj.administration_role_arn {
             params.put(
                 &format!("{}{}", prefix, "AdministrationRoleARN"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.capabilities {
@@ -8668,16 +8399,10 @@ impl UpdateStackSetInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.description {
-            params.put(
-                &format!("{}{}", prefix, "Description"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.operation_id {
-            params.put(
-                &format!("{}{}", prefix, "OperationId"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "OperationId"), &field_value);
         }
         if let Some(ref field_value) = obj.operation_preferences {
             StackSetOperationPreferencesSerializer::serialize(
@@ -8695,27 +8420,21 @@ impl UpdateStackSetInputSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name.replace("+", "%2B"),
+            &obj.stack_set_name,
         );
         if let Some(ref field_value) = obj.tags {
             TagsSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
         if let Some(ref field_value) = obj.template_body {
-            params.put(
-                &format!("{}{}", prefix, "TemplateBody"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateBody"), &field_value);
         }
         if let Some(ref field_value) = obj.template_url {
-            params.put(
-                &format!("{}{}", prefix, "TemplateURL"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateURL"), &field_value);
         }
         if let Some(ref field_value) = obj.use_previous_template {
             params.put(
                 &format!("{}{}", prefix, "UsePreviousTemplate"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -8788,14 +8507,9 @@ impl UpdateTerminationProtectionInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "EnableTerminationProtection"),
-            &obj.enable_termination_protection
-                .to_string()
-                .replace("+", "%2B"),
+            &obj.enable_termination_protection.to_string(),
         );
-        params.put(
-            &format!("{}{}", prefix, "StackName"),
-            &obj.stack_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
     }
 }
 
@@ -8892,16 +8606,10 @@ impl ValidateTemplateInputSerializer {
         }
 
         if let Some(ref field_value) = obj.template_body {
-            params.put(
-                &format!("{}{}", prefix, "TemplateBody"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateBody"), &field_value);
         }
         if let Some(ref field_value) = obj.template_url {
-            params.put(
-                &format!("{}{}", prefix, "TemplateURL"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateURL"), &field_value);
         }
     }
 }
@@ -12618,7 +12326,10 @@ where
         params.put("Action", "CancelUpdateStack");
         params.put("Version", "2010-05-15");
         CancelUpdateStackInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -12646,7 +12357,10 @@ where
         params.put("Action", "ContinueUpdateRollback");
         params.put("Version", "2010-05-15");
         ContinueUpdateRollbackInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -12697,7 +12411,10 @@ where
         params.put("Action", "CreateChangeSet");
         params.put("Version", "2010-05-15");
         CreateChangeSetInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -12748,7 +12465,10 @@ where
         params.put("Action", "CreateStack");
         params.put("Version", "2010-05-15");
         CreateStackInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -12799,7 +12519,10 @@ where
         params.put("Action", "CreateStackInstances");
         params.put("Version", "2010-05-15");
         CreateStackInstancesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -12850,7 +12573,10 @@ where
         params.put("Action", "CreateStackSet");
         params.put("Version", "2010-05-15");
         CreateStackSetInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -12901,7 +12627,10 @@ where
         params.put("Action", "DeleteChangeSet");
         params.put("Version", "2010-05-15");
         DeleteChangeSetInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -12949,7 +12678,10 @@ where
         params.put("Action", "DeleteStack");
         params.put("Version", "2010-05-15");
         DeleteStackInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -12977,7 +12709,10 @@ where
         params.put("Action", "DeleteStackInstances");
         params.put("Version", "2010-05-15");
         DeleteStackInstancesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13028,7 +12763,10 @@ where
         params.put("Action", "DeleteStackSet");
         params.put("Version", "2010-05-15");
         DeleteStackSetInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13079,7 +12817,10 @@ where
         params.put("Action", "DescribeAccountLimits");
         params.put("Version", "2010-05-15");
         DescribeAccountLimitsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13130,7 +12871,10 @@ where
         params.put("Action", "DescribeChangeSet");
         params.put("Version", "2010-05-15");
         DescribeChangeSetInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13181,7 +12925,10 @@ where
         params.put("Action", "DescribeStackEvents");
         params.put("Version", "2010-05-15");
         DescribeStackEventsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13232,7 +12979,10 @@ where
         params.put("Action", "DescribeStackInstance");
         params.put("Version", "2010-05-15");
         DescribeStackInstanceInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13283,7 +13033,10 @@ where
         params.put("Action", "DescribeStackResource");
         params.put("Version", "2010-05-15");
         DescribeStackResourceInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13334,7 +13087,10 @@ where
         params.put("Action", "DescribeStackResources");
         params.put("Version", "2010-05-15");
         DescribeStackResourcesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13385,7 +13141,10 @@ where
         params.put("Action", "DescribeStackSet");
         params.put("Version", "2010-05-15");
         DescribeStackSetInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13436,7 +13195,10 @@ where
         params.put("Action", "DescribeStackSetOperation");
         params.put("Version", "2010-05-15");
         DescribeStackSetOperationInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13487,7 +13249,10 @@ where
         params.put("Action", "DescribeStacks");
         params.put("Version", "2010-05-15");
         DescribeStacksInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13538,7 +13303,10 @@ where
         params.put("Action", "EstimateTemplateCost");
         params.put("Version", "2010-05-15");
         EstimateTemplateCostInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13589,7 +13357,10 @@ where
         params.put("Action", "ExecuteChangeSet");
         params.put("Version", "2010-05-15");
         ExecuteChangeSetInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13640,7 +13411,10 @@ where
         params.put("Action", "GetStackPolicy");
         params.put("Version", "2010-05-15");
         GetStackPolicyInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13691,7 +13465,10 @@ where
         params.put("Action", "GetTemplate");
         params.put("Version", "2010-05-15");
         GetTemplateInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13742,7 +13519,10 @@ where
         params.put("Action", "GetTemplateSummary");
         params.put("Version", "2010-05-15");
         GetTemplateSummaryInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13793,7 +13573,10 @@ where
         params.put("Action", "ListChangeSets");
         params.put("Version", "2010-05-15");
         ListChangeSetsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13844,7 +13627,10 @@ where
         params.put("Action", "ListExports");
         params.put("Version", "2010-05-15");
         ListExportsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13895,7 +13681,10 @@ where
         params.put("Action", "ListImports");
         params.put("Version", "2010-05-15");
         ListImportsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13946,7 +13735,10 @@ where
         params.put("Action", "ListStackInstances");
         params.put("Version", "2010-05-15");
         ListStackInstancesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13997,7 +13789,10 @@ where
         params.put("Action", "ListStackResources");
         params.put("Version", "2010-05-15");
         ListStackResourcesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14048,7 +13843,10 @@ where
         params.put("Action", "ListStackSetOperationResults");
         params.put("Version", "2010-05-15");
         ListStackSetOperationResultsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14099,7 +13897,10 @@ where
         params.put("Action", "ListStackSetOperations");
         params.put("Version", "2010-05-15");
         ListStackSetOperationsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14150,7 +13951,10 @@ where
         params.put("Action", "ListStackSets");
         params.put("Version", "2010-05-15");
         ListStackSetsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14201,7 +14005,10 @@ where
         params.put("Action", "ListStacks");
         params.put("Version", "2010-05-15");
         ListStacksInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14252,7 +14059,10 @@ where
         params.put("Action", "SetStackPolicy");
         params.put("Version", "2010-05-15");
         SetStackPolicyInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14277,7 +14087,10 @@ where
         params.put("Action", "SignalResource");
         params.put("Version", "2010-05-15");
         SignalResourceInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14305,7 +14118,10 @@ where
         params.put("Action", "StopStackSetOperation");
         params.put("Version", "2010-05-15");
         StopStackSetOperationInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14356,7 +14172,10 @@ where
         params.put("Action", "UpdateStack");
         params.put("Version", "2010-05-15");
         UpdateStackInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14407,7 +14226,10 @@ where
         params.put("Action", "UpdateStackInstances");
         params.put("Version", "2010-05-15");
         UpdateStackInstancesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14458,7 +14280,10 @@ where
         params.put("Action", "UpdateStackSet");
         params.put("Version", "2010-05-15");
         UpdateStackSetInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14509,7 +14334,10 @@ where
         params.put("Action", "UpdateTerminationProtection");
         params.put("Version", "2010-05-15");
         UpdateTerminationProtectionInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14560,7 +14388,10 @@ where
         params.put("Action", "ValidateTemplate");
         params.put("Version", "2010-05-15");
         ValidateTemplateInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {

@@ -33,6 +33,7 @@ use rusoto_core::xmlutil::{
     characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::reader::XmlEvent;
@@ -152,15 +153,9 @@ impl CancelJobInputSerializer {
         }
 
         if let Some(ref field_value) = obj.api_version {
-            params.put(
-                &format!("{}{}", prefix, "APIVersion"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "APIVersion"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "JobId"),
-            &obj.job_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id);
     }
 }
 
@@ -244,28 +239,16 @@ impl CreateJobInputSerializer {
         }
 
         if let Some(ref field_value) = obj.api_version {
-            params.put(
-                &format!("{}{}", prefix, "APIVersion"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "APIVersion"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "JobType"),
-            &obj.job_type.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "Manifest"),
-            &obj.manifest.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "JobType"), &obj.job_type);
+        params.put(&format!("{}{}", prefix, "Manifest"), &obj.manifest);
         if let Some(ref field_value) = obj.manifest_addendum {
-            params.put(
-                &format!("{}{}", prefix, "ManifestAddendum"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ManifestAddendum"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "ValidateOnly"),
-            &obj.validate_only.to_string().replace("+", "%2B"),
+            &obj.validate_only.to_string(),
         );
     }
 }
@@ -443,71 +426,38 @@ impl GetShippingLabelInputSerializer {
         }
 
         if let Some(ref field_value) = obj.api_version {
-            params.put(
-                &format!("{}{}", prefix, "APIVersion"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "APIVersion"), &field_value);
         }
         if let Some(ref field_value) = obj.city {
-            params.put(
-                &format!("{}{}", prefix, "city"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "city"), &field_value);
         }
         if let Some(ref field_value) = obj.company {
-            params.put(
-                &format!("{}{}", prefix, "company"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "company"), &field_value);
         }
         if let Some(ref field_value) = obj.country {
-            params.put(
-                &format!("{}{}", prefix, "country"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "country"), &field_value);
         }
         JobIdListSerializer::serialize(params, &format!("{}{}", prefix, "jobIds"), &obj.job_ids);
         if let Some(ref field_value) = obj.name {
-            params.put(
-                &format!("{}{}", prefix, "name"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "name"), &field_value);
         }
         if let Some(ref field_value) = obj.phone_number {
-            params.put(
-                &format!("{}{}", prefix, "phoneNumber"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "phoneNumber"), &field_value);
         }
         if let Some(ref field_value) = obj.postal_code {
-            params.put(
-                &format!("{}{}", prefix, "postalCode"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "postalCode"), &field_value);
         }
         if let Some(ref field_value) = obj.state_or_province {
-            params.put(
-                &format!("{}{}", prefix, "stateOrProvince"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "stateOrProvince"), &field_value);
         }
         if let Some(ref field_value) = obj.street_1 {
-            params.put(
-                &format!("{}{}", prefix, "street1"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "street1"), &field_value);
         }
         if let Some(ref field_value) = obj.street_2 {
-            params.put(
-                &format!("{}{}", prefix, "street2"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "street2"), &field_value);
         }
         if let Some(ref field_value) = obj.street_3 {
-            params.put(
-                &format!("{}{}", prefix, "street3"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "street3"), &field_value);
         }
     }
 }
@@ -581,15 +531,9 @@ impl GetStatusInputSerializer {
         }
 
         if let Some(ref field_value) = obj.api_version {
-            params.put(
-                &format!("{}{}", prefix, "APIVersion"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "APIVersion"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "JobId"),
-            &obj.job_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id);
     }
 }
 
@@ -918,21 +862,15 @@ impl ListJobsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.api_version {
-            params.put(
-                &format!("{}{}", prefix, "APIVersion"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "APIVersion"), &field_value);
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_jobs {
             params.put(
                 &format!("{}{}", prefix, "MaxJobs"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -1164,26 +1102,14 @@ impl UpdateJobInputSerializer {
         }
 
         if let Some(ref field_value) = obj.api_version {
-            params.put(
-                &format!("{}{}", prefix, "APIVersion"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "APIVersion"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "JobId"),
-            &obj.job_id.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "JobType"),
-            &obj.job_type.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "Manifest"),
-            &obj.manifest.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id);
+        params.put(&format!("{}{}", prefix, "JobType"), &obj.job_type);
+        params.put(&format!("{}{}", prefix, "Manifest"), &obj.manifest);
         params.put(
             &format!("{}{}", prefix, "ValidateOnly"),
-            &obj.validate_only.to_string().replace("+", "%2B"),
+            &obj.validate_only.to_string(),
         );
     }
 }
@@ -2097,7 +2023,10 @@ where
         params.put("Action", "CancelJob");
         params.put("Version", "2010-06-01");
         CancelJobInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -2150,7 +2079,10 @@ where
         params.put("Action", "CreateJob");
         params.put("Version", "2010-06-01");
         CreateJobInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -2206,7 +2138,10 @@ where
         params.put("Action", "GetShippingLabel");
         params.put("Version", "2010-06-01");
         GetShippingLabelInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -2259,7 +2194,10 @@ where
         params.put("Action", "GetStatus");
         params.put("Version", "2010-06-01");
         GetStatusInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -2308,7 +2246,10 @@ where
         params.put("Action", "ListJobs");
         params.put("Version", "2010-06-01");
         ListJobsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -2361,7 +2302,10 @@ where
         params.put("Action", "UpdateJob");
         params.put("Version", "2010-06-01");
         UpdateJobInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
