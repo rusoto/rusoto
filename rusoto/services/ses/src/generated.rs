@@ -107,14 +107,8 @@ impl AddHeaderActionSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "HeaderName"),
-            &obj.header_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "HeaderValue"),
-            &obj.header_value.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "HeaderName"), &obj.header_name);
+        params.put(&format!("{}{}", prefix, "HeaderValue"), &obj.header_value);
     }
 }
 
@@ -324,29 +318,17 @@ impl BounceActionSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Message"),
-            &obj.message.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "Sender"),
-            &obj.sender.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Message"), &obj.message);
+        params.put(&format!("{}{}", prefix, "Sender"), &obj.sender);
         params.put(
             &format!("{}{}", prefix, "SmtpReplyCode"),
-            &obj.smtp_reply_code.replace("+", "%2B"),
+            &obj.smtp_reply_code,
         );
         if let Some(ref field_value) = obj.status_code {
-            params.put(
-                &format!("{}{}", prefix, "StatusCode"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "StatusCode"), &field_value);
         }
         if let Some(ref field_value) = obj.topic_arn {
-            params.put(
-                &format!("{}{}", prefix, "TopicArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TopicArn"), &field_value);
         }
     }
 }
@@ -416,20 +398,11 @@ impl BouncedRecipientInfoSerializer {
         }
 
         if let Some(ref field_value) = obj.bounce_type {
-            params.put(
-                &format!("{}{}", prefix, "BounceType"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "BounceType"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "Recipient"),
-            &obj.recipient.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Recipient"), &obj.recipient);
         if let Some(ref field_value) = obj.recipient_arn {
-            params.put(
-                &format!("{}{}", prefix, "RecipientArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "RecipientArn"), &field_value);
         }
         if let Some(ref field_value) = obj.recipient_dsn_fields {
             RecipientDsnFieldsSerializer::serialize(
@@ -486,7 +459,7 @@ impl BulkEmailDestinationSerializer {
         if let Some(ref field_value) = obj.replacement_template_data {
             params.put(
                 &format!("{}{}", prefix, "ReplacementTemplateData"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
     }
@@ -652,12 +625,9 @@ impl CloneReceiptRuleSetRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "OriginalRuleSetName"),
-            &obj.original_rule_set_name.replace("+", "%2B"),
+            &obj.original_rule_set_name,
         );
-        params.put(
-            &format!("{}{}", prefix, "RuleSetName"),
-            &obj.rule_set_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
     }
 }
 
@@ -828,15 +798,15 @@ impl CloudWatchDimensionConfigurationSerializer {
 
         params.put(
             &format!("{}{}", prefix, "DefaultDimensionValue"),
-            &obj.default_dimension_value.replace("+", "%2B"),
+            &obj.default_dimension_value,
         );
         params.put(
             &format!("{}{}", prefix, "DimensionName"),
-            &obj.dimension_name.replace("+", "%2B"),
+            &obj.dimension_name,
         );
         params.put(
             &format!("{}{}", prefix, "DimensionValueSource"),
-            &obj.dimension_value_source.replace("+", "%2B"),
+            &obj.dimension_value_source,
         );
     }
 }
@@ -954,10 +924,7 @@ impl ConfigurationSetSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Name"),
-            &obj.name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
     }
 }
 
@@ -1047,15 +1014,9 @@ impl ContentSerializer {
         }
 
         if let Some(ref field_value) = obj.charset {
-            params.put(
-                &format!("{}{}", prefix, "Charset"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Charset"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "Data"),
-            &obj.data.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Data"), &obj.data);
     }
 }
 
@@ -1097,7 +1058,7 @@ impl CreateConfigurationSetEventDestinationRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ConfigurationSetName"),
-            &obj.configuration_set_name.replace("+", "%2B"),
+            &obj.configuration_set_name,
         );
         EventDestinationSerializer::serialize(
             params,
@@ -1194,7 +1155,7 @@ impl CreateConfigurationSetTrackingOptionsRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ConfigurationSetName"),
-            &obj.configuration_set_name.replace("+", "%2B"),
+            &obj.configuration_set_name,
         );
         TrackingOptionsSerializer::serialize(
             params,
@@ -1256,27 +1217,24 @@ impl CreateCustomVerificationEmailTemplateRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "FailureRedirectionURL"),
-            &obj.failure_redirection_url.replace("+", "%2B"),
+            &obj.failure_redirection_url,
         );
         params.put(
             &format!("{}{}", prefix, "FromEmailAddress"),
-            &obj.from_email_address.replace("+", "%2B"),
+            &obj.from_email_address,
         );
         params.put(
             &format!("{}{}", prefix, "SuccessRedirectionURL"),
-            &obj.success_redirection_url.replace("+", "%2B"),
+            &obj.success_redirection_url,
         );
         params.put(
             &format!("{}{}", prefix, "TemplateContent"),
-            &obj.template_content.replace("+", "%2B"),
+            &obj.template_content,
         );
-        params.put(
-            &format!("{}{}", prefix, "TemplateName"),
-            &obj.template_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
         params.put(
             &format!("{}{}", prefix, "TemplateSubject"),
-            &obj.template_subject.replace("+", "%2B"),
+            &obj.template_subject,
         );
     }
 }
@@ -1342,16 +1300,10 @@ impl CreateReceiptRuleRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.after {
-            params.put(
-                &format!("{}{}", prefix, "After"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "After"), &field_value);
         }
         ReceiptRuleSerializer::serialize(params, &format!("{}{}", prefix, "Rule"), &obj.rule);
-        params.put(
-            &format!("{}{}", prefix, "RuleSetName"),
-            &obj.rule_set_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
     }
 }
 
@@ -1391,10 +1343,7 @@ impl CreateReceiptRuleSetRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "RuleSetName"),
-            &obj.rule_set_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
     }
 }
 
@@ -1650,11 +1599,11 @@ impl DeleteConfigurationSetEventDestinationRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ConfigurationSetName"),
-            &obj.configuration_set_name.replace("+", "%2B"),
+            &obj.configuration_set_name,
         );
         params.put(
             &format!("{}{}", prefix, "EventDestinationName"),
-            &obj.event_destination_name.replace("+", "%2B"),
+            &obj.event_destination_name,
         );
     }
 }
@@ -1697,7 +1646,7 @@ impl DeleteConfigurationSetRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ConfigurationSetName"),
-            &obj.configuration_set_name.replace("+", "%2B"),
+            &obj.configuration_set_name,
         );
     }
 }
@@ -1744,7 +1693,7 @@ impl DeleteConfigurationSetTrackingOptionsRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ConfigurationSetName"),
-            &obj.configuration_set_name.replace("+", "%2B"),
+            &obj.configuration_set_name,
         );
     }
 }
@@ -1789,10 +1738,7 @@ impl DeleteCustomVerificationEmailTemplateRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "TemplateName"),
-            &obj.template_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
     }
 }
 
@@ -1814,14 +1760,8 @@ impl DeleteIdentityPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Identity"),
-            &obj.identity.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
     }
 }
 
@@ -1861,10 +1801,7 @@ impl DeleteIdentityRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Identity"),
-            &obj.identity.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
     }
 }
 
@@ -1904,10 +1841,7 @@ impl DeleteReceiptFilterRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "FilterName"),
-            &obj.filter_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "FilterName"), &obj.filter_name);
     }
 }
 
@@ -1949,14 +1883,8 @@ impl DeleteReceiptRuleRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "RuleName"),
-            &obj.rule_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "RuleSetName"),
-            &obj.rule_set_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RuleName"), &obj.rule_name);
+        params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
     }
 }
 
@@ -1996,10 +1924,7 @@ impl DeleteReceiptRuleSetRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "RuleSetName"),
-            &obj.rule_set_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
     }
 }
 
@@ -2039,10 +1964,7 @@ impl DeleteTemplateRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "TemplateName"),
-            &obj.template_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
     }
 }
 
@@ -2081,10 +2003,7 @@ impl DeleteVerifiedEmailAddressRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "EmailAddress"),
-            &obj.email_address.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "EmailAddress"), &obj.email_address);
     }
 }
 
@@ -2185,7 +2104,7 @@ impl DescribeConfigurationSetRequestSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "ConfigurationSetName"),
-            &obj.configuration_set_name.replace("+", "%2B"),
+            &obj.configuration_set_name,
         );
     }
 }
@@ -2277,14 +2196,8 @@ impl DescribeReceiptRuleRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "RuleName"),
-            &obj.rule_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "RuleSetName"),
-            &obj.rule_set_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RuleName"), &obj.rule_name);
+        params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
     }
 }
 
@@ -2350,10 +2263,7 @@ impl DescribeReceiptRuleSetRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "RuleSetName"),
-            &obj.rule_set_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
     }
 }
 
@@ -2644,7 +2554,7 @@ impl EventDestinationSerializer {
         if let Some(ref field_value) = obj.enabled {
             params.put(
                 &format!("{}{}", prefix, "Enabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.kinesis_firehose_destination {
@@ -2659,10 +2569,7 @@ impl EventDestinationSerializer {
             &format!("{}{}", prefix, "MatchingEventTypes"),
             &obj.matching_event_types,
         );
-        params.put(
-            &format!("{}{}", prefix, "Name"),
-            &obj.name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
         if let Some(ref field_value) = obj.sns_destination {
             SNSDestinationSerializer::serialize(
                 params,
@@ -2813,14 +2720,8 @@ impl ExtensionFieldSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Name"),
-            &obj.name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "Value"),
-            &obj.value.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "Value"), &obj.value);
     }
 }
 
@@ -2926,10 +2827,7 @@ impl GetCustomVerificationEmailTemplateRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "TemplateName"),
-            &obj.template_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
     }
 }
 
@@ -3268,10 +3166,7 @@ impl GetIdentityPoliciesRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Identity"),
-            &obj.identity.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
         PolicyNameListSerializer::serialize(
             params,
             &format!("{}{}", prefix, "PolicyNames"),
@@ -3528,10 +3423,7 @@ impl GetTemplateRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "TemplateName"),
-            &obj.template_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
     }
 }
 
@@ -4055,12 +3947,9 @@ impl KinesisFirehoseDestinationSerializer {
 
         params.put(
             &format!("{}{}", prefix, "DeliveryStreamARN"),
-            &obj.delivery_stream_arn.replace("+", "%2B"),
+            &obj.delivery_stream_arn,
         );
-        params.put(
-            &format!("{}{}", prefix, "IAMRoleARN"),
-            &obj.iam_role_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "IAMRoleARN"), &obj.iam_role_arn);
     }
 }
 
@@ -4138,21 +4027,12 @@ impl LambdaActionSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "FunctionArn"),
-            &obj.function_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "FunctionArn"), &obj.function_arn);
         if let Some(ref field_value) = obj.invocation_type {
-            params.put(
-                &format!("{}{}", prefix, "InvocationType"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "InvocationType"), &field_value);
         }
         if let Some(ref field_value) = obj.topic_arn {
-            params.put(
-                &format!("{}{}", prefix, "TopicArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TopicArn"), &field_value);
         }
     }
 }
@@ -4192,14 +4072,11 @@ impl ListConfigurationSetsRequestSerializer {
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
     }
 }
@@ -4283,14 +4160,11 @@ impl ListCustomVerificationEmailTemplatesRequestSerializer {
         if let Some(ref field_value) = obj.max_results {
             params.put(
                 &format!("{}{}", prefix, "MaxResults"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
     }
 }
@@ -4373,22 +4247,16 @@ impl ListIdentitiesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.identity_type {
-            params.put(
-                &format!("{}{}", prefix, "IdentityType"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "IdentityType"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
     }
 }
@@ -4462,10 +4330,7 @@ impl ListIdentityPoliciesRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Identity"),
-            &obj.identity.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
     }
 }
 
@@ -4598,10 +4463,7 @@ impl ListReceiptRuleSetsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
     }
 }
@@ -4680,14 +4542,11 @@ impl ListTemplatesRequestSerializer {
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(
-                &format!("{}{}", prefix, "NextToken"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
     }
 }
@@ -4907,10 +4766,7 @@ impl MessageDsnSerializer {
         }
 
         if let Some(ref field_value) = obj.arrival_date {
-            params.put(
-                &format!("{}{}", prefix, "ArrivalDate"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ArrivalDate"), &field_value);
         }
         if let Some(ref field_value) = obj.extension_fields {
             ExtensionFieldListSerializer::serialize(
@@ -4919,10 +4775,7 @@ impl MessageDsnSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "ReportingMta"),
-            &obj.reporting_mta.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ReportingMta"), &obj.reporting_mta);
     }
 }
 
@@ -4958,14 +4811,8 @@ impl MessageTagSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Name"),
-            &obj.name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "Value"),
-            &obj.value.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "Value"), &obj.value);
     }
 }
 
@@ -5157,18 +5004,9 @@ impl PutIdentityPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Identity"),
-            &obj.identity.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "Policy"),
-            &obj.policy.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
+        params.put(&format!("{}{}", prefix, "Policy"), &obj.policy);
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
     }
 }
 
@@ -5210,9 +5048,7 @@ impl RawMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "Data"),
-            ::std::str::from_utf8(&obj.data)
-                .unwrap()
-                .replace("+", "%2B"),
+            ::std::str::from_utf8(&obj.data).unwrap(),
         );
     }
 }
@@ -5492,10 +5328,7 @@ impl ReceiptFilterSerializer {
             &format!("{}{}", prefix, "IpFilter"),
             &obj.ip_filter,
         );
-        params.put(
-            &format!("{}{}", prefix, "Name"),
-            &obj.name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
     }
 }
 
@@ -5632,14 +5465,8 @@ impl ReceiptIpFilterSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Cidr"),
-            &obj.cidr.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "Policy"),
-            &obj.policy.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Cidr"), &obj.cidr);
+        params.put(&format!("{}{}", prefix, "Policy"), &obj.policy);
     }
 }
 
@@ -5742,13 +5569,10 @@ impl ReceiptRuleSerializer {
         if let Some(ref field_value) = obj.enabled {
             params.put(
                 &format!("{}{}", prefix, "Enabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "Name"),
-            &obj.name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
         if let Some(ref field_value) = obj.recipients {
             RecipientsListSerializer::serialize(
                 params,
@@ -5759,14 +5583,11 @@ impl ReceiptRuleSerializer {
         if let Some(ref field_value) = obj.scan_enabled {
             params.put(
                 &format!("{}{}", prefix, "ScanEnabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.tls_policy {
-            params.put(
-                &format!("{}{}", prefix, "TlsPolicy"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TlsPolicy"), &field_value);
         }
     }
 }
@@ -5991,15 +5812,9 @@ impl RecipientDsnFieldsSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Action"),
-            &obj.action.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Action"), &obj.action);
         if let Some(ref field_value) = obj.diagnostic_code {
-            params.put(
-                &format!("{}{}", prefix, "DiagnosticCode"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "DiagnosticCode"), &field_value);
         }
         if let Some(ref field_value) = obj.extension_fields {
             ExtensionFieldListSerializer::serialize(
@@ -6009,27 +5824,15 @@ impl RecipientDsnFieldsSerializer {
             );
         }
         if let Some(ref field_value) = obj.final_recipient {
-            params.put(
-                &format!("{}{}", prefix, "FinalRecipient"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "FinalRecipient"), &field_value);
         }
         if let Some(ref field_value) = obj.last_attempt_date {
-            params.put(
-                &format!("{}{}", prefix, "LastAttemptDate"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "LastAttemptDate"), &field_value);
         }
         if let Some(ref field_value) = obj.remote_mta {
-            params.put(
-                &format!("{}{}", prefix, "RemoteMta"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "RemoteMta"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "Status"),
-            &obj.status.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Status"), &obj.status);
     }
 }
 
@@ -6122,10 +5925,7 @@ impl ReorderReceiptRuleSetRequestSerializer {
             &format!("{}{}", prefix, "RuleNames"),
             &obj.rule_names,
         );
-        params.put(
-            &format!("{}{}", prefix, "RuleSetName"),
-            &obj.rule_set_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
     }
 }
 
@@ -6293,27 +6093,15 @@ impl S3ActionSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "BucketName"),
-            &obj.bucket_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "BucketName"), &obj.bucket_name);
         if let Some(ref field_value) = obj.kms_key_arn {
-            params.put(
-                &format!("{}{}", prefix, "KmsKeyArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "KmsKeyArn"), &field_value);
         }
         if let Some(ref field_value) = obj.object_key_prefix {
-            params.put(
-                &format!("{}{}", prefix, "ObjectKeyPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ObjectKeyPrefix"), &field_value);
         }
         if let Some(ref field_value) = obj.topic_arn {
-            params.put(
-                &format!("{}{}", prefix, "TopicArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TopicArn"), &field_value);
         }
     }
 }
@@ -6412,15 +6200,9 @@ impl SNSActionSerializer {
         }
 
         if let Some(ref field_value) = obj.encoding {
-            params.put(
-                &format!("{}{}", prefix, "Encoding"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Encoding"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "TopicArn"),
-            &obj.topic_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
     }
 }
 
@@ -6496,10 +6278,7 @@ impl SNSDestinationSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "TopicARN"),
-            &obj.topic_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "TopicARN"), &obj.topic_arn);
     }
 }
 
@@ -6529,15 +6308,9 @@ impl SendBounceRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "BounceSender"),
-            &obj.bounce_sender.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "BounceSender"), &obj.bounce_sender);
         if let Some(ref field_value) = obj.bounce_sender_arn {
-            params.put(
-                &format!("{}{}", prefix, "BounceSenderArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "BounceSenderArn"), &field_value);
         }
         BouncedRecipientInfoListSerializer::serialize(
             params,
@@ -6545,10 +6318,7 @@ impl SendBounceRequestSerializer {
             &obj.bounced_recipient_info_list,
         );
         if let Some(ref field_value) = obj.explanation {
-            params.put(
-                &format!("{}{}", prefix, "Explanation"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Explanation"), &field_value);
         }
         if let Some(ref field_value) = obj.message_dsn {
             MessageDsnSerializer::serialize(
@@ -6559,7 +6329,7 @@ impl SendBounceRequestSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "OriginalMessageId"),
-            &obj.original_message_id.replace("+", "%2B"),
+            &obj.original_message_id,
         );
     }
 }
@@ -6650,7 +6420,7 @@ impl SendBulkTemplatedEmailRequestSerializer {
         if let Some(ref field_value) = obj.configuration_set_name {
             params.put(
                 &format!("{}{}", prefix, "ConfigurationSetName"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.default_tags {
@@ -6663,7 +6433,7 @@ impl SendBulkTemplatedEmailRequestSerializer {
         if let Some(ref field_value) = obj.default_template_data {
             params.put(
                 &format!("{}{}", prefix, "DefaultTemplateData"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         BulkEmailDestinationListSerializer::serialize(
@@ -6679,36 +6449,18 @@ impl SendBulkTemplatedEmailRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.return_path {
-            params.put(
-                &format!("{}{}", prefix, "ReturnPath"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ReturnPath"), &field_value);
         }
         if let Some(ref field_value) = obj.return_path_arn {
-            params.put(
-                &format!("{}{}", prefix, "ReturnPathArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ReturnPathArn"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "Source"),
-            &obj.source.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Source"), &obj.source);
         if let Some(ref field_value) = obj.source_arn {
-            params.put(
-                &format!("{}{}", prefix, "SourceArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SourceArn"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "Template"),
-            &obj.template.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Template"), &obj.template);
         if let Some(ref field_value) = obj.template_arn {
-            params.put(
-                &format!("{}{}", prefix, "TemplateArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateArn"), &field_value);
         }
     }
 }
@@ -6783,17 +6535,11 @@ impl SendCustomVerificationEmailRequestSerializer {
         if let Some(ref field_value) = obj.configuration_set_name {
             params.put(
                 &format!("{}{}", prefix, "ConfigurationSetName"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "EmailAddress"),
-            &obj.email_address.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "TemplateName"),
-            &obj.template_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "EmailAddress"), &obj.email_address);
+        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
     }
 }
 
@@ -6994,7 +6740,7 @@ impl SendEmailRequestSerializer {
         if let Some(ref field_value) = obj.configuration_set_name {
             params.put(
                 &format!("{}{}", prefix, "ConfigurationSetName"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         DestinationSerializer::serialize(
@@ -7011,26 +6757,14 @@ impl SendEmailRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.return_path {
-            params.put(
-                &format!("{}{}", prefix, "ReturnPath"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ReturnPath"), &field_value);
         }
         if let Some(ref field_value) = obj.return_path_arn {
-            params.put(
-                &format!("{}{}", prefix, "ReturnPathArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ReturnPathArn"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "Source"),
-            &obj.source.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Source"), &obj.source);
         if let Some(ref field_value) = obj.source_arn {
-            params.put(
-                &format!("{}{}", prefix, "SourceArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SourceArn"), &field_value);
         }
         if let Some(ref field_value) = obj.tags {
             MessageTagListSerializer::serialize(
@@ -7122,7 +6856,7 @@ impl SendRawEmailRequestSerializer {
         if let Some(ref field_value) = obj.configuration_set_name {
             params.put(
                 &format!("{}{}", prefix, "ConfigurationSetName"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.destinations {
@@ -7133,10 +6867,7 @@ impl SendRawEmailRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.from_arn {
-            params.put(
-                &format!("{}{}", prefix, "FromArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "FromArn"), &field_value);
         }
         RawMessageSerializer::serialize(
             params,
@@ -7144,22 +6875,13 @@ impl SendRawEmailRequestSerializer {
             &obj.raw_message,
         );
         if let Some(ref field_value) = obj.return_path_arn {
-            params.put(
-                &format!("{}{}", prefix, "ReturnPathArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ReturnPathArn"), &field_value);
         }
         if let Some(ref field_value) = obj.source {
-            params.put(
-                &format!("{}{}", prefix, "Source"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Source"), &field_value);
         }
         if let Some(ref field_value) = obj.source_arn {
-            params.put(
-                &format!("{}{}", prefix, "SourceArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SourceArn"), &field_value);
         }
         if let Some(ref field_value) = obj.tags {
             MessageTagListSerializer::serialize(
@@ -7257,7 +6979,7 @@ impl SendTemplatedEmailRequestSerializer {
         if let Some(ref field_value) = obj.configuration_set_name {
             params.put(
                 &format!("{}{}", prefix, "ConfigurationSetName"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         DestinationSerializer::serialize(
@@ -7273,26 +6995,14 @@ impl SendTemplatedEmailRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.return_path {
-            params.put(
-                &format!("{}{}", prefix, "ReturnPath"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ReturnPath"), &field_value);
         }
         if let Some(ref field_value) = obj.return_path_arn {
-            params.put(
-                &format!("{}{}", prefix, "ReturnPathArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ReturnPathArn"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "Source"),
-            &obj.source.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Source"), &obj.source);
         if let Some(ref field_value) = obj.source_arn {
-            params.put(
-                &format!("{}{}", prefix, "SourceArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SourceArn"), &field_value);
         }
         if let Some(ref field_value) = obj.tags {
             MessageTagListSerializer::serialize(
@@ -7301,20 +7011,11 @@ impl SendTemplatedEmailRequestSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "Template"),
-            &obj.template.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Template"), &obj.template);
         if let Some(ref field_value) = obj.template_arn {
-            params.put(
-                &format!("{}{}", prefix, "TemplateArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateArn"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "TemplateData"),
-            &obj.template_data.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "TemplateData"), &obj.template_data);
     }
 }
 
@@ -7395,10 +7096,7 @@ impl SetActiveReceiptRuleSetRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.rule_set_name {
-            params.put(
-                &format!("{}{}", prefix, "RuleSetName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "RuleSetName"), &field_value);
         }
     }
 }
@@ -7443,12 +7141,9 @@ impl SetIdentityDkimEnabledRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "DkimEnabled"),
-            &obj.dkim_enabled.to_string().replace("+", "%2B"),
+            &obj.dkim_enabled.to_string(),
         );
-        params.put(
-            &format!("{}{}", prefix, "Identity"),
-            &obj.identity.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
     }
 }
 
@@ -7496,12 +7191,9 @@ impl SetIdentityFeedbackForwardingEnabledRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ForwardingEnabled"),
-            &obj.forwarding_enabled.to_string().replace("+", "%2B"),
+            &obj.forwarding_enabled.to_string(),
         );
-        params.put(
-            &format!("{}{}", prefix, "Identity"),
-            &obj.identity.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
     }
 }
 
@@ -7551,15 +7243,12 @@ impl SetIdentityHeadersInNotificationsEnabledRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "Enabled"),
-            &obj.enabled.to_string().replace("+", "%2B"),
+            &obj.enabled.to_string(),
         );
-        params.put(
-            &format!("{}{}", prefix, "Identity"),
-            &obj.identity.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
         params.put(
             &format!("{}{}", prefix, "NotificationType"),
-            &obj.notification_type.replace("+", "%2B"),
+            &obj.notification_type,
         );
     }
 }
@@ -7607,18 +7296,12 @@ impl SetIdentityMailFromDomainRequestSerializer {
         if let Some(ref field_value) = obj.behavior_on_mx_failure {
             params.put(
                 &format!("{}{}", prefix, "BehaviorOnMXFailure"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "Identity"),
-            &obj.identity.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
         if let Some(ref field_value) = obj.mail_from_domain {
-            params.put(
-                &format!("{}{}", prefix, "MailFromDomain"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "MailFromDomain"), &field_value);
         }
     }
 }
@@ -7663,19 +7346,13 @@ impl SetIdentityNotificationTopicRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Identity"),
-            &obj.identity.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
         params.put(
             &format!("{}{}", prefix, "NotificationType"),
-            &obj.notification_type.replace("+", "%2B"),
+            &obj.notification_type,
         );
         if let Some(ref field_value) = obj.sns_topic {
-            params.put(
-                &format!("{}{}", prefix, "SnsTopic"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SnsTopic"), &field_value);
         }
     }
 }
@@ -7721,19 +7398,10 @@ impl SetReceiptRulePositionRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.after {
-            params.put(
-                &format!("{}{}", prefix, "After"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "After"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "RuleName"),
-            &obj.rule_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "RuleSetName"),
-            &obj.rule_set_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RuleName"), &obj.rule_name);
+        params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
     }
 }
 
@@ -7820,15 +7488,9 @@ impl StopActionSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Scope"),
-            &obj.scope.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Scope"), &obj.scope);
         if let Some(ref field_value) = obj.topic_arn {
-            params.put(
-                &format!("{}{}", prefix, "TopicArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TopicArn"), &field_value);
         }
     }
 }
@@ -7967,26 +7629,14 @@ impl TemplateSerializer {
         }
 
         if let Some(ref field_value) = obj.html_part {
-            params.put(
-                &format!("{}{}", prefix, "HtmlPart"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "HtmlPart"), &field_value);
         }
         if let Some(ref field_value) = obj.subject_part {
-            params.put(
-                &format!("{}{}", prefix, "SubjectPart"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "SubjectPart"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "TemplateName"),
-            &obj.template_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
         if let Some(ref field_value) = obj.text_part {
-            params.put(
-                &format!("{}{}", prefix, "TextPart"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TextPart"), &field_value);
         }
     }
 }
@@ -8132,14 +7782,8 @@ impl TestRenderTemplateRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "TemplateData"),
-            &obj.template_data.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "TemplateName"),
-            &obj.template_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "TemplateData"), &obj.template_data);
+        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
     }
 }
 
@@ -8295,7 +7939,7 @@ impl TrackingOptionsSerializer {
         if let Some(ref field_value) = obj.custom_redirect_domain {
             params.put(
                 &format!("{}{}", prefix, "CustomRedirectDomain"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
     }
@@ -8320,7 +7964,7 @@ impl UpdateAccountSendingEnabledRequestSerializer {
         if let Some(ref field_value) = obj.enabled {
             params.put(
                 &format!("{}{}", prefix, "Enabled"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -8350,7 +7994,7 @@ impl UpdateConfigurationSetEventDestinationRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ConfigurationSetName"),
-            &obj.configuration_set_name.replace("+", "%2B"),
+            &obj.configuration_set_name,
         );
         EventDestinationSerializer::serialize(
             params,
@@ -8404,11 +8048,11 @@ impl UpdateConfigurationSetReputationMetricsEnabledRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ConfigurationSetName"),
-            &obj.configuration_set_name.replace("+", "%2B"),
+            &obj.configuration_set_name,
         );
         params.put(
             &format!("{}{}", prefix, "Enabled"),
-            &obj.enabled.to_string().replace("+", "%2B"),
+            &obj.enabled.to_string(),
         );
     }
 }
@@ -8437,11 +8081,11 @@ impl UpdateConfigurationSetSendingEnabledRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ConfigurationSetName"),
-            &obj.configuration_set_name.replace("+", "%2B"),
+            &obj.configuration_set_name,
         );
         params.put(
             &format!("{}{}", prefix, "Enabled"),
-            &obj.enabled.to_string().replace("+", "%2B"),
+            &obj.enabled.to_string(),
         );
     }
 }
@@ -8469,7 +8113,7 @@ impl UpdateConfigurationSetTrackingOptionsRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ConfigurationSetName"),
-            &obj.configuration_set_name.replace("+", "%2B"),
+            &obj.configuration_set_name,
         );
         TrackingOptionsSerializer::serialize(
             params,
@@ -8532,36 +8176,24 @@ impl UpdateCustomVerificationEmailTemplateRequestSerializer {
         if let Some(ref field_value) = obj.failure_redirection_url {
             params.put(
                 &format!("{}{}", prefix, "FailureRedirectionURL"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.from_email_address {
-            params.put(
-                &format!("{}{}", prefix, "FromEmailAddress"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "FromEmailAddress"), &field_value);
         }
         if let Some(ref field_value) = obj.success_redirection_url {
             params.put(
                 &format!("{}{}", prefix, "SuccessRedirectionURL"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.template_content {
-            params.put(
-                &format!("{}{}", prefix, "TemplateContent"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateContent"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "TemplateName"),
-            &obj.template_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
         if let Some(ref field_value) = obj.template_subject {
-            params.put(
-                &format!("{}{}", prefix, "TemplateSubject"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TemplateSubject"), &field_value);
         }
     }
 }
@@ -8585,10 +8217,7 @@ impl UpdateReceiptRuleRequestSerializer {
         }
 
         ReceiptRuleSerializer::serialize(params, &format!("{}{}", prefix, "Rule"), &obj.rule);
-        params.put(
-            &format!("{}{}", prefix, "RuleSetName"),
-            &obj.rule_set_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
     }
 }
 
@@ -8761,10 +8390,7 @@ impl VerifyDomainDkimRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Domain"),
-            &obj.domain.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Domain"), &obj.domain);
     }
 }
 
@@ -8833,10 +8459,7 @@ impl VerifyDomainIdentityRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Domain"),
-            &obj.domain.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Domain"), &obj.domain);
     }
 }
 
@@ -8905,10 +8528,7 @@ impl VerifyEmailAddressRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "EmailAddress"),
-            &obj.email_address.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "EmailAddress"), &obj.email_address);
     }
 }
 
@@ -8928,10 +8548,7 @@ impl VerifyEmailIdentityRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "EmailAddress"),
-            &obj.email_address.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "EmailAddress"), &obj.email_address);
     }
 }
 
@@ -9023,13 +8640,10 @@ impl WorkmailActionSerializer {
 
         params.put(
             &format!("{}{}", prefix, "OrganizationArn"),
-            &obj.organization_arn.replace("+", "%2B"),
+            &obj.organization_arn,
         );
         if let Some(ref field_value) = obj.topic_arn {
-            params.put(
-                &format!("{}{}", prefix, "TopicArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "TopicArn"), &field_value);
         }
     }
 }
