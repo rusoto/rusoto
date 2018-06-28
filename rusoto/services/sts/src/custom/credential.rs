@@ -4,8 +4,8 @@ use futures::{Async, Future, Poll};
 
 use rusoto_core;
 
-use rusoto_core::{AwsCredentials, CredentialsError,
-    ProvideAwsCredentials, DispatchSignedRequest, RusotoFuture};
+use rusoto_core::{CredentialsError, ProvideAwsCredentials, RusotoFuture};
+use rusoto_core::credential::AwsCredentials;
 use ::{AssumeRoleRequest, AssumeRoleResponse, AssumeRoleError,
     AssumeRoleWithSAMLRequest, AssumeRoleWithSAMLResponse, AssumeRoleWithSAMLError,
     AssumeRoleWithWebIdentityRequest, AssumeRoleWithWebIdentityResponse, AssumeRoleWithWebIdentityError,
@@ -104,11 +104,11 @@ impl StsSessionCredentialsProvider {
     /// * `sts_client` - The [StsClient](struct.StsClient.html) to use to acquire session tokens.
     /// * `duration` - The duration of the session tokens. Default 1 hour.
     /// * `mfa_serial` - Optional MFA hardware device serial number or virtual device ARN. Set the MFA code with `set_mfa_code`.
-    pub fn new<P,D>(sts_client: StsClient<P,D>,
+    pub fn new(sts_client: StsClient,
             duration: Option<Duration>,
             mfa_serial: Option<String>,
             ) -> StsSessionCredentialsProvider 
-            where P: ProvideAwsCredentials + 'static, D: DispatchSignedRequest + 'static {
+    {
         StsSessionCredentialsProvider {
             sts_client: Box::new(sts_client),
             session_duration: duration.unwrap_or(Duration::seconds(DEFAULT_DURATION_SECONDS as i64)),
@@ -200,7 +200,7 @@ impl StsAssumeRoleSessionCredentialsProvider {
     /// * `session_duration` - Duration of session tokens. Default 1 hour.
     /// * `scope_down_policy` - Optional inline IAM policy in JSON format to further restrict the access granted to the negotiated session.
     /// * `mfa_serial` - Optional MFA hardware device serial number or virtual device ARN. Use `set_mfa_code` to set the MFA code.
-    pub fn new<P,D>(sts_client: StsClient<P,D>,
+    pub fn new(sts_client: StsClient,
             role_arn: String,
             session_name: String,
             external_id: Option<String>,
@@ -209,7 +209,7 @@ impl StsAssumeRoleSessionCredentialsProvider {
             mfa_serial: Option<String>
             ) 
             -> StsAssumeRoleSessionCredentialsProvider 
-            where P: ProvideAwsCredentials + 'static, D: DispatchSignedRequest + 'static {
+    {
         StsAssumeRoleSessionCredentialsProvider {
             sts_client: Box::new(sts_client),
             role_arn: role_arn,
@@ -305,7 +305,7 @@ impl StsWebIdentityFederationSessionCredentialsProvider {
     /// * `session_name` - An identifier for the assumed role session. Minimum length of 2. Maximum length of 64. Pattern: `[\w+=,.@-]*`
     /// * `session_duration` - Duration of session tokens. Default 1 hour.
     /// * `scope_down_policy` - Optional inline IAM policy in JSON format to further restrict the access granted to the negotiated session.
-    pub fn new<P,D>(sts_client: StsClient<P,D>,
+    pub fn new(sts_client: StsClient,
             wif_token: String,
             wif_provider: Option<String>,
             role_arn: String,
@@ -313,7 +313,7 @@ impl StsWebIdentityFederationSessionCredentialsProvider {
             session_duration: Option<Duration>,
             scope_down_policy: Option<String>
             ) -> StsWebIdentityFederationSessionCredentialsProvider
-            where P: ProvideAwsCredentials + 'static, D: DispatchSignedRequest + 'static {
+        {
         StsWebIdentityFederationSessionCredentialsProvider {
             sts_client: Box::new(sts_client),
             wif_token: wif_token,
