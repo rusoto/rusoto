@@ -2,7 +2,7 @@
 
 extern crate chrono;
 extern crate futures;
-extern crate hyper;
+extern crate http;
 extern crate rusoto_core;
 
 use std::fs::File;
@@ -10,12 +10,13 @@ use std::io::Read;
 use std::collections::HashMap;
 use std::time::Duration;
 
-use rusoto_core::{DispatchSignedRequest, HttpResponse, HttpDispatchError, SignedRequest};
+use rusoto_core::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{ProvideAwsCredentials, CredentialsError, AwsCredentials};
-use rusoto_core::request::Headers;
+use rusoto_core::request::{Headers, HttpResponse};
+use rusoto_core::signature::SignedRequest;
 use futures::future::{FutureResult, ok};
 use futures::stream::once;
-use hyper::StatusCode;
+use http::{HttpTryFrom, StatusCode};
 
 pub struct MockCredentialsProvider;
 
@@ -34,7 +35,7 @@ pub struct MockRequestDispatcher {
     status: StatusCode,
     body: Vec<u8>,
     headers: HashMap<String, String>,
-    request_checker: Option<Box<Fn(&SignedRequest)>>,
+    request_checker: Option<Box<Fn(&SignedRequest) + Send + Sync>>,
 }
 
 impl MockRequestDispatcher {
@@ -53,7 +54,7 @@ impl MockRequestDispatcher {
     }
 
     pub fn with_request_checker<F>(mut self, checker: F) -> MockRequestDispatcher
-        where F: Fn(&SignedRequest) + 'static {
+        where F: Fn(&SignedRequest) + Send + Sync + 'static {
         self.request_checker = Some(Box::new(checker));
         self
     }
