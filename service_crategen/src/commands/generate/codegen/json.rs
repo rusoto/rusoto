@@ -40,17 +40,15 @@ impl GenerateProtocol for JsonGenerator {
                     request.add_header(\"x-amz-target\", \"{target_prefix}.{name}\");
                     {payload}
 
-                    let future = self.inner.sign_and_dispatch(request, |response| {{
-                        if response.status == StatusCode::Ok {{
+                    self.client.sign_and_dispatch(request, |response| {{
+                        if response.status.is_success() {{
                             {ok_response}
                         }} else {{
-                            future::Either::B(response.buffer().from_err().and_then(|response| {{
+                            Box::new(response.buffer().from_err().and_then(|response| {{
                                 Err({error_type}::from_body(String::from_utf8_lossy(response.body.as_ref()).as_ref()))
                             }}))
                         }}
-                    }});
-
-                    RusotoFuture::new(future)
+                    }})
                 }}
                 ",
                      documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
@@ -76,8 +74,7 @@ impl GenerateProtocol for JsonGenerator {
                  "use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
-        use serde_json::from_str;
-        use hyper::StatusCode;")
+        use serde_json::from_str;")
     }
 
     fn serialize_trait(&self) -> Option<&'static str> {
@@ -133,7 +130,7 @@ fn generate_documentation(operation: &Operation) -> Option<String> {
 
 fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
     if operation.output.is_some() {
-        format!("future::Either::A(response.buffer().from_err().map(|response| {{
+        format!("Box::new(response.buffer().from_err().map(|response| {{
                     let mut body = response.body;
 
                     if body.is_empty() || body == b\"null\" {{
@@ -144,6 +141,6 @@ fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
                 }}))",
             output_type)
     } else {
-        "future::Either::A(future::ok(::std::mem::drop(response)))".to_owned()
+        "Box::new(future::ok(::std::mem::drop(response)))".to_owned()
     }
 }

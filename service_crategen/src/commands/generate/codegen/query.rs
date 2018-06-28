@@ -38,17 +38,15 @@ impl GenerateProtocol for QueryGenerator {
                     {serialize_input}
                     request.set_params(params);
 
-                    let future = self.inner.sign_and_dispatch(request, |response| {{
-                        if response.status != StatusCode::Ok {{
-                            return future::Either::B(response.buffer().from_err().and_then(|response| {{
+                    self.client.sign_and_dispatch(request, |response| {{
+                        if !response.status.is_success() {{
+                            return Box::new(response.buffer().from_err().and_then(|response| {{
                                 Err({error_type}::from_body(String::from_utf8_lossy(response.body.as_ref()).as_ref()))
                             }}));
                         }}
 
                         {parse_payload}
-                    }});
-
-                    RusotoFuture::new(future)
+                    }})
                 }}
                 ",
                      api_version = service.api_version(),
@@ -77,7 +75,6 @@ impl GenerateProtocol for QueryGenerator {
             use rusoto_core::xmlutil::{{Next, Peek, XmlParseError, XmlResponse}};
             use rusoto_core::xmlutil::{{characters, end_element, find_start_element, start_element, skip_tree, peek_at_name}};
             use rusoto_core::xmlerror::*;
-            use hyper::StatusCode;
 
             enum DeserializerNext {{
                 Close,

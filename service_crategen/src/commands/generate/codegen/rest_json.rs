@@ -56,22 +56,20 @@ impl GenerateProtocol for RestJsonGenerator {
                     {load_headers}
                     {load_params}
 
-                    let future = self.inner.sign_and_dispatch(request, |response| {{
+                    self.client.sign_and_dispatch(request, |response| {{
                         if {status_check} {{
-                            future::Either::A(response.buffer().from_err().map(|response| {{
+                            Box::new(response.buffer().from_err().map(|response| {{
                                 {parse_body}
                                 {parse_headers}
                                 {parse_status_code}
                                 result
                             }}))
                         }} else {{
-                            future::Either::B(response.buffer().from_err().and_then(|response| {{
+                            Box::new(response.buffer().from_err().and_then(|response| {{
                                 Err({error_type}::from_body(String::from_utf8_lossy(response.body.as_ref()).as_ref()))
                             }}))
                         }}
-                    }});
-
-                    RusotoFuture::new(future)
+                    }})
                 }}
                 ",
                 documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
