@@ -17,7 +17,6 @@
 //! If you're using the service, you're probably looking for [LexModelsClient](struct.LexModelsClient.html) and [LexModels](trait.LexModels.html).
 
 extern crate futures;
-extern crate hyper;
 #[macro_use]
 extern crate log;
 extern crate rusoto_core;
@@ -25,7 +24,6 @@ extern crate serde;
 #[macro_use]
 extern crate serde_derive;
 extern crate serde_json;
-extern crate tokio_core;
 
 mod generated;
 mod custom;

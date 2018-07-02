@@ -17,15 +17,13 @@ use std::io;
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
-use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::region;
 use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::{ClientInner, RusotoFuture};
+use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 use rusoto_core::request::HttpDispatchError;
 
-use hyper::StatusCode;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::xmlerror::*;
@@ -2042,48 +2040,41 @@ pub trait ImportExport {
     fn update_job(&self, input: UpdateJobInput) -> RusotoFuture<UpdateJobOutput, UpdateJobError>;
 }
 /// A client for the AWS Import/Export API.
-pub struct ImportExportClient<P = CredentialsProvider, D = RequestDispatcher>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    inner: ClientInner<P, D>,
+pub struct ImportExportClient {
+    client: Client,
     region: region::Region,
 }
 
 impl ImportExportClient {
-    /// Creates a simple client backed by an implicit event loop.
+    /// Creates a client backed by the default tokio event loop.
     ///
     /// The client will use the default credentials provider and tls client.
-    ///
-    /// See the `rusoto_core::reactor` module for more details.
-    pub fn simple(region: region::Region) -> ImportExportClient {
-        ImportExportClient::new(
-            RequestDispatcher::default(),
-            CredentialsProvider::default(),
-            region,
-        )
-    }
-}
-
-impl<P, D> ImportExportClient<P, D>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
+    pub fn new(region: region::Region) -> ImportExportClient {
         ImportExportClient {
-            inner: ClientInner::new(credentials_provider, request_dispatcher),
+            client: Client::shared(),
+            region: region,
+        }
+    }
+
+    pub fn new_with<P, D>(
+        request_dispatcher: D,
+        credentials_provider: P,
+        region: region::Region,
+    ) -> ImportExportClient
+    where
+        P: ProvideAwsCredentials + Send + Sync + 'static,
+        P::Future: Send,
+        D: DispatchSignedRequest + Send + Sync + 'static,
+        D::Future: Send,
+    {
+        ImportExportClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region: region,
         }
     }
 }
 
-impl<P, D> ImportExport for ImportExportClient<P, D>
-where
-    P: ProvideAwsCredentials + 'static,
-    D: DispatchSignedRequest + 'static,
-{
+impl ImportExport for ImportExportClient {
     /// <p>This operation cancels a specified job. Only the job owner can cancel it. The operation fails if the job has already started or is complete.</p>
     fn cancel_job(&self, input: CancelJobInput) -> RusotoFuture<CancelJobOutput, CancelJobError> {
         let mut request = SignedRequest::new(
@@ -2099,16 +2090,16 @@ where
         CancelJobInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CancelJobError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -2132,9 +2123,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>This operation initiates the process of scheduling an upload or download of your data. You include in the request a manifest that describes the data transfer specifics. The response to the request includes a job ID, which you can use in other operations, a signature that you use to identify your storage device, and the address where you should ship your storage device.</p>
@@ -2152,16 +2141,16 @@ where
         CreateJobInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateJobError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -2185,9 +2174,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>This operation generates a pre-paid UPS shipping label that you will use to ship your device to AWS for processing.</p>
@@ -2208,16 +2195,16 @@ where
         GetShippingLabelInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetShippingLabelError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -2241,9 +2228,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>This operation returns information about a job, including where the job is in the processing pipeline, the status of the results, and the signature value associated with the job. You can only return information about jobs you own.</p>
@@ -2261,16 +2246,16 @@ where
         GetStatusInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetStatusError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -2294,9 +2279,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>This operation returns the jobs associated with the requester. AWS Import/Export lists the jobs in reverse chronological order based on the date of creation. For example if Job Test1 was created 2009Dec30 and Test2 was created 2010Feb05, the ListJobs operation would return Test2 followed by Test1.</p>
@@ -2310,16 +2293,16 @@ where
         ListJobsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListJobsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -2343,9 +2326,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>You use this operation to change the parameters specified in the original manifest file by supplying a new manifest file. The manifest file attached to this request replaces the original manifest file. You can only use the operation after a CreateJob request but before the data transfer starts and you can only use it on jobs you own.</p>
@@ -2363,16 +2344,16 @@ where
         UpdateJobInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateJobError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -2396,9 +2377,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 }
 
@@ -2418,7 +2397,8 @@ mod protocol_tests {
             "importexport-get-status.xml",
         );
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
-        let client = ImportExportClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let client =
+            ImportExportClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetStatusInput::default();
         let result = client.get_status(request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
@@ -2431,7 +2411,8 @@ mod protocol_tests {
             "importexport-list-jobs.xml",
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = ImportExportClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let client =
+            ImportExportClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListJobsInput::default();
         let result = client.list_jobs(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);

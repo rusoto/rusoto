@@ -17,15 +17,13 @@ use std::io;
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
-use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::region;
 use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::{ClientInner, RusotoFuture};
+use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 use rusoto_core::request::HttpDispatchError;
 
-use hyper::StatusCode;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_str;
@@ -5554,48 +5552,41 @@ pub trait AlexaForBusiness {
     ) -> RusotoFuture<UpdateSkillGroupResponse, UpdateSkillGroupError>;
 }
 /// A client for the Alexa For Business API.
-pub struct AlexaForBusinessClient<P = CredentialsProvider, D = RequestDispatcher>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    inner: ClientInner<P, D>,
+pub struct AlexaForBusinessClient {
+    client: Client,
     region: region::Region,
 }
 
 impl AlexaForBusinessClient {
-    /// Creates a simple client backed by an implicit event loop.
+    /// Creates a client backed by the default tokio event loop.
     ///
     /// The client will use the default credentials provider and tls client.
-    ///
-    /// See the `rusoto_core::reactor` module for more details.
-    pub fn simple(region: region::Region) -> AlexaForBusinessClient {
-        AlexaForBusinessClient::new(
-            RequestDispatcher::default(),
-            CredentialsProvider::default(),
-            region,
-        )
-    }
-}
-
-impl<P, D> AlexaForBusinessClient<P, D>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
+    pub fn new(region: region::Region) -> AlexaForBusinessClient {
         AlexaForBusinessClient {
-            inner: ClientInner::new(credentials_provider, request_dispatcher),
+            client: Client::shared(),
+            region: region,
+        }
+    }
+
+    pub fn new_with<P, D>(
+        request_dispatcher: D,
+        credentials_provider: P,
+        region: region::Region,
+    ) -> AlexaForBusinessClient
+    where
+        P: ProvideAwsCredentials + Send + Sync + 'static,
+        P::Future: Send,
+        D: DispatchSignedRequest + Send + Sync + 'static,
+        D::Future: Send,
+    {
+        AlexaForBusinessClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region: region,
         }
     }
 }
 
-impl<P, D> AlexaForBusiness for AlexaForBusinessClient<P, D>
-where
-    P: ProvideAwsCredentials + 'static,
-    D: DispatchSignedRequest + 'static,
-{
+impl AlexaForBusiness for AlexaForBusinessClient {
     /// <p>Associates a contact to a given address book.</p>
     fn associate_contact_with_address_book(
         &self,
@@ -5612,9 +5603,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -5626,15 +5617,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AssociateContactWithAddressBookError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Associates a device to a given room. This applies all the settings from the room profile to the device, and all the skills in any skill groups added to that room. This operation requires the device to be online, or a manual sync is required. </p>
@@ -5649,9 +5638,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -5663,15 +5652,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AssociateDeviceWithRoomError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Associates a skill group to a given room. This enables all skills in the associated skill group on all devices in the room.</p>
@@ -5689,9 +5676,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -5703,15 +5690,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AssociateSkillGroupWithRoomError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates an address book with the specified details.</p>
@@ -5726,9 +5711,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -5740,15 +5725,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateAddressBookError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a contact with the specified details.</p>
@@ -5763,9 +5746,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -5777,15 +5760,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateContactError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a new room profile with the specified details.</p>
@@ -5800,9 +5781,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -5814,15 +5795,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateProfileError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a room with the specified details.</p>
@@ -5837,9 +5816,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -5851,15 +5830,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateRoomError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a skill group with a specified name and description.</p>
@@ -5874,9 +5851,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -5888,15 +5865,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateSkillGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a user.</p>
@@ -5911,9 +5886,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -5925,15 +5900,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateUserError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes an address book by the address book ARN.</p>
@@ -5948,9 +5921,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -5962,15 +5935,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteAddressBookError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes a contact by the contact ARN.</p>
@@ -5985,9 +5956,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -5999,15 +5970,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteContactError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes a room profile by the profile ARN.</p>
@@ -6022,9 +5991,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6036,15 +6005,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteProfileError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes a room by the room ARN.</p>
@@ -6059,9 +6026,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6073,15 +6040,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteRoomError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes room skill parameter details by room, skill, and parameter key ID.</p>
@@ -6096,9 +6061,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6110,15 +6075,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteRoomSkillParameterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes a skill group by skill group ARN.</p>
@@ -6133,9 +6096,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6147,15 +6110,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteSkillGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes a specified user by user ARN and enrollment ARN.</p>
@@ -6170,9 +6131,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6184,15 +6145,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteUserError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Disassociates a contact from a given address book.</p>
@@ -6213,9 +6172,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6227,15 +6186,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DisassociateContactFromAddressBookError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Disassociates a device from its current room. The device continues to be connected to the Wi-Fi network and is still registered to the account. The device settings and skills are removed from the room.</p>
@@ -6253,9 +6210,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6267,15 +6224,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DisassociateDeviceFromRoomError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Disassociates a skill group from a specified room. This disables all skills in the skill group on all devices in the room.</p>
@@ -6294,9 +6249,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6308,15 +6263,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DisassociateSkillGroupFromRoomError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets address the book details by the address book ARN.</p>
@@ -6331,9 +6284,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6345,15 +6298,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetAddressBookError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets the contact details by the contact ARN.</p>
@@ -6368,9 +6319,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6382,15 +6333,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetContactError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets the details of a device by device ARN.</p>
@@ -6405,9 +6354,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6419,15 +6368,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetDeviceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets the details of a room profile by profile ARN.</p>
@@ -6442,9 +6389,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6456,15 +6403,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetProfileError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets room details by room ARN.</p>
@@ -6476,9 +6421,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6490,15 +6435,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetRoomError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets room skill parameter details by room, skill, and parameter key ARN.</p>
@@ -6513,9 +6456,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6527,15 +6470,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetRoomSkillParameterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets skill group details by skill group ARN.</p>
@@ -6550,9 +6491,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6564,15 +6505,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetSkillGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists all enabled skills in a specific skill group.</p>
@@ -6587,9 +6526,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6601,15 +6540,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListSkillsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists all tags for a specific resource.</p>
@@ -6621,9 +6558,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6635,15 +6572,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListTagsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates room skill parameter details by room, skill, and parameter key ID. Not all skills have a room skill parameter.</p>
@@ -6658,9 +6593,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6672,15 +6607,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutRoomSkillParameterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Determines the details for the room from which a skill request was invoked. This operation is used by skill developers.</p>
@@ -6695,9 +6628,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6709,15 +6642,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ResolveRoomError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Revokes an invitation and invalidates the enrollment URL.</p>
@@ -6732,9 +6663,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6746,15 +6677,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RevokeInvitationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Searches address books and lists the ones that meet a set of filter and sort criteria.</p>
@@ -6769,9 +6698,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6783,15 +6712,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SearchAddressBooksError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Searches contacts and lists the ones that meet a set of filter and sort criteria.</p>
@@ -6806,9 +6733,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6820,15 +6747,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SearchContactsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Searches devices and lists the ones that meet a set of filter criteria.</p>
@@ -6843,9 +6768,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6857,15 +6782,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SearchDevicesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Searches room profiles and lists the ones that meet a set of filter criteria.</p>
@@ -6880,9 +6803,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6894,15 +6817,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SearchProfilesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Searches rooms and lists the ones that meet a set of filter and sort criteria.</p>
@@ -6917,9 +6838,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6931,15 +6852,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SearchRoomsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Searches skill groups and lists the ones that meet a set of filter and sort criteria.</p>
@@ -6954,9 +6873,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -6968,15 +6887,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SearchSkillGroupsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Searches users and lists the ones that meet a set of filter and sort criteria.</p>
@@ -6991,9 +6908,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -7005,15 +6922,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SearchUsersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Sends an enrollment invitation email with a URL to a user. The URL is valid for 72 hours or until you call this operation again, whichever comes first. </p>
@@ -7028,9 +6943,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -7042,15 +6957,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SendInvitationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Resets a device and its account to the known default settings by clearing all information and settings set by previous users.</p>
@@ -7065,9 +6978,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -7079,15 +6992,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(StartDeviceSyncError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Adds metadata tags to a specified resource.</p>
@@ -7102,9 +7013,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -7116,15 +7027,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(TagResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Removes metadata tags from a specified resource.</p>
@@ -7139,9 +7048,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -7153,15 +7062,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UntagResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates address book details by the address book ARN.</p>
@@ -7176,9 +7083,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -7190,15 +7097,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateAddressBookError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates the contact details by the contact ARN.</p>
@@ -7213,9 +7118,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -7227,15 +7132,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateContactError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates the device name by device ARN.</p>
@@ -7250,9 +7153,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -7264,15 +7167,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateDeviceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates an existing room profile by room profile ARN.</p>
@@ -7287,9 +7188,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -7301,15 +7202,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateProfileError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates room details by room ARN.</p>
@@ -7324,9 +7223,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -7338,15 +7237,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateRoomError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates skill group details by skill group ARN.</p>
@@ -7361,9 +7258,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -7375,15 +7272,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateSkillGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 }
 

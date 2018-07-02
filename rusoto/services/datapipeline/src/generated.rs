@@ -17,15 +17,13 @@ use std::io;
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
-use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::region;
 use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::{ClientInner, RusotoFuture};
+use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 use rusoto_core::request::HttpDispatchError;
 
-use hyper::StatusCode;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_str;
@@ -2616,48 +2614,41 @@ pub trait DataPipeline {
     ) -> RusotoFuture<ValidatePipelineDefinitionOutput, ValidatePipelineDefinitionError>;
 }
 /// A client for the AWS Data Pipeline API.
-pub struct DataPipelineClient<P = CredentialsProvider, D = RequestDispatcher>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    inner: ClientInner<P, D>,
+pub struct DataPipelineClient {
+    client: Client,
     region: region::Region,
 }
 
 impl DataPipelineClient {
-    /// Creates a simple client backed by an implicit event loop.
+    /// Creates a client backed by the default tokio event loop.
     ///
     /// The client will use the default credentials provider and tls client.
-    ///
-    /// See the `rusoto_core::reactor` module for more details.
-    pub fn simple(region: region::Region) -> DataPipelineClient {
-        DataPipelineClient::new(
-            RequestDispatcher::default(),
-            CredentialsProvider::default(),
-            region,
-        )
-    }
-}
-
-impl<P, D> DataPipelineClient<P, D>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
+    pub fn new(region: region::Region) -> DataPipelineClient {
         DataPipelineClient {
-            inner: ClientInner::new(credentials_provider, request_dispatcher),
+            client: Client::shared(),
+            region: region,
+        }
+    }
+
+    pub fn new_with<P, D>(
+        request_dispatcher: D,
+        credentials_provider: P,
+        region: region::Region,
+    ) -> DataPipelineClient
+    where
+        P: ProvideAwsCredentials + Send + Sync + 'static,
+        P::Future: Send,
+        D: DispatchSignedRequest + Send + Sync + 'static,
+        D::Future: Send,
+    {
+        DataPipelineClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region: region,
         }
     }
 }
 
-impl<P, D> DataPipeline for DataPipelineClient<P, D>
-where
-    P: ProvideAwsCredentials + 'static,
-    D: DispatchSignedRequest + 'static,
-{
+impl DataPipeline for DataPipelineClient {
     /// <p>Validates the specified pipeline and starts processing pipeline tasks. If the pipeline does not pass validation, activation fails.</p> <p>If you need to pause the pipeline to investigate an issue with a component, such as a data source or script, call <a>DeactivatePipeline</a>.</p> <p>To activate a finished pipeline, modify the end date for the pipeline and then activate it.</p>
     fn activate_pipeline(
         &self,
@@ -2670,9 +2661,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2684,15 +2675,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ActivatePipelineError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Adds or modifies tags for the specified pipeline.</p>
@@ -2704,9 +2693,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2718,15 +2707,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AddTagsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a new, empty pipeline. Use <a>PutPipelineDefinition</a> to populate the pipeline.</p>
@@ -2741,9 +2728,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2755,15 +2742,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreatePipelineError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deactivates the specified running pipeline. The pipeline is set to the <code>DEACTIVATING</code> state until the deactivation process completes.</p> <p>To resume a deactivated pipeline, use <a>ActivatePipeline</a>. By default, the pipeline resumes from the last completed execution. Optionally, you can specify the date and time to resume the pipeline.</p>
@@ -2778,9 +2763,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2792,15 +2777,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeactivatePipelineError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes a pipeline, its pipeline definition, and its run history. AWS Data Pipeline attempts to cancel instances associated with the pipeline that are currently being processed by task runners.</p> <p>Deleting a pipeline cannot be undone. You cannot query or restore a deleted pipeline. To temporarily pause a pipeline instead of deleting it, call <a>SetStatus</a> with the status set to <code>PAUSE</code> on individual components. Components that are paused by <a>SetStatus</a> can be resumed.</p>
@@ -2812,19 +2795,17 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(future::ok(::std::mem::drop(response)))
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeletePipelineError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets the object definitions for a set of objects associated with the pipeline. Object definitions are composed of a set of fields that define the properties of the object.</p>
@@ -2839,9 +2820,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2853,15 +2834,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeObjectsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves metadata about one or more pipelines. The information retrieved includes the name of the pipeline, the pipeline identifier, its current state, and the user account that owns the pipeline. Using account credentials, you can retrieve metadata about pipelines that you or your IAM users have created. If you are using an IAM user account, you can retrieve metadata about only those pipelines for which you have read permissions.</p> <p>To retrieve the full pipeline definition instead of metadata about the pipeline, call <a>GetPipelineDefinition</a>.</p>
@@ -2876,9 +2855,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2890,15 +2869,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribePipelinesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Task runners call <code>EvaluateExpression</code> to evaluate a string in the context of the specified object. For example, a task runner can evaluate SQL queries stored in Amazon S3.</p>
@@ -2913,9 +2890,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2927,15 +2904,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(EvaluateExpressionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets the definition of the specified pipeline. You can call <code>GetPipelineDefinition</code> to retrieve the pipeline definition that you provided using <a>PutPipelineDefinition</a>.</p>
@@ -2950,9 +2925,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2964,15 +2939,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetPipelineDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists the pipeline identifiers for all active pipelines that you have permission to access.</p>
@@ -2987,9 +2960,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -3001,15 +2974,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListPipelinesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Task runners call <code>PollForTask</code> to receive a task to perform from AWS Data Pipeline. The task runner specifies which tasks it can perform by setting a value for the <code>workerGroup</code> parameter. The task returned can come from any of the pipelines that match the <code>workerGroup</code> value passed in by the task runner and that was launched using the IAM user credentials specified by the task runner.</p> <p>If tasks are ready in the work queue, <code>PollForTask</code> returns a response immediately. If no tasks are available in the queue, <code>PollForTask</code> uses long-polling and holds on to a poll connection for up to a 90 seconds, during which time the first newly scheduled task is handed to the task runner. To accomodate this, set the socket timeout in your task runner to 90 seconds. The task runner should not call <code>PollForTask</code> again on the same <code>workerGroup</code> until it receives a response, and this can take up to 90 seconds. </p>
@@ -3024,9 +2995,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -3038,15 +3009,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PollForTaskError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Adds tasks, schedules, and preconditions to the specified pipeline. You can use <code>PutPipelineDefinition</code> to populate a new pipeline.</p> <p> <code>PutPipelineDefinition</code> also validates the configuration as it adds it to the pipeline. Changes to the pipeline are saved unless one of the following three validation errors exists in the pipeline. </p> <ol> <li>An object is missing a name or identifier field.</li> <li>A string or reference field is empty.</li> <li>The number of objects in the pipeline exceeds the maximum allowed objects.</li> <li>The pipeline is in a FINISHED state.</li> </ol> <p> Pipeline object definitions are passed to the <code>PutPipelineDefinition</code> action and returned by the <a>GetPipelineDefinition</a> action. </p>
@@ -3061,9 +3030,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -3075,15 +3044,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutPipelineDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Queries the specified pipeline for the names of objects that match the specified set of conditions.</p>
@@ -3098,9 +3065,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -3112,15 +3079,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(QueryObjectsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Removes existing tags from the specified pipeline.</p>
@@ -3135,9 +3100,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -3149,15 +3114,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RemoveTagsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Task runners call <code>ReportTaskProgress</code> when assigned a task to acknowledge that it has the task. If the web service does not receive this acknowledgement within 2 minutes, it assigns the task in a subsequent <a>PollForTask</a> call. After this initial acknowledgement, the task runner only needs to report progress every 15 minutes to maintain its ownership of the task. You can change this reporting time from 15 minutes by specifying a <code>reportProgressTimeout</code> field in your pipeline.</p> <p>If a task runner does not report its status after 5 minutes, AWS Data Pipeline assumes that the task runner is unable to process the task and reassigns the task in a subsequent response to <a>PollForTask</a>. Task runners should call <code>ReportTaskProgress</code> every 60 seconds.</p>
@@ -3172,9 +3135,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -3186,15 +3149,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ReportTaskProgressError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Task runners call <code>ReportTaskRunnerHeartbeat</code> every 15 minutes to indicate that they are operational. If the AWS Data Pipeline Task Runner is launched on a resource managed by AWS Data Pipeline, the web service can use this call to detect when the task runner application has failed and restart a new instance.</p>
@@ -3209,9 +3170,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -3223,15 +3184,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ReportTaskRunnerHeartbeatError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Requests that the status of the specified physical or logical pipeline objects be updated in the specified pipeline. This update might not occur immediately, but is eventually consistent. The status that can be set depends on the type of object (for example, DataNode or Activity). You cannot perform this operation on <code>FINISHED</code> pipelines and attempting to do so returns <code>InvalidRequestException</code>.</p>
@@ -3243,19 +3202,17 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(future::ok(::std::mem::drop(response)))
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetStatusError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Task runners call <code>SetTaskStatus</code> to notify AWS Data Pipeline that a task is completed and provide information about the final status. A task runner makes this call regardless of whether the task was sucessful. A task runner does not need to call <code>SetTaskStatus</code> for tasks that are canceled by the web service during a call to <a>ReportTaskProgress</a>.</p>
@@ -3270,9 +3227,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -3284,15 +3241,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetTaskStatusError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Validates the specified pipeline definition to ensure that it is well formed and can be run without error.</p>
@@ -3307,9 +3262,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -3321,15 +3276,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ValidatePipelineDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 }
 

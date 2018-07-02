@@ -17,10 +17,9 @@ use std::io;
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
-use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::region;
 use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::{ClientInner, RusotoFuture};
+use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 use rusoto_core::request::HttpDispatchError;
@@ -844,48 +843,41 @@ pub trait Polly {
     ) -> RusotoFuture<SynthesizeSpeechOutput, SynthesizeSpeechError>;
 }
 /// A client for the Amazon Polly API.
-pub struct PollyClient<P = CredentialsProvider, D = RequestDispatcher>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    inner: ClientInner<P, D>,
+pub struct PollyClient {
+    client: Client,
     region: region::Region,
 }
 
 impl PollyClient {
-    /// Creates a simple client backed by an implicit event loop.
+    /// Creates a client backed by the default tokio event loop.
     ///
     /// The client will use the default credentials provider and tls client.
-    ///
-    /// See the `rusoto_core::reactor` module for more details.
-    pub fn simple(region: region::Region) -> PollyClient {
-        PollyClient::new(
-            RequestDispatcher::default(),
-            CredentialsProvider::default(),
-            region,
-        )
-    }
-}
-
-impl<P, D> PollyClient<P, D>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
+    pub fn new(region: region::Region) -> PollyClient {
         PollyClient {
-            inner: ClientInner::new(credentials_provider, request_dispatcher),
+            client: Client::shared(),
+            region: region,
+        }
+    }
+
+    pub fn new_with<P, D>(
+        request_dispatcher: D,
+        credentials_provider: P,
+        region: region::Region,
+    ) -> PollyClient
+    where
+        P: ProvideAwsCredentials + Send + Sync + 'static,
+        P::Future: Send,
+        D: DispatchSignedRequest + Send + Sync + 'static,
+        D::Future: Send,
+    {
+        PollyClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region: region,
         }
     }
 }
 
-impl<P, D> Polly for PollyClient<P, D>
-where
-    P: ProvideAwsCredentials + 'static,
-    D: DispatchSignedRequest + 'static,
-{
+impl Polly for PollyClient {
     /// <p>Deletes the specified pronunciation lexicon stored in an AWS Region. A lexicon which has been deleted is not available for speech synthesis, nor is it possible to retrieve it using either the <code>GetLexicon</code> or <code>ListLexicon</code> APIs.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn delete_lexicon(
         &self,
@@ -896,9 +888,9 @@ where
         let mut request = SignedRequest::new("DELETE", "polly", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -912,15 +904,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteLexiconError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the list of voices that are available for use when requesting speech synthesis. Each voice speaks a specified language, is either male or female, and is identified by an ID, which is the ASCII version of the voice name. </p> <p>When synthesizing speech ( <code>SynthesizeSpeech</code> ), you provide the voice ID for the voice you want from the list of voices returned by <code>DescribeVoices</code>.</p> <p>For example, you want your news reader application to read news in a specific language, but giving a user the option to choose the voice. Using the <code>DescribeVoices</code> operation you can provide the user with a list of available voices to select from.</p> <p> You can optionally specify a language code to filter the available voices. For example, if you specify <code>en-US</code>, the operation returns a list of all available US English voices. </p> <p>This operation requires permissions to perform the <code>polly:DescribeVoices</code> action.</p>
@@ -942,9 +932,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -958,15 +948,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeVoicesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the content of the specified pronunciation lexicon stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
@@ -979,9 +967,9 @@ where
         let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -995,15 +983,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetLexiconError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns a list of pronunciation lexicons stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
@@ -1022,9 +1008,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -1038,15 +1024,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListLexiconsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
@@ -1062,9 +1046,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -1078,15 +1062,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutLexiconError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Synthesizes UTF-8 input, plain text or SSML, to a stream of bytes. SSML input must be valid, well-formed SSML. Some alphabets might not be available with all the voices (for example, Cyrillic might not be read at all by English voices) unless phoneme mapping is used. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/how-text-to-speech-works.html">How it Works</a>.</p>
@@ -1102,9 +1084,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut result = SynthesizeSpeechOutput::default();
                     result.audio_stream = Some(response.body);
 
@@ -1122,15 +1104,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SynthesizeSpeechError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 }
 

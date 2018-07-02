@@ -17,15 +17,13 @@ use std::io;
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
-use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::region;
 use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::{ClientInner, RusotoFuture};
+use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 use rusoto_core::request::HttpDispatchError;
 
-use hyper::StatusCode;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::xmlerror::*;
@@ -14223,48 +14221,41 @@ pub trait ElasticBeanstalk {
     ) -> RusotoFuture<ConfigurationSettingsValidationMessages, ValidateConfigurationSettingsError>;
 }
 /// A client for the Elastic Beanstalk API.
-pub struct ElasticBeanstalkClient<P = CredentialsProvider, D = RequestDispatcher>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    inner: ClientInner<P, D>,
+pub struct ElasticBeanstalkClient {
+    client: Client,
     region: region::Region,
 }
 
 impl ElasticBeanstalkClient {
-    /// Creates a simple client backed by an implicit event loop.
+    /// Creates a client backed by the default tokio event loop.
     ///
     /// The client will use the default credentials provider and tls client.
-    ///
-    /// See the `rusoto_core::reactor` module for more details.
-    pub fn simple(region: region::Region) -> ElasticBeanstalkClient {
-        ElasticBeanstalkClient::new(
-            RequestDispatcher::default(),
-            CredentialsProvider::default(),
-            region,
-        )
-    }
-}
-
-impl<P, D> ElasticBeanstalkClient<P, D>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
+    pub fn new(region: region::Region) -> ElasticBeanstalkClient {
         ElasticBeanstalkClient {
-            inner: ClientInner::new(credentials_provider, request_dispatcher),
+            client: Client::shared(),
+            region: region,
+        }
+    }
+
+    pub fn new_with<P, D>(
+        request_dispatcher: D,
+        credentials_provider: P,
+        region: region::Region,
+    ) -> ElasticBeanstalkClient
+    where
+        P: ProvideAwsCredentials + Send + Sync + 'static,
+        P::Future: Send,
+        D: DispatchSignedRequest + Send + Sync + 'static,
+        D::Future: Send,
+    {
+        ElasticBeanstalkClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region: region,
         }
     }
 }
 
-impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
-where
-    P: ProvideAwsCredentials + 'static,
-    D: DispatchSignedRequest + 'static,
-{
+impl ElasticBeanstalk for ElasticBeanstalkClient {
     /// <p>Cancels in-progress environment configuration update or application version deployment.</p>
     fn abort_environment_update(
         &self,
@@ -14278,19 +14269,17 @@ where
         AbortEnvironmentUpdateMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AbortEnvironmentUpdateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Applies a scheduled managed action immediately. A managed action can be applied only if its status is <code>Scheduled</code>. Get the status and action ID of a managed action with <a>DescribeEnvironmentManagedActions</a>.</p>
@@ -14306,16 +14295,16 @@ where
         ApplyEnvironmentManagedActionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ApplyEnvironmentManagedActionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14341,9 +14330,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Checks if the specified CNAME is available.</p>
@@ -14359,16 +14346,16 @@ where
         CheckDNSAvailabilityMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CheckDNSAvailabilityError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14392,9 +14379,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Create or update a group of environments that each run a separate component of a single application. Takes a list of version labels that specify application source bundles for each of the environments to create or update. The name of each environment and other required information must be included in the source bundles in an environment manifest named <code>env.yaml</code>. See <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-mgmt-compose.html">Compose Environments</a> for details.</p>
@@ -14410,16 +14395,16 @@ where
         ComposeEnvironmentsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ComposeEnvironmentsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14443,9 +14428,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p> Creates an application that has one configuration template named <code>default</code> and no application versions. </p>
@@ -14461,16 +14444,16 @@ where
         CreateApplicationMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateApplicationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14494,9 +14477,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p><p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note></p>
@@ -14512,16 +14493,16 @@ where
         CreateApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateApplicationVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14547,9 +14528,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p><p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul></p>
@@ -14565,16 +14544,16 @@ where
         CreateConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateConfigurationTemplateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14598,9 +14577,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Launches an environment for the specified application using the specified configuration.</p>
@@ -14616,16 +14593,16 @@ where
         CreateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateEnvironmentError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14649,9 +14626,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Create a new version of your custom platform.</p>
@@ -14667,16 +14642,16 @@ where
         CreatePlatformVersionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreatePlatformVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14700,9 +14675,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a bucket in Amazon S3 to store application versions, logs, and other files used by Elastic Beanstalk environments. The Elastic Beanstalk console and EB CLI call this API the first time you create an environment in a region. If the storage location already exists, <code>CreateStorageLocation</code> still returns the bucket name but does not create a new bucket.</p>
@@ -14717,16 +14690,16 @@ where
 
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateStorageLocationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14750,9 +14723,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p><p>Deletes the specified application along with all associated versions and configurations. The application versions will not be deleted from your Amazon S3 bucket.</p> <note> <p>You cannot delete an application that has a running environment.</p> </note></p>
@@ -14768,19 +14739,17 @@ where
         DeleteApplicationMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteApplicationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p><p>Deletes the specified version from the specified application.</p> <note> <p>You cannot delete an application version that is associated with a running environment.</p> </note></p>
@@ -14796,19 +14765,17 @@ where
         DeleteApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteApplicationVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p><p>Deletes the specified configuration template.</p> <note> <p>When you launch an environment using a configuration template, the environment gets a copy of the template. You can delete or modify the environment&#39;s copy of the template without affecting the running environment.</p> </note></p>
@@ -14824,19 +14791,17 @@ where
         DeleteConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteConfigurationTemplateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Deletes the draft configuration associated with the running environment.</p> <p>Updating a running environment with any configuration changes creates a draft configuration set. You can get the draft configuration using <a>DescribeConfigurationSettings</a> while the update is in progress or if the update fails. The <code>DeploymentStatus</code> for the draft configuration indicates whether the deployment is in process or has failed. The draft configuration remains in existence until it is deleted with this action.</p>
@@ -14852,19 +14817,17 @@ where
         DeleteEnvironmentConfigurationMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteEnvironmentConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Deletes the specified version of a custom platform.</p>
@@ -14880,16 +14843,16 @@ where
         DeletePlatformVersionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeletePlatformVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14913,9 +14876,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns attributes related to AWS Elastic Beanstalk that are associated with the calling AWS account.</p> <p>The result currently has one set of attributes—resource quotas.</p>
@@ -14930,16 +14891,16 @@ where
 
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAccountAttributesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14963,9 +14924,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieve a list of application versions.</p>
@@ -14981,16 +14940,16 @@ where
         DescribeApplicationVersionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeApplicationVersionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -15016,9 +14975,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the descriptions of existing applications.</p>
@@ -15034,16 +14991,16 @@ where
         DescribeApplicationsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeApplicationsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -15067,9 +15024,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Describes the configuration options that are used in a particular configuration template or environment, or that a specified solution stack defines. The description includes the values the options, their default values, and an indication of the required action on a running environment if an option value is changed.</p>
@@ -15085,16 +15040,16 @@ where
         DescribeConfigurationOptionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeConfigurationOptionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -15118,9 +15073,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p><p>Returns a description of the settings for the specified configuration set, that is, either a configuration template or the configuration set associated with a running environment.</p> <p>When describing the settings for the configuration set associated with a running environment, it is possible to receive two sets of setting descriptions. One is the deployed configuration set, and the other is a draft configuration of an environment that is either in the process of deployment or that failed to deploy.</p> <p>Related Topics</p> <ul> <li> <p> <a>DeleteEnvironmentConfiguration</a> </p> </li> </ul></p>
@@ -15136,16 +15089,16 @@ where
         DescribeConfigurationSettingsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeConfigurationSettingsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -15169,9 +15122,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns information about the overall health of the specified environment. The <b>DescribeEnvironmentHealth</b> operation is only available with AWS Elastic Beanstalk Enhanced Health.</p>
@@ -15187,16 +15138,16 @@ where
         DescribeEnvironmentHealthRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEnvironmentHealthError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -15220,9 +15171,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists an environment's completed and failed managed actions.</p>
@@ -15245,16 +15194,16 @@ where
         );
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEnvironmentManagedActionHistoryError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -15280,9 +15229,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists an environment's upcoming and in-progress managed actions.</p>
@@ -15299,16 +15246,16 @@ where
         DescribeEnvironmentManagedActionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEnvironmentManagedActionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -15334,9 +15281,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns AWS resources for this environment.</p>
@@ -15353,16 +15298,16 @@ where
         DescribeEnvironmentResourcesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEnvironmentResourcesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -15388,9 +15333,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns descriptions for existing environments.</p>
@@ -15406,16 +15349,16 @@ where
         DescribeEnvironmentsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEnvironmentsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -15439,9 +15382,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p><p>Returns list of event descriptions matching criteria up to the last 6 weeks.</p> <note> <p>This action returns the most recent 1,000 events from the specified <code>NextToken</code>.</p> </note></p>
@@ -15457,16 +15398,16 @@ where
         DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEventsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -15490,9 +15431,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrives detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html">enhanced health reporting</a>.</p>
@@ -15508,16 +15447,16 @@ where
         DescribeInstancesHealthRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeInstancesHealthError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -15541,9 +15480,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Describes the version of the platform.</p>
@@ -15559,16 +15496,16 @@ where
         DescribePlatformVersionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribePlatformVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -15592,9 +15529,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns a list of the available solution stack names, with the public version first and then in reverse chronological order.</p>
@@ -15610,16 +15545,16 @@ where
 
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListAvailableSolutionStacksError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -15645,9 +15580,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists the available platforms.</p>
@@ -15663,16 +15596,16 @@ where
         ListPlatformVersionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListPlatformVersionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -15696,9 +15629,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the tags applied to an AWS Elastic Beanstalk resource. The response contains a list of tag key-value pairs.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p>
@@ -15714,16 +15645,16 @@ where
         ListTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListTagsForResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -15747,9 +15678,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes and recreates all of the AWS resources (for example: the Auto Scaling group, load balancer, etc.) for a specified environment and forces a restart.</p>
@@ -15765,19 +15694,17 @@ where
         RebuildEnvironmentMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RebuildEnvironmentError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p><p>Initiates a request to compile the specified type of information of the deployed environment.</p> <p> Setting the <code>InfoType</code> to <code>tail</code> compiles the last lines from the application server log files of every Amazon EC2 instance in your environment. </p> <p> Setting the <code>InfoType</code> to <code>bundle</code> compresses the application server log files for every Amazon EC2 instance into a <code>.zip</code> file. Legacy and .NET containers do not support bundle logs. </p> <p> Use <a>RetrieveEnvironmentInfo</a> to obtain the set of logs. </p> <p>Related Topics</p> <ul> <li> <p> <a>RetrieveEnvironmentInfo</a> </p> </li> </ul></p>
@@ -15793,19 +15720,17 @@ where
         RequestEnvironmentInfoMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RequestEnvironmentInfoError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Causes the environment to restart the application container server running on each Amazon EC2 instance.</p>
@@ -15821,19 +15746,17 @@ where
         RestartAppServerMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RestartAppServerError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p><p>Retrieves the compiled information from a <a>RequestEnvironmentInfo</a> request.</p> <p>Related Topics</p> <ul> <li> <p> <a>RequestEnvironmentInfo</a> </p> </li> </ul></p>
@@ -15849,16 +15772,16 @@ where
         RetrieveEnvironmentInfoMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RetrieveEnvironmentInfoError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -15884,9 +15807,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Swaps the CNAMEs of two environments.</p>
@@ -15902,19 +15823,17 @@ where
         SwapEnvironmentCNAMEsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SwapEnvironmentCNAMEsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Terminates the specified environment.</p>
@@ -15930,16 +15849,16 @@ where
         TerminateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(TerminateEnvironmentError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -15963,9 +15882,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p><p>Updates the specified application to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear these properties, specify an empty string.</p> </note></p>
@@ -15981,16 +15898,16 @@ where
         UpdateApplicationMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateApplicationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -16014,9 +15931,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Modifies lifecycle settings for an application.</p>
@@ -16035,16 +15950,16 @@ where
         UpdateApplicationResourceLifecycleMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateApplicationResourceLifecycleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -16070,9 +15985,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p><p>Updates the specified application version to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear properties, specify an empty string.</p> </note></p>
@@ -16088,16 +16001,16 @@ where
         UpdateApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateApplicationVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -16123,9 +16036,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p><p>Updates the specified configuration template to have the specified properties or configuration option values.</p> <note> <p>If a property (for example, <code>ApplicationName</code>) is not provided, its value remains unchanged. To clear such properties, specify an empty string.</p> </note> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> </ul></p>
@@ -16141,16 +16052,16 @@ where
         UpdateConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateConfigurationTemplateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -16174,9 +16085,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates the environment description, deploys a new application version, updates the configuration settings to an entirely new configuration template, or updates select configuration option values in the running environment.</p> <p> Attempting to update both the release and configuration is not allowed and AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. </p> <p> When updating the configuration settings to a new template or individual settings, a draft configuration is created and <a>DescribeConfigurationSettings</a> for this environment returns two setting descriptions with different <code>DeploymentStatus</code> values. </p>
@@ -16192,16 +16101,16 @@ where
         UpdateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateEnvironmentError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -16225,9 +16134,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Update the list of tags applied to an AWS Elastic Beanstalk resource. Two lists can be passed: <code>TagsToAdd</code> for tags to add or update, and <code>TagsToRemove</code>.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p> <p>If you create a custom IAM user policy to control permission to this operation, specify one of the following two virtual actions (or both) instead of the API operation name:</p> <dl> <dt>elasticbeanstalk:AddTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tags to add in the <code>TagsToAdd</code> parameter.</p> </dd> <dt>elasticbeanstalk:RemoveTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tag keys to remove in the <code>TagsToRemove</code> parameter.</p> </dd> </dl> <p>For details about creating a custom user policy, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/AWSHowTo.iam.managed-policies.html#AWSHowTo.iam.policies">Creating a Custom User Policy</a>.</p>
@@ -16243,19 +16150,17 @@ where
         UpdateTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateTagsForResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Takes a set of configuration settings and either a configuration template or environment, and determines whether those values are valid.</p> <p>This action returns a list of messages indicating any errors or warnings associated with the selection of option values.</p>
@@ -16272,16 +16177,16 @@ where
         ValidateConfigurationSettingsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ValidateConfigurationSettingsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -16307,9 +16212,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 }
 
@@ -16330,7 +16233,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
-            ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CheckDNSAvailabilityMessage::default();
         let result = client.check_dns_availability(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -16344,7 +16247,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
-            ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateApplicationVersionMessage::default();
         let result = client.create_application_version(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -16358,7 +16261,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
-            ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateApplicationMessage::default();
         let result = client.create_application(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -16372,7 +16275,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
-            ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateConfigurationTemplateMessage::default();
         let result = client.create_configuration_template(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -16386,7 +16289,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
-            ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateEnvironmentMessage::default();
         let result = client.create_environment(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -16400,7 +16303,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
-            ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
         let result = client.create_storage_location().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -16414,7 +16317,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
-            ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DeleteApplicationMessage::default();
         let result = client.delete_application(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -16428,7 +16331,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
-            ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeApplicationVersionsMessage::default();
         let result = client.describe_application_versions(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -16442,7 +16345,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
-            ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeApplicationsMessage::default();
         let result = client.describe_applications(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -16456,7 +16359,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
-            ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeConfigurationOptionsMessage::default();
         let result = client.describe_configuration_options(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -16470,7 +16373,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
-            ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeEnvironmentsMessage::default();
         let result = client.describe_environments(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -16484,7 +16387,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
-            ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeEventsMessage::default();
         let result = client.describe_events(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -16498,7 +16401,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
-            ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
         let result = client.list_available_solution_stacks().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -16512,7 +16415,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
-            ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = RetrieveEnvironmentInfoMessage::default();
         let result = client.retrieve_environment_info(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -16526,7 +16429,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
-            ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = TerminateEnvironmentMessage::default();
         let result = client.terminate_environment(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -16540,7 +16443,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
-            ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = UpdateApplicationVersionMessage::default();
         let result = client.update_application_version(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -16554,7 +16457,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
-            ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = UpdateApplicationMessage::default();
         let result = client.update_application(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);

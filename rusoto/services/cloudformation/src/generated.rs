@@ -17,15 +17,13 @@ use std::io;
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
-use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::region;
 use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::{ClientInner, RusotoFuture};
+use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 use rusoto_core::request::HttpDispatchError;
 
-use hyper::StatusCode;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::xmlerror::*;
@@ -12565,48 +12563,41 @@ pub trait CloudFormation {
     ) -> RusotoFuture<ValidateTemplateOutput, ValidateTemplateError>;
 }
 /// A client for the AWS CloudFormation API.
-pub struct CloudFormationClient<P = CredentialsProvider, D = RequestDispatcher>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    inner: ClientInner<P, D>,
+pub struct CloudFormationClient {
+    client: Client,
     region: region::Region,
 }
 
 impl CloudFormationClient {
-    /// Creates a simple client backed by an implicit event loop.
+    /// Creates a client backed by the default tokio event loop.
     ///
     /// The client will use the default credentials provider and tls client.
-    ///
-    /// See the `rusoto_core::reactor` module for more details.
-    pub fn simple(region: region::Region) -> CloudFormationClient {
-        CloudFormationClient::new(
-            RequestDispatcher::default(),
-            CredentialsProvider::default(),
-            region,
-        )
-    }
-}
-
-impl<P, D> CloudFormationClient<P, D>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
+    pub fn new(region: region::Region) -> CloudFormationClient {
         CloudFormationClient {
-            inner: ClientInner::new(credentials_provider, request_dispatcher),
+            client: Client::shared(),
+            region: region,
+        }
+    }
+
+    pub fn new_with<P, D>(
+        request_dispatcher: D,
+        credentials_provider: P,
+        region: region::Region,
+    ) -> CloudFormationClient
+    where
+        P: ProvideAwsCredentials + Send + Sync + 'static,
+        P::Future: Send,
+        D: DispatchSignedRequest + Send + Sync + 'static,
+        D::Future: Send,
+    {
+        CloudFormationClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region: region,
         }
     }
 }
 
-impl<P, D> CloudFormation for CloudFormationClient<P, D>
-where
-    P: ProvideAwsCredentials + 'static,
-    D: DispatchSignedRequest + 'static,
-{
+impl CloudFormation for CloudFormationClient {
     /// <p><p>Cancels an update on the specified stack. If the call completes successfully, the stack rolls back the update and reverts to the previous stack configuration.</p> <note> <p>You can cancel only stacks that are in the UPDATE<em>IN</em>PROGRESS state.</p> </note></p>
     fn cancel_update_stack(
         &self,
@@ -12620,19 +12611,17 @@ where
         CancelUpdateStackInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CancelUpdateStackError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>For a specified stack that is in the <code>UPDATE_ROLLBACK_FAILED</code> state, continues rolling it back to the <code>UPDATE_ROLLBACK_COMPLETE</code> state. Depending on the cause of the failure, you can manually <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-update-rollback-failed"> fix the error</a> and continue the rollback. By continuing the rollback, you can return your stack to a working state (the <code>UPDATE_ROLLBACK_COMPLETE</code> state), and then try to update the stack again.</p> <p>A stack goes into the <code>UPDATE_ROLLBACK_FAILED</code> state when AWS CloudFormation cannot roll back all changes after a failed stack update. For example, you might have a stack that is rolling back to an old database instance that was deleted outside of AWS CloudFormation. Because AWS CloudFormation doesn't know the database was deleted, it assumes that the database instance still exists and attempts to roll back to it, causing the update rollback to fail.</p>
@@ -12648,16 +12637,16 @@ where
         ContinueUpdateRollbackInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ContinueUpdateRollbackError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -12681,9 +12670,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a list of changes that will be applied to a stack so that you can review the changes before executing them. You can create a change set for a stack that doesn't exist or an existing stack. If you create a change set for a stack that doesn't exist, the change set shows all of the resources that AWS CloudFormation will create. If you create a change set for an existing stack, AWS CloudFormation compares the stack's information with the information that you submit in the change set and lists the differences. Use change sets to understand which resources AWS CloudFormation will create or change, and how it will change resources in an existing stack, before you create or update a stack.</p> <p>To create a change set for a stack that doesn't exist, for the <code>ChangeSetType</code> parameter, specify <code>CREATE</code>. To create a change set for an existing stack, specify <code>UPDATE</code> for the <code>ChangeSetType</code> parameter. After the <code>CreateChangeSet</code> call successfully completes, AWS CloudFormation starts creating the change set. To check the status of the change set or to review it, use the <a>DescribeChangeSet</a> action.</p> <p>When you are satisfied with the changes the change set will make, execute the change set by using the <a>ExecuteChangeSet</a> action. AWS CloudFormation doesn't make changes until you execute the change set.</p>
@@ -12699,16 +12686,16 @@ where
         CreateChangeSetInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateChangeSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -12732,9 +12719,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a stack as specified in the template. After the call completes successfully, the stack creation starts. You can check the status of the stack via the <a>DescribeStacks</a> API.</p>
@@ -12750,16 +12735,16 @@ where
         CreateStackInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateStackError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -12783,9 +12768,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates stack instances for the specified accounts, within the specified regions. A stack instance refers to a stack in a specific account and region. <code>Accounts</code> and <code>Regions</code> are required parameters—you must specify at least one account and one region. </p>
@@ -12801,16 +12784,16 @@ where
         CreateStackInstancesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateStackInstancesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -12834,9 +12817,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a stack set.</p>
@@ -12852,16 +12833,16 @@ where
         CreateStackSetInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateStackSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -12885,9 +12866,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes the specified change set. Deleting change sets ensures that no one executes the wrong change set.</p> <p>If the call successfully completes, AWS CloudFormation successfully deleted the change set.</p>
@@ -12903,16 +12882,16 @@ where
         DeleteChangeSetInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteChangeSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -12936,9 +12915,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes a specified stack. Once the call completes successfully, stack deletion starts. Deleted stacks do not show up in the <a>DescribeStacks</a> API if the deletion has been completed successfully.</p>
@@ -12951,19 +12928,17 @@ where
         DeleteStackInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteStackError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Deletes stack instances for the specified accounts, in the specified regions. </p>
@@ -12979,16 +12954,16 @@ where
         DeleteStackInstancesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteStackInstancesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -13012,9 +12987,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes a stack set. Before you can delete a stack set, all of its member stack instances must be deleted. For more information about how to do this, see <a>DeleteStackInstances</a>. </p>
@@ -13030,16 +13003,16 @@ where
         DeleteStackSetInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteStackSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -13063,9 +13036,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves your account's AWS CloudFormation limits, such as the maximum number of stacks that you can create in your account.</p>
@@ -13081,16 +13052,16 @@ where
         DescribeAccountLimitsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAccountLimitsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -13114,9 +13085,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the inputs for the change set and a list of changes that AWS CloudFormation will make if you execute the change set. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html">Updating Stacks Using Change Sets</a> in the AWS CloudFormation User Guide.</p>
@@ -13132,16 +13101,16 @@ where
         DescribeChangeSetInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeChangeSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -13165,9 +13134,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p><p>Returns all stack related events for a specified stack in reverse chronological order. For more information about a stack&#39;s event history, go to <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/concept-stack.html">Stacks</a> in the AWS CloudFormation User Guide.</p> <note> <p>You can list events for stacks that have failed to create or have been deleted by specifying the unique stack identifier (stack ID).</p> </note></p>
@@ -13183,16 +13150,16 @@ where
         DescribeStackEventsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeStackEventsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -13216,9 +13183,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the stack instance that's associated with the specified stack set, AWS account, and region.</p> <p>For a list of stack instances that are associated with a specific stack set, use <a>ListStackInstances</a>.</p>
@@ -13234,16 +13199,16 @@ where
         DescribeStackInstanceInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeStackInstanceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -13267,9 +13232,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns a description of the specified resource in the specified stack.</p> <p>For deleted stacks, DescribeStackResource returns resource information for up to 90 days after the stack has been deleted.</p>
@@ -13285,16 +13248,16 @@ where
         DescribeStackResourceInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeStackResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -13318,9 +13281,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p><p>Returns AWS resource descriptions for running and deleted stacks. If <code>StackName</code> is specified, all the associated resources that are part of the stack are returned. If <code>PhysicalResourceId</code> is specified, the associated resources of the stack that the resource belongs to are returned.</p> <note> <p>Only the first 100 resources will be returned. If your stack has more resources than this, you should use <code>ListStackResources</code> instead.</p> </note> <p>For deleted stacks, <code>DescribeStackResources</code> returns resource information for up to 90 days after the stack has been deleted.</p> <p>You must specify either <code>StackName</code> or <code>PhysicalResourceId</code>, but not both. In addition, you can specify <code>LogicalResourceId</code> to filter the returned result. For more information about resources, the <code>LogicalResourceId</code> and <code>PhysicalResourceId</code>, go to the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/">AWS CloudFormation User Guide</a>.</p> <note> <p>A <code>ValidationError</code> is returned if you specify both <code>StackName</code> and <code>PhysicalResourceId</code> in the same request.</p> </note></p>
@@ -13336,16 +13297,16 @@ where
         DescribeStackResourcesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeStackResourcesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -13369,9 +13330,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the description of the specified stack set. </p>
@@ -13387,16 +13346,16 @@ where
         DescribeStackSetInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeStackSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -13420,9 +13379,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the description of the specified stack set operation. </p>
@@ -13438,16 +13395,16 @@ where
         DescribeStackSetOperationInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeStackSetOperationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -13471,9 +13428,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p><p>Returns the description for the specified stack; if no stack name was specified, then it returns the description for all the stacks created.</p> <note> <p>If the stack does not exist, an <code>AmazonCloudFormationException</code> is returned.</p> </note></p>
@@ -13489,16 +13444,16 @@ where
         DescribeStacksInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeStacksError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -13522,9 +13477,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the estimated monthly cost of a template. The return value is an AWS Simple Monthly Calculator URL with a query string that describes the resources required to run the template.</p>
@@ -13540,16 +13493,16 @@ where
         EstimateTemplateCostInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(EstimateTemplateCostError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -13573,9 +13526,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates a stack using the input information that was provided when the specified change set was created. After the call successfully completes, AWS CloudFormation starts updating the stack. Use the <a>DescribeStacks</a> action to view the status of the update.</p> <p>When you execute a change set, AWS CloudFormation deletes all other change sets associated with the stack because they aren't valid for the updated stack.</p> <p>If a stack policy is associated with the stack, AWS CloudFormation enforces the policy during the update. You can't specify a temporary stack policy that overrides the current policy.</p>
@@ -13591,16 +13542,16 @@ where
         ExecuteChangeSetInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ExecuteChangeSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -13624,9 +13575,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the stack policy for a specified stack. If a stack doesn't have a policy, a null value is returned.</p>
@@ -13642,16 +13591,16 @@ where
         GetStackPolicyInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetStackPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -13675,9 +13624,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p><p>Returns the template body for a specified stack. You can get the template for running or deleted stacks.</p> <p>For deleted stacks, GetTemplate returns the template for up to 90 days after the stack has been deleted.</p> <note> <p> If the template does not exist, a <code>ValidationError</code> is returned. </p> </note></p>
@@ -13693,16 +13640,16 @@ where
         GetTemplateInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetTemplateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -13726,9 +13673,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns information about a new or existing template. The <code>GetTemplateSummary</code> action is useful for viewing parameter information, such as default parameter values and parameter types, before you create or update a stack or stack set.</p> <p>You can use the <code>GetTemplateSummary</code> action when you submit a template, or you can get template information for a stack set, or a running or deleted stack.</p> <p>For deleted stacks, <code>GetTemplateSummary</code> returns the template information for up to 90 days after the stack has been deleted. If the template does not exist, a <code>ValidationError</code> is returned.</p>
@@ -13744,16 +13689,16 @@ where
         GetTemplateSummaryInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetTemplateSummaryError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -13777,9 +13722,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the ID and status of each active change set for a stack. For example, AWS CloudFormation lists change sets that are in the <code>CREATE_IN_PROGRESS</code> or <code>CREATE_PENDING</code> state.</p>
@@ -13795,16 +13738,16 @@ where
         ListChangeSetsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListChangeSetsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -13828,9 +13771,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists all exported output values in the account and region in which you call this action. Use this action to see the exported output values that you can import into other stacks. To import values, use the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html"> <code>Fn::ImportValue</code> </a> function. </p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-exports.html"> AWS CloudFormation Export Stack Output Values</a>.</p>
@@ -13846,16 +13787,16 @@ where
         ListExportsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListExportsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -13879,9 +13820,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists all stacks that are importing an exported output value. To modify or remove an exported output value, first use this action to see which stacks are using it. To see the exported output values in your account, see <a>ListExports</a>. </p> <p>For more information about importing an exported output value, see the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html"> <code>Fn::ImportValue</code> </a> function. </p>
@@ -13897,16 +13836,16 @@ where
         ListImportsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListImportsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -13930,9 +13869,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns summary information about stack instances that are associated with the specified stack set. You can filter for stack instances that are associated with a specific AWS account name or region.</p>
@@ -13948,16 +13885,16 @@ where
         ListStackInstancesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListStackInstancesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -13981,9 +13918,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns descriptions of all resources of the specified stack.</p> <p>For deleted stacks, ListStackResources returns resource information for up to 90 days after the stack has been deleted.</p>
@@ -13999,16 +13934,16 @@ where
         ListStackResourcesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListStackResourcesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14032,9 +13967,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns summary information about the results of a stack set operation. </p>
@@ -14050,16 +13983,16 @@ where
         ListStackSetOperationResultsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListStackSetOperationResultsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14083,9 +14016,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns summary information about operations performed on a stack set. </p>
@@ -14101,16 +14032,16 @@ where
         ListStackSetOperationsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListStackSetOperationsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14134,9 +14065,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns summary information about stack sets that are associated with the user.</p>
@@ -14152,16 +14081,16 @@ where
         ListStackSetsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListStackSetsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14185,9 +14114,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the summary information for stacks whose status matches the specified StackStatusFilter. Summary information for stacks that have been deleted is kept for 90 days after the stack is deleted. If no StackStatusFilter is specified, summary information for all stacks is returned (including existing stacks and stacks that have been deleted).</p>
@@ -14203,16 +14130,16 @@ where
         ListStacksInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListStacksError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14236,9 +14163,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Sets a stack policy for a specified stack.</p>
@@ -14254,19 +14179,17 @@ where
         SetStackPolicyInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetStackPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Sends a signal to the specified resource with a success or failure status. You can use the SignalResource API in conjunction with a creation policy or update policy. AWS CloudFormation doesn't proceed with a stack creation or update until resources receive the required number of signals or the timeout period is exceeded. The SignalResource API is useful in cases where you want to send signals from anywhere other than an Amazon EC2 instance.</p>
@@ -14279,19 +14202,17 @@ where
         SignalResourceInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SignalResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Stops an in-progress operation on a stack set and its associated stack instances. </p>
@@ -14307,16 +14228,16 @@ where
         StopStackSetOperationInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(StopStackSetOperationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14340,9 +14261,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates a stack as specified in the template. After the call completes successfully, the stack update starts. You can check the status of the stack via the <a>DescribeStacks</a> action.</p> <p>To get a copy of the template for an existing stack, you can use the <a>GetTemplate</a> action.</p> <p>For more information about creating an update template, updating a stack, and monitoring the progress of the update, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks.html">Updating a Stack</a>.</p>
@@ -14358,16 +14277,16 @@ where
         UpdateStackInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateStackError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14391,9 +14310,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates the parameter values for stack instances for the specified accounts, within the specified regions. A stack instance refers to a stack in a specific account and region. </p> <p>You can only update stack instances in regions and accounts where they already exist; to create additional stack instances, use <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStackInstances.html">CreateStackInstances</a>. </p> <p>During stack set updates, any parameters overridden for a stack instance are not updated, but retain their overridden value.</p> <p>You can only update the parameter <i>values</i> that are specified in the stack set; to add or delete a parameter itself, use <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html">UpdateStackSet</a> to update the stack set template. If you add a parameter to a template, before you can override the parameter value specified in the stack set you must first use <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html">UpdateStackSet</a> to update all stack instances with the updated template and parameter value specified in the stack set. Once a stack instance has been updated with the new parameter, you can then override the parameter value using <code>UpdateStackInstances</code>.</p>
@@ -14409,16 +14326,16 @@ where
         UpdateStackInstancesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateStackInstancesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14442,9 +14359,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates the stack set and <i>all</i> associated stack instances.</p> <p>Even if the stack set operation created by updating the stack set fails (completely or partially, below or above a specified failure tolerance), the stack set is updated with your changes. Subsequent <a>CreateStackInstances</a> calls on the specified stack set use the updated stack set.</p>
@@ -14460,16 +14375,16 @@ where
         UpdateStackSetInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateStackSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14493,9 +14408,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates termination protection for the specified stack. If a user attempts to delete a stack with termination protection enabled, the operation fails and the stack remains unchanged. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-protect-stacks.html">Protecting a Stack From Being Deleted</a> in the <i>AWS CloudFormation User Guide</i>.</p> <p> For <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html">nested stacks</a>, termination protection is set on the root stack and cannot be changed directly on the nested stack.</p>
@@ -14511,16 +14424,16 @@ where
         UpdateTerminationProtectionInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateTerminationProtectionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14544,9 +14457,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Validates a specified template. AWS CloudFormation first checks if the template is valid JSON. If it isn't, AWS CloudFormation checks if the template is valid YAML. If both these checks fail, AWS CloudFormation returns a template validation error.</p>
@@ -14562,16 +14473,16 @@ where
         ValidateTemplateInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ValidateTemplateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -14595,9 +14506,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 }
 
@@ -14618,7 +14527,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client =
-            CloudFormationClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            CloudFormationClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CancelUpdateStackInput::default();
         let result = client.cancel_update_stack(request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
@@ -14632,7 +14541,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
-            CloudFormationClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            CloudFormationClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeStacksInput::default();
         let result = client.describe_stacks(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -14646,7 +14555,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
-            CloudFormationClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            CloudFormationClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetTemplateInput::default();
         let result = client.get_template(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -14660,7 +14569,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
-            CloudFormationClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            CloudFormationClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListStacksInput::default();
         let result = client.list_stacks(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);

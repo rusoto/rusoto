@@ -17,15 +17,13 @@ use std::io;
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
-use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::region;
 use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::{ClientInner, RusotoFuture};
+use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 use rusoto_core::request::HttpDispatchError;
 
-use hyper::StatusCode;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_str;
@@ -2347,48 +2345,41 @@ pub trait CodeBuild {
     ) -> RusotoFuture<UpdateWebhookOutput, UpdateWebhookError>;
 }
 /// A client for the AWS CodeBuild API.
-pub struct CodeBuildClient<P = CredentialsProvider, D = RequestDispatcher>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    inner: ClientInner<P, D>,
+pub struct CodeBuildClient {
+    client: Client,
     region: region::Region,
 }
 
 impl CodeBuildClient {
-    /// Creates a simple client backed by an implicit event loop.
+    /// Creates a client backed by the default tokio event loop.
     ///
     /// The client will use the default credentials provider and tls client.
-    ///
-    /// See the `rusoto_core::reactor` module for more details.
-    pub fn simple(region: region::Region) -> CodeBuildClient {
-        CodeBuildClient::new(
-            RequestDispatcher::default(),
-            CredentialsProvider::default(),
-            region,
-        )
-    }
-}
-
-impl<P, D> CodeBuildClient<P, D>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
+    pub fn new(region: region::Region) -> CodeBuildClient {
         CodeBuildClient {
-            inner: ClientInner::new(credentials_provider, request_dispatcher),
+            client: Client::shared(),
+            region: region,
+        }
+    }
+
+    pub fn new_with<P, D>(
+        request_dispatcher: D,
+        credentials_provider: P,
+        region: region::Region,
+    ) -> CodeBuildClient
+    where
+        P: ProvideAwsCredentials + Send + Sync + 'static,
+        P::Future: Send,
+        D: DispatchSignedRequest + Send + Sync + 'static,
+        D::Future: Send,
+    {
+        CodeBuildClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region: region,
         }
     }
 }
 
-impl<P, D> CodeBuild for CodeBuildClient<P, D>
-where
-    P: ProvideAwsCredentials + 'static,
-    D: DispatchSignedRequest + 'static,
-{
+impl CodeBuild for CodeBuildClient {
     /// <p>Deletes one or more builds.</p>
     fn batch_delete_builds(
         &self,
@@ -2401,9 +2392,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2415,15 +2406,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(BatchDeleteBuildsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets information about builds.</p>
@@ -2438,9 +2427,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2452,15 +2441,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(BatchGetBuildsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets information about build projects.</p>
@@ -2475,9 +2462,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2489,15 +2476,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(BatchGetProjectsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a build project.</p>
@@ -2512,9 +2497,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2526,15 +2511,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateProjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p><p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, enables AWS CodeBuild to begin automatically rebuilding the source code every time a code change is pushed to the repository.</p> <important> <p>If you enable webhooks for an AWS CodeBuild project, and the project is used as a build step in AWS CodePipeline, then two identical builds will be created for each commit. One build is triggered through webhooks, and one through AWS CodePipeline. Because billing is on a per-build basis, you will be billed for both builds. Therefore, if you are using AWS CodePipeline, we recommend that you disable webhooks in CodeBuild. In the AWS CodeBuild console, clear the Webhook box. For more information, see step 9 in <a href="http://docs.aws.amazon.com/codebuild/latest/userguide/change-project.html#change-project-console">Change a Build Project&#39;s Settings</a>.</p> </important></p>
@@ -2549,9 +2532,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2563,15 +2546,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateWebhookError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes a build project.</p>
@@ -2586,9 +2567,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2600,15 +2581,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteProjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, stops AWS CodeBuild from automatically rebuilding the source code every time a code change is pushed to the repository.</p>
@@ -2623,9 +2602,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2637,15 +2616,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteWebhookError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Resets the cache for a project.</p>
@@ -2660,9 +2637,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2674,15 +2651,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(InvalidateProjectCacheError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets a list of build IDs, with each build ID representing a single build.</p>
@@ -2697,9 +2672,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2711,15 +2686,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListBuildsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets a list of build IDs for the specified build project, with each build ID representing a single build.</p>
@@ -2734,9 +2707,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2748,15 +2721,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListBuildsForProjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets information about Docker images that are managed by AWS CodeBuild.</p>
@@ -2772,9 +2743,9 @@ where
         );
         request.set_payload(Some(b"{}".to_vec()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2786,15 +2757,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListCuratedEnvironmentImagesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets a list of build project names, with each build project name representing a single build project.</p>
@@ -2809,9 +2778,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2823,15 +2792,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListProjectsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Starts running a build.</p>
@@ -2846,9 +2813,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2860,15 +2827,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(StartBuildError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Attempts to stop running a build.</p>
@@ -2880,9 +2845,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2894,15 +2859,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(StopBuildError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Changes the settings of a build project.</p>
@@ -2917,9 +2880,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2931,15 +2894,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateProjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p> Updates the webhook associated with an AWS CodeBuild build project. </p>
@@ -2954,9 +2915,9 @@ where
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
-                future::Either::A(response.buffer().from_err().map(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body.is_empty() || body == b"null" {
@@ -2968,15 +2929,13 @@ where
                     ).unwrap()
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateWebhookError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 }
 

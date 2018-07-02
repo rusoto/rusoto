@@ -17,10 +17,9 @@ use std::io;
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
-use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::region;
 use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::{ClientInner, RusotoFuture};
+use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 use rusoto_core::request::HttpDispatchError;
@@ -9115,48 +9114,41 @@ pub trait GreenGrass {
     ) -> RusotoFuture<UpdateSubscriptionDefinitionResponse, UpdateSubscriptionDefinitionError>;
 }
 /// A client for the AWS Greengrass API.
-pub struct GreenGrassClient<P = CredentialsProvider, D = RequestDispatcher>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    inner: ClientInner<P, D>,
+pub struct GreenGrassClient {
+    client: Client,
     region: region::Region,
 }
 
 impl GreenGrassClient {
-    /// Creates a simple client backed by an implicit event loop.
+    /// Creates a client backed by the default tokio event loop.
     ///
     /// The client will use the default credentials provider and tls client.
-    ///
-    /// See the `rusoto_core::reactor` module for more details.
-    pub fn simple(region: region::Region) -> GreenGrassClient {
-        GreenGrassClient::new(
-            RequestDispatcher::default(),
-            CredentialsProvider::default(),
-            region,
-        )
-    }
-}
-
-impl<P, D> GreenGrassClient<P, D>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
+    pub fn new(region: region::Region) -> GreenGrassClient {
         GreenGrassClient {
-            inner: ClientInner::new(credentials_provider, request_dispatcher),
+            client: Client::shared(),
+            region: region,
+        }
+    }
+
+    pub fn new_with<P, D>(
+        request_dispatcher: D,
+        credentials_provider: P,
+        region: region::Region,
+    ) -> GreenGrassClient
+    where
+        P: ProvideAwsCredentials + Send + Sync + 'static,
+        P::Future: Send,
+        D: DispatchSignedRequest + Send + Sync + 'static,
+        D::Future: Send,
+    {
+        GreenGrassClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region: region,
         }
     }
 }
 
-impl<P, D> GreenGrass for GreenGrassClient<P, D>
-where
-    P: ProvideAwsCredentials + 'static,
-    D: DispatchSignedRequest + 'static,
-{
+impl GreenGrass for GreenGrassClient {
     /// <p>Associates a role with a group. Your AWS Greengrass core will use the role to access AWS cloud services. The role&#39;s permissions should allow Greengrass core Lambda functions to perform actions against the cloud.</p>
     fn associate_role_to_group(
         &self,
@@ -9173,9 +9165,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -9190,15 +9182,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AssociateRoleToGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Associates a role with your account. AWS Greengrass will use the role to access your Lambda functions and AWS IoT resources. This is necessary for deployments to succeed. The role must have at least minimum permissions in the policy &#39;&#39;AWSGreengrassResourceAccessRolePolicy&#39;&#39;.</p>
@@ -9215,9 +9205,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -9233,15 +9223,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AssociateServiceRoleToAccountError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a core definition. You may provide the initial version of the core definition now or use &#39;&#39;CreateCoreDefinitionVersion&#39;&#39; at a later time. AWS Greengrass groups must each contain exactly one AWS Greengrass core.</p>
@@ -9261,9 +9249,9 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -9278,15 +9266,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateCoreDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a version of a core definition that has already been defined. AWS Greengrass groups must each contain exactly one AWS Greengrass core.</p>
@@ -9309,9 +9295,9 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -9327,15 +9313,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateCoreDefinitionVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a deployment.</p>
@@ -9358,9 +9342,9 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -9374,15 +9358,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateDeploymentError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a device definition. You may provide the initial version of the device definition now or use &#39;&#39;CreateDeviceDefinitionVersion&#39;&#39; at a later time.</p>
@@ -9402,9 +9384,9 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -9419,15 +9401,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateDeviceDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a version of a device definition that has already been defined.</p>
@@ -9451,9 +9431,9 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -9469,15 +9449,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateDeviceDefinitionVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a Lambda function definition which contains a list of Lambda functions and their configurations to be used in a group. You can create an initial version of the definition by providing a list of Lambda functions and their configurations now, or use &#39;&#39;CreateFunctionDefinitionVersion&#39;&#39; later.</p>
@@ -9497,9 +9475,9 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -9514,15 +9492,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateFunctionDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a version of a Lambda function definition that has already been defined.</p>
@@ -9546,9 +9522,9 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -9564,15 +9540,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateFunctionDefinitionVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a group. You may provide the initial version of the group or use &#39;&#39;CreateGroupVersion&#39;&#39; at a later time.</p>
@@ -9592,9 +9566,9 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -9608,15 +9582,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a CA for the group. If a CA already exists, it will rotate the existing CA.</p>
@@ -9637,9 +9609,9 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -9655,15 +9627,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateGroupCertificateAuthorityError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a version of a group which has already been defined.</p>
@@ -9686,9 +9656,9 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -9703,15 +9673,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateGroupVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a logger definition. You may provide the initial version of the logger definition now or use &#39;&#39;CreateLoggerDefinitionVersion&#39;&#39; at a later time.</p>
@@ -9731,9 +9699,9 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -9748,15 +9716,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateLoggerDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a version of a logger definition that has already been defined.</p>
@@ -9780,9 +9746,9 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -9798,15 +9764,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateLoggerDefinitionVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a resource definition which contains a list of resources to be used in a group. You can create an initial version of the definition by providing a list of resources now, or use &#39;&#39;CreateResourceDefinitionVersion&#39;&#39; later.</p>
@@ -9826,9 +9790,9 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -9843,15 +9807,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateResourceDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a version of a resource definition that has already been defined.</p>
@@ -9875,9 +9837,9 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -9893,15 +9855,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateResourceDefinitionVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a software update for a core or group of cores (specified as an IoT thing group.) Use this to update the OTA Agent as well as the Greengrass core software. It makes use of the IoT Jobs feature which provides additional commands to manage a Greengrass core software update job.</p>
@@ -9921,9 +9881,9 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -9938,15 +9898,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateSoftwareUpdateJobError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a subscription definition. You may provide the initial version of the subscription definition now or use &#39;&#39;CreateSubscriptionDefinitionVersion&#39;&#39; at a later time.</p>
@@ -9966,9 +9924,9 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -9984,15 +9942,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateSubscriptionDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a version of a subscription definition which has already been defined.</p>
@@ -10018,9 +9974,9 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10037,15 +9993,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateSubscriptionDefinitionVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes a core definition.</p>
@@ -10061,9 +10015,9 @@ where
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10078,15 +10032,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteCoreDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes a device definition.</p>
@@ -10102,9 +10054,9 @@ where
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10119,15 +10071,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDeviceDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes a Lambda function definition.</p>
@@ -10143,9 +10093,9 @@ where
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10160,15 +10110,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteFunctionDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes a group.</p>
@@ -10181,9 +10129,9 @@ where
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10197,15 +10145,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes a logger definition.</p>
@@ -10221,9 +10167,9 @@ where
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10238,15 +10184,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteLoggerDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes a resource definition.</p>
@@ -10262,9 +10206,9 @@ where
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10279,15 +10223,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteResourceDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes a subscription definition.</p>
@@ -10303,9 +10245,9 @@ where
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10321,15 +10263,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteSubscriptionDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Disassociates the role from a group.</p>
@@ -10345,9 +10285,9 @@ where
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10362,15 +10302,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DisassociateRoleFromGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Disassociates the service role from your account. Without a service role, deployments will not work.</p>
@@ -10385,9 +10323,9 @@ where
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10403,15 +10341,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DisassociateServiceRoleFromAccountError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves the role associated with a particular group.</p>
@@ -10427,9 +10363,9 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10444,15 +10380,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetAssociatedRoleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves the connectivity information for a core.</p>
@@ -10468,9 +10402,9 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10485,15 +10419,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetConnectivityInfoError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves information about a core definition version.</p>
@@ -10509,9 +10441,9 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10526,15 +10458,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetCoreDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves information about a core definition version.</p>
@@ -10547,9 +10477,9 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10564,15 +10494,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetCoreDefinitionVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the status of a deployment.</p>
@@ -10589,9 +10517,9 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10606,15 +10534,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetDeploymentStatusError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves information about a device definition.</p>
@@ -10630,9 +10556,9 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10647,15 +10573,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetDeviceDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves information about a device definition version.</p>
@@ -10668,9 +10592,9 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10686,15 +10610,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetDeviceDefinitionVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves information about a Lambda function definition, including its creation time and latest version.</p>
@@ -10710,9 +10632,9 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10727,15 +10649,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetFunctionDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves information about a Lambda function definition version, including which Lambda functions are included in the version and their configurations.</p>
@@ -10748,9 +10668,9 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10766,15 +10686,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetFunctionDefinitionVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves information about a group.</p>
@@ -10784,9 +10702,9 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10800,15 +10718,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retreives the CA associated with a group. Returns the public key of the CA.</p>
@@ -10825,9 +10741,9 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10843,15 +10759,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetGroupCertificateAuthorityError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves the current configuration for the CA used by the group.</p>
@@ -10868,9 +10782,9 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10886,15 +10800,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetGroupCertificateConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves information about a group version.</p>
@@ -10911,9 +10823,9 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10927,15 +10839,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetGroupVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves information about a logger definition.</p>
@@ -10951,9 +10861,9 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10968,15 +10878,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetLoggerDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves information about a logger definition version.</p>
@@ -10989,9 +10897,9 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11007,15 +10915,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetLoggerDefinitionVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves information about a resource definition, including its creation time and latest version.</p>
@@ -11031,9 +10937,9 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11048,15 +10954,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetResourceDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves information about a resource definition version, including which resources are included in the version.</p>
@@ -11069,9 +10973,9 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11087,15 +10991,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetResourceDefinitionVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves the service role that is attached to your account.</p>
@@ -11107,9 +11009,9 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11124,15 +11026,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetServiceRoleForAccountError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves information about a subscription definition.</p>
@@ -11148,9 +11048,9 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11165,15 +11065,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetSubscriptionDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves information about a subscription definition version.</p>
@@ -11187,9 +11085,9 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11205,15 +11103,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetSubscriptionDefinitionVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists the versions of a core definition.</p>
@@ -11238,9 +11134,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11256,15 +11152,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListCoreDefinitionVersionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves a list of core definitions.</p>
@@ -11286,9 +11180,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11303,15 +11197,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListCoreDefinitionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns a history of deployments for the group.</p>
@@ -11336,9 +11228,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11352,15 +11244,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListDeploymentsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists the versions of a device definition.</p>
@@ -11385,9 +11275,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11403,15 +11293,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListDeviceDefinitionVersionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves a list of device definitions.</p>
@@ -11433,9 +11321,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11450,15 +11338,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListDeviceDefinitionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists the versions of a Lambda function definition.</p>
@@ -11484,9 +11370,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11502,15 +11388,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListFunctionDefinitionVersionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves a list of Lambda function definitions.</p>
@@ -11532,9 +11416,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11549,15 +11433,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListFunctionDefinitionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves the current CAs for a group.</p>
@@ -11574,9 +11456,9 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11592,15 +11474,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListGroupCertificateAuthoritiesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists the versions of a group.</p>
@@ -11625,9 +11505,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11642,15 +11522,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListGroupVersionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves a list of groups.</p>
@@ -11672,9 +11550,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11688,15 +11566,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListGroupsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists the versions of a logger definition.</p>
@@ -11721,9 +11597,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11739,15 +11615,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListLoggerDefinitionVersionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves a list of logger definitions.</p>
@@ -11769,9 +11643,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11786,15 +11660,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListLoggerDefinitionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists the versions of a resource definition.</p>
@@ -11820,9 +11692,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11838,15 +11710,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListResourceDefinitionVersionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves a list of resource definitions.</p>
@@ -11868,9 +11738,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11885,15 +11755,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListResourceDefinitionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists the versions of a subscription definition.</p>
@@ -11921,9 +11789,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11939,15 +11807,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListSubscriptionDefinitionVersionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves a list of subscription definitions.</p>
@@ -11969,9 +11835,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11987,15 +11853,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListSubscriptionDefinitionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Resets a group&#39;s deployments.</p>
@@ -12018,9 +11882,9 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12034,15 +11898,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ResetDeploymentsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates the connectivity information for the core. Any devices that belong to the group which has this core will receive this information in order to find the location of the core and connect to it.</p>
@@ -12061,9 +11923,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12078,15 +11940,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateConnectivityInfoError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates a core definition.</p>
@@ -12105,9 +11965,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12122,15 +11982,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateCoreDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates a device definition.</p>
@@ -12149,9 +12007,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12166,15 +12024,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateDeviceDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates a Lambda function definition.</p>
@@ -12193,9 +12049,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12210,15 +12066,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateFunctionDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates a group.</p>
@@ -12234,9 +12088,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12250,15 +12104,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates the Certificate expiry time for a group.</p>
@@ -12280,9 +12132,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12299,15 +12151,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateGroupCertificateConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates a logger definition.</p>
@@ -12326,9 +12176,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12343,15 +12193,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateLoggerDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates a resource definition.</p>
@@ -12370,9 +12218,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12387,15 +12235,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateResourceDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates a subscription definition.</p>
@@ -12414,9 +12260,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12432,15 +12278,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateSubscriptionDefinitionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 }
 

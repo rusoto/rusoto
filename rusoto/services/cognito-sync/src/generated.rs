@@ -17,10 +17,9 @@ use std::io;
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
-use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::region;
 use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::{ClientInner, RusotoFuture};
+use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 use rusoto_core::request::HttpDispatchError;
@@ -2584,48 +2583,41 @@ pub trait CognitoSync {
     ) -> RusotoFuture<UpdateRecordsResponse, UpdateRecordsError>;
 }
 /// A client for the Amazon Cognito Sync API.
-pub struct CognitoSyncClient<P = CredentialsProvider, D = RequestDispatcher>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    inner: ClientInner<P, D>,
+pub struct CognitoSyncClient {
+    client: Client,
     region: region::Region,
 }
 
 impl CognitoSyncClient {
-    /// Creates a simple client backed by an implicit event loop.
+    /// Creates a client backed by the default tokio event loop.
     ///
     /// The client will use the default credentials provider and tls client.
-    ///
-    /// See the `rusoto_core::reactor` module for more details.
-    pub fn simple(region: region::Region) -> CognitoSyncClient {
-        CognitoSyncClient::new(
-            RequestDispatcher::default(),
-            CredentialsProvider::default(),
-            region,
-        )
-    }
-}
-
-impl<P, D> CognitoSyncClient<P, D>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
+    pub fn new(region: region::Region) -> CognitoSyncClient {
         CognitoSyncClient {
-            inner: ClientInner::new(credentials_provider, request_dispatcher),
+            client: Client::shared(),
+            region: region,
+        }
+    }
+
+    pub fn new_with<P, D>(
+        request_dispatcher: D,
+        credentials_provider: P,
+        region: region::Region,
+    ) -> CognitoSyncClient
+    where
+        P: ProvideAwsCredentials + Send + Sync + 'static,
+        P::Future: Send,
+        D: DispatchSignedRequest + Send + Sync + 'static,
+        D::Future: Send,
+    {
+        CognitoSyncClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region: region,
         }
     }
 }
 
-impl<P, D> CognitoSync for CognitoSyncClient<P, D>
-where
-    P: ProvideAwsCredentials + 'static,
-    D: DispatchSignedRequest + 'static,
-{
+impl CognitoSync for CognitoSyncClient {
     /// <p>Initiates a bulk publish of all existing datasets for an Identity Pool to the configured stream. Customers are limited to one successful bulk publish per 24 hours. Bulk publish is an asynchronous request, customers can see the status of the request via the GetBulkPublishDetails operation.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
     fn bulk_publish(
         &self,
@@ -2639,9 +2631,9 @@ where
         let mut request = SignedRequest::new("POST", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -2655,15 +2647,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(BulkPublishError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes the specific dataset. The dataset will be deleted permanently, and the action can't be undone. Datasets that this dataset was merged with will no longer report the merge. Any subsequent operation on this dataset will result in a ResourceNotFoundException.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials.</p>
@@ -2681,9 +2671,9 @@ where
         let mut request = SignedRequest::new("DELETE", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -2697,15 +2687,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDatasetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets meta data about a dataset by identity and dataset name. With Amazon Cognito Sync, each identity has access only to its own data. Thus, the credentials used to make this API call need to have access to the identity data.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials. You should use Cognito Identity credentials to make this API call.</p>
@@ -2723,9 +2711,9 @@ where
         let mut request = SignedRequest::new("GET", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -2739,15 +2727,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDatasetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets usage details (for example, data storage) about a particular identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
@@ -2763,9 +2749,9 @@ where
         let mut request = SignedRequest::new("GET", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -2780,15 +2766,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeIdentityPoolUsageError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets usage information for an identity, including number of datasets and data usage.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials.</p>
@@ -2805,9 +2789,9 @@ where
         let mut request = SignedRequest::new("GET", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -2822,15 +2806,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeIdentityUsageError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Get the status of the last BulkPublish operation for an identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
@@ -2846,9 +2828,9 @@ where
         let mut request = SignedRequest::new("POST", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -2863,15 +2845,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBulkPublishDetailsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets the events and the corresponding Lambda functions associated with an identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
@@ -2887,9 +2867,9 @@ where
         let mut request = SignedRequest::new("GET", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -2903,15 +2883,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetCognitoEventsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets the configuration settings of an identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
@@ -2927,9 +2905,9 @@ where
         let mut request = SignedRequest::new("GET", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -2945,15 +2923,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetIdentityPoolConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists datasets for an identity. With Amazon Cognito Sync, each identity has access only to its own data. Thus, the credentials used to make this API call need to have access to the identity data.</p> <p>ListDatasets can be called with temporary user credentials provided by Cognito Identity or with developer credentials. You should use the Cognito Identity credentials to make this API call.</p>
@@ -2979,9 +2955,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -2995,15 +2971,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListDatasetsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets a list of identity pools registered with Cognito.</p> <p>ListIdentityPoolUsage can only be called with developer credentials. You cannot make this API call with the temporary user credentials provided by Cognito Identity.</p>
@@ -3025,9 +2999,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -3042,15 +3016,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListIdentityPoolUsageError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets paginated records, optionally changed after a particular sync count for a dataset and identity. With Amazon Cognito Sync, each identity has access only to its own data. Thus, the credentials used to make this API call need to have access to the identity data.</p> <p>ListRecords can be called with temporary user credentials provided by Cognito Identity or with developer credentials. You should use Cognito Identity credentials to make this API call.</p>
@@ -3078,9 +3050,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -3094,15 +3066,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListRecordsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Registers a device to receive push sync notifications.</p> <p>This API can only be called with temporary credentials provided by Cognito Identity. You cannot call this API with developer credentials.</p>
@@ -3122,9 +3092,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -3138,15 +3108,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RegisterDeviceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Sets the AWS Lambda function for a given event type for an identity pool. This request only updates the key/value pair specified. Other key/values pairs are not updated. To remove a key value pair, pass a empty value for the particular key.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
@@ -3165,23 +3133,21 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetCognitoEventsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Sets the necessary configuration for push sync.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
@@ -3200,9 +3166,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -3218,15 +3184,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetIdentityPoolConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Subscribes to receive notifications when a dataset is modified by another device.</p> <p>This API can only be called with temporary credentials provided by Cognito Identity. You cannot call this API with developer credentials.</p>
@@ -3239,9 +3203,9 @@ where
         let mut request = SignedRequest::new("POST", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -3256,15 +3220,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SubscribeToDatasetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Unsubscribes from receiving notifications when a dataset is modified by another device.</p> <p>This API can only be called with temporary credentials provided by Cognito Identity. You cannot call this API with developer credentials.</p>
@@ -3277,9 +3239,9 @@ where
         let mut request = SignedRequest::new("DELETE", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -3294,15 +3256,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UnsubscribeFromDatasetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Posts updates to records and adds and deletes records for a dataset and user.</p> <p>The sync count in the record patch is your last known sync count for that record. The server will reject an UpdateRecords request with a ResourceConflictException if you try to patch a record with a new value but a stale sync count.</p> <p>For example, if the sync count on the server is 5 for a key called highScore and you try and submit a new highScore with sync count of 4, the request will be rejected. To obtain the current sync count for a record, call ListRecords. On a successful update of the record, the response returns the new sync count for that record. You should present that sync count the next time you try to update that same record. When the record does not exist, specify the sync count as 0.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials.</p>
@@ -3327,9 +3287,9 @@ where
             request.add_header("x-amz-Client-Context", &client_context.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -3343,15 +3303,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateRecordsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 }
 

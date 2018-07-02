@@ -17,10 +17,9 @@ use std::io;
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
-use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::region;
 use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::{ClientInner, RusotoFuture};
+use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 use rusoto_core::request::HttpDispatchError;
@@ -10589,48 +10588,41 @@ pub trait CloudDirectory {
     ) -> RusotoFuture<UpgradePublishedSchemaResponse, UpgradePublishedSchemaError>;
 }
 /// A client for the Amazon CloudDirectory API.
-pub struct CloudDirectoryClient<P = CredentialsProvider, D = RequestDispatcher>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    inner: ClientInner<P, D>,
+pub struct CloudDirectoryClient {
+    client: Client,
     region: region::Region,
 }
 
 impl CloudDirectoryClient {
-    /// Creates a simple client backed by an implicit event loop.
+    /// Creates a client backed by the default tokio event loop.
     ///
     /// The client will use the default credentials provider and tls client.
-    ///
-    /// See the `rusoto_core::reactor` module for more details.
-    pub fn simple(region: region::Region) -> CloudDirectoryClient {
-        CloudDirectoryClient::new(
-            RequestDispatcher::default(),
-            CredentialsProvider::default(),
-            region,
-        )
-    }
-}
-
-impl<P, D> CloudDirectoryClient<P, D>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
+    pub fn new(region: region::Region) -> CloudDirectoryClient {
         CloudDirectoryClient {
-            inner: ClientInner::new(credentials_provider, request_dispatcher),
+            client: Client::shared(),
+            region: region,
+        }
+    }
+
+    pub fn new_with<P, D>(
+        request_dispatcher: D,
+        credentials_provider: P,
+        region: region::Region,
+    ) -> CloudDirectoryClient
+    where
+        P: ProvideAwsCredentials + Send + Sync + 'static,
+        P::Future: Send,
+        D: DispatchSignedRequest + Send + Sync + 'static,
+        D::Future: Send,
+    {
+        CloudDirectoryClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region: region,
         }
     }
 }
 
-impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
-where
-    P: ProvideAwsCredentials + 'static,
-    D: DispatchSignedRequest + 'static,
-{
+impl CloudDirectory for CloudDirectoryClient {
     /// <p>Adds a new <a>Facet</a> to an object.</p>
     fn add_facet_to_object(
         &self,
@@ -10645,9 +10637,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10661,15 +10653,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AddFacetToObjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Copies the input published schema, at the specified version, into the <a>Directory</a> with the same name and version as that of the published schema.</p>
@@ -10686,9 +10676,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10702,15 +10692,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ApplySchemaError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p><p>Attaches an existing object to another object. An object can be accessed in two ways:</p> <ol> <li> <p>Using the path</p> </li> <li> <p>Using <code>ObjectIdentifier</code> </p> </li> </ol></p>
@@ -10727,9 +10715,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10743,15 +10731,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AttachObjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Attaches a policy object to a regular object. An object can have a limited number of attached policies.</p>
@@ -10771,9 +10757,9 @@ where
             request.add_header("x-amz-data-partition", &directory_arn.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10787,15 +10773,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AttachPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Attaches the specified object to the specified index.</p>
@@ -10812,9 +10796,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10828,15 +10812,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AttachToIndexError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Attaches a typed link to a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
@@ -10853,9 +10835,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10869,15 +10851,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AttachTypedLinkError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Performs all the read operations in a batch. </p>
@@ -10898,9 +10878,9 @@ where
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10914,15 +10894,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(BatchReadError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Performs all the write operations in a batch. Either all the operations succeed or none.</p>
@@ -10939,9 +10917,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10955,15 +10933,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(BatchWriteError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a <a>Directory</a> by copying the published schema into the directory. A directory cannot be created without a schema.</p>
@@ -10980,9 +10956,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -10996,15 +10972,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateDirectoryError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a new <a>Facet</a> in a schema. Facet creation is allowed only in development or applied schemas.</p>
@@ -11021,9 +10995,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11037,15 +11011,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateFacetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates an index object. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_indexing.html">Indexing</a> for more information.</p>
@@ -11062,9 +11034,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11078,15 +11050,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateIndexError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates an object in a <a>Directory</a>. Additionally attaches the object to a parent, if a parent reference and <code>LinkName</code> is specified. An object is simply a collection of <a>Facet</a> attributes. You can also use this API call to create a policy object, if the facet from which you create the object is a policy facet. </p>
@@ -11103,9 +11073,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11119,15 +11089,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateObjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p><p>Creates a new schema in a development state. A schema can exist in three phases:</p> <ul> <li> <p> <i>Development:</i> This is a mutable phase of the schema. All new schemas are in the development phase. Once the schema is finalized, it can be published.</p> </li> <li> <p> <i>Published:</i> Published schemas are immutable and have a version associated with them.</p> </li> <li> <p> <i>Applied:</i> Applied schemas are mutable in a way that allows you to add new schema facets. You can also add new, nonrequired attributes to existing schema facets. You can apply only published schemas to directories. </p> </li> </ul></p>
@@ -11143,9 +11111,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11159,15 +11127,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateSchemaError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
@@ -11184,9 +11150,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11201,15 +11167,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateTypedLinkFacetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes a directory. Only disabled directories can be deleted. A deleted directory cannot be undone. Exercise extreme caution when deleting directories.</p>
@@ -11224,9 +11188,9 @@ where
 
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11240,15 +11204,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDirectoryError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes a given <a>Facet</a>. All attributes and <a>Rule</a>s that are associated with the facet will be deleted. Only development schema facets are allowed deletion.</p>
@@ -11265,9 +11227,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11281,15 +11243,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteFacetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes an object and its associated attributes. Only objects with no children and no parents can be deleted.</p>
@@ -11306,9 +11266,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11322,15 +11282,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteObjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes a given schema. Schemas in a development and published state can only be deleted. </p>
@@ -11345,9 +11303,9 @@ where
 
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11361,15 +11319,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteSchemaError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
@@ -11386,9 +11342,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11403,15 +11359,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteTypedLinkFacetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Detaches the specified object from the specified index.</p>
@@ -11428,9 +11382,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11444,15 +11398,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DetachFromIndexError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Detaches a given object from the parent object. The object that is to be detached from the parent is specified by the link name.</p>
@@ -11469,9 +11421,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11485,15 +11437,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DetachObjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Detaches a policy from an object.</p>
@@ -11510,9 +11460,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11526,15 +11476,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DetachPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Detaches a typed link from a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
@@ -11551,23 +11499,21 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DetachTypedLinkError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Disables the specified directory. Disabled directories cannot be read or written to. Only enabled directories can be disabled. Disabled directories may be reenabled.</p>
@@ -11582,9 +11528,9 @@ where
 
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11598,15 +11544,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DisableDirectoryError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Enables the specified directory. Only disabled directories can be enabled. Once enabled, the directory can then be read and written to.</p>
@@ -11621,9 +11565,9 @@ where
 
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11637,15 +11581,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(EnableDirectoryError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns current applied schema version ARN, including the minor version in use.</p>
@@ -11661,9 +11603,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11678,15 +11620,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetAppliedSchemaVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves metadata about a directory.</p>
@@ -11701,9 +11641,9 @@ where
 
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11717,15 +11657,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetDirectoryError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets details of the <a>Facet</a>, such as facet name, attributes, <a>Rule</a>s, or <code>ObjectType</code>. You can call this on all kinds of schema facets -- published, development, or applied.</p>
@@ -11739,9 +11677,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11755,15 +11693,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetFacetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves metadata about an object.</p>
@@ -11784,9 +11720,9 @@ where
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11801,15 +11737,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetObjectInformationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves a JSON representation of the schema. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat">JSON Schema Format</a> for more information.</p>
@@ -11824,9 +11758,9 @@ where
 
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11840,15 +11774,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetSchemaAsJsonError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the identity attribute order for a specific <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
@@ -11865,9 +11797,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11883,15 +11815,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetTypedLinkFacetInformationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists schema major versions applied to a directory. If <code>SchemaArn</code> is provided, lists the minor version.</p>
@@ -11907,9 +11837,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11924,15 +11854,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListAppliedSchemaArnsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists indices attached to the specified object.</p>
@@ -11953,9 +11881,9 @@ where
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -11970,15 +11898,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListAttachedIndicesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves each Amazon Resource Name (ARN) of schemas in the development state.</p>
@@ -11994,9 +11920,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12011,15 +11937,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListDevelopmentSchemaArnsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists directories created within an account.</p>
@@ -12035,9 +11959,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12051,15 +11975,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListDirectoriesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves attributes attached to the facet.</p>
@@ -12076,9 +11998,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12093,15 +12015,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListFacetAttributesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves the names of facets that exist in a schema.</p>
@@ -12118,9 +12038,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12134,15 +12054,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListFacetNamesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
@@ -12159,9 +12077,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12176,15 +12094,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListIncomingTypedLinksError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists objects and indexed values attached to the index.</p>
@@ -12205,9 +12121,9 @@ where
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12221,15 +12137,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListIndexError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists all attributes that are associated with an object. </p>
@@ -12250,9 +12164,9 @@ where
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12267,15 +12181,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListObjectAttributesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns a paginated list of child objects that are associated with a given object.</p>
@@ -12296,9 +12208,9 @@ where
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12313,15 +12225,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListObjectChildrenError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects. For more information about objects, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#dirstructure">Directory Structure</a>.</p> <p>Use this API to evaluate all parents for an object. The call returns all objects from the root of the directory up to the requested object. The API returns the number of paths based on user-defined <code>MaxResults</code>, in case there are multiple paths to the parent. The order of the paths and nodes returned is consistent among multiple API calls unless the objects are deleted or moved. Paths not leading to the directory root are ignored from the target object.</p>
@@ -12338,9 +12248,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12355,15 +12265,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListObjectParentPathsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists parent objects that are associated with a given object in pagination fashion.</p>
@@ -12384,9 +12292,9 @@ where
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12401,15 +12309,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListObjectParentsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns policies attached to an object in pagination fashion.</p>
@@ -12430,9 +12336,9 @@ where
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12447,15 +12353,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListObjectPoliciesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
@@ -12472,9 +12376,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12489,15 +12393,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListOutgoingTypedLinksError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns all of the <code>ObjectIdentifiers</code> to which a given policy is attached.</p>
@@ -12518,9 +12420,9 @@ where
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12535,15 +12437,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListPolicyAttachmentsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists schema major versions for a published schema. If <code>SchemaArn</code> is provided, lists the minor version.</p>
@@ -12559,9 +12459,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12576,15 +12476,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListPublishedSchemaArnsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns tags for a resource. Tagging is currently supported only for directories with a limit of 50 tags per directory. All 50 tags are returned for a given directory with this API call.</p>
@@ -12600,9 +12498,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12617,15 +12515,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListTagsForResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns a paginated list of all attribute definitions for a particular <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
@@ -12642,9 +12538,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12660,15 +12556,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListTypedLinkFacetAttributesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns a paginated list of <code>TypedLink</code> facet names for a particular schema. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
@@ -12685,9 +12579,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12702,15 +12596,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListTypedLinkFacetNamesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the <code>ObjectIdentifier</code> for such objects. If policies are present, it returns <code>ObjectIdentifier</code>, <code>policyId</code>, and <code>policyType</code>. Paths that don't lead to the root from the target object are ignored. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#policies">Policies</a>.</p>
@@ -12727,9 +12619,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12743,15 +12635,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(LookupPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Publishes a development schema with a major version and a recommended minor version.</p>
@@ -12768,9 +12658,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.development_schema_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12784,15 +12674,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PublishSchemaError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Allows a schema to be updated using JSON upload. Only available for development schemas. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat">JSON Schema Format</a> for more information.</p>
@@ -12809,9 +12697,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12826,15 +12714,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutSchemaFromJsonError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Removes the specified facet from the specified object.</p>
@@ -12851,9 +12737,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12868,15 +12754,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RemoveFacetFromObjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>An API operation for adding tags to a resource.</p>
@@ -12892,9 +12776,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12908,15 +12792,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(TagResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>An API operation for removing tags from a resource.</p>
@@ -12932,9 +12814,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12948,15 +12830,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UntagResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p><p>Does the following:</p> <ol> <li> <p>Adds new <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Updates existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Deletes existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> </ol></p>
@@ -12973,9 +12853,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -12989,15 +12869,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateFacetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates a given object's attributes.</p>
@@ -13014,9 +12892,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -13031,15 +12909,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateObjectAttributesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates the schema name with a new name. Only development schema names can be updated.</p>
@@ -13056,9 +12932,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -13072,15 +12948,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateSchemaError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
@@ -13097,9 +12971,9 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -13114,15 +12988,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateTypedLinkFacetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Upgrades a single directory in-place using the <code>PublishedSchemaArn</code> with schema updates found in <code>MinorVersion</code>. Backwards-compatible minor version upgrades are instantaneously available for readers on all objects in the directory. Note: This is a synchronous API call and upgrades only one schema on a given directory per call. To upgrade multiple directories from one schema, you would need to call this API on each directory.</p>
@@ -13138,9 +13010,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -13155,15 +13027,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpgradeAppliedSchemaError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Upgrades a published schema under a new minor version revision using the current contents of <code>DevelopmentSchemaArn</code>.</p>
@@ -13179,9 +13049,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -13196,15 +13066,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpgradePublishedSchemaError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 }
 

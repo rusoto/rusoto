@@ -17,10 +17,9 @@ use std::io;
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
-use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::region;
 use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::{ClientInner, RusotoFuture};
+use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 use rusoto_core::request::HttpDispatchError;
@@ -6355,48 +6354,41 @@ pub trait Workdocs {
     ) -> RusotoFuture<UpdateUserResponse, UpdateUserError>;
 }
 /// A client for the Amazon WorkDocs API.
-pub struct WorkdocsClient<P = CredentialsProvider, D = RequestDispatcher>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    inner: ClientInner<P, D>,
+pub struct WorkdocsClient {
+    client: Client,
     region: region::Region,
 }
 
 impl WorkdocsClient {
-    /// Creates a simple client backed by an implicit event loop.
+    /// Creates a client backed by the default tokio event loop.
     ///
     /// The client will use the default credentials provider and tls client.
-    ///
-    /// See the `rusoto_core::reactor` module for more details.
-    pub fn simple(region: region::Region) -> WorkdocsClient {
-        WorkdocsClient::new(
-            RequestDispatcher::default(),
-            CredentialsProvider::default(),
-            region,
-        )
-    }
-}
-
-impl<P, D> WorkdocsClient<P, D>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
+    pub fn new(region: region::Region) -> WorkdocsClient {
         WorkdocsClient {
-            inner: ClientInner::new(credentials_provider, request_dispatcher),
+            client: Client::shared(),
+            region: region,
+        }
+    }
+
+    pub fn new_with<P, D>(
+        request_dispatcher: D,
+        credentials_provider: P,
+        region: region::Region,
+    ) -> WorkdocsClient
+    where
+        P: ProvideAwsCredentials + Send + Sync + 'static,
+        P::Future: Send,
+        D: DispatchSignedRequest + Send + Sync + 'static,
+        D::Future: Send,
+    {
+        WorkdocsClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region: region,
         }
     }
 }
 
-impl<P, D> Workdocs for WorkdocsClient<P, D>
-where
-    P: ProvideAwsCredentials + 'static,
-    D: DispatchSignedRequest + 'static,
-{
+impl Workdocs for WorkdocsClient {
     /// <p>Aborts the upload of the specified document version that was previously initiated by <a>InitiateDocumentVersionUpload</a>. The client should make this call only when it no longer intends to upload the document version, or fails to do so.</p>
     fn abort_document_version_upload(
         &self,
@@ -6415,23 +6407,21 @@ where
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 204 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AbortDocumentVersionUploadError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Activates the specified user. Only active users can access Amazon WorkDocs.</p>
@@ -6451,9 +6441,9 @@ where
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -6467,15 +6457,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ActivateUserError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a set of permissions for the specified folder or document. The resource permissions are overwritten if the principals already have different permissions.</p>
@@ -6498,9 +6486,9 @@ where
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 201 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -6515,15 +6503,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AddResourcePermissionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Adds a new comment to the specified document version.</p>
@@ -6547,9 +6533,9 @@ where
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 201 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -6563,15 +6549,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateCommentError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Adds one or more custom properties to the specified resource (a folder, document, or version).</p>
@@ -6599,9 +6583,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -6616,15 +6600,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateCustomMetadataError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a folder with the specified name and parent folder.</p>
@@ -6644,9 +6626,9 @@ where
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 201 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -6660,15 +6642,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateFolderError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Adds the specified list of labels to the given resource (a document or folder)</p>
@@ -6691,9 +6671,9 @@ where
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -6707,15 +6687,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateLabelsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Configure WorkDocs to use Amazon SNS notifications.</p> <p>The endpoint receives a confirmation message, and must confirm the subscription. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SendMessageToHttp.html#SendMessageToHttp.confirm">Confirm the Subscription</a> in the <i>Amazon Simple Notification Service Developer Guide</i>.</p>
@@ -6735,9 +6713,9 @@ where
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -6753,15 +6731,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateNotificationSubscriptionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a user in a Simple AD or Microsoft AD directory. The status of a newly created user is "ACTIVE". New users can access Amazon WorkDocs.</p>
@@ -6781,9 +6757,9 @@ where
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 201 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -6797,15 +6773,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateUserError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deactivates the specified user, which revokes the user's access to Amazon WorkDocs.</p>
@@ -6825,23 +6799,21 @@ where
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 204 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeactivateUserError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes the specified comment from the document version.</p>
@@ -6860,23 +6832,21 @@ where
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 204 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteCommentError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes custom metadata from the specified resource.</p>
@@ -6909,9 +6879,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -6926,15 +6896,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteCustomMetadataError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Permanently deletes the specified document and its associated metadata.</p>
@@ -6954,23 +6922,21 @@ where
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 204 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDocumentError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Permanently deletes the specified folder and its contents.</p>
@@ -6984,23 +6950,21 @@ where
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 204 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteFolderError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes the contents of the specified folder.</p>
@@ -7020,23 +6984,21 @@ where
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 204 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteFolderContentsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes the specified list of labels from a resource.</p>
@@ -7066,9 +7028,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -7082,15 +7044,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteLabelsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes the specified subscription from the specified organization.</p>
@@ -7107,23 +7067,21 @@ where
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteNotificationSubscriptionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes the specified user from a Simple AD or Microsoft AD directory.</p>
@@ -7137,23 +7095,21 @@ where
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 204 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteUserError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Describes the user activities in a specified time period.</p>
@@ -7190,9 +7146,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -7207,15 +7163,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeActivitiesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>List all the comments for the specified document version.</p>
@@ -7244,9 +7198,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -7260,15 +7214,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeCommentsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves the document versions for the specified document.</p> <p>By default, only active versions are returned.</p>
@@ -7302,9 +7254,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -7319,15 +7271,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDocumentVersionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Describes the contents of the specified folder, including its documents and subfolders.</p> <p>By default, Amazon WorkDocs returns the first 100 active document and folder metadata items. If there are more results, the response includes a marker that you can use to request the next set of results. You can also request initialized documents.</p>
@@ -7367,9 +7317,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -7384,15 +7334,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeFolderContentsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Describes the groups specified by query.</p>
@@ -7421,9 +7369,9 @@ where
         params.put("searchQuery", &input.search_query);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -7437,15 +7385,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeGroupsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists the specified notification subscriptions.</p>
@@ -7473,9 +7419,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -7491,15 +7437,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeNotificationSubscriptionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Describes the permissions of a specified resource.</p>
@@ -7530,9 +7474,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -7548,15 +7492,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeResourcePermissionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecycleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecycleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p>
@@ -7579,9 +7521,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -7596,15 +7538,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeRootFoldersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Describes the specified users. You can describe all users or filter the results (for example, by status or organization).</p> <p>By default, Amazon WorkDocs returns the first 24 active or pending users. If there are more results, the response includes a marker that you can use to request the next set of results.</p>
@@ -7650,9 +7590,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -7666,15 +7606,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeUsersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves details of the current user for whom the authentication token was generated. This is not a valid action for SigV4 (administrative API) clients.</p>
@@ -7689,9 +7627,9 @@ where
 
         request.add_header("Authentication", &input.authentication_token);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -7705,15 +7643,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetCurrentUserError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves details of a document.</p>
@@ -7738,9 +7674,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -7754,15 +7690,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetDocumentError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves the path information (the hierarchy from the root folder) for the requested document.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested document and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the names of the parent folders.</p>
@@ -7793,9 +7727,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -7809,15 +7743,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetDocumentPathError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves version metadata for the specified document.</p>
@@ -7846,9 +7778,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -7863,15 +7795,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetDocumentVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves the metadata of the specified folder.</p>
@@ -7893,9 +7823,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -7909,15 +7839,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetFolderError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves the path information (the hierarchy from the root folder) for the specified folder.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested folder and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the parent folder names.</p>
@@ -7948,9 +7876,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -7964,15 +7892,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetFolderPathError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a new document object and version object.</p> <p>The client specifies the parent folder ID and name of the document to upload. The ID is optionally specified when creating a new version of an existing document. This is the first step to upload a document. Next, upload the document to the URL returned from the call, and then call <a>UpdateDocumentVersion</a>.</p> <p>To cancel the document upload, call <a>AbortDocumentVersionUpload</a>.</p>
@@ -7993,9 +7919,9 @@ where
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 201 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -8011,15 +7937,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(InitiateDocumentVersionUploadError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Removes all the permissions from the specified resource.</p>
@@ -8039,23 +7963,21 @@ where
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 204 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RemoveAllResourcePermissionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Removes the permission for the specified principal from the specified resource.</p>
@@ -8081,23 +8003,21 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 204 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RemoveResourcePermissionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates the specified attributes of a document. The user must have access to both the document and its parent folder, if applicable.</p>
@@ -8120,23 +8040,21 @@ where
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateDocumentError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Changes the status of the document version to ACTIVE. </p> <p>Amazon WorkDocs also sets its document container to ACTIVE. This is the last step in a document upload, after the client uploads the document to an S3-presigned URL returned by <a>InitiateDocumentVersionUpload</a>. </p>
@@ -8160,23 +8078,21 @@ where
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateDocumentVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates the specified attributes of the specified folder. The user must have access to both the folder and its parent folder, if applicable.</p>
@@ -8193,23 +8109,21 @@ where
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateFolderError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Updates the specified attributes of the specified user, and grants or revokes administrative privileges to the Amazon WorkDocs site.</p>
@@ -8229,9 +8143,9 @@ where
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
+        self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
-                future::Either::A(response.buffer().from_err().map(|response| {
+                Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
                     if body == b"null" {
@@ -8245,15 +8159,13 @@ where
                     result
                 }))
             } else {
-                future::Either::B(response.buffer().from_err().and_then(|response| {
+                Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateUserError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
             }
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 }
 
