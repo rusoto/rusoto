@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_get_rest_apis() {
-    let client = BatchClient::simple(Region::UsEast1);
+    let client = BatchClient::new(Region::UsEast1);
     let request = DescribeJobDefinitionsRequest::default();
 
     client.describe_job_definitions(request).sync().unwrap();

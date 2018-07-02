@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_list_gateways() {
-    let client = StorageGatewayClient::simple(Region::UsEast1);
+    let client = StorageGatewayClient::new(Region::UsEast1);
     let request = ListGatewaysInput::default();
 
     client.list_gateways(request).sync().unwrap();

@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_list_applications() {
-    let client = KinesisAnalyticsClient::simple(Region::UsEast1);
+    let client = KinesisAnalyticsClient::new(Region::UsEast1);
     let request = ListApplicationsRequest::default();
 
     let result = client.list_applications(request).sync().unwrap();

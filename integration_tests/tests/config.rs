@@ -9,7 +9,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_describe_config_rules() {
-    let client = ConfigServiceClient::simple(Region::UsEast1);
+    let client = ConfigServiceClient::new(Region::UsEast1);
 
     let request = DescribeConfigRulesRequest::default();
 
@@ -24,7 +24,7 @@ fn should_describe_config_rules() {
 
 #[test]
 fn should_describe_delivery_channels() {
-    let client = ConfigServiceClient::simple(Region::UsEast1);
+    let client = ConfigServiceClient::new(Region::UsEast1);
 
     let request = DescribeDeliveryChannelsRequest::default();
 

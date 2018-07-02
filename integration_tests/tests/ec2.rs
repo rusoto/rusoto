@@ -11,7 +11,7 @@ use std::error::Error;
 
 #[test]
 fn main() {
-    let ec2 = Ec2Client::simple(Region::UsEast1);
+    let ec2 = Ec2Client::new(Region::UsEast1);
 
     let mut req = DescribeInstancesRequest::default();
     req.instance_ids = Some(vec!["i-00000000".into(), "i-00000001".into()]);
@@ -31,7 +31,7 @@ fn main() {
 #[ignore]
 #[should_panic(expected="<Message>Request would have succeeded, but DryRun flag is set.</Message>")]
 fn dry_run() {
-    let ec2 = Ec2Client::simple(Region::UsEast1);
+    let ec2 = Ec2Client::new(Region::UsEast1);
     let req = CreateSnapshotRequest {
         volume_id: "v-00000001".into(),
         dry_run: Some(true),
@@ -45,7 +45,7 @@ fn dry_run() {
 #[ignore]
 #[should_panic(expected="<Code>InvalidID</Code>")]
 fn query_serialization_name() {
-    let ec2 = Ec2Client::simple(Region::UsEast1);
+    let ec2 = Ec2Client::new(Region::UsEast1);
     let req = CreateTagsRequest {
         dry_run: None,
         resources: vec!["v-00000001".into()],

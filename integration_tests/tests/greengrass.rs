@@ -10,7 +10,7 @@ use rusoto_core::Region;
 #[test]
 fn should_list_groups() {
     let _ = env_logger::try_init();
-    let client = GreenGrassClient::simple(Region::UsWest2);
+    let client = GreenGrassClient::new(Region::UsWest2);
     
     let request = ListGroupsRequest::default();
 

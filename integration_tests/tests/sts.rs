@@ -14,7 +14,7 @@ use rusoto_core::{ProvideAwsCredentials, Region};
 
 #[test]
 fn main() {
-    let sts = StsClient::simple(Region::UsEast1);
+    let sts = StsClient::new(Region::UsEast1);
 
     // http://docs.aws.amazon.com/STS/latest/APIReference/Welcome.html
     match sts.assume_role(AssumeRoleRequest{

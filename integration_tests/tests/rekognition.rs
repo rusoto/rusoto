@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_list_collections() {
-    let client = RekognitionClient::simple(Region::UsEast1);
+    let client = RekognitionClient::new(Region::UsEast1);
     let request = ListCollectionsRequest::default();
 
     let result = client.list_collections(request).sync().unwrap();

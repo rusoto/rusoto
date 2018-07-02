@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_parse_error_type() {
-    let client = DynamoDbClient::simple(Region::UsEast1);
+    let client = DynamoDbClient::new(Region::UsEast1);
 
     // limit of -1 should generate a validation error
     let request = ListTablesInput { limit: Some(-1), ..Default::default() };
@@ -25,7 +25,7 @@ fn should_parse_error_type() {
 
 #[test]
 fn should_list_tables() {
-    let client = DynamoDbClient::simple(Region::UsEast1);
+    let client = DynamoDbClient::new(Region::UsEast1);
     let request = ListTablesInput::default();
 
     client.list_tables(request).sync().unwrap();

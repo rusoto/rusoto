@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_list_named_queries() {
-    let client = AthenaClient::simple(Region::UsEast1);
+    let client = AthenaClient::new(Region::UsEast1);
     let request = ListNamedQueriesInput::default();
 
     client.list_named_queries(request).sync().unwrap();

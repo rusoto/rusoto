@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_describe_repositories() {
-    let client = EcrClient::simple(Region::UsEast1);
+    let client = EcrClient::new(Region::UsEast1);
     let request = DescribeRepositoriesRequest::default();
 
     client.describe_repositories(request).sync().unwrap();

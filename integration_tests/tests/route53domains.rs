@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_list_operations() {
-    let client = Route53DomainsClient::simple(Region::UsEast1);
+    let client = Route53DomainsClient::new(Region::UsEast1);
     let request = ListOperationsRequest::default();
 
     client.list_operations(request).sync().unwrap();

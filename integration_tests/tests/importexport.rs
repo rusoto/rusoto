@@ -10,7 +10,7 @@ use rusoto_core::Region;
 #[ignore]
 fn should_list_jobs() {
     let _ = env_logger::try_init();
-    let client = ImportExportClient::simple(Region::UsEast1);
+    let client = ImportExportClient::new(Region::UsEast1);
     let request = ListJobsInput::default();
 
     let result = client.list_jobs(request).sync().unwrap();

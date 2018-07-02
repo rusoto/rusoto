@@ -10,7 +10,7 @@ use rusoto_core::Region;
 #[test]
 fn should_list_things() {
     let _ = env_logger::try_init();
-    let client = IotClient::simple(Region::UsEast1);
+    let client = IotClient::new(Region::UsEast1);
     let request = ListThingsRequest::default();
 
     client.list_things(request).sync().unwrap();
