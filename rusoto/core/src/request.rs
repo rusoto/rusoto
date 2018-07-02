@@ -175,13 +175,13 @@ impl fmt::Display for HttpDispatchError {
 
 impl From<HyperError> for HttpDispatchError {
     fn from(err: HyperError) -> HttpDispatchError {
-        HttpDispatchError { message: err.description().to_string() }
+        HttpDispatchError { message: err.to_string() }
     }
 }
 
 impl From<IoError> for HttpDispatchError {
     fn from(err: IoError) -> HttpDispatchError {
-        HttpDispatchError { message: err.description().to_string() }
+        HttpDispatchError { message: err.to_string() }
     }
 }
 
@@ -530,5 +530,12 @@ mod tests {
               ("minio-style-header-name", "AnotherValue"),
               ("random-style-header-name", "yet again another value")]
         );
+    }
+
+    #[test]
+    fn from_io_error_preserves_error_message() {
+        let io_error = ::std::io::Error::new(::std::io::ErrorKind::Other, "my error message");
+        let error = HttpDispatchError::from(io_error);
+        assert_eq!(error.to_string(), "my error message")
     }
 }
