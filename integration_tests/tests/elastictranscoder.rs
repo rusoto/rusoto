@@ -36,7 +36,7 @@ impl TestEtsClient {
     fn new(region: Region) -> TestEtsClient {
         TestEtsClient {
             region: region.clone(),
-            client: EtsClient::simple(region),
+            client: EtsClient::new(region),
             s3_client: None,
             input_bucket: None,
             output_bucket: None,
@@ -44,7 +44,7 @@ impl TestEtsClient {
     }
 
     fn create_s3_client(&mut self) {
-        self.s3_client = Some(S3Client::simple(self.region.clone()));
+        self.s3_client = Some(S3Client::new(self.region.clone()));
     }
 
     fn create_bucket(&mut self) -> String {

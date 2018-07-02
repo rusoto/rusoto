@@ -10,7 +10,7 @@ use rusoto_core::Region;
 #[test]
 #[ignore] // Ignore until we get this working
 fn should_describe_budgets() {
-    let client = BudgetsClient::simple(Region::UsEast1);
+    let client = BudgetsClient::new(Region::UsEast1);
     // This request needs the accountId set:
     let request = DescribeBudgetsRequest::default();
 

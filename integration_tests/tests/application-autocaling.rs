@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_describe_scaling_policies() {
-    let client = ApplicationAutoScalingClient::simple(Region::UsEast1);
+    let client = ApplicationAutoScalingClient::new(Region::UsEast1);
 
     let request = DescribeScalingPoliciesRequest{
         service_namespace: "ec2".to_owned(),

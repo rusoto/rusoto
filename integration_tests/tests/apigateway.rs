@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_get_rest_apis() {
-    let client = ApiGatewayClient::simple(Region::UsEast1);
+    let client = ApiGatewayClient::new(Region::UsEast1);
     let request = GetRestApisRequest::default();
 
     client.get_rest_apis(request).sync().unwrap();

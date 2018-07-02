@@ -2,8 +2,8 @@ extern crate rusoto_mock;
 
 use ::{Lambda, LambdaClient, InvocationRequest};
 
-use rusoto_core::{Region, SignedRequest};
-use rusoto_core::signature::SignedRequestPayload;
+use rusoto_core::Region;
+use rusoto_core::signature::{SignedRequest,SignedRequestPayload};
 use self::rusoto_mock::*;
 
 /// Ensures that rest-json codegen handles the response body,
@@ -32,7 +32,7 @@ fn should_parse_invocation_response() {
         ..Default::default()
     };
 
-    let client = LambdaClient::new(mock, MockCredentialsProvider, Region::UsEast1);
+    let client = LambdaClient::new_with(mock, MockCredentialsProvider, Region::UsEast1);
     let result = client.invoke(request).sync().unwrap();
 
     assert_eq!(Some(r#"{"arbitrary":"json"}"#.to_owned().into_bytes()), result.payload);

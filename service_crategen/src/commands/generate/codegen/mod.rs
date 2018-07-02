@@ -129,10 +129,9 @@ fn generate<P, E>(writer: &mut FileWriter,
         #[allow(warnings)]
         use futures::future;
         use futures::Future;
-        use rusoto_core::reactor::{{CredentialsProvider, RequestDispatcher}};
         use rusoto_core::request::DispatchSignedRequest;
         use rusoto_core::region;
-        use rusoto_core::{{ClientInner, RusotoFuture}};
+        use rusoto_core::{{Client, RusotoFuture}};
 
         use rusoto_core::request::HttpDispatchError;
         use rusoto_core::credential::{{CredentialsError, ProvideAwsCredentials}};
@@ -171,32 +170,36 @@ fn generate_client<P>(writer: &mut FileWriter,
 
     writeln!(writer,
         "/// A client for the {service_name} API.
-        pub struct {type_name}<P = CredentialsProvider, D = RequestDispatcher> where P: ProvideAwsCredentials, D: DispatchSignedRequest {{
-            inner: ClientInner<P, D>,
+        pub struct {type_name} {{
+            client: Client,
             region: region::Region,
         }}
 
         impl {type_name} {{
-            /// Creates a simple client backed by an implicit event loop.
+            /// Creates a client backed by the default tokio event loop.
             ///
             /// The client will use the default credentials provider and tls client.
-            ///
-            /// See the `rusoto_core::reactor` module for more details.
-            pub fn simple(region: region::Region) -> {type_name} {{
-                {type_name}::new(RequestDispatcher::default(), CredentialsProvider::default(), region)
+            pub fn new(region: region::Region) -> {type_name} {{
+                {type_name} {{
+                    client: Client::shared(),
+                    region: region
+                }}
             }}
-        }}
 
-        impl<P, D> {type_name}<P, D> where P: ProvideAwsCredentials, D: DispatchSignedRequest {{
-            pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {{
-                  {type_name} {{
-                    inner: ClientInner::new(credentials_provider, request_dispatcher),
+            pub fn new_with<P, D>(request_dispatcher: D, credentials_provider: P, region: region::Region) -> {type_name}
+                where P: ProvideAwsCredentials + Send + Sync + 'static,
+                      P::Future: Send,
+                      D: DispatchSignedRequest + Send + Sync + 'static,
+                      D::Future: Send
+            {{
+                {type_name} {{
+                    client: Client::new_with(credentials_provider, request_dispatcher),
                     region: region
                 }}
             }}
         }}
 
-        impl<P, D> {trait_name} for {type_name}<P, D> where P: ProvideAwsCredentials + 'static, D: DispatchSignedRequest + 'static {{
+        impl {trait_name} for {type_name} {{
         ",
         service_name = service.name(),
         type_name = service.client_type_name(),

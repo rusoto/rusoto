@@ -9,7 +9,7 @@ use rusoto_core::Region;
 
 #[test]
 fn get_user() {
-    let iam = IamClient::simple(Region::UsEast1);
+    let iam = IamClient::new(Region::UsEast1);
 
     // http://docs.aws.amazon.com/IAM/latest/APIReference/Welcome.html
     let request = GetUserRequest { ..Default::default() };
@@ -18,7 +18,7 @@ fn get_user() {
 
 #[test]
 fn list_users() {
-    let iam = IamClient::simple(Region::UsEast1);
+    let iam = IamClient::new(Region::UsEast1);
 
     // http://docs.aws.amazon.com/IAM/latest/APIReference/Welcome.html
     let request = ListUsersRequest { ..Default::default() };

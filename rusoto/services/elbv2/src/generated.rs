@@ -17,15 +17,13 @@ use std::io;
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
-use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::region;
 use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::{ClientInner, RusotoFuture};
+use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 use rusoto_core::request::HttpDispatchError;
 
-use hyper::StatusCode;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::xmlerror::*;
@@ -9665,48 +9663,41 @@ pub trait Elb {
     ) -> RusotoFuture<SetSubnetsOutput, SetSubnetsError>;
 }
 /// A client for the Elastic Load Balancing v2 API.
-pub struct ElbClient<P = CredentialsProvider, D = RequestDispatcher>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    inner: ClientInner<P, D>,
+pub struct ElbClient {
+    client: Client,
     region: region::Region,
 }
 
 impl ElbClient {
-    /// Creates a simple client backed by an implicit event loop.
+    /// Creates a client backed by the default tokio event loop.
     ///
     /// The client will use the default credentials provider and tls client.
-    ///
-    /// See the `rusoto_core::reactor` module for more details.
-    pub fn simple(region: region::Region) -> ElbClient {
-        ElbClient::new(
-            RequestDispatcher::default(),
-            CredentialsProvider::default(),
-            region,
-        )
-    }
-}
-
-impl<P, D> ElbClient<P, D>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
+    pub fn new(region: region::Region) -> ElbClient {
         ElbClient {
-            inner: ClientInner::new(credentials_provider, request_dispatcher),
+            client: Client::shared(),
+            region: region,
+        }
+    }
+
+    pub fn new_with<P, D>(
+        request_dispatcher: D,
+        credentials_provider: P,
+        region: region::Region,
+    ) -> ElbClient
+    where
+        P: ProvideAwsCredentials + Send + Sync + 'static,
+        P::Future: Send,
+        D: DispatchSignedRequest + Send + Sync + 'static,
+        D::Future: Send,
+    {
+        ElbClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region: region,
         }
     }
 }
 
-impl<P, D> Elb for ElbClient<P, D>
-where
-    P: ProvideAwsCredentials + 'static,
-    D: DispatchSignedRequest + 'static,
-{
+impl Elb for ElbClient {
     /// <p>Adds the specified certificate to the specified secure listener.</p> <p>If the certificate was already added, the call is successful but the certificate is not added again.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>. To remove certificates from your listener, use <a>RemoveListenerCertificates</a>.</p>
     fn add_listener_certificates(
         &self,
@@ -9720,16 +9711,16 @@ where
         AddListenerCertificatesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AddListenerCertificatesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -9753,9 +9744,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Adds the specified tags to the specified Elastic Load Balancing resource. You can tag your Application Load Balancers, Network Load Balancers, and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>
@@ -9768,16 +9757,16 @@ where
         AddTagsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AddTagsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -9801,9 +9790,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a listener for the specified Application Load Balancer or Network Load Balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple listeners with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-listeners.html">Listeners for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
@@ -9819,16 +9806,16 @@ where
         CreateListenerInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateListenerError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -9852,9 +9839,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates an Application Load Balancer or a Network Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, public subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>For limit information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancer</a> in the <i>Network Load Balancers Guide</i>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple load balancers with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html">Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
@@ -9870,16 +9855,16 @@ where
         CreateLoadBalancerInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateLoadBalancerError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -9903,9 +9888,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the condition for a rule is met, the specified action is taken. If no conditions are met, the action for the default rule is taken. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
@@ -9921,16 +9904,16 @@ where
         CreateRuleInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateRuleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -9954,9 +9937,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple target groups with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html">Target Groups for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
@@ -9972,16 +9953,16 @@ where
         CreateTargetGroupInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateTargetGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -10005,9 +9986,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes the specified listener.</p> <p>Alternatively, your listener is deleted when you delete the load balancer it is attached to using <a>DeleteLoadBalancer</a>.</p>
@@ -10023,16 +10002,16 @@ where
         DeleteListenerInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteListenerError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -10056,9 +10035,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes the specified Application Load Balancer or Network Load Balancer and its attached listeners.</p> <p>You can't delete a load balancer if deletion protection is enabled. If the load balancer does not exist or has already been deleted, the call succeeds.</p> <p>Deleting a load balancer does not affect its registered targets. For example, your EC2 instances continue to run and are still registered to their target groups. If you no longer need these EC2 instances, you can stop or terminate them.</p>
@@ -10074,16 +10051,16 @@ where
         DeleteLoadBalancerInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteLoadBalancerError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -10107,9 +10084,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes the specified rule.</p>
@@ -10125,16 +10100,16 @@ where
         DeleteRuleInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteRuleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -10158,9 +10133,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes the specified target group.</p> <p>You can delete a target group if it is not referenced by any actions. Deleting a target group also deletes any associated health checks.</p>
@@ -10176,16 +10149,16 @@ where
         DeleteTargetGroupInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteTargetGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -10209,9 +10182,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deregisters the specified targets from the specified target group. After the targets are deregistered, they no longer receive traffic from the load balancer.</p>
@@ -10227,16 +10198,16 @@ where
         DeregisterTargetsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeregisterTargetsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -10260,9 +10231,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancers</a> in the <i>Application Load Balancer Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
@@ -10278,16 +10247,16 @@ where
         DescribeAccountLimitsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAccountLimitsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -10311,9 +10280,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Describes the certificates for the specified secure listener.</p>
@@ -10329,16 +10296,16 @@ where
         DescribeListenerCertificatesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeListenerCertificatesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -10362,9 +10329,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Describes the specified listeners or the listeners for the specified Application Load Balancer or Network Load Balancer. You must specify either a load balancer or one or more listeners.</p>
@@ -10380,16 +10345,16 @@ where
         DescribeListenersInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeListenersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -10413,9 +10378,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Describes the attributes for the specified Application Load Balancer or Network Load Balancer.</p>
@@ -10432,16 +10395,16 @@ where
         DescribeLoadBalancerAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLoadBalancerAttributesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -10467,9 +10430,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Describes the specified load balancers or all of your load balancers.</p> <p>To describe the listeners for a load balancer, use <a>DescribeListeners</a>. To describe the attributes for a load balancer, use <a>DescribeLoadBalancerAttributes</a>.</p>
@@ -10485,16 +10446,16 @@ where
         DescribeLoadBalancersInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLoadBalancersError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -10518,9 +10479,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Describes the specified rules or the rules for the specified listener. You must specify either a listener or one or more rules.</p>
@@ -10536,16 +10495,16 @@ where
         DescribeRulesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeRulesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -10569,9 +10528,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
@@ -10587,16 +10544,16 @@ where
         DescribeSSLPoliciesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSSLPoliciesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -10620,9 +10577,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Describes the tags for the specified resources. You can describe the tags for one or more Application Load Balancers, Network Load Balancers, and target groups.</p>
@@ -10638,16 +10593,16 @@ where
         DescribeTagsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeTagsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -10671,9 +10626,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Describes the attributes for the specified target group.</p>
@@ -10689,16 +10642,16 @@ where
         DescribeTargetGroupAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeTargetGroupAttributesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -10724,9 +10677,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Describes the specified target groups or all of your target groups. By default, all target groups are described. Alternatively, you can specify one of the following to filter the results: the ARN of the load balancer, the names of one or more target groups, or the ARNs of one or more target groups.</p> <p>To describe the targets for a target group, use <a>DescribeTargetHealth</a>. To describe the attributes of a target group, use <a>DescribeTargetGroupAttributes</a>.</p>
@@ -10742,16 +10693,16 @@ where
         DescribeTargetGroupsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeTargetGroupsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -10775,9 +10726,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Describes the health of the specified targets or all of your targets.</p>
@@ -10793,16 +10742,16 @@ where
         DescribeTargetHealthInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeTargetHealthError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -10826,9 +10775,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Modifies the specified properties of the specified listener.</p> <p>Any properties that you do not specify retain their current values. However, changing the protocol from HTTPS to HTTP removes the security policy and SSL certificate properties. If you change the protocol from HTTP to HTTPS, you must add the security policy and server certificate.</p>
@@ -10844,16 +10791,16 @@ where
         ModifyListenerInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyListenerError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -10877,9 +10824,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Modifies the specified attributes of the specified Application Load Balancer or Network Load Balancer.</p> <p>If any of the specified attributes can't be modified as requested, the call fails. Any existing attributes that you do not modify retain their current values.</p>
@@ -10895,16 +10840,16 @@ where
         ModifyLoadBalancerAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyLoadBalancerAttributesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -10928,9 +10873,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Modifies the specified rule.</p> <p>Any existing properties that you do not modify retain their current values.</p> <p>To modify the default action, use <a>ModifyListener</a>.</p>
@@ -10946,16 +10889,16 @@ where
         ModifyRuleInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyRuleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -10979,9 +10922,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Modifies the health checks used when evaluating the health state of the targets in the specified target group.</p> <p>To monitor the health of the targets, use <a>DescribeTargetHealth</a>.</p>
@@ -10997,16 +10938,16 @@ where
         ModifyTargetGroupInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyTargetGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -11030,9 +10971,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Modifies the specified attributes of the specified target group.</p>
@@ -11048,16 +10987,16 @@ where
         ModifyTargetGroupAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyTargetGroupAttributesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -11081,9 +11020,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Registers the specified targets with the specified target group.</p> <p>You can register targets by instance ID or by IP address. If the target is an EC2 instance, it must be in the <code>running</code> state when you register it.</p> <p>By default, the load balancer routes requests to registered targets using the protocol and port for the target group. Alternatively, you can override the port for a target when you register it. You can register each EC2 instance or IP address with the same target group multiple times using different ports.</p> <p>With a Network Load Balancer, you cannot register instances by instance ID if they have the following instance types: C1, CC1, CC2, CG1, CG2, CR1, CS1, G1, G2, HI1, HS1, M1, M2, M3, and T1. You can register instances of these types by IP address.</p> <p>To remove a target from a target group, use <a>DeregisterTargets</a>.</p>
@@ -11099,16 +11036,16 @@ where
         RegisterTargetsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RegisterTargetsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -11132,9 +11069,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Removes the specified certificate from the specified secure listener.</p> <p>You can't remove the default certificate for a listener. To replace the default certificate, call <a>ModifyListener</a>.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>.</p>
@@ -11150,16 +11085,16 @@ where
         RemoveListenerCertificatesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RemoveListenerCertificatesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -11183,9 +11118,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Removes the specified tags from the specified Elastic Load Balancing resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>
@@ -11201,16 +11134,16 @@ where
         RemoveTagsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RemoveTagsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -11234,9 +11167,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer or Network Load Balancer.</p> <p>Note that Network Load Balancers must use <code>ipv4</code>.</p>
@@ -11252,16 +11183,16 @@ where
         SetIpAddressTypeInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetIpAddressTypeError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -11285,9 +11216,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Sets the priorities of the specified rules.</p> <p>You can reorder the rules as long as there are no priority conflicts in the new order. Any existing rules that you do not specify retain their current priority.</p>
@@ -11303,16 +11232,16 @@ where
         SetRulePrioritiesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetRulePrioritiesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -11336,9 +11265,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Associates the specified security groups with the specified Application Load Balancer. The specified security groups override the previously associated security groups.</p> <p>Note that you can't specify a security group for a Network Load Balancer.</p>
@@ -11354,16 +11281,16 @@ where
         SetSecurityGroupsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetSecurityGroupsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -11387,9 +11314,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Enables the Availability Zone for the specified public subnets for the specified Application Load Balancer. The specified subnets replace the previously enabled subnets.</p> <p>Note that you can't change the subnets for a Network Load Balancer.</p>
@@ -11405,16 +11330,16 @@ where
         SetSubnetsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetSubnetsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let result;
 
                 if response.body.is_empty() {
@@ -11438,9 +11363,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 }
 
@@ -11460,7 +11383,7 @@ mod protocol_tests {
             "elb-describe-load-balancers.xml",
         );
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
-        let client = ElbClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let client = ElbClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeLoadBalancersInput::default();
         let result = client.describe_load_balancers(request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
@@ -11473,7 +11396,7 @@ mod protocol_tests {
             "elb-describe-load-balancers.xml",
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = ElbClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let client = ElbClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeLoadBalancersInput::default();
         let result = client.describe_load_balancers(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);

@@ -10,7 +10,7 @@ use rusoto_core::Region;
 #[test]
 fn should_list_invitations() {
   let _ = env_logger::try_init();
-  let client = SecretsManagerClient::simple(Region::UsWest2);
+  let client = SecretsManagerClient::new(Region::UsWest2);
   let request = ListSecretsRequest {
     ..Default::default()
   };

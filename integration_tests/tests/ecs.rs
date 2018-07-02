@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn main() {
-    let ecs = EcsClient::simple(Region::UsEast1);
+    let ecs = EcsClient::new(Region::UsEast1);
 
     // http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ListClusters.html
     match ecs.list_clusters(ListClustersRequest::default()).sync() {

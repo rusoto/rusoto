@@ -12,7 +12,7 @@ use rusoto_core::Region;
 // for the last 600 seconds
 #[test]
 fn should_get_service_graph() {
-    let client = XRayClient::simple(Region::UsEast1);
+    let client = XRayClient::new(Region::UsEast1);
 
     let time = (get_time().sec - 30) as f64; // 30 seconds in the past
 

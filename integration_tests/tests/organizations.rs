@@ -10,7 +10,7 @@ use rusoto_core::Region;
 #[ignore]
 fn should_describe_organizations() {
     let _ = env_logger::try_init();
-    let client = OrganizationsClient::simple(Region::UsEast1);
+    let client = OrganizationsClient::new(Region::UsEast1);
 
     let result = client.describe_organization().sync().unwrap();
     println!("{:#?}", result);

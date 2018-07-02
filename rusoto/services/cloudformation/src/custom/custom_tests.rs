@@ -2,7 +2,8 @@ extern crate rusoto_mock;
 
 use ::{CloudFormation, CloudFormationClient, ListStacksInput};
 
-use rusoto_core::{Region, SignedRequest};
+use rusoto_core::Region;
+use rusoto_core::signature::SignedRequest;
 use self::rusoto_mock::*;
 
 #[test]
@@ -54,6 +55,6 @@ fn should_serialize_list_parameters_in_query_string() {
     let filters = vec!["CREATE_IN_PROGRESS".to_owned(), "DELETE_COMPLETE".to_owned()];
     let request = ListStacksInput { stack_status_filter: Some(filters), ..Default::default() };
 
-    let client = CloudFormationClient::new(mock, MockCredentialsProvider, Region::UsEast1);
+    let client = CloudFormationClient::new_with(mock, MockCredentialsProvider, Region::UsEast1);
     let _result = client.list_stacks(request).sync().unwrap();
 }

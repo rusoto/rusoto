@@ -3,7 +3,8 @@ extern crate rusoto_mock;
 use ::*;
 
 use futures::{Future, Stream};
-use rusoto_core::{Region, SignedRequest};
+use rusoto_core::Region;
+use rusoto_core::signature::SignedRequest;
 use self::rusoto_mock::*;
 
 #[test]
@@ -11,7 +12,7 @@ fn initiate_multipart_upload_happy_path() {
     let body = MockResponseReader::read_response("test_resources/custom", "s3_initiate_multipart_upload.xml");
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
 
-    let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
+    let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
     let result = client.create_multipart_upload(CreateMultipartUploadRequest {
         bucket: "example-bucket".to_owned(),
         key: "example-object".to_owned(),
@@ -34,7 +35,7 @@ fn complete_multipart_upload_happy_path() {
     let body = MockResponseReader::read_response("test_resources/custom", "s3_complete_multipart_upload.xml");
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
     
-    let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
+    let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
     let result = client.complete_multipart_upload(CompleteMultipartUploadRequest {
         bucket: "example-bucket".to_owned(),
         key: "example-object".to_owned(),
@@ -57,7 +58,7 @@ fn list_multipart_upload_happy_path() {
     let body = MockResponseReader::read_response("test_resources/custom", "s3_list_multipart_uploads.xml");
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
     
-    let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
+    let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
     let result = client.list_multipart_uploads(ListMultipartUploadsRequest {
         bucket: "example-bucket".to_owned(),
         ..Default::default()
@@ -144,7 +145,7 @@ fn list_multipart_upload_parts_happy_path() {
     req.bucket = "rusoto1440826511".to_owned();
     req.key = "testfile.zip".to_owned();
 
-    let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
+    let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
     let result = client.list_parts(req).sync().unwrap();
     assert_eq!(result.bucket, sstr("rusoto1440826511"));
     assert_eq!(result.upload_id,
@@ -200,7 +201,7 @@ fn list_multipart_uploads_no_uploads() {
     let mut req = ListMultipartUploadsRequest::default();
     req.bucket = "test-bucket".to_owned();
 
-    let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
+    let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
     let result = client.list_multipart_uploads(req).sync().unwrap();
 
     assert_eq!(result.bucket, sstr("rusoto1440826568"));
@@ -238,7 +239,7 @@ fn should_parse_sample_list_buckets_response() {
             assert!(request.payload.is_none());
         });
 
-    let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
+    let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
     let result = client.list_buckets().sync().unwrap();
 
     let owner = result.owner.unwrap();
@@ -261,7 +262,7 @@ fn should_parse_headers() {
         .with_header("x-amz-expiration", "foo")
         .with_header("x-amz-restore", "bar");
 
-    let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
+    let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
     let request = HeadObjectRequest::default();
     let result = client.head_object(request).sync().unwrap();
 
@@ -304,7 +305,7 @@ fn should_serialize_complicated_request() {
             assert!(request.payload.is_none());
         });
 
-    let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
+    let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
     let _ = client.get_object(request).sync().unwrap();
 }
 
@@ -313,7 +314,7 @@ fn should_parse_location_constraint() {
     let body = MockResponseReader::read_response("test_resources/generated/valid", "s3-get-bucket-location.xml");
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
     
-    let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
+    let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
     let result = client.get_bucket_location(GetBucketLocationRequest {
         bucket: "example-bucket".to_owned()
     }).sync();
@@ -366,7 +367,7 @@ fn test_parse_no_such_bucket_error() {
         ..Default::default()
     };
 
-    let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
+    let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
     let result = client.list_objects_v2(request).sync();
     assert!(result.is_err());
     let err = result.err().unwrap();

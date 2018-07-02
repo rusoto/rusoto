@@ -8,7 +8,7 @@ use rusoto_mturk::{MechanicalTurkClient, MechanicalTurk, ListHITsRequest};
 
 #[test]
 fn should_list_hits() {
-    let client = MechanicalTurkClient::simple(Region::UsEast1);
+    let client = MechanicalTurkClient::new(Region::UsEast1);
     let request = ListHITsRequest::default();
 
     // If your AWS account isn't linked to a Mechanical Turk account, AWS returns an error
