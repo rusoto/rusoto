@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_list_rules() {
-    let client = CloudWatchEventsClient::simple(Region::UsEast1);
+    let client = CloudWatchEventsClient::new(Region::UsEast1);
     let request = ListRulesRequest::default();
 
     client.list_rules(request).sync().unwrap();

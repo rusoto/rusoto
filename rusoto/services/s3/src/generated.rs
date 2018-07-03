@@ -17,15 +17,13 @@ use std::io;
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
-use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::region;
 use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::{ClientInner, RusotoFuture};
+use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 use rusoto_core::request::HttpDispatchError;
 
-use hyper::StatusCode;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::xmlerror::*;
@@ -22255,48 +22253,41 @@ pub trait S3 {
     ) -> RusotoFuture<UploadPartCopyOutput, UploadPartCopyError>;
 }
 /// A client for the Amazon S3 API.
-pub struct S3Client<P = CredentialsProvider, D = RequestDispatcher>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    inner: ClientInner<P, D>,
+pub struct S3Client {
+    client: Client,
     region: region::Region,
 }
 
 impl S3Client {
-    /// Creates a simple client backed by an implicit event loop.
+    /// Creates a client backed by the default tokio event loop.
     ///
     /// The client will use the default credentials provider and tls client.
-    ///
-    /// See the `rusoto_core::reactor` module for more details.
-    pub fn simple(region: region::Region) -> S3Client {
-        S3Client::new(
-            RequestDispatcher::default(),
-            CredentialsProvider::default(),
-            region,
-        )
-    }
-}
-
-impl<P, D> S3Client<P, D>
-where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
-{
-    pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
+    pub fn new(region: region::Region) -> S3Client {
         S3Client {
-            inner: ClientInner::new(credentials_provider, request_dispatcher),
+            client: Client::shared(),
+            region: region,
+        }
+    }
+
+    pub fn new_with<P, D>(
+        request_dispatcher: D,
+        credentials_provider: P,
+        region: region::Region,
+    ) -> S3Client
+    where
+        P: ProvideAwsCredentials + Send + Sync + 'static,
+        P::Future: Send,
+        D: DispatchSignedRequest + Send + Sync + 'static,
+        D::Future: Send,
+    {
+        S3Client {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region: region,
         }
     }
 }
 
-impl<P, D> S3 for S3Client<P, D>
-where
-    P: ProvideAwsCredentials + 'static,
-    D: DispatchSignedRequest + 'static,
-{
+impl S3 for S3Client {
     /// <p>Aborts a multipart upload.</p><p>To verify that all parts have been removed, so you don't get charged for the part storage, you should call the List Parts operation and ensure the parts list is empty.</p>
     #[allow(unused_variables, warnings)]
     fn abort_multipart_upload(
@@ -22314,19 +22305,16 @@ where
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AbortMultipartUploadError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -22351,9 +22339,7 @@ where
                 };
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Completes a multipart upload by assembling previously uploaded parts.</p>
@@ -22384,19 +22370,16 @@ where
             request.set_payload(Some(Vec::new()));
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CompleteMultipartUploadError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -22442,9 +22425,7 @@ where
                 };
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a copy of an object that is already stored in Amazon S3.</p>
@@ -22622,19 +22603,16 @@ where
             );
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CopyObjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -22700,9 +22678,7 @@ where
                 };
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Creates a new bucket.</p>
@@ -22751,19 +22727,16 @@ where
             request.set_payload(Some(Vec::new()));
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateBucketError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -22788,9 +22761,7 @@ where
                 };
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Initiates a multipart upload and returns an upload ID.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
@@ -22911,19 +22882,16 @@ where
         params.put_key("uploads");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateMultipartUploadError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -22983,9 +22951,7 @@ where
                 };
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deletes the bucket. All objects (including all object versions and Delete Markers) in the bucket must be deleted before the bucket itself can be deleted.</p>
@@ -22995,22 +22961,17 @@ where
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Deletes an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
@@ -23028,22 +22989,17 @@ where
         params.put_key("analytics");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketAnalyticsConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Deletes the cors configuration information set for the bucket.</p>
@@ -23060,22 +23016,17 @@ where
         params.put_key("cors");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketCorsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Deletes the server-side encryption configuration from the bucket.</p>
@@ -23092,22 +23043,17 @@ where
         params.put_key("encryption");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketEncryptionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Deletes an inventory configuration (identified by the inventory ID) from the bucket.</p>
@@ -23125,22 +23071,17 @@ where
         params.put_key("inventory");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketInventoryConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Deletes the lifecycle configuration from the bucket.</p>
@@ -23157,22 +23098,17 @@ where
         params.put_key("lifecycle");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketLifecycleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Deletes a metrics configuration (specified by the metrics configuration ID) from the bucket.</p>
@@ -23190,22 +23126,17 @@ where
         params.put_key("metrics");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketMetricsConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Deletes the policy from the bucket.</p>
@@ -23222,22 +23153,17 @@ where
         params.put_key("policy");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Deletes the replication configuration from the bucket.</p>
@@ -23254,22 +23180,17 @@ where
         params.put_key("replication");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketReplicationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Deletes the tags from the bucket.</p>
@@ -23286,22 +23207,17 @@ where
         params.put_key("tagging");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketTaggingError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>This operation removes the website configuration from the bucket.</p>
@@ -23318,22 +23234,17 @@ where
         params.put_key("website");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketWebsiteError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object. If there isn&#39;t a null version, Amazon S3 does not remove any objects.</p>
@@ -23359,19 +23270,16 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteObjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -23404,9 +23312,7 @@ where
                 };
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Removes the tag-set from an existing object.</p>
@@ -23426,19 +23332,16 @@ where
         params.put_key("tagging");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteObjectTaggingError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -23463,9 +23366,7 @@ where
                 };
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>This operation enables you to delete multiple objects from a bucket using a single HTTP request. You may specify up to 1000 keys.</p>
@@ -23493,19 +23394,16 @@ where
         request.set_payload(Some(writer.into_inner()));
         request.set_content_md5_header();
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteObjectsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -23530,9 +23428,7 @@ where
                 };
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the accelerate configuration of a bucket.</p>
@@ -23550,19 +23446,16 @@ where
         params.put_key("accelerate");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketAccelerateConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -23585,9 +23478,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets the access control policy for the bucket.</p>
@@ -23604,19 +23495,16 @@ where
         params.put_key("acl");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketAclError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -23637,9 +23525,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
@@ -23658,19 +23544,16 @@ where
         params.put_key("analytics");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketAnalyticsConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -23693,9 +23576,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the cors configuration for the bucket.</p>
@@ -23712,19 +23593,16 @@ where
         params.put_key("cors");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketCorsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -23745,9 +23623,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the server-side encryption configuration of a bucket.</p>
@@ -23764,19 +23640,16 @@ where
         params.put_key("encryption");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketEncryptionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -23797,9 +23670,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns an inventory configuration (identified by the inventory ID) from the bucket.</p>
@@ -23818,19 +23689,16 @@ where
         params.put_key("inventory");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketInventoryConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -23853,9 +23721,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deprecated, see the GetBucketLifecycleConfiguration operation.</p>
@@ -23872,19 +23738,16 @@ where
         params.put_key("lifecycle");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketLifecycleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -23905,9 +23768,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the lifecycle configuration information set on the bucket.</p>
@@ -23925,19 +23786,16 @@ where
         params.put_key("lifecycle");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketLifecycleConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -23960,9 +23818,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the region the bucket resides in.</p>
@@ -23979,19 +23835,16 @@ where
         params.put_key("location");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketLocationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -24012,9 +23865,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the logging status of a bucket and the permissions users have to view and modify that status. To use GET, you must be the bucket owner.</p>
@@ -24031,19 +23882,16 @@ where
         params.put_key("logging");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketLoggingError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -24064,9 +23912,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Gets a metrics configuration (specified by the metrics configuration ID) from the bucket.</p>
@@ -24084,19 +23930,16 @@ where
         params.put_key("metrics");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketMetricsConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -24119,9 +23962,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Deprecated, see the GetBucketNotificationConfiguration operation.</p>
@@ -24138,19 +23979,16 @@ where
         params.put_key("notification");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketNotificationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -24173,9 +24011,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the notification configuration of a bucket.</p>
@@ -24192,19 +24028,16 @@ where
         params.put_key("notification");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketNotificationConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -24225,9 +24058,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the policy of a specified bucket.</p>
@@ -24244,27 +24075,22 @@ where
         params.put_key("policy");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().map(move |response| {
+            Box::new(response.buffer().from_err().map(move |response| {
                 let mut result = GetBucketPolicyOutput::default();
                 result.policy = Some(String::from_utf8_lossy(response.body.as_ref()).into());
 
                 result
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the replication configuration of a bucket.</p>
@@ -24281,19 +24107,16 @@ where
         params.put_key("replication");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketReplicationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -24314,9 +24137,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the request payment configuration of a bucket.</p>
@@ -24333,19 +24154,16 @@ where
         params.put_key("requestPayment");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketRequestPaymentError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -24366,9 +24184,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the tag set associated with the bucket.</p>
@@ -24385,19 +24201,16 @@ where
         params.put_key("tagging");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketTaggingError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -24418,9 +24231,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the versioning state of a bucket.</p>
@@ -24437,19 +24248,16 @@ where
         params.put_key("versioning");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketVersioningError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -24470,9 +24278,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the website configuration for a bucket.</p>
@@ -24489,19 +24295,16 @@ where
         params.put_key("website");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketWebsiteError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -24522,9 +24325,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Retrieves objects from Amazon S3.</p>
@@ -24605,12 +24406,9 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetObjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
@@ -24746,10 +24544,8 @@ where
                 let value = website_redirect_location.to_owned();
                 result.website_redirect_location = Some(value)
             };
-            future::Either::A(future::ok(result))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(result))
+        })
     }
 
     /// <p>Returns the access control list (ACL) of an object.</p>
@@ -24772,19 +24568,16 @@ where
         params.put_key("acl");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetObjectAclError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -24809,9 +24602,7 @@ where
                 };
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns the tag-set of an object.</p>
@@ -24831,19 +24622,16 @@ where
         params.put_key("tagging");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetObjectTaggingError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -24868,9 +24656,7 @@ where
                 };
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Return torrent files from a bucket.</p>
@@ -24890,12 +24676,9 @@ where
         params.put_key("torrent");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetObjectTorrentError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
@@ -24911,10 +24694,8 @@ where
                 let value = request_charged.to_owned();
                 result.request_charged = Some(value)
             };
-            future::Either::A(future::ok(result))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(result))
+        })
     }
 
     /// <p>This operation is useful to determine if a bucket exists and you have permission to access it.</p>
@@ -24924,22 +24705,17 @@ where
 
         let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(HeadBucketError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>The HEAD operation retrieves metadata from an object without returning the object itself. This operation is useful if you&#39;re only interested in an object&#39;s metadata. To use HEAD, you must have READ access to the object.</p>
@@ -25005,19 +24781,16 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(HeadObjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -25154,9 +24927,7 @@ where
                 };
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists the analytics configurations for the bucket.</p>
@@ -25177,19 +24948,16 @@ where
         params.put_key("analytics");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListBucketAnalyticsConfigurationsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -25212,9 +24980,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns a list of inventory configurations for the bucket.</p>
@@ -25235,19 +25001,16 @@ where
         params.put_key("inventory");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListBucketInventoryConfigurationsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -25270,9 +25033,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists the metrics configurations for the bucket.</p>
@@ -25293,19 +25054,16 @@ where
         params.put_key("metrics");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListBucketMetricsConfigurationsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -25328,9 +25086,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns a list of all buckets owned by the authenticated sender of the request.</p>
@@ -25340,19 +25096,16 @@ where
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListBucketsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -25373,9 +25126,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>This operation lists in-progress multipart uploads.</p>
@@ -25410,19 +25161,16 @@ where
         params.put_key("uploads");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListMultipartUploadsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -25443,9 +25191,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns metadata about all of the versions of objects in a bucket.</p>
@@ -25480,19 +25226,16 @@ where
         params.put_key("versions");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListObjectVersionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -25513,9 +25256,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket.</p>
@@ -25549,19 +25290,16 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListObjectsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -25582,9 +25320,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket. Note: ListObjectsV2 is the revised List Objects API and we recommend you use this revised API for new application development.</p>
@@ -25625,19 +25361,16 @@ where
         params.put("list-type", "2");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListObjectsV2Error::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -25658,9 +25391,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Lists the parts that have been uploaded for a specific multipart upload.</p>
@@ -25683,19 +25414,16 @@ where
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListPartsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -25728,9 +25456,7 @@ where
                 };
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Sets the accelerate configuration of an existing bucket.</p>
@@ -25754,22 +25480,17 @@ where
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketAccelerateConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Sets the permissions on a bucket using access control lists (ACL).</p>
@@ -25821,22 +25542,17 @@ where
             request.set_payload(Some(Vec::new()));
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketAclError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Sets an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
@@ -25861,22 +25577,17 @@ where
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketAnalyticsConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Sets the cors configuration for a bucket.</p>
@@ -25901,22 +25612,17 @@ where
         request.set_payload(Some(writer.into_inner()));
         request.set_content_md5_header();
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketCorsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Creates a new server-side encryption configuration (or replaces an existing one, if present).</p>
@@ -25943,22 +25649,17 @@ where
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketEncryptionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Adds an inventory configuration (identified by the inventory ID) from the bucket.</p>
@@ -25983,22 +25684,17 @@ where
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketInventoryConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Deprecated, see the PutBucketLifecycleConfiguration operation.</p>
@@ -26030,22 +25726,17 @@ where
         }
         request.set_content_md5_header();
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketLifecycleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Sets lifecycle configuration for your bucket. If a lifecycle configuration exists, it replaces it.</p>
@@ -26074,22 +25765,17 @@ where
         }
         request.set_content_md5_header();
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketLifecycleConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Set the logging parameters for a bucket and to specify permissions for who can view and modify the logging parameters. To set the logging status of a bucket, you must be the bucket owner.</p>
@@ -26116,22 +25802,17 @@ where
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketLoggingError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Sets a metrics configuration (specified by the metrics configuration ID) for the bucket.</p>
@@ -26156,22 +25837,17 @@ where
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketMetricsConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Deprecated, see the PutBucketNotificationConfiguraiton operation.</p>
@@ -26198,22 +25874,17 @@ where
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketNotificationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Enables notifications of specified events for a bucket.</p>
@@ -26237,22 +25908,17 @@ where
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketNotificationConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Replaces a policy on a bucket. If the bucket already has a policy, the one in this request completely replaces it.</p>
@@ -26283,22 +25949,17 @@ where
         PolicySerializer::serialize(&mut writer, "Policy", &input.policy);
         request.set_payload(Some(writer.into_inner()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Creates a new replication configuration (or replaces an existing one, if present).</p>
@@ -26326,22 +25987,17 @@ where
         request.set_payload(Some(writer.into_inner()));
         request.set_content_md5_header();
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketReplicationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Sets the request payment configuration for a bucket. By default, the bucket owner pays for downloads from the bucket. This configuration parameter enables the bucket owner (only) to specify that the person requesting the download will be charged for the download. Documentation on requester pays buckets can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html</p>
@@ -26368,22 +26024,17 @@ where
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketRequestPaymentError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Sets the tags for a bucket.</p>
@@ -26407,22 +26058,17 @@ where
         request.set_payload(Some(writer.into_inner()));
         request.set_content_md5_header();
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketTaggingError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Sets the versioning state of an existing bucket. To set the versioning state, you must be the bucket owner.</p>
@@ -26453,22 +26099,17 @@ where
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketVersioningError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Set the website configuration for a bucket.</p>
@@ -26495,22 +26136,17 @@ where
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketWebsiteError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(future::ok(::std::mem::drop(response)))
-        });
-
-        RusotoFuture::new(future)
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
     }
 
     /// <p>Adds an object to a bucket.</p>
@@ -26637,19 +26273,16 @@ where
             request.set_payload_stream(__body.len, __body.inner);
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutObjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -26713,9 +26346,7 @@ where
                 };
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>uses the acl subresource to set the access control list (ACL) permissions for an object that already exists in a bucket</p>
@@ -26777,19 +26408,16 @@ where
             request.set_payload(Some(Vec::new()));
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutObjectAclError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -26814,9 +26442,7 @@ where
                 };
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Sets the supplied tag-set to an object that already exists in a bucket</p>
@@ -26842,19 +26468,16 @@ where
         TaggingSerializer::serialize(&mut writer, "Tagging", &input.tagging);
         request.set_payload(Some(writer.into_inner()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutObjectTaggingError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -26879,9 +26502,7 @@ where
                 };
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Restores an archived copy of an object back into Amazon S3</p>
@@ -26915,19 +26536,16 @@ where
             request.set_payload(Some(Vec::new()));
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RestoreObjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -26957,9 +26575,7 @@ where
                 };
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>This operation filters the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response.</p>
@@ -27004,19 +26620,16 @@ where
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SelectObjectContentError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -27037,9 +26650,7 @@ where
 
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Uploads a part in a multipart upload.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
@@ -27092,19 +26703,16 @@ where
             request.set_payload_stream(__body.len, __body.inner);
         }
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UploadPartError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -27160,9 +26768,7 @@ where
                 };
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 
     /// <p>Uploads a part by copying data from an existing object as data source.</p>
@@ -27261,19 +26867,16 @@ where
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok
-                && response.status != StatusCode::NoContent
-                && response.status != StatusCode::PartialContent
-            {
-                return future::Either::B(response.buffer().from_err().and_then(|response| {
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UploadPartCopyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
             }
 
-            future::Either::A(response.buffer().from_err().and_then(move |response| {
+            Box::new(response.buffer().from_err().and_then(move |response| {
                 let mut result;
 
                 if response.body.is_empty() {
@@ -27331,9 +26934,7 @@ where
                 };
                 Ok(result)
             }))
-        });
-
-        RusotoFuture::new(future)
+        })
     }
 }
 
@@ -27353,7 +26954,7 @@ mod protocol_tests {
             "s3-create-bucket.xml",
         );
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
-        let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let client = S3Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateBucketRequest::default();
         let result = client.create_bucket(request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
@@ -27366,7 +26967,7 @@ mod protocol_tests {
             "s3-list-objects.xml",
         );
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
-        let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let client = S3Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListObjectsRequest::default();
         let result = client.list_objects(request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
@@ -27379,7 +26980,7 @@ mod protocol_tests {
             "s3-get-bucket-acl.xml",
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let client = S3Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetBucketAclRequest::default();
         let result = client.get_bucket_acl(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -27392,7 +26993,7 @@ mod protocol_tests {
             "s3-get-bucket-location.xml",
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let client = S3Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetBucketLocationRequest::default();
         let result = client.get_bucket_location(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -27405,7 +27006,7 @@ mod protocol_tests {
             "s3-get-bucket-logging.xml",
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let client = S3Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetBucketLoggingRequest::default();
         let result = client.get_bucket_logging(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -27418,7 +27019,7 @@ mod protocol_tests {
             "s3-get-bucket-policy.xml",
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let client = S3Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetBucketPolicyRequest::default();
         let result = client.get_bucket_policy(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -27431,7 +27032,7 @@ mod protocol_tests {
             "s3-list-buckets.xml",
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let client = S3Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
         let result = client.list_buckets().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -27444,7 +27045,7 @@ mod protocol_tests {
             "s3-list-multipart-uploads.xml",
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let client = S3Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListMultipartUploadsRequest::default();
         let result = client.list_multipart_uploads(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -27457,7 +27058,7 @@ mod protocol_tests {
             "s3-list-object-versions.xml",
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let client = S3Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListObjectVersionsRequest::default();
         let result = client.list_object_versions(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
@@ -27470,7 +27071,7 @@ mod protocol_tests {
             "s3-list-objects.xml",
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let client = S3Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListObjectsRequest::default();
         let result = client.list_objects(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);

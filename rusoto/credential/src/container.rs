@@ -5,9 +5,7 @@ use std::time::Duration;
 
 use futures::{Async, Future, Poll};
 use futures::future::{FutureResult, err};
-use hyper::{Uri, Request, Method};
-use hyper::header::Authorization;
-use tokio_core::reactor::Handle;
+use hyper::{Body, Request};
 
 use {AwsCredentials, CredentialsError, ProvideAwsCredentials,
      parse_credentials_from_aws_service, non_empty_env_var};
@@ -40,17 +38,13 @@ const AWS_CONTAINER_AUTHORIZATION_TOKEN: &str = "AWS_CONTAINER_AUTHORIZATION_TOK
 ///
 /// ```rust
 /// extern crate rusoto_credential;
-/// extern crate tokio_core;
 ///
 /// use std::time::Duration;
 ///
 /// use rusoto_credential::ContainerProvider;
-/// use tokio_core::reactor::Core;
 ///
 /// fn main() {
-///   let core = Core::new().unwrap();
-///
-///   let mut provider = ContainerProvider::new(&core.handle());
+///   let mut provider = ContainerProvider::new();
 ///   // you can overwrite the default timeout like this:
 ///   provider.set_timeout(Duration::from_secs(60));
 ///
@@ -65,9 +59,9 @@ pub struct ContainerProvider {
 
 impl ContainerProvider {
     /// Create a new provider with the given handle.
-    pub fn new(handle: &Handle) -> Self {
+    pub fn new() -> Self {
         ContainerProvider {
-            client: HttpClient::new(handle),
+            client: HttpClient::new(),
             timeout: Duration::from_secs(30)
         }
     }
@@ -121,7 +115,7 @@ fn credentials_from_container(client: &HttpClient, timeout: Duration) -> Result<
     Ok(client.request(request_from_env_vars()?, timeout))
 }
 
-fn request_from_env_vars() -> Result<Request, CredentialsError> {
+fn request_from_env_vars() -> Result<Request<Body>, CredentialsError> {
     let relative_uri = non_empty_env_var(AWS_CONTAINER_CREDENTIALS_RELATIVE_URI).map(
         |path| format!("http://{}{}", AWS_CREDENTIALS_PROVIDER_IP, path)
     );
@@ -130,8 +124,16 @@ fn request_from_env_vars() -> Result<Request, CredentialsError> {
         None => match non_empty_env_var(AWS_CONTAINER_CREDENTIALS_FULL_URI) {
             Some(ref uri) => {
                 let mut request = new_request(uri, AWS_CONTAINER_CREDENTIALS_FULL_URI)?;
-                let token = non_empty_env_var(AWS_CONTAINER_AUTHORIZATION_TOKEN);
-                token.map(|t| request.headers_mut().set(Authorization(t)));
+                if let Some(token) = non_empty_env_var(AWS_CONTAINER_AUTHORIZATION_TOKEN) {
+                    match token.parse() {
+                        Ok(parsed_token) => {
+                            request.headers_mut().insert("authorization", parsed_token);
+                        }
+                        Err(err) => {
+                            return Err(CredentialsError::new(format!("failed to parse token: {}", err)));
+                        }
+                    }
+                }
                 Ok(request)
             },
             None => Err(CredentialsError::new(
@@ -141,24 +143,20 @@ fn request_from_env_vars() -> Result<Request, CredentialsError> {
     }
 }
 
-fn new_request(uri: &str, env_var_name: &str) -> Result<Request, CredentialsError> {
-    uri.parse::<Uri>().map(
-            |uri| Request::new(Method::Get, uri)
-        ).or_else(|error| Err(
+fn new_request(uri: &str, env_var_name: &str) -> Result<Request<Body>, CredentialsError> {
+    Request::get(uri).body(Body::empty())
+        .map_err(|error|
              CredentialsError::new(
                  format!("Error while parsing URI '{}' derived from environment variable '{}': {}",
                          uri, env_var_name, error.description())
              )
         )
-    )
 }
 
 #[cfg(test)]
 mod tests {
     use std::env;
     use std::sync::{Mutex, MutexGuard};
-    use hyper::header::Authorization;
-    use hyper::header::Bearer;
     use super::*;
 
     // cargo runs tests in parallel, which leads to race conditions when changing
@@ -191,7 +189,7 @@ mod tests {
         assert!(result.is_ok());
         let request = result.ok().unwrap();
         assert_eq!(request.uri().path(), path);
-        assert_eq!(request.headers().has::<Authorization<Bearer>>(), false);
+        assert_eq!(request.headers().contains_key("authorization"), false);
     }
 
     #[test]
@@ -229,7 +227,7 @@ mod tests {
         assert!(result.is_ok());
         let request = result.ok().unwrap();
         assert_eq!(request.uri().to_string(), url);
-        assert_eq!(request.headers().has::<Authorization<Bearer>>(), true);
+        assert_eq!(request.headers().contains_key("authorization"), true);
     }
 
     #[test]
@@ -244,7 +242,7 @@ mod tests {
         assert!(result.is_ok());
         let request = result.ok().unwrap();
         assert_eq!(request.uri().to_string(), url);
-        assert_eq!(request.headers().has::<Authorization<Bearer>>(), false);
+        assert_eq!(request.headers().contains_key("authorization"), false);
     }
 
     #[test]
@@ -260,6 +258,6 @@ mod tests {
         assert!(result.is_ok());
         let request = result.ok().unwrap();
         assert_eq!(request.uri().to_string(), url);
-        assert_eq!(request.headers().has::<Authorization<Bearer>>(), false);
+        assert_eq!(request.headers().contains_key("authorization"), false);
     }
 }

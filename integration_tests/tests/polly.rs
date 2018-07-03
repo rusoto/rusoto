@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_describe_voices() {
-    let client = PollyClient::simple(Region::UsEast1);
+    let client = PollyClient::new(Region::UsEast1);
     let request = DescribeVoicesInput::default();
 
     println!("{:?}", client.describe_voices(request).sync().unwrap());

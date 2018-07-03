@@ -25,21 +25,21 @@ pub extern crate rusoto_credential as credential;
 extern crate serde;
 extern crate sha2;
 extern crate time;
-extern crate tokio_core;
+extern crate tokio;
+extern crate tokio_timer;
 extern crate url;
 extern crate xml;
 
 mod future;
-mod client_inner;
+mod client;
 
 pub mod param;
 pub mod region;
 pub mod request;
 pub mod signature;
-pub mod reactor;
 
 #[doc(hidden)]
-pub use client_inner::ClientInner;
+pub use client::Client;
 #[doc(hidden)]
 pub mod serialization;
 #[doc(hidden)]
@@ -47,14 +47,7 @@ pub mod xmlerror;
 #[doc(hidden)]
 pub mod xmlutil;
 
-pub use credential::{AwsCredentials, ChainProvider, ContainerProvider, CredentialsError,
-                     EnvironmentProvider, InstanceMetadataProvider, ProfileProvider,
-                     ProvideAwsCredentials, DefaultCredentialsProvider,
-                     DefaultCredentialsProviderSync, claims,
-                     AutoRefreshingProviderSync, AutoRefreshingProvider,
-                     BaseAutoRefreshingProvider};
-
-pub use region::{ParseRegionError, Region};
-pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError, TlsError, HttpClient};
-pub use signature::SignedRequest;
+pub use credential::{ProvideAwsCredentials, DefaultCredentialsProvider, CredentialsError};
+pub use request::{DispatchSignedRequest, HttpClient, HttpDispatchError};
+pub use region::Region;
 pub use future::RusotoFuture;

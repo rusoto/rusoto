@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_put_metric_data() {
-    let client = CloudWatchClient::simple(Region::UsEast1);
+    let client = CloudWatchClient::new(Region::UsEast1);
 
     let metric_data = vec![MetricDatum {
                                dimensions: Some(vec![Dimension {

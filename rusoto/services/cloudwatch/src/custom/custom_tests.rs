@@ -2,7 +2,8 @@ extern crate rusoto_mock;
 
 use ::{CloudWatch, CloudWatchClient, PutMetricDataInput, Dimension, MetricDatum};
 
-use rusoto_core::{Region, SignedRequest};
+use rusoto_core::Region;
+use rusoto_core::signature::SignedRequest;
 use self::rusoto_mock::*;
 
 #[test]
@@ -44,7 +45,7 @@ fn should_serialize_complex_metric_data_params() {
         metric_data: metric_data,
     };
 
-    let client = CloudWatchClient::new(mock, MockCredentialsProvider, Region::UsEast1);
+    let client = CloudWatchClient::new_with(mock, MockCredentialsProvider, Region::UsEast1);
     let response = client.put_metric_data(request).sync().unwrap();
     println!("{:#?}", response);
 }

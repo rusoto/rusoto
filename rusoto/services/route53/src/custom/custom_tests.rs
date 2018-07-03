@@ -23,7 +23,7 @@ fn test_parse_no_such_hosted_zone_error() {
         ..Default::default()
     };
 
-    let client = Route53Client::new(mock, MockCredentialsProvider, Region::UsEast1);
+    let client = Route53Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
     let result = client.list_resource_record_sets(request).sync();
     assert!(result.is_err());
     let err = result.err().unwrap();

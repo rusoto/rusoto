@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_describe_trails() {
-    let client = CloudTrailClient::simple(Region::UsEast1);
+    let client = CloudTrailClient::new(Region::UsEast1);
     let request = DescribeTrailsRequest::default();
 
     client.describe_trails(request).sync().unwrap();

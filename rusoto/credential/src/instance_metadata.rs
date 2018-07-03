@@ -4,8 +4,7 @@ use std::time::Duration;
 
 use futures::{Future, Poll};
 use futures::future::{FutureResult, result};
-use hyper::{Uri, Request, Method};
-use tokio_core::reactor::Handle;
+use hyper::Uri;
 
 use {AwsCredentials, CredentialsError, ProvideAwsCredentials,
      parse_credentials_from_aws_service};
@@ -23,17 +22,13 @@ const AWS_CREDENTIALS_PROVIDER_PATH: &str = "latest/meta-data/iam/security-crede
 ///
 /// ```rust
 /// extern crate rusoto_credential;
-/// extern crate tokio_core;
 ///
 /// use std::time::Duration;
 ///
 /// use rusoto_credential::InstanceMetadataProvider;
-/// use tokio_core::reactor::Core;
 ///
 /// fn main() {
-///   let core = Core::new().unwrap();
-///
-///   let mut provider = InstanceMetadataProvider::new(&core.handle());
+///   let mut provider = InstanceMetadataProvider::new();
 ///   // you can overwrite the default timeout like this:
 ///   provider.set_timeout(Duration::from_secs(60));
 ///
@@ -48,10 +43,9 @@ pub struct InstanceMetadataProvider {
 
 impl InstanceMetadataProvider {
     /// Create a new provider with the given handle.
-    pub fn new(handle: &Handle) -> Self {
-        let client = HttpClient::new(handle);
+    pub fn new() -> Self {
         InstanceMetadataProvider {
-            client: client,
+            client:  HttpClient::new(),
             timeout: Duration::from_secs(30)
         }
     }
@@ -125,8 +119,9 @@ fn get_role_name(client: &HttpClient, timeout: Duration) -> Result<HttpClientFut
         AWS_CREDENTIALS_PROVIDER_IP,
         AWS_CREDENTIALS_PROVIDER_PATH
     );
-    let uri = role_name_address.parse::<Uri>()?;
-    Ok(client.request(Request::new(Method::Get, uri), timeout))
+    let uri = role_name_address.parse::<Uri>()
+        .map_err(|err| CredentialsError::new(err))?;
+    Ok(client.get(uri, timeout))
 }
 
 /// Gets the credentials for an EC2 Instances IAM Role.
@@ -142,6 +137,8 @@ fn get_credentials_from_role(
         role_name
     );
 
-    let uri = credentials_provider_url.parse::<Uri>()?;
-    Ok(client.request(Request::new(Method::Get, uri), timeout))
+    let uri = credentials_provider_url.parse::<Uri>()
+        .map_err(|err| CredentialsError::new(err))?;
+
+    Ok(client.get(uri, timeout))
 }

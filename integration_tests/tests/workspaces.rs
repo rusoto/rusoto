@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_describe_workspaces() {
-    let client = WorkspacesClient::simple(Region::UsEast1);
+    let client = WorkspacesClient::new(Region::UsEast1);
     let request = DescribeWorkspacesRequest::default();
 
     client.describe_workspaces(request).sync().unwrap();

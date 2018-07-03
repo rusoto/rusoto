@@ -18,8 +18,7 @@ use futures::{Future, Stream};
 use futures_fs::FsPool;
 use rusoto_core::Region;
 use rusoto_core::ProvideAwsCredentials;
-use rusoto_core::credential::AwsCredentials;
-use rusoto_core::reactor::CredentialsProvider;
+use rusoto_core::credential::{AwsCredentials, DefaultCredentialsProvider};
 use rusoto_s3::util::PreSignedRequest;
 use rusoto_s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectError, GetObjectRequest,
                  PutObjectRequest, DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration,
@@ -44,8 +43,8 @@ fn test_all_the_things() {
         Region::UsEast1
     };
 
-    let client = S3Client::simple(region.clone());
-    let credentials = CredentialsProvider::default().credentials().wait().unwrap();
+    let client = S3Client::new(region.clone());
+    let credentials = DefaultCredentialsProvider::new().unwrap().credentials().wait().unwrap();
 
     let test_bucket = format!("rusoto-test-bucket-{}", get_time().sec);
     let filename = format!("test_file_{}", get_time().sec);

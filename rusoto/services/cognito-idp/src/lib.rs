@@ -17,13 +17,11 @@
 //! If you're using the service, you're probably looking for [CognitoIdentityProviderClient](struct.CognitoIdentityProviderClient.html) and [CognitoIdentityProvider](trait.CognitoIdentityProvider.html).
 
 extern crate futures;
-extern crate hyper;
 extern crate rusoto_core;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;
 extern crate serde_json;
-extern crate tokio_core;
 
 mod generated;
 mod custom;

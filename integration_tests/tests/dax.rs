@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_describe_clusters() {
-    let client = DynamodbAcceleratorClient::simple(Region::UsEast1);
+    let client = DynamodbAcceleratorClient::new(Region::UsEast1);
     let request = DescribeClustersRequest::default();
 
     client.describe_clusters(request).sync().unwrap();

@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_list_user_pools() {
-    let client = CognitoIdentityProviderClient::simple(Region::UsEast1);
+    let client = CognitoIdentityProviderClient::new(Region::UsEast1);
     let request = ListUserPoolsRequest{
     	max_results: 10,
     	..Default::default()

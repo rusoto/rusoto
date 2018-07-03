@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_describe_tags() {
-    let client = DatabaseMigrationServiceClient::simple(Region::UsEast1);
+    let client = DatabaseMigrationServiceClient::new(Region::UsEast1);
     let request = DescribeEndpointsMessage::default();
 
     let result = client.describe_endpoints(request).sync().unwrap();

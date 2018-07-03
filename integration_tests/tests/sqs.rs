@@ -16,7 +16,7 @@ use rusoto_core::Region;
 
 #[test]
 fn list_queues() {
-    let sqs = SqsClient::simple(Region::UsEast1);
+    let sqs = SqsClient::new(Region::UsEast1);
 
     let request = ListQueuesRequest { ..Default::default() };
 
@@ -27,7 +27,7 @@ fn list_queues() {
 #[test]
 fn sqs_roundtrip_tests() {
     let _ = env_logger::try_init();
-    let sqs = SqsClient::simple(Region::UsEast1);
+    let sqs = SqsClient::new(Region::UsEast1);
 
     // create a new queue
     let q_name = &format!("test_q_{}", rand::random::<u64>());
@@ -87,6 +87,7 @@ fn sqs_roundtrip_tests() {
         .expect("message should be available")
     {
         println!("Received message '{}' with id {}", msg.body.clone().unwrap(), msg.message_id.clone().unwrap());
+        println!("Receipt handle is {:?}", msg.receipt_handle);
 
         assert!(msg.body.unwrap().eq(&msg_str));
 
@@ -113,7 +114,7 @@ fn sqs_roundtrip_tests() {
 #[test]
 fn sqs_timeout_test() {
     let _ = env_logger::try_init();
-    let sqs = SqsClient::simple(Region::UsEast1);
+    let sqs = SqsClient::new(Region::UsEast1);
 
     let q_name = &format!("test_q_{}", rand::random::<u64>());
 
@@ -132,6 +133,7 @@ fn sqs_timeout_test() {
         ..Default::default()
     };
     let result = sqs.receive_message(receive_request).with_timeout(Duration::from_secs(2)).sync();
+    println!("sqs receive result: {:?}", result);
 
     let err = result.err().expect("receive did not fail as expected");
     assert!(err.to_string().find("Request timed out").is_some());
@@ -146,7 +148,7 @@ fn sqs_timeout_test() {
 #[test]
 fn sqs_bulk_roundtrip_tests() {
 	let _ = env_logger::try_init();
-	let sqs = SqsClient::simple(Region::UsEast1);
+	let sqs = SqsClient::new(Region::UsEast1);
 
 	// create a new queue
 	let q_name = &format!("test_q_{}", rand::random::<u64>());

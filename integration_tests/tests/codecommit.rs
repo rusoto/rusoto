@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_list_repositories() {
-    let client = CodeCommitClient::simple(Region::UsEast1);
+    let client = CodeCommitClient::new(Region::UsEast1);
     let request = ListRepositoriesInput::default();
 
     client.list_repositories(request).sync().unwrap();

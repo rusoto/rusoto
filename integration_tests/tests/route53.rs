@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_list_hosted_zones() {
-    let client = Route53Client::simple(Region::UsEast1);
+    let client = Route53Client::new(Region::UsEast1);
     let request = ListHostedZonesRequest::default();
 
     client.list_hosted_zones(request).sync().unwrap();

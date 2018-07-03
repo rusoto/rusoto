@@ -15,7 +15,7 @@ use rusoto_core::Region;
 fn should_describe_tags() {
     let _ = env_logger::try_init();
     
-    let client = DiscoveryClient::simple(Region::UsWest2);
+    let client = DiscoveryClient::new(Region::UsWest2);
     let request = DescribeTagsRequest::default();
 
     match client.describe_tags(request).sync() {
@@ -31,7 +31,7 @@ fn should_describe_tags() {
 fn should_list_configurations() {
     let _ = env_logger::try_init();
 
-    let client = DiscoveryClient::simple(Region::UsWest2);
+    let client = DiscoveryClient::new(Region::UsWest2);
     let request = ListConfigurationsRequest{
         configuration_type: "SERVER".to_owned(),
         ..Default::default()

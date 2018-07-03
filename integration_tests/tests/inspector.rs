@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_list_assessment_runs() {
-    let client = InspectorClient::simple(Region::UsEast1);
+    let client = InspectorClient::new(Region::UsEast1);
     let request = ListAssessmentRunsRequest::default();
 
     client.list_assessment_runs(request).sync().unwrap();

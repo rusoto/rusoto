@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_list_clusters() {
-    let client = EmrClient::simple(Region::UsEast1);
+    let client = EmrClient::new(Region::UsEast1);
     let request = ListClustersInput::default();
 
     client.list_clusters(request).sync().unwrap();
@@ -16,7 +16,7 @@ fn should_list_clusters() {
 
 #[test]
 fn should_handle_deprecation_gracefully() {
-    let client = EmrClient::simple(Region::UsEast1);
+    let client = EmrClient::new(Region::UsEast1);
     let request = DescribeJobFlowsInput::default();
 
     match client.describe_job_flows(request).sync() {

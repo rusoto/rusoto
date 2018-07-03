@@ -9,7 +9,7 @@ use rusoto_core::Region;
 #[test]
 pub fn should_list_devices() {
     
-    let client = DeviceFarmClient::simple(Region::UsWest2);
+    let client = DeviceFarmClient::new(Region::UsWest2);
     let request = ListDevicesRequest::default();
 
     client.list_devices(request).sync().unwrap();

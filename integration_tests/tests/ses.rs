@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_list_verified_email_addresses() {
-    let client = SesClient::simple(Region::UsEast1);
+    let client = SesClient::new(Region::UsEast1);
 
     let result = client.list_verified_email_addresses().sync().unwrap();
     println!("{:#?}", result);

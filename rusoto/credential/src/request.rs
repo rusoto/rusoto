@@ -1,14 +1,13 @@
 use std::io::{Error as IoError};
 use std::io::ErrorKind::InvalidData;
 use std::mem;
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 use futures::{Async, Future, Poll, Stream};
-use futures::future::{Either, Select2};
 use futures::stream::Concat2;
-use hyper::{Client as HyperClient, Body, Request};
-use hyper::client::{FutureResponse as HyperFutureResponse, HttpConnector};
-use tokio_core::reactor::{Handle, Timeout};
+use hyper::{Client as HyperClient, Body, Request, Uri};
+use hyper::client::{ResponseFuture as HyperResponseFuture, HttpConnector};
+use tokio_timer::Deadline;
 
 use super::CredentialsError;
 
@@ -16,7 +15,7 @@ use super::CredentialsError;
 pub struct HttpClientFuture(ClientFutureInner);
 
 enum RequestFuture {
-    Waiting(HyperFutureResponse),
+    Waiting(HyperResponseFuture),
     Buffering(Concat2<Body>),
     Swapping
 }
@@ -39,7 +38,7 @@ impl Future for RequestFuture {
                                 message: format!("Invalid Response Code: {}", res.status())
                             })
                         } else {
-                            *self = RequestFuture::Buffering(res.body().concat2());
+                            *self = RequestFuture::Buffering(res.into_body().concat2());
                             self.poll()
                         }
                     }
@@ -64,7 +63,7 @@ impl Future for RequestFuture {
 }
 
 enum ClientFutureInner {
-    Request(Select2<RequestFuture, Timeout>),
+    Request(Deadline<RequestFuture>),
     Error(String)
 }
 
@@ -76,18 +75,17 @@ impl Future for HttpClientFuture {
         match self.0 {
             ClientFutureInner::Error(ref message) =>
                 Err(CredentialsError { message: message.clone() }),
-            ClientFutureInner::Request(ref mut select_future) => {
-                match select_future.poll() {
-                    Err(Either::A((err, _))) =>
-                        Err(err),
-                    Err(Either::B((io_err, _))) =>
-                        Err(io_err.into()),
+            ClientFutureInner::Request(ref mut deadline_future) => {
+                match deadline_future.poll() {
+                    Err(deadline_error) => {
+                        Err(CredentialsError {
+                            message: deadline_error.to_string()
+                        })
+                    }
                     Ok(Async::NotReady) =>
                         Ok(Async::NotReady),
-                    Ok(Async::Ready(Either::A((body, _)))) =>
+                    Ok(Async::Ready(body)) =>
                         Ok(Async::Ready(body)),
-                    Ok(Async::Ready(Either::B(((), _)))) =>
-                        Err(CredentialsError { message: "Request timed out".into() })
                 }
             }
         }
@@ -97,30 +95,28 @@ impl Future for HttpClientFuture {
 /// Http client for use in a credentials provider.
 #[derive(Debug, Clone)]
 pub struct HttpClient {
-    inner: HyperClient<HttpConnector>,
-    handle: Handle
+    inner: HyperClient<HttpConnector>
 }
 
 impl HttpClient {
     /// Create an http client.
-    pub fn new(handle: &Handle) -> HttpClient {
+    pub fn new() -> HttpClient {
         HttpClient {
-            inner: HyperClient::configure().build(handle),
-            handle: handle.clone()
+            inner: HyperClient::new(),
         }
     }
 
-    pub fn request(&self, request: Request, timeout: Duration) -> HttpClientFuture {
-        let request_future = RequestFuture::Waiting(self.inner.request(request));
+    pub fn get(&self, uri: Uri, timeout: Duration) -> HttpClientFuture {
+        match Request::get(uri).body(Body::empty()) {
+            Ok(request) => self.request(request, timeout),
+            Err(err) => HttpClientFuture(ClientFutureInner::Error(err.to_string())),
+        }
+    }
 
-        let inner = match Timeout::new(timeout, &self.handle) {
-            Err(err) => ClientFutureInner::Error(format!("Error creating timeout future {}", err)),
-            Ok(timeout_future) => {
-                let future = request_future.select2(timeout_future);
-                ClientFutureInner::Request(future)
-            }
-        };
-
+    pub fn request(&self, req: Request<Body>, timeout: Duration) -> HttpClientFuture {
+        let future = RequestFuture::Waiting(self.inner.request(req));
+        let deadline = Instant::now() + timeout;
+        let inner = ClientFutureInner::Request(Deadline::new(future, deadline));
         HttpClientFuture(inner)
     }
 }
