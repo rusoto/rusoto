@@ -4,7 +4,7 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::region::Region;
 use rusoto_core::credential::AwsCredentials;
 use generated::{GetObjectRequest, PutObjectRequest, DeleteObjectRequest};
-
+use std::time::Duration;
 /// URL encodes an S3 object key. This is necessary for `copy_object` and `upload_part_copy`,
 /// which require the `copy_source` field to be URL encoded.
 ///
@@ -59,14 +59,27 @@ macro_rules! add_params {
     });
 }
 
+pub struct PreSignedRequestOption {
+    pub expires_in: Duration
+}
+
+impl Default for PreSignedRequestOption {
+    fn default() -> Self {
+        Self {
+            expires_in: Duration::from_secs(3600)
+        }
+    }
+}
+
+
 pub trait PreSignedRequest {
     /// http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html
-    fn get_presigned_url(&self, region: &Region, credentials: &AwsCredentials) -> String;
+    fn get_presigned_url(&self, region: &Region, credentials: &AwsCredentials, option: &PreSignedRequestOption) -> String;
 }
 
 impl PreSignedRequest for GetObjectRequest {
     /// https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGET.html
-    fn get_presigned_url(&self, region: &Region, credentials: &AwsCredentials) -> String {
+    fn get_presigned_url(&self, region: &Region, credentials: &AwsCredentials, option: &PreSignedRequestOption) -> String {
         let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
         let mut request = SignedRequest::new("GET", "s3", &region, &request_uri);
         let mut params = Params::new();
@@ -96,13 +109,13 @@ impl PreSignedRequest for GetObjectRequest {
         );
 
         request.set_params(params);
-        request.generate_presigned_url(&credentials)
+        request.generate_presigned_url(credentials, &option.expires_in)
     }
 }
 
 impl PreSignedRequest for PutObjectRequest {
     /// https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPUT.html
-    fn get_presigned_url(&self, region: &Region, credentials: &AwsCredentials) -> String {
+    fn get_presigned_url(&self, region: &Region, credentials: &AwsCredentials, option: &PreSignedRequestOption) -> String {
         let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
         let mut request = SignedRequest::new("PUT", "s3", &region, &request_uri);
 
@@ -143,13 +156,13 @@ impl PreSignedRequest for PutObjectRequest {
             }
         }
 
-        request.generate_presigned_url(&credentials)
+        request.generate_presigned_url(credentials, &option.expires_in)
     }
 }
 
 impl PreSignedRequest for DeleteObjectRequest {
     /// https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectDELETE.html
-    fn get_presigned_url(&self, region: &Region, credentials: &AwsCredentials) -> String {
+    fn get_presigned_url(&self, region: &Region, credentials: &AwsCredentials, option: &PreSignedRequestOption) -> String {
         let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
         let mut request = SignedRequest::new("DELETE", "s3", &region, &request_uri);
         let mut params = Params::new();
@@ -165,6 +178,6 @@ impl PreSignedRequest for DeleteObjectRequest {
         );
 
         request.set_params(params);
-        request.generate_presigned_url(&credentials)
+        request.generate_presigned_url(credentials, &option.expires_in)
     }
 }
