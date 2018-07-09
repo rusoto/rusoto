@@ -539,7 +539,7 @@ fn test_get_object_with_expired_presigned_url(region: &Region, credentials: &Aws
         expires_in: ::std::time::Duration::from_secs(1)
     };
     let presigned_url = req.get_presigned_url(region, credentials, &opt);
-    ::std::thread::sleep(::std::time::Duration::from_secs(1));
+    ::std::thread::sleep(::std::time::Duration::from_secs(2));
     println!("get object presigned url: {:#?}", presigned_url);
     let res = reqwest::get(&presigned_url).unwrap();
     assert_eq!(res.status(), reqwest::StatusCode::Forbidden);
