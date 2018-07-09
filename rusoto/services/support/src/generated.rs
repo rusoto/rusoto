@@ -90,7 +90,7 @@ pub struct Attachment {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     pub data: Option<Vec<u8>>,
     /// <p>The name of the attachment file.</p>

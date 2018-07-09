@@ -918,7 +918,7 @@ pub struct Loa {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     pub loa_content: Option<Vec<u8>>,
     #[serde(rename = "loaContentType")]

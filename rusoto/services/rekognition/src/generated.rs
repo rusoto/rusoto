@@ -960,7 +960,7 @@ pub struct Image {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     pub bytes: Option<Vec<u8>>,
     /// <p>Identifies an S3 object as the image source.</p>

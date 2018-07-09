@@ -97,7 +97,7 @@ pub struct Certificate {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     pub certificate_wallet: Option<Vec<u8>>,
     /// <p>The key length of the cryptographic algorithm being used.</p>
@@ -1182,7 +1182,7 @@ pub struct ImportCertificateMessage {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     pub certificate_wallet: Option<Vec<u8>>,
     /// <p>The tags associated with the certificate.</p>

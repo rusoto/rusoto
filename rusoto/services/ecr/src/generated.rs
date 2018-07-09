@@ -894,7 +894,7 @@ pub struct UploadLayerPartRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     pub layer_part_blob: Vec<u8>,
     /// <p>The integer value of the first byte of the layer part.</p>
