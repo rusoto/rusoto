@@ -5,16 +5,13 @@
 //! log group.
 
 extern crate chrono;
-extern crate dotenv;
 extern crate rusoto_core;
 extern crate rusoto_logs;
 
-use dotenv::dotenv;
 use chrono::{Utc};
 
 use std::default::Default;
-use rusoto_core::{EnvironmentProvider, Region};
-use rusoto_core::reactor::RequestDispatcher;
+use rusoto_core::Region;
 use rusoto_logs::{CloudWatchLogs,
   CloudWatchLogsClient,
   DescribeLogStreamsRequest,
@@ -24,13 +21,9 @@ use rusoto_logs::{CloudWatchLogs,
 fn main() {
     const LOG_GROUP_NAME: &'static str = "testing";
     const LOG_STREAM_NAME: &'static str = "testing";
-    // AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY stored in a local .env file
-    dotenv().ok();
-    let request_dispatcher: RequestDispatcher = Default::default();
 
-    // EnvironmentProvider automatically grabs the credentials from the env
-    let client = CloudWatchLogsClient::new(request_dispatcher,
-      EnvironmentProvider, Region::UsEast2);
+    let client = CloudWatchLogsClient::new(Region::UsEast2);
+
     let input_log_event = InputLogEvent {
         message: "Test log message".to_string(),
         timestamp: Utc::now().timestamp_millis(), // milliseconds epoch
@@ -39,7 +32,7 @@ fn main() {
     // We need the log stream to get the sequence token
     let mut desc_streams_req: DescribeLogStreamsRequest = Default::default();
     desc_streams_req.log_group_name = LOG_GROUP_NAME.to_string();
-    let streams_resp = client.describe_log_streams(&desc_streams_req).sync();
+    let streams_resp = client.describe_log_streams(desc_streams_req).sync();
     let log_streams = streams_resp.unwrap().log_streams.unwrap();
     let stream = &log_streams
       .iter()
@@ -54,6 +47,6 @@ fn main() {
         sequence_token: sequence_token,
     };
 
-    let resp = client.put_log_events(&put_log_events_request).sync();
+    let resp = client.put_log_events(put_log_events_request).sync();
     println!("{:#?}", resp);
 }
