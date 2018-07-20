@@ -7,6 +7,7 @@
 //! Types for loading and managing AWS access credentials for API requests.
 
 extern crate chrono;
+extern crate dirs;
 #[macro_use]
 extern crate futures;
 extern crate hyper;

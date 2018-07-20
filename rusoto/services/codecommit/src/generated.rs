@@ -401,7 +401,7 @@ pub struct GetBlobOutput {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     pub content: Vec<u8>,
 }
@@ -1107,7 +1107,7 @@ pub struct PutFileInput {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     pub file_content: Vec<u8>,
     /// <p>The file mode permissions of the blob. Valid file mode permissions are listed below.</p>

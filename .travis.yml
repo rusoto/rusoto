@@ -1,7 +1,6 @@
-sudo: required
-dist: trusty
 language: rust
 # cache dependencies: https://docs.travis-ci.com/user/caching/#Rust-Cargo-cache
+osx_image: xcode9.4
 cache:
   directories:
     - ~/.cargo
@@ -18,8 +17,18 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then ulimit -n 1024; fi
 script:
   - |
-      if [ "$JOB" = "unit_tests" ]; then
-        echo "Running Rusoto tests" && cargo update && cargo test --all -v
+      if [ "$JOB" = "unit_tests_A" ]; then
+        echo "Running Rusoto tests (phase A)" \
+         && pip install --user toml \
+         && .travis/split_workspace 1 2 \
+         && cargo test --all -v
+      fi
+  - |
+      if [ "$JOB" = "unit_tests_B" ]; then
+        echo "Running Rusoto tests (phase B)" \
+         && pip install --user toml \
+         && .travis/split_workspace 2 2 \
+         && cargo test --all -v
       fi
   - |
       if [ "$JOB" = "integration_tests_and_docs" ]; then
@@ -47,7 +56,8 @@ env:
     - RUST_BACKTRACE=1
     - CARGO_INCREMENTAL=0
   matrix:
-    - JOB=unit_tests
+    - JOB=unit_tests_A
+    - JOB=unit_tests_B
     - JOB=integration_tests_and_docs
 branches:
   only:

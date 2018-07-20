@@ -1,12 +1,12 @@
 //! The Credentials Provider for Credentials stored in a profile inside of a Credentials file.
 
 use std::collections::HashMap;
-use std::env::{home_dir};
 use std::fs;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
 
+use dirs::home_dir;
 use futures::{Future, Poll};
 use futures::future::{FutureResult, result};
 use regex::Regex;
@@ -76,7 +76,7 @@ impl ProfileProvider {
                 Ok(home_path)
             }
             None => Err(CredentialsError::new(
-                "The environment variable HOME must be set.",
+                "Failed to determine home directory.",
             )),
         }
     }
