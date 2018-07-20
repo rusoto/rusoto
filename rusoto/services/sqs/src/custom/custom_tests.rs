@@ -3,7 +3,8 @@ extern crate rusoto_mock;
 use std::collections::HashMap;
 use ::{Sqs, SqsClient, SendMessageRequest, ReceiveMessageRequest, MessageAttributeValue, GetQueueUrlRequest, GetQueueUrlError};
 
-use rusoto_core::{Region, SignedRequest};
+use rusoto_core::Region;
+use rusoto_core::signature::SignedRequest;
 use self::rusoto_mock::*;
 
 #[test]
@@ -57,7 +58,7 @@ fn should_serialize_map_parameters_in_query_string() {
         ..Default::default()
     };
 
-    let client = SqsClient::new(mock, MockCredentialsProvider, Region::UsEast1);
+    let client = SqsClient::new_with(mock, MockCredentialsProvider, Region::UsEast1);
     let _result = client.send_message(request).sync().unwrap();
 }
 
@@ -114,7 +115,7 @@ fn should_fix_issue_323() {
         ..Default::default()
     };
 
-    let client = SqsClient::new(mock, MockCredentialsProvider, Region::UsEast1);
+    let client = SqsClient::new_with(mock, MockCredentialsProvider, Region::UsEast1);
     let _result = client.receive_message(request).sync().unwrap();
 }
 
@@ -137,7 +138,7 @@ fn test_parse_queue_does_not_exist_error() {
         ..Default::default()
     };
 
-    let client = SqsClient::new(mock, MockCredentialsProvider, Region::UsEast1);
+    let client = SqsClient::new_with(mock, MockCredentialsProvider, Region::UsEast1);
     let result = client.get_queue_url(request).sync();
     assert!(result.is_err());
     let err = result.err().unwrap();

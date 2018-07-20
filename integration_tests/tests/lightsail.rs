@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_list_domains() {
-    let client = LightsailClient::simple(Region::UsEast1);
+    let client = LightsailClient::new(Region::UsEast1);
     let request = GetDomainsRequest::default();
 
     let result = client.get_domains(request).sync().unwrap();

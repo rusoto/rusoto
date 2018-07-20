@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_describe_report_definitions() {
-    let client = CostAndUsageReportClient::simple(Region::UsEast1);
+    let client = CostAndUsageReportClient::new(Region::UsEast1);
     let request = DescribeReportDefinitionsRequest::default();
 
     let result = client.describe_report_definitions(request).sync().unwrap();

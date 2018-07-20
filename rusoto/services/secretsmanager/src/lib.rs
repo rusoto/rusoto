@@ -17,13 +17,11 @@
 //! If you're using the service, you're probably looking for [SecretsManagerClient](struct.SecretsManagerClient.html) and [SecretsManager](trait.SecretsManager.html).
 
 extern crate futures;
-extern crate hyper;
 extern crate rusoto_core;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;
 extern crate serde_json;
-extern crate tokio_core;
 
 mod generated;
 mod custom;

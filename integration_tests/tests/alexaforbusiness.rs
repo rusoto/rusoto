@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_list_skills() {
-    let client = AlexaForBusinessClient::simple(Region::UsEast1);
+    let client = AlexaForBusinessClient::new(Region::UsEast1);
     let request = ListSkillsRequest::default();
 
     let response = client.list_skills(request).sync();

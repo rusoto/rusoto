@@ -10,7 +10,7 @@ use rusoto_core::Region;
 #[test]
 fn should_list_vaults() {
     let _ = env_logger::try_init();
-    let client = GlacierClient::simple(Region::UsWest2);
+    let client = GlacierClient::new(Region::UsWest2);
     // account id can be provided or use the account that signed the request with `-`.
     // http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vaults-get.html
     let request = ListVaultsInput{

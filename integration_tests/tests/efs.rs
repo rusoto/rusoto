@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_describe_filesystems() {
-    let client = EfsClient::simple(Region::UsEast1);
+    let client = EfsClient::new(Region::UsEast1);
     let request = DescribeFileSystemsRequest::default();
 
     let result = client.describe_file_systems(request).sync().unwrap();

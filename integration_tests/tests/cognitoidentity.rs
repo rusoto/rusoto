@@ -9,7 +9,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_list_identity_pools() {
-    let client = CognitoIdentityClient::simple(Region::UsEast1);
+    let client = CognitoIdentityClient::new(Region::UsEast1);
 
     let mut request = ListIdentityPoolsInput::default();
     request.max_results = 10;
@@ -19,7 +19,7 @@ fn should_list_identity_pools() {
 
 #[test]
 fn should_handle_validation_errors_gracefully() {
-    let client = CognitoIdentityClient::simple(Region::UsEast1);
+    let client = CognitoIdentityClient::new(Region::UsEast1);
 
     let mut request = ListIdentitiesInput::default();
     request.max_results = 10;

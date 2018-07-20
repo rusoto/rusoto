@@ -10,7 +10,7 @@ use rusoto_core::Region;
 #[test]
 fn should_describe_fleets() {
     let _ = env_logger::try_init();
-    let client = AppStreamClient::simple(Region::UsEast1);
+    let client = AppStreamClient::new(Region::UsEast1);
     let request = DescribeFleetsRequest::default();
 
 	let result = client.describe_fleets(request).sync().unwrap();

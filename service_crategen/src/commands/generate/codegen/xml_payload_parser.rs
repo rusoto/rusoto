@@ -40,7 +40,7 @@ pub fn generate_response_parser(service: &Service,
                                 parse_non_payload: &str)
                                 -> String {
     if operation.output.is_none() {
-        return "future::Either::A(future::ok(::std::mem::drop(response)))".to_string();
+        return "Box::new(future::ok(::std::mem::drop(response)))".to_string();
     }
 
     let shape_name = &operation.output.as_ref()
@@ -80,7 +80,7 @@ fn payload_body_parser(payload_type: ShapeType,
     match payload_type {
         ShapeType::Blob if !streaming => {
             format!("
-                future::Either::A(response.buffer().from_err().map(move |response| {{
+                Box::new(response.buffer().from_err().map(move |response| {{
                     let mut result = {output_shape}::default();
                     result.{payload_member} = Some(response.body);
                     {parse_non_payload}
@@ -96,7 +96,7 @@ fn payload_body_parser(payload_type: ShapeType,
                 let mut result = {output_shape}::default();
                 result.{payload_member} = Some({streaming_constructor} {{ len: None, inner: response.body }});
                 {parse_non_payload}
-                future::Either::A(future::ok(result))
+                Box::new(future::ok(result))
                 ",
                     output_shape = output_shape,
                     payload_member = payload_member.to_snake_case(),
@@ -105,7 +105,7 @@ fn payload_body_parser(payload_type: ShapeType,
         },
         _ => {
             format!("
-                future::Either::A(response.buffer().from_err().map(move |response| {{
+                Box::new(response.buffer().from_err().map(move |response| {{
                     let mut result = {output_shape}::default();
                     result.{payload_member} = Some(String::from_utf8_lossy(response.body.as_ref()).into());
                     {parse_non_payload}
@@ -146,7 +146,7 @@ fn xml_body_parser(output_shape: &str,
     };
 
     format!("
-        future::Either::A(response.buffer().from_err().and_then(move |response| {{
+        Box::new(response.buffer().from_err().and_then(move |response| {{
             {let_result}
 
             if response.body.is_empty() {{

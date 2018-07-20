@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_list_pipelines() {
-    let client = DataPipelineClient::simple(Region::UsEast1);
+    let client = DataPipelineClient::new(Region::UsEast1);
     let request = ListPipelinesInput::default();
 
     client.list_pipelines(request).sync().unwrap();

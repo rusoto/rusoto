@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_get_bots() {
-    let client = LexModelsClient::simple(Region::UsEast1);
+    let client = LexModelsClient::new(Region::UsEast1);
     let request = GetBotsRequest::default();
 
     let result = client.get_bots(request).sync().unwrap();

@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_describe_addresses() {
-    let client = SnowballClient::simple(Region::UsEast1);
+    let client = SnowballClient::new(Region::UsEast1);
     let request = DescribeAddressesRequest::default();
 
     let result = client.describe_addresses(request).sync().unwrap();

@@ -18,9 +18,7 @@
 
 extern crate chrono;
 extern crate futures;
-extern crate hyper;
 extern crate rusoto_core;
-extern crate tokio_core;
 extern crate xml;
 
 mod generated;

@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_list_streams() {
-    let client = DynamoDbStreamsClient::simple(Region::UsEast1);
+    let client = DynamoDbStreamsClient::new(Region::UsEast1);
     let request = ListStreamsInput::default();
 
     client.list_streams(request).sync().unwrap();

@@ -7,13 +7,14 @@
 //! Types for loading and managing AWS access credentials for API requests.
 
 extern crate chrono;
+extern crate dirs;
 #[macro_use]
 extern crate futures;
 extern crate hyper;
 extern crate hyper_tls;
 extern crate regex;
 extern crate serde_json;
-extern crate tokio_core;
+extern crate tokio_timer;
 
 pub use environment::{EnvironmentProvider, EnvironmentProviderFuture};
 pub use container::{ContainerProvider, ContainerProviderFuture};
@@ -38,16 +39,13 @@ use std::ops::Deref;
 use std::sync::{Arc, Mutex};
 use std::rc::Rc;
 use std::time::Duration;
-use std::cell::RefCell;
 use std::collections::BTreeMap;
 
 use chrono::{DateTime, Duration as ChronoDuration, ParseError, Utc};
 use futures::{Async, Future, Poll};
 use futures::future::{err, Either, Shared, SharedItem};
 use hyper::Error as HyperError;
-use hyper::error::UriError;
 use serde_json::{from_str as json_from_str, Value};
-use tokio_core::reactor::Handle;
 
 /// AWS API access credentials, including access key, secret key, token (for IAM profiles),
 /// expiration timestamp, and claims from federated login.
@@ -152,10 +150,10 @@ impl CredentialsError {
     /// * `message` - The Error message for this CredentialsError.
     pub fn new<S>(message: S) -> CredentialsError
     where
-        S: Into<String>,
+        S: ToString,
     {
         CredentialsError {
-            message: message.into(),
+            message: message.to_string(),
         }
     }
 }
@@ -180,12 +178,6 @@ impl From<ParseError> for CredentialsError {
 
 impl From<IoError> for CredentialsError {
     fn from(err: IoError) -> CredentialsError {
-        CredentialsError::new(err.description())
-    }
-}
-
-impl From<UriError> for CredentialsError {
-    fn from(err: UriError) -> CredentialsError {
         CredentialsError::new(err.description())
     }
 }
@@ -226,12 +218,21 @@ impl<P: ProvideAwsCredentials> ProvideAwsCredentials for Arc<P> {
 /// In order to access the wrapped provider, for instance to set a timeout, the `get_ref`
 /// and `get_mut` methods can be used.
 #[derive(Debug)]
-pub struct BaseAutoRefreshingProvider<P: ProvideAwsCredentials + 'static, T> {
+pub struct AutoRefreshingProvider<P: ProvideAwsCredentials + 'static> {
     credentials_provider: P,
-    shared_future: T,
+    shared_future: Mutex<Shared<P::Future>>,
 }
 
-impl<P: ProvideAwsCredentials + 'static, T> BaseAutoRefreshingProvider<P, T> {
+impl<P: ProvideAwsCredentials + 'static> AutoRefreshingProvider<P> {
+    /// Create a new `AutoRefreshingProvider` around the provided base provider.
+    pub fn new(provider: P) -> Result<AutoRefreshingProvider<P>, CredentialsError> {
+        let future = provider.credentials();
+        Ok(AutoRefreshingProvider {
+            credentials_provider: provider,
+            shared_future: Mutex::new(future.shared()),
+        })
+    }
+
     /// Get a shared reference to the wrapped provider.
     pub fn get_ref(&self) -> &P {
         &self.credentials_provider
@@ -305,22 +306,7 @@ impl<P: ProvideAwsCredentials + 'static> Future for AutoRefreshingProviderFuture
     }
 }
 
-/// Threadsafe `AutoRefreshingProvider` that locks cached credentials with a `Mutex`
-pub type AutoRefreshingProviderSync<P> =
-    BaseAutoRefreshingProvider<P, Mutex<Shared<<P as ProvideAwsCredentials>::Future>>>;
-
-impl<P: ProvideAwsCredentials + 'static> AutoRefreshingProviderSync<P> {
-    /// Grab a RefreshingProvider that locks it's credentials with a Mutex so it's thread safe.
-    pub fn with_mutex(provider: P) -> Result<AutoRefreshingProviderSync<P>, CredentialsError> {
-        let future = provider.credentials();
-        Ok(BaseAutoRefreshingProvider {
-            credentials_provider: provider,
-            shared_future: Mutex::new(future.shared()),
-        })
-    }
-}
-
-impl<P: ProvideAwsCredentials + 'static> ProvideAwsCredentials for AutoRefreshingProviderSync<P> {
+impl<P: ProvideAwsCredentials + 'static> ProvideAwsCredentials for AutoRefreshingProvider<P> {
     type Future = AutoRefreshingProviderFuture<P>;
 
     fn credentials(&self) -> Self::Future {
@@ -336,69 +322,38 @@ impl<P: ProvideAwsCredentials + 'static> ProvideAwsCredentials for AutoRefreshin
     }
 }
 
-/// `!Sync` `AutoRefreshingProvider` that caches credentials in a `RefCell`
-pub type AutoRefreshingProvider<P> =
-    BaseAutoRefreshingProvider<P, RefCell<Shared<<P as ProvideAwsCredentials>::Future>>>;
-
-impl<P: ProvideAwsCredentials + 'static> AutoRefreshingProvider<P> {
-    /// Grab a provider that locks it's credentials with a RefCell. If you're looking for
-    /// Thread Safety, take a look at AutoRefreshingProviderSync.
-    pub fn with_refcell(provider: P) -> Result<AutoRefreshingProvider<P>, CredentialsError> {
-        let future = provider.credentials();
-        Ok(BaseAutoRefreshingProvider {
-            credentials_provider: provider,
-            shared_future: RefCell::new(future.shared()),
-        })
-    }
-}
-
-impl<P: ProvideAwsCredentials + 'static> ProvideAwsCredentials for AutoRefreshingProvider<P> {
-    type Future = AutoRefreshingProviderFuture<P>;
-
-    fn credentials(&self) -> Self::Future {
-        let mut shared_future = self.shared_future.borrow_mut();
-        AutoRefreshingProviderFuture {
-            inner: AutoRefreshingFutureInner::from_shared_future(
-                &mut shared_future,
-                &self.credentials_provider,
-            ),
-        }
-    }
-}
-
-/// The credentials provider you probably want to use if you don't require Sync for your AWS services.
-/// Wraps a `ChainProvider` in an `AutoRefreshingProvider` that uses a `RefCell` to cache credentials
+/// Wraps a `ChainProvider` in an `AutoRefreshingProvider`.
 ///
 /// The underlying `ChainProvider` checks multiple sources for credentials, and the `AutoRefreshingProvider`
-/// refreshes the credentials automatically when they expire.  The `RefCell` allows this caching to happen
-/// without the overhead of a `Mutex`, but is `!Sync`.
-///
-/// For a `Sync` implementation of the same, see `DefaultCredentialsProviderSync`
-pub type DefaultCredentialsProvider = AutoRefreshingProvider<ChainProvider>;
+/// refreshes the credentials automatically when they expire.
+pub struct DefaultCredentialsProvider(AutoRefreshingProvider<ChainProvider>);
 
 impl DefaultCredentialsProvider {
-    /// Creates a new DefaultCredentials Provider. If you're looking for
-    /// Thread Safety look at DefaultCredentialsProviderSync.
-    pub fn new(handle: &Handle) -> Result<DefaultCredentialsProvider, CredentialsError> {
-        AutoRefreshingProvider::with_refcell(ChainProvider::new(handle))
+    /// Creates a new thread-safe `DefaultCredentialsProvider`.
+    pub fn new() -> Result<DefaultCredentialsProvider, CredentialsError> {
+        let inner = AutoRefreshingProvider::new(ChainProvider::new())?;
+        Ok(DefaultCredentialsProvider(inner))
     }
 }
 
-/// The credentials provider you probably want to use if you do require Sync for your AWS services.
-/// Wraps a `ChainProvider` in an `AutoRefreshingProvider` that uses a `Mutex` to lock credentials in a
-/// threadsafe manner.
-///
-/// The underlying `ChainProvider` checks multiple sources for credentials, and the `AutoRefreshingProvider`
-/// refreshes the credentials automatically when they expire.  The `Mutex` allows this caching to happen
-/// in a Sync manner, incurring the overhead of a Mutex when credentials expire and need to be refreshed.
-///
-/// For a `!Sync` implementation of the same, see `DefaultCredentialsProvider`
-pub type DefaultCredentialsProviderSync = AutoRefreshingProviderSync<ChainProvider>;
+impl ProvideAwsCredentials for DefaultCredentialsProvider {
+    type Future = DefaultCredentialsProviderFuture;
 
-impl DefaultCredentialsProviderSync {
-    /// Creates a new Thread Safe Default Credentials Provider.
-    pub fn new(handle: &Handle) -> Result<DefaultCredentialsProviderSync, CredentialsError> {
-        AutoRefreshingProviderSync::with_mutex(ChainProvider::new(handle))
+    fn credentials(&self) -> Self::Future {
+        let inner = self.0.credentials();
+        DefaultCredentialsProviderFuture(inner)
+    }
+}
+
+/// Future returned from `DefaultCredentialsProvider`.
+pub struct DefaultCredentialsProviderFuture(AutoRefreshingProviderFuture<ChainProvider>);
+
+impl Future for DefaultCredentialsProviderFuture {
+    type Item = AwsCredentials;
+    type Error = CredentialsError;
+
+    fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
+        self.0.poll()
     }
 }
 
@@ -419,17 +374,13 @@ impl DefaultCredentialsProviderSync {
 ///
 /// ```rust
 /// extern crate rusoto_credential;
-/// extern crate tokio_core;
 ///
 /// use std::time::Duration;
 ///
 /// use rusoto_credential::ChainProvider;
-/// use tokio_core::reactor::Core;
 ///
 /// fn main() {
-///   let core = Core::new().unwrap();
-///
-///   let mut provider = ChainProvider::new(&core.handle());
+///   let mut provider = ChainProvider::new();
 ///   // you can overwrite the default timeout like this:
 ///   provider.set_timeout(Duration::from_secs(60));
 ///
@@ -453,7 +404,7 @@ impl ChainProvider {
 
 /// Future returned from `ChainProvider`.
 pub struct ChainProviderFuture {
-    inner: Box<Future<Item = AwsCredentials, Error = CredentialsError>>,
+    inner: Box<Future<Item = AwsCredentials, Error = CredentialsError> + Send>,
 }
 
 impl Future for ChainProviderFuture {
@@ -493,23 +444,22 @@ impl ProvideAwsCredentials for ChainProvider {
 
 impl ChainProvider {
     /// Create a new `ChainProvider` using a `ProfileProvider` with the default settings.
-    pub fn new(handle: &Handle) -> ChainProvider {
+    pub fn new() -> ChainProvider {
         ChainProvider {
             profile_provider: ProfileProvider::new().ok(),
-            instance_metadata_provider: InstanceMetadataProvider::new(handle),
-            container_provider: ContainerProvider::new(handle),
+            instance_metadata_provider: InstanceMetadataProvider::new(),
+            container_provider: ContainerProvider::new(),
         }
     }
 
     /// Create a new `ChainProvider` using the provided `ProfileProvider`.
     pub fn with_profile_provider(
-        handle: &Handle,
         profile_provider: ProfileProvider,
     ) -> ChainProvider {
         ChainProvider {
             profile_provider: Some(profile_provider),
-            instance_metadata_provider: InstanceMetadataProvider::new(handle),
-            container_provider: ContainerProvider::new(handle),
+            instance_metadata_provider: InstanceMetadataProvider::new(),
+            container_provider: ContainerProvider::new(),
         }
     }
 }
@@ -590,6 +540,23 @@ mod tests {
     use test_utils::{is_secret_hidden_behind_asterisks, SECRET};
 
     use super::*;
+
+    #[test]
+    fn providers_are_send_and_sync() {
+        fn is_send_and_sync<T: Send + Sync>() {}
+
+        is_send_and_sync::<ChainProvider>();
+        is_send_and_sync::<AutoRefreshingProvider<ChainProvider>>();
+        is_send_and_sync::<DefaultCredentialsProvider>();
+    }
+
+    #[test]
+    fn provider_futures_are_send() {
+        fn is_send<T: Send>() {}
+
+        is_send::<ChainProviderFuture>();
+        is_send::<AutoRefreshingProviderFuture<ChainProvider>>();
+    }
 
     #[test]
     fn profile_provider_finds_right_credentials_in_file() {

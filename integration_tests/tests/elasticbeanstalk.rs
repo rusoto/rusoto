@@ -9,7 +9,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_describe_applications() {
-    let client = ElasticBeanstalkClient::simple(Region::UsEast1);
+    let client = ElasticBeanstalkClient::new(Region::UsEast1);
     let request = DescribeApplicationsMessage::default();
 
     let result = client.describe_applications(request).sync().unwrap();

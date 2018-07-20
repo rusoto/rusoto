@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_list_hapgs() {
-    let client = CloudHsmClient::simple(Region::UsEast1);
+    let client = CloudHsmClient::new(Region::UsEast1);
     let request = ListHapgsRequest::default();
 
     match client.list_hapgs(request).sync() {
@@ -25,7 +25,7 @@ fn should_list_hapgs() {
 
 #[test]
 fn should_list_hsms() {
-    let client = CloudHsmClient::simple(Region::UsEast1);
+    let client = CloudHsmClient::new(Region::UsEast1);
     let request = ListHsmsRequest::default();
 
     match client.list_hsms(request).sync() {
@@ -41,7 +41,7 @@ fn should_list_hsms() {
 }
 #[test]
 fn should_list_luna_clients() {
-    let client = CloudHsmClient::simple(Region::UsEast1);
+    let client = CloudHsmClient::new(Region::UsEast1);
     let request = ListLunaClientsRequest::default();
 
     match client.list_luna_clients(request).sync() {

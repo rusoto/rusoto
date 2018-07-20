@@ -9,7 +9,7 @@ use rusoto_core::Region;
 #[test]
 fn should_describe_db_clusters() {
     let _ = env_logger::try_init();
-    let client = RdsClient::simple(Region::UsEast1);
+    let client = RdsClient::new(Region::UsEast1);
     let request = DescribeDBClustersMessage::default();
 
     let result = client.describe_db_clusters(request).sync();
@@ -20,7 +20,7 @@ fn should_describe_db_clusters() {
 #[test]
 fn should_create_destroy_options_group() {
     let _ = env_logger::try_init();
-    let client = RdsClient::simple(Region::UsEast1);
+    let client = RdsClient::new(Region::UsEast1);
 
     let mut tags: Vec<Tag> = Vec::new();
     let tag = Tag {

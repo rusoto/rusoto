@@ -8,7 +8,7 @@ use rusoto_core::Region;
 
 #[test]
 fn should_list_fleets() {
-    let client = GameLiftClient::simple(Region::UsWest2);
+    let client = GameLiftClient::new(Region::UsWest2);
     let request = ListFleetsInput::default();
 
     let result = client.list_fleets(request).sync().unwrap();
