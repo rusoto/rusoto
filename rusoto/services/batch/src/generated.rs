@@ -2780,9 +2780,9 @@ impl Batch for BatchClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DescribeComputeEnvironmentsResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<DescribeComputeEnvironmentsResponse>(&body)
+                            .unwrap();
 
                     result
                 }))

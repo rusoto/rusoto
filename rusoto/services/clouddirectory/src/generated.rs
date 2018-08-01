@@ -11808,9 +11808,9 @@ impl CloudDirectory for CloudDirectoryClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetTypedLinkFacetInformationResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<GetTypedLinkFacetInformationResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -12549,9 +12549,9 @@ impl CloudDirectory for CloudDirectoryClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListTypedLinkFacetAttributesResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<ListTypedLinkFacetAttributesResponse>(&body)
+                            .unwrap();
 
                     result
                 }))

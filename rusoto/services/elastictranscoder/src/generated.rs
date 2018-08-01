@@ -3819,9 +3819,9 @@ impl Ets for EtsClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<UpdatePipelineNotificationsResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<UpdatePipelineNotificationsResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
