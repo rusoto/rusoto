@@ -1,4 +1,6 @@
-#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
+#![doc(
+    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
+)]
 #![cfg_attr(feature = "nightly-testing", feature(plugin))]
 #![cfg_attr(feature = "nightly-testing", plugin(clippy))]
 #![cfg_attr(not(feature = "unstable"), deny(warnings))]
@@ -16,34 +18,34 @@ extern crate regex;
 extern crate serde_json;
 extern crate tokio_timer;
 
-pub use environment::{EnvironmentProvider, EnvironmentProviderFuture};
 pub use container::{ContainerProvider, ContainerProviderFuture};
-pub use static_provider::StaticProvider;
+pub use environment::{EnvironmentProvider, EnvironmentProviderFuture};
 pub use instance_metadata::{InstanceMetadataProvider, InstanceMetadataProviderFuture};
 pub use profile::{ProfileProvider, ProfileProviderFuture};
+pub use static_provider::StaticProvider;
 
-mod request;
+pub mod claims;
 mod container;
 mod environment;
-mod static_provider;
 mod instance_metadata;
 mod profile;
+mod request;
+mod static_provider;
 pub(crate) mod test_utils;
-pub mod claims;
 
+use std::collections::BTreeMap;
 use std::env::var as env_var;
-use std::fmt;
 use std::error::Error;
+use std::fmt;
 use std::io::Error as IoError;
 use std::ops::Deref;
-use std::sync::{Arc, Mutex};
 use std::rc::Rc;
+use std::sync::{Arc, Mutex};
 use std::time::Duration;
-use std::collections::BTreeMap;
 
 use chrono::{DateTime, Duration as ChronoDuration, ParseError, Utc};
-use futures::{Async, Future, Poll};
 use futures::future::{err, Either, Shared, SharedItem};
+use futures::{Async, Future, Poll};
 use hyper::Error as HyperError;
 use serde_json::{from_str as json_from_str, Value};
 
@@ -389,6 +391,7 @@ impl Future for DefaultCredentialsProviderFuture {
 /// ```
 #[derive(Debug, Clone)]
 pub struct ChainProvider {
+    environment_provider: EnvironmentProvider,
     instance_metadata_provider: InstanceMetadataProvider,
     container_provider: ContainerProvider,
     profile_provider: Option<ProfileProvider>,
@@ -423,7 +426,7 @@ impl ProvideAwsCredentials for ChainProvider {
         let profile_provider = self.profile_provider.clone();
         let instance_metadata_provider = self.instance_metadata_provider.clone();
         let container_provider = self.container_provider.clone();
-        let future = EnvironmentProvider
+        let future = self.environment_provider
             .credentials()
             .or_else(move |_| match profile_provider {
                 Some(ref provider) => Either::A(provider.credentials()),
@@ -446,6 +449,7 @@ impl ChainProvider {
     /// Create a new `ChainProvider` using a `ProfileProvider` with the default settings.
     pub fn new() -> ChainProvider {
         ChainProvider {
+            environment_provider: EnvironmentProvider::default(),
             profile_provider: ProfileProvider::new().ok(),
             instance_metadata_provider: InstanceMetadataProvider::new(),
             container_provider: ContainerProvider::new(),
@@ -453,10 +457,9 @@ impl ChainProvider {
     }
 
     /// Create a new `ChainProvider` using the provided `ProfileProvider`.
-    pub fn with_profile_provider(
-        profile_provider: ProfileProvider,
-    ) -> ChainProvider {
+    pub fn with_profile_provider(profile_provider: ProfileProvider) -> ChainProvider {
         ChainProvider {
+            environment_provider: EnvironmentProvider::default(),
             profile_provider: Some(profile_provider),
             instance_metadata_provider: InstanceMetadataProvider::new(),
             container_provider: ContainerProvider::new(),
@@ -532,8 +535,8 @@ extern crate quickcheck;
 
 #[cfg(test)]
 mod tests {
-    use std::io::Read;
     use std::fs::{self, File};
+    use std::io::Read;
     use std::path::Path;
 
     use futures::Future;
