@@ -74,7 +74,7 @@ use rusoto_core::Region;
 use rusoto_dynamodb::{DynamoDb, DynamoDbClient, ListTablesInput};
 
 fn main() {
-    let client = DynamoDbClient::simple(Region::UsEast1);
+    let client = DynamoDbClient::new(Region::UsEast1);
     let list_tables_input: ListTablesInput = Default::default();
 
     match client.list_tables(list_tables_input).sync() {
