@@ -104,31 +104,31 @@ impl EnvironmentProvider {
 }
 
 /// A private trait for building the environment variable names based
-/// on a provided prefix. Pulled out of the base `EnvironmentProvider`
-/// to keep separate from the public functionality.
+/// on a provided prefix. Smallest subset of functionality needed for
+/// Credentials building (see `credentials_from_environment` below).
 trait EnvironmentVariableProvider {
-    fn prefix(self: &Self) -> String;
+    fn prefix(&self) -> &str;
 
-    fn access_key_id_var(self: &Self) -> String {
+    fn access_key_id_var(&self) -> String {
         format!("{}_ACCESS_KEY_ID", self.prefix())
     }
 
-    fn secret_access_key_var(self: &Self) -> String {
+    fn secret_access_key_var(&self) -> String {
         format!("{}_SECRET_ACCESS_KEY", self.prefix())
     }
 
-    fn session_token_var(self: &Self) -> String {
+    fn session_token_var(&self) -> String {
         format!("{}_SESSION_TOKEN", self.prefix())
     }
 
-    fn credential_expiration_var(self: &Self) -> String {
+    fn credential_expiration_var(&self) -> String {
         format!("{}_CREDENTIAL_EXPIRATION", self.prefix())
     }
 }
 
 impl EnvironmentVariableProvider for EnvironmentProvider {
-    fn prefix(self: &Self) -> String {
-        self.prefix.clone()
+    fn prefix(&self) -> &str {
+        self.prefix.as_str()
     }
 }
 
@@ -182,13 +182,8 @@ fn credentials_from_environment(
 
 /// Force an error if we do not see the particular variable name in the env.
 fn get_critical_variable(var_name: String) -> Result<String, CredentialsError> {
-    match non_empty_env_var(&var_name) {
-        Some(value) => Ok(value),
-        None => Err(CredentialsError::new(format!(
-            "No (or empty) {} in environment",
-            var_name
-        ))),
-    }
+    non_empty_env_var(&var_name)
+        .ok_or_else(|| CredentialsError::new(format!("No (or empty) {} in environment", var_name)))
 }
 
 #[cfg(test)]
