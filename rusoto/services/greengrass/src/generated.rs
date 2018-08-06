@@ -9216,9 +9216,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<AssociateServiceRoleToAccountResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<AssociateServiceRoleToAccountResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -9306,9 +9306,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateCoreDefinitionVersionResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<CreateCoreDefinitionVersionResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -9442,9 +9442,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateDeviceDefinitionVersionResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<CreateDeviceDefinitionVersionResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -9533,9 +9533,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateFunctionDefinitionVersionResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<CreateFunctionDefinitionVersionResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -9620,9 +9620,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateGroupCertificateAuthorityResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<CreateGroupCertificateAuthorityResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -9757,9 +9757,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateLoggerDefinitionVersionResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<CreateLoggerDefinitionVersionResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -9848,9 +9848,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateResourceDefinitionVersionResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<CreateResourceDefinitionVersionResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -9935,9 +9935,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateSubscriptionDefinitionResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<CreateSubscriptionDefinitionResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -9987,8 +9987,7 @@ impl GreenGrass for GreenGrassClient {
                     debug!("Response status: {}", response.status);
                     let result = serde_json::from_slice::<
                         CreateSubscriptionDefinitionVersionResponse,
-                    >(&body)
-                        .unwrap();
+                    >(&body).unwrap();
 
                     result
                 }))
@@ -10256,9 +10255,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DeleteSubscriptionDefinitionResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<DeleteSubscriptionDefinitionResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -10334,9 +10333,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DisassociateServiceRoleFromAccountResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<DisassociateServiceRoleFromAccountResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -10603,9 +10602,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetDeviceDefinitionVersionResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<GetDeviceDefinitionVersionResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -10679,9 +10678,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetFunctionDefinitionVersionResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<GetFunctionDefinitionVersionResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -10752,9 +10751,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetGroupCertificateAuthorityResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<GetGroupCertificateAuthorityResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -10793,9 +10792,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetGroupCertificateConfigurationResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<GetGroupCertificateConfigurationResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -10908,9 +10907,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetLoggerDefinitionVersionResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<GetLoggerDefinitionVersionResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -10984,9 +10983,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetResourceDefinitionVersionResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<GetResourceDefinitionVersionResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -11096,9 +11095,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetSubscriptionDefinitionVersionResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<GetSubscriptionDefinitionVersionResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -11145,9 +11144,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListCoreDefinitionVersionsResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<ListCoreDefinitionVersionsResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -11286,9 +11285,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListDeviceDefinitionVersionsResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<ListDeviceDefinitionVersionsResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -11381,9 +11380,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListFunctionDefinitionVersionsResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<ListFunctionDefinitionVersionsResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -11467,9 +11466,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListGroupCertificateAuthoritiesResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<ListGroupCertificateAuthoritiesResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -11608,9 +11607,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListLoggerDefinitionVersionsResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<ListLoggerDefinitionVersionsResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -11703,9 +11702,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListResourceDefinitionVersionsResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<ListResourceDefinitionVersionsResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -11800,9 +11799,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListSubscriptionDefinitionVersionsResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<ListSubscriptionDefinitionVersionsResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -11846,9 +11845,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListSubscriptionDefinitionsResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<ListSubscriptionDefinitionsResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -12145,8 +12144,7 @@ impl GreenGrass for GreenGrassClient {
                     debug!("Response status: {}", response.status);
                     let result = serde_json::from_slice::<
                         UpdateGroupCertificateConfigurationResponse,
-                    >(&body)
-                        .unwrap();
+                    >(&body).unwrap();
 
                     result
                 }))
@@ -12271,9 +12269,9 @@ impl GreenGrass for GreenGrassClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<UpdateSubscriptionDefinitionResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<UpdateSubscriptionDefinitionResponse>(&body)
+                            .unwrap();
 
                     result
                 }))

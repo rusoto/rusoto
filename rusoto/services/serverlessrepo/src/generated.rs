@@ -2069,9 +2069,9 @@ impl ServerlessRepo for ServerlessRepoClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateCloudFormationChangeSetResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<CreateCloudFormationChangeSetResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
