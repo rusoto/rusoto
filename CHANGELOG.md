@@ -17,6 +17,7 @@
 - Changed HttpClient to be generic over hyper::Connect, default HttpClient<C = HttpsConnector<HttpConnector>>, see #1033
 - Derive PartialEq for all request and response types, except when they contain streams
 - Change core and credentials to use Hyper 0.12
+  - Add support for alternative prefixes for environment variables.
 - Add example to Rusoto Logs documentation
 - Add custom dev dependency capability to services crategen
 
