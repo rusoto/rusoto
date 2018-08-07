@@ -23,7 +23,7 @@ To use `rusoto_cur` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_cur = "0.32.0"
+rusoto_cur = "0.33.0"
 ```
 
 ## Contributing

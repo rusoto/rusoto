@@ -1836,9 +1836,9 @@ impl Efs for EfsClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DescribeMountTargetSecurityGroupsResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<DescribeMountTargetSecurityGroupsResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
