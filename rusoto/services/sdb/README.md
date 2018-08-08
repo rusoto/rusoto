@@ -23,7 +23,7 @@ To use `rusoto_sdb` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_sdb = "0.33.0"
+rusoto_sdb = "0.33.1"
 ```
 
 ## Contributing

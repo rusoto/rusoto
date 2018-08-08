@@ -23,7 +23,7 @@ To use `rusoto_glue` in your application, add it as a dependency in your `Cargo.
 
 ```toml
 [dependencies]
-rusoto_glue = "0.33.0"
+rusoto_glue = "0.33.1"
 ```
 
 ## Contributing
