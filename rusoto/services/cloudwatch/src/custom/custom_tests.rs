@@ -2,15 +2,11 @@ extern crate rusoto_mock;
 
 use ::{CloudWatch, CloudWatchClient, PutMetricDataInput, Dimension, MetricDatum};
 
-<<<<<<< HEAD
 use rusoto_core::Region;
 use rusoto_core::signature::SignedRequest;
-=======
-use rusoto_core::{Region, SignedRequest};
 use rusoto_core::signature::SignedRequestPayload;
 use rusoto_core::param::Params;
 use serde_urlencoded;
->>>>>>> Fix test for urlencoded request
 use self::rusoto_mock::*;
 
 #[test]
