@@ -3,6 +3,10 @@
 ## [Unreleased]
 (Please put an entry here in each PR)
 
+## [0.33.1] - 2018-08-07
+
+- Fix `rusoto_mock` versions available
+
 ## [0.33.0] - 2018-07-31
 
 - Remove `impl Display for Region` since it was of little use and confusingly similar to `Region::name()`.

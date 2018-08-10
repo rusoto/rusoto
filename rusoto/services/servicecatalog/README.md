@@ -23,7 +23,7 @@ To use `rusoto_servicecatalog` in your application, add it as a dependency in yo
 
 ```toml
 [dependencies]
-rusoto_servicecatalog = "0.33.0"
+rusoto_servicecatalog = "0.33.1"
 ```
 
 ## Contributing
