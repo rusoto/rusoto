@@ -20049,9 +20049,9 @@ impl Iot for IotClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DescribeEventConfigurationsResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<DescribeEventConfigurationsResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -20367,9 +20367,9 @@ impl Iot for IotClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DescribeThingRegistrationTaskResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<DescribeThingRegistrationTaskResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -22101,9 +22101,9 @@ impl Iot for IotClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListThingRegistrationTaskReportsResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<ListThingRegistrationTaskReportsResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -22152,9 +22152,9 @@ impl Iot for IotClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<ListThingRegistrationTasksResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<ListThingRegistrationTasksResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -22890,9 +22890,9 @@ impl Iot for IotClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<StartThingRegistrationTaskResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<StartThingRegistrationTaskResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -23269,9 +23269,9 @@ impl Iot for IotClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<UpdateIndexingConfigurationResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<UpdateIndexingConfigurationResponse>(&body)
+                            .unwrap();
 
                     result
                 }))

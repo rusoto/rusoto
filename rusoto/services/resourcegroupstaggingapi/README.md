@@ -23,7 +23,7 @@ To use `rusoto_resourcegroupstaggingapi` in your application, add it as a depend
 
 ```toml
 [dependencies]
-rusoto_resourcegroupstaggingapi = "0.32.0"
+rusoto_resourcegroupstaggingapi = "0.33.1"
 ```
 
 ## Contributing

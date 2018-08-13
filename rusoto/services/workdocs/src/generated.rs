@@ -6724,9 +6724,9 @@ impl Workdocs for WorkdocsClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<CreateNotificationSubscriptionResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<CreateNotificationSubscriptionResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -7430,9 +7430,9 @@ impl Workdocs for WorkdocsClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DescribeNotificationSubscriptionsResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<DescribeNotificationSubscriptionsResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -7485,9 +7485,9 @@ impl Workdocs for WorkdocsClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<DescribeResourcePermissionsResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<DescribeResourcePermissionsResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -7930,9 +7930,9 @@ impl Workdocs for WorkdocsClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<InitiateDocumentVersionUploadResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<InitiateDocumentVersionUploadResponse>(&body)
+                            .unwrap();
 
                     result
                 }))

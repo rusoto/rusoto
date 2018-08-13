@@ -2916,9 +2916,9 @@ impl CognitoSync for CognitoSyncClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<GetIdentityPoolConfigurationResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<GetIdentityPoolConfigurationResponse>(&body)
+                            .unwrap();
 
                     result
                 }))
@@ -3177,9 +3177,9 @@ impl CognitoSync for CognitoSyncClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result = serde_json::from_slice::<SetIdentityPoolConfigurationResponse>(
-                        &body,
-                    ).unwrap();
+                    let result =
+                        serde_json::from_slice::<SetIdentityPoolConfigurationResponse>(&body)
+                            .unwrap();
 
                     result
                 }))

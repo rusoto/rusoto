@@ -23,7 +23,7 @@ To use `rusoto_datapipeline` in your application, add it as a dependency in your
 
 ```toml
 [dependencies]
-rusoto_datapipeline = "0.32.0"
+rusoto_datapipeline = "0.33.1"
 ```
 
 ## Contributing
