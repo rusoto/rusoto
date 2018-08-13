@@ -165,6 +165,7 @@ fn test_all_the_things() {
     // generate a presigned url
     test_get_object_with_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
     test_get_object_with_expired_presigned_url(&region, &credentials, &test_bucket, &filename);
+    test_get_object_with_expired_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
     test_put_object_with_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
     test_delete_object_with_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
 
