@@ -11,6 +11,7 @@ use std::collections::btree_map::Entry;
 use std::fmt;
 use std::io;
 use std::str;
+use std::time::Duration;
 
 use futures::Stream;
 use hmac::{Hmac, Mac};
@@ -231,7 +232,7 @@ impl SignedRequest {
 
 
     /// http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html
-    pub fn generate_presigned_url(&mut self, creds: &AwsCredentials) -> String {
+    pub fn generate_presigned_url(&mut self, creds: &AwsCredentials, expires_in: &Duration) -> String {
         debug!("Presigning request URL");
 
         self.sign(creds);
@@ -263,10 +264,7 @@ impl SignedRequest {
         self.params.put("X-Amz-Credential", format!("{}/{}/{}/{}/aws4_request", &creds.aws_access_key_id(), &current_date, self.region.name(), self.service));
 
         self.remove_header("X-Amz-Expires");
-        let expiration_time = match self.params.get("response-expires") {
-            Some(&Some(ref value)) => value.to_string(),
-            _ => "3600".to_string(),
-        };
+        let expiration_time = format!("{}", expires_in.as_secs());
         self.params.put("X-Amz-Expires", expiration_time);
 
         self.canonical_uri = canonical_uri(&self.path);

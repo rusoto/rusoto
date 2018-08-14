@@ -19,7 +19,7 @@ use futures_fs::FsPool;
 use rusoto_core::Region;
 use rusoto_core::ProvideAwsCredentials;
 use rusoto_core::credential::{AwsCredentials, DefaultCredentialsProvider};
-use rusoto_s3::util::PreSignedRequest;
+use rusoto_s3::util::{PreSignedRequest, PreSignedRequestOption};
 use rusoto_s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectError, GetObjectRequest,
                  PutObjectRequest, DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration,
                  CORSRule, CreateBucketRequest, DeleteBucketRequest, CreateMultipartUploadRequest,
@@ -152,6 +152,7 @@ fn test_all_the_things() {
                                   &"tests/sample-data/no_credentials");
     // generate a presigned url
     test_get_object_with_presigned_url(&region, &credentials, &test_bucket, &filename);
+    test_get_object_with_expired_presigned_url(&region, &credentials, &test_bucket, &filename);
     test_put_object_with_presigned_url(&region, &credentials, &test_bucket, &filename);
     test_delete_object_with_presigned_url(&region, &credentials, &test_bucket, &filename);
 
@@ -163,6 +164,7 @@ fn test_all_the_things() {
                                   &"tests/sample-data/no_credentials");
     // generate a presigned url
     test_get_object_with_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
+    test_get_object_with_expired_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
     test_put_object_with_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
     test_delete_object_with_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
 
@@ -516,7 +518,7 @@ fn test_get_object_with_presigned_url(region: &Region, credentials: &AwsCredenti
         key: filename.to_owned(),
         ..Default::default()
     };
-    let presigned_url = req.get_presigned_url(region, credentials);
+    let presigned_url = req.get_presigned_url(region, credentials, &Default::default());
     println!("get object presigned url: {:#?}", presigned_url);
     let mut res = reqwest::get(&presigned_url).unwrap();
     assert_eq!(res.status(), reqwest::StatusCode::Ok);
@@ -527,13 +529,29 @@ fn test_get_object_with_presigned_url(region: &Region, credentials: &AwsCredenti
     assert!(buf.len() > 0);
 }
 
+fn test_get_object_with_expired_presigned_url(region: &Region, credentials: &AwsCredentials, bucket: &str, filename: &str) {
+    let req = GetObjectRequest {
+        bucket: bucket.to_owned(),
+        key: filename.to_owned(),
+        ..Default::default()
+    };
+    let opt = PreSignedRequestOption {
+        expires_in: ::std::time::Duration::from_secs(1)
+    };
+    let presigned_url = req.get_presigned_url(region, credentials, &opt);
+    ::std::thread::sleep(::std::time::Duration::from_secs(2));
+    println!("get object presigned url: {:#?}", presigned_url);
+    let res = reqwest::get(&presigned_url).unwrap();
+    assert_eq!(res.status(), reqwest::StatusCode::Forbidden);
+}
+
 fn test_put_object_with_presigned_url(region: &Region, credentials: &AwsCredentials, bucket: &str, filename: &str) {
     let req = PutObjectRequest {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
         ..Default::default()
     };
-    let presigned_url = req.get_presigned_url(region, credentials);
+    let presigned_url = req.get_presigned_url(region, credentials, &Default::default());
     println!("put object presigned url: {:#?}", presigned_url);
     let mut map = HashMap::new();
     map.insert("test", "data");
@@ -548,7 +566,7 @@ fn test_delete_object_with_presigned_url(region: &Region, credentials: &AwsCrede
         key: filename.to_owned(),
         ..Default::default()
     };
-    let presigned_url = req.get_presigned_url(region, credentials);
+    let presigned_url = req.get_presigned_url(region, credentials, &Default::default());
     println!("delete object presigned url: {:#?}", presigned_url);
     let client = reqwest::Client::new();
     let res = client.delete(&presigned_url).send().unwrap();
