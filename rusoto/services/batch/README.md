@@ -23,7 +23,7 @@ To use `rusoto_batch` in your application, add it as a dependency in your `Cargo
 
 ```toml
 [dependencies]
-rusoto_batch = "0.32.0"
+rusoto_batch = "0.33.1"
 ```
 
 ## Contributing

@@ -3,6 +3,12 @@
 ## [Unreleased]
 (Please put an entry here in each PR)
 
+## [0.33.1] - 2018-08-07
+
+- Fix `rusoto_mock` versions available
+
+## [0.33.0] - 2018-07-31
+
 - Remove `impl Display for Region` since it was of little use and confusingly similar to `Region::name()`.
 - More efficiently and correctly remove scheme from `Region::Custom` endpoints
 - Prevent reactor from hanging indefinitely when using the new tokio release
@@ -26,7 +32,7 @@
 - Convert all services to `futures`-based APIs
 - Show secret keys and tokens as `"**********"` in `Debug` output
 - Ensure list of signed headers is correct when not all headers are signed
-- Use ```$AWS_PROFILE``` to obtain default profile name 
+- Use ```$AWS_PROFILE``` to obtain default profile name
 - Implement `Default` for `Region`
 - Derive Clone for remaining types (affects CloudFront, Route 53 and S3)
 - Link to service-specific documentation in generated Cargo manifests
