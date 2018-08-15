@@ -1,7 +1,8 @@
 # Rusoto changes
 
 ## [Unreleased]
-(Please put an entry here in each PR)
+- Add example to Rusoto Logs documentation
+- Add custom dev dependency capability to services crategen
 
 ## [0.33.1] - 2018-08-07
 
@@ -24,8 +25,6 @@
 - Derive PartialEq for all request and response types, except when they contain streams
 - Change core and credentials to use Hyper 0.12
 - Add support for alternative prefixes for environment variables.
-- Add example to Rusoto Logs documentation
-- Add custom dev dependency capability to services crategen
 
 ## [0.32.0] - 2018-03-03
 
