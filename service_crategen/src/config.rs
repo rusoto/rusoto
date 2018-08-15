@@ -18,6 +18,8 @@ pub struct ServiceConfig {
     pub protocol_version: String,
     #[serde(rename = "customDependencies")]
     pub custom_dependencies: Option<BTreeMap<String, cargo::Dependency>>,
+    #[serde(rename = "customDevDependencies")]
+    pub custom_dev_dependencies: Option<BTreeMap<String, cargo::Dependency>>,
     #[serde(rename = "baseTypeName")]
     pub base_type_name: String
 }

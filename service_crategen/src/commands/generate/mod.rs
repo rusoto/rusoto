@@ -80,6 +80,7 @@ pub fn generate_services(services: &BTreeMap<String, ServiceConfig>, out_dir: &P
         }
 
         let service_dependencies = service.get_dependencies();
+        let service_dev_dependencies = service.get_dev_dependencies();
 
         let extern_crates = service_dependencies.iter().map(|(k, _)| {
             if k == "xml-rs" {
@@ -126,15 +127,7 @@ pub fn generate_services(services: &BTreeMap<String, ServiceConfig>, out_dir: &P
                 homepage: Some("https://www.rusoto.org/".into())
             },
             dependencies: service_dependencies,
-            dev_dependencies: vec![
-                ("rusoto_mock".to_owned(), cargo::Dependency::Extended {
-                    path: Some("../../../mock".into()),
-                    version: Some("0.27.0".into()),
-                    optional: None,
-                    default_features: None,
-                    features: None
-                })
-            ].into_iter().collect(),
+            dev_dependencies: service_dev_dependencies,
             ..cargo::Manifest::default()
         };
 

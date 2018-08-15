@@ -132,4 +132,22 @@ impl <'b> Service <'b> {
 
         dependencies
     }
+
+    pub fn get_dev_dependencies(&self) -> BTreeMap<String, cargo::Dependency> {
+        let mut dev_dependencies = BTreeMap::new();
+
+        dev_dependencies.insert("rusoto_mock".to_owned(), cargo::Dependency::Extended {
+            path: Some("../../../mock".into()),
+            version: Some("0.27.0".into()),
+            optional: None,
+            default_features: None,
+            features: None
+        });
+
+        if let Some(ref custom_dev_dependencies) = self.config.custom_dev_dependencies {
+            dev_dependencies.extend(custom_dev_dependencies.clone());
+        }
+
+        dev_dependencies
+    }
 }

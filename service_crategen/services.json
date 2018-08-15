@@ -393,7 +393,10 @@
     "version": "0.33.1",
     "coreVersion": "0.33.1",
     "protocolVersion": "2014-03-28",
-    "baseTypeName": "CloudWatchLogs"
+    "baseTypeName": "CloudWatchLogs",
+    "customDevDependencies": {
+      "chrono": "0.4"
+    }
   },
   "machinelearning": {
     "version": "0.33.1",
