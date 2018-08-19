@@ -107,6 +107,24 @@ pub struct GetEntitlementsResult {
     pub next_token: Option<String>,
 }
 
+/// <p>An internal error has occurred. Retry your request. If the problem persists, post a message with details on the AWS forums.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalServiceErrorException {
+    pub message: Option<String>,
+}
+
+/// <p>One or more parameters in your request was invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterException {
+    pub message: Option<String>,
+}
+
+/// <p>The calls to the GetEntitlements API are throttled.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ThrottlingException {
+    pub message: Option<String>,
+}
+
 /// Errors returned by GetEntitlements
 #[derive(Debug, PartialEq)]
 pub enum GetEntitlementsError {

@@ -133,6 +133,12 @@ impl ArtifactListDeserializer {
         Ok(obj)
     }
 }
+/// <p>The account specified does not have the appropriate bucket permissions.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BucketPermissionException {
+    pub message: Option<String>,
+}
+
 /// <p>Input structure for the CancelJob operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelJobInput {
@@ -208,6 +214,12 @@ impl CancelJobOutputDeserializer {
         Ok(obj)
     }
 }
+/// <p>The specified job ID has been canceled and is no longer valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CanceledJobIdException {
+    pub message: Option<String>,
+}
+
 struct CarrierDeserializer;
 impl CarrierDeserializer {
     #[allow(unused_variables)]
@@ -345,6 +357,12 @@ impl CreateJobOutputDeserializer {
         Ok(obj)
     }
 }
+/// <p>Each account can create only a certain number of jobs per day. If you need to create more than this, please contact awsimportexport@amazon.com to explain your particular use case.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateJobQuotaExceededException {
+    pub message: Option<String>,
+}
+
 struct CreationDateDeserializer;
 impl CreationDateDeserializer {
     #[allow(unused_variables)]
@@ -401,6 +419,12 @@ impl ErrorCountDeserializer {
         Ok(obj)
     }
 }
+/// <p>Indicates that the specified job has expired out of the system.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ExpiredJobIdException {
+    pub message: Option<String>,
+}
+
 struct GenericStringDeserializer;
 impl GenericStringDeserializer {
     #[allow(unused_variables)]
@@ -726,6 +750,54 @@ impl GetStatusOutputDeserializer {
         Ok(obj)
     }
 }
+/// <p>The AWS Access Key ID specified in the request did not match the manifest&#39;s accessKeyId value. The manifest and the request authentication must use the same AWS Access Key ID.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidAccessKeyIdException {
+    pub message: Option<String>,
+}
+
+/// <p>The address specified in the manifest is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidAddressException {
+    pub message: Option<String>,
+}
+
+/// <p>One or more customs parameters was invalid. Please correct and resubmit.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidCustomsException {
+    pub message: Option<String>,
+}
+
+/// <p>File system specified in export manifest is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidFileSystemException {
+    pub message: Option<String>,
+}
+
+/// <p>The JOBID was missing, not found, or not associated with the AWS account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidJobIdException {
+    pub message: Option<String>,
+}
+
+/// <p>One or more manifest fields was invalid. Please correct and resubmit.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidManifestFieldException {
+    pub message: Option<String>,
+}
+
+/// <p>One or more parameters had an invalid value.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterException {
+    pub message: Option<String>,
+}
+
+/// <p>The client tool version is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidVersionException {
+    pub message: Option<String>,
+}
+
 struct IsCanceledDeserializer;
 impl IsCanceledDeserializer {
     #[allow(unused_variables)]
@@ -1044,6 +1116,42 @@ impl LogKeyDeserializer {
         Ok(obj)
     }
 }
+/// <p>Your manifest is not well-formed.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MalformedManifestException {
+    pub message: Option<String>,
+}
+
+/// <p>One or more required customs parameters was missing from the manifest.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MissingCustomsException {
+    pub message: Option<String>,
+}
+
+/// <p>One or more required fields were missing from the manifest file. Please correct and resubmit.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MissingManifestFieldException {
+    pub message: Option<String>,
+}
+
+/// <p>One or more required parameters was missing from the request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MissingParameterException {
+    pub message: Option<String>,
+}
+
+/// <p>Your manifest file contained buckets from multiple regions. A job is restricted to buckets from one region. Please correct and resubmit.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MultipleRegionsException {
+    pub message: Option<String>,
+}
+
+/// <p>The specified bucket does not exist. Create the specified bucket or change the manifest&#39;s bucket, exportBucket, or logBucket field to a bucket that the account, as specified by the manifest&#39;s Access Key ID, has write permissions to.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NoSuchBucketException {
+    pub message: Option<String>,
+}
+
 struct ProgressCodeDeserializer;
 impl ProgressCodeDeserializer {
     #[allow(unused_variables)]
@@ -1142,6 +1250,18 @@ impl URLDeserializer {
         Ok(obj)
     }
 }
+/// <p>AWS Import/Export cannot cancel the job</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UnableToCancelJobIdException {
+    pub message: Option<String>,
+}
+
+/// <p>AWS Import/Export cannot update the job</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UnableToUpdateJobIdException {
+    pub message: Option<String>,
+}
+
 /// <p>Input structure for the UpateJob operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateJobInput {

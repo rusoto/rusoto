@@ -65,6 +65,10 @@ pub struct BatchRetryStrategy {
     pub attempts: Option<i64>,
 }
 
+/// <p>There is concurrent modification on a rule or target.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ConcurrentModificationException {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteRuleRequest {
     /// <p>The name of the rule.</p>
@@ -168,6 +172,14 @@ pub struct InputTransformer {
     pub input_template: String,
 }
 
+/// <p>This exception occurs due to unexpected causes.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalException {}
+
+/// <p>The event pattern is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidEventPatternException {}
+
 /// <p>This object enables you to specify a JSON path to extract from the event and use as the partition key for the Amazon Kinesis stream, so that you can control the shard to which the event goes. If you do not include this parameter, the default is to use the <code>eventId</code> as the partition key.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KinesisParameters {
@@ -175,6 +187,10 @@ pub struct KinesisParameters {
     #[serde(rename = "PartitionKeyPath")]
     pub partition_key_path: String,
 }
+
+/// <p>You tried to create more rules or add more targets to a rule than is allowed.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListRuleNamesByTargetRequest {
@@ -257,6 +273,10 @@ pub struct ListTargetsByRuleResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
 }
+
+/// <p>The event bus policy is too long. For more information, see the limits.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PolicyLengthExceededException {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutEventsRequest {
@@ -451,6 +471,10 @@ pub struct RemoveTargetsResultEntry {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_id: Option<String>,
 }
+
+/// <p>An entity that you specified does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceNotFoundException {}
 
 /// <p>Contains information about a rule in Amazon CloudWatch Events.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]

@@ -29,6 +29,10 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
+/// <p>General authentication failure. The request was not signed correctly.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AccessDeniedException {}
+
 /// <p>The file to be used as album art. There can be multiple artworks associated with an audio file, to a maximum of 20.</p> <p>To remove artwork or leave the artwork empty, you can either set <code>Artwork</code> to null, or set the <code>Merge Policy</code> to "Replace" and use an empty <code>Artwork</code> array.</p> <p>To pass through existing artwork unchanged, set the <code>Merge Policy</code> to "Prepend", "Append", or "Fallback", and use an empty <code>Artwork</code> array.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Artwork {
@@ -483,6 +487,9 @@ pub struct HlsContentProtection {
     pub method: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct IncompatibleVersionException {}
+
 /// <p>The captions to be created, if any.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InputCaptions {
@@ -495,6 +502,10 @@ pub struct InputCaptions {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub merge_policy: Option<String>,
 }
+
+/// <p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalServiceException {}
 
 /// <p>A section of the response body that provides information about the job that is created.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -708,6 +719,10 @@ pub struct JobWatermark {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preset_watermark_id: Option<String>,
 }
+
+/// <p>Too many operations for a given AWS account. For example, the number of pipelines exceeds the maximum allowed.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {}
 
 /// <p>The <code>ListJobsByPipelineRequest</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1126,6 +1141,14 @@ pub struct ReadPresetResponse {
     pub preset: Option<Preset>,
 }
 
+/// <p>The resource you are attempting to change is in use. For example, you are attempting to delete a pipeline that is currently in use.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceInUseException {}
+
+/// <p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceNotFoundException {}
+
 /// <p> The <code>TestRoleRequest</code> structure. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TestRoleRequest {
@@ -1311,6 +1334,10 @@ pub struct UpdatePipelineStatusResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline: Option<Pipeline>,
 }
+
+/// <p>One or more required parameter values were not provided in the request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ValidationException {}
 
 /// <p>The <code>VideoParameters</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]

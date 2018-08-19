@@ -41,6 +41,10 @@ enum DeserializerNext {
     Skip,
     Element(String),
 }
+/// <p>The customer has exceeded the allowed rate of API calls.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct APICallRateForCustomerExceededFault {}
+
 /// <p>Represents the input of an AddTagsToResource operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddTagsToResourceMessage {
@@ -115,6 +119,14 @@ impl AllowedNodeTypeModificationsMessageDeserializer {
         Ok(obj)
     }
 }
+/// <p>The specified Amazon EC2 security group is already authorized for the specified cache security group.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AuthorizationAlreadyExistsFault {}
+
+/// <p>The specified Amazon EC2 security group is not authorized for the specified cache security group.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AuthorizationNotFoundFault {}
+
 /// <p>Represents the input of an AuthorizeCacheSecurityGroupIngress operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AuthorizeCacheSecurityGroupIngressMessage {
@@ -581,6 +593,10 @@ impl CacheClusterDeserializer {
         Ok(obj)
     }
 }
+/// <p>You already have a cluster with the given identifier.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CacheClusterAlreadyExistsFault {}
+
 struct CacheClusterListDeserializer;
 impl CacheClusterListDeserializer {
     #[allow(unused_variables)]
@@ -678,6 +694,10 @@ impl CacheClusterMessageDeserializer {
         Ok(obj)
     }
 }
+/// <p>The requested cluster ID does not refer to an existing cluster.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CacheClusterNotFoundFault {}
+
 /// <p>Provides all of the details about a particular cache engine version.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CacheEngineVersion {
@@ -1347,6 +1367,10 @@ impl CacheParameterGroupDeserializer {
         Ok(obj)
     }
 }
+/// <p>A cache parameter group with the requested name already exists.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CacheParameterGroupAlreadyExistsFault {}
+
 /// <p>Represents the output of a <code>DescribeCacheParameters</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CacheParameterGroupDetails {
@@ -1502,6 +1526,14 @@ impl CacheParameterGroupNameMessageDeserializer {
         Ok(obj)
     }
 }
+/// <p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CacheParameterGroupNotFoundFault {}
+
+/// <p>The request cannot be processed because it would exceed the maximum number of cache security groups.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CacheParameterGroupQuotaExceededFault {}
+
 /// <p>Status of the cache parameter group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CacheParameterGroupStatus {
@@ -1691,6 +1723,10 @@ impl CacheSecurityGroupDeserializer {
         Ok(obj)
     }
 }
+/// <p>A cache security group with the specified name already exists.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CacheSecurityGroupAlreadyExistsFault {}
+
 /// <p>Represents a cluster's status within a particular cache security group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CacheSecurityGroupMembership {
@@ -1854,6 +1890,14 @@ impl CacheSecurityGroupNameListSerializer {
     }
 }
 
+/// <p>The requested cache security group name does not refer to an existing cache security group.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CacheSecurityGroupNotFoundFault {}
+
+/// <p>The request cannot be processed because it would exceed the allowed number of cache security groups.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CacheSecurityGroupQuotaExceededFault {}
+
 struct CacheSecurityGroupsDeserializer;
 impl CacheSecurityGroupsDeserializer {
     #[allow(unused_variables)]
@@ -1964,6 +2008,14 @@ impl CacheSubnetGroupDeserializer {
         Ok(obj)
     }
 }
+/// <p>The requested cache subnet group name is already in use by an existing cache subnet group.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CacheSubnetGroupAlreadyExistsFault {}
+
+/// <p>The requested cache subnet group is currently in use.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CacheSubnetGroupInUse {}
+
 /// <p>Represents the output of a <code>DescribeCacheSubnetGroups</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CacheSubnetGroupMessage {
@@ -2017,6 +2069,14 @@ impl CacheSubnetGroupMessageDeserializer {
         Ok(obj)
     }
 }
+/// <p>The requested cache subnet group name does not refer to an existing cache subnet group.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CacheSubnetGroupNotFoundFault {}
+
+/// <p>The request cannot be processed because it would exceed the allowed number of cache subnet groups.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CacheSubnetGroupQuotaExceededFault {}
+
 struct CacheSubnetGroupsDeserializer;
 impl CacheSubnetGroupsDeserializer {
     #[allow(unused_variables)]
@@ -2060,6 +2120,10 @@ impl CacheSubnetGroupsDeserializer {
         Ok(obj)
     }
 }
+/// <p>The request cannot be processed because it would exceed the allowed number of subnets in a cache subnet group.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CacheSubnetQuotaExceededFault {}
+
 struct ChangeTypeDeserializer;
 impl ChangeTypeDeserializer {
     #[allow(unused_variables)]
@@ -2114,6 +2178,10 @@ impl ClusterIdListDeserializer {
         Ok(obj)
     }
 }
+/// <p>The request cannot be processed because it would exceed the allowed number of clusters per customer.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ClusterQuotaForCustomerExceededFault {}
+
 /// <p>Represents the input of a <code>CopySnapshotMessage</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopySnapshotMessage {
@@ -4530,6 +4598,10 @@ impl EventsMessageDeserializer {
         Ok(obj)
     }
 }
+/// <p>The requested cache node type is not available in the specified Availability Zone.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InsufficientCacheClusterCapacityFault {}
+
 struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(unused_variables)]
@@ -4558,6 +4630,51 @@ impl IntegerOptionalDeserializer {
         Ok(obj)
     }
 }
+/// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidARNFault {}
+
+/// <p>The requested cluster is not in the <code>available</code> state.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidCacheClusterStateFault {}
+
+/// <p>The current state of the cache parameter group does not allow the requested operation to occur.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidCacheParameterGroupStateFault {}
+
+/// <p>The current state of the cache security group does not allow deletion.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidCacheSecurityGroupStateFault {}
+
+/// <p>Two or more incompatible parameters were specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterCombinationException {
+    /// <p>Two or more parameters that must not be used together were used together.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The value for a parameter is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterValueException {
+    /// <p>A parameter value is invalid.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The requested replication group is not in the <code>available</code> state.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidReplicationGroupStateFault {}
+
+/// <p>The current state of the snapshot does not allow the requested operation to occur.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidSnapshotStateFault {}
+
+/// <p>An invalid subnet identifier was specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidSubnet {}
+
+/// <p>The VPC network is in an invalid state.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidVPCNetworkStateFault {}
 
 /// Serialize `KeyList` contents to a `SignedRequest`.
 struct KeyListSerializer;
@@ -5603,6 +5720,13 @@ impl NodeGroupMemberListDeserializer {
         Ok(obj)
     }
 }
+/// <p>The node group specified by the <code>NodeGroupId</code> parameter could not be found. Please verify that the node group exists and that you spelled the <code>NodeGroupId</code> value correctly.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NodeGroupNotFoundFault {}
+
+/// <p>The request cannot be processed because it would exceed the maximum allowed number of node groups (shards) in a single replication group. The default maximum is 15</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NodeGroupsPerReplicationGroupQuotaExceededFault {}
 
 /// Serialize `NodeGroupsToRemoveList` contents to a `SignedRequest`.
 struct NodeGroupsToRemoveListSerializer;
@@ -5614,6 +5738,14 @@ impl NodeGroupsToRemoveListSerializer {
         }
     }
 }
+
+/// <p>The request cannot be processed because it would exceed the allowed number of cache nodes in a single cluster.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NodeQuotaForClusterExceededFault {}
+
+/// <p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NodeQuotaForCustomerExceededFault {}
 
 /// <p>Represents an individual cache node in a snapshot of a cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -6588,6 +6720,10 @@ impl ReplicationGroupDeserializer {
         Ok(obj)
     }
 }
+/// <p>The specified replication group already exists.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ReplicationGroupAlreadyExistsFault {}
+
 struct ReplicationGroupListDeserializer;
 impl ReplicationGroupListDeserializer {
     #[allow(unused_variables)]
@@ -6686,6 +6822,10 @@ impl ReplicationGroupMessageDeserializer {
         Ok(obj)
     }
 }
+/// <p>The specified replication group does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ReplicationGroupNotFoundFault {}
+
 /// <p>The settings to be applied to the Redis replication group, either immediately or during the next maintenance window.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplicationGroupPendingModifiedValues {
@@ -6875,6 +7015,10 @@ impl ReservedCacheNodeDeserializer {
         Ok(obj)
     }
 }
+/// <p>You already have a reservation with the given identifier.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ReservedCacheNodeAlreadyExistsFault {}
+
 struct ReservedCacheNodeListDeserializer;
 impl ReservedCacheNodeListDeserializer {
     #[allow(unused_variables)]
@@ -6973,6 +7117,14 @@ impl ReservedCacheNodeMessageDeserializer {
         Ok(obj)
     }
 }
+/// <p>The requested reserved cache node was not found.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ReservedCacheNodeNotFoundFault {}
+
+/// <p>The request cannot be processed because it would exceed the user's cache node quota.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ReservedCacheNodeQuotaExceededFault {}
+
 /// <p>Describes all of the attributes of a reserved cache node offering.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReservedCacheNodesOffering {
@@ -7167,6 +7319,10 @@ impl ReservedCacheNodesOfferingMessageDeserializer {
         Ok(obj)
     }
 }
+/// <p>The requested cache node offering does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ReservedCacheNodesOfferingNotFoundFault {}
+
 /// <p>Represents the input of a <code>ResetCacheParameterGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResetCacheParameterGroupMessage {
@@ -7751,6 +7907,9 @@ impl SnapshotDeserializer {
         Ok(obj)
     }
 }
+/// <p>You already have a snapshot with the given name.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SnapshotAlreadyExistsFault {}
 
 /// Serialize `SnapshotArnsList` contents to a `SignedRequest`.
 struct SnapshotArnsListSerializer;
@@ -7762,6 +7921,10 @@ impl SnapshotArnsListSerializer {
         }
     }
 }
+
+/// <p>You attempted one of the following operations:</p> <ul> <li> <p>Creating a snapshot of a Redis cluster running on a <code>cache.t1.micro</code> cache node.</p> </li> <li> <p>Creating a snapshot of a cluster that is running Memcached rather than Redis.</p> </li> </ul> <p>Neither of these are supported by ElastiCache.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SnapshotFeatureNotSupportedFault {}
 
 struct SnapshotListDeserializer;
 impl SnapshotListDeserializer {
@@ -7803,6 +7966,14 @@ impl SnapshotListDeserializer {
         Ok(obj)
     }
 }
+/// <p>The requested snapshot name does not refer to an existing snapshot.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SnapshotNotFoundFault {}
+
+/// <p>The request cannot be processed because it would exceed the maximum number of snapshots.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SnapshotQuotaExceededFault {}
+
 struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
     #[allow(unused_variables)]
@@ -7900,6 +8071,10 @@ impl SubnetIdentifierListSerializer {
         }
     }
 }
+
+/// <p>The requested subnet is being used by another cache subnet group.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SubnetInUse {}
 
 struct SubnetListDeserializer;
 impl SubnetListDeserializer {
@@ -8130,6 +8305,14 @@ impl TagListMessageDeserializer {
         Ok(obj)
     }
 }
+/// <p>The requested tag was not found on this resource.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TagNotFoundFault {}
+
+/// <p>The request cannot be processed because it would cause the resource to have more than the allowed number of tags. The maximum number of tags permitted on a resource is 50.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TagQuotaPerResourceExceeded {}
+
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TestFailoverMessage {
     /// <p>The name of the node group (called shard in the console) in this replication group on which automatic failover is to be tested. You may test automatic failover on up to 5 node groups in any rolling 24-hour period.</p>
@@ -8157,6 +8340,9 @@ impl TestFailoverMessageSerializer {
         );
     }
 }
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TestFailoverNotAvailableFault {}
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TestFailoverResult {

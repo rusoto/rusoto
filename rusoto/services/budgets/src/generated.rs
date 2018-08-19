@@ -184,6 +184,12 @@ pub struct CreateSubscriberRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateSubscriberResponse {}
 
+/// <p>You've exceeded the notification or subscriber limit.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreationLimitExceededException {
+    pub message: Option<String>,
+}
+
 /// <p> Request of DeleteBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteBudgetRequest {
@@ -352,6 +358,42 @@ pub struct DescribeSubscribersForNotificationResponse {
     #[serde(rename = "Subscribers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subscribers: Option<Vec<Subscriber>>,
+}
+
+/// <p>The budget name already exists. Budget names must be unique within an account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DuplicateRecordException {
+    pub message: Option<String>,
+}
+
+/// <p>The pagination token expired.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ExpiredNextTokenException {
+    pub message: Option<String>,
+}
+
+/// <p>An error on the server occurred during the processing of your request. Try again later.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalErrorException {
+    pub message: Option<String>,
+}
+
+/// <p>The pagination token is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidNextTokenException {
+    pub message: Option<String>,
+}
+
+/// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterException {
+    pub message: Option<String>,
+}
+
+/// <p>We can’t locate the resource that you specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NotFoundException {
+    pub message: Option<String>,
 }
 
 /// <p><p>A notification associated with a budget. A budget can have up to five notifications. </p> <p>Each notification must have at least one subscriber. A notification can have one SNS subscriber and up to ten email subscribers, for a total of 11 subscribers.</p> <p>For example, if you have a budget for 200 dollars and you want to be notified when you go over 160 dollars, create a notification with the following parameters:</p> <ul> <li> <p>A notificationType of <code>ACTUAL</code> </p> </li> <li> <p>A comparisonOperator of <code>GREATER_THAN</code> </p> </li> <li> <p>A notification threshold of <code>80</code> </p> </li> </ul></p>

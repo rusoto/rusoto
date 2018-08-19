@@ -43,6 +43,12 @@ enum DeserializerNext {
     Skip,
     Element(String),
 }
+/// <p>Access denied.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AccessDenied {
+    pub message: Option<String>,
+}
+
 /// <p>A complex type that lists the AWS accounts, if any, that you included in the <code>TrustedSigners</code> complex type for this distribution. These are the accounts that you want to allow to create signed URLs for private content.</p> <p>The <code>Signer</code> complex type lists the AWS account number of the trusted signer or <code>self</code> if the signer is the AWS account that created the distribution. The <code>Signer</code> element also includes the IDs of any active CloudFront key pairs that are associated with the trusted signer's AWS account. If no <code>KeyPairId</code> element appears for a <code>Signer</code>, that signer can't create signed URLs. </p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ActiveTrustedSigners {
@@ -386,6 +392,11 @@ impl AwsAccountNumberListSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BatchTooLarge {
+    pub message: Option<String>,
+}
+
 struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(unused_variables)]
@@ -419,6 +430,11 @@ impl BooleanSerializer {
         )))?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CNAMEAlreadyExists {
+    pub message: Option<String>,
 }
 
 /// <p>A complex type that describes how CloudFront processes requests.</p> <p>You must create at least as many cache behaviors (including the default cache behavior) as you have origins if you want CloudFront to distribute objects from all of the origins. Each cache behavior specifies the one origin from which you want CloudFront to get objects. If you have two origins and only the default cache behavior, the default cache behavior will cause CloudFront to get objects from one of the origins, but the other origin is never used.</p> <p>For the current limit on the number of cache behaviors that you can add to a distribution, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront">Amazon CloudFront Limits</a> in the <i>AWS General Reference</i>.</p> <p>If you don't want to specify any cache behaviors, include only an empty <code>CacheBehaviors</code> element. Don't include an empty <code>CacheBehavior</code> element, or CloudFront returns a <code>MalformedXML</code> error.</p> <p>To delete all cache behaviors in an existing distribution, update the distribution configuration and include only an empty <code>CacheBehaviors</code> element.</p> <p>To add, change, or remove one or more cache behaviors, update the distribution configuration and specify all of the cache behaviors that you want to include in the updated distribution.</p> <p>For more information about cache behaviors, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesCacheBehavior">Cache Behaviors</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
@@ -914,6 +930,12 @@ impl CloudFrontOriginAccessIdentityDeserializer {
         Ok(obj)
     }
 }
+/// <p>If the <code>CallerReference</code> is a value you already sent in a previous request to create an identity but the content of the <code>CloudFrontOriginAccessIdentityConfig</code> is different from the original request, CloudFront returns a <code>CloudFrontOriginAccessIdentityAlreadyExists</code> error. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CloudFrontOriginAccessIdentityAlreadyExists {
+    pub message: Option<String>,
+}
+
 /// <p>Origin access identity configuration. Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/CloudFront/identity ID/config</code> resource. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CloudFrontOriginAccessIdentityConfig {
@@ -993,6 +1015,11 @@ impl CloudFrontOriginAccessIdentityConfigSerializer {
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CloudFrontOriginAccessIdentityInUse {
+    pub message: Option<String>,
 }
 
 /// <p>Lists the origin access identities for CloudFront.Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/origin-access-identity/cloudfront</code> resource. The response includes a <code>CloudFrontOriginAccessIdentityList</code> element with zero or more <code>CloudFrontOriginAccessIdentitySummary</code> child elements. By default, your entire list of origin access identities is returned in one single page. If the list is long, you can paginate it using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
@@ -2564,6 +2591,12 @@ impl DistributionDeserializer {
         Ok(obj)
     }
 }
+/// <p>The caller reference you attempted to create the distribution with is associated with another distribution.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DistributionAlreadyExists {
+    pub message: Option<String>,
+}
+
 /// <p>A distribution configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DistributionConfig {
@@ -2921,6 +2954,11 @@ impl DistributionListDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DistributionNotDisabled {
+    pub message: Option<String>,
+}
+
 /// <p>A summary of the information about a CloudFront distribution.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DistributionSummary {
@@ -3960,6 +3998,18 @@ impl HttpVersionSerializer {
     }
 }
 
+/// <p>Origin and <code>CallerReference</code> cannot be updated. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct IllegalUpdate {
+    pub message: Option<String>,
+}
+
+/// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InconsistentQuantities {
+    pub message: Option<String>,
+}
+
 struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(unused_variables)]
@@ -3993,6 +4043,131 @@ impl IntegerSerializer {
         )))?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
+}
+
+/// <p>The argument is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidArgument {
+    pub message: Option<String>,
+}
+
+/// <p>The default root object file name is too big or contains an invalid character.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidDefaultRootObject {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidErrorCode {
+    pub message: Option<String>,
+}
+
+/// <p>Your request contains forward cookies option which doesn't match with the expectation for the <code>whitelisted</code> list of cookie names. Either list of cookie names has been specified when not allowed or list of cookie names is missing when expected.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidForwardCookies {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidGeoRestrictionParameter {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidHeadersForS3Origin {
+    pub message: Option<String>,
+}
+
+/// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidIfMatchVersion {
+    pub message: Option<String>,
+}
+
+/// <p>The specified Lambda function association is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidLambdaFunctionAssociation {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidLocationCode {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidMinimumProtocolVersion {
+    pub message: Option<String>,
+}
+
+/// <p>The Amazon S3 origin server specified does not refer to a valid Amazon S3 bucket.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidOrigin {
+    pub message: Option<String>,
+}
+
+/// <p>The origin access identity is not valid or doesn't exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidOriginAccessIdentity {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidOriginKeepaliveTimeout {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidOriginReadTimeout {
+    pub message: Option<String>,
+}
+
+/// <p>You cannot specify SSLv3 as the minimum protocol version if you only want to support only clients that support Server Name Indication (SNI).</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidProtocolSettings {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidQueryStringParameters {
+    pub message: Option<String>,
+}
+
+/// <p>The relative path is too big, is not URL-encoded, or does not begin with a slash (/).</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidRelativePath {
+    pub message: Option<String>,
+}
+
+/// <p>This operation requires the HTTPS protocol. Ensure that you specify the HTTPS protocol in your request, or omit the <code>RequiredProtocols</code> element from your distribution configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidRequiredProtocol {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidResponseCode {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidTTLOrder {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidTagging {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidViewerCertificate {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidWebACLId {
+    pub message: Option<String>,
 }
 
 /// <p>An invalidation. </p>
@@ -5349,6 +5524,47 @@ impl MinimumProtocolVersionSerializer {
     }
 }
 
+/// <p>This operation requires a body. Ensure that the body is present and the <code>Content-Type</code> header is set.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MissingBody {
+    pub message: Option<String>,
+}
+
+/// <p>The specified origin access identity does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NoSuchCloudFrontOriginAccessIdentity {
+    pub message: Option<String>,
+}
+
+/// <p>The specified distribution does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NoSuchDistribution {
+    pub message: Option<String>,
+}
+
+/// <p>The specified invalidation does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NoSuchInvalidation {
+    pub message: Option<String>,
+}
+
+/// <p>No origin exists with the specified <code>Origin Id</code>. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NoSuchOrigin {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NoSuchResource {
+    pub message: Option<String>,
+}
+
+/// <p>The specified streaming distribution does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NoSuchStreamingDistribution {
+    pub message: Option<String>,
+}
+
 /// <p>A complex type that describes the Amazon S3 bucket or the HTTP server (for example, a web server) from which CloudFront gets your files. You must create at least one origin.</p> <p>For the current limit on the number of origins that you can create for a distribution, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront">Amazon CloudFront Limits</a> in the <i>AWS General Reference</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Origin {
@@ -6010,6 +6226,12 @@ impl PathsSerializer {
     }
 }
 
+/// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PreconditionFailed {
+    pub message: Option<String>,
+}
+
 struct PriceClassDeserializer;
 impl PriceClassDeserializer {
     #[allow(unused_variables)]
@@ -6202,6 +6424,11 @@ impl ResourceARNSerializer {
         )))?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceInUse {
+    pub message: Option<String>,
 }
 
 /// <p>A complex type that identifies ways in which you want to restrict distribution of your content.</p>
@@ -6744,6 +6971,11 @@ impl StreamingDistributionDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct StreamingDistributionAlreadyExists {
+    pub message: Option<String>,
+}
+
 /// <p>The RTMP distribution's configuration information.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct StreamingDistributionConfig {
@@ -6994,6 +7226,11 @@ impl StreamingDistributionListDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct StreamingDistributionNotDisabled {
+    pub message: Option<String>,
+}
+
 /// <p> A summary of the information for an Amazon CloudFront streaming distribution.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct StreamingDistributionSummary {
@@ -7614,6 +7851,104 @@ impl TimestampDeserializer {
         Ok(obj)
     }
 }
+/// <p>You cannot create more cache behaviors for the distribution.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyCacheBehaviors {
+    pub message: Option<String>,
+}
+
+/// <p>You cannot create anymore custom SSL/TLS certificates.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyCertificates {
+    pub message: Option<String>,
+}
+
+/// <p>Processing your request would cause you to exceed the maximum number of origin access identities allowed.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyCloudFrontOriginAccessIdentities {
+    pub message: Option<String>,
+}
+
+/// <p>Your request contains more cookie names in the whitelist than are allowed per cache behavior.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyCookieNamesInWhiteList {
+    pub message: Option<String>,
+}
+
+/// <p>Your request contains more CNAMEs than are allowed per distribution.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyDistributionCNAMEs {
+    pub message: Option<String>,
+}
+
+/// <p>Processing your request would cause you to exceed the maximum number of distributions allowed.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyDistributions {
+    pub message: Option<String>,
+}
+
+/// <p>Processing your request would cause the maximum number of distributions with Lambda function associations per owner to be exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyDistributionsWithLambdaAssociations {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyHeadersInForwardedValues {
+    pub message: Option<String>,
+}
+
+/// <p>You have exceeded the maximum number of allowable InProgress invalidation batch requests, or invalidation objects.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyInvalidationsInProgress {
+    pub message: Option<String>,
+}
+
+/// <p>Your request contains more Lambda function associations than are allowed per distribution.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyLambdaFunctionAssociations {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyOriginCustomHeaders {
+    pub message: Option<String>,
+}
+
+/// <p>You cannot create more origins for the distribution.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyOrigins {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyQueryStringParameters {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyStreamingDistributionCNAMEs {
+    pub message: Option<String>,
+}
+
+/// <p>Processing your request would cause you to exceed the maximum number of streaming distributions allowed.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyStreamingDistributions {
+    pub message: Option<String>,
+}
+
+/// <p>Your request contains more trusted signers than are allowed per distribution.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyTrustedSigners {
+    pub message: Option<String>,
+}
+
+/// <p>One or more of your trusted signers don't exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TrustedSignerDoesNotExist {
+    pub message: Option<String>,
+}
+
 /// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p> <p>If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p> <p>For more information about updating the distribution configuration, see <a>DistributionConfig</a> .</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TrustedSigners {

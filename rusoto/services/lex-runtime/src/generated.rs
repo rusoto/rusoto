@@ -28,6 +28,18 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
+/// <p>Either the Amazon Lex bot is still building, or one of the dependent services (Amazon Polly, AWS Lambda) failed with an internal service error.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BadGatewayException {
+    pub message: Option<String>,
+}
+
+/// <p> Request validation failed, there is no usable message in the context, or the bot build failed, is still in progress, or contains unbuilt changes. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BadRequestException {
+    pub message: Option<String>,
+}
+
 /// <p>Represents an option to be shown on the client platform (Facebook, Slack, etc.)</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Button {
@@ -37,6 +49,18 @@ pub struct Button {
     /// <p>The value sent to Amazon Lex when a user chooses the button. For example, consider button text "NYC." When the user chooses the button, the value sent can be "New York City."</p>
     #[serde(rename = "value")]
     pub value: String,
+}
+
+/// <p> Two clients are using the same AWS account, Amazon Lex bot, and user ID. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ConflictException {
+    pub message: Option<String>,
+}
+
+/// <p><p> One of the dependencies, such as AWS Lambda or Amazon Polly, threw an exception. For example, </p> <ul> <li> <p>If Amazon Lex does not have sufficient permissions to call a Lambda function.</p> </li> <li> <p>If a Lambda function takes longer than 30 seconds to execute.</p> </li> <li> <p>If a fulfillment Lambda function returns a <code>Delegate</code> dialog action without removing any slot values.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DependencyFailedException {
+    pub message: Option<String>,
 }
 
 /// <p>Represents an option rendered to the user when a prompt is shown. It could be an image, a button, a link, or text. </p>
@@ -62,6 +86,37 @@ pub struct GenericAttachment {
     #[serde(rename = "title")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
+}
+
+/// <p>Internal service error. Retry the call.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalFailureException {
+    pub message: Option<String>,
+}
+
+/// <p>Exceeded a limit.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {
+    pub message: Option<String>,
+    pub retry_after_seconds: Option<String>,
+}
+
+/// <p>This exception is not used.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LoopDetectedException {
+    pub message: Option<String>,
+}
+
+/// <p>The accept header in the request does not have a valid value.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NotAcceptableException {
+    pub message: Option<String>,
+}
+
+/// <p>The resource (such as the Amazon Lex bot or an alias) that is referred to is not found.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NotFoundException {
+    pub message: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -184,6 +239,12 @@ pub struct PostTextResponse {
     pub slots: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p>The input speech is too long.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RequestTimeoutException {
+    pub message: Option<String>,
+}
+
 /// <p>If you configure a response card when creating your bots, Amazon Lex substitutes the session attributes and slot values that are available, and then returns it. The response card can also come from a Lambda function ( <code>dialogCodeHook</code> and <code>fulfillmentActivity</code> on an intent).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ResponseCard {
@@ -199,6 +260,12 @@ pub struct ResponseCard {
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+/// <p>The Content-Type header (<code>PostContent</code> API) has an invalid value. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UnsupportedMediaTypeException {
+    pub message: Option<String>,
 }
 
 /// Errors returned by PostContent

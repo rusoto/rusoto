@@ -112,6 +112,48 @@ pub struct AttachmentDetails {
     pub file_name: Option<String>,
 }
 
+/// <p>An attachment with the specified ID could not be found.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AttachmentIdNotFound {
+    /// <p>An attachment with the specified ID could not be found.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The limit for the number of attachment sets created in a short period of time has been exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AttachmentLimitExceeded {
+    /// <p>The limit for the number of attachment sets created in a short period of time has been exceeded.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The expiration time of the attachment set has passed. The set expires 1 hour after it is created.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AttachmentSetExpired {
+    /// <p>The expiration time of the attachment set has passed. The set expires 1 hour after it is created.</p>
+    pub message: Option<String>,
+}
+
+/// <p>An attachment set with the specified ID could not be found.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AttachmentSetIdNotFound {
+    /// <p>An attachment set with the specified ID could not be found.</p>
+    pub message: Option<String>,
+}
+
+/// <p>A limit for the size of an attachment set has been exceeded. The limits are 3 attachments and 5 MB per attachment.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AttachmentSetSizeLimitExceeded {
+    /// <p>A limit for the size of an attachment set has been exceeded. The limits are 3 attachments and 5 MB per attachment.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The case creation limit for the account has been exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CaseCreationLimitExceeded {
+    /// <p>An error message that indicates that you have exceeded the number of cases you can have open.</p>
+    pub message: Option<String>,
+}
+
 /// <p><p>A JSON-formatted object that contains the metadata for a support case. It is contained the response from a <a>DescribeCases</a> request. <b>CaseDetails</b> contains the following fields:</p> <ul> <li> <p> <b>caseId.</b> The AWS Support case ID requested or returned in the call. The case ID is an alphanumeric string formatted as shown in this example: case-<i>12345678910-2013-c4c1d2bf33c5cf47</i>.</p> </li> <li> <p> <b>categoryCode.</b> The category of problem for the AWS Support case. Corresponds to the CategoryCode values returned by a call to <a>DescribeServices</a>.</p> </li> <li> <p> <b>displayId.</b> The identifier for the case on pages in the AWS Support Center.</p> </li> <li> <p> <b>language.</b> The ISO 639-1 code for the language in which AWS provides support. AWS Support currently supports English (&quot;en&quot;) and Japanese (&quot;ja&quot;). Language parameters must be passed explicitly for operations that take them.</p> </li> <li> <p> <b>recentCommunications.</b> One or more <a>Communication</a> objects. Fields of these objects are <code>attachments</code>, <code>body</code>, <code>caseId</code>, <code>submittedBy</code>, and <code>timeCreated</code>.</p> </li> <li> <p> <b>nextToken.</b> A resumption point for pagination.</p> </li> <li> <p> <b>serviceCode.</b> The identifier for the AWS service that corresponds to the service code defined in the call to <a>DescribeServices</a>.</p> </li> <li> <p> <b>severityCode. </b>The severity code assigned to the case. Contains one of the values returned by the call to <a>DescribeSeverityLevels</a>.</p> </li> <li> <p> <b>status.</b> The status of the case in the AWS Support Center.</p> </li> <li> <p> <b>subject.</b> The subject line of the case.</p> </li> <li> <p> <b>submittedBy.</b> The email address of the account that submitted the case.</p> </li> <li> <p> <b>timeCreated.</b> The time the case was created, in ISO-8601 format.</p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CaseDetails {
@@ -163,6 +205,13 @@ pub struct CaseDetails {
     #[serde(rename = "timeCreated")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub time_created: Option<String>,
+}
+
+/// <p>The requested <code>caseId</code> could not be located.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CaseIdNotFound {
+    /// <p>The requested <code>CaseId</code> could not be located.</p>
+    pub message: Option<String>,
 }
 
 /// <p>A JSON-formatted name/value pair that represents the category name and category code of the problem, selected from the <a>DescribeServices</a> response for each AWS service.</p>
@@ -249,6 +298,13 @@ pub struct CreateCaseResponse {
     #[serde(rename = "caseId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub case_id: Option<String>,
+}
+
+/// <p>The limit for the number of <a>DescribeAttachment</a> requests in a short period of time has been exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeAttachmentLimitExceeded {
+    /// <p>The limit for the number of <a>DescribeAttachment</a> requests in a short period of time has been exceeded.</p>
+    pub message: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -465,6 +521,13 @@ pub struct DescribeTrustedAdvisorChecksResponse {
     /// <p>Information about all available Trusted Advisor checks.</p>
     #[serde(rename = "checks")]
     pub checks: Vec<TrustedAdvisorCheckDescription>,
+}
+
+/// <p>An internal server error occurred.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalServerError {
+    /// <p>An internal server error occurred.</p>
+    pub message: Option<String>,
 }
 
 /// <p>The five most recent communications associated with the case.</p>

@@ -368,7 +368,7 @@ pub struct AdminInitiateAuthResponse {
     #[serde(rename = "AuthenticationResult")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_result: Option<AuthenticationResultType>,
-    /// <p><p>The name of the challenge which you are responding to with this call. This is returned to you in the <code>AdminInitiateAuth</code> response if you need to pass another challenge.</p> <ul> <li> <p> <code>SMS<em>MFA</code>: Next challenge is to supply an <code>SMS</em>MFA<em>CODE</code>, delivered via SMS.</p> </li> <li> <p> <code>PASSWORD</em>VERIFIER</code>: Next challenge is to supply <code>PASSWORD<em>CLAIM</em>SIGNATURE</code>, <code>PASSWORD<em>CLAIM</em>SECRET<em>BLOCK</code>, and <code>TIMESTAMP</code> after the client-side SRP calculations.</p> </li> <li> <p> <code>CUSTOM</em>CHALLENGE</code>: This is returned if your custom authentication flow determines that the user should pass another challenge before tokens are issued.</p> </li> <li> <p> <code>DEVICE<em>SRP</em>AUTH</code>: If device tracking was enabled on your user pool and the previous challenges were passed, this challenge is returned so that Amazon Cognito can start tracking this device.</p> </li> <li> <p> <code>DEVICE<em>PASSWORD</em>VERIFIER</code>: Similar to <code>PASSWORD<em>VERIFIER</code>, but for devices only.</p> </li> <li> <p> <code>ADMIN</em>NO<em>SRP</em>AUTH</code>: This is returned if you need to authenticate with <code>USERNAME</code> and <code>PASSWORD</code> directly. An app client must be enabled to use this flow.</p> </li> <li> <p> <code>NEW<em>PASSWORD</em>REQUIRED</code>: For users which are required to change their passwords after successful first login. This challenge should be passed with <code>NEW_PASSWORD</code> and any other required attributes.</p> </li> </ul></p>
+    /// <p><p>The name of the challenge which you are responding to with this call. This is returned to you in the <code>AdminInitiateAuth</code> response if you need to pass another challenge.</p> <ul> <li> <p> <code>MFA<em>SETUP</code>: If MFA is required, users who do not have at least one of the MFA methods set up are presented with an <code>MFA</em>SETUP</code> challenge. The user must set up at least one MFA type to continue to authenticate.</p> </li> <li> <p> <code>SELECT<em>MFA</em>TYPE</code>: Selects the MFA type. Valid MFA options are <code>SMS<em>MFA</code> for text SMS MFA, and <code>SOFTWARE</em>TOKEN<em>MFA</code> for TOTP software token MFA.</p> </li> <li> <p> <code>SMS</em>MFA</code>: Next challenge is to supply an <code>SMS<em>MFA</em>CODE</code>, delivered via SMS.</p> </li> <li> <p> <code>PASSWORD<em>VERIFIER</code>: Next challenge is to supply <code>PASSWORD</em>CLAIM<em>SIGNATURE</code>, <code>PASSWORD</em>CLAIM<em>SECRET</em>BLOCK</code>, and <code>TIMESTAMP</code> after the client-side SRP calculations.</p> </li> <li> <p> <code>CUSTOM<em>CHALLENGE</code>: This is returned if your custom authentication flow determines that the user should pass another challenge before tokens are issued.</p> </li> <li> <p> <code>DEVICE</em>SRP<em>AUTH</code>: If device tracking was enabled on your user pool and the previous challenges were passed, this challenge is returned so that Amazon Cognito can start tracking this device.</p> </li> <li> <p> <code>DEVICE</em>PASSWORD<em>VERIFIER</code>: Similar to <code>PASSWORD</em>VERIFIER</code>, but for devices only.</p> </li> <li> <p> <code>ADMIN<em>NO</em>SRP<em>AUTH</code>: This is returned if you need to authenticate with <code>USERNAME</code> and <code>PASSWORD</code> directly. An app client must be enabled to use this flow.</p> </li> <li> <p> <code>NEW</em>PASSWORD<em>REQUIRED</code>: For users which are required to change their passwords after successful first login. This challenge should be passed with <code>NEW</em>PASSWORD</code> and any other required attributes.</p> </li> </ul></p>
     #[serde(rename = "ChallengeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_name: Option<String>,
@@ -682,6 +682,13 @@ pub struct AdminUserGlobalSignOutRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AdminUserGlobalSignOutResponse {}
 
+/// <p>This exception is thrown when a user tries to confirm the account with an email or phone number that has already been supplied as an alias from a different account. This exception tells user that an account with this email or phone already exists.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AliasExistsException {
+    /// <p>The message sent to the user when an alias exists.</p>
+    pub message: Option<String>,
+}
+
 /// <p>The Amazon Pinpoint analytics configuration for collecting metrics for a user pool.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AnalyticsConfigurationType {
@@ -789,7 +796,7 @@ pub struct AuthenticationResultType {
     #[serde(rename = "AccessToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_token: Option<String>,
-    /// <p>The expiration period of the authentication result.</p>
+    /// <p>The expiration period of the authentication result in seconds.</p>
     #[serde(rename = "ExpiresIn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expires_in: Option<i64>,
@@ -859,6 +866,20 @@ pub struct CodeDeliveryDetailsType {
     pub destination: Option<String>,
 }
 
+/// <p>This exception is thrown when a verification code fails to deliver successfully.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CodeDeliveryFailureException {
+    /// <p>The message sent when a verification code fails to deliver successfully.</p>
+    pub message: Option<String>,
+}
+
+/// <p>This exception is thrown if the provided code does not match what the server was expecting.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CodeMismatchException {
+    /// <p>The message provided when the code mismatch exception is thrown.</p>
+    pub message: Option<String>,
+}
+
 /// <p>The compromised credentials actions type</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CompromisedCredentialsActionsType {
@@ -877,6 +898,13 @@ pub struct CompromisedCredentialsRiskConfigurationType {
     #[serde(rename = "EventFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_filter: Option<Vec<String>>,
+}
+
+/// <p>This exception is thrown if two or more modifications are happening concurrently.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ConcurrentModificationException {
+    /// <p>The message provided when the concurrent exception is thrown.</p>
+    pub message: Option<String>,
 }
 
 /// <p>Confirms the device request.</p>
@@ -1122,14 +1150,14 @@ pub struct CreateUserPoolClientRequest {
     #[serde(rename = "AnalyticsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub analytics_configuration: Option<AnalyticsConfigurationType>,
-    /// <p>A list of allowed callback URLs for the identity providers.</p>
+    /// <p>A list of allowed redirect (callback) URLs for the identity providers.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p>
     #[serde(rename = "CallbackURLs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub callback_ur_ls: Option<Vec<String>>,
     /// <p>The client name for the user pool client you would like to create.</p>
     #[serde(rename = "ClientName")]
     pub client_name: String,
-    /// <p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p>
+    /// <p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p>
     #[serde(rename = "DefaultRedirectURI")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_redirect_uri: Option<String>,
@@ -1570,6 +1598,12 @@ pub struct DomainDescriptionType {
     pub version: Option<String>,
 }
 
+/// <p>This exception is thrown when the provider is already supported by the user pool.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DuplicateProviderException {
+    pub message: Option<String>,
+}
+
 /// <p>The email configuration type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EmailConfigurationType {
@@ -1581,6 +1615,12 @@ pub struct EmailConfigurationType {
     #[serde(rename = "SourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_arn: Option<String>,
+}
+
+/// <p>This exception is thrown when there is a code mismatch and the service fails to configure the software token TOTP multi-factor authentication (MFA).</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EnableSoftwareTokenMFAException {
+    pub message: Option<String>,
 }
 
 /// <p>Specifies the user context data captured at the time of an event request.</p>
@@ -1634,6 +1674,13 @@ pub struct EventRiskType {
     #[serde(rename = "RiskLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub risk_level: Option<String>,
+}
+
+/// <p>This exception is thrown if a code has expired.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ExpiredCodeException {
+    /// <p>The message returned when the expired code exception is thrown.</p>
+    pub message: Option<String>,
 }
 
 /// <p>Represents the request to forget the device.</p>
@@ -1877,6 +1924,12 @@ pub struct GlobalSignOutRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GlobalSignOutResponse {}
 
+/// <p>This exception is thrown when Amazon Cognito encounters a group that already exists in the user pool.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GroupExistsException {
+    pub message: Option<String>,
+}
+
 /// <p>The group type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GroupType {
@@ -2008,6 +2061,68 @@ pub struct InitiateAuthResponse {
     pub session: Option<String>,
 }
 
+/// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalErrorException {
+    /// <p>The message returned when Amazon Cognito throws an internal error exception.</p>
+    pub message: Option<String>,
+}
+
+/// <p>This exception is thrown when Amazon Cognito is not allowed to use your email identity. HTTP status code: 400.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidEmailRoleAccessPolicyException {
+    /// <p>The message returned when you have an unverified email address or the identity policy is not set on an email address that Amazon Cognito can access.</p>
+    pub message: Option<String>,
+}
+
+/// <p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidLambdaResponseException {
+    /// <p>The message returned when the Amazon Cognito service throws an invalid AWS Lambda response exception.</p>
+    pub message: Option<String>,
+}
+
+/// <p>This exception is thrown when the specified OAuth flow is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidOAuthFlowException {
+    pub message: Option<String>,
+}
+
+/// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterException {
+    /// <p>The message returned when the Amazon Cognito service throws an invalid parameter exception.</p>
+    pub message: Option<String>,
+}
+
+/// <p>This exception is thrown when the Amazon Cognito service encounters an invalid password.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidPasswordException {
+    /// <p>The message returned when the Amazon Cognito service throws an invalid user password exception.</p>
+    pub message: Option<String>,
+}
+
+/// <p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidSmsRoleAccessPolicyException {
+    /// <p>The message retuned when the invalid SMS role access policy exception is thrown.</p>
+    pub message: Option<String>,
+}
+
+/// <p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidSmsRoleTrustRelationshipException {
+    /// <p>The message returned when the role trust relationship for the SMS message is invalid.</p>
+    pub message: Option<String>,
+}
+
+/// <p>This exception is thrown when the user pool configuration is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidUserPoolConfigurationException {
+    /// <p>The message returned when the user pool configuration is invalid.</p>
+    pub message: Option<String>,
+}
+
 /// <p>Specifies the configuration for AWS Lambda triggers.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LambdaConfigType {
@@ -2051,6 +2166,13 @@ pub struct LambdaConfigType {
     #[serde(rename = "VerifyAuthChallengeResponse")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub verify_auth_challenge_response: Option<String>,
+}
+
+/// <p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {
+    /// <p>The message returned when Amazon Cognito throws a limit exceeded exception.</p>
+    pub message: Option<String>,
 }
 
 /// <p>Represents the request to list the devices.</p>
@@ -2310,6 +2432,13 @@ pub struct ListUsersResponse {
     pub users: Option<Vec<UserType>>,
 }
 
+/// <p>This exception is thrown when Amazon Cognito cannot find a multi-factor authentication (MFA) method.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MFAMethodNotFoundException {
+    /// <p>The message returned when Amazon Cognito throws an MFA method not found exception.</p>
+    pub message: Option<String>,
+}
+
 /// <p>Specifies the different settings for multi-factor authentication (MFA).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MFAOptionType {
@@ -2351,6 +2480,13 @@ pub struct NewDeviceMetadataType {
     #[serde(rename = "DeviceKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_key: Option<String>,
+}
+
+/// <p>This exception is thrown when a user is not authorized.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NotAuthorizedException {
+    /// <p>The message returned when the Amazon Cognito service returns a not authorized exception.</p>
+    pub message: Option<String>,
 }
 
 /// <p>The notify configuration type.</p>
@@ -2435,6 +2571,20 @@ pub struct PasswordPolicyType {
     pub require_uppercase: Option<bool>,
 }
 
+/// <p>This exception is thrown when a password reset is required.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PasswordResetRequiredException {
+    /// <p>The message returned when a password reset is required.</p>
+    pub message: Option<String>,
+}
+
+/// <p>This exception is thrown when a precondition is not met.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PreconditionNotMetException {
+    /// <p>The message returned when a precondition is not met.</p>
+    pub message: Option<String>,
+}
+
 /// <p>A container for identity provider details.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ProviderDescription {
@@ -2503,6 +2653,13 @@ pub struct ResendConfirmationCodeResponse {
     #[serde(rename = "CodeDeliveryDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code_delivery_details: Option<CodeDeliveryDetailsType>,
+}
+
+/// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceNotFoundException {
+    /// <p>The message returned when the Amazon Cognito service returns a resource not found exception.</p>
+    pub message: Option<String>,
 }
 
 /// <p>A resource server scope.</p>
@@ -2652,7 +2809,7 @@ pub struct SchemaAttributeType {
     #[serde(rename = "DeveloperOnlyAttribute")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub developer_only_attribute: Option<bool>,
-    /// <p>Specifies whether the attribute can be changed once it has been created.</p>
+    /// <p>Specifies whether the value of the attribute can be changed.</p>
     #[serde(rename = "Mutable")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mutable: Option<bool>,
@@ -2672,6 +2829,12 @@ pub struct SchemaAttributeType {
     #[serde(rename = "StringAttributeConstraints")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub string_attribute_constraints: Option<StringAttributeConstraintsType>,
+}
+
+/// <p>This exception is thrown when the specified scope does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ScopeDoesNotExistException {
+    pub message: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2877,6 +3040,12 @@ pub struct SmsMfaConfigType {
     pub sms_configuration: Option<SmsConfigurationType>,
 }
 
+/// <p>This exception is thrown when the software token TOTP multi-factor authentication (MFA) is not enabled for the user pool.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SoftwareTokenMFANotFoundException {
+    pub message: Option<String>,
+}
+
 /// <p>The type used for enabling software token MFA at the user pool level.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SoftwareTokenMfaConfigType {
@@ -2952,6 +3121,20 @@ pub struct StringAttributeConstraintsType {
     pub min_length: Option<String>,
 }
 
+/// <p>This exception is thrown when the user has made too many failed attempts for a given action (e.g., sign in).</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyFailedAttemptsException {
+    /// <p>The message returned when the Amazon Cognito service returns a too many failed attempts exception.</p>
+    pub message: Option<String>,
+}
+
+/// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyRequestsException {
+    /// <p>The message returned when the Amazon Cognito service returns a too many requests exception.</p>
+    pub message: Option<String>,
+}
+
 /// <p>A container for the UI customization information for a user pool's built-in app UI.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UICustomizationType {
@@ -2983,6 +3166,26 @@ pub struct UICustomizationType {
     #[serde(rename = "UserPoolId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_id: Option<String>,
+}
+
+/// <p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UnexpectedLambdaException {
+    /// <p>The message returned when the Amazon Cognito service returns an unexpected AWS Lambda exception.</p>
+    pub message: Option<String>,
+}
+
+/// <p>This exception is thrown when the specified identifier is not supported.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UnsupportedIdentityProviderException {
+    pub message: Option<String>,
+}
+
+/// <p>The request failed because the user is in an unsupported state.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UnsupportedUserStateException {
+    /// <p>The message returned when the user is in an unsupported state.</p>
+    pub message: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3148,7 +3351,7 @@ pub struct UpdateUserPoolClientRequest {
     #[serde(rename = "AnalyticsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub analytics_configuration: Option<AnalyticsConfigurationType>,
-    /// <p>A list of allowed callback URLs for the identity providers.</p>
+    /// <p>A list of allowed redirect (callback) URLs for the identity providers.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p>
     #[serde(rename = "CallbackURLs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub callback_ur_ls: Option<Vec<String>>,
@@ -3159,7 +3362,7 @@ pub struct UpdateUserPoolClientRequest {
     #[serde(rename = "ClientName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_name: Option<String>,
-    /// <p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p>
+    /// <p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p>
     #[serde(rename = "DefaultRedirectURI")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_redirect_uri: Option<String>,
@@ -3282,6 +3485,13 @@ pub struct UserContextDataType {
     pub encoded_data: Option<String>,
 }
 
+/// <p>This exception is thrown when you are trying to modify a user pool while a user import job is in progress for that pool.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UserImportInProgressException {
+    /// <p>The message returned when the user pool has an import job running.</p>
+    pub message: Option<String>,
+}
+
 /// <p>The user import job type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UserImportJobType {
@@ -3339,6 +3549,33 @@ pub struct UserImportJobType {
     pub user_pool_id: Option<String>,
 }
 
+/// <p>This exception is thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UserLambdaValidationException {
+    /// <p>The message returned when the Amazon Cognito service returns a user validation exception with the AWS Lambda service.</p>
+    pub message: Option<String>,
+}
+
+/// <p>This exception is thrown when a user is not confirmed successfully.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UserNotConfirmedException {
+    /// <p>The message returned when a user is not confirmed successfully.</p>
+    pub message: Option<String>,
+}
+
+/// <p>This exception is thrown when a user is not found.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UserNotFoundException {
+    /// <p>The message returned when a user is not found.</p>
+    pub message: Option<String>,
+}
+
+/// <p>This exception is thrown when user pool add-ons are not enabled.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UserPoolAddOnNotEnabledException {
+    pub message: Option<String>,
+}
+
 /// <p>The user pool add-ons type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UserPoolAddOnsType {
@@ -3383,7 +3620,7 @@ pub struct UserPoolClientType {
     #[serde(rename = "AnalyticsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub analytics_configuration: Option<AnalyticsConfigurationType>,
-    /// <p>A list of allowed callback URLs for the identity providers.</p>
+    /// <p>A list of allowed redirect (callback) URLs for the identity providers.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p>
     #[serde(rename = "CallbackURLs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub callback_ur_ls: Option<Vec<String>>,
@@ -3403,7 +3640,7 @@ pub struct UserPoolClientType {
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    /// <p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p>
+    /// <p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p>
     #[serde(rename = "DefaultRedirectURI")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_redirect_uri: Option<String>,
@@ -3479,6 +3716,12 @@ pub struct UserPoolPolicyType {
     pub password_policy: Option<PasswordPolicyType>,
 }
 
+/// <p>This exception is thrown when a user pool tag cannot be set or updated.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UserPoolTaggingException {
+    pub message: Option<String>,
+}
+
 /// <p>A container for information about the user pool.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UserPoolType {
@@ -3490,6 +3733,10 @@ pub struct UserPoolType {
     #[serde(rename = "AliasAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub alias_attributes: Option<Vec<String>>,
+    /// <p>The Amazon Resource Name (ARN) for the user pool.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
     /// <p>Specifies the attributes that are auto-verified in a user pool.</p>
     #[serde(rename = "AutoVerifiedAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3530,7 +3777,7 @@ pub struct UserPoolType {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The AWS Lambda triggers associated with tue user pool.</p>
+    /// <p>The AWS Lambda triggers associated with the user pool.</p>
     #[serde(rename = "LambdaConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_config: Option<LambdaConfigType>,
@@ -3623,6 +3870,13 @@ pub struct UserType {
     #[serde(rename = "Username")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
+}
+
+/// <p>This exception is thrown when Amazon Cognito encounters a user name that already exists in the user pool.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UsernameExistsException {
+    /// <p>The message returned when Amazon Cognito throws a user name exists exception.</p>
+    pub message: Option<String>,
 }
 
 /// <p>The template for verification messages.</p>
@@ -15928,7 +16182,7 @@ pub trait CognitoIdentityProvider {
         input: UpdateUserPoolClientRequest,
     ) -> RusotoFuture<UpdateUserPoolClientResponse, UpdateUserPoolClientError>;
 
-    /// <p>Use this API to register a user's entered TOTP code and mark the user's software token MFA status as "verified" if successful,</p>
+    /// <p>Use this API to register a user's entered TOTP code and mark the user's software token MFA status as "verified" if successful. The request takes an access token or a session string, but not both.</p>
     fn verify_software_token(
         &self,
         input: VerifySoftwareTokenRequest,
@@ -19375,7 +19629,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Use this API to register a user's entered TOTP code and mark the user's software token MFA status as "verified" if successful,</p>
+    /// <p>Use this API to register a user's entered TOTP code and mark the user's software token MFA status as "verified" if successful. The request takes an access token or a session string, but not both.</p>
     fn verify_software_token(
         &self,
         input: VerifySoftwareTokenRequest,

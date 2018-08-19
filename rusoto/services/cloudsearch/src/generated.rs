@@ -501,6 +501,13 @@ impl AvailabilityOptionsStatusDeserializer {
         Ok(obj)
     }
 }
+/// <p>An error occurred while processing the request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BaseException {
+    pub code: Option<String>,
+    pub message: Option<String>,
+}
+
 struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(unused_variables)]
@@ -2257,6 +2264,10 @@ impl DescribeSuggestersResponseDeserializer {
         Ok(obj)
     }
 }
+/// <p>The request was rejected because it attempted an operation which is not enabled.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DisabledOperationException {}
+
 /// <p>Options for a search suggester.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DocumentSuggesterOptions {
@@ -3808,6 +3819,14 @@ impl IntOptionsSerializer {
     }
 }
 
+/// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalException {}
+
+/// <p>The request was rejected because it specified an invalid type definition.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidTypeException {}
+
 /// <p>Options for a latlon field. A latlon field contains a location stored as a latitude and longitude value pair. Present if <code>IndexFieldType</code> specifies the field is of type <code>latlon</code>. All options are enabled by default.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LatLonOptions {
@@ -3942,6 +3961,10 @@ impl LatLonOptionsSerializer {
         }
     }
 }
+
+/// <p>The request was rejected because a resource limit has already been met.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {}
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Limits {
@@ -4496,6 +4519,10 @@ impl PolicyDocumentDeserializer {
         Ok(obj)
     }
 }
+/// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceNotFoundException {}
+
 /// <p>The desired instance type and desired number of replicas of each index partition.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScalingParameters {

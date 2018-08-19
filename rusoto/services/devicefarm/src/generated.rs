@@ -65,6 +65,13 @@ pub struct AccountSettings {
     pub unmetered_remote_access_devices: Option<::std::collections::HashMap<String, i64>>,
 }
 
+/// <p>An invalid argument was specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ArgumentException {
+    /// <p>Any additional information about the exception.</p>
+    pub message: Option<String>,
+}
+
 /// <p>Represents the output of a test. Examples of artifacts include logs and screenshots.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Artifact {
@@ -284,6 +291,10 @@ pub struct CreateRemoteAccessSessionConfiguration {
     #[serde(rename = "billingMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub billing_method: Option<String>,
+    /// <p>An array of Amazon Resource Names (ARNs) included in the VPC endpoint configuration.</p>
+    #[serde(rename = "vpceConfigurationArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpce_configuration_arns: Option<Vec<String>>,
 }
 
 /// <p>Creates and submits a request to start a remote access session.</p>
@@ -359,7 +370,7 @@ pub struct CreateUploadRequest {
     /// <p>The ARN of the project for the upload.</p>
     #[serde(rename = "projectArn")]
     pub project_arn: String,
-    /// <p>The upload's upload type.</p> <p>Must be one of the following values:</p> <ul> <li> <p>ANDROID_APP: An Android upload.</p> </li> <li> <p>IOS_APP: An iOS upload.</p> </li> <li> <p>WEB_APP: A web appliction upload.</p> </li> <li> <p>EXTERNAL_DATA: An external data upload.</p> </li> <li> <p>APPIUM_JAVA_JUNIT_TEST_PACKAGE: An Appium Java JUnit test package upload.</p> </li> <li> <p>APPIUM_JAVA_TESTNG_TEST_PACKAGE: An Appium Java TestNG test package upload.</p> </li> <li> <p>APPIUM_PYTHON_TEST_PACKAGE: An Appium Python test package upload.</p> </li> <li> <p>APPIUM_WEB_JAVA_JUNIT_TEST_PACKAGE: An Appium Java JUnit test package upload.</p> </li> <li> <p>APPIUM_WEB_JAVA_TESTNG_TEST_PACKAGE: An Appium Java TestNG test package upload.</p> </li> <li> <p>APPIUM_WEB_PYTHON_TEST_PACKAGE: An Appium Python test package upload.</p> </li> <li> <p>CALABASH_TEST_PACKAGE: A Calabash test package upload.</p> </li> <li> <p>INSTRUMENTATION_TEST_PACKAGE: An instrumentation upload.</p> </li> <li> <p>UIAUTOMATION_TEST_PACKAGE: A uiautomation test package upload.</p> </li> <li> <p>UIAUTOMATOR_TEST_PACKAGE: A uiautomator test package upload.</p> </li> <li> <p>XCTEST_TEST_PACKAGE: An XCode test package upload.</p> </li> <li> <p>XCTEST_UI_TEST_PACKAGE: An XCode UI test package upload.</p> </li> </ul> <p> <b>Note</b> If you call <code>CreateUpload</code> with <code>WEB_APP</code> specified, AWS Device Farm throws an <code>ArgumentException</code> error.</p>
+    /// <p>The upload's upload type.</p> <p>Must be one of the following values:</p> <ul> <li> <p>ANDROID_APP: An Android upload.</p> </li> <li> <p>IOS_APP: An iOS upload.</p> </li> <li> <p>WEB_APP: A web application upload.</p> </li> <li> <p>EXTERNAL_DATA: An external data upload.</p> </li> <li> <p>APPIUM_JAVA_JUNIT_TEST_PACKAGE: An Appium Java JUnit test package upload.</p> </li> <li> <p>APPIUM_JAVA_TESTNG_TEST_PACKAGE: An Appium Java TestNG test package upload.</p> </li> <li> <p>APPIUM_PYTHON_TEST_PACKAGE: An Appium Python test package upload.</p> </li> <li> <p>APPIUM_WEB_JAVA_JUNIT_TEST_PACKAGE: An Appium Java JUnit test package upload.</p> </li> <li> <p>APPIUM_WEB_JAVA_TESTNG_TEST_PACKAGE: An Appium Java TestNG test package upload.</p> </li> <li> <p>APPIUM_WEB_PYTHON_TEST_PACKAGE: An Appium Python test package upload.</p> </li> <li> <p>CALABASH_TEST_PACKAGE: A Calabash test package upload.</p> </li> <li> <p>INSTRUMENTATION_TEST_PACKAGE: An instrumentation upload.</p> </li> <li> <p>UIAUTOMATION_TEST_PACKAGE: A uiautomation test package upload.</p> </li> <li> <p>UIAUTOMATOR_TEST_PACKAGE: A uiautomator test package upload.</p> </li> <li> <p>XCTEST_TEST_PACKAGE: An XCode test package upload.</p> </li> <li> <p>XCTEST_UI_TEST_PACKAGE: An XCode UI test package upload.</p> </li> </ul> <p> <b>Note</b> If you call <code>CreateUpload</code> with <code>WEB_APP</code> specified, AWS Device Farm throws an <code>ArgumentException</code> error.</p>
     #[serde(rename = "type")]
     pub type_: String,
 }
@@ -371,6 +382,31 @@ pub struct CreateUploadResult {
     #[serde(rename = "upload")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub upload: Option<Upload>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateVPCEConfigurationRequest {
+    /// <p>The DNS name of the service running in your VPC that you want Device Farm to test.</p>
+    #[serde(rename = "serviceDnsName")]
+    pub service_dns_name: String,
+    /// <p>An optional description, providing more details about your VPC endpoint configuration.</p>
+    #[serde(rename = "vpceConfigurationDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpce_configuration_description: Option<String>,
+    /// <p>The friendly name you give to your VPC endpoint configuration, to manage your configurations more easily.</p>
+    #[serde(rename = "vpceConfigurationName")]
+    pub vpce_configuration_name: String,
+    /// <p>The name of the VPC endpoint service running inside your AWS account that you want Device Farm to test.</p>
+    #[serde(rename = "vpceServiceName")]
+    pub vpce_service_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct CreateVPCEConfigurationResult {
+    /// <p>An object containing information about your VPC endpoint configuration.</p>
+    #[serde(rename = "vpceConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpce_configuration: Option<VPCEConfiguration>,
 }
 
 /// <p>A JSON object specifying the paths where the artifacts generated by the customer's tests, on the device or in the test environment, will be pulled from.</p> <p>Specify <code>deviceHostPaths</code> and optionally specify either <code>iosPaths</code> or <code>androidPaths</code>.</p> <p>For web app tests, you can specify both <code>iosPaths</code> and <code>androidPaths</code>.</p>
@@ -469,6 +505,16 @@ pub struct DeleteUploadRequest {
 /// <p>Represents the result of a delete upload request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteUploadResult {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteVPCEConfigurationRequest {
+    /// <p>The Amazon Resource Name (ARN) of the VPC endpoint configuration you want to delete.</p>
+    #[serde(rename = "arn")]
+    pub arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DeleteVPCEConfigurationResult {}
 
 /// <p>Represents a device type that an app is tested against.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -662,6 +708,10 @@ pub struct ExecutionConfiguration {
     #[serde(rename = "skipAppResign")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub skip_app_resign: Option<bool>,
+    /// <p>Set to true to enable video capture; otherwise, set to false. The default is true.</p>
+    #[serde(rename = "videoCapture")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub video_capture: Option<bool>,
 }
 
 /// <p>Represents the request sent to retrieve the account settings.</p>
@@ -699,6 +749,10 @@ pub struct GetDevicePoolCompatibilityRequest {
     #[serde(rename = "appArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_arn: Option<String>,
+    /// <p>An object containing information about the settings for a run.</p>
+    #[serde(rename = "configuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration: Option<ScheduleRunConfiguration>,
     /// <p>The device pool's ARN.</p>
     #[serde(rename = "devicePoolArn")]
     pub device_pool_arn: String,
@@ -934,6 +988,28 @@ pub struct GetUploadResult {
     pub upload: Option<Upload>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetVPCEConfigurationRequest {
+    /// <p>The Amazon Resource Name (ARN) of the VPC endpoint configuration you want to describe.</p>
+    #[serde(rename = "arn")]
+    pub arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct GetVPCEConfigurationResult {
+    /// <p>An object containing information about your VPC endpoint configuration.</p>
+    #[serde(rename = "vpceConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpce_configuration: Option<VPCEConfiguration>,
+}
+
+/// <p>An entity with the same name already exists.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct IdempotencyException {
+    /// <p>Any additional information about the exception.</p>
+    pub message: Option<String>,
+}
+
 /// <p>Represents information about incompatibility.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct IncompatibilityMessage {
@@ -996,6 +1072,12 @@ pub struct InstanceProfile {
     pub reboot_after_use: Option<bool>,
 }
 
+/// <p>There was an error with the update request, or you do not have sufficient permissions to update this VPC endpoint configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidOperationException {
+    pub message: Option<String>,
+}
+
 /// <p>Represents a device.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Job {
@@ -1051,6 +1133,21 @@ pub struct Job {
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+    /// <p>This value is set to true if video capture is enabled; otherwise, it is set to false.</p>
+    #[serde(rename = "videoCapture")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub video_capture: Option<bool>,
+    /// <p>The endpoint for streaming device video.</p>
+    #[serde(rename = "videoEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub video_endpoint: Option<String>,
+}
+
+/// <p>A limit was exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {
+    /// <p>Any additional information about the exception.</p>
+    pub message: Option<String>,
 }
 
 /// <p>Represents a request to the list artifacts operation.</p>
@@ -1486,6 +1583,10 @@ pub struct ListUploadsRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p><p>The type of upload.</p> <p>Must be one of the following values:</p> <ul> <li> <p>ANDROID<em>APP: An Android upload.</p> </li> <li> <p>IOS</em>APP: An iOS upload.</p> </li> <li> <p>WEB<em>APP: A web appliction upload.</p> </li> <li> <p>EXTERNAL</em>DATA: An external data upload.</p> </li> <li> <p>APPIUM<em>JAVA</em>JUNIT<em>TEST</em>PACKAGE: An Appium Java JUnit test package upload.</p> </li> <li> <p>APPIUM<em>JAVA</em>TESTNG<em>TEST</em>PACKAGE: An Appium Java TestNG test package upload.</p> </li> <li> <p>APPIUM<em>PYTHON</em>TEST<em>PACKAGE: An Appium Python test package upload.</p> </li> <li> <p>APPIUM</em>WEB<em>JAVA</em>JUNIT<em>TEST</em>PACKAGE: An Appium Java JUnit test package upload.</p> </li> <li> <p>APPIUM<em>WEB</em>JAVA<em>TESTNG</em>TEST<em>PACKAGE: An Appium Java TestNG test package upload.</p> </li> <li> <p>APPIUM</em>WEB<em>PYTHON</em>TEST<em>PACKAGE: An Appium Python test package upload.</p> </li> <li> <p>CALABASH</em>TEST<em>PACKAGE: A Calabash test package upload.</p> </li> <li> <p>INSTRUMENTATION</em>TEST<em>PACKAGE: An instrumentation upload.</p> </li> <li> <p>UIAUTOMATION</em>TEST<em>PACKAGE: A uiautomation test package upload.</p> </li> <li> <p>UIAUTOMATOR</em>TEST<em>PACKAGE: A uiautomator test package upload.</p> </li> <li> <p>XCTEST</em>TEST<em>PACKAGE: An XCode test package upload.</p> </li> <li> <p>XCTEST</em>UI<em>TEST</em>PACKAGE: An XCode UI test package upload.</p> </li> <li> <p>APPIUM<em>JAVA</em>JUNIT<em>TEST</em>SPEC: An Appium Java JUnit test spec upload.</p> </li> <li> <p>APPIUM<em>JAVA</em>TESTNG<em>TEST</em>SPEC: An Appium Java TestNG test spec upload.</p> </li> <li> <p>APPIUM<em>PYTHON</em>TEST<em>SPEC: An Appium Python test spec upload.</p> </li> <li> <p>APPIUM</em>WEB<em>JAVA</em>JUNIT<em>TEST</em>SPEC: An Appium Java JUnit test spec upload.</p> </li> <li> <p>APPIUM<em>WEB</em>JAVA<em>TESTNG</em>TEST<em>SPEC: An Appium Java TestNG test spec upload.</p> </li> <li> <p>APPIUM</em>WEB<em>PYTHON</em>TEST<em>SPEC: An Appium Python test spec upload.</p> </li> <li> <p>INSTRUMENTATION</em>TEST<em>SPEC: An instrumentation test spec upload.</p> </li> <li> <p>XCTEST</em>UI<em>TEST</em>SPEC: An XCode UI test spec upload.</p> </li> </ul></p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 /// <p>Represents the result of a list uploads request.</p>
@@ -1499,6 +1600,30 @@ pub struct ListUploadsResult {
     #[serde(rename = "uploads")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub uploads: Option<Vec<Upload>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListVPCEConfigurationsRequest {
+    /// <p>An integer specifying the maximum number of items you want to return in the API response.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ListVPCEConfigurationsResult {
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>An array of <code>VPCEConfiguration</code> objects containing information about your VPC endpoint configuration.</p>
+    #[serde(rename = "vpceConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpce_configurations: Option<Vec<VPCEConfiguration>>,
 }
 
 /// <p>Represents a latitude and longitude pair, expressed in geographic coordinate system degrees (for example 47.6204, -122.3491).</p> <p>Elevation is currently not supported.</p>
@@ -1576,6 +1701,20 @@ pub struct NetworkProfile {
     #[serde(rename = "uplinkLossPercent")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub uplink_loss_percent: Option<i64>,
+}
+
+/// <p>Exception gets thrown when a user is not eligible to perform the specified transaction.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NotEligibleException {
+    /// <p>The HTTP response code of a Not Eligible exception.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The specified entity was not found.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NotFoundException {
+    /// <p>Any additional information about the exception.</p>
+    pub message: Option<String>,
 }
 
 /// <p>Represents the metadata of a device offering.</p>
@@ -2037,6 +2176,10 @@ pub struct Run {
     #[serde(rename = "stopped")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stopped: Option<f64>,
+    /// <p>The ARN of the YAML-formatted test specification for the run.</p>
+    #[serde(rename = "testSpecArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub test_spec_arn: Option<String>,
     /// <p>The total number of jobs for the run.</p>
     #[serde(rename = "totalJobs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2103,6 +2246,10 @@ pub struct ScheduleRunConfiguration {
     #[serde(rename = "radios")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub radios: Option<Radios>,
+    /// <p>An array of Amazon Resource Names (ARNs) for your VPC endpoint configurations.</p>
+    #[serde(rename = "vpceConfigurationArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpce_configuration_arns: Option<Vec<String>>,
 }
 
 /// <p>Represents a request to the schedule run operation.</p>
@@ -2159,9 +2306,35 @@ pub struct ScheduleRunTest {
     #[serde(rename = "testPackageArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub test_package_arn: Option<String>,
+    /// <p>The ARN of the YAML-formatted test specification.</p>
+    #[serde(rename = "testSpecArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub test_spec_arn: Option<String>,
     /// <p><p>The test&#39;s type.</p> <p>Must be one of the following values:</p> <ul> <li> <p>BUILTIN<em>FUZZ: The built-in fuzz type.</p> </li> <li> <p>BUILTIN</em>EXPLORER: For Android, an app explorer that will traverse an Android app, interacting with it and capturing screenshots at the same time.</p> </li> <li> <p>APPIUM<em>JAVA</em>JUNIT: The Appium Java JUnit type.</p> </li> <li> <p>APPIUM<em>JAVA</em>TESTNG: The Appium Java TestNG type.</p> </li> <li> <p>APPIUM<em>PYTHON: The Appium Python type.</p> </li> <li> <p>APPIUM</em>WEB<em>JAVA</em>JUNIT: The Appium Java JUnit type for Web apps.</p> </li> <li> <p>APPIUM<em>WEB</em>JAVA<em>TESTNG: The Appium Java TestNG type for Web apps.</p> </li> <li> <p>APPIUM</em>WEB<em>PYTHON: The Appium Python type for Web apps.</p> </li> <li> <p>CALABASH: The Calabash type.</p> </li> <li> <p>INSTRUMENTATION: The Instrumentation type.</p> </li> <li> <p>UIAUTOMATION: The uiautomation type.</p> </li> <li> <p>UIAUTOMATOR: The uiautomator type.</p> </li> <li> <p>XCTEST: The XCode test type.</p> </li> <li> <p>XCTEST</em>UI: The XCode UI test type.</p> </li> </ul></p>
     #[serde(rename = "type")]
     pub type_: String,
+}
+
+/// <p>There was a problem with the service account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ServiceAccountException {
+    /// <p>Any additional information about the exception.</p>
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StopJobRequest {
+    /// <p>Represents the Amazon Resource Name (ARN) of the Device Farm job you wish to stop.</p>
+    #[serde(rename = "arn")]
+    pub arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct StopJobResult {
+    /// <p>The job that was stopped.</p>
+    #[serde(rename = "job")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job: Option<Job>,
 }
 
 /// <p>Represents the request to stop the remote access session.</p>
@@ -2493,6 +2666,64 @@ pub struct UpdateProjectResult {
     pub project: Option<Project>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateUploadRequest {
+    /// <p>The Amazon Resource Name (ARN) of the uploaded test spec.</p>
+    #[serde(rename = "arn")]
+    pub arn: String,
+    /// <p>The upload's content type (for example, "application/x-yaml").</p>
+    #[serde(rename = "contentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_type: Option<String>,
+    /// <p>Set to true if the YAML file has changed and needs to be updated; otherwise, set to false.</p>
+    #[serde(rename = "editContent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub edit_content: Option<bool>,
+    /// <p>The upload's test spec file name. The name should not contain the '/' character. The test spec file name must end with the <code>.yaml</code> or <code>.yml</code> file extension.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct UpdateUploadResult {
+    /// <p>A test spec uploaded to Device Farm.</p>
+    #[serde(rename = "upload")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub upload: Option<Upload>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateVPCEConfigurationRequest {
+    /// <p>The Amazon Resource Name (ARN) of the VPC endpoint configuration you want to update.</p>
+    #[serde(rename = "arn")]
+    pub arn: String,
+    /// <p>The DNS (domain) name used to connect to your private service in your Amazon VPC. The DNS name must not already be in use on the Internet.</p>
+    #[serde(rename = "serviceDnsName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_dns_name: Option<String>,
+    /// <p>An optional description, providing more details about your VPC endpoint configuration.</p>
+    #[serde(rename = "vpceConfigurationDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpce_configuration_description: Option<String>,
+    /// <p>The friendly name you give to your VPC endpoint configuration, to manage your configurations more easily.</p>
+    #[serde(rename = "vpceConfigurationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpce_configuration_name: Option<String>,
+    /// <p>The name of the VPC endpoint service running inside your AWS account that you want Device Farm to test.</p>
+    #[serde(rename = "vpceServiceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpce_service_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct UpdateVPCEConfigurationResult {
+    /// <p>An object containing information about your VPC endpoint configuration.</p>
+    #[serde(rename = "vpceConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpce_configuration: Option<VPCEConfiguration>,
+}
+
 /// <p>An app or a set of one or more tests to upload or that have been uploaded.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Upload {
@@ -2500,6 +2731,10 @@ pub struct Upload {
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p><p>The upload&#39;s category. Allowed values include:</p> <ul> <li> <p>CURATED: An upload managed by AWS Device Farm.</p> </li> <li> <p>PRIVATE: An upload managed by the AWS Device Farm customer.</p> </li> </ul></p>
+    #[serde(rename = "category")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub category: Option<String>,
     /// <p>The upload's content type (for example, "application/octet-stream").</p>
     #[serde(rename = "contentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2532,6 +2767,31 @@ pub struct Upload {
     #[serde(rename = "url")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+}
+
+/// <p>Represents an Amazon Virtual Private Cloud (VPC) endpoint configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct VPCEConfiguration {
+    /// <p>The Amazon Resource Name (ARN) of the VPC endpoint configuration.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The DNS name that maps to the private IP address of the service you want to access.</p>
+    #[serde(rename = "serviceDnsName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_dns_name: Option<String>,
+    /// <p>An optional description, providing more details about your VPC endpoint configuration.</p>
+    #[serde(rename = "vpceConfigurationDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpce_configuration_description: Option<String>,
+    /// <p>The friendly name you give to your VPC endpoint configuration, to manage your configurations more easily.</p>
+    #[serde(rename = "vpceConfigurationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpce_configuration_name: Option<String>,
+    /// <p>The name of the VPC endpoint service running inside your AWS account that you want Device Farm to test.</p>
+    #[serde(rename = "vpceServiceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpce_service_name: Option<String>,
 }
 
 /// Errors returned by CreateDevicePool
@@ -3115,6 +3375,99 @@ impl Error for CreateUploadError {
             CreateUploadError::Credentials(ref err) => err.description(),
             CreateUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             CreateUploadError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateVPCEConfiguration
+#[derive(Debug, PartialEq)]
+pub enum CreateVPCEConfigurationError {
+    /// <p>An invalid argument was specified.</p>
+    Argument(String),
+    /// <p>A limit was exceeded.</p>
+    LimitExceeded(String),
+    /// <p>There was a problem with the service account.</p>
+    ServiceAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateVPCEConfigurationError {
+    pub fn from_body(body: &str) -> CreateVPCEConfigurationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ArgumentException" => {
+                        CreateVPCEConfigurationError::Argument(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        CreateVPCEConfigurationError::LimitExceeded(String::from(error_message))
+                    }
+                    "ServiceAccountException" => {
+                        CreateVPCEConfigurationError::ServiceAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateVPCEConfigurationError::Validation(error_message.to_string())
+                    }
+                    _ => CreateVPCEConfigurationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateVPCEConfigurationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateVPCEConfigurationError {
+    fn from(err: serde_json::error::Error) -> CreateVPCEConfigurationError {
+        CreateVPCEConfigurationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateVPCEConfigurationError {
+    fn from(err: CredentialsError) -> CreateVPCEConfigurationError {
+        CreateVPCEConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateVPCEConfigurationError {
+    fn from(err: HttpDispatchError) -> CreateVPCEConfigurationError {
+        CreateVPCEConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateVPCEConfigurationError {
+    fn from(err: io::Error) -> CreateVPCEConfigurationError {
+        CreateVPCEConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateVPCEConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateVPCEConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateVPCEConfigurationError::Argument(ref cause) => cause,
+            CreateVPCEConfigurationError::LimitExceeded(ref cause) => cause,
+            CreateVPCEConfigurationError::ServiceAccount(ref cause) => cause,
+            CreateVPCEConfigurationError::Validation(ref cause) => cause,
+            CreateVPCEConfigurationError::Credentials(ref err) => err.description(),
+            CreateVPCEConfigurationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateVPCEConfigurationError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -3790,6 +4143,105 @@ impl Error for DeleteUploadError {
             DeleteUploadError::Credentials(ref err) => err.description(),
             DeleteUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteUploadError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteVPCEConfiguration
+#[derive(Debug, PartialEq)]
+pub enum DeleteVPCEConfigurationError {
+    /// <p>An invalid argument was specified.</p>
+    Argument(String),
+    /// <p>There was an error with the update request, or you do not have sufficient permissions to update this VPC endpoint configuration.</p>
+    InvalidOperation(String),
+    /// <p>The specified entity was not found.</p>
+    NotFound(String),
+    /// <p>There was a problem with the service account.</p>
+    ServiceAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteVPCEConfigurationError {
+    pub fn from_body(body: &str) -> DeleteVPCEConfigurationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ArgumentException" => {
+                        DeleteVPCEConfigurationError::Argument(String::from(error_message))
+                    }
+                    "InvalidOperationException" => {
+                        DeleteVPCEConfigurationError::InvalidOperation(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        DeleteVPCEConfigurationError::NotFound(String::from(error_message))
+                    }
+                    "ServiceAccountException" => {
+                        DeleteVPCEConfigurationError::ServiceAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteVPCEConfigurationError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteVPCEConfigurationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteVPCEConfigurationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteVPCEConfigurationError {
+    fn from(err: serde_json::error::Error) -> DeleteVPCEConfigurationError {
+        DeleteVPCEConfigurationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteVPCEConfigurationError {
+    fn from(err: CredentialsError) -> DeleteVPCEConfigurationError {
+        DeleteVPCEConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteVPCEConfigurationError {
+    fn from(err: HttpDispatchError) -> DeleteVPCEConfigurationError {
+        DeleteVPCEConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteVPCEConfigurationError {
+    fn from(err: io::Error) -> DeleteVPCEConfigurationError {
+        DeleteVPCEConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteVPCEConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteVPCEConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteVPCEConfigurationError::Argument(ref cause) => cause,
+            DeleteVPCEConfigurationError::InvalidOperation(ref cause) => cause,
+            DeleteVPCEConfigurationError::NotFound(ref cause) => cause,
+            DeleteVPCEConfigurationError::ServiceAccount(ref cause) => cause,
+            DeleteVPCEConfigurationError::Validation(ref cause) => cause,
+            DeleteVPCEConfigurationError::Credentials(ref err) => err.description(),
+            DeleteVPCEConfigurationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteVPCEConfigurationError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -5223,6 +5675,99 @@ impl Error for GetUploadError {
             GetUploadError::Credentials(ref err) => err.description(),
             GetUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             GetUploadError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetVPCEConfiguration
+#[derive(Debug, PartialEq)]
+pub enum GetVPCEConfigurationError {
+    /// <p>An invalid argument was specified.</p>
+    Argument(String),
+    /// <p>The specified entity was not found.</p>
+    NotFound(String),
+    /// <p>There was a problem with the service account.</p>
+    ServiceAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetVPCEConfigurationError {
+    pub fn from_body(body: &str) -> GetVPCEConfigurationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ArgumentException" => {
+                        GetVPCEConfigurationError::Argument(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        GetVPCEConfigurationError::NotFound(String::from(error_message))
+                    }
+                    "ServiceAccountException" => {
+                        GetVPCEConfigurationError::ServiceAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetVPCEConfigurationError::Validation(error_message.to_string())
+                    }
+                    _ => GetVPCEConfigurationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetVPCEConfigurationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetVPCEConfigurationError {
+    fn from(err: serde_json::error::Error) -> GetVPCEConfigurationError {
+        GetVPCEConfigurationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetVPCEConfigurationError {
+    fn from(err: CredentialsError) -> GetVPCEConfigurationError {
+        GetVPCEConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetVPCEConfigurationError {
+    fn from(err: HttpDispatchError) -> GetVPCEConfigurationError {
+        GetVPCEConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetVPCEConfigurationError {
+    fn from(err: io::Error) -> GetVPCEConfigurationError {
+        GetVPCEConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetVPCEConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetVPCEConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            GetVPCEConfigurationError::Argument(ref cause) => cause,
+            GetVPCEConfigurationError::NotFound(ref cause) => cause,
+            GetVPCEConfigurationError::ServiceAccount(ref cause) => cause,
+            GetVPCEConfigurationError::Validation(ref cause) => cause,
+            GetVPCEConfigurationError::Credentials(ref err) => err.description(),
+            GetVPCEConfigurationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetVPCEConfigurationError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -7063,6 +7608,93 @@ impl Error for ListUploadsError {
         }
     }
 }
+/// Errors returned by ListVPCEConfigurations
+#[derive(Debug, PartialEq)]
+pub enum ListVPCEConfigurationsError {
+    /// <p>An invalid argument was specified.</p>
+    Argument(String),
+    /// <p>There was a problem with the service account.</p>
+    ServiceAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListVPCEConfigurationsError {
+    pub fn from_body(body: &str) -> ListVPCEConfigurationsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ArgumentException" => {
+                        ListVPCEConfigurationsError::Argument(String::from(error_message))
+                    }
+                    "ServiceAccountException" => {
+                        ListVPCEConfigurationsError::ServiceAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListVPCEConfigurationsError::Validation(error_message.to_string())
+                    }
+                    _ => ListVPCEConfigurationsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListVPCEConfigurationsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListVPCEConfigurationsError {
+    fn from(err: serde_json::error::Error) -> ListVPCEConfigurationsError {
+        ListVPCEConfigurationsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListVPCEConfigurationsError {
+    fn from(err: CredentialsError) -> ListVPCEConfigurationsError {
+        ListVPCEConfigurationsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListVPCEConfigurationsError {
+    fn from(err: HttpDispatchError) -> ListVPCEConfigurationsError {
+        ListVPCEConfigurationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListVPCEConfigurationsError {
+    fn from(err: io::Error) -> ListVPCEConfigurationsError {
+        ListVPCEConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListVPCEConfigurationsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListVPCEConfigurationsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListVPCEConfigurationsError::Argument(ref cause) => cause,
+            ListVPCEConfigurationsError::ServiceAccount(ref cause) => cause,
+            ListVPCEConfigurationsError::Validation(ref cause) => cause,
+            ListVPCEConfigurationsError::Credentials(ref err) => err.description(),
+            ListVPCEConfigurationsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListVPCEConfigurationsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by PurchaseOffering
 #[derive(Debug, PartialEq)]
 pub enum PurchaseOfferingError {
@@ -7365,6 +7997,97 @@ impl Error for ScheduleRunError {
             ScheduleRunError::Credentials(ref err) => err.description(),
             ScheduleRunError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             ScheduleRunError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by StopJob
+#[derive(Debug, PartialEq)]
+pub enum StopJobError {
+    /// <p>An invalid argument was specified.</p>
+    Argument(String),
+    /// <p>A limit was exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified entity was not found.</p>
+    NotFound(String),
+    /// <p>There was a problem with the service account.</p>
+    ServiceAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl StopJobError {
+    pub fn from_body(body: &str) -> StopJobError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ArgumentException" => StopJobError::Argument(String::from(error_message)),
+                    "LimitExceededException" => {
+                        StopJobError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotFoundException" => StopJobError::NotFound(String::from(error_message)),
+                    "ServiceAccountException" => {
+                        StopJobError::ServiceAccount(String::from(error_message))
+                    }
+                    "ValidationException" => StopJobError::Validation(error_message.to_string()),
+                    _ => StopJobError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => StopJobError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for StopJobError {
+    fn from(err: serde_json::error::Error) -> StopJobError {
+        StopJobError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StopJobError {
+    fn from(err: CredentialsError) -> StopJobError {
+        StopJobError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StopJobError {
+    fn from(err: HttpDispatchError) -> StopJobError {
+        StopJobError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopJobError {
+    fn from(err: io::Error) -> StopJobError {
+        StopJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StopJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StopJobError {
+    fn description(&self) -> &str {
+        match *self {
+            StopJobError::Argument(ref cause) => cause,
+            StopJobError::LimitExceeded(ref cause) => cause,
+            StopJobError::NotFound(ref cause) => cause,
+            StopJobError::ServiceAccount(ref cause) => cause,
+            StopJobError::Validation(ref cause) => cause,
+            StopJobError::Credentials(ref err) => err.description(),
+            StopJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            StopJobError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -8049,6 +8772,198 @@ impl Error for UpdateProjectError {
         }
     }
 }
+/// Errors returned by UpdateUpload
+#[derive(Debug, PartialEq)]
+pub enum UpdateUploadError {
+    /// <p>An invalid argument was specified.</p>
+    Argument(String),
+    /// <p>A limit was exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified entity was not found.</p>
+    NotFound(String),
+    /// <p>There was a problem with the service account.</p>
+    ServiceAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateUploadError {
+    pub fn from_body(body: &str) -> UpdateUploadError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ArgumentException" => UpdateUploadError::Argument(String::from(error_message)),
+                    "LimitExceededException" => {
+                        UpdateUploadError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotFoundException" => UpdateUploadError::NotFound(String::from(error_message)),
+                    "ServiceAccountException" => {
+                        UpdateUploadError::ServiceAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateUploadError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateUploadError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateUploadError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateUploadError {
+    fn from(err: serde_json::error::Error) -> UpdateUploadError {
+        UpdateUploadError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateUploadError {
+    fn from(err: CredentialsError) -> UpdateUploadError {
+        UpdateUploadError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateUploadError {
+    fn from(err: HttpDispatchError) -> UpdateUploadError {
+        UpdateUploadError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateUploadError {
+    fn from(err: io::Error) -> UpdateUploadError {
+        UpdateUploadError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateUploadError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateUploadError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateUploadError::Argument(ref cause) => cause,
+            UpdateUploadError::LimitExceeded(ref cause) => cause,
+            UpdateUploadError::NotFound(ref cause) => cause,
+            UpdateUploadError::ServiceAccount(ref cause) => cause,
+            UpdateUploadError::Validation(ref cause) => cause,
+            UpdateUploadError::Credentials(ref err) => err.description(),
+            UpdateUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UpdateUploadError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateVPCEConfiguration
+#[derive(Debug, PartialEq)]
+pub enum UpdateVPCEConfigurationError {
+    /// <p>An invalid argument was specified.</p>
+    Argument(String),
+    /// <p>There was an error with the update request, or you do not have sufficient permissions to update this VPC endpoint configuration.</p>
+    InvalidOperation(String),
+    /// <p>The specified entity was not found.</p>
+    NotFound(String),
+    /// <p>There was a problem with the service account.</p>
+    ServiceAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateVPCEConfigurationError {
+    pub fn from_body(body: &str) -> UpdateVPCEConfigurationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ArgumentException" => {
+                        UpdateVPCEConfigurationError::Argument(String::from(error_message))
+                    }
+                    "InvalidOperationException" => {
+                        UpdateVPCEConfigurationError::InvalidOperation(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        UpdateVPCEConfigurationError::NotFound(String::from(error_message))
+                    }
+                    "ServiceAccountException" => {
+                        UpdateVPCEConfigurationError::ServiceAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateVPCEConfigurationError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateVPCEConfigurationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateVPCEConfigurationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateVPCEConfigurationError {
+    fn from(err: serde_json::error::Error) -> UpdateVPCEConfigurationError {
+        UpdateVPCEConfigurationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateVPCEConfigurationError {
+    fn from(err: CredentialsError) -> UpdateVPCEConfigurationError {
+        UpdateVPCEConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateVPCEConfigurationError {
+    fn from(err: HttpDispatchError) -> UpdateVPCEConfigurationError {
+        UpdateVPCEConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateVPCEConfigurationError {
+    fn from(err: io::Error) -> UpdateVPCEConfigurationError {
+        UpdateVPCEConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateVPCEConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateVPCEConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateVPCEConfigurationError::Argument(ref cause) => cause,
+            UpdateVPCEConfigurationError::InvalidOperation(ref cause) => cause,
+            UpdateVPCEConfigurationError::NotFound(ref cause) => cause,
+            UpdateVPCEConfigurationError::ServiceAccount(ref cause) => cause,
+            UpdateVPCEConfigurationError::Validation(ref cause) => cause,
+            UpdateVPCEConfigurationError::Credentials(ref err) => err.description(),
+            UpdateVPCEConfigurationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateVPCEConfigurationError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the AWS Device Farm API. AWS Device Farm clients implement this trait.
 pub trait DeviceFarm {
     /// <p>Creates a device pool.</p>
@@ -8086,6 +9001,12 @@ pub trait DeviceFarm {
         &self,
         input: CreateUploadRequest,
     ) -> RusotoFuture<CreateUploadResult, CreateUploadError>;
+
+    /// <p>Creates a configuration record in Device Farm for your Amazon Virtual Private Cloud (VPC) endpoint.</p>
+    fn create_vpce_configuration(
+        &self,
+        input: CreateVPCEConfigurationRequest,
+    ) -> RusotoFuture<CreateVPCEConfigurationResult, CreateVPCEConfigurationError>;
 
     /// <p>Deletes a device pool given the pool ARN. Does not allow deletion of curated pools owned by the system.</p>
     fn delete_device_pool(
@@ -8125,6 +9046,12 @@ pub trait DeviceFarm {
         &self,
         input: DeleteUploadRequest,
     ) -> RusotoFuture<DeleteUploadResult, DeleteUploadError>;
+
+    /// <p>Deletes a configuration for your Amazon Virtual Private Cloud (VPC) endpoint.</p>
+    fn delete_vpce_configuration(
+        &self,
+        input: DeleteVPCEConfigurationRequest,
+    ) -> RusotoFuture<DeleteVPCEConfigurationResult, DeleteVPCEConfigurationError>;
 
     /// <p>Returns the number of unmetered iOS and/or unmetered Android devices that have been purchased by the account.</p>
     fn get_account_settings(
@@ -8196,6 +9123,12 @@ pub trait DeviceFarm {
 
     /// <p>Gets information about an upload.</p>
     fn get_upload(&self, input: GetUploadRequest) -> RusotoFuture<GetUploadResult, GetUploadError>;
+
+    /// <p>Returns information about the configuration settings for your Amazon Virtual Private Cloud (VPC) endpoint.</p>
+    fn get_vpce_configuration(
+        &self,
+        input: GetVPCEConfigurationRequest,
+    ) -> RusotoFuture<GetVPCEConfigurationResult, GetVPCEConfigurationError>;
 
     /// <p>Installs an application to the device in a remote access session. For Android applications, the file must be in .apk format. For iOS applications, the file must be in .ipa format.</p>
     fn install_to_remote_access_session(
@@ -8302,6 +9235,12 @@ pub trait DeviceFarm {
         input: ListUploadsRequest,
     ) -> RusotoFuture<ListUploadsResult, ListUploadsError>;
 
+    /// <p>Returns information about all Amazon Virtual Private Cloud (VPC) endpoint configurations in the AWS account.</p>
+    fn list_vpce_configurations(
+        &self,
+        input: ListVPCEConfigurationsRequest,
+    ) -> RusotoFuture<ListVPCEConfigurationsResult, ListVPCEConfigurationsError>;
+
     /// <p>Immediately purchases offerings for an AWS account. Offerings renew with the latest total purchased quantity for an offering, unless the renewal was overridden. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>
     fn purchase_offering(
         &self,
@@ -8319,6 +9258,9 @@ pub trait DeviceFarm {
         &self,
         input: ScheduleRunRequest,
     ) -> RusotoFuture<ScheduleRunResult, ScheduleRunError>;
+
+    /// <p>Initiates a stop request for the current job. AWS Device Farm will immediately stop the job on the device where tests have not started executing, and you will not be billed for this device. On the device where tests have started executing, Setup Suite and Teardown Suite tests will run to completion before stopping execution on the device. You will be billed for Setup, Teardown, and any tests that were in progress or already completed.</p>
+    fn stop_job(&self, input: StopJobRequest) -> RusotoFuture<StopJobResult, StopJobError>;
 
     /// <p>Ends a specified remote access session.</p>
     fn stop_remote_access_session(
@@ -8358,6 +9300,18 @@ pub trait DeviceFarm {
         &self,
         input: UpdateProjectRequest,
     ) -> RusotoFuture<UpdateProjectResult, UpdateProjectError>;
+
+    /// <p>Update an uploaded test specification (test spec).</p>
+    fn update_upload(
+        &self,
+        input: UpdateUploadRequest,
+    ) -> RusotoFuture<UpdateUploadResult, UpdateUploadError>;
+
+    /// <p>Updates information about an existing Amazon Virtual Private Cloud (VPC) endpoint configuration.</p>
+    fn update_vpce_configuration(
+        &self,
+        input: UpdateVPCEConfigurationRequest,
+    ) -> RusotoFuture<UpdateVPCEConfigurationResult, UpdateVPCEConfigurationError>;
 }
 /// A client for the AWS Device Farm API.
 pub struct DeviceFarmClient {
@@ -8608,6 +9562,44 @@ impl DeviceFarm for DeviceFarmClient {
         })
     }
 
+    /// <p>Creates a configuration record in Device Farm for your Amazon Virtual Private Cloud (VPC) endpoint.</p>
+    fn create_vpce_configuration(
+        &self,
+        input: CreateVPCEConfigurationRequest,
+    ) -> RusotoFuture<CreateVPCEConfigurationResult, CreateVPCEConfigurationError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DeviceFarm_20150623.CreateVPCEConfiguration",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateVPCEConfigurationResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateVPCEConfigurationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Deletes a device pool given the pool ARN. Does not allow deletion of curated pools owned by the system.</p>
     fn delete_device_pool(
         &self,
@@ -8846,6 +9838,44 @@ impl DeviceFarm for DeviceFarmClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteUploadError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Deletes a configuration for your Amazon Virtual Private Cloud (VPC) endpoint.</p>
+    fn delete_vpce_configuration(
+        &self,
+        input: DeleteVPCEConfigurationRequest,
+    ) -> RusotoFuture<DeleteVPCEConfigurationResult, DeleteVPCEConfigurationError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DeviceFarm_20150623.DeleteVPCEConfiguration",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteVPCEConfigurationResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteVPCEConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -9354,6 +10384,41 @@ impl DeviceFarm for DeviceFarmClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetUploadError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Returns information about the configuration settings for your Amazon Virtual Private Cloud (VPC) endpoint.</p>
+    fn get_vpce_configuration(
+        &self,
+        input: GetVPCEConfigurationRequest,
+    ) -> RusotoFuture<GetVPCEConfigurationResult, GetVPCEConfigurationError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DeviceFarm_20150623.GetVPCEConfiguration");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetVPCEConfigurationResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetVPCEConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -10026,6 +11091,41 @@ impl DeviceFarm for DeviceFarmClient {
         })
     }
 
+    /// <p>Returns information about all Amazon Virtual Private Cloud (VPC) endpoint configurations in the AWS account.</p>
+    fn list_vpce_configurations(
+        &self,
+        input: ListVPCEConfigurationsRequest,
+    ) -> RusotoFuture<ListVPCEConfigurationsResult, ListVPCEConfigurationsError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DeviceFarm_20150623.ListVPCEConfigurations");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListVPCEConfigurationsResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListVPCEConfigurationsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Immediately purchases offerings for an AWS account. Offerings renew with the latest total purchased quantity for an offering, unless the renewal was overridden. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>
     fn purchase_offering(
         &self,
@@ -10124,6 +11224,38 @@ impl DeviceFarm for DeviceFarmClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ScheduleRunError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Initiates a stop request for the current job. AWS Device Farm will immediately stop the job on the device where tests have not started executing, and you will not be billed for this device. On the device where tests have started executing, Setup Suite and Teardown Suite tests will run to completion before stopping execution on the device. You will be billed for Setup, Teardown, and any tests that were in progress or already completed.</p>
+    fn stop_job(&self, input: StopJobRequest) -> RusotoFuture<StopJobResult, StopJobError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DeviceFarm_20150623.StopJob");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<StopJobResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(StopJobError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -10369,6 +11501,79 @@ impl DeviceFarm for DeviceFarmClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateProjectError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Update an uploaded test specification (test spec).</p>
+    fn update_upload(
+        &self,
+        input: UpdateUploadRequest,
+    ) -> RusotoFuture<UpdateUploadResult, UpdateUploadError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DeviceFarm_20150623.UpdateUpload");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateUploadResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateUploadError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Updates information about an existing Amazon Virtual Private Cloud (VPC) endpoint configuration.</p>
+    fn update_vpce_configuration(
+        &self,
+        input: UpdateVPCEConfigurationRequest,
+    ) -> RusotoFuture<UpdateVPCEConfigurationResult, UpdateVPCEConfigurationError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DeviceFarm_20150623.UpdateVPCEConfiguration",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateVPCEConfigurationResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateVPCEConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

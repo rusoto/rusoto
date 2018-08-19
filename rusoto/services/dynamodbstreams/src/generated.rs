@@ -102,6 +102,13 @@ pub struct DescribeStreamOutput {
     pub stream_description: Option<StreamDescription>,
 }
 
+/// <p>The shard iterator has expired and can no longer be used to retrieve stream records. A shard iterator expires 15 minutes after it is retrieved using the <code>GetShardIterator</code> action.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ExpiredIteratorException {
+    /// <p>The provided iterator exceeds the maximum age allowed.</p>
+    pub message: Option<String>,
+}
+
 /// <p>Represents the input of a <code>GetRecords</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetRecordsInput {
@@ -167,6 +174,13 @@ pub struct Identity {
     pub type_: Option<String>,
 }
 
+/// <p>An error occurred on the server side.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalServerError {
+    /// <p>The server encountered an internal error trying to fulfill the request.</p>
+    pub message: Option<String>,
+}
+
 /// <p><p>Represents <i>a single element</i> of a key schema. A key schema specifies the attributes that make up the primary key of a table, or the key attributes of an index.</p> <p>A <code>KeySchemaElement</code> represents exactly one attribute of the primary key. For example, a simple primary key (partition key) would be represented by one <code>KeySchemaElement</code>. A composite primary key (partition key and sort key) would require one <code>KeySchemaElement</code> for the partition key, and another <code>KeySchemaElement</code> for the sort key.</p> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39;s usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct KeySchemaElement {
@@ -176,6 +190,13 @@ pub struct KeySchemaElement {
     /// <p>The attribute data, consisting of the data type and the attribute value itself.</p>
     #[serde(rename = "KeyType")]
     pub key_type: String,
+}
+
+/// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ErrorHandling.html#APIRetries">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {
+    /// <p>Too many operations for a given subscriber.</p>
+    pub message: Option<String>,
 }
 
 /// <p>Represents the input of a <code>ListStreams</code> operation.</p>
@@ -239,6 +260,13 @@ pub struct Record {
     #[serde(rename = "userIdentity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_identity: Option<Identity>,
+}
+
+/// <p>The operation tried to access a nonexistent stream.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceNotFoundException {
+    /// <p>The resource which is being requested does not exist.</p>
+    pub message: Option<String>,
 }
 
 /// <p>The beginning and ending sequence numbers for the stream records contained within a shard.</p>
@@ -360,6 +388,13 @@ pub struct StreamRecord {
     #[serde(rename = "StreamViewType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_view_type: Option<String>,
+}
+
+/// <p><p>The operation attempted to read past the oldest stream record in a shard.</p> <p>In DynamoDB Streams, there is a 24 hour limit on data retention. Stream records whose age exceeds this limit are subject to removal (trimming) from the stream. You might receive a TrimmedDataAccessException if:</p> <ul> <li><p>You request a shard iterator with a sequence number older than the trim point (24 hours).</p> </li> <li><p>You obtain a shard iterator, but before you use the iterator in a <code>GetRecords</code> request, a stream record in the shard exceeds the 24 hour period and is trimmed. This causes the iterator to access a record that no longer exists.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TrimmedDataAccessException {
+    /// <p>"The data you are trying to access has been trimmed.</p>
+    pub message: Option<String>,
 }
 
 /// Errors returned by DescribeStream

@@ -41,6 +41,10 @@ enum DeserializerNext {
     Skip,
     Element(String),
 }
+/// <p>Indicates that email sending is disabled for your entire Amazon SES account.</p> <p>You can enable or disable email sending for your Amazon SES account using <a>UpdateAccountSendingEnabled</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AccountSendingPausedException {}
+
 /// <p>When included in a receipt rule, this action adds a header to the received email.</p> <p>For information about adding a header using a receipt rule, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-action-add-header.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddHeaderAction {
@@ -179,6 +183,13 @@ impl AddressListSerializer {
             params.put(&key, &obj);
         }
     }
+}
+
+/// <p>Indicates that a resource could not be created because of a naming conflict.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AlreadyExistsException {
+    /// <p>Indicates that a resource could not be created because the resource name already exists.</p>
+    pub name: Option<String>,
 }
 
 struct AmazonResourceNameDeserializer;
@@ -615,6 +626,13 @@ impl BulkEmailStatusDeserializer {
         Ok(obj)
     }
 }
+/// <p>Indicates that the delete operation could not be completed.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CannotDeleteException {
+    /// <p>Indicates that a resource could not be deleted because no resource with the specified name exists.</p>
+    pub name: Option<String>,
+}
+
 struct CidrDeserializer;
 impl CidrDeserializer {
     #[allow(unused_variables)]
@@ -958,6 +976,13 @@ impl ConfigurationSetSerializer {
     }
 }
 
+/// <p>Indicates that the configuration set could not be created because of a naming conflict.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ConfigurationSetAlreadyExistsException {
+    /// <p>Indicates that the configuration set does not exist.</p>
+    pub configuration_set_name: Option<String>,
+}
+
 /// Serialize `ConfigurationSetAttributeList` contents to a `SignedRequest`.
 struct ConfigurationSetAttributeListSerializer;
 impl ConfigurationSetAttributeListSerializer {
@@ -967,6 +992,13 @@ impl ConfigurationSetAttributeListSerializer {
             params.put(&key, &obj);
         }
     }
+}
+
+/// <p>Indicates that the configuration set does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ConfigurationSetDoesNotExistException {
+    /// <p>Indicates that the configuration set does not exist.</p>
+    pub configuration_set_name: Option<String>,
 }
 
 struct ConfigurationSetNameDeserializer;
@@ -983,6 +1015,13 @@ impl ConfigurationSetNameDeserializer {
         Ok(obj)
     }
 }
+/// <p>Indicates that email sending is disabled for the configuration set.</p> <p>You can enable or disable email sending for a configuration set using <a>UpdateConfigurationSetSendingEnabled</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ConfigurationSetSendingPausedException {
+    /// <p>The name of the configuration set for which email sending is disabled.</p>
+    pub configuration_set_name: Option<String>,
+}
+
 struct ConfigurationSetsDeserializer;
 impl ConfigurationSetsDeserializer {
     #[allow(unused_variables)]
@@ -1482,6 +1521,10 @@ impl CustomRedirectDomainDeserializer {
         Ok(obj)
     }
 }
+/// <p>Indicates that custom verification email template provided content is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CustomVerificationEmailInvalidContentException {}
+
 /// <p>Contains information about a custom verification email template.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CustomVerificationEmailTemplate {
@@ -1565,6 +1608,20 @@ impl CustomVerificationEmailTemplateDeserializer {
         Ok(obj)
     }
 }
+/// <p>Indicates that a custom verification email template with the name you specified already exists.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CustomVerificationEmailTemplateAlreadyExistsException {
+    /// <p>Indicates that the provided custom verification email template with the specified template name already exists.</p>
+    pub custom_verification_email_template_name: Option<String>,
+}
+
+/// <p>Indicates that a custom verification email template with the name you specified does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CustomVerificationEmailTemplateDoesNotExistException {
+    /// <p>Indicates that the provided custom verification email template does not exist.</p>
+    pub custom_verification_email_template_name: Option<String>,
+}
+
 struct CustomVerificationEmailTemplatesDeserializer;
 impl CustomVerificationEmailTemplatesDeserializer {
     #[allow(unused_variables)]
@@ -2670,6 +2727,24 @@ impl EventDestinationSerializer {
     }
 }
 
+/// <p>Indicates that the event destination could not be created because of a naming conflict.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EventDestinationAlreadyExistsException {
+    /// <p>Indicates that the configuration set does not exist.</p>
+    pub configuration_set_name: Option<String>,
+    /// <p>Indicates that the event destination does not exist.</p>
+    pub event_destination_name: Option<String>,
+}
+
+/// <p>Indicates that the event destination does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EventDestinationDoesNotExistException {
+    /// <p>Indicates that the configuration set does not exist.</p>
+    pub configuration_set_name: Option<String>,
+    /// <p>Indicates that the event destination does not exist.</p>
+    pub event_destination_name: Option<String>,
+}
+
 struct EventDestinationNameDeserializer;
 impl EventDestinationNameDeserializer {
     #[allow(unused_variables)]
@@ -2860,10 +2935,17 @@ impl FromAddressDeserializer {
         Ok(obj)
     }
 }
-/// <p>Represents a request to return the email sending status for your Amazon SES account.</p>
+/// <p>Indicates that the sender address specified for a custom verification email is not verified, and is therefore not eligible to send the custom verification email. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct FromEmailAddressNotVerifiedException {
+    /// <p>Indicates that the from email address associated with the custom verification email template is not verified.</p>
+    pub from_email_address: Option<String>,
+}
+
+/// <p>Represents a request to return the email sending status for your Amazon SES account in the current AWS Region.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetAccountSendingEnabledResponse {
-    /// <p>Describes whether email sending is enabled or disabled for your Amazon SES account.</p>
+    /// <p>Describes whether email sending is enabled or disabled for your Amazon SES account in the current AWS Region.</p>
     pub enabled: Option<bool>,
 }
 
@@ -3970,6 +4052,78 @@ impl IdentityVerificationAttributesDeserializer {
         Ok(obj)
     }
 }
+/// <p>Indicates that the Amazon CloudWatch destination is invalid. See the error message for details.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidCloudWatchDestinationException {
+    /// <p>Indicates that the configuration set does not exist.</p>
+    pub configuration_set_name: Option<String>,
+    /// <p>Indicates that the event destination does not exist.</p>
+    pub event_destination_name: Option<String>,
+}
+
+/// <p>Indicates that the configuration set is invalid. See the error message for details.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidConfigurationSetException {}
+
+/// <p>Indicates that the Amazon Kinesis Firehose destination is invalid. See the error message for details.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidFirehoseDestinationException {
+    /// <p>Indicates that the configuration set does not exist.</p>
+    pub configuration_set_name: Option<String>,
+    /// <p>Indicates that the event destination does not exist.</p>
+    pub event_destination_name: Option<String>,
+}
+
+/// <p>Indicates that the provided AWS Lambda function is invalid, or that Amazon SES could not execute the provided function, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidLambdaFunctionException {
+    /// <p>Indicates that the ARN of the function was not found.</p>
+    pub function_arn: Option<String>,
+}
+
+/// <p>Indicates that the provided policy is invalid. Check the error stack for more information about what caused the error.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidPolicyException {}
+
+/// <p>Indicates that one or more of the replacement values you provided is invalid. This error may occur when the TemplateData object contains invalid JSON.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidRenderingParameterException {
+    pub template_name: Option<String>,
+}
+
+/// <p>Indicates that the provided Amazon S3 bucket or AWS KMS encryption key is invalid, or that Amazon SES could not publish to the bucket, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidS3ConfigurationException {
+    /// <p>Indicated that the S3 Bucket was not found.</p>
+    pub bucket: Option<String>,
+}
+
+/// <p>Indicates that the Amazon Simple Notification Service (Amazon SNS) destination is invalid. See the error message for details.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidSNSDestinationException {
+    /// <p>Indicates that the configuration set does not exist.</p>
+    pub configuration_set_name: Option<String>,
+    /// <p>Indicates that the event destination does not exist.</p>
+    pub event_destination_name: Option<String>,
+}
+
+/// <p>Indicates that the provided Amazon SNS topic is invalid, or that Amazon SES could not publish to the topic, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidSnsTopicException {
+    /// <p>Indicates that the topic does not exist.</p>
+    pub topic: Option<String>,
+}
+
+/// <p>Indicates that the template that you specified could not be rendered. This issue may occur when a template refers to a partial that does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidTemplateException {
+    pub template_name: Option<String>,
+}
+
+/// <p><p>Indicates that the custom domain to be used for open and click tracking redirects is invalid. This error appears most often in the following situations:</p> <ul> <li> <p>When the tracking domain you specified is not verified in Amazon SES.</p> </li> <li> <p>When the tracking domain you specified is not a valid domain or subdomain.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidTrackingOptionsException {}
+
 struct InvocationTypeDeserializer;
 impl InvocationTypeDeserializer {
     #[allow(unused_variables)]
@@ -4168,6 +4322,10 @@ impl LastFreshStartDeserializer {
         Ok(obj)
     }
 }
+/// <p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {}
+
 /// <p>Represents a request to list the configuration sets associated with your AWS account. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListConfigurationSetsRequest {
@@ -4255,7 +4413,7 @@ impl ListConfigurationSetsResponseDeserializer {
         Ok(obj)
     }
 }
-/// <p>Represents a request to list the existing custom verification email templates for your account.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p>
+/// <p>Represents a request to list the existing custom verification email templates for your account.</p> <p>For more information about custom verification email templates, see <a href="ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListCustomVerificationEmailTemplatesRequest {
     /// <p>The maximum number of custom verification email templates to return. This value must be at least 1 and less than or equal to 50. If you do not specify a value, or if you specify a value less than 1 or greater than 50, the operation will return up to 50 results.</p>
@@ -4832,6 +4990,10 @@ impl MailFromDomainNameDeserializer {
         Ok(obj)
     }
 }
+/// <p> Indicates that the message could not be sent because Amazon SES could not read the MX record required to use the specified MAIL FROM domain. For information about editing the custom MAIL FROM domain settings for an identity, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-edit.html">Amazon SES Developer Guide</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MailFromDomainNotVerifiedException {}
+
 struct Max24HourSendDeserializer;
 impl Max24HourSendDeserializer {
     #[allow(unused_variables)]
@@ -4937,6 +5099,10 @@ impl MessageIdDeserializer {
         Ok(obj)
     }
 }
+/// <p>Indicates that the action failed, and the message could not be sent. Check the error stack for more information about what caused the error.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MessageRejected {}
+
 /// <p>Contains the name and value of a tag that you can provide to <code>SendEmail</code> or <code>SendRawEmail</code> to apply to an email.</p> <p>Message tags, which you use with configuration sets, enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct MessageTag {
@@ -4975,6 +5141,12 @@ impl MessageTagListSerializer {
             MessageTagSerializer::serialize(params, &key, obj);
         }
     }
+}
+
+/// <p>Indicates that one or more of the replacement values for the specified template was not specified. Ensure that the TemplateData object contains references to all of the replacement tags in the specified template.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MissingRenderingAttributeException {
+    pub template_name: Option<String>,
 }
 
 struct NextTokenDeserializer;
@@ -5134,6 +5306,10 @@ impl PolicyNameListSerializer {
     }
 }
 
+/// <p>Indicates that the account has not been granted production access.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ProductionAccessNotGrantedException {}
+
 /// <p>Represents a request to add or update a sending authorization policy for an identity. Sending authorization is an Amazon SES feature that enables you to authorize other senders to use your identities. For information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutIdentityPolicyRequest {
@@ -5229,7 +5405,7 @@ pub struct ReceiptAction {
     pub sns_action: Option<SNSAction>,
     /// <p>Terminates the evaluation of the receipt rule set and optionally publishes a notification to Amazon SNS.</p>
     pub stop_action: Option<StopAction>,
-    /// <p>Calls Amazon WorkMail and, optionally, publishes a notification to Amazon SNS.</p>
+    /// <p>Calls Amazon WorkMail and, optionally, publishes a notification to Amazon Amazon SNS.</p>
     pub workmail_action: Option<WorkmailAction>,
 }
 
@@ -6210,12 +6386,26 @@ impl ReputationOptionsDeserializer {
         Ok(obj)
     }
 }
+/// <p>Indicates that the provided receipt rule does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RuleDoesNotExistException {
+    /// <p>Indicates that the named receipt rule does not exist.</p>
+    pub name: Option<String>,
+}
+
+/// <p>Indicates that the provided receipt rule set does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RuleSetDoesNotExistException {
+    /// <p>Indicates that the named receipt rule set does not exist.</p>
+    pub name: Option<String>,
+}
+
 /// <p>When included in a receipt rule, this action saves the received message to an Amazon Simple Storage Service (Amazon S3) bucket and, optionally, publishes a notification to Amazon Simple Notification Service (Amazon SNS).</p> <p>To enable Amazon SES to write emails to your Amazon S3 bucket, use an AWS KMS key to encrypt your emails, or publish to an Amazon SNS topic of another account, Amazon SES must have permission to access those resources. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p> <note> <p>When you save your emails to an Amazon S3 bucket, the maximum email size (including headers) is 30 MB. Emails larger than that will bounce.</p> </note> <p>For information about specifying Amazon S3 actions in receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-action-s3.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct S3Action {
     /// <p>The name of the Amazon S3 bucket that incoming email will be saved to.</p>
     pub bucket_name: String,
-    /// <p><p>The customer master key that Amazon SES should use to encrypt your emails before saving them to the Amazon S3 bucket. You can use the default master key or a custom master key you created in AWS KMS as follows:</p> <ul> <li> <p>To use the default master key, provide an ARN in the form of <code>arn:aws:kms:REGION:ACCOUNT-ID-WITHOUT-HYPHENS:alias/aws/ses</code>. For example, if your AWS account ID is 123456789012 and you want to use the default master key in the US West (Oregon) region, the ARN of the default master key would be <code>arn:aws:kms:us-west-2:123456789012:alias/aws/ses</code>. If you use the default master key, you don&#39;t need to perform any extra steps to give Amazon SES permission to use the key.</p> </li> <li> <p>To use a custom master key you created in AWS KMS, provide the ARN of the master key and ensure that you add a statement to your key&#39;s policy to give Amazon SES permission to use it. For more information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p> </li> </ul> <p>For more information about key policies, see the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html">AWS KMS Developer Guide</a>. If you do not specify a master key, Amazon SES will not encrypt your emails.</p> <important> <p>Your mail is encrypted by Amazon SES using the Amazon S3 encryption client before the mail is submitted to Amazon S3 for storage. It is not encrypted using Amazon S3 server-side encryption. This means that you must use the Amazon S3 encryption client to decrypt the email after retrieving it from Amazon S3, as the service has no access to use your AWS KMS keys for decryption. This encryption client is currently available with the <a href="http://aws.amazon.com/sdk-for-java/">AWS Java SDK</a> and <a href="http://aws.amazon.com/sdk-for-ruby/">AWS Ruby SDK</a> only. For more information about client-side encryption using AWS KMS master keys, see the <a href="AmazonS3/latest/dev/UsingClientSideEncryption.html">Amazon S3 Developer Guide</a>.</p> </important></p>
+    /// <p><p>The customer master key that Amazon SES should use to encrypt your emails before saving them to the Amazon S3 bucket. You can use the default master key or a custom master key you created in AWS KMS as follows:</p> <ul> <li> <p>To use the default master key, provide an ARN in the form of <code>arn:aws:kms:REGION:ACCOUNT-ID-WITHOUT-HYPHENS:alias/aws/ses</code>. For example, if your AWS account ID is 123456789012 and you want to use the default master key in the US West (Oregon) region, the ARN of the default master key would be <code>arn:aws:kms:us-west-2:123456789012:alias/aws/ses</code>. If you use the default master key, you don&#39;t need to perform any extra steps to give Amazon SES permission to use the key.</p> </li> <li> <p>To use a custom master key you created in AWS KMS, provide the ARN of the master key and ensure that you add a statement to your key&#39;s policy to give Amazon SES permission to use it. For more information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p> </li> </ul> <p>For more information about key policies, see the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html">AWS KMS Developer Guide</a>. If you do not specify a master key, Amazon SES will not encrypt your emails.</p> <important> <p>Your mail is encrypted by Amazon SES using the Amazon S3 encryption client before the mail is submitted to Amazon S3 for storage. It is not encrypted using Amazon S3 server-side encryption. This means that you must use the Amazon S3 encryption client to decrypt the email after retrieving it from Amazon S3, as the service has no access to use your AWS KMS keys for decryption. This encryption client is currently available with the <a href="http://aws.amazon.com/sdk-for-java/">AWS SDK for Java</a> and <a href="http://aws.amazon.com/sdk-for-ruby/">AWS SDK for Ruby</a> only. For more information about client-side encryption using AWS KMS master keys, see the <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingClientSideEncryption.html">Amazon S3 Developer Guide</a>.</p> </important></p>
     pub kms_key_arn: Option<String>,
     /// <p>The key prefix of the Amazon S3 bucket. The key prefix is similar to a directory name that enables you to store similar data under the same directory in a bucket.</p>
     pub object_key_prefix: Option<String>,
@@ -8002,6 +8192,12 @@ impl TemplateContentDeserializer {
         Ok(obj)
     }
 }
+/// <p>Indicates that the Template object you specified does not exist in your Amazon SES account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TemplateDoesNotExistException {
+    pub template_name: Option<String>,
+}
+
 /// <p>Contains information about an email template.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TemplateMetadata {
@@ -8229,7 +8425,7 @@ impl TlsPolicyDeserializer {
         Ok(obj)
     }
 }
-/// <p>A domain that is used to redirect email recipients to an Amazon SES-operated domain. This domain captures open and click events generated by Amazon SES emails.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Configuring Custom Domains to Handle Open and Click Tracking</a> in the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/Welcome.html">Amazon SES Developer Guide</a>.</p>
+/// <p>A domain that is used to redirect email recipients to an Amazon SES-operated domain. This domain captures open and click events generated by Amazon SES emails.</p> <p>For more information, see <a href="ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Configuring Custom Domains to Handle Open and Click Tracking</a> in the <i>Amazon SES Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TrackingOptions {
     /// <p>The custom subdomain that will be used to redirect email recipients to the Amazon SES event tracking domain.</p>
@@ -8298,10 +8494,24 @@ impl TrackingOptionsSerializer {
     }
 }
 
+/// <p>Indicates that the configuration set you specified already contains a TrackingOptions object.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TrackingOptionsAlreadyExistsException {
+    /// <p>Indicates that a TrackingOptions object already exists in the specified configuration set.</p>
+    pub configuration_set_name: Option<String>,
+}
+
+/// <p>Indicates that the TrackingOptions object you specified does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TrackingOptionsDoesNotExistException {
+    /// <p>Indicates that a TrackingOptions object does not exist in the specified configuration set.</p>
+    pub configuration_set_name: Option<String>,
+}
+
 /// <p>Represents a request to enable or disable the email sending capabilities for your entire Amazon SES account.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateAccountSendingEnabledRequest {
-    /// <p>Describes whether email sending is enabled or disabled for your Amazon SES account.</p>
+    /// <p>Describes whether email sending is enabled or disabled for your Amazon SES account in the current AWS Region.</p>
     pub enabled: Option<bool>,
 }
 
@@ -9818,7 +10028,7 @@ impl Error for CreateReceiptRuleSetError {
 pub enum CreateTemplateError {
     /// <p>Indicates that a resource could not be created because of a naming conflict.</p>
     AlreadyExists(String),
-    /// <p>Indicates that a template could not be created because it contained invalid JSON.</p>
+    /// <p>Indicates that the template that you specified could not be rendered. This issue may occur when a template refers to a partial that does not exist.</p>
     InvalidTemplate(String),
     /// <p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
     LimitExceeded(String),
@@ -14464,7 +14674,7 @@ impl Error for UpdateReceiptRuleError {
 /// Errors returned by UpdateTemplate
 #[derive(Debug, PartialEq)]
 pub enum UpdateTemplateError {
-    /// <p>Indicates that a template could not be created because it contained invalid JSON.</p>
+    /// <p>Indicates that the template that you specified could not be rendered. This issue may occur when a template refers to a partial that does not exist.</p>
     InvalidTemplate(String),
     /// <p>Indicates that the Template object you specified does not exist in your Amazon SES account.</p>
     TemplateDoesNotExist(String),
@@ -14848,7 +15058,7 @@ pub trait Ses {
         input: CreateConfigurationSetRequest,
     ) -> RusotoFuture<CreateConfigurationSetResponse, CreateConfigurationSetError>;
 
-    /// <p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn create_configuration_set_event_destination(
         &self,
         input: CreateConfigurationSetEventDestinationRequest,
@@ -14857,7 +15067,7 @@ pub trait Ses {
         CreateConfigurationSetEventDestinationError,
     >;
 
-    /// <p>Creates an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Configuring Custom Domains to Handle Open and Click Tracking</a> in the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/Welcome.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Creates an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p>
     fn create_configuration_set_tracking_options(
         &self,
         input: CreateConfigurationSetTrackingOptionsRequest,
@@ -14866,7 +15076,7 @@ pub trait Ses {
         CreateConfigurationSetTrackingOptionsError,
     >;
 
-    /// <p>Creates a new custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Creates a new custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
     fn create_custom_verification_email_template(
         &self,
         input: CreateCustomVerificationEmailTemplateRequest,
@@ -14911,7 +15121,7 @@ pub trait Ses {
         DeleteConfigurationSetEventDestinationError,
     >;
 
-    /// <p><p>Deletes an association between a configuration set and a custom domain for open and click event tracking.</p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Configuring Custom Domains to Handle Open and Click Tracking</a> in the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/Welcome.html">Amazon SES Developer Guide</a>.</p> <note> <p>Deleting this kind of association will result in emails sent using the specified configuration set to capture open and click events using the standard, Amazon SES-operated domains.</p> </note></p>
+    /// <p><p>Deletes an association between a configuration set and a custom domain for open and click event tracking.</p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p> <note> <p>Deleting this kind of association will result in emails sent using the specified configuration set to capture open and click events using the standard, Amazon SES-operated domains.</p> </note></p>
     fn delete_configuration_set_tracking_options(
         &self,
         input: DeleteConfigurationSetTrackingOptionsRequest,
@@ -14920,7 +15130,7 @@ pub trait Ses {
         DeleteConfigurationSetTrackingOptionsError,
     >;
 
-    /// <p>Deletes an existing custom verification email template. </p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Deletes an existing custom verification email template. </p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_custom_verification_email_template(
         &self,
         input: DeleteCustomVerificationEmailTemplateRequest,
@@ -14992,12 +15202,12 @@ pub trait Ses {
         input: DescribeReceiptRuleSetRequest,
     ) -> RusotoFuture<DescribeReceiptRuleSetResponse, DescribeReceiptRuleSetError>;
 
-    /// <p>Returns the email sending status of the Amazon SES account.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Returns the email sending status of the Amazon SES account for the current region.</p> <p>You can execute this operation no more than once per second.</p>
     fn get_account_sending_enabled(
         &self,
     ) -> RusotoFuture<GetAccountSendingEnabledResponse, GetAccountSendingEnabledError>;
 
-    /// <p>Returns the custom email verification template for the template name you specify.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Returns the custom email verification template for the template name you specify.</p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
     fn get_custom_verification_email_template(
         &self,
         input: GetCustomVerificationEmailTemplateRequest,
@@ -15048,7 +15258,7 @@ pub trait Ses {
     /// <p>Provides the sending limits for the Amazon SES account. </p> <p>You can execute this operation no more than once per second.</p>
     fn get_send_quota(&self) -> RusotoFuture<GetSendQuotaResponse, GetSendQuotaError>;
 
-    /// <p>Provides sending statistics for the Amazon SES account. The result is a list of data points, representing the last two weeks of sending activity. Each data point in the list contains statistics for a 15-minute period of time.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Provides sending statistics for the current AWS Region. The result is a list of data points, representing the last two weeks of sending activity. Each data point in the list contains statistics for a 15-minute period of time.</p> <p>You can execute this operation no more than once per second.</p>
     fn get_send_statistics(
         &self,
     ) -> RusotoFuture<GetSendStatisticsResponse, GetSendStatisticsError>;
@@ -15059,13 +15269,13 @@ pub trait Ses {
         input: GetTemplateRequest,
     ) -> RusotoFuture<GetTemplateResponse, GetTemplateError>;
 
-    /// <p>Provides a list of the configuration sets associated with your Amazon SES account. For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Monitoring Your Amazon SES Sending Activity</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second. This operation will return up to 1,000 configuration sets each time it is run. If your Amazon SES account has more than 1,000 configuration sets, this operation will also return a NextToken element. You can then execute the <code>ListConfigurationSets</code> operation again, passing the <code>NextToken</code> parameter and the value of the NextToken element to retrieve additional results.</p>
+    /// <p>Provides a list of the configuration sets associated with your Amazon SES account in the current AWS Region. For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Monitoring Your Amazon SES Sending Activity</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second. This operation will return up to 1,000 configuration sets each time it is run. If your Amazon SES account has more than 1,000 configuration sets, this operation will also return a NextToken element. You can then execute the <code>ListConfigurationSets</code> operation again, passing the <code>NextToken</code> parameter and the value of the NextToken element to retrieve additional results.</p>
     fn list_configuration_sets(
         &self,
         input: ListConfigurationSetsRequest,
     ) -> RusotoFuture<ListConfigurationSetsResponse, ListConfigurationSetsError>;
 
-    /// <p>Lists the existing custom verification email templates for your account.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Lists the existing custom verification email templates for your account in the current AWS Region.</p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
     fn list_custom_verification_email_templates(
         &self,
         input: ListCustomVerificationEmailTemplatesRequest,
@@ -15074,7 +15284,7 @@ pub trait Ses {
         ListCustomVerificationEmailTemplatesError,
     >;
 
-    /// <p>Returns a list containing all of the identities (email addresses and domains) for your AWS account, regardless of verification status.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Returns a list containing all of the identities (email addresses and domains) for your AWS account in the current AWS Region, regardless of verification status.</p> <p>You can execute this operation no more than once per second.</p>
     fn list_identities(
         &self,
         input: ListIdentitiesRequest,
@@ -15086,19 +15296,19 @@ pub trait Ses {
         input: ListIdentityPoliciesRequest,
     ) -> RusotoFuture<ListIdentityPoliciesResponse, ListIdentityPoliciesError>;
 
-    /// <p>Lists the IP address filters associated with your AWS account.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Lists the IP address filters associated with your AWS account in the current AWS Region.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn list_receipt_filters(
         &self,
         input: ListReceiptFiltersRequest,
     ) -> RusotoFuture<ListReceiptFiltersResponse, ListReceiptFiltersError>;
 
-    /// <p>Lists the receipt rule sets that exist under your AWS account. If there are additional receipt rule sets to be retrieved, you will receive a <code>NextToken</code> that you can provide to the next call to <code>ListReceiptRuleSets</code> to retrieve the additional entries.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Lists the receipt rule sets that exist under your AWS account in the current AWS Region. If there are additional receipt rule sets to be retrieved, you will receive a <code>NextToken</code> that you can provide to the next call to <code>ListReceiptRuleSets</code> to retrieve the additional entries.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn list_receipt_rule_sets(
         &self,
         input: ListReceiptRuleSetsRequest,
     ) -> RusotoFuture<ListReceiptRuleSetsResponse, ListReceiptRuleSetsError>;
 
-    /// <p>Lists the email templates present in your Amazon SES account.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Lists the email templates present in your Amazon SES account in the current AWS Region.</p> <p>You can execute this operation no more than once per second.</p>
     fn list_templates(
         &self,
         input: ListTemplatesRequest,
@@ -15133,7 +15343,7 @@ pub trait Ses {
         input: SendBulkTemplatedEmailRequest,
     ) -> RusotoFuture<SendBulkTemplatedEmailResponse, SendBulkTemplatedEmailError>;
 
-    /// <p>Adds an email address to the list of identities for your Amazon SES account and attempts to verify it. As a result of executing this operation, a customized verification email is sent to the specified address.</p> <p>To use this operation, you must first create a custom verification email template. For more information about creating and using custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Adds an email address to the list of identities for your Amazon SES account in the current AWS Region and attempts to verify it. As a result of executing this operation, a customized verification email is sent to the specified address.</p> <p>To use this operation, you must first create a custom verification email template. For more information about creating and using custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
     fn send_custom_verification_email(
         &self,
         input: SendCustomVerificationEmailRequest,
@@ -15151,7 +15361,7 @@ pub trait Ses {
         input: SendRawEmailRequest,
     ) -> RusotoFuture<SendRawEmailResponse, SendRawEmailError>;
 
-    /// <p><p>Composes an email message using an email template and immediately queues it for sending.</p> <p>In order to send email using the <code>SendTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The total size of the message, including attachments, must be less than 10 MB.</p> </li> <li> <p>Calls to the <code>SendTemplatedEmail</code> operation may only include one <code>Destination</code> parameter. A destination is a set of recipients who will receive the same version of the email. The <code>Destination</code> parameter can include up to 50 recipients, across the To:, CC: and BCC: fields.</p> </li> <li> <p>The <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> </ul></p>
+    /// <p><p>Composes an email message using an email template and immediately queues it for sending.</p> <p>In order to send email using the <code>SendTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The total size of the message, including attachments, must be less than 10 MB.</p> </li> <li> <p>Calls to the <code>SendTemplatedEmail</code> operation may only include one <code>Destination</code> parameter. A destination is a set of recipients who will receive the same version of the email. The <code>Destination</code> parameter can include up to 50 recipients, across the To:, CC: and BCC: fields.</p> </li> <li> <p>The <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> </ul> <important> <p>If your call to the <code>SendTemplatedEmail</code> operation includes all of the required parameters, Amazon SES accepts it and returns a Message ID. However, if Amazon SES can&#39;t render the email because the template contains errors, it doesn&#39;t send the email. Additionally, because it already accepted the message, Amazon SES doesn&#39;t return a message stating that it was unable to send the email.</p> <p>For these reasons, we highly recommend that you set up Amazon SES to send you notifications when Rendering Failure events occur. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Sending Personalized Email Using the Amazon SES API</a> in the <i>Amazon Simple Email Service Developer Guide</i>.</p> </important></p>
     fn send_templated_email(
         &self,
         input: SendTemplatedEmailRequest,
@@ -15211,7 +15421,7 @@ pub trait Ses {
         input: TestRenderTemplateRequest,
     ) -> RusotoFuture<TestRenderTemplateResponse, TestRenderTemplateError>;
 
-    /// <p>Enables or disables email sending across your entire Amazon SES account. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending across your Amazon SES account when reputation metrics (such as your bounce on complaint rate) reach certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Enables or disables email sending across your entire Amazon SES account in the current AWS Region. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending across your Amazon SES account in a given AWS Region when reputation metrics (such as your bounce or complaint rates) reach certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
     fn update_account_sending_enabled(
         &self,
         input: UpdateAccountSendingEnabledRequest,
@@ -15226,19 +15436,19 @@ pub trait Ses {
         UpdateConfigurationSetEventDestinationError,
     >;
 
-    /// <p>Enables or disables the publishing of reputation metrics for emails sent using a specific configuration set. Reputation metrics include bounce and complaint rates. These metrics are published to Amazon CloudWatch. By using Amazon CloudWatch, you can create alarms when bounce or complaint rates exceed a certain threshold.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Enables or disables the publishing of reputation metrics for emails sent using a specific configuration set in a given AWS Region. Reputation metrics include bounce and complaint rates. These metrics are published to Amazon CloudWatch. By using CloudWatch, you can create alarms when bounce or complaint rates exceed certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
     fn update_configuration_set_reputation_metrics_enabled(
         &self,
         input: UpdateConfigurationSetReputationMetricsEnabledRequest,
     ) -> RusotoFuture<(), UpdateConfigurationSetReputationMetricsEnabledError>;
 
-    /// <p>Enables or disables email sending for messages sent using a specific configuration set. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending for a configuration set when the reputation metrics for that configuration set (such as your bounce on complaint rate) reach certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Enables or disables email sending for messages sent using a specific configuration set in a given AWS Region. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending for a configuration set when the reputation metrics for that configuration set (such as your bounce on complaint rate) exceed certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
     fn update_configuration_set_sending_enabled(
         &self,
         input: UpdateConfigurationSetSendingEnabledRequest,
     ) -> RusotoFuture<(), UpdateConfigurationSetSendingEnabledError>;
 
-    /// <p>Modifies an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Configuring Custom Domains to Handle Open and Click Tracking</a> in the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/Welcome.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Modifies an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p>
     fn update_configuration_set_tracking_options(
         &self,
         input: UpdateConfigurationSetTrackingOptionsRequest,
@@ -15247,7 +15457,7 @@ pub trait Ses {
         UpdateConfigurationSetTrackingOptionsError,
     >;
 
-    /// <p>Updates an existing custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Updates an existing custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
     fn update_custom_verification_email_template(
         &self,
         input: UpdateCustomVerificationEmailTemplateRequest,
@@ -15271,7 +15481,7 @@ pub trait Ses {
         input: VerifyDomainDkimRequest,
     ) -> RusotoFuture<VerifyDomainDkimResponse, VerifyDomainDkimError>;
 
-    /// <p>Adds a domain to the list of identities for your Amazon SES account and attempts to verify it. For more information about verifying domains, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Adds a domain to the list of identities for your Amazon SES account in the current AWS Region and attempts to verify it. For more information about verifying domains, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second.</p>
     fn verify_domain_identity(
         &self,
         input: VerifyDomainIdentityRequest,
@@ -15283,7 +15493,7 @@ pub trait Ses {
         input: VerifyEmailAddressRequest,
     ) -> RusotoFuture<(), VerifyEmailAddressError>;
 
-    /// <p>Adds an email address to the list of identities for your Amazon SES account and attempts to verify it. As a result of executing this operation, a verification email is sent to the specified address.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Adds an email address to the list of identities for your Amazon SES account in the current AWS region and attempts to verify it. As a result of executing this operation, a verification email is sent to the specified address.</p> <p>You can execute this operation no more than once per second.</p>
     fn verify_email_identity(
         &self,
         input: VerifyEmailIdentityRequest,
@@ -15423,7 +15633,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn create_configuration_set_event_destination(
         &self,
         input: CreateConfigurationSetEventDestinationRequest,
@@ -15477,7 +15687,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p>Creates an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Configuring Custom Domains to Handle Open and Click Tracking</a> in the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/Welcome.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Creates an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p>
     fn create_configuration_set_tracking_options(
         &self,
         input: CreateConfigurationSetTrackingOptionsRequest,
@@ -15531,7 +15741,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p>Creates a new custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Creates a new custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
     fn create_custom_verification_email_template(
         &self,
         input: CreateCustomVerificationEmailTemplateRequest,
@@ -15856,7 +16066,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p><p>Deletes an association between a configuration set and a custom domain for open and click event tracking.</p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Configuring Custom Domains to Handle Open and Click Tracking</a> in the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/Welcome.html">Amazon SES Developer Guide</a>.</p> <note> <p>Deleting this kind of association will result in emails sent using the specified configuration set to capture open and click events using the standard, Amazon SES-operated domains.</p> </note></p>
+    /// <p><p>Deletes an association between a configuration set and a custom domain for open and click event tracking.</p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p> <note> <p>Deleting this kind of association will result in emails sent using the specified configuration set to capture open and click events using the standard, Amazon SES-operated domains.</p> </note></p>
     fn delete_configuration_set_tracking_options(
         &self,
         input: DeleteConfigurationSetTrackingOptionsRequest,
@@ -15910,7 +16120,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p>Deletes an existing custom verification email template. </p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Deletes an existing custom verification email template. </p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_custom_verification_email_template(
         &self,
         input: DeleteCustomVerificationEmailTemplateRequest,
@@ -16454,7 +16664,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p>Returns the email sending status of the Amazon SES account.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Returns the email sending status of the Amazon SES account for the current region.</p> <p>You can execute this operation no more than once per second.</p>
     fn get_account_sending_enabled(
         &self,
     ) -> RusotoFuture<GetAccountSendingEnabledResponse, GetAccountSendingEnabledError> {
@@ -16502,7 +16712,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p>Returns the custom email verification template for the template name you specify.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Returns the custom email verification template for the template name you specify.</p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
     fn get_custom_verification_email_template(
         &self,
         input: GetCustomVerificationEmailTemplateRequest,
@@ -16862,7 +17072,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p>Provides sending statistics for the Amazon SES account. The result is a list of data points, representing the last two weeks of sending activity. Each data point in the list contains statistics for a 15-minute period of time.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Provides sending statistics for the current AWS Region. The result is a list of data points, representing the last two weeks of sending activity. Each data point in the list contains statistics for a 15-minute period of time.</p> <p>You can execute this operation no more than once per second.</p>
     fn get_send_statistics(
         &self,
     ) -> RusotoFuture<GetSendStatisticsResponse, GetSendStatisticsError> {
@@ -16959,7 +17169,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p>Provides a list of the configuration sets associated with your Amazon SES account. For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Monitoring Your Amazon SES Sending Activity</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second. This operation will return up to 1,000 configuration sets each time it is run. If your Amazon SES account has more than 1,000 configuration sets, this operation will also return a NextToken element. You can then execute the <code>ListConfigurationSets</code> operation again, passing the <code>NextToken</code> parameter and the value of the NextToken element to retrieve additional results.</p>
+    /// <p>Provides a list of the configuration sets associated with your Amazon SES account in the current AWS Region. For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Monitoring Your Amazon SES Sending Activity</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second. This operation will return up to 1,000 configuration sets each time it is run. If your Amazon SES account has more than 1,000 configuration sets, this operation will also return a NextToken element. You can then execute the <code>ListConfigurationSets</code> operation again, passing the <code>NextToken</code> parameter and the value of the NextToken element to retrieve additional results.</p>
     fn list_configuration_sets(
         &self,
         input: ListConfigurationSetsRequest,
@@ -17008,7 +17218,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p>Lists the existing custom verification email templates for your account.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Lists the existing custom verification email templates for your account in the current AWS Region.</p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
     fn list_custom_verification_email_templates(
         &self,
         input: ListCustomVerificationEmailTemplatesRequest,
@@ -17062,7 +17272,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p>Returns a list containing all of the identities (email addresses and domains) for your AWS account, regardless of verification status.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Returns a list containing all of the identities (email addresses and domains) for your AWS account in the current AWS Region, regardless of verification status.</p> <p>You can execute this operation no more than once per second.</p>
     fn list_identities(
         &self,
         input: ListIdentitiesRequest,
@@ -17160,7 +17370,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p>Lists the IP address filters associated with your AWS account.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Lists the IP address filters associated with your AWS account in the current AWS Region.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn list_receipt_filters(
         &self,
         input: ListReceiptFiltersRequest,
@@ -17209,7 +17419,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p>Lists the receipt rule sets that exist under your AWS account. If there are additional receipt rule sets to be retrieved, you will receive a <code>NextToken</code> that you can provide to the next call to <code>ListReceiptRuleSets</code> to retrieve the additional entries.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Lists the receipt rule sets that exist under your AWS account in the current AWS Region. If there are additional receipt rule sets to be retrieved, you will receive a <code>NextToken</code> that you can provide to the next call to <code>ListReceiptRuleSets</code> to retrieve the additional entries.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn list_receipt_rule_sets(
         &self,
         input: ListReceiptRuleSetsRequest,
@@ -17258,7 +17468,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p>Lists the email templates present in your Amazon SES account.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Lists the email templates present in your Amazon SES account in the current AWS Region.</p> <p>You can execute this operation no more than once per second.</p>
     fn list_templates(
         &self,
         input: ListTemplatesRequest,
@@ -17551,7 +17761,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p>Adds an email address to the list of identities for your Amazon SES account and attempts to verify it. As a result of executing this operation, a customized verification email is sent to the specified address.</p> <p>To use this operation, you must first create a custom verification email template. For more information about creating and using custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Adds an email address to the list of identities for your Amazon SES account in the current AWS Region and attempts to verify it. As a result of executing this operation, a customized verification email is sent to the specified address.</p> <p>To use this operation, you must first create a custom verification email template. For more information about creating and using custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
     fn send_custom_verification_email(
         &self,
         input: SendCustomVerificationEmailRequest,
@@ -17700,7 +17910,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p><p>Composes an email message using an email template and immediately queues it for sending.</p> <p>In order to send email using the <code>SendTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The total size of the message, including attachments, must be less than 10 MB.</p> </li> <li> <p>Calls to the <code>SendTemplatedEmail</code> operation may only include one <code>Destination</code> parameter. A destination is a set of recipients who will receive the same version of the email. The <code>Destination</code> parameter can include up to 50 recipients, across the To:, CC: and BCC: fields.</p> </li> <li> <p>The <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> </ul></p>
+    /// <p><p>Composes an email message using an email template and immediately queues it for sending.</p> <p>In order to send email using the <code>SendTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The total size of the message, including attachments, must be less than 10 MB.</p> </li> <li> <p>Calls to the <code>SendTemplatedEmail</code> operation may only include one <code>Destination</code> parameter. A destination is a set of recipients who will receive the same version of the email. The <code>Destination</code> parameter can include up to 50 recipients, across the To:, CC: and BCC: fields.</p> </li> <li> <p>The <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> </ul> <important> <p>If your call to the <code>SendTemplatedEmail</code> operation includes all of the required parameters, Amazon SES accepts it and returns a Message ID. However, if Amazon SES can&#39;t render the email because the template contains errors, it doesn&#39;t send the email. Additionally, because it already accepted the message, Amazon SES doesn&#39;t return a message stating that it was unable to send the email.</p> <p>For these reasons, we highly recommend that you set up Amazon SES to send you notifications when Rendering Failure events occur. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Sending Personalized Email Using the Amazon SES API</a> in the <i>Amazon Simple Email Service Developer Guide</i>.</p> </important></p>
     fn send_templated_email(
         &self,
         input: SendTemplatedEmailRequest,
@@ -18157,7 +18367,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p>Enables or disables email sending across your entire Amazon SES account. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending across your Amazon SES account when reputation metrics (such as your bounce on complaint rate) reach certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Enables or disables email sending across your entire Amazon SES account in the current AWS Region. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending across your Amazon SES account in a given AWS Region when reputation metrics (such as your bounce or complaint rates) reach certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
     fn update_account_sending_enabled(
         &self,
         input: UpdateAccountSendingEnabledRequest,
@@ -18237,7 +18447,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p>Enables or disables the publishing of reputation metrics for emails sent using a specific configuration set. Reputation metrics include bounce and complaint rates. These metrics are published to Amazon CloudWatch. By using Amazon CloudWatch, you can create alarms when bounce or complaint rates exceed a certain threshold.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Enables or disables the publishing of reputation metrics for emails sent using a specific configuration set in a given AWS Region. Reputation metrics include bounce and complaint rates. These metrics are published to Amazon CloudWatch. By using CloudWatch, you can create alarms when bounce or complaint rates exceed certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
     fn update_configuration_set_reputation_metrics_enabled(
         &self,
         input: UpdateConfigurationSetReputationMetricsEnabledRequest,
@@ -18269,7 +18479,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p>Enables or disables email sending for messages sent using a specific configuration set. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending for a configuration set when the reputation metrics for that configuration set (such as your bounce on complaint rate) reach certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Enables or disables email sending for messages sent using a specific configuration set in a given AWS Region. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending for a configuration set when the reputation metrics for that configuration set (such as your bounce on complaint rate) exceed certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
     fn update_configuration_set_sending_enabled(
         &self,
         input: UpdateConfigurationSetSendingEnabledRequest,
@@ -18295,7 +18505,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p>Modifies an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Configuring Custom Domains to Handle Open and Click Tracking</a> in the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/Welcome.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Modifies an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p>
     fn update_configuration_set_tracking_options(
         &self,
         input: UpdateConfigurationSetTrackingOptionsRequest,
@@ -18349,7 +18559,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p>Updates an existing custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Updates an existing custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
     fn update_custom_verification_email_template(
         &self,
         input: UpdateCustomVerificationEmailTemplateRequest,
@@ -18522,7 +18732,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p>Adds a domain to the list of identities for your Amazon SES account and attempts to verify it. For more information about verifying domains, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Adds a domain to the list of identities for your Amazon SES account in the current AWS Region and attempts to verify it. For more information about verifying domains, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second.</p>
     fn verify_domain_identity(
         &self,
         input: VerifyDomainIdentityRequest,
@@ -18597,7 +18807,7 @@ impl Ses for SesClient {
         })
     }
 
-    /// <p>Adds an email address to the list of identities for your Amazon SES account and attempts to verify it. As a result of executing this operation, a verification email is sent to the specified address.</p> <p>You can execute this operation no more than once per second.</p>
+    /// <p>Adds an email address to the list of identities for your Amazon SES account in the current AWS region and attempts to verify it. As a result of executing this operation, a verification email is sent to the specified address.</p> <p>You can execute this operation no more than once per second.</p>
     fn verify_email_identity(
         &self,
         input: VerifyEmailIdentityRequest,

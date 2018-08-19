@@ -28,6 +28,24 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
+/// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AccessDeniedException {
+    pub code: Option<String>,
+    pub docs: Option<String>,
+    pub message: Option<String>,
+    pub tip: Option<String>,
+}
+
+/// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AccountSetupInProgressException {
+    pub code: Option<String>,
+    pub docs: Option<String>,
+    pub message: Option<String>,
+    pub tip: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AllocateStaticIpRequest {
     /// <p>The name of the static IP address.</p>
@@ -1775,6 +1793,15 @@ pub struct InstanceState {
     pub name: Option<String>,
 }
 
+/// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidInputException {
+    pub code: Option<String>,
+    pub docs: Option<String>,
+    pub message: Option<String>,
+    pub tip: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct IsVpcPeeredRequest {}
 
@@ -2091,6 +2118,15 @@ pub struct MonthlyTransfer {
     pub gb_per_month_allocated: Option<i64>,
 }
 
+/// <p>Lightsail throws this exception when it cannot find a resource.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NotFoundException {
+    pub code: Option<String>,
+    pub docs: Option<String>,
+    pub message: Option<String>,
+    pub tip: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct OpenInstancePublicPortsRequest {
     /// <p>The name of the instance for which you want to open the public ports.</p>
@@ -2160,6 +2196,15 @@ pub struct Operation {
     #[serde(rename = "statusChangedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_changed_at: Option<f64>,
+}
+
+/// <p>Lightsail throws this exception when an operation fails to execute.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct OperationFailureException {
+    pub code: Option<String>,
+    pub docs: Option<String>,
+    pub message: Option<String>,
+    pub tip: Option<String>,
 }
 
 /// <p>The password data for the Windows Server-based instance, including the ciphertext and the key pair name.</p>
@@ -2289,6 +2334,15 @@ pub struct ResourceLocation {
     pub region_name: Option<String>,
 }
 
+/// <p>A general service exception.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ServiceException {
+    pub code: Option<String>,
+    pub docs: Option<String>,
+    pub message: Option<String>,
+    pub tip: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartInstanceRequest {
     /// <p>The name of the instance (a virtual private server) to start.</p>
@@ -2362,6 +2416,15 @@ pub struct StopInstanceResult {
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
+}
+
+/// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UnauthenticatedException {
+    pub code: Option<String>,
+    pub docs: Option<String>,
+    pub message: Option<String>,
+    pub tip: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]

@@ -1172,6 +1172,39 @@ pub struct GetMLModelOutput {
     pub training_parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p>A second request to use or change an object was not allowed. This can result from retrying a request using a parameter that was not present in the original request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct IdempotentParameterMismatchException {
+    pub code: Option<i64>,
+    pub message: Option<String>,
+}
+
+/// <p>An error on the server occurred when trying to process a request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalServerException {
+    pub code: Option<i64>,
+    pub message: Option<String>,
+}
+
+/// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidInputException {
+    pub code: Option<i64>,
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidTagException {
+    pub message: Option<String>,
+}
+
+/// <p>The subscriber exceeded the maximum number of operations. This exception can occur when listing objects such as <code>DataSource</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {
+    pub code: Option<i64>,
+    pub message: Option<String>,
+}
+
 /// <p> Represents the output of a <code>GetMLModel</code> operation. </p> <p>The content consists of the detailed metadata and the current status of the <code>MLModel</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct MLModel {
@@ -1291,6 +1324,12 @@ pub struct Prediction {
     #[serde(rename = "predictedValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predicted_value: Option<f32>,
+}
+
+/// <p>The exception is thrown when a predict request is made to an unmounted <code>MLModel</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PredictorNotMountedException {
+    pub message: Option<String>,
 }
 
 /// <p>The data specification of an Amazon Relational Database Service (Amazon RDS) <code>DataSource</code>.</p>
@@ -1464,6 +1503,13 @@ pub struct RedshiftMetadata {
     pub select_sql_query: Option<String>,
 }
 
+/// <p>A specified resource cannot be located.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceNotFoundException {
+    pub code: Option<i64>,
+    pub message: Option<String>,
+}
+
 /// <p> Describes the data specification of a <code>DataSource</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct S3DataSpec {
@@ -1495,6 +1541,11 @@ pub struct Tag {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TagLimitExceededException {
+    pub message: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]

@@ -44,6 +44,14 @@ pub struct AddTagsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AddTagsResponse {}
 
+/// <p>This exception is thrown when an operation is called with an invalid trail ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CloudTrailARNInvalidException {}
+
+/// <p>Cannot set a CloudWatch Logs delivery for this region.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CloudWatchLogsDeliveryUnavailableException {}
+
 /// <p>Specifies the settings for each trail.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateTrailRequest {
@@ -333,6 +341,94 @@ pub struct GetTrailStatusResponse {
     pub time_logging_stopped: Option<String>,
 }
 
+/// <p>This exception is thrown when the policy on the S3 bucket or KMS key is not sufficient.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InsufficientEncryptionPolicyException {}
+
+/// <p>This exception is thrown when the policy on the S3 bucket is not sufficient.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InsufficientS3BucketPolicyException {}
+
+/// <p>This exception is thrown when the policy on the SNS topic is not sufficient.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InsufficientSnsTopicPolicyException {}
+
+/// <p>This exception is thrown when the provided CloudWatch log group is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidCloudWatchLogsLogGroupArnException {}
+
+/// <p>This exception is thrown when the provided role is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidCloudWatchLogsRoleArnException {}
+
+/// <p><p>This exception is thrown when the <code>PutEventSelectors</code> operation is called with an invalid number of event selectors, data resources, or an invalid value for a parameter:</p> <ul> <li> <p>Specify a valid number of event selectors (1 to 5) for a trail.</p> </li> <li> <p>Specify a valid number of data resources (1 to 250) for an event selector.</p> </li> <li> <p>Specify a valid value for a parameter. For example, specifying the <code>ReadWriteType</code> parameter with a value of <code>read-only</code> is invalid.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidEventSelectorsException {}
+
+/// <p>This exception is thrown when an operation is called on a trail from a region other than the region in which the trail was created.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidHomeRegionException {}
+
+/// <p>This exception is thrown when the KMS key ARN is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidKmsKeyIdException {}
+
+/// <p>Occurs when an invalid lookup attribute is specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidLookupAttributesException {}
+
+/// <p>This exception is thrown if the limit specified is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidMaxResultsException {}
+
+/// <p>Invalid token or token that was previously used in a request with different parameters. This exception is thrown if the token is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidNextTokenException {}
+
+/// <p>This exception is thrown when the combination of parameters provided is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterCombinationException {}
+
+/// <p>This exception is thrown when the provided S3 bucket name is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidS3BucketNameException {}
+
+/// <p>This exception is thrown when the provided S3 prefix is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidS3PrefixException {}
+
+/// <p>This exception is thrown when the provided SNS topic name is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidSnsTopicNameException {}
+
+/// <p>This exception is thrown when the key or value specified for the tag does not match the regular expression <code>^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidTagParameterException {}
+
+/// <p>Occurs if the timestamp values are invalid. Either the start time occurs after the end time or the time range is outside the range of possible values.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidTimeRangeException {}
+
+/// <p>Reserved for future use.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidTokenException {}
+
+/// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidTrailNameException {}
+
+/// <p>This exception is thrown when there is an issue with the specified KMS key and the trail can’t be updated.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct KmsException {}
+
+/// <p>This exception is deprecated.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct KmsKeyDisabledException {}
+
+/// <p>This exception is thrown when the KMS key does not exist, or when the S3 bucket and the KMS key are not in the same region.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct KmsKeyNotFoundException {}
+
 /// <p>Requests the public keys for a specified time range.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListPublicKeysRequest {
@@ -437,6 +533,14 @@ pub struct LookupEventsResponse {
     pub next_token: Option<String>,
 }
 
+/// <p>This exception is thrown when the maximum number of trails is reached.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MaximumNumberOfTrailsExceededException {}
+
+/// <p>This exception is thrown when the requested operation is not permitted.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct OperationNotPermittedException {}
+
 /// <p>Contains information about a returned public key.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PublicKey {
@@ -513,6 +617,10 @@ pub struct Resource {
     pub resource_type: Option<String>,
 }
 
+/// <p>This exception is thrown when the specified resource is not found.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceNotFoundException {}
+
 /// <p>A resource tag.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ResourceTag {
@@ -525,6 +633,14 @@ pub struct ResourceTag {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags_list: Option<Vec<Tag>>,
 }
+
+/// <p>This exception is thrown when the specified resource type is not supported by CloudTrail.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceTypeNotSupportedException {}
+
+/// <p>This exception is thrown when the specified S3 bucket does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct S3BucketDoesNotExistException {}
 
 /// <p>The request to CloudTrail to start logging AWS API calls for an account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -561,6 +677,10 @@ pub struct Tag {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
+
+/// <p>The number of tags per trail has exceeded the permitted amount. Currently, the limit is 50.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TagsLimitExceededException {}
 
 /// <p>The settings for a trail.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -618,6 +738,22 @@ pub struct Trail {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trail_arn: Option<String>,
 }
+
+/// <p>This exception is thrown when the specified trail already exists.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TrailAlreadyExistsException {}
+
+/// <p>This exception is thrown when the trail with the given name is not found.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TrailNotFoundException {}
+
+/// <p>This exception is deprecated.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TrailNotProvidedException {}
+
+/// <p>This exception is thrown when the requested operation is not supported.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UnsupportedOperationException {}
 
 /// <p>Specifies settings to update for the trail.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]

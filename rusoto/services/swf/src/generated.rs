@@ -751,6 +751,12 @@ pub struct DecisionTaskTimedOutEventAttributes {
     pub timeout_type: String,
 }
 
+/// <p><p>The <code>StartWorkflowExecution</code> API action was called without the required parameters set.</p> <p>Some workflow execution parameters, such as the decision <code>taskList</code>, must be set to start the execution. However, these parameters might have been set as defaults when the workflow type was registered. In this case, you can omit these parameters from the <code>StartWorkflowExecution</code> call and Amazon SWF uses the values defined in the workflow type.</p> <note> <p>If these parameters aren&#39;t set and no default parameters were defined in the workflow type, this error is displayed.</p> </note></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DefaultUndefinedFault {
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeprecateActivityTypeInput {
     /// <p>The activity type to deprecate.</p>
@@ -815,12 +821,26 @@ pub struct DescribeWorkflowTypeInput {
     pub workflow_type: WorkflowType,
 }
 
+/// <p>Returned if the specified domain already exists. You get this fault even if the existing domain is in deprecated status.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DomainAlreadyExistsFault {
+    /// <p>A description that may help with diagnosing the cause of the fault.</p>
+    pub message: Option<String>,
+}
+
 /// <p>Contains the configuration settings of a domain.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DomainConfiguration {
     /// <p>The retention period for workflow executions in this domain.</p>
     #[serde(rename = "workflowExecutionRetentionPeriodInDays")]
     pub workflow_execution_retention_period_in_days: String,
+}
+
+/// <p>Returned when the specified domain has been deprecated.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DomainDeprecatedFault {
+    /// <p>A description that may help with diagnosing the cause of the fault.</p>
+    pub message: Option<String>,
 }
 
 /// <p>Contains details of a domain.</p>
@@ -1297,6 +1317,13 @@ pub struct LambdaFunctionTimedOutEventAttributes {
     pub timeout_type: Option<String>,
 }
 
+/// <p>Returned by any operation if a system imposed limitation has been reached. To address this fault you should either clean up unused resources or increase the limit by contacting AWS.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededFault {
+    /// <p>A description that may help with diagnosing the cause of the fault.</p>
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListActivityTypesInput {
     /// <p>The name of the domain in which the activity types have been registered.</p>
@@ -1458,6 +1485,13 @@ pub struct MarkerRecordedEventAttributes {
     /// <p>The name of the marker.</p>
     #[serde(rename = "markerName")]
     pub marker_name: String,
+}
+
+/// <p>Returned when the caller doesn't have sufficient permissions to invoke the action.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct OperationNotPermittedFault {
+    /// <p>A description that may help with diagnosing the cause of the fault.</p>
+    pub message: Option<String>,
 }
 
 /// <p>Contains the count of tasks in a task list.</p>
@@ -2293,6 +2327,27 @@ pub struct TimerStartedEventAttributes {
     pub timer_id: String,
 }
 
+/// <p>Returned if the type already exists in the specified domain. You get this fault even if the existing type is in deprecated status. You can specify another version if the intent is to create a new distinct version of the type.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TypeAlreadyExistsFault {
+    /// <p>A description that may help with diagnosing the cause of the fault.</p>
+    pub message: Option<String>,
+}
+
+/// <p>Returned when the specified activity or workflow type was already deprecated.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TypeDeprecatedFault {
+    /// <p>A description that may help with diagnosing the cause of the fault.</p>
+    pub message: Option<String>,
+}
+
+/// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UnknownResourceFault {
+    /// <p>A description that may help with diagnosing the cause of the fault.</p>
+    pub message: Option<String>,
+}
+
 /// <p>Represents a workflow execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkflowExecution {
@@ -2302,6 +2357,13 @@ pub struct WorkflowExecution {
     /// <p>The user defined identifier associated with the workflow execution.</p>
     #[serde(rename = "workflowId")]
     pub workflow_id: String,
+}
+
+/// <p>Returned by <a>StartWorkflowExecution</a> when an open execution with the same workflowId is already running in the specified domain.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct WorkflowExecutionAlreadyStartedFault {
+    /// <p>A description that may help with diagnosing the cause of the fault.</p>
+    pub message: Option<String>,
 }
 
 /// <p>Provides the details of the <code>WorkflowExecutionCancelRequested</code> event.</p>

@@ -144,6 +144,10 @@ pub struct BGPPeer {
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
+    /// <p>The Direct Connection endpoint which the BGP peer terminates on.</p>
+    #[serde(rename = "awsDeviceV2")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_device_v2: Option<String>,
     #[serde(rename = "bgpPeerState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bgp_peer_state: Option<String>,
@@ -211,10 +215,14 @@ pub struct ConfirmPublicVirtualInterfaceResponse {
 /// <p>A connection represents the physical network connection between the AWS Direct Connect location and the customer.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Connection {
-    /// <p>The Direct Connection endpoint which the physical connection terminates on.</p>
+    /// <p>Deprecated in favor of awsDeviceV2.</p> <p>The Direct Connection endpoint which the physical connection terminates on.</p>
     #[serde(rename = "awsDevice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_device: Option<String>,
+    /// <p>The Direct Connection endpoint which the physical connection terminates on.</p>
+    #[serde(rename = "awsDeviceV2")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_device_v2: Option<String>,
     /// <p>Bandwidth of the connection.</p> <p>Example: 1Gbps (for regular connections), or 500Mbps (for hosted connections)</p> <p>Default: None</p>
     #[serde(rename = "bandwidth")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -726,6 +734,13 @@ pub struct DescribeVirtualInterfacesRequest {
     pub virtual_interface_id: Option<String>,
 }
 
+/// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DirectConnectClientException {
+    /// <p>This is an exception thrown when there is an issue with the input provided by the API call. For example, the name provided for a connection contains a pound sign (#). This can also occur when a valid value is provided, but is otherwise constrained. For example, the valid VLAN tag range is 1-4096 but each can only be used once per connection.</p>
+    pub message: Option<String>,
+}
+
 /// <p>A direct connect gateway is an intermediate object that enables you to connect virtual interfaces and virtual private gateways.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DirectConnectGateway {
@@ -799,6 +814,13 @@ pub struct DirectConnectGatewayAttachment {
     pub virtual_interface_region: Option<String>,
 }
 
+/// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DirectConnectServerException {
+    /// <p>This is an exception thrown when there is a backend issue on the server side.</p>
+    pub message: Option<String>,
+}
+
 /// <p>Container for the parameters to the DisassociateConnectionFromLag operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateConnectionFromLagRequest {
@@ -810,13 +832,21 @@ pub struct DisassociateConnectionFromLagRequest {
     pub lag_id: String,
 }
 
+/// <p>A tag key was specified more than once.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DuplicateTagKeysException {}
+
 /// <p>An interconnect is a connection that can host other connections.</p> <p>Like a standard AWS Direct Connect connection, an interconnect represents the physical connection between an AWS Direct Connect partner's network and a specific Direct Connect location. An AWS Direct Connect partner who owns an interconnect can provision hosted connections on the interconnect for their end customers, thereby providing the end customers with connectivity to AWS services.</p> <p>The resources of the interconnect, including bandwidth and VLAN numbers, are shared by all of the hosted connections on the interconnect, and the owner of the interconnect determines how these resources are assigned.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Interconnect {
-    /// <p>The Direct Connection endpoint which the physical connection terminates on.</p>
+    /// <p>Deprecated in favor of awsDeviceV2.</p> <p>The Direct Connection endpoint which the physical connection terminates on.</p>
     #[serde(rename = "awsDevice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_device: Option<String>,
+    /// <p>The Direct Connection endpoint which the physical connection terminates on.</p>
+    #[serde(rename = "awsDeviceV2")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_device_v2: Option<String>,
     #[serde(rename = "bandwidth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bandwidth: Option<String>,
@@ -860,10 +890,14 @@ pub struct Lag {
     #[serde(rename = "allowsHostedConnections")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allows_hosted_connections: Option<bool>,
-    /// <p>The AWS Direct Connection endpoint that hosts the LAG.</p>
+    /// <p>Deprecated in favor of awsDeviceV2.</p> <p>The AWS Direct Connection endpoint that hosts the LAG.</p>
     #[serde(rename = "awsDevice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_device: Option<String>,
+    /// <p>The AWS Direct Connection endpoint that hosts the LAG.</p>
+    #[serde(rename = "awsDeviceV2")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_device_v2: Option<String>,
     /// <p>A list of connections bundled by this LAG.</p>
     #[serde(rename = "connections")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -937,6 +971,10 @@ pub struct Location {
     #[serde(rename = "locationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location_name: Option<String>,
+    /// <p>The AWS region where the AWS Direct connect location is located.</p> <p>Example: us-east-1</p> <p>Default: None</p>
+    #[serde(rename = "region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region: Option<String>,
 }
 
 /// <p>A location is a network facility where AWS Direct Connect routers are available to be connected. Generally, these are colocation hubs where many network providers have equipment, and where cross connects can be delivered. Locations include a name and facility code, and must be provided when creating a connection.</p>
@@ -1121,6 +1159,10 @@ pub struct TagResourceRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TagResourceResponse {}
 
+/// <p>You have reached the limit on the number of tags that can be assigned to a Direct Connect resource.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyTagsException {}
+
 /// <p>Container for the parameters to the UntagResource operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UntagResourceRequest {
@@ -1191,6 +1233,10 @@ pub struct VirtualInterface {
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
+    /// <p>The Direct Connection endpoint which the virtual interface terminates on.</p>
+    #[serde(rename = "awsDeviceV2")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_device_v2: Option<String>,
     #[serde(rename = "bgpPeers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bgp_peers: Option<Vec<BGPPeer>>,
@@ -1214,6 +1260,10 @@ pub struct VirtualInterface {
     #[serde(rename = "ownerAccount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_account: Option<String>,
+    /// <p>The AWS region where the virtual interface is located.</p> <p>Example: us-east-1</p> <p>Default: None</p>
+    #[serde(rename = "region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region: Option<String>,
     #[serde(rename = "routeFilterPrefixes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_filter_prefixes: Option<Vec<RouteFilterPrefix>>,

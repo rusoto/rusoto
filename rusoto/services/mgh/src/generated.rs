@@ -28,6 +28,12 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
+/// <p>You do not have sufficient access to perform this action.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AccessDeniedException {
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateCreatedArtifactRequest {
     /// <p>An ARN of the AWS resource related to the migration (e.g., AMI, EC2 instance, RDS instance, etc.) </p>
@@ -197,6 +203,12 @@ pub struct DiscoveredResource {
     pub description: Option<String>,
 }
 
+/// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DryRunOperation {
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ImportMigrationTaskRequest {
     /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
@@ -213,6 +225,18 @@ pub struct ImportMigrationTaskRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ImportMigrationTaskResult {}
+
+/// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalServerError {
+    pub message: Option<String>,
+}
+
+/// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidInputException {
+    pub message: Option<String>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListCreatedArtifactsRequest {
@@ -423,6 +447,12 @@ pub struct NotifyMigrationTaskStateRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct NotifyMigrationTaskStateResult {}
 
+/// <p>Exception raised when there are problems accessing ADS (Application Discovery Service); most likely due to a misconfigured policy or the <code>migrationhub-discovery</code> role is missing or not configured correctly.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PolicyErrorException {
+    pub message: Option<String>,
+}
+
 /// <p>Summary of the AWS resource used for access control that is implicitly linked to your AWS account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ProgressUpdateStreamSummary {
@@ -444,7 +474,7 @@ pub struct PutResourceAttributesRequest {
     /// <p>The name of the ProgressUpdateStream. </p>
     #[serde(rename = "ProgressUpdateStream")]
     pub progress_update_stream: String,
-    /// <p><p>Information about the resource that is being migrated. This data will be used to map the task to a resource in the Application Discovery Service (ADS)&#39;s repository.</p> <note> <p>In the <code>ResourceAttribute</code> object array, the <code>Type</code> field is reserved for the following values: <code>IPV4<em>ADDRESS | IPV6</em>ADDRESS | MAC<em>ADDRESS | FQDN | VM</em>MANAGER<em>ID | VM</em>MANAGED<em>OBJECT</em>REFERENCE | VM<em>NAME | VM</em>PATH | BIOS<em>ID | MOTHERBOARD</em>SERIAL<em>NUMBER</code>, and the identifying value can be a string up to 256 characters.</p> </note> <important> <p>If any &quot;VM&quot; related value is used for a <code>ResourceAttribute</code> object, it is required that <code>VM</em>MANAGER_ID</code>, as a minimum, is always used. If it is not used, the server will not be associated in the Application Discovery Service (ADS)&#39;s repository using any of the other &quot;VM&quot; related values, and you will experience data loss. See the Example section below for a use case of specifying &quot;VM&quot; related values.</p> </important></p>
+    /// <p><p>Information about the resource that is being migrated. This data will be used to map the task to a resource in the Application Discovery Service (ADS)&#39;s repository.</p> <note> <p>Takes the object array of <code>ResourceAttribute</code> where the <code>Type</code> field is reserved for the following values: <code>IPV4<em>ADDRESS | IPV6</em>ADDRESS | MAC<em>ADDRESS | FQDN | VM</em>MANAGER<em>ID | VM</em>MANAGED<em>OBJECT</em>REFERENCE | VM<em>NAME | VM</em>PATH | BIOS<em>ID | MOTHERBOARD</em>SERIAL<em>NUMBER</code> where the identifying value can be a string up to 256 characters.</p> </note> <important> <ul> <li> <p>If any &quot;VM&quot; related value is set for a <code>ResourceAttribute</code> object, it is required that <code>VM</em>MANAGER<em>ID</code>, as a minimum, is always set. If <code>VM</em>MANAGER<em>ID</code> is not set, then all &quot;VM&quot; fields will be discarded and &quot;VM&quot; fields will not be used for matching the migration task to a server in Application Discovery Service (ADS)&#39;s repository. See the &lt;a href=&quot;https://docs.aws.amazon.com/migrationhub/latest/ug/API</em>PutResourceAttributes.html#API<em>PutResourceAttributes</em>Examples&quot;&gt;Example</a> section below for a use case of specifying &quot;VM&quot; related values.</p> </li> <li> <p> If a server you are trying to match has multiple IP or MAC addresses, you should provide as many as you know in separate type/value pairs passed to the <code>ResourceAttributeList</code> parameter to maximize the chances of matching.</p> </li> </ul> </important></p>
     #[serde(rename = "ResourceAttributeList")]
     pub resource_attribute_list: Vec<ResourceAttribute>,
 }
@@ -463,6 +493,18 @@ pub struct ResourceAttribute {
     pub value: String,
 }
 
+/// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceNotFoundException {
+    pub message: Option<String>,
+}
+
+/// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ServiceUnavailableException {
+    pub message: Option<String>,
+}
+
 /// <p>Task object encapsulating task information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Task {
@@ -477,6 +519,12 @@ pub struct Task {
     #[serde(rename = "StatusDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_detail: Option<String>,
+}
+
+/// <p>Exception raised to indicate a request was not authorized when the <code>DryRun</code> flag is set to "true".</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UnauthorizedOperation {
+    pub message: Option<String>,
 }
 
 /// Errors returned by AssociateCreatedArtifact
@@ -2427,7 +2475,7 @@ pub trait MigrationHub {
         input: NotifyMigrationTaskStateRequest,
     ) -> RusotoFuture<NotifyMigrationTaskStateResult, NotifyMigrationTaskStateError>;
 
-    /// <p><p>Provides identifying details of the resource being migrated so that it can be associated in the Application Discovery Service (ADS)&#39;s repository. This association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p> <important> <ul> <li> <p>Keep in mind that subsequent calls to PutResourceAttributes will override previously stored attributes. For example, if it is first called with a MAC address, but later, it is desired to <i>add</i> an IP address, it will then be required to call it with <i>both</i> the IP and MAC addresses to prevent overiding the MAC address.</p> </li> <li> <p>Note the instructions regarding the special use case of the <code>ResourceAttributeList</code> parameter when specifying any &quot;VM&quot; related value.</p> </li> </ul> </important> <note> <p>Because this is an asynchronous call, it will always return 200, whether an association occurs or not. To confirm if an association was found based on the provided details, call <code>ListDiscoveredResources</code>.</p> </note></p>
+    /// <p><p>Provides identifying details of the resource being migrated so that it can be associated in the Application Discovery Service (ADS)&#39;s repository. This association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p> <important> <ul> <li> <p>Keep in mind that subsequent calls to PutResourceAttributes will override previously stored attributes. For example, if it is first called with a MAC address, but later, it is desired to <i>add</i> an IP address, it will then be required to call it with <i>both</i> the IP and MAC addresses to prevent overiding the MAC address.</p> </li> <li> <p>Note the instructions regarding the special use case of the <a href="https://docs.aws.amazon.com/migrationhub/latest/ug/API_PutResourceAttributes.html#migrationhub-PutResourceAttributes-request-ResourceAttributeList"> <code>ResourceAttributeList</code> </a> parameter when specifying any &quot;VM&quot; related value. </p> </li> </ul> </important> <note> <p>Because this is an asynchronous call, it will always return 200, whether an association occurs or not. To confirm if an association was found based on the provided details, call <code>ListDiscoveredResources</code>.</p> </note></p>
     fn put_resource_attributes(
         &self,
         input: PutResourceAttributesRequest,
@@ -3004,7 +3052,7 @@ impl MigrationHub for MigrationHubClient {
         })
     }
 
-    /// <p><p>Provides identifying details of the resource being migrated so that it can be associated in the Application Discovery Service (ADS)&#39;s repository. This association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p> <important> <ul> <li> <p>Keep in mind that subsequent calls to PutResourceAttributes will override previously stored attributes. For example, if it is first called with a MAC address, but later, it is desired to <i>add</i> an IP address, it will then be required to call it with <i>both</i> the IP and MAC addresses to prevent overiding the MAC address.</p> </li> <li> <p>Note the instructions regarding the special use case of the <code>ResourceAttributeList</code> parameter when specifying any &quot;VM&quot; related value.</p> </li> </ul> </important> <note> <p>Because this is an asynchronous call, it will always return 200, whether an association occurs or not. To confirm if an association was found based on the provided details, call <code>ListDiscoveredResources</code>.</p> </note></p>
+    /// <p><p>Provides identifying details of the resource being migrated so that it can be associated in the Application Discovery Service (ADS)&#39;s repository. This association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p> <important> <ul> <li> <p>Keep in mind that subsequent calls to PutResourceAttributes will override previously stored attributes. For example, if it is first called with a MAC address, but later, it is desired to <i>add</i> an IP address, it will then be required to call it with <i>both</i> the IP and MAC addresses to prevent overiding the MAC address.</p> </li> <li> <p>Note the instructions regarding the special use case of the <a href="https://docs.aws.amazon.com/migrationhub/latest/ug/API_PutResourceAttributes.html#migrationhub-PutResourceAttributes-request-ResourceAttributeList"> <code>ResourceAttributeList</code> </a> parameter when specifying any &quot;VM&quot; related value. </p> </li> </ul> </important> <note> <p>Because this is an asynchronous call, it will always return 200, whether an association occurs or not. To confirm if an association was found based on the provided details, call <code>ListDiscoveredResources</code>.</p> </note></p>
     fn put_resource_attributes(
         &self,
         input: PutResourceAttributesRequest,

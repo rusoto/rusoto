@@ -52,6 +52,53 @@ pub struct BatchMeterUsageResult {
     pub unprocessed_records: Option<Vec<UsageRecord>>,
 }
 
+/// <p>A metering record has already been emitted by the same EC2 instance for the given {usageDimension, timestamp} with a different usageQuantity.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DuplicateRequestException {
+    pub message: Option<String>,
+}
+
+/// <p>The submitted registration token has expired. This can happen if the buyer's browser takes too long to redirect to your page, the buyer has resubmitted the registration token, or your application has held on to the registration token for too long. Your SaaS registration website should redeem this token as soon as it is submitted by the buyer's browser.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ExpiredTokenException {
+    pub message: Option<String>,
+}
+
+/// <p>An internal error has occurred. Retry your request. If the problem persists, post a message with details on the AWS forums.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalServiceErrorException {
+    pub message: Option<String>,
+}
+
+/// <p>You have metered usage for a CustomerIdentifier that does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidCustomerIdentifierException {
+    pub message: Option<String>,
+}
+
+/// <p>The endpoint being called is in a region different from your EC2 instance. The region of the Metering service endpoint and the region of the EC2 instance must match.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidEndpointRegionException {
+    pub message: Option<String>,
+}
+
+/// <p>The product code passed does not match the product code used for publishing the product.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidProductCodeException {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidTokenException {
+    pub message: Option<String>,
+}
+
+/// <p>The usage dimension does not match one of the UsageDimensions associated with products.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidUsageDimensionException {
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct MeterUsageRequest {
     /// <p>Checks whether you have the permissions required for the action, but does not make the request. If you have the permissions, the request returns DryRunOperation; otherwise, it returns UnauthorizedException.</p>
@@ -97,6 +144,18 @@ pub struct ResolveCustomerResult {
     #[serde(rename = "ProductCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product_code: Option<String>,
+}
+
+/// <p>The calls to the MeterUsage API are throttled.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ThrottlingException {
+    pub message: Option<String>,
+}
+
+/// <p>The timestamp value passed in the meterUsage() is out of allowed range.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TimestampOutOfBoundsException {
+    pub message: Option<String>,
 }
 
 /// <p>A UsageRecord indicates a quantity of usage for a given product, customer, dimension and time.</p> <p>Multiple requests with the same UsageRecords as input will be deduplicated to prevent double charges.</p>

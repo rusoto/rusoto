@@ -106,6 +106,12 @@ pub struct CreateLogStreamRequest {
     pub log_stream_name: String,
 }
 
+/// <p>The event was already logged.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DataAlreadyAcceptedException {
+    pub expected_sequence_token: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDestinationRequest {
     /// <p>The name of the destination.</p>
@@ -263,7 +269,7 @@ pub struct DescribeLogStreamsRequest {
     /// <p>The name of the log group.</p>
     #[serde(rename = "logGroupName")]
     pub log_group_name: String,
-    /// <p>The prefix to match.</p> <p>iIf <code>orderBy</code> is <code>LastEventTime</code>,you cannot specify this parameter.</p>
+    /// <p>The prefix to match.</p> <p>If <code>orderBy</code> is <code>LastEventTime</code>,you cannot specify this parameter.</p>
     #[serde(rename = "logStreamNamePrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_stream_name_prefix: Option<String>,
@@ -302,10 +308,11 @@ pub struct DescribeMetricFiltersRequest {
     #[serde(rename = "logGroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_group_name: Option<String>,
+    /// <p>Filters results to include only those with the specified metric name. If you include this parameter in your request, you must also include the <code>metricNamespace</code> parameter.</p>
     #[serde(rename = "metricName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_name: Option<String>,
-    /// <p>The namespace of the CloudWatch metric.</p>
+    /// <p>Filters results to include only those in the specified namespace. If you include this parameter in your request, you must also include the <code>metricName</code> parameter.</p>
     #[serde(rename = "metricNamespace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_namespace: Option<String>,
@@ -559,7 +566,7 @@ pub struct FilteredLogEvent {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetLogEventsRequest {
-    /// <p>The end of the time range, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a time stamp later than this time are not included.</p>
+    /// <p>The end of the time range, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a time stamp equal to or later than this time are not included.</p>
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<i64>,
@@ -581,7 +588,7 @@ pub struct GetLogEventsRequest {
     #[serde(rename = "startFromHead")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_from_head: Option<bool>,
-    /// <p>The start of the time range, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a time stamp earlier than this time are not included.</p>
+    /// <p>The start of the time range, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a time stamp equal to this time or later than this time are included. Events with a time stamp earlier than this time are not included.</p>
     #[serde(rename = "startTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<i64>,
@@ -593,11 +600,11 @@ pub struct GetLogEventsResponse {
     #[serde(rename = "events")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub events: Option<Vec<OutputLogEvent>>,
-    /// <p>The token for the next set of items in the backward direction. The token expires after 24 hours.</p>
+    /// <p>The token for the next set of items in the backward direction. The token expires after 24 hours. This token will never be null. If you have reached the end of the stream, it will return the same token you passed in.</p>
     #[serde(rename = "nextBackwardToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_backward_token: Option<String>,
-    /// <p>The token for the next set of items in the forward direction. The token expires after 24 hours.</p>
+    /// <p>The token for the next set of items in the forward direction. The token expires after 24 hours. If you have reached the end of the stream, it will return the same token you passed in.</p>
     #[serde(rename = "nextForwardToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_forward_token: Option<String>,
@@ -609,10 +616,28 @@ pub struct InputLogEvent {
     /// <p>The raw event message.</p>
     #[serde(rename = "message")]
     pub message: String,
-    /// <p>The time the event occurred, expressed as the number of milliseconds fter Jan 1, 1970 00:00:00 UTC.</p>
+    /// <p>The time the event occurred, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
     #[serde(rename = "timestamp")]
     pub timestamp: i64,
 }
+
+/// <p>The operation is not valid on the specified resource.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidOperationException {}
+
+/// <p>A parameter is specified incorrectly.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterException {}
+
+/// <p>The sequence token is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidSequenceTokenException {
+    pub expected_sequence_token: Option<String>,
+}
+
+/// <p>You have reached the maximum number of resources that can be created.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTagsLogGroupRequest {
@@ -757,6 +782,10 @@ pub struct MetricTransformation {
     pub metric_value: String,
 }
 
+/// <p>Multiple requests to update the same resource were in conflict.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct OperationAbortedException {}
+
 /// <p>Represents a log event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct OutputLogEvent {
@@ -852,7 +881,7 @@ pub struct PutMetricFilterRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutResourcePolicyRequest {
-    /// <p>Details of the new policy, including the identity of the principal that is enabled to put logs to this account. This is formatted as a JSON string.</p> <p>The following example creates a resource policy enabling the Route 53 service to put DNS query logs in to the specified log group. Replace "logArn" with the ARN of your CloudWatch Logs resource, such as a log group or log stream.</p> <p> { "Version": "2012-10-17" "Statement": [ { "Sid": "Route53LogsToCloudWatchLogs", "Effect": "Allow", "Principal": { "Service": [ "route53.amazonaws.com" ] }, "Action":"logs:PutLogEvents", "Resource": logArn } ] } </p>
+    /// <p>Details of the new policy, including the identity of the principal that is enabled to put logs to this account. This is formatted as a JSON string.</p> <p>The following example creates a resource policy enabling the Route 53 service to put DNS query logs in to the specified log group. Replace "logArn" with the ARN of your CloudWatch Logs resource, such as a log group or log stream.</p> <p> <code>{ "Version": "2012-10-17", "Statement": [ { "Sid": "Route53LogsToCloudWatchLogs", "Effect": "Allow", "Principal": { "Service": [ "route53.amazonaws.com" ] }, "Action":"logs:PutLogEvents", "Resource": "logArn" } ] } </code> </p>
     #[serde(rename = "policyDocument")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_document: Option<String>,
@@ -920,6 +949,14 @@ pub struct RejectedLogEventsInfo {
     pub too_old_log_event_end_index: Option<i64>,
 }
 
+/// <p>The specified resource already exists.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceAlreadyExistsException {}
+
+/// <p>The specified resource does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceNotFoundException {}
+
 /// <p>A policy enabling one or more entities to put logs to a log group in this account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ResourcePolicy {
@@ -949,6 +986,10 @@ pub struct SearchedLogStream {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub searched_completely: Option<bool>,
 }
+
+/// <p>The service cannot complete the request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ServiceUnavailableException {}
 
 /// <p>Represents a subscription filter.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1007,6 +1048,10 @@ pub struct TestMetricFilterResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub matches: Option<Vec<MetricFilterMatchRecord>>,
 }
+
+/// <p>The most likely cause is an invalid AWS access key ID or secret key.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UnrecognizedClientException {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UntagLogGroupRequest {
@@ -3404,6 +3449,8 @@ pub enum PutLogEventsError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
+    /// <p>The most likely cause is an invalid AWS access key ID or secret key.</p>
+    UnrecognizedClient(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3442,6 +3489,9 @@ impl PutLogEventsError {
                     }
                     "ServiceUnavailableException" => {
                         PutLogEventsError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "UnrecognizedClientException" => {
+                        PutLogEventsError::UnrecognizedClient(String::from(error_message))
                     }
                     "ValidationException" => {
                         PutLogEventsError::Validation(error_message.to_string())
@@ -3487,6 +3537,7 @@ impl Error for PutLogEventsError {
             PutLogEventsError::InvalidSequenceToken(ref cause) => cause,
             PutLogEventsError::ResourceNotFound(ref cause) => cause,
             PutLogEventsError::ServiceUnavailable(ref cause) => cause,
+            PutLogEventsError::UnrecognizedClient(ref cause) => cause,
             PutLogEventsError::Validation(ref cause) => cause,
             PutLogEventsError::Credentials(ref err) => err.description(),
             PutLogEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -4295,7 +4346,7 @@ pub trait CloudWatchLogs {
         input: PutDestinationPolicyRequest,
     ) -> RusotoFuture<(), PutDestinationPolicyError>;
 
-    /// <p><p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>. If you call <code>PutLogEvents</code> twice within a narrow time period using the same value for <code>sequenceToken</code>, both calls may be successful, or one may be rejected.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their time stamp (the time the event occurred, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC).</p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul></p>
+    /// <p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>. If you call <code>PutLogEvents</code> twice within a narrow time period using the same value for <code>sequenceToken</code>, both calls may be successful, or one may be rejected.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their time stamp. The time stamp is the time the event occurred, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. (In AWS Tools for PowerShell and the AWS SDK for .NET, the timestamp is specified in .NET format: yyyy-mm-ddThh:mm:ss. For example, 2017-09-15T13:45:30.) </p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul> <p>If a call to PutLogEvents returns "UnrecognizedClientException" the most likely cause is an invalid AWS access key ID or secret key. </p>
     fn put_log_events(
         &self,
         input: PutLogEventsRequest,
@@ -4307,7 +4358,7 @@ pub trait CloudWatchLogs {
         input: PutMetricFilterRequest,
     ) -> RusotoFuture<(), PutMetricFilterError>;
 
-    /// <p>Creates or updates a resource policy allowing other AWS services to put log events to this account, such as Amazon Route 53. An account can have up to 50 resource policies per region.</p>
+    /// <p>Creates or updates a resource policy allowing other AWS services to put log events to this account, such as Amazon Route 53. An account can have up to 10 resource policies per region.</p>
     fn put_resource_policy(
         &self,
         input: PutResourcePolicyRequest,
@@ -5118,7 +5169,7 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         })
     }
 
-    /// <p><p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>. If you call <code>PutLogEvents</code> twice within a narrow time period using the same value for <code>sequenceToken</code>, both calls may be successful, or one may be rejected.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their time stamp (the time the event occurred, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC).</p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul></p>
+    /// <p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>. If you call <code>PutLogEvents</code> twice within a narrow time period using the same value for <code>sequenceToken</code>, both calls may be successful, or one may be rejected.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their time stamp. The time stamp is the time the event occurred, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. (In AWS Tools for PowerShell and the AWS SDK for .NET, the timestamp is specified in .NET format: yyyy-mm-ddThh:mm:ss. For example, 2017-09-15T13:45:30.) </p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul> <p>If a call to PutLogEvents returns "UnrecognizedClientException" the most likely cause is an invalid AWS access key ID or secret key. </p>
     fn put_log_events(
         &self,
         input: PutLogEventsRequest,
@@ -5178,7 +5229,7 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         })
     }
 
-    /// <p>Creates or updates a resource policy allowing other AWS services to put log events to this account, such as Amazon Route 53. An account can have up to 50 resource policies per region.</p>
+    /// <p>Creates or updates a resource policy allowing other AWS services to put log events to this account, such as Amazon Route 53. An account can have up to 10 resource policies per region.</p>
     fn put_resource_policy(
         &self,
         input: PutResourcePolicyRequest,

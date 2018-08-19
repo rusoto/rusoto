@@ -258,6 +258,20 @@ pub struct CloudWatchLoggingOptionUpdate {
     pub role_arn_update: Option<String>,
 }
 
+/// <p>User-provided application code (query) is invalid. This can be a simple syntax error.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CodeValidationException {
+    /// <p>Test</p>
+    pub message: Option<String>,
+}
+
+/// <p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ConcurrentModificationException {
+    /// <p><p/></p>
+    pub message: Option<String>,
+}
+
 /// <p>TBD</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateApplicationRequest {
@@ -662,6 +676,20 @@ pub struct InputUpdate {
     pub name_prefix_update: Option<String>,
 }
 
+/// <p>User-provided application configuration is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidApplicationConfigurationException {
+    /// <p>test</p>
+    pub message: Option<String>,
+}
+
+/// <p>Specified input parameter value is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidArgumentException {
+    /// <p><p/></p>
+    pub message: Option<String>,
+}
+
 /// <p>Provides additional mapping information when JSON is the record format on the streaming source.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct JSONMappingParameters {
@@ -853,6 +881,13 @@ pub struct LambdaOutputUpdate {
     #[serde(rename = "RoleARNUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn_update: Option<String>,
+}
+
+/// <p>Exceeded the number of applications allowed.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {
+    /// <p><p/></p>
+    pub message: Option<String>,
 }
 
 /// <p><p/></p>
@@ -1052,6 +1087,26 @@ pub struct ReferenceDataSourceUpdate {
     pub table_name_update: Option<String>,
 }
 
+/// <p>Application is not available for this operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceInUseException {
+    /// <p><p/></p>
+    pub message: Option<String>,
+}
+
+/// <p>Specified application can't be found.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceNotFoundException {
+    /// <p><p/></p>
+    pub message: Option<String>,
+}
+
+/// <p>Discovery failed to get a record from the streaming source because of the Amazon Kinesis Streams ProvisionedThroughputExceededException. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetRecords.html">GetRecords</a> in the Amazon Kinesis Streams API Reference.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceProvisionedThroughputExceededException {
+    pub message: Option<String>,
+}
+
 /// <p>Provides a description of an Amazon S3 data source, including the Amazon Resource Name (ARN) of the S3 bucket, the ARN of the IAM role that is used to access the bucket, and the name of the S3 object that contains the data.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct S3Configuration {
@@ -1111,6 +1166,12 @@ pub struct S3ReferenceDataSourceUpdate {
     pub reference_role_arn_update: Option<String>,
 }
 
+/// <p>The service is unavailable, back off and retry the operation. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ServiceUnavailableException {
+    pub message: Option<String>,
+}
+
 /// <p>Describes the format of the data in the streaming source, and how each data element maps to corresponding columns created in the in-application stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SourceSchema {
@@ -1152,6 +1213,14 @@ pub struct StopApplicationRequest {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StopApplicationResponse {}
+
+/// <p>Data format is not valid, Amazon Kinesis Analytics is not able to detect schema for the given streaming source.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UnableToDetectSchemaException {
+    pub processed_input_records: Option<Vec<String>>,
+    pub raw_input_records: Option<Vec<String>>,
+    pub message: Option<String>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateApplicationRequest {

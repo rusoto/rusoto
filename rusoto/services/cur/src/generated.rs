@@ -66,6 +66,18 @@ pub struct DescribeReportDefinitionsResponse {
     pub report_definitions: Option<Vec<ReportDefinition>>,
 }
 
+/// <p>This exception is thrown when putting a report preference with a name that already exists.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DuplicateReportNameException {
+    pub message: Option<String>,
+}
+
+/// <p>This exception is thrown on a known dependency failure.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalErrorException {
+    pub message: Option<String>,
+}
+
 /// <p>Request of PutReportDefinition</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutReportDefinitionRequest {
@@ -99,6 +111,18 @@ pub struct ReportDefinition {
     pub s3_region: String,
     #[serde(rename = "TimeUnit")]
     pub time_unit: String,
+}
+
+/// <p>This exception is thrown when the number of report preference reaches max limit. The max number is 5.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ReportLimitReachedException {
+    pub message: Option<String>,
+}
+
+/// <p>This exception is thrown when providing an invalid input. eg. Put a report preference with an invalid report name, or Delete a report preference with an empty report name.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ValidationException {
+    pub message: Option<String>,
 }
 
 /// Errors returned by DeleteReportDefinition

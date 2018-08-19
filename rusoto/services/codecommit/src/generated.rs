@@ -28,6 +28,14 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
+/// <p>The specified Amazon Resource Name (ARN) does not exist in the AWS account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ActorDoesNotExistException {}
+
+/// <p>The specified Amazon Resource Name (ARN) does not exist in the AWS account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AuthorDoesNotExistException {}
+
 /// <p>Represents the input of a batch get repositories operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetRepositoriesInput {
@@ -49,6 +57,18 @@ pub struct BatchGetRepositoriesOutput {
     pub repositories_not_found: Option<Vec<String>>,
 }
 
+/// <p>The before commit ID and the after commit ID are the same, which is not valid. The before commit ID and the after commit ID must be different commit IDs.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BeforeCommitIdAndAfterCommitIdAreSameException {}
+
+/// <p>The specified blob does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BlobIdDoesNotExistException {}
+
+/// <p>A blob ID is required but was not specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BlobIdRequiredException {}
+
 /// <p>Returns information about a specific Git blob object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BlobMetadata {
@@ -66,6 +86,10 @@ pub struct BlobMetadata {
     pub path: Option<String>,
 }
 
+/// <p>The specified branch does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BranchDoesNotExistException {}
+
 /// <p>Returns information about a branch.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BranchInfo {
@@ -78,6 +102,22 @@ pub struct BranchInfo {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub commit_id: Option<String>,
 }
+
+/// <p>The specified branch name already exists.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BranchNameExistsException {}
+
+/// <p>The specified branch name is not valid because it is a tag name. Type the name of a current branch in the repository. For a list of valid branch names, use <a>ListBranches</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BranchNameIsTagNameException {}
+
+/// <p>A branch name is required but was not specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BranchNameRequiredException {}
+
+/// <p>A client request token is required. A client request token is an unique, client-generated idempotency token that when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request will return information about the initial request that used that token.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ClientRequestTokenRequiredException {}
 
 /// <p>Returns information about a specific comment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -115,6 +155,30 @@ pub struct Comment {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
 }
+
+/// <p>The comment is empty. You must provide some content for a comment. The content cannot be null.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CommentContentRequiredException {}
+
+/// <p>The comment is too large. Comments are limited to 1,000 characters.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CommentContentSizeLimitExceededException {}
+
+/// <p>This comment has already been deleted. You cannot edit or delete a deleted comment.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CommentDeletedException {}
+
+/// <p>No comment exists with the provided ID. Verify that you have provided the correct ID, and then try again.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CommentDoesNotExistException {}
+
+/// <p>The comment ID is missing or null. A comment ID is required.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CommentIdRequiredException {}
+
+/// <p>You cannot modify or delete this comment. Only comment authors can modify or delete their comments.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CommentNotCreatedByCallerException {}
 
 /// <p>Returns information about comments on the comparison between two commits.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -219,6 +283,26 @@ pub struct Commit {
     pub tree_id: Option<String>,
 }
 
+/// <p>The specified commit does not exist or no commit was specified, and the specified repository has no default branch.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CommitDoesNotExistException {}
+
+/// <p>The specified commit ID does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CommitIdDoesNotExistException {}
+
+/// <p>A commit ID was not specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CommitIdRequiredException {}
+
+/// <p>The commit message is too long. Provide a shorter string. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CommitMessageLengthExceededException {}
+
+/// <p>A commit was not specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CommitRequiredException {}
+
 /// <p>Represents the input of a create branch operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateBranchInput {
@@ -278,6 +362,10 @@ pub struct CreateRepositoryOutput {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_metadata: Option<RepositoryMetadata>,
 }
+
+/// <p>The specified branch is the default branch for the repository, and cannot be deleted. To delete this branch, you must first set another branch as the default branch.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DefaultBranchCannotBeDeletedException {}
 
 /// <p>Represents the input of a delete branch operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -381,6 +469,46 @@ pub struct Difference {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub change_type: Option<String>,
 }
+
+/// <p>A file cannot be added to the repository because the specified path name has the same name as a file that already exists in this repository. Either provide a different name for the file, or specify a different path for the file.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DirectoryNameConflictsWithFileNameException {}
+
+/// <p>An encryption integrity check failed.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EncryptionIntegrityChecksFailedException {}
+
+/// <p>An encryption key could not be accessed.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EncryptionKeyAccessDeniedException {}
+
+/// <p>The encryption key is disabled.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EncryptionKeyDisabledException {}
+
+/// <p>No encryption key was found.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EncryptionKeyNotFoundException {}
+
+/// <p>The encryption key is not available.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EncryptionKeyUnavailableException {}
+
+/// <p>The file cannot be added because it is empty. Empty files cannot be added to the repository with this API.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct FileContentRequiredException {}
+
+/// <p>The file cannot be added because it is too large. The maximum file size that can be added using PutFile is 6 MB. For files larger than 6 MB but smaller than 2 GB, add them using a Git client.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct FileContentSizeLimitExceededException {}
+
+/// <p>A file cannot be added to the repository because the specified file name has the same name as a directory in this repository. Either provide another name for the file, or add the file in a directory that does not match the file name.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct FileNameConflictsWithDirectoryNameException {}
+
+/// <p>The specified file exceeds the file size limit for AWS CodeCommit. For more information about limits in AWS CodeCommit, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">AWS CodeCommit User Guide</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct FileTooLargeException {}
 
 /// <p>Represents the input of a get blob operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -658,6 +786,166 @@ pub struct GetRepositoryTriggersOutput {
     pub triggers: Option<Vec<RepositoryTrigger>>,
 }
 
+/// <p>The client request token is not valid. Either the token is not in a valid format, or the token has been used in a previous request and cannot be re-used.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct IdempotencyParameterMismatchException {}
+
+/// <p>The Amazon Resource Name (ARN) is not valid. Make sure that you have provided the full ARN for the user who initiated the change for the pull request, and then try again.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidActorArnException {}
+
+/// <p>The Amazon Resource Name (ARN) is not valid. Make sure that you have provided the full ARN for the author of the pull request, and then try again.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidAuthorArnException {}
+
+/// <p>The specified blob is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidBlobIdException {}
+
+/// <p>The specified reference name is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidBranchNameException {}
+
+/// <p>The client request token is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidClientRequestTokenException {}
+
+/// <p>The comment ID is not in a valid format. Make sure that you have provided the full comment ID.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidCommentIdException {}
+
+/// <p>The specified commit is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidCommitException {}
+
+/// <p>The specified commit ID is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidCommitIdException {}
+
+/// <p>The specified continuation token is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidContinuationTokenException {}
+
+/// <p>The pull request description is not valid. Descriptions are limited to 1,000 characters in length.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidDescriptionException {}
+
+/// <p>The destination commit specifier is not valid. You must provide a valid branch name, tag, or full commit ID. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidDestinationCommitSpecifierException {}
+
+/// <p>The specified email address either contains one or more characters that are not allowed, or it exceeds the maximum number of characters allowed for an email address.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidEmailException {}
+
+/// <p>The location of the file is not valid. Make sure that you include the extension of the file as well as the file name.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidFileLocationException {}
+
+/// <p>The specified file mode permission is not valid. For a list of valid file mode permissions, see <a>PutFile</a>. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidFileModeException {}
+
+/// <p>The position is not valid. Make sure that the line number exists in the version of the file you want to comment on.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidFilePositionException {}
+
+/// <p>The specified number of maximum results is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidMaxResultsException {}
+
+/// <p>The specified merge option is not valid. The only valid value is FAST_FORWARD_MERGE.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidMergeOptionException {}
+
+/// <p>The specified sort order is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidOrderException {}
+
+/// <p>The parent commit ID is not valid. The commit ID cannot be empty, and must match the head commit ID for the branch of the repository where you want to add or update a file.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParentCommitIdException {}
+
+/// <p>The specified path is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidPathException {}
+
+/// <p>The pull request event type is not valid. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidPullRequestEventTypeException {}
+
+/// <p>The pull request ID is not valid. Make sure that you have provided the full ID and that the pull request is in the specified repository, and then try again.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidPullRequestIdException {}
+
+/// <p>The pull request status is not valid. The only valid values are <code>OPEN</code> and <code>CLOSED</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidPullRequestStatusException {}
+
+/// <p>The pull request status update is not valid. The only valid update is from <code>OPEN</code> to <code>CLOSED</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidPullRequestStatusUpdateException {}
+
+/// <p>The specified reference name format is not valid. Reference names must conform to the Git references format, for example refs/heads/master. For more information, see <a href="https://git-scm.com/book/en/v2/Git-Internals-Git-References">Git Internals - Git References</a> or consult your Git documentation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidReferenceNameException {}
+
+/// <p>Either the enum is not in a valid format, or the specified file version enum is not valid in respect to the current file version.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidRelativeFileVersionEnumException {}
+
+/// <p>The specified repository description is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidRepositoryDescriptionException {}
+
+/// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidRepositoryNameException {}
+
+/// <p>One or more branch names specified for the trigger is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidRepositoryTriggerBranchNameException {}
+
+/// <p>The custom data provided for the trigger is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidRepositoryTriggerCustomDataException {}
+
+/// <p>The Amazon Resource Name (ARN) for the trigger is not valid for the specified destination. The most common reason for this error is that the ARN does not meet the requirements for the service type.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidRepositoryTriggerDestinationArnException {}
+
+/// <p>One or more events specified for the trigger is not valid. Check to make sure that all events specified match the requirements for allowed events.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidRepositoryTriggerEventsException {}
+
+/// <p>The name of the trigger is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidRepositoryTriggerNameException {}
+
+/// <p>The region for the trigger target does not match the region for the repository. Triggers must be created in the same region as the target for the trigger.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidRepositoryTriggerRegionException {}
+
+/// <p>The specified sort by value is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidSortByException {}
+
+/// <p>The source commit specifier is not valid. You must provide a valid branch name, tag, or full commit ID.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidSourceCommitSpecifierException {}
+
+/// <p>The target for the pull request is not valid. A target must contain the full values for the repository name, source branch, and destination branch for the pull request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidTargetException {}
+
+/// <p>The targets for the pull request is not valid or not in a valid format. Targets are a list of target objects. Each target object must contain the full values for the repository name, source branch, and destination branch for a pull request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidTargetsException {}
+
+/// <p>The title of the pull request is not valid. Pull request titles cannot exceed 100 characters in length.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidTitleException {}
+
 /// <p>Represents the input of a list branches operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListBranchesInput {
@@ -764,6 +1052,26 @@ pub struct Location {
     pub relative_file_version: Option<String>,
 }
 
+/// <p>The pull request cannot be merged automatically into the destination branch. You must manually merge the branches and resolve any conflicts.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ManualMergeRequiredException {}
+
+/// <p>The number of branches for the trigger was exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MaximumBranchesExceededException {}
+
+/// <p>You cannot create the pull request because the repository has too many open pull requests. The maximum number of open pull requests for a repository is 1,000. Close one or more open pull requests, and then try again.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MaximumOpenPullRequestsExceededException {}
+
+/// <p>The maximum number of allowed repository names was exceeded. Currently, this number is 25.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MaximumRepositoryNamesExceededException {}
+
+/// <p>The number of triggers allowed for the repository was exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MaximumRepositoryTriggersExceededException {}
+
 /// <p>Returns information about a merge or potential merge between a source reference and a destination reference in a pull request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct MergeMetadata {
@@ -776,6 +1084,10 @@ pub struct MergeMetadata {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub merged_by: Option<String>,
 }
+
+/// <p>A merge option or stategy is required, and none was provided.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MergeOptionRequiredException {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct MergePullRequestByFastForwardInput {
@@ -798,6 +1110,34 @@ pub struct MergePullRequestByFastForwardOutput {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pull_request: Option<PullRequest>,
 }
+
+/// <p>You cannot include more than one repository in a pull request. Make sure you have specified only one repository name in your request, and then try again.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MultipleRepositoriesInPullRequestException {}
+
+/// <p>The file name is not valid because it has exceeded the character limit for file names. File names, including the path to the file, cannot exceed the character limit. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NameLengthExceededException {}
+
+/// <p>The parent commit ID is not valid. The specified parent commit ID does not exist in the specified branch of the repository.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ParentCommitDoesNotExistException {}
+
+/// <p>The file could not be added because the provided parent commit ID is not the current tip of the specified branch. To view the full commit ID of the current head of the branch, use <a>GetBranch</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ParentCommitIdOutdatedException {}
+
+/// <p>A parent commit ID is required. To view the full commit ID of a branch in a repository, use <a>GetBranch</a> or a Git command (for example, git pull or git log).</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ParentCommitIdRequiredException {}
+
+/// <p>The specified path does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PathDoesNotExistException {}
+
+/// <p>The filePath for a location cannot be empty or null.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PathRequiredException {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PostCommentForComparedCommitInput {
@@ -982,6 +1322,14 @@ pub struct PullRequest {
     pub title: Option<String>,
 }
 
+/// <p>The pull request status cannot be updated because it is already closed.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PullRequestAlreadyClosedException {}
+
+/// <p>The pull request ID could not be found. Make sure that you have specified the correct repository name and pull request ID, and then try again.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PullRequestDoesNotExistException {}
+
 /// <p>Returns information about a pull request event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PullRequestEvent {
@@ -1016,6 +1364,10 @@ pub struct PullRequestEvent {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pull_request_status_changed_event_metadata: Option<PullRequestStatusChangedEventMetadata>,
 }
+
+/// <p>A pull request ID is required, but none was provided.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PullRequestIdRequiredException {}
 
 /// <p>Returns information about the change in the merge state for a pull request event. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1059,6 +1411,10 @@ pub struct PullRequestStatusChangedEventMetadata {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pull_request_status: Option<String>,
 }
+
+/// <p>A pull request status is required, but none was provided.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PullRequestStatusRequiredException {}
 
 /// <p>Returns information about a pull request target.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1163,6 +1519,26 @@ pub struct PutRepositoryTriggersOutput {
     pub configuration_id: Option<String>,
 }
 
+/// <p>The specified reference does not exist. You must provide a full commit ID.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ReferenceDoesNotExistException {}
+
+/// <p>A reference name is required, but none was provided.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ReferenceNameRequiredException {}
+
+/// <p>The specified reference is not a supported type. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ReferenceTypeNotSupportedException {}
+
+/// <p>The specified repository does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RepositoryDoesNotExistException {}
+
+/// <p>A repository resource limit was exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RepositoryLimitExceededException {}
+
 /// <p>Information about a repository.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RepositoryMetadata {
@@ -1208,6 +1584,10 @@ pub struct RepositoryMetadata {
     pub repository_name: Option<String>,
 }
 
+/// <p>The specified repository name already exists.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RepositoryNameExistsException {}
+
 /// <p>Information about a repository name and ID.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RepositoryNameIdPair {
@@ -1220,6 +1600,18 @@ pub struct RepositoryNameIdPair {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_name: Option<String>,
 }
+
+/// <p>A repository name is required but was not specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RepositoryNameRequiredException {}
+
+/// <p>A repository names object is required but was not specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RepositoryNamesRequiredException {}
+
+/// <p>The repository does not contain any pull requests with that pull request ID. Check to make sure you have provided the correct repository name for the pull request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RepositoryNotAssociatedWithPullRequestException {}
 
 /// <p>Information about a trigger for a repository.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1243,6 +1635,18 @@ pub struct RepositoryTrigger {
     pub name: String,
 }
 
+/// <p>At least one branch name is required but was not specified in the trigger configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RepositoryTriggerBranchNameListRequiredException {}
+
+/// <p>A destination ARN for the target service for the trigger is required but was not specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RepositoryTriggerDestinationArnRequiredException {}
+
+/// <p>At least one event for the trigger is required but was not specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RepositoryTriggerEventsListRequiredException {}
+
 /// <p>A trigger failed to run.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RepositoryTriggerExecutionFailure {
@@ -1255,6 +1659,22 @@ pub struct RepositoryTriggerExecutionFailure {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger: Option<String>,
 }
+
+/// <p>A name for the trigger is required but was not specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RepositoryTriggerNameRequiredException {}
+
+/// <p>The list of triggers for the repository is required but was not specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RepositoryTriggersListRequiredException {}
+
+/// <p>The file was not added or updated because the content of the file is exactly the same as the content of that file in the repository and branch that you specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SameFileContentException {}
+
+/// <p>The source branch and the destination branch for the pull request are the same. You must specify different branches for the source and destination.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SourceAndDestinationAreSameException {}
 
 /// <p>Returns information about a target for a pull request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1270,6 +1690,14 @@ pub struct Target {
     #[serde(rename = "sourceReference")]
     pub source_reference: String,
 }
+
+/// <p>A pull request target is required. It cannot be empty or null. A pull request target must contain the full values for the repository name, source branch, and destination branch for the pull request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TargetRequiredException {}
+
+/// <p>An array of target objects is required. It cannot be empty or null.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TargetsRequiredException {}
 
 /// <p>Represents the input of a test repository triggers operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1294,6 +1722,18 @@ pub struct TestRepositoryTriggersOutput {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub successful_executions: Option<Vec<String>>,
 }
+
+/// <p>The tip of the source branch in the destination repository does not match the tip of the source branch specified in your request. The pull request might have been updated. Make sure that you have the latest changes.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TipOfSourceReferenceIsDifferentException {}
+
+/// <p>The divergence between the tips of the provided commit specifiers is too great to determine whether there might be any merge conflicts. Locally compare the specifiers using <code>git diff</code> or a diff tool.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TipsDivergenceExceededException {}
+
+/// <p>A pull request title is required. It cannot be empty or null.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TitleRequiredException {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateCommentInput {

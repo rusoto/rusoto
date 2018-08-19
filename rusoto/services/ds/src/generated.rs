@@ -71,6 +71,15 @@ pub struct Attribute {
     pub value: Option<String>,
 }
 
+/// <p>An authentication error occurred.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AuthenticationFailedException {
+    /// <p>The textual message for the exception.</p>
+    pub message: Option<String>,
+    /// <p>The identifier of the request that caused the exception.</p>
+    pub request_id: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CancelSchemaExtensionRequest {
     /// <p>The identifier of the directory whose schema extension will be canceled.</p>
@@ -83,6 +92,13 @@ pub struct CancelSchemaExtensionRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CancelSchemaExtensionResult {}
+
+/// <p>A client exception has occurred.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ClientException {
+    pub message: Option<String>,
+    pub request_id: Option<String>,
+}
 
 /// <p>Contains information about a computer account in a directory.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -738,6 +754,13 @@ pub struct DirectoryDescription {
     pub vpc_settings: Option<DirectoryVpcSettingsDescription>,
 }
 
+/// <p>The maximum number of directories in the region has been reached. You can use the <a>GetDirectoryLimits</a> operation to determine your directory limits in the region.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DirectoryLimitExceededException {
+    pub message: Option<String>,
+    pub request_id: Option<String>,
+}
+
 /// <p>Contains directory limit information for a region.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DirectoryLimits {
@@ -777,6 +800,13 @@ pub struct DirectoryLimits {
     #[serde(rename = "ConnectedDirectoriesLimitReached")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connected_directories_limit_reached: Option<bool>,
+}
+
+/// <p>The specified directory is unavailable or could not be found.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DirectoryUnavailableException {
+    pub message: Option<String>,
+    pub request_id: Option<String>,
 }
 
 /// <p>Contains VPC information for the <a>CreateDirectory</a> or <a>CreateMicrosoftAD</a> operation.</p>
@@ -888,6 +918,13 @@ pub struct DomainController {
     pub vpc_id: Option<String>,
 }
 
+/// <p>The maximum allowed number of domain controllers per directory was exceeded. The default limit per directory is 20 domain controllers.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DomainControllerLimitExceededException {
+    pub message: Option<String>,
+    pub request_id: Option<String>,
+}
+
 /// <p>Contains the inputs for the <a>EnableRadius</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct EnableRadiusRequest {
@@ -922,6 +959,20 @@ pub struct EnableSsoRequest {
 /// <p>Contains the results of the <a>EnableSso</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct EnableSsoResult {}
+
+/// <p>The specified entity already exists.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EntityAlreadyExistsException {
+    pub message: Option<String>,
+    pub request_id: Option<String>,
+}
+
+/// <p>The specified entity could not be found.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EntityDoesNotExistException {
+    pub message: Option<String>,
+    pub request_id: Option<String>,
+}
 
 /// <p>Information about SNS topic and AWS Directory Service directory associations.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -978,6 +1029,34 @@ pub struct GetSnapshotLimitsResult {
     pub snapshot_limits: Option<SnapshotLimits>,
 }
 
+/// <p>The account does not have sufficient permission to perform the operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InsufficientPermissionsException {
+    pub message: Option<String>,
+    pub request_id: Option<String>,
+}
+
+/// <p>The <i>NextToken</i> value is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidNextTokenException {
+    pub message: Option<String>,
+    pub request_id: Option<String>,
+}
+
+/// <p>One or more parameters are not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterException {
+    pub message: Option<String>,
+    pub request_id: Option<String>,
+}
+
+/// <p>The new password provided by the user does not meet the password complexity requirements defined in your directory.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidPasswordException {
+    pub message: Option<String>,
+    pub request_id: Option<String>,
+}
+
 /// <p>IP address block. This is often the address block of the DNS server used for your on-premises domain. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct IpRoute {
@@ -1018,6 +1097,13 @@ pub struct IpRouteInfo {
     #[serde(rename = "IpRouteStatusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_route_status_reason: Option<String>,
+}
+
+/// <p>The maximum allowed number of IP addresses was exceeded. The default limit is 100 IP address blocks.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct IpRouteLimitExceededException {
+    pub message: Option<String>,
+    pub request_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1179,6 +1265,22 @@ pub struct RemoveTagsFromResourceRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RemoveTagsFromResourceResult {}
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ResetUserPasswordRequest {
+    /// <p>Identifier of the AWS Managed Microsoft AD or Simple AD directory in which the user resides.</p>
+    #[serde(rename = "DirectoryId")]
+    pub directory_id: String,
+    /// <p>The new password that will be reset.</p>
+    #[serde(rename = "NewPassword")]
+    pub new_password: String,
+    /// <p>The username of the user whose password will be reset.</p>
+    #[serde(rename = "UserName")]
+    pub user_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ResetUserPasswordResult {}
+
 /// <p>An object representing the inputs for the <a>RestoreFromSnapshot</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RestoreFromSnapshotRequest {
@@ -1224,6 +1326,13 @@ pub struct SchemaExtensionInfo {
     pub start_date_time: Option<f64>,
 }
 
+/// <p>An exception has occurred in AWS Directory Service.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ServiceException {
+    pub message: Option<String>,
+    pub request_id: Option<String>,
+}
+
 /// <p>Describes a directory snapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Snapshot {
@@ -1251,6 +1360,13 @@ pub struct Snapshot {
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+}
+
+/// <p>The maximum number of manual snapshots for the directory has been reached. You can use the <a>GetSnapshotLimits</a> operation to determine the snapshot limits for a directory.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SnapshotLimitExceededException {
+    pub message: Option<String>,
+    pub request_id: Option<String>,
 }
 
 /// <p>Contains manual snapshot limit information for a directory.</p>
@@ -1305,6 +1421,13 @@ pub struct Tag {
     pub value: String,
 }
 
+/// <p>The maximum allowed number of tags was exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TagLimitExceededException {
+    pub message: Option<String>,
+    pub request_id: Option<String>,
+}
+
 /// <p>Describes a trust relationship between an Microsoft AD in the AWS cloud and an external domain.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Trust {
@@ -1348,6 +1471,13 @@ pub struct Trust {
     #[serde(rename = "TrustType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trust_type: Option<String>,
+}
+
+/// <p>The operation is not supported.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UnsupportedOperationException {
+    pub message: Option<String>,
+    pub request_id: Option<String>,
 }
 
 /// <p>Updates a conditional forwarder.</p>
@@ -1395,6 +1525,13 @@ pub struct UpdateRadiusRequest {
 /// <p>Contains the results of the <a>UpdateRadius</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateRadiusResult {}
+
+/// <p>The user provided a username that does not exist in your directory.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UserDoesNotExistException {
+    pub message: Option<String>,
+    pub request_id: Option<String>,
+}
 
 /// <p>Initiates the verification of an existing trust relationship between a Microsoft AD in the AWS cloud and an external domain.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -4881,6 +5018,123 @@ impl Error for RemoveTagsFromResourceError {
         }
     }
 }
+/// Errors returned by ResetUserPassword
+#[derive(Debug, PartialEq)]
+pub enum ResetUserPasswordError {
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The specified directory is unavailable or could not be found.</p>
+    DirectoryUnavailable(String),
+    /// <p>The specified entity could not be found.</p>
+    EntityDoesNotExist(String),
+    /// <p>The new password provided by the user does not meet the password complexity requirements defined in your directory.</p>
+    InvalidPassword(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// <p>The operation is not supported.</p>
+    UnsupportedOperation(String),
+    /// <p>The user provided a username that does not exist in your directory.</p>
+    UserDoesNotExist(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ResetUserPasswordError {
+    pub fn from_body(body: &str) -> ResetUserPasswordError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ClientException" => {
+                        ResetUserPasswordError::Client(String::from(error_message))
+                    }
+                    "DirectoryUnavailableException" => {
+                        ResetUserPasswordError::DirectoryUnavailable(String::from(error_message))
+                    }
+                    "EntityDoesNotExistException" => {
+                        ResetUserPasswordError::EntityDoesNotExist(String::from(error_message))
+                    }
+                    "InvalidPasswordException" => {
+                        ResetUserPasswordError::InvalidPassword(String::from(error_message))
+                    }
+                    "ServiceException" => {
+                        ResetUserPasswordError::Service(String::from(error_message))
+                    }
+                    "UnsupportedOperationException" => {
+                        ResetUserPasswordError::UnsupportedOperation(String::from(error_message))
+                    }
+                    "UserDoesNotExistException" => {
+                        ResetUserPasswordError::UserDoesNotExist(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ResetUserPasswordError::Validation(error_message.to_string())
+                    }
+                    _ => ResetUserPasswordError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ResetUserPasswordError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ResetUserPasswordError {
+    fn from(err: serde_json::error::Error) -> ResetUserPasswordError {
+        ResetUserPasswordError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ResetUserPasswordError {
+    fn from(err: CredentialsError) -> ResetUserPasswordError {
+        ResetUserPasswordError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ResetUserPasswordError {
+    fn from(err: HttpDispatchError) -> ResetUserPasswordError {
+        ResetUserPasswordError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ResetUserPasswordError {
+    fn from(err: io::Error) -> ResetUserPasswordError {
+        ResetUserPasswordError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ResetUserPasswordError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ResetUserPasswordError {
+    fn description(&self) -> &str {
+        match *self {
+            ResetUserPasswordError::Client(ref cause) => cause,
+            ResetUserPasswordError::DirectoryUnavailable(ref cause) => cause,
+            ResetUserPasswordError::EntityDoesNotExist(ref cause) => cause,
+            ResetUserPasswordError::InvalidPassword(ref cause) => cause,
+            ResetUserPasswordError::Service(ref cause) => cause,
+            ResetUserPasswordError::UnsupportedOperation(ref cause) => cause,
+            ResetUserPasswordError::UserDoesNotExist(ref cause) => cause,
+            ResetUserPasswordError::Validation(ref cause) => cause,
+            ResetUserPasswordError::Credentials(ref err) => err.description(),
+            ResetUserPasswordError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ResetUserPasswordError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by RestoreFromSnapshot
 #[derive(Debug, PartialEq)]
 pub enum RestoreFromSnapshotError {
@@ -5732,6 +5986,12 @@ pub trait DirectoryService {
         &self,
         input: RemoveTagsFromResourceRequest,
     ) -> RusotoFuture<RemoveTagsFromResourceResult, RemoveTagsFromResourceError>;
+
+    /// <p>Resets the password for any user in your AWS Managed Microsoft AD or Simple AD directory.</p>
+    fn reset_user_password(
+        &self,
+        input: ResetUserPasswordRequest,
+    ) -> RusotoFuture<ResetUserPasswordResult, ResetUserPasswordError>;
 
     /// <p>Restores a directory using an existing directory snapshot.</p> <p>When you restore a directory from a snapshot, any changes made to the directory after the snapshot date are overwritten.</p> <p>This action returns as soon as the restore operation is initiated. You can monitor the progress of the restore operation by calling the <a>DescribeDirectories</a> operation with the directory identifier. When the <b>DirectoryDescription.Stage</b> value changes to <code>Active</code>, the restore operation is complete.</p>
     fn restore_from_snapshot(
@@ -7034,6 +7294,44 @@ impl DirectoryService for DirectoryServiceClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RemoveTagsFromResourceError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Resets the password for any user in your AWS Managed Microsoft AD or Simple AD directory.</p>
+    fn reset_user_password(
+        &self,
+        input: ResetUserPasswordRequest,
+    ) -> RusotoFuture<ResetUserPasswordResult, ResetUserPasswordError> {
+        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DirectoryService_20150416.ResetUserPassword",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ResetUserPasswordResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ResetUserPasswordError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

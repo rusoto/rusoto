@@ -213,6 +213,36 @@ pub struct ImportServerCatalogRequest {}
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ImportServerCatalogResponse {}
 
+/// <p>An internal error has occured.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalError {
+    pub message: Option<String>,
+}
+
+/// <p>A parameter specified in the request is not valid, is unsupported, or cannot be used.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterException {
+    pub message: Option<String>,
+}
+
+/// <p>The request is missing a required parameter. Ensure that you have supplied all the required parameters for the request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MissingRequiredParameterException {
+    pub message: Option<String>,
+}
+
+/// <p>No connectors are available to handle this request. Please associate connector(s) and verify any existing connectors are healthy and can respond to requests.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NoConnectorsAvailableException {
+    pub message: Option<String>,
+}
+
+/// <p>The specified operation is not allowed. This error can occur for a number of reasons; for example, you might be trying to start a Replication Run before seed Replication Run.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct OperationNotPermittedException {
+    pub message: Option<String>,
+}
+
 /// <p>Object representing a Replication Job</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ReplicationJob {
@@ -260,6 +290,18 @@ pub struct ReplicationJob {
     pub vm_server: Option<VmServer>,
 }
 
+/// <p>An active Replication Job already exists for the specified server.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ReplicationJobAlreadyExistsException {
+    pub message: Option<String>,
+}
+
+/// <p>The specified Replication Job cannot be found.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ReplicationJobNotFoundException {
+    pub message: Option<String>,
+}
+
 /// <p>Object representing a Replication Run</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ReplicationRun {
@@ -289,6 +331,12 @@ pub struct ReplicationRun {
     pub type_: Option<String>,
 }
 
+/// <p>This user has exceeded the maximum allowed Replication Run limit.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ReplicationRunLimitExceededException {
+    pub message: Option<String>,
+}
+
 /// <p>Object representing a server</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Server {
@@ -309,6 +357,12 @@ pub struct Server {
     pub vm_server: Option<VmServer>,
 }
 
+/// <p>The provided server cannot be replicated.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ServerCannotBeReplicatedException {
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartOnDemandReplicationRunRequest {
     #[serde(rename = "description")]
@@ -323,6 +377,12 @@ pub struct StartOnDemandReplicationRunResponse {
     #[serde(rename = "replicationRunId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_run_id: Option<String>,
+}
+
+/// <p>This user does not have permissions to perform this operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UnauthorizedOperationException {
+    pub message: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]

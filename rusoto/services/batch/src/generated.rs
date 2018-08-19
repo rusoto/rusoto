@@ -126,6 +126,12 @@ pub struct CancelJobRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CancelJobResponse {}
 
+/// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ClientException {
+    pub message: Option<String>,
+}
+
 /// <p>An object representing an AWS Batch compute environment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ComputeEnvironmentDetail {
@@ -905,6 +911,12 @@ pub struct RetryStrategy {
     #[serde(rename = "attempts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attempts: Option<i64>,
+}
+
+/// <p>These errors are usually caused by a server issue.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ServerException {
+    pub message: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]

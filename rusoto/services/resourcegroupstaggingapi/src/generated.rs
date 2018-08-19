@@ -124,6 +124,24 @@ pub struct GetTagValuesOutput {
     pub tag_values: Option<Vec<String>>,
 }
 
+/// <p>The request processing failed because of an unknown error, exception, or failure. You can retry the request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalServiceException {
+    pub message: Option<String>,
+}
+
+/// <p>A parameter is missing or a malformed string or invalid or out-of-range value was supplied for the request parameter.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterException {
+    pub message: Option<String>,
+}
+
+/// <p>A <code>PaginationToken</code> is valid for a maximum of 15 minutes. Your request was denied because the specified <code>PaginationToken</code> has expired.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PaginationTokenExpiredException {
+    pub message: Option<String>,
+}
+
 /// <p>A list of resource ARNs and the tags (keys and values) that are associated with each.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ResourceTagMapping {
@@ -177,6 +195,12 @@ pub struct TagResourcesOutput {
     #[serde(rename = "FailedResourcesMap")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_resources_map: Option<::std::collections::HashMap<String, FailureInfo>>,
+}
+
+/// <p>The request was denied to limit the frequency of submitted requests.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ThrottledException {
+    pub message: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]

@@ -1076,6 +1076,26 @@ impl ComparisonOperatorDeserializer {
         Ok(obj)
     }
 }
+/// <p>Another user submitted a request to create, update, or delete the object at the same time that you did. Retry the request. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ConcurrentModification {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
+/// <p><p>The cause of this error depends on whether you&#39;re trying to create a public or a private hosted zone:</p> <ul> <li> <p> <b>Public hosted zone:</b> Two hosted zones that have the same name or that have a parent/child relationship (example.com and test.example.com) can&#39;t have any common name servers. You tried to create a hosted zone that has the same name as an existing hosted zone or that&#39;s the parent or child of an existing hosted zone, and you specified a delegation set that shares one or more name servers with the existing hosted zone. For more information, see <a>CreateReusableDelegationSet</a>.</p> </li> <li> <p> <b>Private hosted zone:</b> You specified an Amazon VPC that you&#39;re already using for another hosted zone, and the domain that you specified for one of the hosted zones is a subdomain of the domain that you specified for the other hosted zone. For example, you can&#39;t use the same Amazon VPC for the hosted zones for example.com and test.example.com.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ConflictingDomainExists {
+    pub message: Option<String>,
+}
+
+/// <p>You tried to update a traffic policy instance by using a traffic policy version that has a different DNS type than the current type for the instance. You specified the type in the JSON document in the <code>CreateTrafficPolicy</code> or <code>CreateTrafficPolicyVersion</code>request. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ConflictingTypes {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
 /// <p>A complex type that contains the health check request information.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateHealthCheckRequest {
@@ -1879,6 +1899,27 @@ impl DelegationSetDeserializer {
         Ok(obj)
     }
 }
+/// <p>A delegation set with the same owner and caller reference combination has already been created.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DelegationSetAlreadyCreated {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The specified delegation set has already been marked as reusable.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DelegationSetAlreadyReusable {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The specified delegation contains associated hosted zones which must be deleted before the reusable delegation set can be deleted.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DelegationSetInUse {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
 struct DelegationSetNameServersDeserializer;
 impl DelegationSetNameServersDeserializer {
     #[allow(unused_variables)]
@@ -1919,6 +1960,20 @@ impl DelegationSetNameServersDeserializer {
         Ok(obj)
     }
 }
+/// <p>You can create a hosted zone that has the same name as an existing hosted zone (example.com is common), but there is a limit to the number of hosted zones that have the same name. If you get this error, Amazon Route 53 has reached that limit. If you own the domain name and Amazon Route 53 generates this error, contact Customer Support.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DelegationSetNotAvailable {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
+/// <p>A reusable delegation set with the specified ID does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DelegationSetNotReusable {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
 struct DelegationSetsDeserializer;
 impl DelegationSetsDeserializer {
     #[allow(unused_variables)]
@@ -3962,6 +4017,13 @@ impl HealthCheckDeserializer {
         Ok(obj)
     }
 }
+/// <p><p> The health check you&#39;re attempting to create already exists. Amazon Route 53 returns this error when you submit a request that has the following values:</p> <ul> <li> <p>The same value for <code>CallerReference</code> as an existing health check, and one or more values that differ from the existing health check that has the same caller reference.</p> </li> <li> <p>The same value for <code>CallerReference</code> as a health check that you created and later deleted, regardless of the other settings in the request.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct HealthCheckAlreadyExists {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
 /// <p>A complex type that contains information about the health check.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct HealthCheckConfig {
@@ -4298,6 +4360,13 @@ impl HealthCheckIdSerializer {
     }
 }
 
+/// <p>This error code is not in use.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct HealthCheckInUse {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
 struct HealthCheckNonceDeserializer;
 impl HealthCheckNonceDeserializer {
     #[allow(unused_variables)]
@@ -4606,6 +4675,12 @@ impl HealthCheckVersionSerializer {
     }
 }
 
+/// <p>The value of <code>HealthCheckVersion</code> in the request doesn't match the value of <code>HealthCheckVersion</code> in the health check.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct HealthCheckVersionMismatch {
+    pub message: Option<String>,
+}
+
 struct HealthChecksDeserializer;
 impl HealthChecksDeserializer {
     #[allow(unused_variables)]
@@ -4765,6 +4840,13 @@ impl HostedZoneDeserializer {
         Ok(obj)
     }
 }
+/// <p>The hosted zone you're trying to create already exists. Amazon Route 53 returns this error when a hosted zone has already been created with the specified <code>CallerReference</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct HostedZoneAlreadyExists {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
 /// <p>A complex type that contains an optional comment about your hosted zone. If you don't want to specify a comment, omit both the <code>HostedZoneConfig</code> and <code>Comment</code> elements.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct HostedZoneConfig {
@@ -4955,6 +5037,27 @@ impl HostedZoneLimitTypeSerializer {
     }
 }
 
+/// <p>The hosted zone contains resource records that are not SOA or NS records.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct HostedZoneNotEmpty {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The specified HostedZone can't be found.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct HostedZoneNotFound {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The specified hosted zone is a public hosted zone, not a private hosted zone.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct HostedZoneNotPrivate {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
 struct HostedZoneRRSetCountDeserializer;
 impl HostedZoneRRSetCountDeserializer {
     #[allow(unused_variables)]
@@ -5061,6 +5164,18 @@ impl IPAddressCidrDeserializer {
         Ok(obj)
     }
 }
+/// <p>The resource you're trying to access is unsupported on this Amazon Route 53 endpoint.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct IncompatibleVersion {
+    pub message: Option<String>,
+}
+
+/// <p><p>Amazon Route 53 doesn&#39;t have the permissions required to create log streams and send query logs to log streams. Possible causes include the following:</p> <ul> <li> <p>There is no resource policy that specifies the log group ARN in the value for <code>Resource</code>.</p> </li> <li> <p>The resource policy that includes the log group ARN in the value for <code>Resource</code> doesn&#39;t have the necessary permissions.</p> </li> <li> <p>The resource policy hasn&#39;t finished propagating yet.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InsufficientCloudWatchLogsResourcePolicy {
+    pub message: Option<String>,
+}
+
 struct InsufficientDataHealthStatusDeserializer;
 impl InsufficientDataHealthStatusDeserializer {
     #[allow(unused_variables)]
@@ -5094,6 +5209,55 @@ impl InsufficientDataHealthStatusSerializer {
         )))?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
+}
+
+/// <p>Parameter name is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidArgument {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
+/// <p>This exception contains a list of messages that might contain one or more error messages. Each error message indicates one error in the change batch.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidChangeBatch {
+    pub message: Option<String>,
+    /// <p>Descriptive message for the error response.</p>
+    pub messages: Option<Vec<String>>,
+}
+
+/// <p>The specified domain name is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidDomainName {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The input is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidInput {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The value that you specified to get the second or subsequent page of results is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidPaginationToken {
+    pub message: Option<String>,
+}
+
+/// <p>The format of the traffic policy document that you specified in the <code>Document</code> element is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidTrafficPolicyDocument {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The VPC ID that you specified either isn't a valid ID or the current account is not authorized to access this VPC.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidVPCId {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
 }
 
 struct InvertedDeserializer;
@@ -5166,6 +5330,13 @@ impl IsPrivateZoneSerializer {
     }
 }
 
+/// <p>The VPC that you're trying to disassociate from the private hosted zone is the last VPC that is associated with the hosted zone. Amazon Route 53 doesn't support disassociating the last VPC from a hosted zone.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LastVPCAssociation {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
 struct LimitValueDeserializer;
 impl LimitValueDeserializer {
     #[allow(unused_variables)]
@@ -5180,6 +5351,13 @@ impl LimitValueDeserializer {
         Ok(obj)
     }
 }
+/// <p>This operation can't be completed either because the current account has reached the limit on reusable delegation sets that it can create or because you've reached the limit on the number of Amazon VPCs that you can associate with a private hosted zone. To get the current limit on the number of reusable delegation sets, see <a>GetAccountLimit</a>. To get the current limit on the number of Amazon VPCs that you can associate with a private hosted zone, see <a>GetHostedZoneLimit</a>. To request a higher limit, <a href="http://aws.amazon.com/route53-request">create a case</a> with the AWS Support Center.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitsExceeded {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
 /// <p>If a health check or hosted zone was created by another service, <code>LinkedService</code> is a complex type that describes the service that created the resource. When a resource is created by another service, you can't edit or delete it using Amazon Route 53. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LinkedService {
@@ -6625,6 +6803,66 @@ impl NamespaceDeserializer {
         Ok(obj)
     }
 }
+/// <p>A change with the specified change ID does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NoSuchChange {
+    pub message: Option<String>,
+}
+
+/// <p>There is no CloudWatch Logs log group with the specified ARN.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NoSuchCloudWatchLogsLogGroup {
+    pub message: Option<String>,
+}
+
+/// <p>A reusable delegation set with the specified ID does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NoSuchDelegationSet {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
+/// <p>Amazon Route 53 doesn't support the specified geolocation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NoSuchGeoLocation {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
+/// <p>No health check exists with the ID that you specified in the <code>DeleteHealthCheck</code> request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NoSuchHealthCheck {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
+/// <p>No hosted zone exists with the ID that you specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NoSuchHostedZone {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
+/// <p>There is no DNS query logging configuration with the specified ID.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NoSuchQueryLoggingConfig {
+    pub message: Option<String>,
+}
+
+/// <p>No traffic policy exists with the specified ID.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NoSuchTrafficPolicy {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
+/// <p>No traffic policy instance exists with the specified ID.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NoSuchTrafficPolicyInstance {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
 struct NonceDeserializer;
 impl NonceDeserializer {
     #[allow(unused_variables)]
@@ -6658,6 +6896,13 @@ impl NonceSerializer {
         )))?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
+}
+
+/// <p>Associating the specified VPC with the specified hosted zone has not been authorized.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NotAuthorizedException {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
 }
 
 struct PageMarkerDeserializer;
@@ -6828,6 +7073,19 @@ impl PortSerializer {
     }
 }
 
+/// <p>If Amazon Route 53 can't process a request before the next request arrives, it will reject subsequent requests for the same hosted zone and return an <code>HTTP 400 error</code> (<code>Bad request</code>). If Amazon Route 53 returns this error repeatedly for the same request, we recommend that you wait, in intervals of increasing duration, before you try the request again.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PriorRequestNotComplete {
+    pub message: Option<String>,
+}
+
+/// <p>You're trying to associate a VPC with a public hosted zone. Amazon Route 53 doesn't support associating a VPC with a public hosted zone.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PublicZoneVPCAssociation {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
 /// <p>A complex type that contains information about a configuration for DNS query logging.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct QueryLoggingConfig {
@@ -6889,6 +7147,12 @@ impl QueryLoggingConfigDeserializer {
         Ok(obj)
     }
 }
+/// <p>You can create only one query logging configuration for a hosted zone, and a query logging configuration already exists for this hosted zone.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct QueryLoggingConfigAlreadyExists {
+    pub message: Option<String>,
+}
+
 struct QueryLoggingConfigIdDeserializer;
 impl QueryLoggingConfigIdDeserializer {
     #[allow(unused_variables)]
@@ -8679,6 +8943,12 @@ impl ThresholdDeserializer {
         Ok(obj)
     }
 }
+/// <p>The limit on the number of requests per second was exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ThrottlingException {
+    pub message: Option<String>,
+}
+
 struct TimeStampDeserializer;
 impl TimeStampDeserializer {
     #[allow(unused_variables)]
@@ -8693,6 +8963,47 @@ impl TimeStampDeserializer {
         Ok(obj)
     }
 }
+/// <p>This health check can't be created because the current account has reached the limit on the number of active health checks.</p> <p>For information about default limits, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>For information about how to get the current limit for an account, see <a>GetAccountLimit</a>. To request a higher limit, <a href="http://aws.amazon.com/route53-request">create a case</a> with the AWS Support Center.</p> <p>You have reached the maximum number of active health checks for an AWS account. To request a higher limit, <a href="http://aws.amazon.com/route53-request">create a case</a> with the AWS Support Center.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyHealthChecks {
+    pub message: Option<String>,
+}
+
+/// <p>This operation can't be completed either because the current account has reached the limit on the number of hosted zones or because you've reached the limit on the number of hosted zones that can be associated with a reusable delegation set.</p> <p>For information about default limits, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>To get the current limit on hosted zones that can be created by an account, see <a>GetAccountLimit</a>.</p> <p>To get the current limit on hosted zones that can be associated with a reusable delegation set, see <a>GetReusableDelegationSetLimit</a>.</p> <p>To request a higher limit, <a href="http://aws.amazon.com/route53-request">create a case</a> with the AWS Support Center.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyHostedZones {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
+/// <p>This traffic policy can't be created because the current account has reached the limit on the number of traffic policies.</p> <p>For information about default limits, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>To get the current limit for an account, see <a>GetAccountLimit</a>. </p> <p>To request a higher limit, <a href="http://aws.amazon.com/route53-request">create a case</a> with the AWS Support Center.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyTrafficPolicies {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
+/// <p>This traffic policy instance can't be created because the current account has reached the limit on the number of traffic policy instances.</p> <p>For information about default limits, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>For information about how to get the current limit for an account, see <a>GetAccountLimit</a>.</p> <p>To request a higher limit, <a href="http://aws.amazon.com/route53-request">create a case</a> with the AWS Support Center.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyTrafficPolicyInstances {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
+/// <p>This traffic policy version can't be created because you've reached the limit of 1000 on the number of versions that you can create for the current traffic policy.</p> <p>To create more traffic policy versions, you can use <a>GetTrafficPolicy</a> to get the traffic policy document for a specified traffic policy version, and then use <a>CreateTrafficPolicy</a> to create a new traffic policy using the traffic policy document.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyTrafficPolicyVersionsForCurrentPolicy {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
+/// <p>You've created the maximum number of authorizations that can be created for the specified hosted zone. To authorize another VPC to be associated with the hosted zone, submit a <code>DeleteVPCAssociationAuthorization</code> request to remove an existing authorization. To get a list of existing authorizations, submit a <code>ListVPCAssociationAuthorizations</code> request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyVPCAssociationAuthorizations {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
 struct TrafficPoliciesDeserializer;
 impl TrafficPoliciesDeserializer {
     #[allow(unused_variables)]
@@ -8813,6 +9124,13 @@ impl TrafficPolicyDeserializer {
         Ok(obj)
     }
 }
+/// <p>A traffic policy that has the same value for <code>Name</code> already exists.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TrafficPolicyAlreadyExists {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
 struct TrafficPolicyCommentDeserializer;
 impl TrafficPolicyCommentDeserializer {
     #[allow(unused_variables)]
@@ -8918,6 +9236,13 @@ impl TrafficPolicyIdSerializer {
     }
 }
 
+/// <p>One or more traffic policy instances were created by using the specified traffic policy.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TrafficPolicyInUse {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
 /// <p>A complex type that contains settings for the new traffic policy instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TrafficPolicyInstance {
@@ -9017,6 +9342,13 @@ impl TrafficPolicyInstanceDeserializer {
         Ok(obj)
     }
 }
+/// <p>There is already a traffic policy instance with the specified ID.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TrafficPolicyInstanceAlreadyExists {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
 struct TrafficPolicyInstanceCountDeserializer;
 impl TrafficPolicyInstanceCountDeserializer {
     #[allow(unused_variables)]
@@ -9845,6 +10177,20 @@ impl VPCSerializer {
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
+}
+
+/// <p>The VPC that you specified is not authorized to be associated with the hosted zone.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct VPCAssociationAuthorizationNotFound {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The specified VPC and hosted zone are not currently associated.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct VPCAssociationNotFound {
+    /// <p>Descriptive message for the error response.</p>
+    pub message: Option<String>,
 }
 
 struct VPCIdDeserializer;

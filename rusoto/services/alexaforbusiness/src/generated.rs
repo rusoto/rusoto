@@ -62,6 +62,12 @@ pub struct AddressBookData {
     pub name: Option<String>,
 }
 
+/// <p>The resource being created already exists. HTTP Status Code: 400</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AlreadyExistsException {
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateContactWithAddressBookRequest {
     /// <p>The ARN of the address book with which to associate the contact.</p>
@@ -112,15 +118,15 @@ pub struct Contact {
     #[serde(rename = "ContactArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contact_arn: Option<String>,
-    /// <p>The name of the contact to display on the AWS management console.</p>
+    /// <p>The name of the contact to display on the console.</p>
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    /// <p>The first name of the contact that is used to call the contact on the device.</p>
+    /// <p>The first name of the contact, used to call the contact on the device.</p>
     #[serde(rename = "FirstName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub first_name: Option<String>,
-    /// <p>The last name of the contact that is used to call the contact on the device.</p>
+    /// <p>The last name of the contact, used to call the contact on the device.</p>
     #[serde(rename = "LastName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_name: Option<String>,
@@ -137,15 +143,15 @@ pub struct ContactData {
     #[serde(rename = "ContactArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contact_arn: Option<String>,
-    /// <p>The name of the contact to display on the AWS management console.</p>
+    /// <p>The name of the contact to display on the console.</p>
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    /// <p>The first name of the contact that is used to call the contact on the device.</p>
+    /// <p>The first name of the contact, used to call the contact on the device.</p>
     #[serde(rename = "FirstName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub first_name: Option<String>,
-    /// <p>The last name of the contact that is used to call the contact on the device.</p>
+    /// <p>The last name of the contact, used to call the contact on the device.</p>
     #[serde(rename = "LastName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_name: Option<String>,
@@ -184,7 +190,7 @@ pub struct CreateContactRequest {
     #[serde(rename = "ClientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
-    /// <p>The name of the contact to display on the AWS management console.</p>
+    /// <p>The name of the contact to display on the console.</p>
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
@@ -195,7 +201,7 @@ pub struct CreateContactRequest {
     #[serde(rename = "LastName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_name: Option<String>,
-    /// <p>The phone number of the contact in E164 format.</p>
+    /// <p>The phone number of the contact in E.164 format.</p>
     #[serde(rename = "PhoneNumber")]
     pub phone_number: String,
 }
@@ -446,7 +452,7 @@ pub struct Device {
     #[serde(rename = "DeviceSerialNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_serial_number: Option<String>,
-    /// <p>The status of a device. If the status is not READY, check the DeviceStatusInfo for details.</p>
+    /// <p>The status of a device. If the status is not READY, check the DeviceStatusInfo value for details.</p>
     #[serde(rename = "DeviceStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_status: Option<String>,
@@ -517,6 +523,29 @@ pub struct DeviceData {
     pub software_version: Option<String>,
 }
 
+/// <p>The list of device events.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DeviceEvent {
+    /// <p>The time (in epoch) when the event occurred. </p>
+    #[serde(rename = "Timestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timestamp: Option<f64>,
+    /// <p>The type of device event.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    /// <p>The value of the event.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+/// <p>The request failed because this device is no longer registered and therefore no longer managed by this account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeviceNotRegisteredException {
+    pub message: Option<String>,
+}
+
 /// <p>Details of a device’s status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeviceStatusDetail {
@@ -529,6 +558,10 @@ pub struct DeviceStatusDetail {
 /// <p>Detailed information about a device's status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeviceStatusInfo {
+    /// <p>The latest available information about the connection status of a device. </p>
+    #[serde(rename = "ConnectionStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_status: Option<String>,
     /// <p>One or more device status detail descriptions.</p>
     #[serde(rename = "DeviceStatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -701,6 +734,49 @@ pub struct GetSkillGroupResponse {
     pub skill_group: Option<SkillGroup>,
 }
 
+/// <p>The attempt to update a user is invalid due to the user's current status. HTTP Status Code: 400</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidUserStatusException {
+    pub message: Option<String>,
+}
+
+/// <p>You are performing an action that would put you beyond your account's limits. HTTP Status Code: 400</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListDeviceEventsRequest {
+    /// <p>The ARN of a device.</p>
+    #[serde(rename = "DeviceArn")]
+    pub device_arn: String,
+    /// <p>The event type to filter device events. If EventType isn't specified, this returns a list of all device events in reverse chronological order. If EventType is specified, this returns a list of device events for that EventType in reverse chronological order. </p>
+    #[serde(rename = "EventType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_type: Option<String>,
+    /// <p>The maximum number of results to include in the response. The default value is 50. If more results exist than the specified MaxResults value, a token is included in the response so that the remaining results can be retrieved. </p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response only includes results beyond the token, up to the value specified by MaxResults. When the end of results is reached, the response has a value of null.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ListDeviceEventsResponse {
+    /// <p>The device events requested for the device ARN.</p>
+    #[serde(rename = "DeviceEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_events: Option<Vec<DeviceEvent>>,
+    /// <p>The token returned to indicate that there is more data available.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListSkillsRequest {
     /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved. Required.</p>
@@ -731,7 +807,7 @@ pub struct ListSkillsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTagsRequest {
-    /// <p>The ARN of the specific resource for which to list tags. Required.</p>
+    /// <p>The ARN of the specified resource for which to list tags.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
     /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p>
@@ -750,10 +826,22 @@ pub struct ListTagsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The list of tags requested for the specific resource.</p>
+    /// <p>The tags requested for the specified resource.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>The name sent in the request is already in use. HTTP Status Code: 400</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NameInUseException {
+    pub message: Option<String>,
+}
+
+/// <p>The resource is not found. HTTP Status Code: 400</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NotFoundException {
+    pub message: Option<String>,
 }
 
 /// <p>A room profile with attributes.</p>
@@ -875,6 +963,13 @@ pub struct ResolveRoomResponse {
     #[serde(rename = "RoomSkillParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub room_skill_parameters: Option<Vec<RoomSkillParameter>>,
+}
+
+/// <p>The resource in the request is already in use. HTTP Status Code: 400</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceInUseException {
+    pub client_request_token: Option<String>,
+    pub message: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1031,7 +1126,7 @@ pub struct SearchContactsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SearchDevicesRequest {
-    /// <p>The filters to use to list a specified set of devices. Supported filter keys are DeviceName, DeviceStatus, DeviceStatusDetailCode, RoomName, DeviceType, DeviceSerialNumber, and UnassociatedOnly.</p>
+    /// <p>The filters to use to list a specified set of devices. Supported filter keys are DeviceName, DeviceStatus, DeviceStatusDetailCode, RoomName, DeviceType, DeviceSerialNumber, UnassociatedOnly, and ConnectionStatus (ONLINE and OFFLINE).</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
@@ -1043,7 +1138,7 @@ pub struct SearchDevicesRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The sort order to use in listing the specified set of devices. Supported sort keys are DeviceName, DeviceStatus, RoomName, DeviceType, and DeviceSerialNumber.</p>
+    /// <p>The sort order to use in listing the specified set of devices. Supported sort keys are DeviceName, DeviceStatus, RoomName, DeviceType, DeviceSerialNumber, and ConnectionStatus.</p>
     #[serde(rename = "SortCriteria")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_criteria: Option<Vec<Sort>>,
@@ -1523,6 +1618,8 @@ pub struct UserData {
 /// Errors returned by AssociateContactWithAddressBook
 #[derive(Debug, PartialEq)]
 pub enum AssociateContactWithAddressBookError {
+    /// <p>You are performing an action that would put you beyond your account's limits. HTTP Status Code: 400</p>
+    LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1547,6 +1644,11 @@ impl AssociateContactWithAddressBookError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "LimitExceededException" => {
+                        AssociateContactWithAddressBookError::LimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         AssociateContactWithAddressBookError::Validation(error_message.to_string())
                     }
@@ -1586,6 +1688,7 @@ impl fmt::Display for AssociateContactWithAddressBookError {
 impl Error for AssociateContactWithAddressBookError {
     fn description(&self) -> &str {
         match *self {
+            AssociateContactWithAddressBookError::LimitExceeded(ref cause) => cause,
             AssociateContactWithAddressBookError::Validation(ref cause) => cause,
             AssociateContactWithAddressBookError::Credentials(ref err) => err.description(),
             AssociateContactWithAddressBookError::HttpDispatch(ref dispatch_error) => {
@@ -1598,6 +1701,8 @@ impl Error for AssociateContactWithAddressBookError {
 /// Errors returned by AssociateDeviceWithRoom
 #[derive(Debug, PartialEq)]
 pub enum AssociateDeviceWithRoomError {
+    /// <p>The request failed because this device is no longer registered and therefore no longer managed by this account.</p>
+    DeviceNotRegistered(String),
     /// <p>You are performing an action that would put you beyond your account's limits. HTTP Status Code: 400</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
@@ -1624,6 +1729,11 @@ impl AssociateDeviceWithRoomError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "DeviceNotRegisteredException" => {
+                        AssociateDeviceWithRoomError::DeviceNotRegistered(String::from(
+                            error_message,
+                        ))
+                    }
                     "LimitExceededException" => {
                         AssociateDeviceWithRoomError::LimitExceeded(String::from(error_message))
                     }
@@ -1666,6 +1776,7 @@ impl fmt::Display for AssociateDeviceWithRoomError {
 impl Error for AssociateDeviceWithRoomError {
     fn description(&self) -> &str {
         match *self {
+            AssociateDeviceWithRoomError::DeviceNotRegistered(ref cause) => cause,
             AssociateDeviceWithRoomError::LimitExceeded(ref cause) => cause,
             AssociateDeviceWithRoomError::Validation(ref cause) => cause,
             AssociateDeviceWithRoomError::Credentials(ref err) => err.description(),
@@ -2880,6 +2991,8 @@ impl Error for DisassociateContactFromAddressBookError {
 /// Errors returned by DisassociateDeviceFromRoom
 #[derive(Debug, PartialEq)]
 pub enum DisassociateDeviceFromRoomError {
+    /// <p>The request failed because this device is no longer registered and therefore no longer managed by this account.</p>
+    DeviceNotRegistered(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2904,6 +3017,11 @@ impl DisassociateDeviceFromRoomError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "DeviceNotRegisteredException" => {
+                        DisassociateDeviceFromRoomError::DeviceNotRegistered(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DisassociateDeviceFromRoomError::Validation(error_message.to_string())
                     }
@@ -2943,6 +3061,7 @@ impl fmt::Display for DisassociateDeviceFromRoomError {
 impl Error for DisassociateDeviceFromRoomError {
     fn description(&self) -> &str {
         match *self {
+            DisassociateDeviceFromRoomError::DeviceNotRegistered(ref cause) => cause,
             DisassociateDeviceFromRoomError::Validation(ref cause) => cause,
             DisassociateDeviceFromRoomError::Credentials(ref err) => err.description(),
             DisassociateDeviceFromRoomError::HttpDispatch(ref dispatch_error) => {
@@ -3563,6 +3682,85 @@ impl Error for GetSkillGroupError {
             GetSkillGroupError::Credentials(ref err) => err.description(),
             GetSkillGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             GetSkillGroupError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListDeviceEvents
+#[derive(Debug, PartialEq)]
+pub enum ListDeviceEventsError {
+    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListDeviceEventsError {
+    pub fn from_body(body: &str) -> ListDeviceEventsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "NotFoundException" => {
+                        ListDeviceEventsError::NotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListDeviceEventsError::Validation(error_message.to_string())
+                    }
+                    _ => ListDeviceEventsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListDeviceEventsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListDeviceEventsError {
+    fn from(err: serde_json::error::Error) -> ListDeviceEventsError {
+        ListDeviceEventsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListDeviceEventsError {
+    fn from(err: CredentialsError) -> ListDeviceEventsError {
+        ListDeviceEventsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListDeviceEventsError {
+    fn from(err: HttpDispatchError) -> ListDeviceEventsError {
+        ListDeviceEventsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListDeviceEventsError {
+    fn from(err: io::Error) -> ListDeviceEventsError {
+        ListDeviceEventsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListDeviceEventsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListDeviceEventsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListDeviceEventsError::NotFound(ref cause) => cause,
+            ListDeviceEventsError::Validation(ref cause) => cause,
+            ListDeviceEventsError::Credentials(ref err) => err.description(),
+            ListDeviceEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListDeviceEventsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -4546,6 +4744,8 @@ impl Error for SendInvitationError {
 /// Errors returned by StartDeviceSync
 #[derive(Debug, PartialEq)]
 pub enum StartDeviceSyncError {
+    /// <p>The request failed because this device is no longer registered and therefore no longer managed by this account.</p>
+    DeviceNotRegistered(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -4570,6 +4770,9 @@ impl StartDeviceSyncError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "DeviceNotRegisteredException" => {
+                        StartDeviceSyncError::DeviceNotRegistered(String::from(error_message))
+                    }
                     "ValidationException" => {
                         StartDeviceSyncError::Validation(error_message.to_string())
                     }
@@ -4609,6 +4812,7 @@ impl fmt::Display for StartDeviceSyncError {
 impl Error for StartDeviceSyncError {
     fn description(&self) -> &str {
         match *self {
+            StartDeviceSyncError::DeviceNotRegistered(ref cause) => cause,
             StartDeviceSyncError::Validation(ref cause) => cause,
             StartDeviceSyncError::Credentials(ref err) => err.description(),
             StartDeviceSyncError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -4941,6 +5145,8 @@ impl Error for UpdateContactError {
 /// Errors returned by UpdateDevice
 #[derive(Debug, PartialEq)]
 pub enum UpdateDeviceError {
+    /// <p>The request failed because this device is no longer registered and therefore no longer managed by this account.</p>
+    DeviceNotRegistered(String),
     /// <p>The resource is not found. HTTP Status Code: 400</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -4967,6 +5173,9 @@ impl UpdateDeviceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "DeviceNotRegisteredException" => {
+                        UpdateDeviceError::DeviceNotRegistered(String::from(error_message))
+                    }
                     "NotFoundException" => UpdateDeviceError::NotFound(String::from(error_message)),
                     "ValidationException" => {
                         UpdateDeviceError::Validation(error_message.to_string())
@@ -5007,6 +5216,7 @@ impl fmt::Display for UpdateDeviceError {
 impl Error for UpdateDeviceError {
     fn description(&self) -> &str {
         match *self {
+            UpdateDeviceError::DeviceNotRegistered(ref cause) => cause,
             UpdateDeviceError::NotFound(ref cause) => cause,
             UpdateDeviceError::Validation(ref cause) => cause,
             UpdateDeviceError::Credentials(ref err) => err.description(),
@@ -5266,19 +5476,19 @@ impl Error for UpdateSkillGroupError {
 }
 /// Trait representing the capabilities of the Alexa For Business API. Alexa For Business clients implement this trait.
 pub trait AlexaForBusiness {
-    /// <p>Associates a contact to a given address book.</p>
+    /// <p>Associates a contact with a given address book.</p>
     fn associate_contact_with_address_book(
         &self,
         input: AssociateContactWithAddressBookRequest,
     ) -> RusotoFuture<AssociateContactWithAddressBookResponse, AssociateContactWithAddressBookError>;
 
-    /// <p>Associates a device to a given room. This applies all the settings from the room profile to the device, and all the skills in any skill groups added to that room. This operation requires the device to be online, or a manual sync is required. </p>
+    /// <p>Associates a device with a given room. This applies all the settings from the room profile to the device, and all the skills in any skill groups added to that room. This operation requires the device to be online, or else a manual sync is required. </p>
     fn associate_device_with_room(
         &self,
         input: AssociateDeviceWithRoomRequest,
     ) -> RusotoFuture<AssociateDeviceWithRoomResponse, AssociateDeviceWithRoomError>;
 
-    /// <p>Associates a skill group to a given room. This enables all skills in the associated skill group on all devices in the room.</p>
+    /// <p>Associates a skill group with a given room. This enables all skills in the associated skill group on all devices in the room.</p>
     fn associate_skill_group_with_room(
         &self,
         input: AssociateSkillGroupWithRoomRequest,
@@ -5422,13 +5632,19 @@ pub trait AlexaForBusiness {
         input: GetSkillGroupRequest,
     ) -> RusotoFuture<GetSkillGroupResponse, GetSkillGroupError>;
 
+    /// <p>Lists the device event history, including device connection status, for up to 30 days.</p>
+    fn list_device_events(
+        &self,
+        input: ListDeviceEventsRequest,
+    ) -> RusotoFuture<ListDeviceEventsResponse, ListDeviceEventsError>;
+
     /// <p>Lists all enabled skills in a specific skill group.</p>
     fn list_skills(
         &self,
         input: ListSkillsRequest,
     ) -> RusotoFuture<ListSkillsResponse, ListSkillsError>;
 
-    /// <p>Lists all tags for a specific resource.</p>
+    /// <p>Lists all tags for the specified resource.</p>
     fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
 
     /// <p>Updates room skill parameter details by room, skill, and parameter key ID. Not all skills have a room skill parameter.</p>
@@ -5497,7 +5713,7 @@ pub trait AlexaForBusiness {
         input: SendInvitationRequest,
     ) -> RusotoFuture<SendInvitationResponse, SendInvitationError>;
 
-    /// <p>Resets a device and its account to the known default settings by clearing all information and settings set by previous users.</p>
+    /// <p>Resets a device and its account to the known default settings, by clearing all information and settings set by previous users.</p>
     fn start_device_sync(
         &self,
         input: StartDeviceSyncRequest,
@@ -5587,7 +5803,7 @@ impl AlexaForBusinessClient {
 }
 
 impl AlexaForBusiness for AlexaForBusinessClient {
-    /// <p>Associates a contact to a given address book.</p>
+    /// <p>Associates a contact with a given address book.</p>
     fn associate_contact_with_address_book(
         &self,
         input: AssociateContactWithAddressBookRequest,
@@ -5626,7 +5842,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 
-    /// <p>Associates a device to a given room. This applies all the settings from the room profile to the device, and all the skills in any skill groups added to that room. This operation requires the device to be online, or a manual sync is required. </p>
+    /// <p>Associates a device with a given room. This applies all the settings from the room profile to the device, and all the skills in any skill groups added to that room. This operation requires the device to be online, or else a manual sync is required. </p>
     fn associate_device_with_room(
         &self,
         input: AssociateDeviceWithRoomRequest,
@@ -5661,7 +5877,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 
-    /// <p>Associates a skill group to a given room. This enables all skills in the associated skill group on all devices in the room.</p>
+    /// <p>Associates a skill group with a given room. This enables all skills in the associated skill group on all devices in the room.</p>
     fn associate_skill_group_with_room(
         &self,
         input: AssociateSkillGroupWithRoomRequest,
@@ -6514,6 +6730,41 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 
+    /// <p>Lists the device event history, including device connection status, for up to 30 days.</p>
+    fn list_device_events(
+        &self,
+        input: ListDeviceEventsRequest,
+    ) -> RusotoFuture<ListDeviceEventsResponse, ListDeviceEventsError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.ListDeviceEvents");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListDeviceEventsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListDeviceEventsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Lists all enabled skills in a specific skill group.</p>
     fn list_skills(
         &self,
@@ -6549,7 +6800,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 
-    /// <p>Lists all tags for a specific resource.</p>
+    /// <p>Lists all tags for the specified resource.</p>
     fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
@@ -6966,7 +7217,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 
-    /// <p>Resets a device and its account to the known default settings by clearing all information and settings set by previous users.</p>
+    /// <p>Resets a device and its account to the known default settings, by clearing all information and settings set by previous users.</p>
     fn start_device_sync(
         &self,
         input: StartDeviceSyncRequest,

@@ -45,6 +45,19 @@ pub struct AddTagsToResourceResponse {
     pub status: String,
 }
 
+/// <p>Indicates that an internal error occurred.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CloudHsmInternalException {}
+
+/// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CloudHsmServiceException {
+    /// <p>Additional information about the error.</p>
+    pub message: Option<String>,
+    /// <p>Indicates if the action can be retried.</p>
+    pub retryable: Option<bool>,
+}
+
 /// <p>Contains the inputs for the <a>CreateHapgRequest</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateHapgRequest {
@@ -384,6 +397,10 @@ pub struct GetConfigResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub config_type: Option<String>,
 }
+
+/// <p>Indicates that one or more of the request parameters are not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidRequestException {}
 
 /// <p>Contains the inputs for the <a>ListAvailableZones</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]

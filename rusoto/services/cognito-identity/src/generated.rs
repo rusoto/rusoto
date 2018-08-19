@@ -45,6 +45,13 @@ pub struct CognitoIdentityProvider {
     pub server_side_token_check: Option<bool>,
 }
 
+/// <p>Thrown if there are parallel requests to modify a resource.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ConcurrentModificationException {
+    /// <p>The message returned by a ConcurrentModificationException.</p>
+    pub message: Option<String>,
+}
+
 /// <p>Input to the CreateIdentityPool action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateIdentityPoolInput {
@@ -136,6 +143,20 @@ pub struct DescribeIdentityPoolInput {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
     #[serde(rename = "IdentityPoolId")]
     pub identity_pool_id: String,
+}
+
+/// <p>The provided developer user identifier is already registered with Cognito under a different identity ID.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeveloperUserAlreadyRegisteredException {
+    /// <p>This developer user identifier is already registered with Cognito.</p>
+    pub message: Option<String>,
+}
+
+/// <p>An exception thrown when a dependent service such as Facebook or Twitter is not responding</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ExternalServiceException {
+    /// <p>The message returned by an ExternalServiceException</p>
+    pub message: Option<String>,
 }
 
 /// <p>Input to the <code>GetCredentialsForIdentity</code> action.</p>
@@ -342,6 +363,34 @@ pub struct IdentityPoolShortDescription {
     pub identity_pool_name: Option<String>,
 }
 
+/// <p>Thrown when the service encounters an error during processing the request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalErrorException {
+    /// <p>The message returned by an InternalErrorException.</p>
+    pub message: Option<String>,
+}
+
+/// <p>Thrown if the identity pool has no role associated for the given auth type (auth/unauth) or if the AssumeRole fails.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidIdentityPoolConfigurationException {
+    /// <p>The message returned for an <code>InvalidIdentityPoolConfigurationException</code> </p>
+    pub message: Option<String>,
+}
+
+/// <p>Thrown for missing or bad input parameter(s).</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterException {
+    /// <p>The message returned by an InvalidParameterException.</p>
+    pub message: Option<String>,
+}
+
+/// <p>Thrown when the total number of user pools has exceeded a preset limit.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {
+    /// <p>The message returned by a LimitExceededException.</p>
+    pub message: Option<String>,
+}
+
 /// <p>Input to the ListIdentities action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListIdentitiesInput {
@@ -487,6 +536,27 @@ pub struct MergeDeveloperIdentitiesResponse {
     pub identity_id: Option<String>,
 }
 
+/// <p>Thrown when a user is not authorized to access the requested resource.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NotAuthorizedException {
+    /// <p>The message returned by a NotAuthorizedException</p>
+    pub message: Option<String>,
+}
+
+/// <p>Thrown when a user tries to use a login which is already linked to another account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceConflictException {
+    /// <p>The message returned by a ResourceConflictException.</p>
+    pub message: Option<String>,
+}
+
+/// <p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceNotFoundException {
+    /// <p>The message returned by a ResourceNotFoundException.</p>
+    pub message: Option<String>,
+}
+
 /// <p>A role mapping.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RoleMapping {
@@ -524,6 +594,13 @@ pub struct SetIdentityPoolRolesInput {
     /// <p>The map of roles associated with this pool. For a given role, the key will be either "authenticated" or "unauthenticated" and the value will be the Role ARN.</p>
     #[serde(rename = "Roles")]
     pub roles: ::std::collections::HashMap<String, String>,
+}
+
+/// <p>Thrown when a request is throttled.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyRequestsException {
+    /// <p>Message returned by a TooManyRequestsException</p>
+    pub message: Option<String>,
 }
 
 /// <p>Input to the <code>UnlinkDeveloperIdentity</code> action.</p>
