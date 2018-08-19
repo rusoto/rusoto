@@ -771,6 +771,12 @@ impl DecodedMessageTypeDeserializer {
         Ok(obj)
     }
 }
+/// <p>The web identity token that was passed is expired or is not valid. Get a new identity token from the identity provider and then retry the request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ExpiredTokenException {
+    pub message: Option<String>,
+}
+
 struct FederatedIdTypeDeserializer;
 impl FederatedIdTypeDeserializer {
     #[allow(unused_variables)]
@@ -1104,6 +1110,30 @@ impl GetSessionTokenResponseDeserializer {
         Ok(obj)
     }
 }
+/// <p>The request could not be fulfilled because the non-AWS identity provider (IDP) that was asked to verify the incoming identity token could not be reached. This is often a transient error caused by network conditions. Retry the request a limited number of times so that you don't exceed the request rate. If the error persists, the non-AWS identity provider might be down or not responding.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct IDPCommunicationErrorException {
+    pub message: Option<String>,
+}
+
+/// <p>The identity provider (IdP) reported that authentication failed. This might be because the claim is invalid.</p> <p>If this error is returned for the <code>AssumeRoleWithWebIdentity</code> operation, it can also mean that the claim has expired or has been explicitly revoked. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct IDPRejectedClaimException {
+    pub message: Option<String>,
+}
+
+/// <p>The error returned if the message passed to <code>DecodeAuthorizationMessage</code> was invalid. This can happen if the token contains invalid characters, such as linebreaks. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidAuthorizationMessageException {
+    pub message: Option<String>,
+}
+
+/// <p>The web identity token that was passed could not be validated by AWS. Get a new identity token from the identity provider and then retry the request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidIdentityTokenException {
+    pub message: Option<String>,
+}
+
 struct IssuerDeserializer;
 impl IssuerDeserializer {
     #[allow(unused_variables)]
@@ -1118,6 +1148,12 @@ impl IssuerDeserializer {
         Ok(obj)
     }
 }
+/// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MalformedPolicyDocumentException {
+    pub message: Option<String>,
+}
+
 struct NameQualifierDeserializer;
 impl NameQualifierDeserializer {
     #[allow(unused_variables)]
@@ -1146,6 +1182,18 @@ impl NonNegativeIntegerTypeDeserializer {
         Ok(obj)
     }
 }
+/// <p>The request was rejected because the policy document was too large. The error message describes how big the policy document is, in packed form, as a percentage of what the API allows.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PackedPolicyTooLargeException {
+    pub message: Option<String>,
+}
+
+/// <p>STS is not activated in the requested region for the account that is being asked to generate credentials. The account administrator must use the IAM console to activate STS in that region. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>IAM User Guide</i>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RegionDisabledException {
+    pub message: Option<String>,
+}
+
 struct SubjectDeserializer;
 impl SubjectDeserializer {
     #[allow(unused_variables)]

@@ -381,6 +381,13 @@ impl DashboardEntryDeserializer {
         Ok(obj)
     }
 }
+/// <p>Some part of the dashboard data is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DashboardInvalidInputError {
+    pub dashboard_validation_messages: Option<Vec<DashboardValidationMessage>>,
+    pub message: Option<String>,
+}
+
 struct DashboardNameDeserializer;
 impl DashboardNameDeserializer {
     #[allow(unused_variables)]
@@ -405,6 +412,12 @@ impl DashboardNamesSerializer {
             params.put(&key, &obj);
         }
     }
+}
+
+/// <p>The specified dashboard does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DashboardNotFoundError {
+    pub message: Option<String>,
 }
 
 /// <p>An error or warning for the operation.</p>
@@ -1829,6 +1842,41 @@ impl HistorySummaryDeserializer {
         Ok(obj)
     }
 }
+/// <p>Request processing has failed due to some unknown error, exception, or failure.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalServiceFault {
+    /// <p><p/></p>
+    pub message: Option<String>,
+}
+
+/// <p>Data was not syntactically valid JSON.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidFormatFault {
+    /// <p><p/></p>
+    pub message: Option<String>,
+}
+
+/// <p>The next token specified is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidNextToken {
+    /// <p><p/></p>
+    pub message: Option<String>,
+}
+
+/// <p>Parameters were used together that cannot be used together.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterCombinationException {
+    /// <p><p/></p>
+    pub message: Option<String>,
+}
+
+/// <p>The value of an input parameter is bad or out-of-range.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterValueException {
+    /// <p><p/></p>
+    pub message: Option<String>,
+}
+
 struct LastModifiedDeserializer;
 impl LastModifiedDeserializer {
     #[allow(unused_variables)]
@@ -1843,6 +1891,13 @@ impl LastModifiedDeserializer {
         Ok(obj)
     }
 }
+/// <p>The quota for alarms for this customer has already been reached.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededFault {
+    /// <p><p/></p>
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListDashboardsInput {
     /// <p>If you specify this parameter, only the dashboards with names starting with the specified string are listed. The maximum length is 255, and valid characters are A-Z, a-z, 0-9, ".", "-", and "_". </p>
@@ -2917,6 +2972,13 @@ impl MetricsDeserializer {
         Ok(obj)
     }
 }
+/// <p>An input parameter that is required is missing.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MissingRequiredParameterException {
+    /// <p><p/></p>
+    pub message: Option<String>,
+}
+
 struct NamespaceDeserializer;
 impl NamespaceDeserializer {
     #[allow(unused_variables)]
@@ -3289,6 +3351,13 @@ impl ResourceNameDeserializer {
         Ok(obj)
     }
 }
+/// <p>The named resource does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceNotFound {
+    /// <p><p/></p>
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SetAlarmStateInput {
     /// <p>The name for the alarm. This name must be unique within the AWS account. The maximum length is 255 characters.</p>

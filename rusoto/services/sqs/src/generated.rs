@@ -118,6 +118,14 @@ impl AttributeNameListSerializer {
     }
 }
 
+/// <p>Two or more batch entries in the request have the same <code>Id</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BatchEntryIdsNotDistinct {}
+
+/// <p>The length of all the messages put together is more than the limit.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BatchRequestTooLong {}
+
 /// <p>This is used in the responses of batch API to give a detailed description of the result of an action on each entry in the request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct BatchResultErrorEntry {
@@ -863,6 +871,10 @@ impl DeleteQueueRequestSerializer {
     }
 }
 
+/// <p>The batch request doesn't contain any entries.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EmptyBatchRequest {}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetQueueAttributesRequest {
@@ -1022,6 +1034,22 @@ impl GetQueueUrlResultDeserializer {
         Ok(obj)
     }
 }
+/// <p>The attribute referred to doesn't exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidAttributeName {}
+
+/// <p>The <code>Id</code> of a batch entry in a batch request doesn't abide by the specification.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidBatchEntryId {}
+
+/// <p>The receipt handle isn't valid for the current version.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidIdFormat {}
+
+/// <p>The message contains characters outside the allowed set.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidMessageContents {}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListDeadLetterSourceQueuesRequest {
@@ -1520,6 +1548,10 @@ impl MessageListDeserializer {
         Ok(obj)
     }
 }
+/// <p>The message referred to isn't in flight.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MessageNotInflight {}
+
 struct MessageSystemAttributeMapDeserializer;
 impl MessageSystemAttributeMapDeserializer {
     #[allow(unused_variables)]
@@ -1556,6 +1588,14 @@ impl MessageSystemAttributeNameDeserializer {
         Ok(obj)
     }
 }
+/// <p>The action that you requested would violate a limit. For example, <code>ReceiveMessage</code> returns this error if the maximum number of inflight messages is reached. <code> <a>AddPermission</a> </code> returns this error if the maximum number of permissions for the queue is reached.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct OverLimit {}
+
+/// <p>Indicates that the specified queue previously received a <code>PurgeQueue</code> request within the last 60 seconds (the time it can take to delete the messages in the queue).</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PurgeQueueInProgress {}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PurgeQueueRequest {
@@ -1630,6 +1670,18 @@ impl QueueAttributeNameDeserializer {
         Ok(obj)
     }
 }
+/// <p>You must wait 60 seconds after deleting a queue before you can create another one with the same name.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct QueueDeletedRecently {}
+
+/// <p>The queue referred to doesn't exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct QueueDoesNotExist {}
+
+/// <p>A queue already exists with this name. Amazon SQS returns this error only if the request includes attributes whose values differ from those of the existing queue.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct QueueNameExists {}
+
 struct QueueUrlListDeserializer;
 impl QueueUrlListDeserializer {
     #[allow(unused_variables)]
@@ -1655,6 +1707,10 @@ impl QueueUrlListDeserializer {
         Ok(obj)
     }
 }
+/// <p>The receipt handle provided isn't valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ReceiptHandleIsInvalid {}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReceiveMessageRequest {
@@ -2394,6 +2450,14 @@ impl TagValueDeserializer {
         Ok(obj)
     }
 }
+/// <p>The batch request contains more entries than permissible.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyEntriesInBatchRequest {}
+
+/// <p>Error code 400. Unsupported operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UnsupportedOperation {}
+
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UntagQueueRequest {
     /// <p>The URL of the queue.</p>

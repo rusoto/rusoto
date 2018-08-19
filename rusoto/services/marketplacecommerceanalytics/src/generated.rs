@@ -65,6 +65,13 @@ pub struct GenerateDataSetResult {
     pub data_set_request_id: Option<String>,
 }
 
+/// <p>This exception is thrown when an internal service error occurs.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MarketplaceCommerceAnalyticsException {
+    /// <p>This message describes details of the error.</p>
+    pub message: Option<String>,
+}
+
 /// <p>Container for the parameters to the StartSupportDataExport operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartSupportDataExportRequest {

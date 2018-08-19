@@ -341,6 +341,13 @@ pub struct DescribeRepositoriesResponse {
     pub repositories: Option<Vec<Repository>>,
 }
 
+/// <p>The specified layer upload does not contain any layer parts.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EmptyUploadException {
+    /// <p>The error message associated with the exception.</p>
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetAuthorizationTokenRequest {
     /// <p>A list of AWS account IDs that are associated with the registries for which to get authorization tokens. If you do not specify a registry, the default registry is assumed.</p>
@@ -521,6 +528,13 @@ pub struct Image {
     pub repository_name: Option<String>,
 }
 
+/// <p>The specified image has already been pushed, and there were no changes to the manifest or image tag after the last push.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ImageAlreadyExistsException {
+    /// <p>The error message associated with the exception.</p>
+    pub message: Option<String>,
+}
+
 /// <p>An object that describes an image returned by a <a>DescribeImages</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ImageDetail {
@@ -580,6 +594,12 @@ pub struct ImageIdentifier {
     pub image_tag: Option<String>,
 }
 
+/// <p>The image requested does not exist in the specified repository.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ImageNotFoundException {
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct InitiateLayerUploadRequest {
     /// <p>The AWS account ID associated with the registry to which you intend to upload layers. If you do not specify a registry, the default registry is assumed.</p>
@@ -603,6 +623,35 @@ pub struct InitiateLayerUploadResponse {
     pub upload_id: Option<String>,
 }
 
+/// <p>The layer digest calculation performed by Amazon ECR upon receipt of the image layer does not match the digest specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidLayerException {
+    /// <p>The error message associated with the exception.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The layer part size is not valid, or the first byte specified is not consecutive to the last byte of a previous layer part upload.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidLayerPartException {
+    /// <p>The last valid byte received from the layer part upload that is associated with the exception.</p>
+    pub last_valid_byte_received: Option<i64>,
+    /// <p>The error message associated with the exception.</p>
+    pub message: Option<String>,
+    /// <p>The registry ID associated with the exception.</p>
+    pub registry_id: Option<String>,
+    /// <p>The repository name associated with the exception.</p>
+    pub repository_name: Option<String>,
+    /// <p>The upload ID associated with the exception.</p>
+    pub upload_id: Option<String>,
+}
+
+/// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterException {
+    /// <p>The error message associated with the exception.</p>
+    pub message: Option<String>,
+}
+
 /// <p>An object representing an Amazon ECR image layer.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Layer {
@@ -624,6 +673,13 @@ pub struct Layer {
     pub media_type: Option<String>,
 }
 
+/// <p>The image layer already exists in the associated repository.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LayerAlreadyExistsException {
+    /// <p>The error message associated with the exception.</p>
+    pub message: Option<String>,
+}
+
 /// <p>An object representing an Amazon ECR image layer failure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LayerFailure {
@@ -641,6 +697,33 @@ pub struct LayerFailure {
     pub layer_digest: Option<String>,
 }
 
+/// <p>The specified layer is not available because it is not associated with an image. Unassociated image layers may be cleaned up at any time.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LayerInaccessibleException {
+    /// <p>The error message associated with the exception.</p>
+    pub message: Option<String>,
+}
+
+/// <p>Layer parts must be at least 5 MiB in size.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LayerPartTooSmallException {
+    /// <p>The error message associated with the exception.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The specified layers could not be found, or the specified layer is not valid for this repository.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LayersNotFoundException {
+    /// <p>The error message associated with the exception.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The lifecycle policy could not be found, and no policy is set to the repository.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LifecyclePolicyNotFoundException {
+    pub message: Option<String>,
+}
+
 /// <p>The filter for the lifecycle policy preview.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct LifecyclePolicyPreviewFilter {
@@ -648,6 +731,18 @@ pub struct LifecyclePolicyPreviewFilter {
     #[serde(rename = "tagStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_status: Option<String>,
+}
+
+/// <p>The previous lifecycle policy preview request has not completed. Please try again later.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LifecyclePolicyPreviewInProgressException {
+    pub message: Option<String>,
+}
+
+/// <p>There is no dry run for this repository.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LifecyclePolicyPreviewNotFoundException {
+    pub message: Option<String>,
 }
 
 /// <p>The result of the lifecycle policy preview.</p>
@@ -691,6 +786,13 @@ pub struct LifecyclePolicyRuleAction {
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+}
+
+/// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon Elastic Container Registry User Guide.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {
+    /// <p>The error message associated with the exception.</p>
+    pub message: Option<String>,
 }
 
 /// <p>An object representing a filter on a <a>ListImages</a> operation.</p>
@@ -818,6 +920,41 @@ pub struct Repository {
     pub repository_uri: Option<String>,
 }
 
+/// <p>The specified repository already exists in the specified registry.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RepositoryAlreadyExistsException {
+    /// <p>The error message associated with the exception.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The specified repository contains images. To delete a repository that contains images, you must force the deletion with the <code>force</code> parameter.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RepositoryNotEmptyException {
+    /// <p>The error message associated with the exception.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RepositoryNotFoundException {
+    /// <p>The error message associated with the exception.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The specified repository and registry combination does not have an associated repository policy.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RepositoryPolicyNotFoundException {
+    /// <p>The error message associated with the exception.</p>
+    pub message: Option<String>,
+}
+
+/// <p>These errors are usually caused by a server-side issue.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ServerException {
+    /// <p>The error message associated with the exception.</p>
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SetRepositoryPolicyRequest {
     /// <p>If the policy you are attempting to set on a repository policy would prevent you from setting another policy in the future, you must force the <a>SetRepositoryPolicy</a> operation. This is intended to prevent accidental repository lock outs.</p>
@@ -933,6 +1070,13 @@ pub struct UploadLayerPartResponse {
     #[serde(rename = "uploadId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub upload_id: Option<String>,
+}
+
+/// <p>The upload could not be found, or the specified upload id is not valid for this repository.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UploadNotFoundException {
+    /// <p>The error message associated with the exception.</p>
+    pub message: Option<String>,
 }
 
 /// Errors returned by BatchCheckLayerAvailability

@@ -29,6 +29,13 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
+/// <p>An exception thrown when a bulk publish operation is requested less than 24 hours after a previous bulk publish operation completed successfully.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AlreadyStreamedException {
+    /// <p>The message associated with the AlreadyStreamedException exception.</p>
+    pub message: String,
+}
+
 /// <p>The input for the BulkPublish operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BulkPublishRequest {
@@ -61,6 +68,13 @@ pub struct CognitoStreams {
     #[serde(rename = "StreamingStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub streaming_status: Option<String>,
+}
+
+/// <p>Thrown if there are parallel requests to modify a resource.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ConcurrentModificationException {
+    /// <p>The message returned by a ConcurrentModicationException.</p>
+    pub message: String,
 }
 
 /// <p>A collection of data for an identity pool. An identity pool can have multiple datasets. A dataset is per identity and can be general or associated with a particular entity in an application (like a saved game). Datasets are automatically created if they don&#39;t exist. Data is synced by dataset, and a dataset can hold up to 1MB of key-value pairs.</p>
@@ -177,6 +191,13 @@ pub struct DescribeIdentityUsageResponse {
     #[serde(rename = "IdentityUsage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_usage: Option<IdentityUsage>,
+}
+
+/// <p>An exception thrown when there is an IN_PROGRESS bulk publish operation for the given identity pool.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DuplicateRequestException {
+    /// <p>The message associated with the DuplicateRequestException exception.</p>
+    pub message: String,
 }
 
 /// <p>The input for the GetBulkPublishDetails operation.</p>
@@ -298,6 +319,47 @@ pub struct IdentityUsage {
     #[serde(rename = "LastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
+}
+
+/// <p>Indicates an internal service error.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalErrorException {
+    /// <p>Message returned by InternalErrorException.</p>
+    pub message: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidConfigurationException {
+    /// <p>Message returned by InvalidConfigurationException.</p>
+    pub message: String,
+}
+
+/// <p>The AWS Lambda function returned invalid output or an exception.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidLambdaFunctionOutputException {
+    /// <p>A message returned when an InvalidLambdaFunctionOutputException occurs</p>
+    pub message: String,
+}
+
+/// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterException {
+    /// <p>Message returned by InvalidParameterException.</p>
+    pub message: String,
+}
+
+/// <p>AWS Lambda throttled your account, please contact AWS Support</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LambdaThrottledException {
+    /// <p>A message returned when an LambdaThrottledException is thrown</p>
+    pub message: String,
+}
+
+/// <p>Thrown when the limit on the number of objects or operations has been exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {
+    /// <p>Message returned by LimitExceededException.</p>
+    pub message: String,
 }
 
 /// <p>Request for a list of datasets for an identity.</p>
@@ -441,6 +503,13 @@ pub struct ListRecordsResponse {
     pub sync_session_token: Option<String>,
 }
 
+/// <p>Thrown when a user is not authorized to access the requested resource.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NotAuthorizedException {
+    /// <p>The message returned by a NotAuthorizedException.</p>
+    pub message: String,
+}
+
 /// <p>Configuration options to be applied to the identity pool.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PushSync {
@@ -531,6 +600,20 @@ pub struct RegisterDeviceResponse {
     pub device_id: Option<String>,
 }
 
+/// <p>Thrown if an update can&#39;t be applied because the resource was changed by another call and this would result in a conflict.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceConflictException {
+    /// <p>The message returned by a ResourceConflictException.</p>
+    pub message: String,
+}
+
+/// <p>Thrown if the resource doesn&#39;t exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceNotFoundException {
+    /// <p>Message returned by a ResourceNotFoundException.</p>
+    pub message: String,
+}
+
 /// <p>A request to configure Cognito Events</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SetCognitoEventsRequest {
@@ -595,6 +678,13 @@ pub struct SubscribeToDatasetRequest {
 /// <p>Response to a SubscribeToDataset request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SubscribeToDatasetResponse {}
+
+/// <p>Thrown if the request is throttled.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyRequestsException {
+    /// <p>Message returned by a TooManyRequestsException.</p>
+    pub message: String,
+}
 
 /// <p>A request to UnsubscribeFromDataset.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]

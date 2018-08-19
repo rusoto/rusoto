@@ -79,6 +79,10 @@ pub struct Cluster {
     #[serde(rename = "PreferredMaintenanceWindow")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
+    /// <p>The description of the server-side encryption status on the specified DAX cluster.</p>
+    #[serde(rename = "SSEDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sse_description: Option<SSEDescription>,
     /// <p>A list of security groups, and the status of each, for the nodes in the cluster.</p>
     #[serde(rename = "SecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -96,6 +100,18 @@ pub struct Cluster {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total_nodes: Option<i64>,
 }
+
+/// <p>You already have a DAX cluster with the given identifier.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ClusterAlreadyExistsFault {}
+
+/// <p>The requested cluster ID does not refer to an existing DAX cluster.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ClusterNotFoundFault {}
+
+/// <p>You have attempted to exceed the maximum number of DAX clusters for your AWS account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ClusterQuotaForCustomerExceededFault {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateClusterRequest {
@@ -131,6 +147,10 @@ pub struct CreateClusterRequest {
     /// <p><p>The number of nodes in the DAX cluster. A replication factor of 1 will create a single-node cluster, without any read replicas. For additional fault tolerance, you can create a multiple node cluster with one or more read replicas. To do this, set <i>ReplicationFactor</i> to 2 or more.</p> <note> <p>AWS recommends that you have at least two read replicas per cluster.</p> </note></p>
     #[serde(rename = "ReplicationFactor")]
     pub replication_factor: i64,
+    /// <p>Represents the settings used to enable server-side encryption on the cluster.</p>
+    #[serde(rename = "SSESpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sse_specification: Option<SSESpecification>,
     /// <p>A list of security group IDs to be assigned to each node in the DAX cluster. (Each of the security group ID is system-generated.)</p> <p>If this parameter is not specified, DAX assigns the default VPC security group to each node.</p>
     #[serde(rename = "SecurityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -504,6 +524,42 @@ pub struct IncreaseReplicationFactorResponse {
     pub cluster: Option<Cluster>,
 }
 
+/// <p>There are not enough system resources to create the cluster you requested (or to resize an already-existing cluster). </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InsufficientClusterCapacityFault {}
+
+/// <p>The Amazon Resource Name (ARN) supplied in the request is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidARNFault {}
+
+/// <p>The requested DAX cluster is not in the <i>available</i> state.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidClusterStateFault {}
+
+/// <p>Two or more incompatible parameters were specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterCombinationException {
+    pub message: Option<String>,
+}
+
+/// <p>One or more parameters in a parameter group are in an invalid state.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterGroupStateFault {}
+
+/// <p>The value for a parameter is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterValueException {
+    pub message: Option<String>,
+}
+
+/// <p>An invalid subnet identifier was specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidSubnet {}
+
+/// <p>The VPC network is in an invalid state.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidVPCNetworkStateFault {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTagsRequest {
     /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token.</p>
@@ -555,6 +611,18 @@ pub struct Node {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_group_status: Option<String>,
 }
+
+/// <p>None of the nodes in the cluster have the given node ID.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NodeNotFoundFault {}
+
+/// <p>You have attempted to exceed the maximum number of nodes for a DAX cluster.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NodeQuotaForClusterExceededFault {}
+
+/// <p>You have attempted to exceed the maximum number of nodes for your AWS account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NodeQuotaForCustomerExceededFault {}
 
 /// <p>Represents a parameter value that is applicable to a particular node type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -640,6 +708,18 @@ pub struct ParameterGroup {
     pub parameter_group_name: Option<String>,
 }
 
+/// <p>The specified parameter group already exists.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ParameterGroupAlreadyExistsFault {}
+
+/// <p>The specified parameter group does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ParameterGroupNotFoundFault {}
+
+/// <p>You have attempted to exceed the maximum number of parameter groups.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ParameterGroupQuotaExceededFault {}
+
 /// <p>The status of a parameter group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ParameterGroupStatus {
@@ -688,6 +768,23 @@ pub struct RebootNodeResponse {
     pub cluster: Option<Cluster>,
 }
 
+/// <p>The description of the server-side encryption status on the specified DAX cluster.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct SSEDescription {
+    /// <p><p>The current state of server-side encryption:</p> <ul> <li> <p> <code>ENABLING</code> - Server-side encryption is being enabled.</p> </li> <li> <p> <code>ENABLED</code> - Server-side encryption is enabled.</p> </li> <li> <p> <code>DISABLING</code> - Server-side encryption is being disabled.</p> </li> <li> <p> <code>DISABLED</code> - Server-side encryption is disabled.</p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Represents the settings used to enable server-side encryption.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct SSESpecification {
+    /// <p>Indicates whether server-side encryption is enabled (true) or disabled (false) on the cluster.</p>
+    #[serde(rename = "Enabled")]
+    pub enabled: bool,
+}
+
 /// <p>An individual VPC security group and its status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SecurityGroupMembership {
@@ -700,6 +797,9 @@ pub struct SecurityGroupMembership {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ServiceLinkedRoleNotFoundFault {}
 
 /// <p>Represents the subnet associated with a DAX cluster. This parameter refers to subnets defined in Amazon Virtual Private Cloud (Amazon VPC) and used with DAX.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -735,6 +835,30 @@ pub struct SubnetGroup {
     pub vpc_id: Option<String>,
 }
 
+/// <p>The specified subnet group already exists.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SubnetGroupAlreadyExistsFault {}
+
+/// <p>The specified subnet group is currently in use.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SubnetGroupInUseFault {}
+
+/// <p>The requested subnet group name does not refer to an existing subnet group.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SubnetGroupNotFoundFault {}
+
+/// <p>The request cannot be processed because it would exceed the allowed number of subnets in a subnet group.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SubnetGroupQuotaExceededFault {}
+
+/// <p>The requested subnet is being used by another subnet group.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SubnetInUse {}
+
+/// <p>The request cannot be processed because it would exceed the allowed number of subnets in a subnet group.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SubnetQuotaExceededFault {}
+
 /// <p>A description of a tag. Every tag is a key-value pair. You can add up to 50 tags to a single DAX cluster.</p> <p>AWS-assigned tag names and values are automatically assigned the <code>aws:</code> prefix, which the user cannot assign. AWS-assigned tag names do not count towards the tag limit of 50. User-assigned tag names have the prefix <code>user:</code>.</p> <p>You cannot backdate the application of a tag.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
@@ -747,6 +871,14 @@ pub struct Tag {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
+
+/// <p>The tag does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TagNotFoundFault {}
+
+/// <p>You have exceeded the maximum number of tags for this DAX cluster.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TagQuotaPerResourceExceeded {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TagResourceRequest {
@@ -889,6 +1021,8 @@ pub enum CreateClusterError {
     NodeQuotaForCustomerExceededFault(String),
     /// <p>The specified parameter group does not exist.</p>
     ParameterGroupNotFoundFault(String),
+
+    ServiceLinkedRoleNotFoundFault(String),
     /// <p>The requested subnet group name does not refer to an existing subnet group.</p>
     SubnetGroupNotFoundFault(String),
     /// <p>You have exceeded the maximum number of tags for this DAX cluster.</p>
@@ -960,6 +1094,11 @@ impl CreateClusterError {
                     "ParameterGroupNotFoundFault" => {
                         CreateClusterError::ParameterGroupNotFoundFault(String::from(error_message))
                     }
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        CreateClusterError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "SubnetGroupNotFoundFault" => {
                         CreateClusterError::SubnetGroupNotFoundFault(String::from(error_message))
                     }
@@ -1016,6 +1155,7 @@ impl Error for CreateClusterError {
             CreateClusterError::NodeQuotaForClusterExceededFault(ref cause) => cause,
             CreateClusterError::NodeQuotaForCustomerExceededFault(ref cause) => cause,
             CreateClusterError::ParameterGroupNotFoundFault(ref cause) => cause,
+            CreateClusterError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             CreateClusterError::SubnetGroupNotFoundFault(ref cause) => cause,
             CreateClusterError::TagQuotaPerResourceExceeded(ref cause) => cause,
             CreateClusterError::Validation(ref cause) => cause,
@@ -1038,6 +1178,8 @@ pub enum CreateParameterGroupError {
     ParameterGroupAlreadyExistsFault(String),
     /// <p>You have attempted to exceed the maximum number of parameter groups.</p>
     ParameterGroupQuotaExceededFault(String),
+
+    ServiceLinkedRoleNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1087,6 +1229,11 @@ impl CreateParameterGroupError {
                             error_message,
                         ))
                     }
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        CreateParameterGroupError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreateParameterGroupError::Validation(error_message.to_string())
                     }
@@ -1131,6 +1278,7 @@ impl Error for CreateParameterGroupError {
             CreateParameterGroupError::InvalidParameterValue(ref cause) => cause,
             CreateParameterGroupError::ParameterGroupAlreadyExistsFault(ref cause) => cause,
             CreateParameterGroupError::ParameterGroupQuotaExceededFault(ref cause) => cause,
+            CreateParameterGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             CreateParameterGroupError::Validation(ref cause) => cause,
             CreateParameterGroupError::Credentials(ref err) => err.description(),
             CreateParameterGroupError::HttpDispatch(ref dispatch_error) => {
@@ -1145,6 +1293,8 @@ impl Error for CreateParameterGroupError {
 pub enum CreateSubnetGroupError {
     /// <p>An invalid subnet identifier was specified.</p>
     InvalidSubnet(String),
+
+    ServiceLinkedRoleNotFoundFault(String),
     /// <p>The specified subnet group already exists.</p>
     SubnetGroupAlreadyExistsFault(String),
     /// <p>The request cannot be processed because it would exceed the allowed number of subnets in a subnet group.</p>
@@ -1177,6 +1327,11 @@ impl CreateSubnetGroupError {
                 match *error_type {
                     "InvalidSubnet" => {
                         CreateSubnetGroupError::InvalidSubnet(String::from(error_message))
+                    }
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        CreateSubnetGroupError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        ))
                     }
                     "SubnetGroupAlreadyExistsFault" => {
                         CreateSubnetGroupError::SubnetGroupAlreadyExistsFault(String::from(
@@ -1231,6 +1386,7 @@ impl Error for CreateSubnetGroupError {
     fn description(&self) -> &str {
         match *self {
             CreateSubnetGroupError::InvalidSubnet(ref cause) => cause,
+            CreateSubnetGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             CreateSubnetGroupError::SubnetGroupAlreadyExistsFault(ref cause) => cause,
             CreateSubnetGroupError::SubnetGroupQuotaExceededFault(ref cause) => cause,
             CreateSubnetGroupError::SubnetQuotaExceededFault(ref cause) => cause,
@@ -1256,6 +1412,8 @@ pub enum DecreaseReplicationFactorError {
     InvalidParameterValue(String),
     /// <p>None of the nodes in the cluster have the given node ID.</p>
     NodeNotFoundFault(String),
+
+    ServiceLinkedRoleNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1301,6 +1459,11 @@ impl DecreaseReplicationFactorError {
                     "NodeNotFoundFault" => DecreaseReplicationFactorError::NodeNotFoundFault(
                         String::from(error_message),
                     ),
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        DecreaseReplicationFactorError::ServiceLinkedRoleNotFoundFault(
+                            String::from(error_message),
+                        )
+                    }
                     "ValidationException" => {
                         DecreaseReplicationFactorError::Validation(error_message.to_string())
                     }
@@ -1345,6 +1508,7 @@ impl Error for DecreaseReplicationFactorError {
             DecreaseReplicationFactorError::InvalidParameterCombination(ref cause) => cause,
             DecreaseReplicationFactorError::InvalidParameterValue(ref cause) => cause,
             DecreaseReplicationFactorError::NodeNotFoundFault(ref cause) => cause,
+            DecreaseReplicationFactorError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             DecreaseReplicationFactorError::Validation(ref cause) => cause,
             DecreaseReplicationFactorError::Credentials(ref err) => err.description(),
             DecreaseReplicationFactorError::HttpDispatch(ref dispatch_error) => {
@@ -1365,6 +1529,8 @@ pub enum DeleteClusterError {
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
+
+    ServiceLinkedRoleNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1400,6 +1566,11 @@ impl DeleteClusterError {
                     }
                     "InvalidParameterValueException" => {
                         DeleteClusterError::InvalidParameterValue(String::from(error_message))
+                    }
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        DeleteClusterError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         DeleteClusterError::Validation(error_message.to_string())
@@ -1444,6 +1615,7 @@ impl Error for DeleteClusterError {
             DeleteClusterError::InvalidClusterStateFault(ref cause) => cause,
             DeleteClusterError::InvalidParameterCombination(ref cause) => cause,
             DeleteClusterError::InvalidParameterValue(ref cause) => cause,
+            DeleteClusterError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             DeleteClusterError::Validation(ref cause) => cause,
             DeleteClusterError::Credentials(ref err) => err.description(),
             DeleteClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -1462,6 +1634,8 @@ pub enum DeleteParameterGroupError {
     InvalidParameterValue(String),
     /// <p>The specified parameter group does not exist.</p>
     ParameterGroupNotFoundFault(String),
+
+    ServiceLinkedRoleNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1503,6 +1677,11 @@ impl DeleteParameterGroupError {
                     }
                     "ParameterGroupNotFoundFault" => {
                         DeleteParameterGroupError::ParameterGroupNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        DeleteParameterGroupError::ServiceLinkedRoleNotFoundFault(String::from(
                             error_message,
                         ))
                     }
@@ -1549,6 +1728,7 @@ impl Error for DeleteParameterGroupError {
             DeleteParameterGroupError::InvalidParameterGroupStateFault(ref cause) => cause,
             DeleteParameterGroupError::InvalidParameterValue(ref cause) => cause,
             DeleteParameterGroupError::ParameterGroupNotFoundFault(ref cause) => cause,
+            DeleteParameterGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             DeleteParameterGroupError::Validation(ref cause) => cause,
             DeleteParameterGroupError::Credentials(ref err) => err.description(),
             DeleteParameterGroupError::HttpDispatch(ref dispatch_error) => {
@@ -1561,6 +1741,7 @@ impl Error for DeleteParameterGroupError {
 /// Errors returned by DeleteSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteSubnetGroupError {
+    ServiceLinkedRoleNotFoundFault(String),
     /// <p>The specified subnet group is currently in use.</p>
     SubnetGroupInUseFault(String),
     /// <p>The requested subnet group name does not refer to an existing subnet group.</p>
@@ -1589,6 +1770,11 @@ impl DeleteSubnetGroupError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        DeleteSubnetGroupError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "SubnetGroupInUseFault" => {
                         DeleteSubnetGroupError::SubnetGroupInUseFault(String::from(error_message))
                     }
@@ -1634,6 +1820,7 @@ impl fmt::Display for DeleteSubnetGroupError {
 impl Error for DeleteSubnetGroupError {
     fn description(&self) -> &str {
         match *self {
+            DeleteSubnetGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             DeleteSubnetGroupError::SubnetGroupInUseFault(ref cause) => cause,
             DeleteSubnetGroupError::SubnetGroupNotFoundFault(ref cause) => cause,
             DeleteSubnetGroupError::Validation(ref cause) => cause,
@@ -1654,6 +1841,8 @@ pub enum DescribeClustersError {
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
+
+    ServiceLinkedRoleNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1688,6 +1877,11 @@ impl DescribeClustersError {
                     }
                     "InvalidParameterValueException" => {
                         DescribeClustersError::InvalidParameterValue(String::from(error_message))
+                    }
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        DescribeClustersError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         DescribeClustersError::Validation(error_message.to_string())
@@ -1731,6 +1925,7 @@ impl Error for DescribeClustersError {
             DescribeClustersError::ClusterNotFoundFault(ref cause) => cause,
             DescribeClustersError::InvalidParameterCombination(ref cause) => cause,
             DescribeClustersError::InvalidParameterValue(ref cause) => cause,
+            DescribeClustersError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             DescribeClustersError::Validation(ref cause) => cause,
             DescribeClustersError::Credentials(ref err) => err.description(),
             DescribeClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -1745,6 +1940,8 @@ pub enum DescribeDefaultParametersError {
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
+
+    ServiceLinkedRoleNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1778,6 +1975,11 @@ impl DescribeDefaultParametersError {
                         DescribeDefaultParametersError::InvalidParameterValue(String::from(
                             error_message,
                         ))
+                    }
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        DescribeDefaultParametersError::ServiceLinkedRoleNotFoundFault(
+                            String::from(error_message),
+                        )
                     }
                     "ValidationException" => {
                         DescribeDefaultParametersError::Validation(error_message.to_string())
@@ -1820,6 +2022,7 @@ impl Error for DescribeDefaultParametersError {
         match *self {
             DescribeDefaultParametersError::InvalidParameterCombination(ref cause) => cause,
             DescribeDefaultParametersError::InvalidParameterValue(ref cause) => cause,
+            DescribeDefaultParametersError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             DescribeDefaultParametersError::Validation(ref cause) => cause,
             DescribeDefaultParametersError::Credentials(ref err) => err.description(),
             DescribeDefaultParametersError::HttpDispatch(ref dispatch_error) => {
@@ -1836,6 +2039,8 @@ pub enum DescribeEventsError {
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
+
+    ServiceLinkedRoleNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1867,6 +2072,11 @@ impl DescribeEventsError {
                     }
                     "InvalidParameterValueException" => {
                         DescribeEventsError::InvalidParameterValue(String::from(error_message))
+                    }
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        DescribeEventsError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         DescribeEventsError::Validation(error_message.to_string())
@@ -1909,6 +2119,7 @@ impl Error for DescribeEventsError {
         match *self {
             DescribeEventsError::InvalidParameterCombination(ref cause) => cause,
             DescribeEventsError::InvalidParameterValue(ref cause) => cause,
+            DescribeEventsError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             DescribeEventsError::Validation(ref cause) => cause,
             DescribeEventsError::Credentials(ref err) => err.description(),
             DescribeEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -1925,6 +2136,8 @@ pub enum DescribeParameterGroupsError {
     InvalidParameterValue(String),
     /// <p>The specified parameter group does not exist.</p>
     ParameterGroupNotFoundFault(String),
+
+    ServiceLinkedRoleNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1961,6 +2174,11 @@ impl DescribeParameterGroupsError {
                     }
                     "ParameterGroupNotFoundFault" => {
                         DescribeParameterGroupsError::ParameterGroupNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        DescribeParameterGroupsError::ServiceLinkedRoleNotFoundFault(String::from(
                             error_message,
                         ))
                     }
@@ -2006,6 +2224,7 @@ impl Error for DescribeParameterGroupsError {
             DescribeParameterGroupsError::InvalidParameterCombination(ref cause) => cause,
             DescribeParameterGroupsError::InvalidParameterValue(ref cause) => cause,
             DescribeParameterGroupsError::ParameterGroupNotFoundFault(ref cause) => cause,
+            DescribeParameterGroupsError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             DescribeParameterGroupsError::Validation(ref cause) => cause,
             DescribeParameterGroupsError::Credentials(ref err) => err.description(),
             DescribeParameterGroupsError::HttpDispatch(ref dispatch_error) => {
@@ -2024,6 +2243,8 @@ pub enum DescribeParametersError {
     InvalidParameterValue(String),
     /// <p>The specified parameter group does not exist.</p>
     ParameterGroupNotFoundFault(String),
+
+    ServiceLinkedRoleNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2058,6 +2279,11 @@ impl DescribeParametersError {
                     }
                     "ParameterGroupNotFoundFault" => {
                         DescribeParametersError::ParameterGroupNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        DescribeParametersError::ServiceLinkedRoleNotFoundFault(String::from(
                             error_message,
                         ))
                     }
@@ -2103,6 +2329,7 @@ impl Error for DescribeParametersError {
             DescribeParametersError::InvalidParameterCombination(ref cause) => cause,
             DescribeParametersError::InvalidParameterValue(ref cause) => cause,
             DescribeParametersError::ParameterGroupNotFoundFault(ref cause) => cause,
+            DescribeParametersError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             DescribeParametersError::Validation(ref cause) => cause,
             DescribeParametersError::Credentials(ref err) => err.description(),
             DescribeParametersError::HttpDispatch(ref dispatch_error) => {
@@ -2115,6 +2342,7 @@ impl Error for DescribeParametersError {
 /// Errors returned by DescribeSubnetGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeSubnetGroupsError {
+    ServiceLinkedRoleNotFoundFault(String),
     /// <p>The requested subnet group name does not refer to an existing subnet group.</p>
     SubnetGroupNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
@@ -2141,6 +2369,11 @@ impl DescribeSubnetGroupsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        DescribeSubnetGroupsError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
                     "SubnetGroupNotFoundFault" => {
                         DescribeSubnetGroupsError::SubnetGroupNotFoundFault(String::from(
                             error_message,
@@ -2185,6 +2418,7 @@ impl fmt::Display for DescribeSubnetGroupsError {
 impl Error for DescribeSubnetGroupsError {
     fn description(&self) -> &str {
         match *self {
+            DescribeSubnetGroupsError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             DescribeSubnetGroupsError::SubnetGroupNotFoundFault(ref cause) => cause,
             DescribeSubnetGroupsError::Validation(ref cause) => cause,
             DescribeSubnetGroupsError::Credentials(ref err) => err.description(),
@@ -2214,6 +2448,8 @@ pub enum IncreaseReplicationFactorError {
     NodeQuotaForClusterExceededFault(String),
     /// <p>You have attempted to exceed the maximum number of nodes for your AWS account.</p>
     NodeQuotaForCustomerExceededFault(String),
+
+    ServiceLinkedRoleNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2276,6 +2512,11 @@ impl IncreaseReplicationFactorError {
                             String::from(error_message),
                         )
                     }
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        IncreaseReplicationFactorError::ServiceLinkedRoleNotFoundFault(
+                            String::from(error_message),
+                        )
+                    }
                     "ValidationException" => {
                         IncreaseReplicationFactorError::Validation(error_message.to_string())
                     }
@@ -2323,6 +2564,7 @@ impl Error for IncreaseReplicationFactorError {
             IncreaseReplicationFactorError::InvalidVPCNetworkStateFault(ref cause) => cause,
             IncreaseReplicationFactorError::NodeQuotaForClusterExceededFault(ref cause) => cause,
             IncreaseReplicationFactorError::NodeQuotaForCustomerExceededFault(ref cause) => cause,
+            IncreaseReplicationFactorError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             IncreaseReplicationFactorError::Validation(ref cause) => cause,
             IncreaseReplicationFactorError::Credentials(ref err) => err.description(),
             IncreaseReplicationFactorError::HttpDispatch(ref dispatch_error) => {
@@ -2345,6 +2587,8 @@ pub enum ListTagsError {
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
+
+    ServiceLinkedRoleNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2383,6 +2627,9 @@ impl ListTagsError {
                     }
                     "InvalidParameterValueException" => {
                         ListTagsError::InvalidParameterValue(String::from(error_message))
+                    }
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        ListTagsError::ServiceLinkedRoleNotFoundFault(String::from(error_message))
                     }
                     "ValidationException" => ListTagsError::Validation(error_message.to_string()),
                     _ => ListTagsError::Unknown(String::from(body)),
@@ -2426,6 +2673,7 @@ impl Error for ListTagsError {
             ListTagsError::InvalidClusterStateFault(ref cause) => cause,
             ListTagsError::InvalidParameterCombination(ref cause) => cause,
             ListTagsError::InvalidParameterValue(ref cause) => cause,
+            ListTagsError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             ListTagsError::Validation(ref cause) => cause,
             ListTagsError::Credentials(ref err) => err.description(),
             ListTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -2446,6 +2694,8 @@ pub enum RebootNodeError {
     InvalidParameterValue(String),
     /// <p>None of the nodes in the cluster have the given node ID.</p>
     NodeNotFoundFault(String),
+
+    ServiceLinkedRoleNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2484,6 +2734,9 @@ impl RebootNodeError {
                     }
                     "NodeNotFoundFault" => {
                         RebootNodeError::NodeNotFoundFault(String::from(error_message))
+                    }
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        RebootNodeError::ServiceLinkedRoleNotFoundFault(String::from(error_message))
                     }
                     "ValidationException" => RebootNodeError::Validation(error_message.to_string()),
                     _ => RebootNodeError::Unknown(String::from(body)),
@@ -2527,6 +2780,7 @@ impl Error for RebootNodeError {
             RebootNodeError::InvalidParameterCombination(ref cause) => cause,
             RebootNodeError::InvalidParameterValue(ref cause) => cause,
             RebootNodeError::NodeNotFoundFault(ref cause) => cause,
+            RebootNodeError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             RebootNodeError::Validation(ref cause) => cause,
             RebootNodeError::Credentials(ref err) => err.description(),
             RebootNodeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -2547,6 +2801,8 @@ pub enum TagResourceError {
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
+
+    ServiceLinkedRoleNotFoundFault(String),
     /// <p>You have exceeded the maximum number of tags for this DAX cluster.</p>
     TagQuotaPerResourceExceeded(String),
     /// An error occurred dispatching the HTTP request
@@ -2587,6 +2843,11 @@ impl TagResourceError {
                     }
                     "InvalidParameterValueException" => {
                         TagResourceError::InvalidParameterValue(String::from(error_message))
+                    }
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        TagResourceError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        ))
                     }
                     "TagQuotaPerResourceExceeded" => {
                         TagResourceError::TagQuotaPerResourceExceeded(String::from(error_message))
@@ -2635,6 +2896,7 @@ impl Error for TagResourceError {
             TagResourceError::InvalidClusterStateFault(ref cause) => cause,
             TagResourceError::InvalidParameterCombination(ref cause) => cause,
             TagResourceError::InvalidParameterValue(ref cause) => cause,
+            TagResourceError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             TagResourceError::TagQuotaPerResourceExceeded(ref cause) => cause,
             TagResourceError::Validation(ref cause) => cause,
             TagResourceError::Credentials(ref err) => err.description(),
@@ -2656,6 +2918,8 @@ pub enum UntagResourceError {
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
+
+    ServiceLinkedRoleNotFoundFault(String),
     /// <p>The tag does not exist.</p>
     TagNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
@@ -2696,6 +2960,11 @@ impl UntagResourceError {
                     }
                     "InvalidParameterValueException" => {
                         UntagResourceError::InvalidParameterValue(String::from(error_message))
+                    }
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        UntagResourceError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        ))
                     }
                     "TagNotFoundFault" => {
                         UntagResourceError::TagNotFoundFault(String::from(error_message))
@@ -2744,6 +3013,7 @@ impl Error for UntagResourceError {
             UntagResourceError::InvalidClusterStateFault(ref cause) => cause,
             UntagResourceError::InvalidParameterCombination(ref cause) => cause,
             UntagResourceError::InvalidParameterValue(ref cause) => cause,
+            UntagResourceError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             UntagResourceError::TagNotFoundFault(ref cause) => cause,
             UntagResourceError::Validation(ref cause) => cause,
             UntagResourceError::Credentials(ref err) => err.description(),
@@ -2767,6 +3037,8 @@ pub enum UpdateClusterError {
     InvalidParameterValue(String),
     /// <p>The specified parameter group does not exist.</p>
     ParameterGroupNotFoundFault(String),
+
+    ServiceLinkedRoleNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2810,6 +3082,11 @@ impl UpdateClusterError {
                     }
                     "ParameterGroupNotFoundFault" => {
                         UpdateClusterError::ParameterGroupNotFoundFault(String::from(error_message))
+                    }
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        UpdateClusterError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         UpdateClusterError::Validation(error_message.to_string())
@@ -2856,6 +3133,7 @@ impl Error for UpdateClusterError {
             UpdateClusterError::InvalidParameterGroupStateFault(ref cause) => cause,
             UpdateClusterError::InvalidParameterValue(ref cause) => cause,
             UpdateClusterError::ParameterGroupNotFoundFault(ref cause) => cause,
+            UpdateClusterError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             UpdateClusterError::Validation(ref cause) => cause,
             UpdateClusterError::Credentials(ref err) => err.description(),
             UpdateClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -2874,6 +3152,8 @@ pub enum UpdateParameterGroupError {
     InvalidParameterValue(String),
     /// <p>The specified parameter group does not exist.</p>
     ParameterGroupNotFoundFault(String),
+
+    ServiceLinkedRoleNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2915,6 +3195,11 @@ impl UpdateParameterGroupError {
                     }
                     "ParameterGroupNotFoundFault" => {
                         UpdateParameterGroupError::ParameterGroupNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        UpdateParameterGroupError::ServiceLinkedRoleNotFoundFault(String::from(
                             error_message,
                         ))
                     }
@@ -2961,6 +3246,7 @@ impl Error for UpdateParameterGroupError {
             UpdateParameterGroupError::InvalidParameterGroupStateFault(ref cause) => cause,
             UpdateParameterGroupError::InvalidParameterValue(ref cause) => cause,
             UpdateParameterGroupError::ParameterGroupNotFoundFault(ref cause) => cause,
+            UpdateParameterGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             UpdateParameterGroupError::Validation(ref cause) => cause,
             UpdateParameterGroupError::Credentials(ref err) => err.description(),
             UpdateParameterGroupError::HttpDispatch(ref dispatch_error) => {
@@ -2975,6 +3261,8 @@ impl Error for UpdateParameterGroupError {
 pub enum UpdateSubnetGroupError {
     /// <p>An invalid subnet identifier was specified.</p>
     InvalidSubnet(String),
+
+    ServiceLinkedRoleNotFoundFault(String),
     /// <p>The requested subnet group name does not refer to an existing subnet group.</p>
     SubnetGroupNotFoundFault(String),
     /// <p>The requested subnet is being used by another subnet group.</p>
@@ -3007,6 +3295,11 @@ impl UpdateSubnetGroupError {
                 match *error_type {
                     "InvalidSubnet" => {
                         UpdateSubnetGroupError::InvalidSubnet(String::from(error_message))
+                    }
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        UpdateSubnetGroupError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        ))
                     }
                     "SubnetGroupNotFoundFault" => UpdateSubnetGroupError::SubnetGroupNotFoundFault(
                         String::from(error_message),
@@ -3057,6 +3350,7 @@ impl Error for UpdateSubnetGroupError {
     fn description(&self) -> &str {
         match *self {
             UpdateSubnetGroupError::InvalidSubnet(ref cause) => cause,
+            UpdateSubnetGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             UpdateSubnetGroupError::SubnetGroupNotFoundFault(ref cause) => cause,
             UpdateSubnetGroupError::SubnetInUse(ref cause) => cause,
             UpdateSubnetGroupError::SubnetQuotaExceededFault(ref cause) => cause,

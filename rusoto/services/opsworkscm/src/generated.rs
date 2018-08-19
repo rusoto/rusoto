@@ -429,6 +429,41 @@ pub struct EngineAttribute {
     pub value: Option<String>,
 }
 
+/// <p>This occurs when the provided nextToken is not valid. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidNextTokenException {
+    /// <p>Error or informational message that can contain more detail about a nextToken failure. </p>
+    pub message: Option<String>,
+}
+
+/// <p>The resource is in a state that does not allow you to perform a specified action. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidStateException {
+    /// <p>Error or informational message that provides more detail if a resource is in a state that is not valid for performing a specified action. </p>
+    pub message: Option<String>,
+}
+
+/// <p>The limit of servers or backups has been reached. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {
+    /// <p>Error or informational message that the maximum allowed number of servers or backups has been exceeded. </p>
+    pub message: Option<String>,
+}
+
+/// <p>The requested resource cannot be created because it already exists. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceAlreadyExistsException {
+    /// <p>Error or informational message in response to a CreateServer request that a resource cannot be created because it already exists. </p>
+    pub message: Option<String>,
+}
+
+/// <p>The requested resource does not exist, or access was denied. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceNotFoundException {
+    /// <p>Error or informational message that can contain more detail about problems locating or accessing a resource. </p>
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RestoreServerRequest {
     /// <p> The ID of the backup that you want to use to restore a server. </p>
@@ -636,6 +671,13 @@ pub struct UpdateServerResponse {
     #[serde(rename = "Server")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server: Option<Server>,
+}
+
+/// <p>One or more of the provided request parameters are not valid. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ValidationException {
+    /// <p>Error or informational message that can contain more detail about a validation failure. </p>
+    pub message: Option<String>,
 }
 
 /// Errors returned by AssociateNode

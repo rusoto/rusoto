@@ -65,6 +65,18 @@ pub struct AlarmConfiguration {
     pub ignore_poll_alarm_failure: Option<bool>,
 }
 
+/// <p>The maximum number of alarms for a deployment group (10) was exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AlarmsLimitExceededException {}
+
+/// <p>An application with the specified name already exists with the applicable IAM user or AWS account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ApplicationAlreadyExistsException {}
+
+/// <p>The application does not exist with the applicable IAM user or AWS account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ApplicationDoesNotExistException {}
+
 /// <p>Information about an application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ApplicationInfo {
@@ -93,6 +105,14 @@ pub struct ApplicationInfo {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub linked_to_git_hub: Option<bool>,
 }
+
+/// <p>More applications were attempted to be created than are allowed.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ApplicationLimitExceededException {}
+
+/// <p>The minimum number of required application names was not specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ApplicationNameRequiredException {}
 
 /// <p>Information about a configuration for automatically rolling back to a previous version of an application revision when a deployment doesn't complete successfully.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -247,6 +267,10 @@ pub struct BatchGetOnPremisesInstancesOutput {
     pub instance_infos: Option<Vec<InstanceInfo>>,
 }
 
+/// <p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BatchLimitExceededException {}
+
 /// <p>Information about blue/green deployment options for a deployment group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BlueGreenDeploymentConfiguration {
@@ -271,11 +295,15 @@ pub struct BlueInstanceTerminationOption {
     #[serde(rename = "action")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<String>,
-    /// <p>The number of minutes to wait after a successful blue/green deployment before terminating instances from the original environment.</p>
+    /// <p>The number of minutes to wait after a successful blue/green deployment before terminating instances from the original environment. The maximum setting is 2880 minutes (2 days).</p>
     #[serde(rename = "terminationWaitTimeInMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub termination_wait_time_in_minutes: Option<i64>,
 }
+
+/// <p>A bucket name is required, but was not provided.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BucketNameFilterRequiredException {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ContinueDeploymentInput {
@@ -513,6 +541,22 @@ pub struct DeleteGitHubAccountTokenOutput {
     pub token_name: Option<String>,
 }
 
+/// <p>The deployment is already complete.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeploymentAlreadyCompletedException {}
+
+/// <p>A deployment configuration with the specified name already exists with the applicable IAM user or AWS account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeploymentConfigAlreadyExistsException {}
+
+/// <p>The deployment configuration does not exist with the applicable IAM user or AWS account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeploymentConfigDoesNotExistException {}
+
+/// <p>The deployment configuration is still in use.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeploymentConfigInUseException {}
+
 /// <p>Information about a deployment configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeploymentConfigInfo {
@@ -541,6 +585,26 @@ pub struct DeploymentConfigInfo {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub traffic_routing_config: Option<TrafficRoutingConfig>,
 }
+
+/// <p>The deployment configurations limit was exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeploymentConfigLimitExceededException {}
+
+/// <p>The deployment configuration name was not specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeploymentConfigNameRequiredException {}
+
+/// <p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeploymentDoesNotExistException {}
+
+/// <p>A deployment group with the specified name already exists with the applicable IAM user or AWS account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeploymentGroupAlreadyExistsException {}
+
+/// <p>The named deployment group does not exist with the applicable IAM user or AWS account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeploymentGroupDoesNotExistException {}
 
 /// <p>Information about a deployment group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -626,6 +690,18 @@ pub struct DeploymentGroupInfo {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger_configurations: Option<Vec<TriggerConfig>>,
 }
+
+/// <p> The deployment groups limit was exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeploymentGroupLimitExceededException {}
+
+/// <p>The deployment group name was not specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeploymentGroupNameRequiredException {}
+
+/// <p>At least one deployment ID must be specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeploymentIdRequiredException {}
 
 /// <p>Information about a deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -740,6 +816,18 @@ pub struct DeploymentInfo {
     pub update_outdated_instances_only: Option<bool>,
 }
 
+/// <p>The deployment does not have a status of Ready and can't continue yet.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeploymentIsNotInReadyStateException {}
+
+/// <p>The number of allowed deployments was exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeploymentLimitExceededException {}
+
+/// <p>The specified deployment has not started.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeploymentNotStartedException {}
+
 /// <p>Information about the deployment status of the instances in the deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeploymentOverview {
@@ -772,7 +860,7 @@ pub struct DeploymentOverview {
 /// <p>Information about how traffic is rerouted to instances in a replacement environment in a blue/green deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeploymentReadyOption {
-    /// <p><p>Information about when to reroute traffic from an original environment to a replacement environment in a blue/green deployment.</p> <ul> <li> <p>CONTINUE<em>DEPLOYMENT: Register new instances with the load balancer immediately after the new application revision is installed on the instances in the replacement environment.</p> </li> <li> <p>STOP</em>DEPLOYMENT: Do not register new instances with load balancer unless traffic is rerouted manually. If traffic is not rerouted manually before the end of the specified wait period, the deployment status is changed to Stopped.</p> </li> </ul></p>
+    /// <p><p>Information about when to reroute traffic from an original environment to a replacement environment in a blue/green deployment.</p> <ul> <li> <p>CONTINUE<em>DEPLOYMENT: Register new instances with the load balancer immediately after the new application revision is installed on the instances in the replacement environment.</p> </li> <li> <p>STOP</em>DEPLOYMENT: Do not register new instances with a load balancer unless traffic rerouting is started using <a>ContinueDeployment</a>. If traffic rerouting is not started before the end of the specified wait period, the deployment status is changed to Stopped.</p> </li> </ul></p>
     #[serde(rename = "actionOnTimeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_on_timeout: Option<String>,
@@ -802,6 +890,10 @@ pub struct DeregisterOnPremisesInstanceInput {
     #[serde(rename = "instanceName")]
     pub instance_name: String,
 }
+
+/// <p>The description is too long.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescriptionTooLongException {}
 
 /// <p>Diagnostic information about executable scripts that are part of a deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1033,6 +1125,14 @@ pub struct GetOnPremisesInstanceOutput {
     pub instance_info: Option<InstanceInfo>,
 }
 
+/// <p>No GitHub account connection exists with the named specified in the call.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GitHubAccountTokenDoesNotExistException {}
+
+/// <p>The call is missing a required GitHub account connection name.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GitHubAccountTokenNameRequiredException {}
+
 /// <p>Information about the location of application artifacts stored in GitHub.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GitHubLocation {
@@ -1054,6 +1154,30 @@ pub struct GreenFleetProvisioningOption {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<String>,
 }
+
+/// <p>No IAM ARN was included in the request. You must use an IAM session ARN or IAM user ARN in the request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct IamArnRequiredException {}
+
+/// <p>The request included an IAM session ARN that has already been used to register a different instance.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct IamSessionArnAlreadyRegisteredException {}
+
+/// <p>The specified IAM user ARN is already registered with an on-premises instance.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct IamUserArnAlreadyRegisteredException {}
+
+/// <p>An IAM user ARN was not specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct IamUserArnRequiredException {}
+
+/// <p>The specified instance does not exist in the deployment group.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InstanceDoesNotExistException {}
+
+/// <p>The instance ID was not specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InstanceIdRequiredException {}
 
 /// <p>Information about an on-premises instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1088,6 +1212,22 @@ pub struct InstanceInfo {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// <p>The maximum number of allowed on-premises instances in a single call was exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InstanceLimitExceededException {}
+
+/// <p>The specified on-premises instance name is already registered.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InstanceNameAlreadyRegisteredException {}
+
+/// <p>An on-premises instance name was not specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InstanceNameRequiredException {}
+
+/// <p>The specified on-premises instance is not registered.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InstanceNotRegisteredException {}
+
 /// <p>Information about an instance in a deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InstanceSummary {
@@ -1116,6 +1256,194 @@ pub struct InstanceSummary {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
+
+/// <p><p>The format of the alarm configuration is invalid. Possible causes include:</p> <ul> <li> <p>The alarm list is null.</p> </li> <li> <p>The alarm object is null.</p> </li> <li> <p>The alarm name is empty or null or exceeds the 255 character limit.</p> </li> <li> <p>Two alarms with the same name have been specified.</p> </li> <li> <p>The alarm configuration is enabled but the alarm list is empty.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidAlarmConfigException {}
+
+/// <p>The application name was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidApplicationNameException {}
+
+/// <p>The automatic rollback configuration was specified in an invalid format. For example, automatic rollback is enabled but an invalid triggering event type or no event types were listed.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidAutoRollbackConfigException {}
+
+/// <p>The Auto Scaling group was specified in an invalid format or does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidAutoScalingGroupException {}
+
+/// <p>The configuration for the blue/green deployment group was provided in an invalid format. For information about deployment configuration format, see <a>CreateDeploymentConfig</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidBlueGreenDeploymentConfigurationException {}
+
+/// <p>The bucket name either doesn't exist or was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidBucketNameFilterException {}
+
+/// <p>The computePlatform is invalid. The computePlatform should be <code>Lambda</code> or <code>Server</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidComputePlatformException {}
+
+/// <p>The deployed state filter was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidDeployedStateFilterException {}
+
+/// <p>The deployment configuration name was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidDeploymentConfigNameException {}
+
+/// <p>The deployment group name was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidDeploymentGroupNameException {}
+
+/// <p>At least one of the deployment IDs was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidDeploymentIdException {}
+
+/// <p>An instance type was specified for an in-place deployment. Instance types are supported for blue/green deployments only.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidDeploymentInstanceTypeException {}
+
+/// <p>The specified deployment status doesn't exist or cannot be determined.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidDeploymentStatusException {}
+
+/// <p>An invalid deployment style was specified. Valid deployment types include "IN_PLACE" and "BLUE_GREEN". Valid deployment options include "WITH_TRAFFIC_CONTROL" and "WITHOUT_TRAFFIC_CONTROL".</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidDeploymentStyleException {}
+
+/// <p>A call was submitted that specified both Ec2TagFilters and Ec2TagSet, but only one of these data types can be used in a single call.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidEC2TagCombinationException {}
+
+/// <p>The tag was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidEC2TagException {}
+
+/// <p>An invalid fileExistsBehavior option was specified to determine how AWS CodeDeploy handles files or directories that already exist in a deployment target location but weren't part of the previous successful deployment. Valid values include "DISALLOW", "OVERWRITE", and "RETAIN".</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidFileExistsBehaviorException {}
+
+/// <p>The GitHub token is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidGitHubAccountTokenException {}
+
+/// <p>The format of the specified GitHub account connection name is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidGitHubAccountTokenNameException {}
+
+/// <p>The IAM session ARN was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidIamSessionArnException {}
+
+/// <p>The IAM user ARN was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidIamUserArnException {}
+
+/// <p>The IgnoreApplicationStopFailures value is invalid. For AWS Lambda deployments, <code>false</code> is expected. For EC2/On-premises deployments, <code>true</code> or <code>false</code> is expected.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidIgnoreApplicationStopFailuresValueException {}
+
+/// <p>The specified input was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidInputException {}
+
+/// <p> </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidInstanceIdException {}
+
+/// <p>The specified on-premises instance name was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidInstanceNameException {}
+
+/// <p>The specified instance status does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidInstanceStatusException {}
+
+/// <p>An invalid instance type was specified for instances in a blue/green deployment. Valid values include "Blue" for an original environment and "Green" for a replacement environment.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidInstanceTypeException {}
+
+/// <p>The specified key prefix filter was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidKeyPrefixFilterException {}
+
+/// <p>A lifecycle event hook is invalid. Review the <code>hooks</code> section in your AppSpec file to ensure the lifecycle events and <code>hooks</code> functions are valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidLifecycleEventHookExecutionIdException {}
+
+/// <p>The result of a Lambda validation function that verifies a lifecycle event is invalid. It should return <code>Succeeded</code> or <code>Failed</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidLifecycleEventHookExecutionStatusException {}
+
+/// <p>An invalid load balancer name, or no load balancer name, was specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidLoadBalancerInfoException {}
+
+/// <p>The minimum healthy instance value was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidMinimumHealthyHostValueException {}
+
+/// <p>The next token was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidNextTokenException {}
+
+/// <p>A call was submitted that specified both OnPremisesTagFilters and OnPremisesTagSet, but only one of these data types can be used in a single call.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidOnPremisesTagCombinationException {}
+
+/// <p>An invalid operation was detected.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidOperationException {}
+
+/// <p>The registration status was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidRegistrationStatusException {}
+
+/// <p>The revision was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidRevisionException {}
+
+/// <p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Auto Scaling.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidRoleException {}
+
+/// <p>The column name to sort by is either not present or was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidSortByException {}
+
+/// <p>The sort order was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidSortOrderException {}
+
+/// <p>The specified tag was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidTagException {}
+
+/// <p>The specified tag filter was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidTagFilterException {}
+
+/// <p><p>The target instance configuration is invalid. Possible causes include:</p> <ul> <li> <p>Configuration data for target instances was entered for an in-place deployment.</p> </li> <li> <p>The limit of 10 tags for a tag type was exceeded.</p> </li> <li> <p>The combined length of the tag names exceeded the limit. </p> </li> <li> <p>A specified tag is not currently applied to any instances.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidTargetInstancesException {}
+
+/// <p>The specified time range was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidTimeRangeException {}
+
+/// <p> The configuration that specifies how traffic is routed during a deployment is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidTrafficRoutingConfigurationException {}
+
+/// <p>The trigger was specified in an invalid format.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidTriggerConfigException {}
+
+/// <p>The UpdateOutdatedInstancesOnly value is invalid. For AWS Lambda deployments, <code>false</code> is expected. For EC2/On-premises deployments, <code>true</code> or <code>false</code> is expected.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidUpdateOutdatedInstancesOnlyValueException {}
 
 /// <p>Information about the most recent attempted or successful deployment to a deployment group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1162,6 +1490,14 @@ pub struct LifecycleEvent {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
+
+/// <p>An attempt to return the status of an already completed lifecycle event occurred.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LifecycleEventAlreadyCompletedException {}
+
+/// <p>The limit for lifecycle hooks was exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LifecycleHookLimitExceededException {}
 
 /// <p>Represents the input of a ListApplicationRevisions operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1407,11 +1743,11 @@ pub struct ListOnPremisesInstancesOutput {
 /// <p>Information about the Elastic Load Balancing load balancer or target group used in a deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoadBalancerInfo {
-    /// <p>An array containing information about the load balancer to use for load balancing in a deployment. In Elastic Load Balancing, load balancers are used with Classic Load Balancers.</p>
+    /// <p><p>An array containing information about the load balancer to use for load balancing in a deployment. In Elastic Load Balancing, load balancers are used with Classic Load Balancers.</p> <note> <p> Adding more than one load balancer to the array is not supported. </p> </note></p>
     #[serde(rename = "elbInfoList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub elb_info_list: Option<Vec<ELBInfo>>,
-    /// <p>An array containing information about the target group to use for load balancing in a deployment. In Elastic Load Balancing, target groups are used with Application Load Balancers.</p>
+    /// <p><p>An array containing information about the target group to use for load balancing in a deployment. In Elastic Load Balancing, target groups are used with Application Load Balancers.</p> <note> <p> Adding more than one target group to the array is not supported. </p> </note></p>
     #[serde(rename = "targetGroupInfoList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_group_info_list: Option<Vec<TargetGroupInfo>>,
@@ -1430,6 +1766,10 @@ pub struct MinimumHealthyHosts {
     pub value: Option<i64>,
 }
 
+/// <p>Both an IAM user ARN and an IAM session ARN were included in the request. Use only one ARN type.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MultipleIamArnsProvidedException {}
+
 /// <p>Information about groups of on-premises instance tags.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct OnPremisesTagSet {
@@ -1438,6 +1778,10 @@ pub struct OnPremisesTagSet {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub on_premises_tag_set_list: Option<Vec<Vec<TagFilter>>>,
 }
+
+/// <p>The API used does not support the deployment.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct OperationNotSupportedException {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutLifecycleEventHookExecutionStatusInput {
@@ -1518,6 +1862,14 @@ pub struct RemoveTagsFromOnPremisesInstancesInput {
     pub tags: Vec<Tag>,
 }
 
+/// <p>The specified resource could not be validated.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceValidationException {}
+
+/// <p>The named revision does not exist with the applicable IAM user or AWS account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RevisionDoesNotExistException {}
+
 /// <p>Information about an application revision.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RevisionInfo {
@@ -1551,6 +1903,14 @@ pub struct RevisionLocation {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub string: Option<RawString>,
 }
+
+/// <p>The revision ID was not specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RevisionRequiredException {}
+
+/// <p>The role ID was not specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RoleRequiredException {}
 
 /// <p>Information about a deployment rollback.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1657,6 +2017,18 @@ pub struct TagFilter {
     pub value: Option<String>,
 }
 
+/// <p>The maximum allowed number of tags was exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TagLimitExceededException {}
+
+/// <p>A tag was not specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TagRequiredException {}
+
+/// <p>The number of tag groups included in the tag set list exceeded the maximum allowed limit of 3.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TagSetListLimitExceededException {}
+
 /// <p>Information about a target group in Elastic Load Balancing to use in a deployment. Instances are registered as targets in a target group, and traffic is routed to the target group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TargetGroupInfo {
@@ -1682,6 +2054,10 @@ pub struct TargetInstances {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_filters: Option<Vec<EC2TagFilter>>,
 }
+
+/// <p>An API function was called too frequently.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ThrottlingException {}
 
 /// <p>A configuration that shifts traffic from one version of a Lambda function to another in two increments. The original and target Lambda function versions are specified in the deployment's AppSpec file.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1755,6 +2131,14 @@ pub struct TriggerConfig {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger_target_arn: Option<String>,
 }
+
+/// <p>The maximum allowed number of triggers was exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TriggerTargetsLimitExceededException {}
+
+/// <p>A call was submitted that is not supported for the specified deployment type.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UnsupportedActionForDeploymentTypeException {}
 
 /// <p>Represents the input of an UpdateApplication operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2893,6 +3277,8 @@ pub enum CreateDeploymentError {
     InvalidDeploymentGroupName(String),
     /// <p>An invalid fileExistsBehavior option was specified to determine how AWS CodeDeploy handles files or directories that already exist in a deployment target location but weren't part of the previous successful deployment. Valid values include "DISALLOW", "OVERWRITE", and "RETAIN".</p>
     InvalidFileExistsBehavior(String),
+    /// <p>The GitHub token is not valid.</p>
+    InvalidGitHubAccountToken(String),
     /// <p>The IgnoreApplicationStopFailures value is invalid. For AWS Lambda deployments, <code>false</code> is expected. For EC2/On-premises deployments, <code>true</code> or <code>false</code> is expected.</p>
     InvalidIgnoreApplicationStopFailuresValue(String),
     /// <p>An invalid load balancer name, or no load balancer name, was specified.</p>
@@ -2988,6 +3374,11 @@ impl CreateDeploymentError {
                             error_message,
                         ))
                     }
+                    "InvalidGitHubAccountTokenException" => {
+                        CreateDeploymentError::InvalidGitHubAccountToken(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidIgnoreApplicationStopFailuresValueException" => {
                         CreateDeploymentError::InvalidIgnoreApplicationStopFailuresValue(
                             String::from(error_message),
@@ -3071,6 +3462,7 @@ impl Error for CreateDeploymentError {
             CreateDeploymentError::InvalidDeploymentConfigName(ref cause) => cause,
             CreateDeploymentError::InvalidDeploymentGroupName(ref cause) => cause,
             CreateDeploymentError::InvalidFileExistsBehavior(ref cause) => cause,
+            CreateDeploymentError::InvalidGitHubAccountToken(ref cause) => cause,
             CreateDeploymentError::InvalidIgnoreApplicationStopFailuresValue(ref cause) => cause,
             CreateDeploymentError::InvalidLoadBalancerInfo(ref cause) => cause,
             CreateDeploymentError::InvalidRevision(ref cause) => cause,

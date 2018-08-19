@@ -190,6 +190,12 @@ pub struct CommentMetadata {
     pub recipient_id: Option<String>,
 }
 
+/// <p>The resource hierarchy is changing.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ConcurrentModificationException {
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateCommentRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
@@ -360,6 +366,12 @@ pub struct CreateUserResponse {
     pub user: Option<User>,
 }
 
+/// <p>The limit has been reached on the number of custom properties for the specified resource.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CustomMetadataLimitExceededException {
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeactivateUserRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
@@ -370,6 +382,10 @@ pub struct DeactivateUserRequest {
     #[serde(rename = "UserId")]
     pub user_id: String,
 }
+
+/// <p>The last user in the organization is being deactivated.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeactivatingLastSystemUserException {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteCommentRequest {
@@ -838,6 +854,12 @@ pub struct DescribeUsersResponse {
     pub users: Option<Vec<User>>,
 }
 
+/// <p>This exception is thrown when the document is locked for comments and user tries to create or delete a comment on that document.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DocumentLockedForCommentsException {
+    pub message: Option<String>,
+}
+
 /// <p>Describes the document.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DocumentMetadata {
@@ -930,6 +952,31 @@ pub struct DocumentVersionMetadata {
     #[serde(rename = "Thumbnail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thumbnail: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>This exception is thrown when a valid checkout ID is not presented on document version upload calls for a document that has been checked out from Web client.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DraftUploadOutOfSyncException {
+    pub message: Option<String>,
+}
+
+/// <p>The resource already exists.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EntityAlreadyExistsException {
+    pub message: Option<String>,
+}
+
+/// <p>The resource does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EntityNotExistsException {
+    pub entity_ids: Option<Vec<String>>,
+    pub message: Option<String>,
+}
+
+/// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct FailedDependencyException {
+    pub message: Option<String>,
 }
 
 /// <p>Describes a folder.</p>
@@ -1159,6 +1206,12 @@ pub struct GroupMetadata {
     pub name: Option<String>,
 }
 
+/// <p>The user is undergoing transfer of ownership.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct IllegalUserStateException {
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct InitiateDocumentVersionUploadRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
@@ -1204,6 +1257,30 @@ pub struct InitiateDocumentVersionUploadResponse {
     #[serde(rename = "UploadMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub upload_metadata: Option<UploadMetadata>,
+}
+
+/// <p>The pagination marker or limit fields are not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidArgumentException {
+    pub message: Option<String>,
+}
+
+/// <p>The operation is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidOperationException {
+    pub message: Option<String>,
+}
+
+/// <p>The password is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidPasswordException {
+    pub message: Option<String>,
+}
+
+/// <p>The maximum of 100,000 folders under the parent folder has been exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {
+    pub message: Option<String>,
 }
 
 /// <p>Set of options which defines notification preferences of given action.</p>
@@ -1262,6 +1339,12 @@ pub struct Principal {
     pub type_: Option<String>,
 }
 
+/// <p>The specified document version is not in the INITIALIZED state.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ProhibitedStateException {
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemoveAllResourcePermissionsRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
@@ -1289,6 +1372,12 @@ pub struct RemoveResourcePermissionRequest {
     /// <p>The ID of the resource.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
+}
+
+/// <p>The resource is already checked out.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceAlreadyCheckedOutException {
+    pub message: Option<String>,
 }
 
 /// <p>Describes the metadata of a resource.</p>
@@ -1346,6 +1435,12 @@ pub struct ResourcePathComponent {
     pub name: Option<String>,
 }
 
+/// <p>One or more of the dependencies is unavailable.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ServiceUnavailableException {
+    pub message: Option<String>,
+}
+
 /// <p>Describes the recipient type and ID, if available.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SharePrincipal {
@@ -1385,6 +1480,18 @@ pub struct ShareResult {
     pub status_message: Option<String>,
 }
 
+/// <p>The storage limit has been exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct StorageLimitExceededException {
+    pub message: Option<String>,
+}
+
+/// <p>The storage limit will be exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct StorageLimitWillExceedException {
+    pub message: Option<String>,
+}
+
 /// <p>Describes the storage for a user.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StorageRuleType {
@@ -1413,6 +1520,28 @@ pub struct Subscription {
     #[serde(rename = "SubscriptionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription_id: Option<String>,
+}
+
+/// <p>The limit has been reached on the number of labels for the specified resource.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyLabelsException {
+    pub message: Option<String>,
+}
+
+/// <p>You've reached the limit on the number of subscriptions for the WorkDocs instance.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManySubscriptionsException {
+    pub message: Option<String>,
+}
+
+/// <p>The operation is not permitted.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UnauthorizedOperationException {}
+
+/// <p>The caller does not have access to perform the action on the resource.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UnauthorizedResourceAccessException {
+    pub message: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]

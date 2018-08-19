@@ -57,6 +57,10 @@ pub struct AssociateTeamMemberResult {
     pub client_request_token: Option<String>,
 }
 
+/// <p>Another modification is being made. That modification must complete before you can make your change.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ConcurrentModificationException {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateProjectRequest {
     /// <p>Reserved for future use.</p>
@@ -266,6 +270,18 @@ pub struct DisassociateTeamMemberRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DisassociateTeamMemberResult {}
 
+/// <p>The next token is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidNextTokenException {}
+
+/// <p>The service role is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidServiceRoleException {}
+
+/// <p>A resource limit has been exceeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListProjectsRequest {
     /// <p>The maximum amount of data that can be contained in a single set of results.</p>
@@ -392,6 +408,22 @@ pub struct ListUserProfilesResult {
     pub user_profiles: Vec<UserProfileSummary>,
 }
 
+/// <p>An AWS CodeStar project with the same ID already exists in this region for the AWS account. AWS CodeStar project IDs must be unique within a region for the AWS account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ProjectAlreadyExistsException {}
+
+/// <p>Project configuration information is required but not specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ProjectConfigurationException {}
+
+/// <p>The project creation request was valid, but a nonspecific exception or error occurred during project creation. The project could not be created in AWS CodeStar.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ProjectCreationFailedException {}
+
+/// <p>The specified AWS CodeStar project was not found.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ProjectNotFoundException {}
+
 /// <p>Information about the metadata for a project.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ProjectSummary {
@@ -445,6 +477,14 @@ pub struct TeamMember {
     #[serde(rename = "userArn")]
     pub user_arn: String,
 }
+
+/// <p>The team member is already associated with a role in this project.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TeamMemberAlreadyAssociatedException {}
+
+/// <p>The specified team member was not found.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TeamMemberNotFoundException {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UntagProjectRequest {
@@ -557,6 +597,14 @@ pub struct UpdateUserProfileResult {
     pub user_arn: String,
 }
 
+/// <p>A user profile with that name already exists in this region for the AWS account. AWS CodeStar user profile names must be unique within a region for the AWS account. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UserProfileAlreadyExistsException {}
+
+/// <p>The user profile was not found.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UserProfileNotFoundException {}
+
 /// <p>Information about a user's profile in AWS CodeStar.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UserProfileSummary {
@@ -577,6 +625,10 @@ pub struct UserProfileSummary {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_arn: Option<String>,
 }
+
+/// <p>The specified input is either not valid, or it could not be validated.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ValidationException {}
 
 /// Errors returned by AssociateTeamMember
 #[derive(Debug, PartialEq)]

@@ -202,6 +202,10 @@ impl AccessPointNameDeserializer {
         Ok(obj)
     }
 }
+/// <p>The specified load balancer does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AccessPointNotFoundException {}
+
 struct AccessPointPortDeserializer;
 impl AccessPointPortDeserializer {
     #[allow(unused_variables)]
@@ -977,6 +981,10 @@ impl CardinalityDeserializer {
         Ok(obj)
     }
 }
+/// <p>The specified ARN does not refer to a valid SSL certificate in AWS Identity and Access Management (IAM) or AWS Certificate Manager (ACM). Note that if you recently uploaded the certificate to IAM, this error might indicate that the certificate is not fully available yet.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CertificateNotFoundException {}
+
 /// <p>Contains the parameters for ConfigureHealthCheck.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ConfigureHealthCheckInput {
@@ -1856,6 +1864,9 @@ impl DeleteLoadBalancerPolicyOutputDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DependencyThrottleException {}
+
 /// <p>Contains the parameters for DeregisterInstancesFromLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeregisterEndPointsInput {
@@ -2587,6 +2598,22 @@ impl DetachLoadBalancerFromSubnetsOutputDeserializer {
         Ok(obj)
     }
 }
+/// <p>The specified load balancer name already exists for this account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DuplicateAccessPointNameException {}
+
+/// <p>A listener already exists for the specified load balancer name and port, but with a different instance port, protocol, or SSL certificate.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DuplicateListenerException {}
+
+/// <p>A policy with the specified name already exists for this load balancer.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DuplicatePolicyNameException {}
+
+/// <p>A tag key was specified more than once.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DuplicateTagKeysException {}
+
 /// <p>Information about a health check.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct HealthCheck {
@@ -3028,6 +3055,26 @@ impl InstancesSerializer {
     }
 }
 
+/// <p>The requested configuration change is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidConfigurationRequestException {}
+
+/// <p>The specified endpoint is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidEndPointException {}
+
+/// <p>The specified value for the schema is not valid. You can only specify a scheme for load balancers in a VPC.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidSchemeException {}
+
+/// <p>One or more of the specified security groups do not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidSecurityGroupException {}
+
+/// <p>The specified VPC has no associated Internet gateway.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidSubnetException {}
+
 struct LBCookieStickinessPoliciesDeserializer;
 impl LBCookieStickinessPoliciesDeserializer {
     #[allow(unused_variables)]
@@ -3428,6 +3475,9 @@ impl ListenerDescriptionsDeserializer {
         Ok(obj)
     }
 }
+/// <p>The load balancer does not have a listener configured at the specified port.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ListenerNotFoundException {}
 
 /// Serialize `Listeners` contents to a `SignedRequest`.
 struct ListenersSerializer;
@@ -3439,6 +3489,10 @@ impl ListenersSerializer {
         }
     }
 }
+
+/// <p>The specified load balancer attribute does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LoadBalancerAttributeNotFoundException {}
 
 /// <p>The attributes for a load balancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -3935,6 +3989,10 @@ impl NameDeserializer {
         Ok(obj)
     }
 }
+/// <p>This operation is not allowed.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct OperationNotPermittedException {}
+
 /// <p>The policies for a load balancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Policies {
@@ -4445,6 +4503,10 @@ impl PolicyNamesSerializer {
     }
 }
 
+/// <p>One or more of the specified policies do not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PolicyNotFoundException {}
+
 /// <p>Information about a policy type.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PolicyTypeDescription {
@@ -4579,6 +4641,10 @@ impl PolicyTypeNamesSerializer {
         }
     }
 }
+
+/// <p>One or more of the specified policy types do not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PolicyTypeNotFoundException {}
 
 /// Serialize `Ports` contents to a `SignedRequest`.
 struct PortsSerializer;
@@ -5204,6 +5270,10 @@ impl SubnetIdDeserializer {
         Ok(obj)
     }
 }
+/// <p>One or more of the specified subnets do not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SubnetNotFoundException {}
+
 struct SubnetsDeserializer;
 impl SubnetsDeserializer {
     #[allow(unused_variables)]
@@ -5542,6 +5612,18 @@ impl TagValueDeserializer {
         Ok(obj)
     }
 }
+/// <p>The quota for the number of load balancers has been reached.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyAccessPointsException {}
+
+/// <p>The quota for the number of policies for this load balancer has been reached.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyPoliciesException {}
+
+/// <p>The quota for the number of tags that can be assigned to a load balancer has been reached.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyTagsException {}
+
 struct UnhealthyThresholdDeserializer;
 impl UnhealthyThresholdDeserializer {
     #[allow(unused_variables)]
@@ -5556,6 +5638,10 @@ impl UnhealthyThresholdDeserializer {
         Ok(obj)
     }
 }
+/// <p>The specified protocol or signature version is not supported.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UnsupportedProtocolException {}
+
 struct VPCIdDeserializer;
 impl VPCIdDeserializer {
     #[allow(unused_variables)]

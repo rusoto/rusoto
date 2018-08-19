@@ -116,6 +116,12 @@ pub struct AssociateConfigurationItemsToApplicationRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AssociateConfigurationItemsToApplicationResponse {}
 
+/// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AuthorizationErrorException {
+    pub message: Option<String>,
+}
+
 /// <p>Tags for a configuration item. Tags are metadata that help you categorize IT assets.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ConfigurationTag {
@@ -139,6 +145,49 @@ pub struct ConfigurationTag {
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ConflictErrorException {
+    pub message: Option<String>,
+}
+
+/// <p>A list of continuous export descriptions.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ContinuousExportDescription {
+    /// <p>The type of data collector used to gather this data (currently only offered for AGENT).</p>
+    #[serde(rename = "dataSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_source: Option<String>,
+    /// <p>The unique ID assigned to this export.</p>
+    #[serde(rename = "exportId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_id: Option<String>,
+    /// <p>The name of the s3 bucket where the export data parquet files are stored.</p>
+    #[serde(rename = "s3Bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3_bucket: Option<String>,
+    /// <p><p>An object which describes how the data is stored.</p> <ul> <li> <p> <code>databaseName</code> - the name of the Glue database used to store the schema.</p> </li> </ul></p>
+    #[serde(rename = "schemaStorageConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_storage_config: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The timestamp representing when the continuous export was started.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p><p>Describes the status of the export. Can be one of the following values:</p> <ul> <li> <p>START<em>IN</em>PROGRESS - setting up resources to start continuous export.</p> </li> <li> <p>START<em>FAILED - an error occurred setting up continuous export. To recover, call start-continuous-export again.</p> </li> <li> <p>ACTIVE - data is being exported to the customer bucket.</p> </li> <li> <p>ERROR - an error occurred during export. To fix the issue, call stop-continuous-export and start-continuous-export.</p> </li> <li> <p>STOP</em>IN<em>PROGRESS - stopping the export.</p> </li> <li> <p>STOP</em>FAILED - an error occurred stopping the export. To recover, call stop-continuous-export again.</p> </li> <li> <p>INACTIVE - the continuous export has been stopped. Data is no longer being exported to the customer bucket.</p> </li> </ul></p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>Contains information about any errors that may have occurred.</p>
+    #[serde(rename = "statusDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_detail: Option<String>,
+    /// <p>The timestamp that represents when this continuous export was stopped.</p>
+    #[serde(rename = "stopTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stop_time: Option<f64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -297,16 +346,44 @@ pub struct DescribeConfigurationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeExportConfigurationsRequest {
-    /// <p>A unique identifier that you can use to query the export status.</p>
+pub struct DescribeContinuousExportsRequest {
+    /// <p>The unique IDs assigned to the exports.</p>
     #[serde(rename = "exportIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub export_ids: Option<Vec<String>>,
-    /// <p>The maximum number of results that you want to display as a part of the query.</p>
+    /// <p>A number between 1 and 100 specifying the maximum number of continuous export descriptions returned.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>A token to get the next set of results. For example, if you specify 100 IDs for <code>DescribeExportConfigurationsRequest$exportIds</code> but set <code>DescribeExportConfigurationsRequest$maxResults</code> to 10, you get results in a set of 10. Use the token in the query to get the next set of 10.</p>
+    /// <p>The token from the previous call to <code>DescribeExportTasks</code>.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DescribeContinuousExportsResponse {
+    /// <p>A list of continuous export descriptions.</p>
+    #[serde(rename = "descriptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub descriptions: Option<Vec<ContinuousExportDescription>>,
+    /// <p>The token from the previous call to <code>DescribeExportTasks</code>.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeExportConfigurationsRequest {
+    /// <p>A list of continuous export ids to search for.</p>
+    #[serde(rename = "exportIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_ids: Option<Vec<String>>,
+    /// <p>A number between 1 and 100 specifying the maximum number of continuous export descriptions returned.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token from the previous call to describe-export-tasks.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -314,11 +391,11 @@ pub struct DescribeExportConfigurationsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeExportConfigurationsResponse {
-    /// <p>Returns export details. When the status is complete, the response includes a URL for an Amazon S3 bucket where you can view the data in a CSV file.</p>
+    /// <p><p/></p>
     #[serde(rename = "exportsInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exports_info: Option<Vec<ExportInfo>>,
-    /// <p>A token to get the next set of results. For example, if you specify 100 IDs for <code>DescribeExportConfigurationsRequest$exportIds</code> but set <code>DescribeExportConfigurationsRequest$maxResults</code> to 10, you get results in a set of 10. Use the token in the query to get the next set of 10.</p>
+    /// <p>The token from the previous call to describe-export-tasks.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -497,6 +574,18 @@ pub struct GetDiscoverySummaryResponse {
     pub servers_mappedto_tags: Option<i64>,
 }
 
+/// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterException {
+    pub message: Option<String>,
+}
+
+/// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterValueException {
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListConfigurationsRequest {
     /// <p>A valid configuration identified by Application Discovery Service. </p>
@@ -592,6 +681,12 @@ pub struct NeighborConnectionDetail {
     pub transport_protocol: Option<String>,
 }
 
+/// <p>This operation is not permitted.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct OperationNotPermittedException {
+    pub message: Option<String>,
+}
+
 /// <p>A field and direction for ordered output.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct OrderByElement {
@@ -602,6 +697,51 @@ pub struct OrderByElement {
     #[serde(rename = "sortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_order: Option<String>,
+}
+
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceInUseException {
+    pub message: Option<String>,
+}
+
+/// <p>The specified configuration ID was not located. Verify the configuration ID and try again.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceNotFoundException {
+    pub message: Option<String>,
+}
+
+/// <p>The server experienced an internal error. Try again.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ServerInternalErrorException {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartContinuousExportRequest {}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct StartContinuousExportResponse {
+    /// <p>The type of data collector used to gather this data (currently only offered for AGENT).</p>
+    #[serde(rename = "dataSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_source: Option<String>,
+    /// <p>The unique ID assigned to this export.</p>
+    #[serde(rename = "exportId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_id: Option<String>,
+    /// <p>The name of the s3 bucket where the export data parquet files are stored.</p>
+    #[serde(rename = "s3Bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3_bucket: Option<String>,
+    /// <p><p>A dictionary which describes how the data is stored.</p> <ul> <li> <p> <code>databaseName</code> - the name of the Glue database used to store the schema.</p> </li> </ul></p>
+    #[serde(rename = "schemaStorageConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_storage_config: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The timestamp representing when the continuous export was started.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -645,6 +785,25 @@ pub struct StartExportTaskResponse {
     #[serde(rename = "exportId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub export_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StopContinuousExportRequest {
+    /// <p>The unique ID assigned to this export.</p>
+    #[serde(rename = "exportId")]
+    pub export_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct StopContinuousExportResponse {
+    /// <p>Timestamp that represents when this continuous export started collecting data.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p>Timestamp that represents when this continuous export was stopped.</p>
+    #[serde(rename = "stopTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stop_time: Option<f64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1412,6 +1571,129 @@ impl Error for DescribeConfigurationsError {
                 dispatch_error.description()
             }
             DescribeConfigurationsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeContinuousExports
+#[derive(Debug, PartialEq)]
+pub enum DescribeContinuousExportsError {
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    AuthorizationError(String),
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    InvalidParameter(String),
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    InvalidParameterValue(String),
+    /// <p>This operation is not permitted.</p>
+    OperationNotPermitted(String),
+    /// <p>The specified configuration ID was not located. Verify the configuration ID and try again.</p>
+    ResourceNotFound(String),
+    /// <p>The server experienced an internal error. Try again.</p>
+    ServerInternalError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeContinuousExportsError {
+    pub fn from_body(body: &str) -> DescribeContinuousExportsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AuthorizationErrorException" => {
+                        DescribeContinuousExportsError::AuthorizationError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterException" => {
+                        DescribeContinuousExportsError::InvalidParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterValueException" => {
+                        DescribeContinuousExportsError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "OperationNotPermittedException" => {
+                        DescribeContinuousExportsError::OperationNotPermitted(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeContinuousExportsError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServerInternalErrorException" => {
+                        DescribeContinuousExportsError::ServerInternalError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        DescribeContinuousExportsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeContinuousExportsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeContinuousExportsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeContinuousExportsError {
+    fn from(err: serde_json::error::Error) -> DescribeContinuousExportsError {
+        DescribeContinuousExportsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeContinuousExportsError {
+    fn from(err: CredentialsError) -> DescribeContinuousExportsError {
+        DescribeContinuousExportsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeContinuousExportsError {
+    fn from(err: HttpDispatchError) -> DescribeContinuousExportsError {
+        DescribeContinuousExportsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeContinuousExportsError {
+    fn from(err: io::Error) -> DescribeContinuousExportsError {
+        DescribeContinuousExportsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeContinuousExportsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeContinuousExportsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeContinuousExportsError::AuthorizationError(ref cause) => cause,
+            DescribeContinuousExportsError::InvalidParameter(ref cause) => cause,
+            DescribeContinuousExportsError::InvalidParameterValue(ref cause) => cause,
+            DescribeContinuousExportsError::OperationNotPermitted(ref cause) => cause,
+            DescribeContinuousExportsError::ResourceNotFound(ref cause) => cause,
+            DescribeContinuousExportsError::ServerInternalError(ref cause) => cause,
+            DescribeContinuousExportsError::Validation(ref cause) => cause,
+            DescribeContinuousExportsError::Credentials(ref err) => err.description(),
+            DescribeContinuousExportsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeContinuousExportsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2269,6 +2551,127 @@ impl Error for ListServerNeighborsError {
         }
     }
 }
+/// Errors returned by StartContinuousExport
+#[derive(Debug, PartialEq)]
+pub enum StartContinuousExportError {
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    AuthorizationError(String),
+    /// <p><p/></p>
+    ConflictError(String),
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    InvalidParameter(String),
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    InvalidParameterValue(String),
+    /// <p>This operation is not permitted.</p>
+    OperationNotPermitted(String),
+    /// <p><p/></p>
+    ResourceInUse(String),
+    /// <p>The server experienced an internal error. Try again.</p>
+    ServerInternalError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl StartContinuousExportError {
+    pub fn from_body(body: &str) -> StartContinuousExportError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AuthorizationErrorException" => {
+                        StartContinuousExportError::AuthorizationError(String::from(error_message))
+                    }
+                    "ConflictErrorException" => {
+                        StartContinuousExportError::ConflictError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        StartContinuousExportError::InvalidParameter(String::from(error_message))
+                    }
+                    "InvalidParameterValueException" => {
+                        StartContinuousExportError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "OperationNotPermittedException" => {
+                        StartContinuousExportError::OperationNotPermitted(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceInUseException" => {
+                        StartContinuousExportError::ResourceInUse(String::from(error_message))
+                    }
+                    "ServerInternalErrorException" => {
+                        StartContinuousExportError::ServerInternalError(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        StartContinuousExportError::Validation(error_message.to_string())
+                    }
+                    _ => StartContinuousExportError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => StartContinuousExportError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for StartContinuousExportError {
+    fn from(err: serde_json::error::Error) -> StartContinuousExportError {
+        StartContinuousExportError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StartContinuousExportError {
+    fn from(err: CredentialsError) -> StartContinuousExportError {
+        StartContinuousExportError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StartContinuousExportError {
+    fn from(err: HttpDispatchError) -> StartContinuousExportError {
+        StartContinuousExportError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartContinuousExportError {
+    fn from(err: io::Error) -> StartContinuousExportError {
+        StartContinuousExportError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StartContinuousExportError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartContinuousExportError {
+    fn description(&self) -> &str {
+        match *self {
+            StartContinuousExportError::AuthorizationError(ref cause) => cause,
+            StartContinuousExportError::ConflictError(ref cause) => cause,
+            StartContinuousExportError::InvalidParameter(ref cause) => cause,
+            StartContinuousExportError::InvalidParameterValue(ref cause) => cause,
+            StartContinuousExportError::OperationNotPermitted(ref cause) => cause,
+            StartContinuousExportError::ResourceInUse(ref cause) => cause,
+            StartContinuousExportError::ServerInternalError(ref cause) => cause,
+            StartContinuousExportError::Validation(ref cause) => cause,
+            StartContinuousExportError::Credentials(ref err) => err.description(),
+            StartContinuousExportError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StartContinuousExportError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by StartDataCollectionByAgentIds
 #[derive(Debug, PartialEq)]
 pub enum StartDataCollectionByAgentIdsError {
@@ -2476,6 +2879,127 @@ impl Error for StartExportTaskError {
             StartExportTaskError::Credentials(ref err) => err.description(),
             StartExportTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             StartExportTaskError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by StopContinuousExport
+#[derive(Debug, PartialEq)]
+pub enum StopContinuousExportError {
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    AuthorizationError(String),
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    InvalidParameter(String),
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    InvalidParameterValue(String),
+    /// <p>This operation is not permitted.</p>
+    OperationNotPermitted(String),
+    /// <p><p/></p>
+    ResourceInUse(String),
+    /// <p>The specified configuration ID was not located. Verify the configuration ID and try again.</p>
+    ResourceNotFound(String),
+    /// <p>The server experienced an internal error. Try again.</p>
+    ServerInternalError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl StopContinuousExportError {
+    pub fn from_body(body: &str) -> StopContinuousExportError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AuthorizationErrorException" => {
+                        StopContinuousExportError::AuthorizationError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        StopContinuousExportError::InvalidParameter(String::from(error_message))
+                    }
+                    "InvalidParameterValueException" => {
+                        StopContinuousExportError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "OperationNotPermittedException" => {
+                        StopContinuousExportError::OperationNotPermitted(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceInUseException" => {
+                        StopContinuousExportError::ResourceInUse(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        StopContinuousExportError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServerInternalErrorException" => {
+                        StopContinuousExportError::ServerInternalError(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        StopContinuousExportError::Validation(error_message.to_string())
+                    }
+                    _ => StopContinuousExportError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => StopContinuousExportError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for StopContinuousExportError {
+    fn from(err: serde_json::error::Error) -> StopContinuousExportError {
+        StopContinuousExportError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StopContinuousExportError {
+    fn from(err: CredentialsError) -> StopContinuousExportError {
+        StopContinuousExportError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StopContinuousExportError {
+    fn from(err: HttpDispatchError) -> StopContinuousExportError {
+        StopContinuousExportError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopContinuousExportError {
+    fn from(err: io::Error) -> StopContinuousExportError {
+        StopContinuousExportError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StopContinuousExportError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StopContinuousExportError {
+    fn description(&self) -> &str {
+        match *self {
+            StopContinuousExportError::AuthorizationError(ref cause) => cause,
+            StopContinuousExportError::InvalidParameter(ref cause) => cause,
+            StopContinuousExportError::InvalidParameterValue(ref cause) => cause,
+            StopContinuousExportError::OperationNotPermitted(ref cause) => cause,
+            StopContinuousExportError::ResourceInUse(ref cause) => cause,
+            StopContinuousExportError::ResourceNotFound(ref cause) => cause,
+            StopContinuousExportError::ServerInternalError(ref cause) => cause,
+            StopContinuousExportError::Validation(ref cause) => cause,
+            StopContinuousExportError::Credentials(ref err) => err.description(),
+            StopContinuousExportError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StopContinuousExportError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2720,19 +3244,25 @@ pub trait Discovery {
         input: DeleteTagsRequest,
     ) -> RusotoFuture<DeleteTagsResponse, DeleteTagsError>;
 
-    /// <p>Lists agents or the Connector by ID or lists all agents/Connectors associated with your user account if you did not specify an ID.</p>
+    /// <p>Lists agents or connectors as specified by ID or other filters. All agents/connectors associated with your user account can be listed if you call <code>DescribeAgents</code> as is without passing any parameters.</p>
     fn describe_agents(
         &self,
         input: DescribeAgentsRequest,
     ) -> RusotoFuture<DescribeAgentsResponse, DescribeAgentsError>;
 
-    /// <p>Retrieves attributes for a list of configuration item IDs. All of the supplied IDs must be for the same asset type (server, application, process, or connection). Output fields are specific to the asset type selected. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, and number of network cards.</p> <p>For a complete list of outputs for each asset type, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a>.</p>
+    /// <p><p>Retrieves attributes for a list of configuration item IDs.</p> <note> <p>All of the supplied IDs must be for the same asset type from one of the follwoing:</p> <ul> <li> <p>server</p> </li> <li> <p>application</p> </li> <li> <p>process</p> </li> <li> <p>connection</p> </li> </ul> <p>Output fields are specific to the asset type specified. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, number of network cards, etc.</p> <p>For a complete list of outputs for each asset type, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a>.</p> </note></p>
     fn describe_configurations(
         &self,
         input: DescribeConfigurationsRequest,
     ) -> RusotoFuture<DescribeConfigurationsResponse, DescribeConfigurationsError>;
 
-    /// <p>Deprecated. Use <code>DescribeExportTasks</code> instead.</p> <p>Retrieves the status of a given export process. You can retrieve status from a maximum of 100 processes.</p>
+    /// <p>Lists exports as specified by ID. All continuous exports associated with your user account can be listed if you call <code>DescribeContinuousExports</code> as is without passing any parameters.</p>
+    fn describe_continuous_exports(
+        &self,
+        input: DescribeContinuousExportsRequest,
+    ) -> RusotoFuture<DescribeContinuousExportsResponse, DescribeContinuousExportsError>;
+
+    /// <p> <code>DescribeExportConfigurations</code> is deprecated.</p> <p>Use instead <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html"> <code>DescribeExportTasks</code> </a>.</p>
     fn describe_export_configurations(
         &self,
         input: DescribeExportConfigurationsRequest,
@@ -2744,7 +3274,7 @@ pub trait Discovery {
         input: DescribeExportTasksRequest,
     ) -> RusotoFuture<DescribeExportTasksResponse, DescribeExportTasksError>;
 
-    /// <p>Retrieves a list of configuration items that are tagged with a specific tag. Or retrieves a list of all tags assigned to a specific configuration item.</p>
+    /// <p>Retrieves a list of configuration items that have tags as specified by the key-value pairs, name and value, passed to the optional parameter <code>filters</code>.</p> <p>There are three valid tag filter names:</p> <ul> <li> <p>tagKey</p> </li> <li> <p>tagValue</p> </li> <li> <p>configurationId</p> </li> </ul> <p>Also, all configuration items associated with your user account that have tags can be listed if you call <code>DescribeTags</code> as is without passing any parameters.</p>
     fn describe_tags(
         &self,
         input: DescribeTagsRequest,
@@ -2764,12 +3294,12 @@ pub trait Discovery {
         &self,
     ) -> RusotoFuture<ExportConfigurationsResponse, ExportConfigurationsError>;
 
-    /// <p>Retrieves a short summary of discovered assets.</p>
+    /// <p>Retrieves a short summary of discovered assets.</p> <p>This API operation takes no request parameters and is called as is at the command prompt as shown in the example.</p>
     fn get_discovery_summary(
         &self,
     ) -> RusotoFuture<GetDiscoverySummaryResponse, GetDiscoverySummaryError>;
 
-    /// <p>Retrieves a list of configuration items according to criteria that you specify in a filter. The filter criteria identifies the relationship requirements.</p>
+    /// <p>Retrieves a list of configuration items as specified by the value passed to the required paramater <code>configurationType</code>. Optional filtering may be applied to refine search results.</p>
     fn list_configurations(
         &self,
         input: ListConfigurationsRequest,
@@ -2780,6 +3310,11 @@ pub trait Discovery {
         &self,
         input: ListServerNeighborsRequest,
     ) -> RusotoFuture<ListServerNeighborsResponse, ListServerNeighborsError>;
+
+    /// <p>Start the continuous flow of agent's discovered data into Amazon Athena.</p>
+    fn start_continuous_export(
+        &self,
+    ) -> RusotoFuture<StartContinuousExportResponse, StartContinuousExportError>;
 
     /// <p>Instructs the specified agents or connectors to start collecting data.</p>
     fn start_data_collection_by_agent_ids(
@@ -2792,6 +3327,12 @@ pub trait Discovery {
         &self,
         input: StartExportTaskRequest,
     ) -> RusotoFuture<StartExportTaskResponse, StartExportTaskError>;
+
+    /// <p>Stop the continuous flow of agent's discovered data into Amazon Athena.</p>
+    fn stop_continuous_export(
+        &self,
+        input: StopContinuousExportRequest,
+    ) -> RusotoFuture<StopContinuousExportResponse, StopContinuousExportError>;
 
     /// <p>Instructs the specified agents or connectors to stop collecting data.</p>
     fn stop_data_collection_by_agent_ids(
@@ -3028,7 +3569,7 @@ impl Discovery for DiscoveryClient {
         })
     }
 
-    /// <p>Lists agents or the Connector by ID or lists all agents/Connectors associated with your user account if you did not specify an ID.</p>
+    /// <p>Lists agents or connectors as specified by ID or other filters. All agents/connectors associated with your user account can be listed if you call <code>DescribeAgents</code> as is without passing any parameters.</p>
     fn describe_agents(
         &self,
         input: DescribeAgentsRequest,
@@ -3066,7 +3607,7 @@ impl Discovery for DiscoveryClient {
         })
     }
 
-    /// <p>Retrieves attributes for a list of configuration item IDs. All of the supplied IDs must be for the same asset type (server, application, process, or connection). Output fields are specific to the asset type selected. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, and number of network cards.</p> <p>For a complete list of outputs for each asset type, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a>.</p>
+    /// <p><p>Retrieves attributes for a list of configuration item IDs.</p> <note> <p>All of the supplied IDs must be for the same asset type from one of the follwoing:</p> <ul> <li> <p>server</p> </li> <li> <p>application</p> </li> <li> <p>process</p> </li> <li> <p>connection</p> </li> </ul> <p>Output fields are specific to the asset type specified. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, number of network cards, etc.</p> <p>For a complete list of outputs for each asset type, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a>.</p> </note></p>
     fn describe_configurations(
         &self,
         input: DescribeConfigurationsRequest,
@@ -3104,7 +3645,45 @@ impl Discovery for DiscoveryClient {
         })
     }
 
-    /// <p>Deprecated. Use <code>DescribeExportTasks</code> instead.</p> <p>Retrieves the status of a given export process. You can retrieve status from a maximum of 100 processes.</p>
+    /// <p>Lists exports as specified by ID. All continuous exports associated with your user account can be listed if you call <code>DescribeContinuousExports</code> as is without passing any parameters.</p>
+    fn describe_continuous_exports(
+        &self,
+        input: DescribeContinuousExportsRequest,
+    ) -> RusotoFuture<DescribeContinuousExportsResponse, DescribeContinuousExportsError> {
+        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.DescribeContinuousExports",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeContinuousExportsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeContinuousExportsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p> <code>DescribeExportConfigurations</code> is deprecated.</p> <p>Use instead <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html"> <code>DescribeExportTasks</code> </a>.</p>
     fn describe_export_configurations(
         &self,
         input: DescribeExportConfigurationsRequest,
@@ -3180,7 +3759,7 @@ impl Discovery for DiscoveryClient {
         })
     }
 
-    /// <p>Retrieves a list of configuration items that are tagged with a specific tag. Or retrieves a list of all tags assigned to a specific configuration item.</p>
+    /// <p>Retrieves a list of configuration items that have tags as specified by the key-value pairs, name and value, passed to the optional parameter <code>filters</code>.</p> <p>There are three valid tag filter names:</p> <ul> <li> <p>tagKey</p> </li> <li> <p>tagValue</p> </li> <li> <p>configurationId</p> </li> </ul> <p>Also, all configuration items associated with your user account that have tags can be listed if you call <code>DescribeTags</code> as is without passing any parameters.</p>
     fn describe_tags(
         &self,
         input: DescribeTagsRequest,
@@ -3297,7 +3876,7 @@ impl Discovery for DiscoveryClient {
         })
     }
 
-    /// <p>Retrieves a short summary of discovered assets.</p>
+    /// <p>Retrieves a short summary of discovered assets.</p> <p>This API operation takes no request parameters and is called as is at the command prompt as shown in the example.</p>
     fn get_discovery_summary(
         &self,
     ) -> RusotoFuture<GetDiscoverySummaryResponse, GetDiscoverySummaryError> {
@@ -3333,7 +3912,7 @@ impl Discovery for DiscoveryClient {
         })
     }
 
-    /// <p>Retrieves a list of configuration items according to criteria that you specify in a filter. The filter criteria identifies the relationship requirements.</p>
+    /// <p>Retrieves a list of configuration items as specified by the value passed to the required paramater <code>configurationType</code>. Optional filtering may be applied to refine search results.</p>
     fn list_configurations(
         &self,
         input: ListConfigurationsRequest,
@@ -3402,6 +3981,42 @@ impl Discovery for DiscoveryClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListServerNeighborsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Start the continuous flow of agent's discovered data into Amazon Athena.</p>
+    fn start_continuous_export(
+        &self,
+    ) -> RusotoFuture<StartContinuousExportResponse, StartContinuousExportError> {
+        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.StartContinuousExport",
+        );
+        request.set_payload(Some(b"{}".to_vec()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<StartContinuousExportResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(StartContinuousExportError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -3479,6 +4094,44 @@ impl Discovery for DiscoveryClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(StartExportTaskError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Stop the continuous flow of agent's discovered data into Amazon Athena.</p>
+    fn stop_continuous_export(
+        &self,
+        input: StopContinuousExportRequest,
+    ) -> RusotoFuture<StopContinuousExportResponse, StopContinuousExportError> {
+        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.StopContinuousExport",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<StopContinuousExportResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(StopContinuousExportError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

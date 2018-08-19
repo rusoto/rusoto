@@ -957,6 +957,10 @@ pub struct DisassociateTagOptionFromResourceInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DisassociateTagOptionFromResourceOutput {}
 
+/// <p>The specified resource is a duplicate.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DuplicateResourceException {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ExecuteProvisionedProductPlanInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
@@ -979,6 +983,14 @@ pub struct ExecuteProvisionedProductPlanOutput {
     pub record_detail: Option<RecordDetail>,
 }
 
+/// <p>One or more parameters provided to the operation are not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParametersException {}
+
+/// <p>An attempt was made to modify a resource that is in a state that is not valid. Check your resources to ensure that they are in valid states before retrying the operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidStateException {}
+
 /// <p>Summary information about a product path for a user.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LaunchPathSummary {
@@ -1000,6 +1012,10 @@ pub struct LaunchPathSummary {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// <p>The current limits of the service would have been exceeded by this operation. Decrease your resource use or increase your service limits and retry the operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListAcceptedPortfolioSharesInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
@@ -1014,6 +1030,10 @@ pub struct ListAcceptedPortfolioSharesInput {
     #[serde(rename = "PageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
+    /// <p><p>The type of shared portfolios to list. The default is to list imported portfolios.</p> <ul> <li> <p> <code>AWS_SERVICECATALOG</code> - List default portfolios</p> </li> <li> <p> <code>IMPORTED</code> - List imported portfolios</p> </li> </ul></p>
+    #[serde(rename = "PortfolioShareType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub portfolio_share_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2095,6 +2115,14 @@ pub struct ResourceDetail {
     pub name: Option<String>,
 }
 
+/// <p>A resource that is currently in use. Ensure that the resource is not in use and retry the operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceInUseException {}
+
+/// <p>The specified resource was not found.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceNotFoundException {}
+
 /// <p>Information about a change to a resource attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ResourceTargetDefinition {
@@ -2316,6 +2344,10 @@ pub struct TagOptionDetail {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
+
+/// <p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TagOptionNotMigratedException {}
 
 /// <p>Summary information about a TagOption.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]

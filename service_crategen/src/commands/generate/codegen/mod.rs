@@ -301,8 +301,9 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
 
     for (name, shape) in service.shapes().iter() {
 
-        // We generate enums for error types, so no need to create model objects for them
-        if shape.exception() {
+        // We generate enums for error types, so no need to create model objects for them.
+        // Except services that now include them in standard responses:
+        if shape.exception() && service.name() == "Kineses" {
             continue;
         }
 

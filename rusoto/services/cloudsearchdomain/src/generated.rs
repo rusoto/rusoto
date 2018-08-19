@@ -51,6 +51,15 @@ pub struct BucketInfo {
     pub buckets: Option<Vec<Bucket>>,
 }
 
+/// <p>Information about any problems encountered while processing an upload request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DocumentServiceException {
+    /// <p>The description of the errors returned by the document service.</p>
+    pub message: Option<String>,
+    /// <p>The return status of a document upload request, <code>error</code> or <code>success</code>.</p>
+    pub status: Option<String>,
+}
+
 /// <p>A warning returned by the document service when an issue is discovered while processing an upload request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DocumentServiceWarning {
@@ -137,6 +146,13 @@ pub struct Hits {
     #[serde(rename = "start")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start: Option<i64>,
+}
+
+/// <p>Information about any problems encountered while processing a search request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SearchException {
+    /// <p>A description of the error returned by the search service.</p>
+    pub message: Option<String>,
 }
 
 /// <p>Container for the parameters to the <code>Search</code> request.</p>

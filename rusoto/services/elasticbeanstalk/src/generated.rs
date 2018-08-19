@@ -144,9 +144,25 @@ impl ActionTypeDeserializer {
         Ok(obj)
     }
 }
+struct ApplicationArnDeserializer;
+impl ApplicationArnDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Describes the properties of an application.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ApplicationDescription {
+    /// <p>The Amazon Resource Name (ARN) of the application.</p>
+    pub application_arn: Option<String>,
     /// <p>The name of the application.</p>
     pub application_name: Option<String>,
     /// <p>The names of the configuration templates associated with this application.</p>
@@ -185,6 +201,12 @@ impl ApplicationDescriptionDeserializer {
 
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
+                    "ApplicationArn" => {
+                        obj.application_arn = Some(try!(ApplicationArnDeserializer::deserialize(
+                            "ApplicationArn",
+                            stack
+                        )));
+                    }
                     "ApplicationName" => {
                         obj.application_name = Some(try!(
                             ApplicationNameDeserializer::deserialize("ApplicationName", stack)
@@ -482,7 +504,7 @@ impl ApplicationNamesListSerializer {
 /// <p>The resource lifecycle configuration for an application. Defines lifecycle settings for resources that belong to the application, and the service role that Elastic Beanstalk assumes in order to apply lifecycle settings. The version lifecycle configuration defines lifecycle settings for application versions.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ApplicationResourceLifecycleConfig {
-    /// <p>The ARN of an IAM service role that Elastic Beanstalk has permission to assume.</p>
+    /// <p>The ARN of an IAM service role that Elastic Beanstalk has permission to assume.</p> <p>The <code>ServiceRole</code> property is required the first time that you provide a <code>VersionLifecycleConfig</code> for the application in one of the supporting calls (<code>CreateApplication</code> or <code>UpdateApplicationResourceLifecycle</code>). After you provide it once, in either one of the calls, Elastic Beanstalk persists the Service Role with the application, and you don't need to specify it again in subsequent <code>UpdateApplicationResourceLifecycle</code> calls. You can, however, specify it in subsequent calls to change the Service Role to another value.</p>
     pub service_role: Option<String>,
     /// <p>The application version lifecycle configuration.</p>
     pub version_lifecycle_config: Option<ApplicationVersionLifecycleConfig>,
@@ -619,11 +641,27 @@ impl ApplicationResourceLifecycleDescriptionMessageDeserializer {
         Ok(obj)
     }
 }
+struct ApplicationVersionArnDeserializer;
+impl ApplicationVersionArnDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Describes the properties of an application version.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ApplicationVersionDescription {
     /// <p>The name of the application to which the application version belongs.</p>
     pub application_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the application version.</p>
+    pub application_version_arn: Option<String>,
     /// <p>Reference to the artifact from the AWS CodeBuild build.</p>
     pub build_arn: Option<String>,
     /// <p>The creation date of the application version.</p>
@@ -636,7 +674,7 @@ pub struct ApplicationVersionDescription {
     pub source_build_information: Option<SourceBuildInformation>,
     /// <p>The storage location of the application version's source bundle in Amazon S3.</p>
     pub source_bundle: Option<S3Location>,
-    /// <p>The processing status of the application version.</p>
+    /// <p><p>The processing status of the application version. Reflects the state of the application version during its creation. Many of the values are only applicable if you specified <code>True</code> for the <code>Process</code> parameter of the <code>CreateApplicationVersion</code> action. The following list describes the possible values.</p> <ul> <li> <p> <code>Unprocessed</code> – Application version wasn&#39;t pre-processed or validated. Elastic Beanstalk will validate configuration files during deployment of the application version to an environment.</p> </li> <li> <p> <code>Processing</code> – Elastic Beanstalk is currently processing the application version.</p> </li> <li> <p> <code>Building</code> – Application version is currently undergoing an AWS CodeBuild build.</p> </li> <li> <p> <code>Processed</code> – Elastic Beanstalk was successfully pre-processed and validated.</p> </li> <li> <p> <code>Failed</code> – Either the AWS CodeBuild build failed or configuration files didn&#39;t pass validation. This application version isn&#39;t usable.</p> </li> </ul></p>
     pub status: Option<String>,
     /// <p>A unique identifier for the application version.</p>
     pub version_label: Option<String>,
@@ -668,6 +706,13 @@ impl ApplicationVersionDescriptionDeserializer {
                         obj.application_name = Some(try!(
                             ApplicationNameDeserializer::deserialize("ApplicationName", stack)
                         ));
+                    }
+                    "ApplicationVersionArn" => {
+                        obj.application_version_arn =
+                            Some(try!(ApplicationVersionArnDeserializer::deserialize(
+                                "ApplicationVersionArn",
+                                stack
+                            )));
                     }
                     "BuildArn" => {
                         obj.build_arn =
@@ -1616,6 +1661,10 @@ impl CnameAvailabilityDeserializer {
         Ok(obj)
     }
 }
+/// <p>AWS CodeBuild is not available in the specified region.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CodeBuildNotInServiceRegionException {}
+
 /// <p>Request to create or update a group of environments.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ComposeEnvironmentsMessage {
@@ -2574,7 +2623,7 @@ pub struct CreateApplicationVersionMessage {
     pub build_configuration: Option<BuildConfiguration>,
     /// <p>Describes this version.</p>
     pub description: Option<String>,
-    /// <p><p>Preprocesses and validates the environment manifest (<code>env.yaml</code>) and configuration files (<code>*.config</code> files in the <code>.ebextensions</code> folder) in the source bundle. Validating configuration files can identify issues prior to deploying the application version to an environment.</p> <note> <p>The <code>Process</code> option validates Elastic Beanstalk configuration files. It doesn&#39;t validate your application&#39;s configuration files, like proxy server or Docker configuration.</p> </note></p>
+    /// <p><p>Pre-processes and validates the environment manifest (<code>env.yaml</code>) and configuration files (<code>*.config</code> files in the <code>.ebextensions</code> folder) in the source bundle. Validating configuration files can identify issues prior to deploying the application version to an environment.</p> <p>You must turn processing on for application versions that you create using AWS CodeBuild or AWS CodeCommit. For application versions built from a source bundle in Amazon S3, processing is optional.</p> <note> <p>The <code>Process</code> option validates Elastic Beanstalk configuration files. It doesn&#39;t validate your application&#39;s configuration files, like proxy server or Docker configuration.</p> </note></p>
     pub process: Option<bool>,
     /// <p>Specify a commit in an AWS CodeCommit Git repository to use as the source code for the application version.</p>
     pub source_build_information: Option<SourceBuildInformation>,
@@ -2741,7 +2790,7 @@ pub struct CreateEnvironmentMessage {
     pub options_to_remove: Option<Vec<OptionSpecification>>,
     /// <p>The ARN of the platform.</p>
     pub platform_arn: Option<String>,
-    /// <p>This is an alternative to specifying a template name. If specified, AWS Elastic Beanstalk sets the configuration values to the default values associated with the specified solution stack.</p>
+    /// <p>This is an alternative to specifying a template name. If specified, AWS Elastic Beanstalk sets the configuration values to the default values associated with the specified solution stack.</p> <p>For a list of current solution stacks, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/concepts.platforms.html">Elastic Beanstalk Supported Platforms</a>.</p>
     pub solution_stack_name: Option<String>,
     /// <p>This specifies the tags applied to resources in the environment.</p>
     pub tags: Option<Vec<Tag>>,
@@ -4407,6 +4456,13 @@ impl Ec2InstanceIdDeserializer {
         Ok(obj)
     }
 }
+/// <p>A generic service exception has occurred.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ElasticBeanstalkServiceException {
+    /// <p>The exception error message.</p>
+    pub message: Option<String>,
+}
+
 struct EndpointURLDeserializer;
 impl EndpointURLDeserializer {
     #[allow(unused_variables)]
@@ -4452,7 +4508,7 @@ pub struct EnvironmentDescription {
     pub description: Option<String>,
     /// <p>For load-balanced, autoscaling environments, the URL to the LoadBalancer. For single-instance environments, the IP address of the instance.</p>
     pub endpoint_url: Option<String>,
-    /// <p>The environment's Amazon Resource Name (ARN), which can be used in other API reuqests that require an ARN.</p>
+    /// <p>The environment's Amazon Resource Name (ARN), which can be used in other API requests that require an ARN.</p>
     pub environment_arn: Option<String>,
     /// <p>The ID of this environment.</p>
     pub environment_id: Option<String>,
@@ -5256,7 +5312,7 @@ pub struct EnvironmentTier {
     pub name: Option<String>,
     /// <p>The type of this environment tier.</p>
     pub type_: Option<String>,
-    /// <p>The version of this environment tier.</p>
+    /// <p><p>The version of this environment tier. When you don&#39;t set a value to it, Elastic Beanstalk uses the latest compatible worker tier version.</p> <note> <p>This member is deprecated. Any specific version that you set may become out of date. We recommend leaving it unspecified.</p> </note></p>
     pub version: Option<String>,
 }
 
@@ -5871,6 +5927,10 @@ impl InstancesHealthAttributesSerializer {
     }
 }
 
+/// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InsufficientPrivilegesException {}
+
 struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(unused_variables)]
@@ -5885,6 +5945,10 @@ impl IntegerDeserializer {
         Ok(obj)
     }
 }
+/// <p>One or more input parameters is not valid. Please correct the input parameters and try the operation again.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidRequestException {}
+
 /// <p>Represents the average latency for the slowest X percent of requests over the last 10 seconds.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Latency {
@@ -6781,6 +6845,10 @@ impl ManagedActionHistoryItemsDeserializer {
         Ok(obj)
     }
 }
+/// <p>Cannot modify the managed action in its current state.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ManagedActionInvalidStateException {}
+
 struct ManagedActionsDeserializer;
 impl ManagedActionsDeserializer {
     #[allow(unused_variables)]
@@ -7099,6 +7167,10 @@ impl OperatingSystemVersionDeserializer {
         Ok(obj)
     }
 }
+/// <p>Unable to perform the specified operation because another operation that effects an element in this activity is already in progress.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct OperationInProgressException {}
+
 struct OptionNamespaceDeserializer;
 impl OptionNamespaceDeserializer {
     #[allow(unused_variables)]
@@ -7927,6 +7999,10 @@ impl PlatformVersionDeserializer {
         Ok(obj)
     }
 }
+/// <p>You cannot delete the platform version because there are still environments running on it.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PlatformVersionStillReferencedException {}
+
 /// <p>Describes a queue.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Queue {
@@ -8202,6 +8278,10 @@ impl ResourceNameDeserializer {
         Ok(obj)
     }
 }
+/// <p>A resource doesn't exist for the specified Amazon Resource Name (ARN).</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceNotFoundException {}
+
 /// <p>The AWS Elastic Beanstalk quota information for a single resource type in an AWS account. It reflects the resource's limits for this account.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResourceQuota {
@@ -8387,6 +8467,10 @@ impl ResourceTagsDescriptionMessageDeserializer {
         Ok(obj)
     }
 }
+/// <p>The type of the specified Amazon Resource Name (ARN) isn't supported for this operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceTypeNotSupportedException {}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestartAppServerMessage {
@@ -8614,6 +8698,14 @@ impl S3LocationSerializer {
         }
     }
 }
+
+/// <p><p>The specified S3 bucket does not belong to the S3 region in which the service is running. The following regions are supported:</p> <ul> <li> <p>IAD/us-east-1</p> </li> <li> <p>PDX/us-west-2</p> </li> <li> <p>DUB/eu-west-1</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct S3LocationNotInServiceRegionException {}
+
+/// <p>The specified account does not have a subscription to Amazon S3.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct S3SubscriptionRequiredException {}
 
 struct SampleTimestampDeserializer;
 impl SampleTimestampDeserializer {
@@ -8939,6 +9031,10 @@ impl SourceBuildInformationSerializer {
         );
     }
 }
+
+/// <p>Unable to delete the Amazon S3 source bundle associated with the application version. The application version was deleted successfully.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SourceBundleDeletionException {}
 
 /// <p>A specification for an environment configuration</p>
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -9577,6 +9673,34 @@ impl TokenDeserializer {
         Ok(obj)
     }
 }
+/// <p>The specified account has reached its limit of application versions.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyApplicationVersionsException {}
+
+/// <p>The specified account has reached its limit of applications.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyApplicationsException {}
+
+/// <p>The specified account has reached its limit of Amazon S3 buckets.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyBucketsException {}
+
+/// <p>The specified account has reached its limit of configuration templates.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyConfigurationTemplatesException {}
+
+/// <p>The specified account has reached its limit of environments.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyEnvironmentsException {}
+
+/// <p>You have exceeded the maximum number of allowed platforms associated with the account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyPlatformsException {}
+
+/// <p>The number of tags in the resource would exceed the number of tags that each resource can have.</p> <p>To calculate this, the operation considers both the number of tags the resource already has and the tags this operation would add if it succeeded.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyTagsException {}
+
 /// <p>Describes a trigger.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Trigger {
@@ -14110,7 +14234,7 @@ pub trait ElasticBeanstalk {
         input: DescribeEventsMessage,
     ) -> RusotoFuture<EventDescriptionsMessage, DescribeEventsError>;
 
-    /// <p>Retrives detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html">enhanced health reporting</a>.</p>
+    /// <p>Retrieves detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html">enhanced health reporting</a>.</p>
     fn describe_instances_health(
         &self,
         input: DescribeInstancesHealthRequest,
@@ -15434,7 +15558,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         })
     }
 
-    /// <p>Retrives detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html">enhanced health reporting</a>.</p>
+    /// <p>Retrieves detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html">enhanced health reporting</a>.</p>
     fn describe_instances_health(
         &self,
         input: DescribeInstancesHealthRequest,

@@ -1242,6 +1242,13 @@ pub struct RejectQualificationRequestRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RejectQualificationRequestResponse {}
 
+/// <p>Your request is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RequestError {
+    pub message: Option<String>,
+    pub turk_error_code: Option<String>,
+}
+
 /// <p> Both the AssignmentReviewReport and the HITReviewReport elements contains the ReviewActionDetail data structure. This structure is returned multiple times for each action specified in the Review Policy. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ReviewActionDetail {
@@ -1368,6 +1375,13 @@ pub struct SendTestEventNotificationRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SendTestEventNotificationResponse {}
+
+/// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ServiceFault {
+    pub message: Option<String>,
+    pub turk_error_code: Option<String>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateExpirationForHITRequest {

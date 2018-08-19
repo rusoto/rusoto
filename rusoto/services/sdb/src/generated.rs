@@ -141,6 +141,12 @@ impl AttributeSerializer {
     }
 }
 
+/// <p>The specified attribute does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AttributeDoesNotExist {
+    pub box_usage: Option<f32>,
+}
+
 struct AttributeListDeserializer;
 impl AttributeListDeserializer {
     #[allow(unused_variables)]
@@ -514,6 +520,12 @@ impl DomainNameListDeserializer {
         Ok(obj)
     }
 }
+/// <p>The item name was specified more than once. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DuplicateItemName {
+    pub box_usage: Option<f32>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetAttributesRequest {
     /// <p>The names of the attributes.</p>
@@ -621,6 +633,36 @@ impl IntegerDeserializer {
         Ok(obj)
     }
 }
+/// <p>The specified NextToken is not valid. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidNextToken {
+    pub box_usage: Option<f32>,
+}
+
+/// <p>Too many predicates exist in the query expression.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidNumberPredicates {
+    pub box_usage: Option<f32>,
+}
+
+/// <p>Too many predicates exist in the query expression.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidNumberValueTests {
+    pub box_usage: Option<f32>,
+}
+
+/// <p>The value for a parameter is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidParameterValue {
+    pub box_usage: Option<f32>,
+}
+
+/// <p>The specified query expression syntax is not valid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidQueryExpression {
+    pub box_usage: Option<f32>,
+}
+
 /// <p></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Item {
@@ -806,6 +848,54 @@ impl LongDeserializer {
         Ok(obj)
     }
 }
+/// <p>The request must contain the specified missing parameter.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MissingParameter {
+    pub box_usage: Option<f32>,
+}
+
+/// <p>The specified domain does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NoSuchDomain {
+    pub box_usage: Option<f32>,
+}
+
+/// <p>Too many attributes in this domain.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NumberDomainAttributesExceeded {
+    pub box_usage: Option<f32>,
+}
+
+/// <p>Too many bytes in this domain.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NumberDomainBytesExceeded {
+    pub box_usage: Option<f32>,
+}
+
+/// <p>Too many domains exist per this account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NumberDomainsExceeded {
+    pub box_usage: Option<f32>,
+}
+
+/// <p>Too many attributes in this item.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NumberItemAttributesExceeded {
+    pub box_usage: Option<f32>,
+}
+
+/// <p>Too many attributes exist in a single call.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NumberSubmittedAttributesExceeded {
+    pub box_usage: Option<f32>,
+}
+
+/// <p>Too many items exist in a single call.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NumberSubmittedItemsExceeded {
+    pub box_usage: Option<f32>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutAttributesRequest {
     /// <p>The list of attributes.</p>
@@ -939,6 +1029,12 @@ impl ReplaceableItemListSerializer {
     }
 }
 
+/// <p>A timeout occurred when attempting to query the specified domain with specified query expression.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RequestTimeout {
+    pub box_usage: Option<f32>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SelectRequest {
     /// <p>Determines whether or not strong consistency should be enforced when data is read from SimpleDB. If <code>true</code>, any data previously written to SimpleDB will be returned. Otherwise, results will be consistent eventually, and the client may not see data that was written immediately before your read.</p>
@@ -1042,6 +1138,12 @@ impl StringDeserializer {
         Ok(obj)
     }
 }
+/// <p>Too many attributes requested.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyRequestedAttributes {
+    pub box_usage: Option<f32>,
+}
+
 /// <p> Specifies the conditions under which data should be updated. If an update condition is specified for a request, the data will only be updated if the condition is satisfied. For example, if an attribute with a specific name and value exists, or if a specific attribute doesn't exist. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateCondition {

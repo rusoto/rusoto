@@ -2038,6 +2038,90 @@ pub struct UpdateXssMatchSetResponse {
     pub change_token: Option<String>,
 }
 
+/// <p>The name specified is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct WAFDisallowedNameException {
+    pub message: Option<String>,
+}
+
+/// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct WAFInternalErrorException {
+    pub message: Option<String>,
+}
+
+/// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct WAFInvalidAccountException {}
+
+/// <p><p>The operation failed because there was nothing to do. For example:</p> <ul> <li> <p>You tried to remove a <code>Rule</code> from a <code>WebACL</code>, but the <code>Rule</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to remove an IP address from an <code>IPSet</code>, but the IP address isn&#39;t in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to remove a <code>ByteMatchTuple</code> from a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add a <code>Rule</code> to a <code>WebACL</code>, but the <code>Rule</code> already exists in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add an IP address to an <code>IPSet</code>, but the IP address already exists in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to add a <code>ByteMatchTuple</code> to a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> already exists in the specified <code>WebACL</code>.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct WAFInvalidOperationException {
+    pub message: Option<String>,
+}
+
+/// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct WAFInvalidParameterException {
+    pub field: Option<String>,
+    pub parameter: Option<String>,
+    pub reason: Option<String>,
+}
+
+/// <p><p>The operation failed because the specified policy is not in the proper format. </p> <p>The policy is subject to the following restrictions:</p> <ul> <li> <p>You can attach only one policy with each <code>PutPermissionPolicy</code> request.</p> </li> <li> <p>The policy must include an <code>Effect</code>, <code>Action</code> and <code>Principal</code>. </p> </li> <li> <p> <code>Effect</code> must specify <code>Allow</code>.</p> </li> <li> <p>The <code>Action</code> in the policy must be <code>waf:UpdateWebACL</code> or <code>waf-regional:UpdateWebACL</code>. Any extra or wildcard actions in the policy will be rejected.</p> </li> <li> <p>The policy cannot include a <code>Resource</code> parameter.</p> </li> <li> <p>The ARN in the request must be a valid WAF RuleGroup ARN and the RuleGroup must exist in the same region.</p> </li> <li> <p>The user making the request must be the owner of the RuleGroup.</p> </li> <li> <p>Your policy must be composed using IAM Policy version 2012-10-17.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct WAFInvalidPermissionPolicyException {
+    pub message: Option<String>,
+}
+
+/// <p>The regular expression (regex) you specified in <code>RegexPatternString</code> is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct WAFInvalidRegexPatternException {
+    pub message: Option<String>,
+}
+
+/// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct WAFLimitsExceededException {
+    pub message: Option<String>,
+}
+
+/// <p><p>The operation failed because you tried to delete an object that isn&#39;t empty. For example:</p> <ul> <li> <p>You tried to delete a <code>WebACL</code> that still contains one or more <code>Rule</code> objects.</p> </li> <li> <p>You tried to delete a <code>Rule</code> that still contains one or more <code>ByteMatchSet</code> objects or other predicates.</p> </li> <li> <p>You tried to delete a <code>ByteMatchSet</code> that contains one or more <code>ByteMatchTuple</code> objects.</p> </li> <li> <p>You tried to delete an <code>IPSet</code> that references one or more IP addresses.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct WAFNonEmptyEntityException {
+    pub message: Option<String>,
+}
+
+/// <p><p>The operation failed because you tried to add an object to or delete an object from another object that doesn&#39;t exist. For example:</p> <ul> <li> <p>You tried to add a <code>Rule</code> to or delete a <code>Rule</code> from a <code>WebACL</code> that doesn&#39;t exist.</p> </li> <li> <p>You tried to add a <code>ByteMatchSet</code> to or delete a <code>ByteMatchSet</code> from a <code>Rule</code> that doesn&#39;t exist.</p> </li> <li> <p>You tried to add an IP address to or delete an IP address from an <code>IPSet</code> that doesn&#39;t exist.</p> </li> <li> <p>You tried to add a <code>ByteMatchTuple</code> to or delete a <code>ByteMatchTuple</code> from a <code>ByteMatchSet</code> that doesn&#39;t exist.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct WAFNonexistentContainerException {
+    pub message: Option<String>,
+}
+
+/// <p>The operation failed because the referenced object doesn't exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct WAFNonexistentItemException {
+    pub message: Option<String>,
+}
+
+/// <p><p>The operation failed because you tried to delete an object that is still in use. For example:</p> <ul> <li> <p>You tried to delete a <code>ByteMatchSet</code> that is still referenced by a <code>Rule</code>.</p> </li> <li> <p>You tried to delete a <code>Rule</code> that is still referenced by a <code>WebACL</code>.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct WAFReferencedItemException {
+    pub message: Option<String>,
+}
+
+/// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct WAFStaleDataException {
+    pub message: Option<String>,
+}
+
+/// <p>The specified subscription does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct WAFSubscriptionNotFoundException {
+    pub message: Option<String>,
+}
+
 /// <p>For the action that is associated with a rule in a <code>WebACL</code>, specifies the action that you want AWS WAF to perform when a web request matches all of the conditions in a rule. For the default action in a <code>WebACL</code>, specifies the action that you want AWS WAF to take when a web request doesn't match all of the conditions in any of the rules in a <code>WebACL</code>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WafAction {

@@ -226,6 +226,19 @@ pub struct GetQueryResultsOutput {
     pub result_set: Option<ResultSet>,
 }
 
+/// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalServerException {
+    pub message: Option<String>,
+}
+
+/// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidRequestException {
+    pub athena_error_code: Option<String>,
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListNamedQueriesInput {
     /// <p>The maximum number of queries to return in this request.</p>
@@ -446,6 +459,13 @@ pub struct StopQueryExecutionInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StopQueryExecutionOutput {}
+
+/// <p>Indicates that the request was throttled.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TooManyRequestsException {
+    pub message: Option<String>,
+    pub reason: Option<String>,
+}
 
 /// <p>Information about a named query ID that could not be processed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]

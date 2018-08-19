@@ -101,6 +101,123 @@ pub struct AttributeValueUpdate {
     pub value: Option<AttributeValue>,
 }
 
+/// <p>Represents the properties of the scaling policy.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct AutoScalingPolicyDescription {
+    /// <p>The name of the scaling policy.</p>
+    #[serde(rename = "PolicyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_name: Option<String>,
+    /// <p>Represents a target tracking scaling policy configuration.</p>
+    #[serde(rename = "TargetTrackingScalingPolicyConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_tracking_scaling_policy_configuration:
+        Option<AutoScalingTargetTrackingScalingPolicyConfigurationDescription>,
+}
+
+/// <p>Represents the autoscaling policy to be modified.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AutoScalingPolicyUpdate {
+    /// <p>The name of the scaling policy.</p>
+    #[serde(rename = "PolicyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_name: Option<String>,
+    /// <p>Represents a target tracking scaling policy configuration.</p>
+    #[serde(rename = "TargetTrackingScalingPolicyConfiguration")]
+    pub target_tracking_scaling_policy_configuration:
+        AutoScalingTargetTrackingScalingPolicyConfigurationUpdate,
+}
+
+/// <p>Represents the autoscaling settings for a global table or global secondary index.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct AutoScalingSettingsDescription {
+    /// <p>Disabled autoscaling for this global table or global secondary index.</p>
+    #[serde(rename = "AutoScalingDisabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_scaling_disabled: Option<bool>,
+    /// <p>Role ARN used for configuring autoScaling policy.</p>
+    #[serde(rename = "AutoScalingRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_scaling_role_arn: Option<String>,
+    /// <p>The maximum capacity units that a global table or global secondary index should be scaled up to.</p>
+    #[serde(rename = "MaximumUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_units: Option<i64>,
+    /// <p>The minimum capacity units that a global table or global secondary index should be scaled down to.</p>
+    #[serde(rename = "MinimumUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_units: Option<i64>,
+    /// <p>Information about the scaling policies.</p>
+    #[serde(rename = "ScalingPolicies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scaling_policies: Option<Vec<AutoScalingPolicyDescription>>,
+}
+
+/// <p>Represents the autoscaling settings to be modified for a global table or global secondary index.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AutoScalingSettingsUpdate {
+    /// <p>Disabled autoscaling for this global table or global secondary index.</p>
+    #[serde(rename = "AutoScalingDisabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_scaling_disabled: Option<bool>,
+    /// <p>Role ARN used for configuring autoscaling policy.</p>
+    #[serde(rename = "AutoScalingRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_scaling_role_arn: Option<String>,
+    /// <p>The maximum capacity units that a global table or global secondary index should be scaled up to.</p>
+    #[serde(rename = "MaximumUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_units: Option<i64>,
+    /// <p>The minimum capacity units that a global table or global secondary index should be scaled down to.</p>
+    #[serde(rename = "MinimumUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_units: Option<i64>,
+    /// <p>The scaling policy to apply for scaling target global table or global secondary index capacity units.</p>
+    #[serde(rename = "ScalingPolicyUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scaling_policy_update: Option<AutoScalingPolicyUpdate>,
+}
+
+/// <p>Represents the properties of a target tracking scaling policy.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct AutoScalingTargetTrackingScalingPolicyConfigurationDescription {
+    /// <p>Indicates whether scale in by the target tracking policy is disabled. If the value is true, scale in is disabled and the target tracking policy won't remove capacity from the scalable resource. Otherwise, scale in is enabled and the target tracking policy can remove capacity from the scalable resource. The default value is false.</p>
+    #[serde(rename = "DisableScaleIn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_scale_in: Option<bool>,
+    /// <p>The amount of time, in seconds, after a scale in activity completes before another scale in activity can start. The cooldown period is used to block subsequent scale in requests until it has expired. You should scale in conservatively to protect your application's availability. However, if another alarm triggers a scale out policy during the cooldown period after a scale-in, application autoscaling scales out your scalable target immediately. </p>
+    #[serde(rename = "ScaleInCooldown")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scale_in_cooldown: Option<i64>,
+    /// <p>The amount of time, in seconds, after a scale out activity completes before another scale out activity can start. While the cooldown period is in effect, the capacity that has been added by the previous scale out event that initiated the cooldown is calculated as part of the desired capacity for the next scale out. You should continuously (but not excessively) scale out.</p>
+    #[serde(rename = "ScaleOutCooldown")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scale_out_cooldown: Option<i64>,
+    /// <p>The target value for the metric. The range is 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2).</p>
+    #[serde(rename = "TargetValue")]
+    pub target_value: f64,
+}
+
+/// <p>Represents the settings of a target tracking scaling policy that will be modified.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AutoScalingTargetTrackingScalingPolicyConfigurationUpdate {
+    /// <p>Indicates whether scale in by the target tracking policy is disabled. If the value is true, scale in is disabled and the target tracking policy won't remove capacity from the scalable resource. Otherwise, scale in is enabled and the target tracking policy can remove capacity from the scalable resource. The default value is false.</p>
+    #[serde(rename = "DisableScaleIn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_scale_in: Option<bool>,
+    /// <p>The amount of time, in seconds, after a scale in activity completes before another scale in activity can start. The cooldown period is used to block subsequent scale in requests until it has expired. You should scale in conservatively to protect your application's availability. However, if another alarm triggers a scale out policy during the cooldown period after a scale-in, application autoscaling scales out your scalable target immediately. </p>
+    #[serde(rename = "ScaleInCooldown")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scale_in_cooldown: Option<i64>,
+    /// <p>The amount of time, in seconds, after a scale out activity completes before another scale out activity can start. While the cooldown period is in effect, the capacity that has been added by the previous scale out event that initiated the cooldown is calculated as part of the desired capacity for the next scale out. You should continuously (but not excessively) scale out.</p>
+    #[serde(rename = "ScaleOutCooldown")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scale_out_cooldown: Option<i64>,
+    /// <p>The target value for the metric. The range is 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2).</p>
+    #[serde(rename = "TargetValue")]
+    pub target_value: f64,
+}
+
 /// <p>Contains the description of the backup created for the table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BackupDescription {
@@ -127,6 +244,10 @@ pub struct BackupDetails {
     /// <p>Time at which the backup was created. This is the request time of the backup. </p>
     #[serde(rename = "BackupCreationDateTime")]
     pub backup_creation_date_time: f64,
+    /// <p>Time at which the automatic on demand backup created by DynamoDB will expire. This <code>SYSTEM</code> on demand backup expires automatically 35 days after its creation.</p>
+    #[serde(rename = "BackupExpiryDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_expiry_date_time: Option<f64>,
     /// <p>Name of the requested backup.</p>
     #[serde(rename = "BackupName")]
     pub backup_name: String,
@@ -137,6 +258,21 @@ pub struct BackupDetails {
     /// <p>Backup can be in one of the following states: CREATING, ACTIVE, DELETED. </p>
     #[serde(rename = "BackupStatus")]
     pub backup_status: String,
+    /// <p><p>BackupType:</p> <ul> <li> <p> <code>USER</code> - On demand backup created by you.</p> </li> <li> <p> <code>SYSTEM</code> - On demand backup automatically created by DynamoDB.</p> </li> </ul></p>
+    #[serde(rename = "BackupType")]
+    pub backup_type: String,
+}
+
+/// <p>There is another ongoing conflicting backup control plane operation on the table. The backups is either being created, deleted or restored to a table.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BackupInUseException {
+    pub message: Option<String>,
+}
+
+/// <p>Backup not found for the given BackupARN. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BackupNotFoundException {
+    pub message: Option<String>,
 }
 
 /// <p>Contains details for the backup.</p>
@@ -150,6 +286,10 @@ pub struct BackupSummary {
     #[serde(rename = "BackupCreationDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_creation_date_time: Option<f64>,
+    /// <p>Time at which the automatic on demand backup created by DynamoDB will expire. This <code>SYSTEM</code> on demand backup expires automatically 35 days after its creation.</p>
+    #[serde(rename = "BackupExpiryDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_expiry_date_time: Option<f64>,
     /// <p>Name of the specified backup.</p>
     #[serde(rename = "BackupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -162,6 +302,10 @@ pub struct BackupSummary {
     #[serde(rename = "BackupStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_status: Option<String>,
+    /// <p><p>BackupType:</p> <ul> <li> <p> <code>USER</code> - On demand backup created by you.</p> </li> <li> <p> <code>SYSTEM</code> - On demand backup automatically created by DynamoDB.</p> </li> </ul></p>
+    #[serde(rename = "BackupType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_type: Option<String>,
     /// <p>ARN associated with the table.</p>
     #[serde(rename = "TableArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -263,6 +407,13 @@ pub struct Condition {
     pub comparison_operator: String,
 }
 
+/// <p>A condition specified in the operation could not be evaluated.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ConditionalCheckFailedException {
+    /// <p>The conditional request failed.</p>
+    pub message: Option<String>,
+}
+
 /// <p>The capacity units consumed by an operation. The data returned includes the total provisioned throughput consumed, along with statistics for the table and any indexes involved in the operation. <code>ConsumedCapacity</code> is only returned if the request asked for it. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html">Provisioned Throughput</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ConsumedCapacity {
@@ -298,6 +449,12 @@ pub struct ContinuousBackupsDescription {
     #[serde(rename = "PointInTimeRecoveryDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub point_in_time_recovery_description: Option<PointInTimeRecoveryDescription>,
+}
+
+/// <p>Backups have not yet been enabled for this table.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ContinuousBackupsUnavailableException {
+    pub message: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -542,7 +699,7 @@ pub struct DescribeContinuousBackupsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeContinuousBackupsOutput {
-    /// <p> <code>ContinuousBackupsDescription</code> can be one of the following : ENABLED, DISABLED. </p>
+    /// <p>Represents the continuous backups and point in time recovery settings on the table.</p>
     #[serde(rename = "ContinuousBackupsDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub continuous_backups_description: Option<ContinuousBackupsDescription>,
@@ -561,6 +718,25 @@ pub struct DescribeGlobalTableOutput {
     #[serde(rename = "GlobalTableDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub global_table_description: Option<GlobalTableDescription>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeGlobalTableSettingsInput {
+    /// <p>The name of the global table to describe.</p>
+    #[serde(rename = "GlobalTableName")]
+    pub global_table_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DescribeGlobalTableSettingsOutput {
+    /// <p>The name of the global table.</p>
+    #[serde(rename = "GlobalTableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_table_name: Option<String>,
+    /// <p>The region specific settings for the global table.</p>
+    #[serde(rename = "ReplicaSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_settings: Option<Vec<ReplicaSettingsDescription>>,
 }
 
 /// <p>Represents the input of a <code>DescribeLimits</code> operation. Has no content.</p>
@@ -793,6 +969,12 @@ pub struct GlobalTable {
     pub replication_group: Option<Vec<Replica>>,
 }
 
+/// <p>The specified global table already exists.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GlobalTableAlreadyExistsException {
+    pub message: Option<String>,
+}
+
 /// <p>Contains details about the global table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GlobalTableDescription {
@@ -818,6 +1000,47 @@ pub struct GlobalTableDescription {
     pub replication_group: Option<Vec<ReplicaDescription>>,
 }
 
+/// <p>Represents the settings of a global secondary index for a global table that will be modified.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GlobalTableGlobalSecondaryIndexSettingsUpdate {
+    /// <p>The name of the global secondary index. The name must be unique among all other indexes on this table.</p>
+    #[serde(rename = "IndexName")]
+    pub index_name: String,
+    /// <p>AutoScaling settings for managing a global secondary index's write capacity units.</p>
+    #[serde(rename = "ProvisionedWriteCapacityAutoScalingSettingsUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_write_capacity_auto_scaling_settings_update: Option<AutoScalingSettingsUpdate>,
+    /// <p>The maximum number of writes consumed per second before DynamoDB returns a <code>ThrottlingException.</code> </p>
+    #[serde(rename = "ProvisionedWriteCapacityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_write_capacity_units: Option<i64>,
+}
+
+/// <p>The specified global table does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GlobalTableNotFoundException {
+    pub message: Option<String>,
+}
+
+/// <p>The operation tried to access a nonexistent index.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct IndexNotFoundException {
+    pub message: Option<String>,
+}
+
+/// <p>An error occurred on the server side.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalServerError {
+    /// <p>The server encountered an internal error trying to fulfill the request.</p>
+    pub message: Option<String>,
+}
+
+/// <p>An invalid restore time was specified. RestoreDateTime must be between EarliestRestorableDateTime and LatestRestorableDateTime.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidRestoreTimeException {
+    pub message: Option<String>,
+}
+
 /// <p>Information about item collections, if any, that were affected by the operation. <code>ItemCollectionMetrics</code> is only returned if the request asked for it. If the table does not have any local secondary indexes, this information is not returned in the response.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ItemCollectionMetrics {
@@ -829,6 +1052,13 @@ pub struct ItemCollectionMetrics {
     #[serde(rename = "SizeEstimateRangeGB")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub size_estimate_range_gb: Option<Vec<f64>>,
+}
+
+/// <p>An item collection is too large. This exception is only returned for tables that have one or more local secondary indexes.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ItemCollectionSizeLimitExceededException {
+    /// <p>The total size of an item collection has exceeded the maximum limit of 10 gigabytes.</p>
+    pub message: Option<String>,
 }
 
 /// <p>Represents <i>a single element</i> of a key schema. A key schema specifies the attributes that make up the primary key of a table, or the key attributes of an index.</p> <p>A <code>KeySchemaElement</code> represents exactly one attribute of the primary key. For example, a simple primary key would be represented by one <code>KeySchemaElement</code> (for the partition key). A composite primary key would require one <code>KeySchemaElement</code> for the partition key, and another <code>KeySchemaElement</code> for the sort key.</p> <p>A <code>KeySchemaElement</code> must be a scalar, top-level attribute (not a nested attribute). The data type must be one of String, Number, or Binary. The attribute cannot be nested within a List or a Map.</p>
@@ -866,9 +1096,20 @@ pub struct KeysAndAttributes {
     pub projection_expression: Option<String>,
 }
 
+/// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {
+    /// <p>Too many operations for a given subscriber.</p>
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListBackupsInput {
-    /// <p> <code>LastEvaluatedBackupARN</code> returned by the previous ListBackups call. </p>
+    /// <p><p>The backups from the table specified by BackupType are listed.</p> <p>Where BackupType can be:</p> <ul> <li> <p> <code>USER</code> - On demand backup created by you.</p> </li> <li> <p> <code>SYSTEM</code> - On demand backup automatically created by DynamoDB.</p> </li> <li> <p> <code>ALL</code> - All types of on demand backups (USER and SYSTEM).</p> </li> </ul></p>
+    #[serde(rename = "BackupType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_type: Option<String>,
+    /// <p> <code>LastEvaluatedBackupArn</code> is the ARN of the backup last evaluated when the current page of results was returned, inclusive of the current page of results. This value may be specified as the <code>ExclusiveStartBackupArn</code> of a new <code>ListBackups</code> operation in order to fetch the next page of results. </p>
     #[serde(rename = "ExclusiveStartBackupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exclusive_start_backup_arn: Option<String>,
@@ -896,7 +1137,7 @@ pub struct ListBackupsOutput {
     #[serde(rename = "BackupSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_summaries: Option<Vec<BackupSummary>>,
-    /// <p>Last evaluated BackupARN.</p>
+    /// <p> The ARN of the backup last evaluated when the current page of results was returned, inclusive of the current page of results. This value may be specified as the <code>ExclusiveStartBackupArn</code> of a new <code>ListBackups</code> operation in order to fetch the next page of results. </p> <p> If <code>LastEvaluatedBackupArn</code> is empty, then the last page of results has been processed and there are no more results to be retrieved. </p> <p> If <code>LastEvaluatedBackupArn</code> is not empty, this may or may not indicate there is more data to be returned. All results are guaranteed to have been returned if and only if no value for <code>LastEvaluatedBackupArn</code> is returned. </p>
     #[serde(rename = "LastEvaluatedBackupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_evaluated_backup_arn: Option<String>,
@@ -1042,11 +1283,11 @@ pub struct LocalSecondaryIndexInfo {
 /// <p>The description of the point in time settings applied to the table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PointInTimeRecoveryDescription {
-    /// <p>Specifies the earliest point in time you can restore your table to. It is equal to the maximum of point in time recovery enabled time and <code>CurrentTime</code> - <code>PointInTimeRecoveryPeriod</code>.</p>
+    /// <p>Specifies the earliest point in time you can restore your table to. It You can restore your table to any point in time during the last 35 days. </p>
     #[serde(rename = "EarliestRestorableDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub earliest_restorable_date_time: Option<f64>,
-    /// <p> <code>LatestRestorableDateTime</code> is 5 minutes from now and there is a +/- 1 minute fuzziness on the restore times. </p>
+    /// <p> <code>LatestRestorableDateTime</code> is typically 5 minutes before the current time. </p>
     #[serde(rename = "LatestRestorableDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_restorable_date_time: Option<f64>,
@@ -1062,6 +1303,12 @@ pub struct PointInTimeRecoverySpecification {
     /// <p>Indicates whether point in time recovery is enabled (true) or disabled (false) on the table.</p>
     #[serde(rename = "PointInTimeRecoveryEnabled")]
     pub point_in_time_recovery_enabled: bool,
+}
+
+/// <p>Point in time recovery has not yet been enabled for this source table.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PointInTimeRecoveryUnavailableException {
+    pub message: Option<String>,
 }
 
 /// <p>Represents attributes that are copied (projected) from the table into an index. These are in addition to the primary key attributes and index key attributes, which are automatically projected.</p>
@@ -1111,6 +1358,13 @@ pub struct ProvisionedThroughputDescription {
     #[serde(rename = "WriteCapacityUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub write_capacity_units: Option<i64>,
+}
+
+/// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ProvisionedThroughputExceededException {
+    /// <p>You exceeded your maximum allowed provisioned throughput.</p>
+    pub message: Option<String>,
 }
 
 /// <p>Represents the input of a <code>PutItem</code> operation.</p>
@@ -1285,6 +1539,12 @@ pub struct Replica {
     pub region_name: Option<String>,
 }
 
+/// <p>The specified replica is already part of the global table.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ReplicaAlreadyExistsException {
+    pub message: Option<String>,
+}
+
 /// <p>Contains the details of the replica.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ReplicaDescription {
@@ -1292,6 +1552,113 @@ pub struct ReplicaDescription {
     #[serde(rename = "RegionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region_name: Option<String>,
+}
+
+/// <p>Represents the properties of a global secondary index.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ReplicaGlobalSecondaryIndexSettingsDescription {
+    /// <p>The name of the global secondary index. The name must be unique among all other indexes on this table.</p>
+    #[serde(rename = "IndexName")]
+    pub index_name: String,
+    /// <p><p> The current status of the global secondary index:</p> <ul> <li> <p> <code>CREATING</code> - The global secondary index is being created.</p> </li> <li> <p> <code>UPDATING</code> - The global secondary index is being updated.</p> </li> <li> <p> <code>DELETING</code> - The global secondary index is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The global secondary index is ready for use.</p> </li> </ul></p>
+    #[serde(rename = "IndexStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_status: Option<String>,
+    /// <p>Autoscaling settings for a global secondary index replica's read capacity units.</p>
+    #[serde(rename = "ProvisionedReadCapacityAutoScalingSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_read_capacity_auto_scaling_settings: Option<AutoScalingSettingsDescription>,
+    /// <p>The maximum number of strongly consistent reads consumed per second before DynamoDB returns a <code>ThrottlingException</code>.</p>
+    #[serde(rename = "ProvisionedReadCapacityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_read_capacity_units: Option<i64>,
+    /// <p>AutoScaling settings for a global secondary index replica's write capacity units.</p>
+    #[serde(rename = "ProvisionedWriteCapacityAutoScalingSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_write_capacity_auto_scaling_settings: Option<AutoScalingSettingsDescription>,
+    /// <p>The maximum number of writes consumed per second before DynamoDB returns a <code>ThrottlingException</code>.</p>
+    #[serde(rename = "ProvisionedWriteCapacityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_write_capacity_units: Option<i64>,
+}
+
+/// <p>Represents the settings of a global secondary index for a global table that will be modified.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ReplicaGlobalSecondaryIndexSettingsUpdate {
+    /// <p>The name of the global secondary index. The name must be unique among all other indexes on this table.</p>
+    #[serde(rename = "IndexName")]
+    pub index_name: String,
+    /// <p>Autoscaling settings for managing a global secondary index replica's read capacity units.</p>
+    #[serde(rename = "ProvisionedReadCapacityAutoScalingSettingsUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_read_capacity_auto_scaling_settings_update: Option<AutoScalingSettingsUpdate>,
+    /// <p>The maximum number of strongly consistent reads consumed per second before DynamoDB returns a <code>ThrottlingException</code>.</p>
+    #[serde(rename = "ProvisionedReadCapacityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_read_capacity_units: Option<i64>,
+}
+
+/// <p>The specified replica is no longer part of the global table.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ReplicaNotFoundException {
+    pub message: Option<String>,
+}
+
+/// <p>Represents the properties of a replica.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ReplicaSettingsDescription {
+    /// <p>The region name of the replica.</p>
+    #[serde(rename = "RegionName")]
+    pub region_name: String,
+    /// <p>Replica global secondary index settings for the global table.</p>
+    #[serde(rename = "ReplicaGlobalSecondaryIndexSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_global_secondary_index_settings:
+        Option<Vec<ReplicaGlobalSecondaryIndexSettingsDescription>>,
+    /// <p>Autoscaling settings for a global table replica's read capacity units.</p>
+    #[serde(rename = "ReplicaProvisionedReadCapacityAutoScalingSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_provisioned_read_capacity_auto_scaling_settings:
+        Option<AutoScalingSettingsDescription>,
+    /// <p>The maximum number of strongly consistent reads consumed per second before DynamoDB returns a <code>ThrottlingException</code>. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.html#ProvisionedThroughput">Specifying Read and Write Requirements</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p>
+    #[serde(rename = "ReplicaProvisionedReadCapacityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_provisioned_read_capacity_units: Option<i64>,
+    /// <p>AutoScaling settings for a global table replica's write capacity units.</p>
+    #[serde(rename = "ReplicaProvisionedWriteCapacityAutoScalingSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_provisioned_write_capacity_auto_scaling_settings:
+        Option<AutoScalingSettingsDescription>,
+    /// <p>The maximum number of writes consumed per second before DynamoDB returns a <code>ThrottlingException</code>. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.html#ProvisionedThroughput">Specifying Read and Write Requirements</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
+    #[serde(rename = "ReplicaProvisionedWriteCapacityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_provisioned_write_capacity_units: Option<i64>,
+    /// <p><p>The current state of the region:</p> <ul> <li> <p> <code>CREATING</code> - The region is being created.</p> </li> <li> <p> <code>UPDATING</code> - The region is being updated.</p> </li> <li> <p> <code>DELETING</code> - The region is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The region is ready for use.</p> </li> </ul></p>
+    #[serde(rename = "ReplicaStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_status: Option<String>,
+}
+
+/// <p>Represents the settings for a global table in a region that will be modified.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ReplicaSettingsUpdate {
+    /// <p>The region of the replica to be added.</p>
+    #[serde(rename = "RegionName")]
+    pub region_name: String,
+    /// <p>Represents the settings of a global secondary index for a global table that will be modified.</p>
+    #[serde(rename = "ReplicaGlobalSecondaryIndexSettingsUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_global_secondary_index_settings_update:
+        Option<Vec<ReplicaGlobalSecondaryIndexSettingsUpdate>>,
+    /// <p>Autoscaling settings for managing a global table replica's read capacity units.</p>
+    #[serde(rename = "ReplicaProvisionedReadCapacityAutoScalingSettingsUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_provisioned_read_capacity_auto_scaling_settings_update:
+        Option<AutoScalingSettingsUpdate>,
+    /// <p>The maximum number of strongly consistent reads consumed per second before DynamoDB returns a <code>ThrottlingException</code>. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.html#ProvisionedThroughput">Specifying Read and Write Requirements</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p>
+    #[serde(rename = "ReplicaProvisionedReadCapacityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_provisioned_read_capacity_units: Option<i64>,
 }
 
 /// <p><p>Represents one of the following:</p> <ul> <li> <p>A new replica to be added to an existing global table.</p> </li> <li> <p>New parameters for an existing replica.</p> </li> <li> <p>An existing replica to be removed from an existing global table.</p> </li> </ul></p>
@@ -1305,6 +1672,20 @@ pub struct ReplicaUpdate {
     #[serde(rename = "Delete")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delete: Option<DeleteReplicaAction>,
+}
+
+/// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceInUseException {
+    /// <p>The resource which is being attempted to be changed is in use.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceNotFoundException {
+    /// <p>The resource which is being requested does not exist.</p>
+    pub message: Option<String>,
 }
 
 /// <p>Contains details for the restore.</p>
@@ -1373,6 +1754,14 @@ pub struct RestoreTableToPointInTimeOutput {
 /// <p>The description of the server-side encryption status on the specified table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SSEDescription {
+    /// <p>The KMS master key ARN used for the KMS encryption.</p>
+    #[serde(rename = "KMSMasterKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_master_key_arn: Option<String>,
+    /// <p><p>Server-side encryption type:</p> <ul> <li> <p> <code>AES256</code> - Server-side encryption which uses the AES256 algorithm.</p> </li> <li> <p> <code>KMS</code> - Server-side encryption which uses AWS Key Management Service.</p> </li> </ul></p>
+    #[serde(rename = "SSEType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sse_type: Option<String>,
     /// <p><p>The current state of server-side encryption:</p> <ul> <li> <p> <code>ENABLING</code> - Server-side encryption is being enabled.</p> </li> <li> <p> <code>ENABLED</code> - Server-side encryption is enabled.</p> </li> <li> <p> <code>DISABLING</code> - Server-side encryption is being disabled.</p> </li> <li> <p> <code>DISABLED</code> - Server-side encryption is disabled.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1549,6 +1938,12 @@ pub struct StreamSpecification {
     pub stream_view_type: Option<String>,
 }
 
+/// <p>A target table with the specified name already exists. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TableAlreadyExistsException {
+    pub message: Option<String>,
+}
+
 /// <p>Represents the properties of a table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TableDescription {
@@ -1620,6 +2015,18 @@ pub struct TableDescription {
     #[serde(rename = "TableStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_status: Option<String>,
+}
+
+/// <p>A target table with the specified name is either being created or deleted. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TableInUseException {
+    pub message: Option<String>,
+}
+
+/// <p>A source table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TableNotFoundException {
+    pub message: Option<String>,
 }
 
 /// <p>Describes a tag. A tag is a key-value pair. You can add up to 50 tags to a single DynamoDB table. </p> <p> AWS-assigned tag names and values are automatically assigned the aws: prefix, which the user cannot assign. AWS-assigned tag names do not count towards the tag limit of 50. User-assigned tag names have the prefix user: in the Cost Allocation Report. You cannot backdate the application of a tag. </p> <p>For an overview on tagging DynamoDB resources, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html">Tagging for DynamoDB</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
@@ -1722,6 +2129,43 @@ pub struct UpdateGlobalTableOutput {
     #[serde(rename = "GlobalTableDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub global_table_description: Option<GlobalTableDescription>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateGlobalTableSettingsInput {
+    /// <p>Represents the settings of a global secondary index for a global table that will be modified.</p>
+    #[serde(rename = "GlobalTableGlobalSecondaryIndexSettingsUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_table_global_secondary_index_settings_update:
+        Option<Vec<GlobalTableGlobalSecondaryIndexSettingsUpdate>>,
+    /// <p>The name of the global table</p>
+    #[serde(rename = "GlobalTableName")]
+    pub global_table_name: String,
+    /// <p>AutoScaling settings for managing provisioned write capacity for the global table.</p>
+    #[serde(rename = "GlobalTableProvisionedWriteCapacityAutoScalingSettingsUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_table_provisioned_write_capacity_auto_scaling_settings_update:
+        Option<AutoScalingSettingsUpdate>,
+    /// <p>The maximum number of writes consumed per second before DynamoDB returns a <code>ThrottlingException.</code> </p>
+    #[serde(rename = "GlobalTableProvisionedWriteCapacityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_table_provisioned_write_capacity_units: Option<i64>,
+    /// <p>Represents the settings for a global table in a region that will be modified.</p>
+    #[serde(rename = "ReplicaSettingsUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_settings_update: Option<Vec<ReplicaSettingsUpdate>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct UpdateGlobalTableSettingsOutput {
+    /// <p>The name of the global table.</p>
+    #[serde(rename = "GlobalTableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_table_name: Option<String>,
+    /// <p>The region specific settings for the global table.</p>
+    #[serde(rename = "ReplicaSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_settings: Option<Vec<ReplicaSettingsDescription>>,
 }
 
 /// <p>Represents the input of an <code>UpdateItem</code> operation.</p>
@@ -2059,7 +2503,7 @@ pub enum CreateBackupError {
     ContinuousBackupsUnavailable(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
     /// <p>A target table with the specified name is either being created or deleted. </p>
     TableInUse(String),
@@ -2166,7 +2610,7 @@ pub enum CreateGlobalTableError {
     GlobalTableAlreadyExists(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
     /// <p>A source table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
     TableNotFound(String),
@@ -2265,7 +2709,7 @@ impl Error for CreateGlobalTableError {
 pub enum CreateTableError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
     ResourceInUse(String),
@@ -2360,7 +2804,7 @@ pub enum DeleteBackupError {
     BackupNotFound(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2556,7 +3000,7 @@ impl Error for DeleteItemError {
 pub enum DeleteTableError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
     ResourceInUse(String),
@@ -2904,6 +3348,95 @@ impl Error for DescribeGlobalTableError {
                 dispatch_error.description()
             }
             DescribeGlobalTableError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeGlobalTableSettings
+#[derive(Debug, PartialEq)]
+pub enum DescribeGlobalTableSettingsError {
+    /// <p>The specified global table does not exist.</p>
+    GlobalTableNotFound(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeGlobalTableSettingsError {
+    pub fn from_body(body: &str) -> DescribeGlobalTableSettingsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "GlobalTableNotFoundException" => {
+                        DescribeGlobalTableSettingsError::GlobalTableNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InternalServerError" => DescribeGlobalTableSettingsError::InternalServerError(
+                        String::from(error_message),
+                    ),
+                    "ValidationException" => {
+                        DescribeGlobalTableSettingsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeGlobalTableSettingsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeGlobalTableSettingsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeGlobalTableSettingsError {
+    fn from(err: serde_json::error::Error) -> DescribeGlobalTableSettingsError {
+        DescribeGlobalTableSettingsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeGlobalTableSettingsError {
+    fn from(err: CredentialsError) -> DescribeGlobalTableSettingsError {
+        DescribeGlobalTableSettingsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeGlobalTableSettingsError {
+    fn from(err: HttpDispatchError) -> DescribeGlobalTableSettingsError {
+        DescribeGlobalTableSettingsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeGlobalTableSettingsError {
+    fn from(err: io::Error) -> DescribeGlobalTableSettingsError {
+        DescribeGlobalTableSettingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeGlobalTableSettingsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeGlobalTableSettingsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeGlobalTableSettingsError::GlobalTableNotFound(ref cause) => cause,
+            DescribeGlobalTableSettingsError::InternalServerError(ref cause) => cause,
+            DescribeGlobalTableSettingsError::Validation(ref cause) => cause,
+            DescribeGlobalTableSettingsError::Credentials(ref err) => err.description(),
+            DescribeGlobalTableSettingsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeGlobalTableSettingsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -3768,7 +4301,7 @@ pub enum RestoreTableFromBackupError {
     BackupNotFound(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
     /// <p>A target table with the specified name already exists. </p>
     TableAlreadyExists(String),
@@ -3877,7 +4410,7 @@ pub enum RestoreTableToPointInTimeError {
     InternalServerError(String),
     /// <p>An invalid restore time was specified. RestoreDateTime must be between EarliestRestorableDateTime and LatestRestorableDateTime.</p>
     InvalidRestoreTime(String),
-    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
     /// <p>Point in time recovery has not yet been enabled for this source table.</p>
     PointInTimeRecoveryUnavailable(String),
@@ -4087,7 +4620,7 @@ impl Error for ScanError {
 pub enum TagResourceError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
     ResourceInUse(String),
@@ -4184,7 +4717,7 @@ impl Error for TagResourceError {
 pub enum UntagResourceError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
     ResourceInUse(String),
@@ -4476,6 +5009,119 @@ impl Error for UpdateGlobalTableError {
         }
     }
 }
+/// Errors returned by UpdateGlobalTableSettings
+#[derive(Debug, PartialEq)]
+pub enum UpdateGlobalTableSettingsError {
+    /// <p>The specified global table does not exist.</p>
+    GlobalTableNotFound(String),
+    /// <p>The operation tried to access a nonexistent index.</p>
+    IndexNotFound(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    LimitExceeded(String),
+    /// <p>The specified replica is no longer part of the global table.</p>
+    ReplicaNotFound(String),
+    /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
+    ResourceInUse(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateGlobalTableSettingsError {
+    pub fn from_body(body: &str) -> UpdateGlobalTableSettingsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "GlobalTableNotFoundException" => {
+                        UpdateGlobalTableSettingsError::GlobalTableNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "IndexNotFoundException" => {
+                        UpdateGlobalTableSettingsError::IndexNotFound(String::from(error_message))
+                    }
+                    "InternalServerError" => UpdateGlobalTableSettingsError::InternalServerError(
+                        String::from(error_message),
+                    ),
+                    "LimitExceededException" => {
+                        UpdateGlobalTableSettingsError::LimitExceeded(String::from(error_message))
+                    }
+                    "ReplicaNotFoundException" => {
+                        UpdateGlobalTableSettingsError::ReplicaNotFound(String::from(error_message))
+                    }
+                    "ResourceInUseException" => {
+                        UpdateGlobalTableSettingsError::ResourceInUse(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateGlobalTableSettingsError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateGlobalTableSettingsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateGlobalTableSettingsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateGlobalTableSettingsError {
+    fn from(err: serde_json::error::Error) -> UpdateGlobalTableSettingsError {
+        UpdateGlobalTableSettingsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateGlobalTableSettingsError {
+    fn from(err: CredentialsError) -> UpdateGlobalTableSettingsError {
+        UpdateGlobalTableSettingsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateGlobalTableSettingsError {
+    fn from(err: HttpDispatchError) -> UpdateGlobalTableSettingsError {
+        UpdateGlobalTableSettingsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateGlobalTableSettingsError {
+    fn from(err: io::Error) -> UpdateGlobalTableSettingsError {
+        UpdateGlobalTableSettingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateGlobalTableSettingsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateGlobalTableSettingsError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateGlobalTableSettingsError::GlobalTableNotFound(ref cause) => cause,
+            UpdateGlobalTableSettingsError::IndexNotFound(ref cause) => cause,
+            UpdateGlobalTableSettingsError::InternalServerError(ref cause) => cause,
+            UpdateGlobalTableSettingsError::LimitExceeded(ref cause) => cause,
+            UpdateGlobalTableSettingsError::ReplicaNotFound(ref cause) => cause,
+            UpdateGlobalTableSettingsError::ResourceInUse(ref cause) => cause,
+            UpdateGlobalTableSettingsError::Validation(ref cause) => cause,
+            UpdateGlobalTableSettingsError::Credentials(ref err) => err.description(),
+            UpdateGlobalTableSettingsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateGlobalTableSettingsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateItem
 #[derive(Debug, PartialEq)]
 pub enum UpdateItemError {
@@ -4584,7 +5230,7 @@ impl Error for UpdateItemError {
 pub enum UpdateTableError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
     ResourceInUse(String),
@@ -4681,7 +5327,7 @@ impl Error for UpdateTableError {
 pub enum UpdateTimeToLiveError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
     ResourceInUse(String),
@@ -4793,7 +5439,7 @@ pub trait DynamoDb {
         input: CreateBackupInput,
     ) -> RusotoFuture<CreateBackupOutput, CreateBackupError>;
 
-    /// <p><p>Creates a global table from an existing table. A global table creates a replication relationship between two or more DynamoDB tables with the same table name in the provided regions. </p> <p> Tables can only be added as the replicas of a global table group under the following conditions: </p> <ul> <li> <p> The tables must have the same name. </p> </li> <li> <p> The tables must contain no items. </p> </li> <li> <p> The tables must have the same hash key and sort key (if present). </p> </li> <li> <p> The tables must have DynamoDB Streams enabled (NEW<em>AND</em>OLD_IMAGES). </p> </li> </ul></p>
+    /// <p><p>Creates a global table from an existing table. A global table creates a replication relationship between two or more DynamoDB tables with the same table name in the provided regions. </p> <p>If you want to add a new replica table to a global table, each of the following conditions must be true:</p> <ul> <li> <p>The table must have the same primary key as all of the other replicas.</p> </li> <li> <p>The table must have the same name as all of the other replicas.</p> </li> <li> <p>The table must have DynamoDB Streams enabled, with the stream containing both the new and the old images of the item.</p> </li> <li> <p>None of the replica tables in the global table can contain any data.</p> </li> </ul> <p> If global secondary indexes are specified, then the following conditions must also be met: </p> <ul> <li> <p> The global secondary indexes must have the same name. </p> </li> <li> <p> The global secondary indexes must have the same hash key and sort key (if present). </p> </li> </ul> <important> <p> Write capacity settings should be set consistently across your replica tables and secondary indexes. DynamoDB strongly recommends enabling auto scaling to manage the write capacity settings for all of your global tables replicas and indexes. </p> <p> If you prefer to manage write capacity settings manually, you should provision equal replicated write capacity units to your replica tables. You should also provision equal replicated write capacity units to matching secondary indexes across your global table. </p> </important></p>
     fn create_global_table(
         &self,
         input: CreateGlobalTableInput,
@@ -4829,7 +5475,7 @@ pub trait DynamoDb {
         input: DescribeBackupInput,
     ) -> RusotoFuture<DescribeBackupOutput, DescribeBackupError>;
 
-    /// <p>Checks the status of continuous backups and point in time recovery on the specified table. Continuous backups are <code>ENABLED</code> on all tables at table creation. If point in time recovery is enabled, <code>PointInTimeRecoveryStatus</code> will be set to ENABLED.</p> <p> Once continuous backups and point in time recovery are enabled, you can restore to any point in time within <code>EarliestRestorableDateTime</code> and <code>LatestRestorableDateTime</code>. </p> <p> <code>LatestRestorableDateTime</code> is typically 5 minutes before the current time. You can restore your table to any point in time during the last 35 days with a 1-minute granularity. </p> <p>You can call <code>DescribeContinuousBackups</code> at a maximum rate of 10 times per second.</p>
+    /// <p>Checks the status of continuous backups and point in time recovery on the specified table. Continuous backups are <code>ENABLED</code> on all tables at table creation. If point in time recovery is enabled, <code>PointInTimeRecoveryStatus</code> will be set to ENABLED.</p> <p> Once continuous backups and point in time recovery are enabled, you can restore to any point in time within <code>EarliestRestorableDateTime</code> and <code>LatestRestorableDateTime</code>. </p> <p> <code>LatestRestorableDateTime</code> is typically 5 minutes before the current time. You can restore your table to any point in time during the last 35 days. </p> <p>You can call <code>DescribeContinuousBackups</code> at a maximum rate of 10 times per second.</p>
     fn describe_continuous_backups(
         &self,
         input: DescribeContinuousBackupsInput,
@@ -4840,6 +5486,12 @@ pub trait DynamoDb {
         &self,
         input: DescribeGlobalTableInput,
     ) -> RusotoFuture<DescribeGlobalTableOutput, DescribeGlobalTableError>;
+
+    /// <p>Describes region specific settings for a global table.</p>
+    fn describe_global_table_settings(
+        &self,
+        input: DescribeGlobalTableSettingsInput,
+    ) -> RusotoFuture<DescribeGlobalTableSettingsOutput, DescribeGlobalTableSettingsError>;
 
     /// <p>Returns the current provisioned-capacity limits for your AWS account in a region, both for the region as a whole and for any one DynamoDB table that you create there.</p> <p>When you establish an AWS account, the account has initial limits on the maximum read capacity units and write capacity units that you can provision across all of your DynamoDB tables in a given region. Also, there are per-table limits that apply when you create a table there. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Limits</a> page in the <i>Amazon DynamoDB Developer Guide</i>.</p> <p>Although you can increase these limits by filing a case at <a href="https://console.aws.amazon.com/support/home#/">AWS Support Center</a>, obtaining the increase is not instantaneous. The <code>DescribeLimits</code> action lets you write code to compare the capacity you are currently using to those limits imposed by your account so that you have enough time to apply for an increase before you hit a limit.</p> <p>For example, you could use one of the AWS SDKs to do the following:</p> <ol> <li> <p>Call <code>DescribeLimits</code> for a particular region to obtain your current account limits on provisioned capacity there.</p> </li> <li> <p>Create a variable to hold the aggregate read capacity units provisioned for all your tables in that region, and one to hold the aggregate write capacity units. Zero them both.</p> </li> <li> <p>Call <code>ListTables</code> to obtain a list of all your DynamoDB tables.</p> </li> <li> <p>For each table name listed by <code>ListTables</code>, do the following:</p> <ul> <li> <p>Call <code>DescribeTable</code> with the table name.</p> </li> <li> <p>Use the data returned by <code>DescribeTable</code> to add the read capacity units and write capacity units provisioned for the table itself to your variables.</p> </li> <li> <p>If the table has one or more global secondary indexes (GSIs), loop over these GSIs and add their provisioned capacity values to your variables as well.</p> </li> </ul> </li> <li> <p>Report the account limits for that region returned by <code>DescribeLimits</code>, along with the total current provisioned capacity levels you have calculated.</p> </li> </ol> <p>This will let you see whether you are getting close to your account-level limits.</p> <p>The per-table limits apply only when you are creating a new table. They restrict the sum of the provisioned capacity of the new table itself and all its global secondary indexes.</p> <p>For existing tables and their GSIs, DynamoDB will not let you increase provisioned capacity extremely rapidly, but the only upper limit that applies is that the aggregate provisioned capacity over all your tables and GSIs cannot exceed either of the per-account limits.</p> <note> <p> <code>DescribeLimits</code> should only be called periodically. You can expect throttling errors if you call it more than once in a minute.</p> </note> <p>The <code>DescribeLimits</code> Request element has no content.</p>
     fn describe_limits(&self) -> RusotoFuture<DescribeLimitsOutput, DescribeLimitsError>;
@@ -4895,7 +5547,7 @@ pub trait DynamoDb {
         input: RestoreTableFromBackupInput,
     ) -> RusotoFuture<RestoreTableFromBackupOutput, RestoreTableFromBackupError>;
 
-    /// <p><p>Restores the specified table to the specified point in time within <code>EarliestRestorableDateTime</code> and <code>LatestRestorableDateTime</code>. You can restore your table to any point in time during the last 35 days with a 1-minute granularity. Any number of users can execute up to 4 concurrent restores (any type of restore) in a given account. </p> <p>You must manually set up the following on the restored table:</p> <ul> <li> <p>Auto scaling policies</p> </li> <li> <p>IAM policies</p> </li> <li> <p>Cloudwatch metrics and alarms</p> </li> <li> <p>Tags</p> </li> <li> <p>Stream settings</p> </li> <li> <p>Time to Live (TTL) settings</p> </li> <li> <p>Point in time recovery settings</p> </li> </ul></p>
+    /// <p><p>Restores the specified table to the specified point in time within <code>EarliestRestorableDateTime</code> and <code>LatestRestorableDateTime</code>. You can restore your table to any point in time during the last 35 days. Any number of users can execute up to 4 concurrent restores (any type of restore) in a given account. </p> <p> When you restore using point in time recovery, DynamoDB restores your table data to the state based on the selected date and time (day:hour:minute:second) to a new table. </p> <p> Along with data, the following are also included on the new restored table using point in time recovery: </p> <ul> <li> <p>Global secondary indexes (GSIs)</p> </li> <li> <p>Local secondary indexes (LSIs)</p> </li> <li> <p>Provisioned read and write capacity</p> </li> <li> <p>Encryption settings</p> <important> <p> All these settings come from the current settings of the source table at the time of restore. </p> </important> </li> </ul> <p>You must manually set up the following on the restored table:</p> <ul> <li> <p>Auto scaling policies</p> </li> <li> <p>IAM policies</p> </li> <li> <p>Cloudwatch metrics and alarms</p> </li> <li> <p>Tags</p> </li> <li> <p>Stream settings</p> </li> <li> <p>Time to Live (TTL) settings</p> </li> <li> <p>Point in time recovery settings</p> </li> </ul></p>
     fn restore_table_to_point_in_time(
         &self,
         input: RestoreTableToPointInTimeInput,
@@ -4910,17 +5562,23 @@ pub trait DynamoDb {
     /// <p>Removes the association of tags from an Amazon DynamoDB resource. You can call UntagResource up to 5 times per second, per account. </p> <p>For an overview on tagging DynamoDB resources, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html">Tagging for DynamoDB</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     fn untag_resource(&self, input: UntagResourceInput) -> RusotoFuture<(), UntagResourceError>;
 
-    /// <p> <code>UpdateContinuousBackups</code> enables or disables point in time recovery for the specified table. A successful <code>UpdateContinuousBackups</code> call returns the current <code>ContinuousBackupsDescription</code>. Continuous backups are <code>ENABLED</code> on all tables at table creation. If point in time recovery is enabled, <code>PointInTimeRecoveryStatus</code> will be set to ENABLED.</p> <p> Once continuous backups and point in time recovery are enabled, you can restore to any point in time within <code>EarliestRestorableDateTime</code> and <code>LatestRestorableDateTime</code>. </p> <p> <code>LatestRestorableDateTime</code> is typically 5 minutes before the current time. You can restore your table to any point in time during the last 35 days with a 1-minute granularity. </p>
+    /// <p> <code>UpdateContinuousBackups</code> enables or disables point in time recovery for the specified table. A successful <code>UpdateContinuousBackups</code> call returns the current <code>ContinuousBackupsDescription</code>. Continuous backups are <code>ENABLED</code> on all tables at table creation. If point in time recovery is enabled, <code>PointInTimeRecoveryStatus</code> will be set to ENABLED.</p> <p> Once continuous backups and point in time recovery are enabled, you can restore to any point in time within <code>EarliestRestorableDateTime</code> and <code>LatestRestorableDateTime</code>. </p> <p> <code>LatestRestorableDateTime</code> is typically 5 minutes before the current time. You can restore your table to any point in time during the last 35 days.. </p>
     fn update_continuous_backups(
         &self,
         input: UpdateContinuousBackupsInput,
     ) -> RusotoFuture<UpdateContinuousBackupsOutput, UpdateContinuousBackupsError>;
 
-    /// <p><p>Adds or removes replicas in the specified global table. The global table must already exist to be able to use this operation. Any replica to be added must be empty, must have the same name as the global table, must have the same key schema, and must have DynamoDB Streams enabled.</p> <note> <p>Although you can use <code>UpdateGlobalTable</code> to add replicas and remove replicas in a single request, for simplicity we recommend that you issue separate requests for adding or removing replicas.</p> </note></p>
+    /// <p><p>Adds or removes replicas in the specified global table. The global table must already exist to be able to use this operation. Any replica to be added must be empty, must have the same name as the global table, must have the same key schema, and must have DynamoDB Streams enabled and must have same provisioned and maximum write capacity units.</p> <note> <p>Although you can use <code>UpdateGlobalTable</code> to add replicas and remove replicas in a single request, for simplicity we recommend that you issue separate requests for adding or removing replicas.</p> </note> <p> If global secondary indexes are specified, then the following conditions must also be met: </p> <ul> <li> <p> The global secondary indexes must have the same name. </p> </li> <li> <p> The global secondary indexes must have the same hash key and sort key (if present). </p> </li> <li> <p> The global secondary indexes must have the same provisioned and maximum write capacity units. </p> </li> </ul></p>
     fn update_global_table(
         &self,
         input: UpdateGlobalTableInput,
     ) -> RusotoFuture<UpdateGlobalTableOutput, UpdateGlobalTableError>;
+
+    /// <p>Updates settings for a global table.</p>
+    fn update_global_table_settings(
+        &self,
+        input: UpdateGlobalTableSettingsInput,
+    ) -> RusotoFuture<UpdateGlobalTableSettingsOutput, UpdateGlobalTableSettingsError>;
 
     /// <p>Edits an existing item's attributes, or adds a new item to the table if it does not already exist. You can put, delete, or add attribute values. You can also perform a conditional update on an existing item (insert a new attribute name-value pair if it doesn't exist, or replace an existing name-value pair if it has certain expected attribute values).</p> <p>You can also return the item's attribute values in the same <code>UpdateItem</code> operation using the <code>ReturnValues</code> parameter.</p>
     fn update_item(
@@ -5081,7 +5739,7 @@ impl DynamoDb for DynamoDbClient {
         })
     }
 
-    /// <p><p>Creates a global table from an existing table. A global table creates a replication relationship between two or more DynamoDB tables with the same table name in the provided regions. </p> <p> Tables can only be added as the replicas of a global table group under the following conditions: </p> <ul> <li> <p> The tables must have the same name. </p> </li> <li> <p> The tables must contain no items. </p> </li> <li> <p> The tables must have the same hash key and sort key (if present). </p> </li> <li> <p> The tables must have DynamoDB Streams enabled (NEW<em>AND</em>OLD_IMAGES). </p> </li> </ul></p>
+    /// <p><p>Creates a global table from an existing table. A global table creates a replication relationship between two or more DynamoDB tables with the same table name in the provided regions. </p> <p>If you want to add a new replica table to a global table, each of the following conditions must be true:</p> <ul> <li> <p>The table must have the same primary key as all of the other replicas.</p> </li> <li> <p>The table must have the same name as all of the other replicas.</p> </li> <li> <p>The table must have DynamoDB Streams enabled, with the stream containing both the new and the old images of the item.</p> </li> <li> <p>None of the replica tables in the global table can contain any data.</p> </li> </ul> <p> If global secondary indexes are specified, then the following conditions must also be met: </p> <ul> <li> <p> The global secondary indexes must have the same name. </p> </li> <li> <p> The global secondary indexes must have the same hash key and sort key (if present). </p> </li> </ul> <important> <p> Write capacity settings should be set consistently across your replica tables and secondary indexes. DynamoDB strongly recommends enabling auto scaling to manage the write capacity settings for all of your global tables replicas and indexes. </p> <p> If you prefer to manage write capacity settings manually, you should provision equal replicated write capacity units to your replica tables. You should also provision equal replicated write capacity units to matching secondary indexes across your global table. </p> </important></p>
     fn create_global_table(
         &self,
         input: CreateGlobalTableInput,
@@ -5291,7 +5949,7 @@ impl DynamoDb for DynamoDbClient {
         })
     }
 
-    /// <p>Checks the status of continuous backups and point in time recovery on the specified table. Continuous backups are <code>ENABLED</code> on all tables at table creation. If point in time recovery is enabled, <code>PointInTimeRecoveryStatus</code> will be set to ENABLED.</p> <p> Once continuous backups and point in time recovery are enabled, you can restore to any point in time within <code>EarliestRestorableDateTime</code> and <code>LatestRestorableDateTime</code>. </p> <p> <code>LatestRestorableDateTime</code> is typically 5 minutes before the current time. You can restore your table to any point in time during the last 35 days with a 1-minute granularity. </p> <p>You can call <code>DescribeContinuousBackups</code> at a maximum rate of 10 times per second.</p>
+    /// <p>Checks the status of continuous backups and point in time recovery on the specified table. Continuous backups are <code>ENABLED</code> on all tables at table creation. If point in time recovery is enabled, <code>PointInTimeRecoveryStatus</code> will be set to ENABLED.</p> <p> Once continuous backups and point in time recovery are enabled, you can restore to any point in time within <code>EarliestRestorableDateTime</code> and <code>LatestRestorableDateTime</code>. </p> <p> <code>LatestRestorableDateTime</code> is typically 5 minutes before the current time. You can restore your table to any point in time during the last 35 days. </p> <p>You can call <code>DescribeContinuousBackups</code> at a maximum rate of 10 times per second.</p>
     fn describe_continuous_backups(
         &self,
         input: DescribeContinuousBackupsInput,
@@ -5357,6 +6015,44 @@ impl DynamoDb for DynamoDbClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeGlobalTableError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Describes region specific settings for a global table.</p>
+    fn describe_global_table_settings(
+        &self,
+        input: DescribeGlobalTableSettingsInput,
+    ) -> RusotoFuture<DescribeGlobalTableSettingsOutput, DescribeGlobalTableSettingsError> {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DynamoDB_20120810.DescribeGlobalTableSettings",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeGlobalTableSettingsOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeGlobalTableSettingsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -5736,7 +6432,7 @@ impl DynamoDb for DynamoDbClient {
         })
     }
 
-    /// <p><p>Restores the specified table to the specified point in time within <code>EarliestRestorableDateTime</code> and <code>LatestRestorableDateTime</code>. You can restore your table to any point in time during the last 35 days with a 1-minute granularity. Any number of users can execute up to 4 concurrent restores (any type of restore) in a given account. </p> <p>You must manually set up the following on the restored table:</p> <ul> <li> <p>Auto scaling policies</p> </li> <li> <p>IAM policies</p> </li> <li> <p>Cloudwatch metrics and alarms</p> </li> <li> <p>Tags</p> </li> <li> <p>Stream settings</p> </li> <li> <p>Time to Live (TTL) settings</p> </li> <li> <p>Point in time recovery settings</p> </li> </ul></p>
+    /// <p><p>Restores the specified table to the specified point in time within <code>EarliestRestorableDateTime</code> and <code>LatestRestorableDateTime</code>. You can restore your table to any point in time during the last 35 days. Any number of users can execute up to 4 concurrent restores (any type of restore) in a given account. </p> <p> When you restore using point in time recovery, DynamoDB restores your table data to the state based on the selected date and time (day:hour:minute:second) to a new table. </p> <p> Along with data, the following are also included on the new restored table using point in time recovery: </p> <ul> <li> <p>Global secondary indexes (GSIs)</p> </li> <li> <p>Local secondary indexes (LSIs)</p> </li> <li> <p>Provisioned read and write capacity</p> </li> <li> <p>Encryption settings</p> <important> <p> All these settings come from the current settings of the source table at the time of restore. </p> </important> </li> </ul> <p>You must manually set up the following on the restored table:</p> <ul> <li> <p>Auto scaling policies</p> </li> <li> <p>IAM policies</p> </li> <li> <p>Cloudwatch metrics and alarms</p> </li> <li> <p>Tags</p> </li> <li> <p>Stream settings</p> </li> <li> <p>Time to Live (TTL) settings</p> </li> <li> <p>Point in time recovery settings</p> </li> </ul></p>
     fn restore_table_to_point_in_time(
         &self,
         input: RestoreTableToPointInTimeInput,
@@ -5850,7 +6546,7 @@ impl DynamoDb for DynamoDbClient {
         })
     }
 
-    /// <p> <code>UpdateContinuousBackups</code> enables or disables point in time recovery for the specified table. A successful <code>UpdateContinuousBackups</code> call returns the current <code>ContinuousBackupsDescription</code>. Continuous backups are <code>ENABLED</code> on all tables at table creation. If point in time recovery is enabled, <code>PointInTimeRecoveryStatus</code> will be set to ENABLED.</p> <p> Once continuous backups and point in time recovery are enabled, you can restore to any point in time within <code>EarliestRestorableDateTime</code> and <code>LatestRestorableDateTime</code>. </p> <p> <code>LatestRestorableDateTime</code> is typically 5 minutes before the current time. You can restore your table to any point in time during the last 35 days with a 1-minute granularity. </p>
+    /// <p> <code>UpdateContinuousBackups</code> enables or disables point in time recovery for the specified table. A successful <code>UpdateContinuousBackups</code> call returns the current <code>ContinuousBackupsDescription</code>. Continuous backups are <code>ENABLED</code> on all tables at table creation. If point in time recovery is enabled, <code>PointInTimeRecoveryStatus</code> will be set to ENABLED.</p> <p> Once continuous backups and point in time recovery are enabled, you can restore to any point in time within <code>EarliestRestorableDateTime</code> and <code>LatestRestorableDateTime</code>. </p> <p> <code>LatestRestorableDateTime</code> is typically 5 minutes before the current time. You can restore your table to any point in time during the last 35 days.. </p>
     fn update_continuous_backups(
         &self,
         input: UpdateContinuousBackupsInput,
@@ -5885,7 +6581,7 @@ impl DynamoDb for DynamoDbClient {
         })
     }
 
-    /// <p><p>Adds or removes replicas in the specified global table. The global table must already exist to be able to use this operation. Any replica to be added must be empty, must have the same name as the global table, must have the same key schema, and must have DynamoDB Streams enabled.</p> <note> <p>Although you can use <code>UpdateGlobalTable</code> to add replicas and remove replicas in a single request, for simplicity we recommend that you issue separate requests for adding or removing replicas.</p> </note></p>
+    /// <p><p>Adds or removes replicas in the specified global table. The global table must already exist to be able to use this operation. Any replica to be added must be empty, must have the same name as the global table, must have the same key schema, and must have DynamoDB Streams enabled and must have same provisioned and maximum write capacity units.</p> <note> <p>Although you can use <code>UpdateGlobalTable</code> to add replicas and remove replicas in a single request, for simplicity we recommend that you issue separate requests for adding or removing replicas.</p> </note> <p> If global secondary indexes are specified, then the following conditions must also be met: </p> <ul> <li> <p> The global secondary indexes must have the same name. </p> </li> <li> <p> The global secondary indexes must have the same hash key and sort key (if present). </p> </li> <li> <p> The global secondary indexes must have the same provisioned and maximum write capacity units. </p> </li> </ul></p>
     fn update_global_table(
         &self,
         input: UpdateGlobalTableInput,
@@ -5913,6 +6609,44 @@ impl DynamoDb for DynamoDbClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateGlobalTableError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Updates settings for a global table.</p>
+    fn update_global_table_settings(
+        &self,
+        input: UpdateGlobalTableSettingsInput,
+    ) -> RusotoFuture<UpdateGlobalTableSettingsOutput, UpdateGlobalTableSettingsError> {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DynamoDB_20120810.UpdateGlobalTableSettings",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateGlobalTableSettingsOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateGlobalTableSettingsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

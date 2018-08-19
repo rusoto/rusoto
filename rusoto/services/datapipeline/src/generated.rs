@@ -245,6 +245,20 @@ pub struct InstanceIdentity {
     pub signature: Option<String>,
 }
 
+/// <p>An internal service error occurred.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalServiceError {
+    /// <p>Description of the error message.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The request was not valid. Verify that your request was properly formatted, that the signature was generated with the correct credentials, and that you haven't exceeded any of the service limits for your account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidRequestException {
+    /// <p>Description of the error message.</p>
+    pub message: Option<String>,
+}
+
 /// <p>Contains the parameters for ListPipelines.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListPipelinesInput {
@@ -316,6 +330,13 @@ pub struct ParameterValue {
     pub string_value: String,
 }
 
+/// <p>The specified pipeline has been deleted.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PipelineDeletedException {
+    /// <p>Description of the error message.</p>
+    pub message: Option<String>,
+}
+
 /// <p>Contains pipeline metadata.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PipelineDescription {
@@ -349,6 +370,13 @@ pub struct PipelineIdName {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+}
+
+/// <p>The specified pipeline was not found. Verify that you used the correct user and account identifiers.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PipelineNotFoundException {
+    /// <p>Description of the error message.</p>
+    pub message: Option<String>,
 }
 
 /// <p>Contains information about a pipeline object. This can be a logical, physical, or physical attempt pipeline object. The complete set of components of a pipeline defines the pipeline.</p>
@@ -595,6 +623,13 @@ pub struct Tag {
     /// <p>The optional value portion of a tag defined by a user. For more information, see <a href="http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-control-access.html">Controlling User Access to Pipelines</a> in the <i>AWS Data Pipeline Developer Guide</i>.</p>
     #[serde(rename = "value")]
     pub value: String,
+}
+
+/// <p>The specified task was not found. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TaskNotFoundException {
+    /// <p>Description of the error message.</p>
+    pub message: Option<String>,
 }
 
 /// <p>Contains information about a pipeline task that is assigned to a task runner.</p>

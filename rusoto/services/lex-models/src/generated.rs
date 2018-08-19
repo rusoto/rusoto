@@ -29,6 +29,12 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
+/// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BadRequestException {
+    pub message: Option<String>,
+}
+
 /// <p>Provides information about a bot alias.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BotAliasMetadata {
@@ -176,6 +182,12 @@ pub struct CodeHook {
     /// <p>The Amazon Resource Name (ARN) of the Lambda function.</p>
     #[serde(rename = "uri")]
     pub uri: String,
+}
+
+/// <p> There was a conflict processing the request. Try your request again. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ConflictException {
+    pub message: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1248,6 +1260,19 @@ pub struct IntentMetadata {
     pub version: Option<String>,
 }
 
+/// <p>An internal Amazon Lex error occurred. Try your request again.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InternalFailureException {
+    pub message: Option<String>,
+}
+
+/// <p>The request exceeded a limit. Try your request again.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {
+    pub message: Option<String>,
+    pub retry_after_seconds: Option<String>,
+}
+
 /// <p>The message object that provides the message text and its type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Message {
@@ -1261,6 +1286,18 @@ pub struct Message {
     #[serde(rename = "groupNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_number: Option<i64>,
+}
+
+/// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NotFoundException {
+    pub message: Option<String>,
+}
+
+/// <p> The checksum of the resource that you are trying to change does not match the checksum in the request. Check the resource's checksum and try again.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PreconditionFailedException {
+    pub message: Option<String>,
 }
 
 /// <p>Obtains information from the user. To define a prompt, provide one or more messages and specify the number of attempts to get information from the user. If you provide more than one message, Amazon Lex chooses one of the messages to use to prompt the user. For more information, see <a>how-it-works</a>.</p>
@@ -1630,6 +1667,13 @@ pub struct PutSlotTypeResponse {
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+/// <p>The resource that you are attempting to delete is referred to by another resource. Use this information to remove references to the resource that you are trying to delete.</p> <p>The body of the exception contains a JSON object that describes the resource.</p> <p> <code>{ "resourceType": BOT | BOTALIAS | BOTCHANNEL | INTENT,</code> </p> <p> <code>"resourceReference": {</code> </p> <p> <code>"name": <i>string</i>, "version": <i>string</i> } }</code> </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResourceInUseException {
+    pub example_reference: Option<ResourceReference>,
+    pub reference_type: Option<String>,
 }
 
 /// <p>Describes the resource that refers to the resource that you are attempting to delete. This object is returned as part of the <code>ResourceInUseException</code> exception. </p>

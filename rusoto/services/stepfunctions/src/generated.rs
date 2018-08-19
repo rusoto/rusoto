@@ -28,6 +28,12 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
+/// <p>The specified activity does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ActivityDoesNotExist {
+    pub message: Option<String>,
+}
+
 /// <p>Contains details about an activity which failed during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivityFailedEventDetails {
@@ -39,6 +45,12 @@ pub struct ActivityFailedEventDetails {
     #[serde(rename = "error")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
+}
+
+/// <p>The maximum number of activities has been reached. Existing activities must be deleted before a new activity can be created.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ActivityLimitExceeded {
+    pub message: Option<String>,
 }
 
 /// <p>Contains details about an activity.</p>
@@ -117,6 +129,12 @@ pub struct ActivityTimedOutEventDetails {
     #[serde(rename = "error")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
+}
+
+/// <p>The maximum number of workers concurrently polling for activity tasks has been reached.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ActivityWorkerLimitExceeded {
+    pub message: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -306,6 +324,18 @@ pub struct ExecutionAbortedEventDetails {
     pub error: Option<String>,
 }
 
+/// <p><p>The execution has the same <code>name</code> as another execution (but a different <code>input</code>).</p> <note> <p>Executions with the same <code>name</code> and <code>input</code> are considered idempotent.</p> </note></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ExecutionAlreadyExists {
+    pub message: Option<String>,
+}
+
+/// <p>The specified execution does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ExecutionDoesNotExist {
+    pub message: Option<String>,
+}
+
 /// <p>Contains details about an execution failure event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ExecutionFailedEventDetails {
@@ -317,6 +347,12 @@ pub struct ExecutionFailedEventDetails {
     #[serde(rename = "error")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
+}
+
+/// <p>The maximum number of running executions has been reached. Running executions must end or be stopped before a new execution can be started.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ExecutionLimitExceeded {
+    pub message: Option<String>,
 }
 
 /// <p>Contains details about an execution.</p>
@@ -510,6 +546,42 @@ pub struct HistoryEvent {
     pub type_: String,
 }
 
+/// <p>The provided Amazon Resource Name (ARN) is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidArn {
+    pub message: Option<String>,
+}
+
+/// <p>The provided Amazon States Language definition is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidDefinition {
+    pub message: Option<String>,
+}
+
+/// <p>The provided JSON input data is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidExecutionInput {
+    pub message: Option<String>,
+}
+
+/// <p>The provided name is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidName {
+    pub message: Option<String>,
+}
+
+/// <p>The provided JSON output data is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidOutput {
+    pub message: Option<String>,
+}
+
+/// <p>The provided token is invalid.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidToken {
+    pub message: Option<String>,
+}
+
 /// <p>Contains details about a lambda function which failed during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LambdaFunctionFailedEventDetails {
@@ -662,6 +734,12 @@ pub struct ListStateMachinesOutput {
     pub state_machines: Vec<StateMachineListItem>,
 }
 
+/// <p>Request is missing a required parameter. This error occurs if both <code>definition</code> and <code>roleArn</code> are not specified.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MissingRequiredParameter {
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SendTaskFailureInput {
     /// <p>A more detailed explanation of the cause of the failure.</p>
@@ -752,6 +830,30 @@ pub struct StateExitedEventDetails {
     pub output: Option<String>,
 }
 
+/// <p>A state machine with the same name but a different definition or role ARN already exists.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct StateMachineAlreadyExists {
+    pub message: Option<String>,
+}
+
+/// <p>The specified state machine is being deleted.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct StateMachineDeleting {
+    pub message: Option<String>,
+}
+
+/// <p>The specified state machine does not exist.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct StateMachineDoesNotExist {
+    pub message: Option<String>,
+}
+
+/// <p>The maximum number of state machines has been reached. Existing state machines must be deleted before a new state machine can be created.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct StateMachineLimitExceeded {
+    pub message: Option<String>,
+}
+
 /// <p>Contains details about the state machine.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StateMachineListItem {
@@ -786,6 +888,16 @@ pub struct StopExecutionOutput {
     /// <p>The date the execution is stopped.</p>
     #[serde(rename = "stopDate")]
     pub stop_date: f64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TaskDoesNotExist {
+    pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TaskTimedOut {
+    pub message: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
