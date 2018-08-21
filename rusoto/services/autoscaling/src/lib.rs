@@ -18,6 +18,7 @@
 
 extern crate futures;
 extern crate rusoto_core;
+extern crate serde_urlencoded;
 extern crate xml;
 
 mod generated;

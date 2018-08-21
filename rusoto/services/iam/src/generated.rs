@@ -31,6 +31,7 @@ use rusoto_core::xmlutil::{
     characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::reader::XmlEvent;
@@ -410,13 +411,10 @@ impl AddClientIDToOpenIDConnectProviderRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "ClientID"),
-            &obj.client_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ClientID"), &obj.client_id);
         params.put(
             &format!("{}{}", prefix, "OpenIDConnectProviderArn"),
-            &obj.open_id_connect_provider_arn.replace("+", "%2B"),
+            &obj.open_id_connect_provider_arn,
         );
     }
 }
@@ -440,12 +438,9 @@ impl AddRoleToInstanceProfileRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "InstanceProfileName"),
-            &obj.instance_profile_name.replace("+", "%2B"),
+            &obj.instance_profile_name,
         );
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -466,14 +461,8 @@ impl AddUserToGroupRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -548,14 +537,8 @@ impl AttachGroupPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
     }
 }
 
@@ -576,14 +559,8 @@ impl AttachRolePolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -604,14 +581,8 @@ impl AttachUserPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -868,14 +839,8 @@ impl ChangePasswordRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "NewPassword"),
-            &obj.new_password.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "OldPassword"),
-            &obj.old_password.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "NewPassword"), &obj.new_password);
+        params.put(&format!("{}{}", prefix, "OldPassword"), &obj.old_password);
     }
 }
 
@@ -980,16 +945,10 @@ impl ContextEntrySerializer {
         }
 
         if let Some(ref field_value) = obj.context_key_name {
-            params.put(
-                &format!("{}{}", prefix, "ContextKeyName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ContextKeyName"), &field_value);
         }
         if let Some(ref field_value) = obj.context_key_type {
-            params.put(
-                &format!("{}{}", prefix, "ContextKeyType"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ContextKeyType"), &field_value);
         }
         if let Some(ref field_value) = obj.context_key_values {
             ContextKeyValueListTypeSerializer::serialize(
@@ -1096,10 +1055,7 @@ impl CreateAccessKeyRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -1166,10 +1122,7 @@ impl CreateAccountAliasRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "AccountAlias"),
-            &obj.account_alias.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "AccountAlias"), &obj.account_alias);
     }
 }
 
@@ -1190,15 +1143,9 @@ impl CreateGroupRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
         if let Some(ref field_value) = obj.path {
-            params.put(
-                &format!("{}{}", prefix, "Path"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Path"), &field_value);
         }
     }
 }
@@ -1268,13 +1215,10 @@ impl CreateInstanceProfileRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "InstanceProfileName"),
-            &obj.instance_profile_name.replace("+", "%2B"),
+            &obj.instance_profile_name,
         );
         if let Some(ref field_value) = obj.path {
-            params.put(
-                &format!("{}{}", prefix, "Path"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Path"), &field_value);
         }
     }
 }
@@ -1347,20 +1291,14 @@ impl CreateLoginProfileRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Password"),
-            &obj.password.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Password"), &obj.password);
         if let Some(ref field_value) = obj.password_reset_required {
             params.put(
                 &format!("{}{}", prefix, "PasswordResetRequired"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -1442,10 +1380,7 @@ impl CreateOpenIDConnectProviderRequestSerializer {
             &format!("{}{}", prefix, "ThumbprintList"),
             &obj.thumbprint_list,
         );
-        params.put(
-            &format!("{}{}", prefix, "Url"),
-            &obj.url.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Url"), &obj.url);
     }
 }
 
@@ -1519,25 +1454,16 @@ impl CreatePolicyRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.description {
-            params.put(
-                &format!("{}{}", prefix, "Description"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.path {
-            params.put(
-                &format!("{}{}", prefix, "Path"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Path"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "PolicyDocument"),
-            &obj.policy_document.replace("+", "%2B"),
+            &obj.policy_document,
         );
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
     }
 }
 
@@ -1606,18 +1532,15 @@ impl CreatePolicyVersionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
         params.put(
             &format!("{}{}", prefix, "PolicyDocument"),
-            &obj.policy_document.replace("+", "%2B"),
+            &obj.policy_document,
         );
         if let Some(ref field_value) = obj.set_as_default {
             params.put(
                 &format!("{}{}", prefix, "SetAsDefault"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -1697,30 +1620,21 @@ impl CreateRoleRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AssumeRolePolicyDocument"),
-            &obj.assume_role_policy_document.replace("+", "%2B"),
+            &obj.assume_role_policy_document,
         );
         if let Some(ref field_value) = obj.description {
-            params.put(
-                &format!("{}{}", prefix, "Description"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.max_session_duration {
             params.put(
                 &format!("{}{}", prefix, "MaxSessionDuration"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path {
-            params.put(
-                &format!("{}{}", prefix, "Path"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Path"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -1787,13 +1701,10 @@ impl CreateSAMLProviderRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Name"),
-            &obj.name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
         params.put(
             &format!("{}{}", prefix, "SAMLMetadataDocument"),
-            &obj.saml_metadata_document.replace("+", "%2B"),
+            &obj.saml_metadata_document,
         );
     }
 }
@@ -1868,19 +1779,13 @@ impl CreateServiceLinkedRoleRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AWSServiceName"),
-            &obj.aws_service_name.replace("+", "%2B"),
+            &obj.aws_service_name,
         );
         if let Some(ref field_value) = obj.custom_suffix {
-            params.put(
-                &format!("{}{}", prefix, "CustomSuffix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "CustomSuffix"), &field_value);
         }
         if let Some(ref field_value) = obj.description {
-            params.put(
-                &format!("{}{}", prefix, "Description"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
     }
 }
@@ -1947,14 +1852,8 @@ impl CreateServiceSpecificCredentialRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "ServiceName"),
-            &obj.service_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ServiceName"), &obj.service_name);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -2025,15 +1924,9 @@ impl CreateUserRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.path {
-            params.put(
-                &format!("{}{}", prefix, "Path"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Path"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -2101,14 +1994,11 @@ impl CreateVirtualMFADeviceRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.path {
-            params.put(
-                &format!("{}{}", prefix, "Path"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Path"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "VirtualMFADeviceName"),
-            &obj.virtual_mfa_device_name.replace("+", "%2B"),
+            &obj.virtual_mfa_device_name,
         );
     }
 }
@@ -2193,14 +2083,8 @@ impl DeactivateMFADeviceRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "SerialNumber"),
-            &obj.serial_number.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "SerialNumber"), &obj.serial_number);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -2221,15 +2105,9 @@ impl DeleteAccessKeyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "AccessKeyId"),
-            &obj.access_key_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "AccessKeyId"), &obj.access_key_id);
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -2249,10 +2127,7 @@ impl DeleteAccountAliasRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "AccountAlias"),
-            &obj.account_alias.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "AccountAlias"), &obj.account_alias);
     }
 }
 
@@ -2273,14 +2148,8 @@ impl DeleteGroupPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
     }
 }
 
@@ -2299,10 +2168,7 @@ impl DeleteGroupRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
     }
 }
 
@@ -2323,7 +2189,7 @@ impl DeleteInstanceProfileRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "InstanceProfileName"),
-            &obj.instance_profile_name.replace("+", "%2B"),
+            &obj.instance_profile_name,
         );
     }
 }
@@ -2343,10 +2209,7 @@ impl DeleteLoginProfileRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -2367,7 +2230,7 @@ impl DeleteOpenIDConnectProviderRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "OpenIDConnectProviderArn"),
-            &obj.open_id_connect_provider_arn.replace("+", "%2B"),
+            &obj.open_id_connect_provider_arn,
         );
     }
 }
@@ -2387,10 +2250,7 @@ impl DeletePolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
     }
 }
 
@@ -2411,14 +2271,8 @@ impl DeletePolicyVersionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "VersionId"),
-            &obj.version_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        params.put(&format!("{}{}", prefix, "VersionId"), &obj.version_id);
     }
 }
 
@@ -2439,14 +2293,8 @@ impl DeleteRolePolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -2465,10 +2313,7 @@ impl DeleteRoleRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -2489,7 +2334,7 @@ impl DeleteSAMLProviderRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SAMLProviderArn"),
-            &obj.saml_provider_arn.replace("+", "%2B"),
+            &obj.saml_provider_arn,
         );
     }
 }
@@ -2513,12 +2358,9 @@ impl DeleteSSHPublicKeyRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SSHPublicKeyId"),
-            &obj.ssh_public_key_id.replace("+", "%2B"),
+            &obj.ssh_public_key_id,
         );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -2539,7 +2381,7 @@ impl DeleteServerCertificateRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ServerCertificateName"),
-            &obj.server_certificate_name.replace("+", "%2B"),
+            &obj.server_certificate_name,
         );
     }
 }
@@ -2559,10 +2401,7 @@ impl DeleteServiceLinkedRoleRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -2633,13 +2472,10 @@ impl DeleteServiceSpecificCredentialRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ServiceSpecificCredentialId"),
-            &obj.service_specific_credential_id.replace("+", "%2B"),
+            &obj.service_specific_credential_id,
         );
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -2663,13 +2499,10 @@ impl DeleteSigningCertificateRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CertificateId"),
-            &obj.certificate_id.replace("+", "%2B"),
+            &obj.certificate_id,
         );
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -2691,14 +2524,8 @@ impl DeleteUserPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -2717,10 +2544,7 @@ impl DeleteUserRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -2739,10 +2563,7 @@ impl DeleteVirtualMFADeviceRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "SerialNumber"),
-            &obj.serial_number.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "SerialNumber"), &obj.serial_number);
     }
 }
 
@@ -2845,14 +2666,8 @@ impl DetachGroupPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
     }
 }
 
@@ -2873,14 +2688,8 @@ impl DetachRolePolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -2901,14 +2710,8 @@ impl DetachUserPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -2935,20 +2738,14 @@ impl EnableMFADeviceRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AuthenticationCode1"),
-            &obj.authentication_code_1.replace("+", "%2B"),
+            &obj.authentication_code_1,
         );
         params.put(
             &format!("{}{}", prefix, "AuthenticationCode2"),
-            &obj.authentication_code_2.replace("+", "%2B"),
+            &obj.authentication_code_2,
         );
-        params.put(
-            &format!("{}{}", prefix, "SerialNumber"),
-            &obj.serial_number.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "SerialNumber"), &obj.serial_number);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -3242,10 +3039,7 @@ impl GetAccessKeyLastUsedRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "AccessKeyId"),
-            &obj.access_key_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "AccessKeyId"), &obj.access_key_id);
     }
 }
 
@@ -3331,15 +3125,12 @@ impl GetAccountAuthorizationDetailsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -3626,7 +3417,7 @@ impl GetContextKeysForPrincipalPolicyRequestSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "PolicySourceArn"),
-            &obj.policy_source_arn.replace("+", "%2B"),
+            &obj.policy_source_arn,
         );
     }
 }
@@ -3712,14 +3503,8 @@ impl GetGroupPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
     }
 }
 
@@ -3803,20 +3588,14 @@ impl GetGroupRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -3904,7 +3683,7 @@ impl GetInstanceProfileRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "InstanceProfileName"),
-            &obj.instance_profile_name.replace("+", "%2B"),
+            &obj.instance_profile_name,
         );
     }
 }
@@ -3973,10 +3752,7 @@ impl GetLoginProfileRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -4044,7 +3820,7 @@ impl GetOpenIDConnectProviderRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "OpenIDConnectProviderArn"),
-            &obj.open_id_connect_provider_arn.replace("+", "%2B"),
+            &obj.open_id_connect_provider_arn,
         );
     }
 }
@@ -4133,10 +3909,7 @@ impl GetPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
     }
 }
 
@@ -4203,14 +3976,8 @@ impl GetPolicyVersionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "VersionId"),
-            &obj.version_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        params.put(&format!("{}{}", prefix, "VersionId"), &obj.version_id);
     }
 }
 
@@ -4280,14 +4047,8 @@ impl GetRolePolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -4367,10 +4128,7 @@ impl GetRoleRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -4437,7 +4195,7 @@ impl GetSAMLProviderRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SAMLProviderArn"),
-            &obj.saml_provider_arn.replace("+", "%2B"),
+            &obj.saml_provider_arn,
         );
     }
 }
@@ -4523,18 +4281,12 @@ impl GetSSHPublicKeyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Encoding"),
-            &obj.encoding.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Encoding"), &obj.encoding);
         params.put(
             &format!("{}{}", prefix, "SSHPublicKeyId"),
-            &obj.ssh_public_key_id.replace("+", "%2B"),
+            &obj.ssh_public_key_id,
         );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -4604,7 +4356,7 @@ impl GetServerCertificateRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ServerCertificateName"),
-            &obj.server_certificate_name.replace("+", "%2B"),
+            &obj.server_certificate_name,
         );
     }
 }
@@ -4675,7 +4427,7 @@ impl GetServiceLinkedRoleDeletionStatusRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "DeletionTaskId"),
-            &obj.deletion_task_id.replace("+", "%2B"),
+            &obj.deletion_task_id,
         );
     }
 }
@@ -4751,14 +4503,8 @@ impl GetUserPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -4840,10 +4586,7 @@ impl GetUserRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -5365,22 +5108,16 @@ impl ListAccessKeysRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -5467,15 +5204,12 @@ impl ListAccountAliasesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -5565,27 +5299,18 @@ impl ListAttachedGroupPoliciesRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(
-                &format!("{}{}", prefix, "PathPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
         }
     }
 }
@@ -5676,27 +5401,18 @@ impl ListAttachedRolePoliciesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(
-                &format!("{}{}", prefix, "PathPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -5786,27 +5502,18 @@ impl ListAttachedUserPoliciesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(
-                &format!("{}{}", prefix, "PathPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -5898,33 +5605,21 @@ impl ListEntitiesForPolicyRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.entity_filter {
-            params.put(
-                &format!("{}{}", prefix, "EntityFilter"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "EntityFilter"), &field_value);
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(
-                &format!("{}{}", prefix, "PathPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
     }
 }
 
@@ -6025,20 +5720,14 @@ impl ListGroupPoliciesRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -6127,21 +5816,15 @@ impl ListGroupsForUserRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -6225,22 +5908,16 @@ impl ListGroupsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(
-                &format!("{}{}", prefix, "PathPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
         }
     }
 }
@@ -6325,21 +6002,15 @@ impl ListInstanceProfilesForRoleRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -6427,22 +6098,16 @@ impl ListInstanceProfilesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(
-                &format!("{}{}", prefix, "PathPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
         }
     }
 }
@@ -6531,22 +6196,16 @@ impl ListMFADevicesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -6703,34 +6362,25 @@ impl ListPoliciesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.only_attached {
             params.put(
                 &format!("{}{}", prefix, "OnlyAttached"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(
-                &format!("{}{}", prefix, "PathPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
         }
         if let Some(ref field_value) = obj.scope {
-            params.put(
-                &format!("{}{}", prefix, "Scope"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Scope"), &field_value);
         }
     }
 }
@@ -6817,21 +6467,15 @@ impl ListPolicyVersionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
     }
 }
 
@@ -6919,21 +6563,15 @@ impl ListRolePoliciesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -7020,22 +6658,16 @@ impl ListRolesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(
-                &format!("{}{}", prefix, "PathPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
         }
     }
 }
@@ -7184,22 +6816,16 @@ impl ListSSHPublicKeysRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -7286,22 +6912,16 @@ impl ListServerCertificatesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(
-                &format!("{}{}", prefix, "PathPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
         }
     }
 }
@@ -7388,16 +7008,10 @@ impl ListServiceSpecificCredentialsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.service_name {
-            params.put(
-                &format!("{}{}", prefix, "ServiceName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ServiceName"), &field_value);
         }
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -7472,22 +7086,16 @@ impl ListSigningCertificatesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -7575,21 +7183,15 @@ impl ListUserPoliciesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -7676,22 +7278,16 @@ impl ListUsersRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(
-                &format!("{}{}", prefix, "PathPrefix"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
         }
     }
 }
@@ -7776,21 +7372,15 @@ impl ListVirtualMFADevicesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.assignment_status {
-            params.put(
-                &format!("{}{}", prefix, "AssignmentStatus"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "AssignmentStatus"), &field_value);
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -9427,18 +9017,12 @@ impl PutGroupPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
         params.put(
             &format!("{}{}", prefix, "PolicyDocument"),
-            &obj.policy_document.replace("+", "%2B"),
+            &obj.policy_document,
         );
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
     }
 }
 
@@ -9463,16 +9047,10 @@ impl PutRolePolicyRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "PolicyDocument"),
-            &obj.policy_document.replace("+", "%2B"),
+            &obj.policy_document,
         );
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -9497,16 +9075,10 @@ impl PutUserPolicyRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "PolicyDocument"),
-            &obj.policy_document.replace("+", "%2B"),
+            &obj.policy_document,
         );
-        params.put(
-            &format!("{}{}", prefix, "PolicyName"),
-            &obj.policy_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -9559,13 +9131,10 @@ impl RemoveClientIDFromOpenIDConnectProviderRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "ClientID"),
-            &obj.client_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "ClientID"), &obj.client_id);
         params.put(
             &format!("{}{}", prefix, "OpenIDConnectProviderArn"),
-            &obj.open_id_connect_provider_arn.replace("+", "%2B"),
+            &obj.open_id_connect_provider_arn,
         );
     }
 }
@@ -9589,12 +9158,9 @@ impl RemoveRoleFromInstanceProfileRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "InstanceProfileName"),
-            &obj.instance_profile_name.replace("+", "%2B"),
+            &obj.instance_profile_name,
         );
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -9615,14 +9181,8 @@ impl RemoveUserFromGroupRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -9701,13 +9261,10 @@ impl ResetServiceSpecificCredentialRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ServiceSpecificCredentialId"),
-            &obj.service_specific_credential_id.replace("+", "%2B"),
+            &obj.service_specific_credential_id,
         );
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -9936,20 +9493,14 @@ impl ResyncMFADeviceRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AuthenticationCode1"),
-            &obj.authentication_code_1.replace("+", "%2B"),
+            &obj.authentication_code_1,
         );
         params.put(
             &format!("{}{}", prefix, "AuthenticationCode2"),
-            &obj.authentication_code_2.replace("+", "%2B"),
+            &obj.authentication_code_2,
         );
-        params.put(
-            &format!("{}{}", prefix, "SerialNumber"),
-            &obj.serial_number.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "SerialNumber"), &obj.serial_number);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -11178,14 +10729,8 @@ impl SetDefaultPolicyVersionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "PolicyArn"),
-            &obj.policy_arn.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "VersionId"),
-            &obj.version_id.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        params.put(&format!("{}{}", prefix, "VersionId"), &obj.version_id);
     }
 }
 
@@ -11302,10 +10847,7 @@ impl SimulateCustomPolicyRequestSerializer {
             &obj.action_names,
         );
         if let Some(ref field_value) = obj.caller_arn {
-            params.put(
-                &format!("{}{}", prefix, "CallerArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "CallerArn"), &field_value);
         }
         if let Some(ref field_value) = obj.context_entries {
             ContextEntryListTypeSerializer::serialize(
@@ -11315,15 +10857,12 @@ impl SimulateCustomPolicyRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         SimulationPolicyListTypeSerializer::serialize(
@@ -11341,20 +10880,14 @@ impl SimulateCustomPolicyRequestSerializer {
         if let Some(ref field_value) = obj.resource_handling_option {
             params.put(
                 &format!("{}{}", prefix, "ResourceHandlingOption"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.resource_owner {
-            params.put(
-                &format!("{}{}", prefix, "ResourceOwner"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ResourceOwner"), &field_value);
         }
         if let Some(ref field_value) = obj.resource_policy {
-            params.put(
-                &format!("{}{}", prefix, "ResourcePolicy"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ResourcePolicy"), &field_value);
         }
     }
 }
@@ -11464,10 +10997,7 @@ impl SimulatePrincipalPolicyRequestSerializer {
             &obj.action_names,
         );
         if let Some(ref field_value) = obj.caller_arn {
-            params.put(
-                &format!("{}{}", prefix, "CallerArn"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "CallerArn"), &field_value);
         }
         if let Some(ref field_value) = obj.context_entries {
             ContextEntryListTypeSerializer::serialize(
@@ -11477,15 +11007,12 @@ impl SimulatePrincipalPolicyRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(
-                &format!("{}{}", prefix, "Marker"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(
                 &format!("{}{}", prefix, "MaxItems"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.policy_input_list {
@@ -11497,7 +11024,7 @@ impl SimulatePrincipalPolicyRequestSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "PolicySourceArn"),
-            &obj.policy_source_arn.replace("+", "%2B"),
+            &obj.policy_source_arn,
         );
         if let Some(ref field_value) = obj.resource_arns {
             ResourceNameListTypeSerializer::serialize(
@@ -11509,20 +11036,14 @@ impl SimulatePrincipalPolicyRequestSerializer {
         if let Some(ref field_value) = obj.resource_handling_option {
             params.put(
                 &format!("{}{}", prefix, "ResourceHandlingOption"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.resource_owner {
-            params.put(
-                &format!("{}{}", prefix, "ResourceOwner"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ResourceOwner"), &field_value);
         }
         if let Some(ref field_value) = obj.resource_policy {
-            params.put(
-                &format!("{}{}", prefix, "ResourcePolicy"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "ResourcePolicy"), &field_value);
         }
     }
 }
@@ -11815,19 +11336,10 @@ impl UpdateAccessKeyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "AccessKeyId"),
-            &obj.access_key_id.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "Status"),
-            &obj.status.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "AccessKeyId"), &obj.access_key_id);
+        params.put(&format!("{}{}", prefix, "Status"), &obj.status);
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -11866,55 +11378,55 @@ impl UpdateAccountPasswordPolicyRequestSerializer {
         if let Some(ref field_value) = obj.allow_users_to_change_password {
             params.put(
                 &format!("{}{}", prefix, "AllowUsersToChangePassword"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.hard_expiry {
             params.put(
                 &format!("{}{}", prefix, "HardExpiry"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.max_password_age {
             params.put(
                 &format!("{}{}", prefix, "MaxPasswordAge"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.minimum_password_length {
             params.put(
                 &format!("{}{}", prefix, "MinimumPasswordLength"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.password_reuse_prevention {
             params.put(
                 &format!("{}{}", prefix, "PasswordReusePrevention"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.require_lowercase_characters {
             params.put(
                 &format!("{}{}", prefix, "RequireLowercaseCharacters"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.require_numbers {
             params.put(
                 &format!("{}{}", prefix, "RequireNumbers"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.require_symbols {
             params.put(
                 &format!("{}{}", prefix, "RequireSymbols"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.require_uppercase_characters {
             params.put(
                 &format!("{}{}", prefix, "RequireUppercaseCharacters"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
     }
@@ -11939,12 +11451,9 @@ impl UpdateAssumeRolePolicyRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "PolicyDocument"),
-            &obj.policy_document.replace("+", "%2B"),
+            &obj.policy_document,
         );
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -11967,21 +11476,12 @@ impl UpdateGroupRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "GroupName"),
-            &obj.group_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
         if let Some(ref field_value) = obj.new_group_name {
-            params.put(
-                &format!("{}{}", prefix, "NewGroupName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NewGroupName"), &field_value);
         }
         if let Some(ref field_value) = obj.new_path {
-            params.put(
-                &format!("{}{}", prefix, "NewPath"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NewPath"), &field_value);
         }
     }
 }
@@ -12006,21 +11506,15 @@ impl UpdateLoginProfileRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.password {
-            params.put(
-                &format!("{}{}", prefix, "Password"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Password"), &field_value);
         }
         if let Some(ref field_value) = obj.password_reset_required {
             params.put(
                 &format!("{}{}", prefix, "PasswordResetRequired"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -12047,7 +11541,7 @@ impl UpdateOpenIDConnectProviderThumbprintRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "OpenIDConnectProviderArn"),
-            &obj.open_id_connect_provider_arn.replace("+", "%2B"),
+            &obj.open_id_connect_provider_arn,
         );
         ThumbprintListTypeSerializer::serialize(
             params,
@@ -12074,14 +11568,8 @@ impl UpdateRoleDescriptionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "Description"),
-            &obj.description.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Description"), &obj.description);
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -12150,21 +11638,15 @@ impl UpdateRoleRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.description {
-            params.put(
-                &format!("{}{}", prefix, "Description"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
         }
         if let Some(ref field_value) = obj.max_session_duration {
             params.put(
                 &format!("{}{}", prefix, "MaxSessionDuration"),
-                &field_value.to_string().replace("+", "%2B"),
+                &field_value.to_string(),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "RoleName"),
-            &obj.role_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
 }
 
@@ -12206,11 +11688,11 @@ impl UpdateSAMLProviderRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SAMLMetadataDocument"),
-            &obj.saml_metadata_document.replace("+", "%2B"),
+            &obj.saml_metadata_document,
         );
         params.put(
             &format!("{}{}", prefix, "SAMLProviderArn"),
-            &obj.saml_provider_arn.replace("+", "%2B"),
+            &obj.saml_provider_arn,
         );
     }
 }
@@ -12285,16 +11767,10 @@ impl UpdateSSHPublicKeyRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SSHPublicKeyId"),
-            &obj.ssh_public_key_id.replace("+", "%2B"),
+            &obj.ssh_public_key_id,
         );
-        params.put(
-            &format!("{}{}", prefix, "Status"),
-            &obj.status.replace("+", "%2B"),
-        );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Status"), &obj.status);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -12318,20 +11794,17 @@ impl UpdateServerCertificateRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.new_path {
-            params.put(
-                &format!("{}{}", prefix, "NewPath"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NewPath"), &field_value);
         }
         if let Some(ref field_value) = obj.new_server_certificate_name {
             params.put(
                 &format!("{}{}", prefix, "NewServerCertificateName"),
-                &field_value.replace("+", "%2B"),
+                &field_value,
             );
         }
         params.put(
             &format!("{}{}", prefix, "ServerCertificateName"),
-            &obj.server_certificate_name.replace("+", "%2B"),
+            &obj.server_certificate_name,
         );
     }
 }
@@ -12357,17 +11830,11 @@ impl UpdateServiceSpecificCredentialRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ServiceSpecificCredentialId"),
-            &obj.service_specific_credential_id.replace("+", "%2B"),
+            &obj.service_specific_credential_id,
         );
-        params.put(
-            &format!("{}{}", prefix, "Status"),
-            &obj.status.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Status"), &obj.status);
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -12393,17 +11860,11 @@ impl UpdateSigningCertificateRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CertificateId"),
-            &obj.certificate_id.replace("+", "%2B"),
+            &obj.certificate_id,
         );
-        params.put(
-            &format!("{}{}", prefix, "Status"),
-            &obj.status.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "Status"), &obj.status);
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -12428,21 +11889,12 @@ impl UpdateUserRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.new_path {
-            params.put(
-                &format!("{}{}", prefix, "NewPath"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NewPath"), &field_value);
         }
         if let Some(ref field_value) = obj.new_user_name {
-            params.put(
-                &format!("{}{}", prefix, "NewUserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "NewUserName"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -12465,12 +11917,9 @@ impl UploadSSHPublicKeyRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SSHPublicKeyBody"),
-            &obj.ssh_public_key_body.replace("+", "%2B"),
+            &obj.ssh_public_key_body,
         );
-        params.put(
-            &format!("{}{}", prefix, "UserName"),
-            &obj.user_name.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -12548,27 +11997,18 @@ impl UploadServerCertificateRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CertificateBody"),
-            &obj.certificate_body.replace("+", "%2B"),
+            &obj.certificate_body,
         );
         if let Some(ref field_value) = obj.certificate_chain {
-            params.put(
-                &format!("{}{}", prefix, "CertificateChain"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "CertificateChain"), &field_value);
         }
         if let Some(ref field_value) = obj.path {
-            params.put(
-                &format!("{}{}", prefix, "Path"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "Path"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "PrivateKey"),
-            &obj.private_key.replace("+", "%2B"),
-        );
+        params.put(&format!("{}{}", prefix, "PrivateKey"), &obj.private_key);
         params.put(
             &format!("{}{}", prefix, "ServerCertificateName"),
-            &obj.server_certificate_name.replace("+", "%2B"),
+            &obj.server_certificate_name,
         );
     }
 }
@@ -12642,13 +12082,10 @@ impl UploadSigningCertificateRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CertificateBody"),
-            &obj.certificate_body.replace("+", "%2B"),
+            &obj.certificate_body,
         );
         if let Some(ref field_value) = obj.user_name {
-            params.put(
-                &format!("{}{}", prefix, "UserName"),
-                &field_value.replace("+", "%2B"),
-            );
+            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
     }
 }
@@ -24986,7 +24423,10 @@ impl Iam for IamClient {
         params.put("Action", "AddClientIDToOpenIDConnectProvider");
         params.put("Version", "2010-05-08");
         AddClientIDToOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25012,7 +24452,10 @@ impl Iam for IamClient {
         params.put("Action", "AddRoleToInstanceProfile");
         params.put("Version", "2010-05-08");
         AddRoleToInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25038,7 +24481,10 @@ impl Iam for IamClient {
         params.put("Action", "AddUserToGroup");
         params.put("Version", "2010-05-08");
         AddUserToGroupRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25064,7 +24510,10 @@ impl Iam for IamClient {
         params.put("Action", "AttachGroupPolicy");
         params.put("Version", "2010-05-08");
         AttachGroupPolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25090,7 +24539,10 @@ impl Iam for IamClient {
         params.put("Action", "AttachRolePolicy");
         params.put("Version", "2010-05-08");
         AttachRolePolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25116,7 +24568,10 @@ impl Iam for IamClient {
         params.put("Action", "AttachUserPolicy");
         params.put("Version", "2010-05-08");
         AttachUserPolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25142,7 +24597,10 @@ impl Iam for IamClient {
         params.put("Action", "ChangePassword");
         params.put("Version", "2010-05-08");
         ChangePasswordRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25168,7 +24626,10 @@ impl Iam for IamClient {
         params.put("Action", "CreateAccessKey");
         params.put("Version", "2010-05-08");
         CreateAccessKeyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25217,7 +24678,10 @@ impl Iam for IamClient {
         params.put("Action", "CreateAccountAlias");
         params.put("Version", "2010-05-08");
         CreateAccountAliasRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25243,7 +24707,10 @@ impl Iam for IamClient {
         params.put("Action", "CreateGroup");
         params.put("Version", "2010-05-08");
         CreateGroupRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25292,7 +24759,10 @@ impl Iam for IamClient {
         params.put("Action", "CreateInstanceProfile");
         params.put("Version", "2010-05-08");
         CreateInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25341,7 +24811,10 @@ impl Iam for IamClient {
         params.put("Action", "CreateLoginProfile");
         params.put("Version", "2010-05-08");
         CreateLoginProfileRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25390,7 +24863,10 @@ impl Iam for IamClient {
         params.put("Action", "CreateOpenIDConnectProvider");
         params.put("Version", "2010-05-08");
         CreateOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25441,7 +24917,10 @@ impl Iam for IamClient {
         params.put("Action", "CreatePolicy");
         params.put("Version", "2010-05-08");
         CreatePolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25490,7 +24969,10 @@ impl Iam for IamClient {
         params.put("Action", "CreatePolicyVersion");
         params.put("Version", "2010-05-08");
         CreatePolicyVersionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25539,7 +25021,10 @@ impl Iam for IamClient {
         params.put("Action", "CreateRole");
         params.put("Version", "2010-05-08");
         CreateRoleRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25588,7 +25073,10 @@ impl Iam for IamClient {
         params.put("Action", "CreateSAMLProvider");
         params.put("Version", "2010-05-08");
         CreateSAMLProviderRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25637,7 +25125,10 @@ impl Iam for IamClient {
         params.put("Action", "CreateServiceLinkedRole");
         params.put("Version", "2010-05-08");
         CreateServiceLinkedRoleRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25687,7 +25178,10 @@ impl Iam for IamClient {
         params.put("Action", "CreateServiceSpecificCredential");
         params.put("Version", "2010-05-08");
         CreateServiceSpecificCredentialRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25738,7 +25232,10 @@ impl Iam for IamClient {
         params.put("Action", "CreateUser");
         params.put("Version", "2010-05-08");
         CreateUserRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25787,7 +25284,10 @@ impl Iam for IamClient {
         params.put("Action", "CreateVirtualMFADevice");
         params.put("Version", "2010-05-08");
         CreateVirtualMFADeviceRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25836,7 +25336,10 @@ impl Iam for IamClient {
         params.put("Action", "DeactivateMFADevice");
         params.put("Version", "2010-05-08");
         DeactivateMFADeviceRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25862,7 +25365,10 @@ impl Iam for IamClient {
         params.put("Action", "DeleteAccessKey");
         params.put("Version", "2010-05-08");
         DeleteAccessKeyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25888,7 +25394,10 @@ impl Iam for IamClient {
         params.put("Action", "DeleteAccountAlias");
         params.put("Version", "2010-05-08");
         DeleteAccountAliasRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25911,7 +25420,10 @@ impl Iam for IamClient {
         params.put("Action", "DeleteAccountPasswordPolicy");
         params.put("Version", "2010-05-08");
 
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25934,7 +25446,10 @@ impl Iam for IamClient {
         params.put("Action", "DeleteGroup");
         params.put("Version", "2010-05-08");
         DeleteGroupRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25960,7 +25475,10 @@ impl Iam for IamClient {
         params.put("Action", "DeleteGroupPolicy");
         params.put("Version", "2010-05-08");
         DeleteGroupPolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -25986,7 +25504,10 @@ impl Iam for IamClient {
         params.put("Action", "DeleteInstanceProfile");
         params.put("Version", "2010-05-08");
         DeleteInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26012,7 +25533,10 @@ impl Iam for IamClient {
         params.put("Action", "DeleteLoginProfile");
         params.put("Version", "2010-05-08");
         DeleteLoginProfileRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26038,7 +25562,10 @@ impl Iam for IamClient {
         params.put("Action", "DeleteOpenIDConnectProvider");
         params.put("Version", "2010-05-08");
         DeleteOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26061,7 +25588,10 @@ impl Iam for IamClient {
         params.put("Action", "DeletePolicy");
         params.put("Version", "2010-05-08");
         DeletePolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26087,7 +25617,10 @@ impl Iam for IamClient {
         params.put("Action", "DeletePolicyVersion");
         params.put("Version", "2010-05-08");
         DeletePolicyVersionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26110,7 +25643,10 @@ impl Iam for IamClient {
         params.put("Action", "DeleteRole");
         params.put("Version", "2010-05-08");
         DeleteRoleRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26136,7 +25672,10 @@ impl Iam for IamClient {
         params.put("Action", "DeleteRolePolicy");
         params.put("Version", "2010-05-08");
         DeleteRolePolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26162,7 +25701,10 @@ impl Iam for IamClient {
         params.put("Action", "DeleteSAMLProvider");
         params.put("Version", "2010-05-08");
         DeleteSAMLProviderRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26188,7 +25730,10 @@ impl Iam for IamClient {
         params.put("Action", "DeleteSSHPublicKey");
         params.put("Version", "2010-05-08");
         DeleteSSHPublicKeyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26214,7 +25759,10 @@ impl Iam for IamClient {
         params.put("Action", "DeleteServerCertificate");
         params.put("Version", "2010-05-08");
         DeleteServerCertificateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26240,7 +25788,10 @@ impl Iam for IamClient {
         params.put("Action", "DeleteServiceLinkedRole");
         params.put("Version", "2010-05-08");
         DeleteServiceLinkedRoleRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26289,7 +25840,10 @@ impl Iam for IamClient {
         params.put("Action", "DeleteServiceSpecificCredential");
         params.put("Version", "2010-05-08");
         DeleteServiceSpecificCredentialRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26315,7 +25869,10 @@ impl Iam for IamClient {
         params.put("Action", "DeleteSigningCertificate");
         params.put("Version", "2010-05-08");
         DeleteSigningCertificateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26338,7 +25895,10 @@ impl Iam for IamClient {
         params.put("Action", "DeleteUser");
         params.put("Version", "2010-05-08");
         DeleteUserRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26364,7 +25924,10 @@ impl Iam for IamClient {
         params.put("Action", "DeleteUserPolicy");
         params.put("Version", "2010-05-08");
         DeleteUserPolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26390,7 +25953,10 @@ impl Iam for IamClient {
         params.put("Action", "DeleteVirtualMFADevice");
         params.put("Version", "2010-05-08");
         DeleteVirtualMFADeviceRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26416,7 +25982,10 @@ impl Iam for IamClient {
         params.put("Action", "DetachGroupPolicy");
         params.put("Version", "2010-05-08");
         DetachGroupPolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26442,7 +26011,10 @@ impl Iam for IamClient {
         params.put("Action", "DetachRolePolicy");
         params.put("Version", "2010-05-08");
         DetachRolePolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26468,7 +26040,10 @@ impl Iam for IamClient {
         params.put("Action", "DetachUserPolicy");
         params.put("Version", "2010-05-08");
         DetachUserPolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26494,7 +26069,10 @@ impl Iam for IamClient {
         params.put("Action", "EnableMFADevice");
         params.put("Version", "2010-05-08");
         EnableMFADeviceRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26519,7 +26097,10 @@ impl Iam for IamClient {
         params.put("Action", "GenerateCredentialReport");
         params.put("Version", "2010-05-08");
 
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26568,7 +26149,10 @@ impl Iam for IamClient {
         params.put("Action", "GetAccessKeyLastUsed");
         params.put("Version", "2010-05-08");
         GetAccessKeyLastUsedRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26618,7 +26202,10 @@ impl Iam for IamClient {
         params.put("Action", "GetAccountAuthorizationDetails");
         params.put("Version", "2010-05-08");
         GetAccountAuthorizationDetailsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26668,7 +26255,10 @@ impl Iam for IamClient {
         params.put("Action", "GetAccountPasswordPolicy");
         params.put("Version", "2010-05-08");
 
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26716,7 +26306,10 @@ impl Iam for IamClient {
         params.put("Action", "GetAccountSummary");
         params.put("Version", "2010-05-08");
 
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26765,7 +26358,10 @@ impl Iam for IamClient {
         params.put("Action", "GetContextKeysForCustomPolicy");
         params.put("Version", "2010-05-08");
         GetContextKeysForCustomPolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26814,7 +26410,10 @@ impl Iam for IamClient {
         params.put("Action", "GetContextKeysForPrincipalPolicy");
         params.put("Version", "2010-05-08");
         GetContextKeysForPrincipalPolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26862,7 +26461,10 @@ impl Iam for IamClient {
         params.put("Action", "GetCredentialReport");
         params.put("Version", "2010-05-08");
 
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26908,7 +26510,10 @@ impl Iam for IamClient {
         params.put("Action", "GetGroup");
         params.put("Version", "2010-05-08");
         GetGroupRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -26957,7 +26562,10 @@ impl Iam for IamClient {
         params.put("Action", "GetGroupPolicy");
         params.put("Version", "2010-05-08");
         GetGroupPolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -27006,7 +26614,10 @@ impl Iam for IamClient {
         params.put("Action", "GetInstanceProfile");
         params.put("Version", "2010-05-08");
         GetInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -27055,7 +26666,10 @@ impl Iam for IamClient {
         params.put("Action", "GetLoginProfile");
         params.put("Version", "2010-05-08");
         GetLoginProfileRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -27104,7 +26718,10 @@ impl Iam for IamClient {
         params.put("Action", "GetOpenIDConnectProvider");
         params.put("Version", "2010-05-08");
         GetOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -27153,7 +26770,10 @@ impl Iam for IamClient {
         params.put("Action", "GetPolicy");
         params.put("Version", "2010-05-08");
         GetPolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -27202,7 +26822,10 @@ impl Iam for IamClient {
         params.put("Action", "GetPolicyVersion");
         params.put("Version", "2010-05-08");
         GetPolicyVersionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -27248,7 +26871,10 @@ impl Iam for IamClient {
         params.put("Action", "GetRole");
         params.put("Version", "2010-05-08");
         GetRoleRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -27297,7 +26923,10 @@ impl Iam for IamClient {
         params.put("Action", "GetRolePolicy");
         params.put("Version", "2010-05-08");
         GetRolePolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -27346,7 +26975,10 @@ impl Iam for IamClient {
         params.put("Action", "GetSAMLProvider");
         params.put("Version", "2010-05-08");
         GetSAMLProviderRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -27395,7 +27027,10 @@ impl Iam for IamClient {
         params.put("Action", "GetSSHPublicKey");
         params.put("Version", "2010-05-08");
         GetSSHPublicKeyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -27444,7 +27079,10 @@ impl Iam for IamClient {
         params.put("Action", "GetServerCertificate");
         params.put("Version", "2010-05-08");
         GetServerCertificateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -27496,7 +27134,10 @@ impl Iam for IamClient {
         params.put("Action", "GetServiceLinkedRoleDeletionStatus");
         params.put("Version", "2010-05-08");
         GetServiceLinkedRoleDeletionStatusRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -27544,7 +27185,10 @@ impl Iam for IamClient {
         params.put("Action", "GetUser");
         params.put("Version", "2010-05-08");
         GetUserRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -27593,7 +27237,10 @@ impl Iam for IamClient {
         params.put("Action", "GetUserPolicy");
         params.put("Version", "2010-05-08");
         GetUserPolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -27642,7 +27289,10 @@ impl Iam for IamClient {
         params.put("Action", "ListAccessKeys");
         params.put("Version", "2010-05-08");
         ListAccessKeysRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -27691,7 +27341,10 @@ impl Iam for IamClient {
         params.put("Action", "ListAccountAliases");
         params.put("Version", "2010-05-08");
         ListAccountAliasesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -27740,7 +27393,10 @@ impl Iam for IamClient {
         params.put("Action", "ListAttachedGroupPolicies");
         params.put("Version", "2010-05-08");
         ListAttachedGroupPoliciesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -27789,7 +27445,10 @@ impl Iam for IamClient {
         params.put("Action", "ListAttachedRolePolicies");
         params.put("Version", "2010-05-08");
         ListAttachedRolePoliciesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -27838,7 +27497,10 @@ impl Iam for IamClient {
         params.put("Action", "ListAttachedUserPolicies");
         params.put("Version", "2010-05-08");
         ListAttachedUserPoliciesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -27887,7 +27549,10 @@ impl Iam for IamClient {
         params.put("Action", "ListEntitiesForPolicy");
         params.put("Version", "2010-05-08");
         ListEntitiesForPolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -27936,7 +27601,10 @@ impl Iam for IamClient {
         params.put("Action", "ListGroupPolicies");
         params.put("Version", "2010-05-08");
         ListGroupPoliciesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -27985,7 +27653,10 @@ impl Iam for IamClient {
         params.put("Action", "ListGroups");
         params.put("Version", "2010-05-08");
         ListGroupsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28034,7 +27705,10 @@ impl Iam for IamClient {
         params.put("Action", "ListGroupsForUser");
         params.put("Version", "2010-05-08");
         ListGroupsForUserRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28083,7 +27757,10 @@ impl Iam for IamClient {
         params.put("Action", "ListInstanceProfiles");
         params.put("Version", "2010-05-08");
         ListInstanceProfilesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28132,7 +27809,10 @@ impl Iam for IamClient {
         params.put("Action", "ListInstanceProfilesForRole");
         params.put("Version", "2010-05-08");
         ListInstanceProfilesForRoleRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28183,7 +27863,10 @@ impl Iam for IamClient {
         params.put("Action", "ListMFADevices");
         params.put("Version", "2010-05-08");
         ListMFADevicesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28232,7 +27915,10 @@ impl Iam for IamClient {
         params.put("Action", "ListOpenIDConnectProviders");
         params.put("Version", "2010-05-08");
         ListOpenIDConnectProvidersRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28281,7 +27967,10 @@ impl Iam for IamClient {
         params.put("Action", "ListPolicies");
         params.put("Version", "2010-05-08");
         ListPoliciesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28330,7 +28019,10 @@ impl Iam for IamClient {
         params.put("Action", "ListPolicyVersions");
         params.put("Version", "2010-05-08");
         ListPolicyVersionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28379,7 +28071,10 @@ impl Iam for IamClient {
         params.put("Action", "ListRolePolicies");
         params.put("Version", "2010-05-08");
         ListRolePoliciesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28428,7 +28123,10 @@ impl Iam for IamClient {
         params.put("Action", "ListRoles");
         params.put("Version", "2010-05-08");
         ListRolesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28477,7 +28175,10 @@ impl Iam for IamClient {
         params.put("Action", "ListSAMLProviders");
         params.put("Version", "2010-05-08");
         ListSAMLProvidersRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28526,7 +28227,10 @@ impl Iam for IamClient {
         params.put("Action", "ListSSHPublicKeys");
         params.put("Version", "2010-05-08");
         ListSSHPublicKeysRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28575,7 +28279,10 @@ impl Iam for IamClient {
         params.put("Action", "ListServerCertificates");
         params.put("Version", "2010-05-08");
         ListServerCertificatesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28625,7 +28332,10 @@ impl Iam for IamClient {
         params.put("Action", "ListServiceSpecificCredentials");
         params.put("Version", "2010-05-08");
         ListServiceSpecificCredentialsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28676,7 +28386,10 @@ impl Iam for IamClient {
         params.put("Action", "ListSigningCertificates");
         params.put("Version", "2010-05-08");
         ListSigningCertificatesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28725,7 +28438,10 @@ impl Iam for IamClient {
         params.put("Action", "ListUserPolicies");
         params.put("Version", "2010-05-08");
         ListUserPoliciesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28774,7 +28490,10 @@ impl Iam for IamClient {
         params.put("Action", "ListUsers");
         params.put("Version", "2010-05-08");
         ListUsersRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28823,7 +28542,10 @@ impl Iam for IamClient {
         params.put("Action", "ListVirtualMFADevices");
         params.put("Version", "2010-05-08");
         ListVirtualMFADevicesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28872,7 +28594,10 @@ impl Iam for IamClient {
         params.put("Action", "PutGroupPolicy");
         params.put("Version", "2010-05-08");
         PutGroupPolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28895,7 +28620,10 @@ impl Iam for IamClient {
         params.put("Action", "PutRolePolicy");
         params.put("Version", "2010-05-08");
         PutRolePolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28918,7 +28646,10 @@ impl Iam for IamClient {
         params.put("Action", "PutUserPolicy");
         params.put("Version", "2010-05-08");
         PutUserPolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28948,7 +28679,10 @@ impl Iam for IamClient {
             "",
             &input,
         );
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -28974,7 +28708,10 @@ impl Iam for IamClient {
         params.put("Action", "RemoveRoleFromInstanceProfile");
         params.put("Version", "2010-05-08");
         RemoveRoleFromInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29000,7 +28737,10 @@ impl Iam for IamClient {
         params.put("Action", "RemoveUserFromGroup");
         params.put("Version", "2010-05-08");
         RemoveUserFromGroupRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29027,7 +28767,10 @@ impl Iam for IamClient {
         params.put("Action", "ResetServiceSpecificCredential");
         params.put("Version", "2010-05-08");
         ResetServiceSpecificCredentialRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29078,7 +28821,10 @@ impl Iam for IamClient {
         params.put("Action", "ResyncMFADevice");
         params.put("Version", "2010-05-08");
         ResyncMFADeviceRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29104,7 +28850,10 @@ impl Iam for IamClient {
         params.put("Action", "SetDefaultPolicyVersion");
         params.put("Version", "2010-05-08");
         SetDefaultPolicyVersionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29130,7 +28879,10 @@ impl Iam for IamClient {
         params.put("Action", "SimulateCustomPolicy");
         params.put("Version", "2010-05-08");
         SimulateCustomPolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29179,7 +28931,10 @@ impl Iam for IamClient {
         params.put("Action", "SimulatePrincipalPolicy");
         params.put("Version", "2010-05-08");
         SimulatePrincipalPolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29228,7 +28983,10 @@ impl Iam for IamClient {
         params.put("Action", "UpdateAccessKey");
         params.put("Version", "2010-05-08");
         UpdateAccessKeyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29254,7 +29012,10 @@ impl Iam for IamClient {
         params.put("Action", "UpdateAccountPasswordPolicy");
         params.put("Version", "2010-05-08");
         UpdateAccountPasswordPolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29280,7 +29041,10 @@ impl Iam for IamClient {
         params.put("Action", "UpdateAssumeRolePolicy");
         params.put("Version", "2010-05-08");
         UpdateAssumeRolePolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29303,7 +29067,10 @@ impl Iam for IamClient {
         params.put("Action", "UpdateGroup");
         params.put("Version", "2010-05-08");
         UpdateGroupRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29329,7 +29096,10 @@ impl Iam for IamClient {
         params.put("Action", "UpdateLoginProfile");
         params.put("Version", "2010-05-08");
         UpdateLoginProfileRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29355,7 +29125,10 @@ impl Iam for IamClient {
         params.put("Action", "UpdateOpenIDConnectProviderThumbprint");
         params.put("Version", "2010-05-08");
         UpdateOpenIDConnectProviderThumbprintRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29381,7 +29154,10 @@ impl Iam for IamClient {
         params.put("Action", "UpdateRole");
         params.put("Version", "2010-05-08");
         UpdateRoleRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29430,7 +29206,10 @@ impl Iam for IamClient {
         params.put("Action", "UpdateRoleDescription");
         params.put("Version", "2010-05-08");
         UpdateRoleDescriptionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29479,7 +29258,10 @@ impl Iam for IamClient {
         params.put("Action", "UpdateSAMLProvider");
         params.put("Version", "2010-05-08");
         UpdateSAMLProviderRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29528,7 +29310,10 @@ impl Iam for IamClient {
         params.put("Action", "UpdateSSHPublicKey");
         params.put("Version", "2010-05-08");
         UpdateSSHPublicKeyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29554,7 +29339,10 @@ impl Iam for IamClient {
         params.put("Action", "UpdateServerCertificate");
         params.put("Version", "2010-05-08");
         UpdateServerCertificateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29580,7 +29368,10 @@ impl Iam for IamClient {
         params.put("Action", "UpdateServiceSpecificCredential");
         params.put("Version", "2010-05-08");
         UpdateServiceSpecificCredentialRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29606,7 +29397,10 @@ impl Iam for IamClient {
         params.put("Action", "UpdateSigningCertificate");
         params.put("Version", "2010-05-08");
         UpdateSigningCertificateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29629,7 +29423,10 @@ impl Iam for IamClient {
         params.put("Action", "UpdateUser");
         params.put("Version", "2010-05-08");
         UpdateUserRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29655,7 +29452,10 @@ impl Iam for IamClient {
         params.put("Action", "UploadSSHPublicKey");
         params.put("Version", "2010-05-08");
         UploadSSHPublicKeyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29704,7 +29504,10 @@ impl Iam for IamClient {
         params.put("Action", "UploadServerCertificate");
         params.put("Version", "2010-05-08");
         UploadServerCertificateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -29753,7 +29556,10 @@ impl Iam for IamClient {
         params.put("Action", "UploadSigningCertificate");
         params.put("Version", "2010-05-08");
         UploadSigningCertificateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {

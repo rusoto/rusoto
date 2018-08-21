@@ -4,6 +4,9 @@ use ::{CloudWatch, CloudWatchClient, PutMetricDataInput, Dimension, MetricDatum}
 
 use rusoto_core::Region;
 use rusoto_core::signature::SignedRequest;
+use rusoto_core::signature::SignedRequestPayload;
+use rusoto_core::param::Params;
+use serde_urlencoded;
 use self::rusoto_mock::*;
 
 #[test]
@@ -13,19 +16,23 @@ fn should_serialize_complex_metric_data_params() {
         .with_request_checker(|request: &SignedRequest| {
             assert_eq!("POST", request.method);
             assert_eq!("/", request.path);
-            assert!(request.payload.is_none());
-            assert_eq!(request.params.get("Namespace"),
-                        Some(&Some("TestNamespace".to_owned())));
-            assert_eq!(request.params.get("MetricData.member.1.MetricName"),
-                        Some(&Some("buffers".to_owned())));
-            assert_eq!(request.params.get("MetricData.member.1.Unit"),
-                        Some(&Some("Bytes".to_owned())));
-            assert_eq!(request.params.get("MetricData.member.1.Value"),
-                        Some(&Some("1".to_owned())));
-            assert_eq!(request.params.get("MetricData.member.1.Dimensions.member.1.Name"),
-                        Some(&Some("foo".to_owned())));
-            assert_eq!(request.params.get("MetricData.member.1.Dimensions.member.1.Value"),
-                        Some(&Some("bar".to_owned())));
+            if let Some(SignedRequestPayload::Buffer(ref buffer)) = request.payload {
+                let params: Params = serde_urlencoded::from_bytes(buffer).unwrap();
+                assert_eq!(params.get("Namespace"),
+                            Some(&Some("TestNamespace".to_owned())));
+                assert_eq!(params.get("MetricData.member.1.MetricName"),
+                            Some(&Some("buffers".to_owned())));
+                assert_eq!(params.get("MetricData.member.1.Unit"),
+                            Some(&Some("Bytes".to_owned())));
+                assert_eq!(params.get("MetricData.member.1.Value"),
+                            Some(&Some("1".to_owned())));
+                assert_eq!(params.get("MetricData.member.1.Dimensions.member.1.Name"),
+                            Some(&Some("foo".to_owned())));
+                assert_eq!(params.get("MetricData.member.1.Dimensions.member.1.Value"),
+                            Some(&Some("bar".to_owned())));
+            } else {
+                panic!("Unexpected request.payload: {:?}", request.payload);
+            }
 
         });
     let metric_data = vec![MetricDatum {
