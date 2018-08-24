@@ -28,6 +28,32 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AssociateIpGroupsRequest {
+    /// <p>The ID of the directory.</p>
+    #[serde(rename = "DirectoryId")]
+    pub directory_id: String,
+    /// <p>The IDs of one or more IP access control groups.</p>
+    #[serde(rename = "GroupIds")]
+    pub group_ids: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct AssociateIpGroupsResult {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AuthorizeIpRulesRequest {
+    /// <p>The ID of the group.</p>
+    #[serde(rename = "GroupId")]
+    pub group_id: String,
+    /// <p>The rules to add to the group.</p>
+    #[serde(rename = "UserRules")]
+    pub user_rules: Vec<IpRuleItem>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct AuthorizeIpRulesResult {}
+
 /// <p>Information about the compute type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ComputeType {
@@ -38,11 +64,34 @@ pub struct ComputeType {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateIpGroupRequest {
+    /// <p>The description of the group.</p>
+    #[serde(rename = "GroupDesc")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_desc: Option<String>,
+    /// <p>The name of the group.</p>
+    #[serde(rename = "GroupName")]
+    pub group_name: String,
+    /// <p>The rules to add to the group.</p>
+    #[serde(rename = "UserRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_rules: Option<Vec<IpRuleItem>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct CreateIpGroupResult {
+    /// <p>The ID of the group.</p>
+    #[serde(rename = "GroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateTagsRequest {
-    /// <p>The ID of the resource.</p>
+    /// <p>The ID of the WorkSpace. To find this ID, use <a>DescribeWorkspaces</a>.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    /// <p>The tags. Each resource can have a maximum of 50 tags.</p>
+    /// <p>The tags. Each WorkSpace can have a maximum of 50 tags.</p>
     #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
 }
@@ -52,7 +101,7 @@ pub struct CreateTagsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateWorkspacesRequest {
-    /// <p>Information about the WorkSpaces to create.</p>
+    /// <p>The WorkSpaces to create. You can specify up to 25 WorkSpaces.</p>
     #[serde(rename = "Workspaces")]
     pub workspaces: Vec<WorkspaceRequest>,
 }
@@ -95,8 +144,18 @@ pub struct DefaultWorkspaceCreationProperties {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteIpGroupRequest {
+    /// <p>The ID of the IP access control group.</p>
+    #[serde(rename = "GroupId")]
+    pub group_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DeleteIpGroupResult {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteTagsRequest {
-    /// <p>The ID of the resource.</p>
+    /// <p>The ID of the WorkSpace. To find this ID, use <a>DescribeWorkspaces</a>.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
     /// <p>The tag keys.</p>
@@ -108,8 +167,36 @@ pub struct DeleteTagsRequest {
 pub struct DeleteTagsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeIpGroupsRequest {
+    /// <p>The IDs of one or more IP access control groups.</p>
+    #[serde(rename = "GroupIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_ids: Option<Vec<String>>,
+    /// <p>The maximum number of items to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DescribeIpGroupsResult {
+    /// <p>The token to use to retrieve the next set of results, or null if there are no more results available. This token is valid for one day and must be used within that time frame.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Information about the IP access control groups.</p>
+    #[serde(rename = "Result")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result: Option<Vec<WorkspacesIpGroup>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeTagsRequest {
-    /// <p>The ID of the resource.</p>
+    /// <p>The ID of the WorkSpace. To find this ID, use <a>DescribeWorkspaces</a>.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
 }
@@ -180,7 +267,7 @@ pub struct DescribeWorkspacesConnectionStatusRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The identifiers of the WorkSpaces.</p>
+    /// <p>The identifiers of the WorkSpaces. You can specify up to 25 WorkSpaces.</p>
     #[serde(rename = "WorkspaceIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_ids: Option<Vec<String>>,
@@ -238,6 +325,19 @@ pub struct DescribeWorkspacesResult {
     pub workspaces: Option<Vec<Workspace>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DisassociateIpGroupsRequest {
+    /// <p>The ID of the directory.</p>
+    #[serde(rename = "DirectoryId")]
+    pub directory_id: String,
+    /// <p>The IDs of one or more IP access control groups.</p>
+    #[serde(rename = "GroupIds")]
+    pub group_ids: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DisassociateIpGroupsResult {}
+
 /// <p>Information about a WorkSpace that could not be created.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct FailedCreateWorkspaceRequest {
@@ -272,6 +372,19 @@ pub struct FailedWorkspaceChangeRequest {
     pub workspace_id: Option<String>,
 }
 
+/// <p>Information about a rule for an IP access control group.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct IpRuleItem {
+    /// <p>The IP address range, in CIDR notation.</p>
+    #[serde(rename = "ipRule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_rule: Option<String>,
+    /// <p>The description.</p>
+    #[serde(rename = "ruleDesc")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_desc: Option<String>,
+}
+
 /// <p>Information about a WorkSpace modification.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ModificationState {
@@ -298,17 +411,30 @@ pub struct ModifyWorkspacePropertiesRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ModifyWorkspacePropertiesResult {}
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ModifyWorkspaceStateRequest {
+    /// <p>The ID of the WorkSpace.</p>
+    #[serde(rename = "WorkspaceId")]
+    pub workspace_id: String,
+    /// <p>The WorkSpace state.</p>
+    #[serde(rename = "WorkspaceState")]
+    pub workspace_state: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ModifyWorkspaceStateResult {}
+
 /// <p>Information used to reboot a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RebootRequest {
-    /// <p>The identifier of the WorkSpace.</p>
+    /// <p>The ID of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
     pub workspace_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RebootWorkspacesRequest {
-    /// <p>The WorkSpaces to reboot.</p>
+    /// <p>The WorkSpaces to reboot. You can specify up to 25 WorkSpaces.</p>
     #[serde(rename = "RebootWorkspaceRequests")]
     pub reboot_workspace_requests: Vec<RebootRequest>,
 }
@@ -324,25 +450,38 @@ pub struct RebootWorkspacesResult {
 /// <p>Information used to rebuild a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RebuildRequest {
-    /// <p>The identifier of the WorkSpace.</p>
+    /// <p>The ID of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
     pub workspace_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RebuildWorkspacesRequest {
-    /// <p>The WorkSpaces to rebuild.</p>
+    /// <p>The WorkSpace to rebuild. You can specify a single WorkSpace.</p>
     #[serde(rename = "RebuildWorkspaceRequests")]
     pub rebuild_workspace_requests: Vec<RebuildRequest>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RebuildWorkspacesResult {
-    /// <p>Information about the WorkSpaces that could not be rebuilt.</p>
+    /// <p>Information about the WorkSpace if it could not be rebuilt.</p>
     #[serde(rename = "FailedRequests")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct RevokeIpRulesRequest {
+    /// <p>The ID of the group.</p>
+    #[serde(rename = "GroupId")]
+    pub group_id: String,
+    /// <p>The rules to remove from the group.</p>
+    #[serde(rename = "UserRules")]
+    pub user_rules: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct RevokeIpRulesResult {}
 
 /// <p>Information about the root volume for a WorkSpace bundle.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -364,7 +503,7 @@ pub struct StartRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartWorkspacesRequest {
-    /// <p>The WorkSpaces to start.</p>
+    /// <p>The WorkSpaces to start. You can specify up to 25 WorkSpaces.</p>
     #[serde(rename = "StartWorkspaceRequests")]
     pub start_workspace_requests: Vec<StartRequest>,
 }
@@ -388,7 +527,7 @@ pub struct StopRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopWorkspacesRequest {
-    /// <p>The WorkSpaces to stop.</p>
+    /// <p>The WorkSpaces to stop. You can specify up to 25 WorkSpaces.</p>
     #[serde(rename = "StopWorkspaceRequests")]
     pub stop_workspace_requests: Vec<StopRequest>,
 }
@@ -416,14 +555,14 @@ pub struct Tag {
 /// <p>Information used to terminate a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TerminateRequest {
-    /// <p>The identifier of the WorkSpace.</p>
+    /// <p>The ID of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
     pub workspace_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TerminateWorkspacesRequest {
-    /// <p>The WorkSpaces to terminate.</p>
+    /// <p>The WorkSpaces to terminate. You can specify up to 25 WorkSpaces.</p>
     #[serde(rename = "TerminateWorkspaceRequests")]
     pub terminate_workspace_requests: Vec<TerminateRequest>,
 }
@@ -435,6 +574,19 @@ pub struct TerminateWorkspacesResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateRulesOfIpGroupRequest {
+    /// <p>The ID of the group.</p>
+    #[serde(rename = "GroupId")]
+    pub group_id: String,
+    /// <p>One or more rules.</p>
+    #[serde(rename = "UserRules")]
+    pub user_rules: Vec<IpRuleItem>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct UpdateRulesOfIpGroupResult {}
 
 /// <p>Information about the user storage for a WorkSpace bundle.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -564,7 +716,7 @@ pub struct WorkspaceConnectionStatus {
     pub workspace_id: Option<String>,
 }
 
-/// <p>Contains information about an AWS Directory Service directory for use with Amazon WorkSpaces.</p>
+/// <p>Information about an AWS Directory Service directory for use with Amazon WorkSpaces.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct WorkspaceDirectory {
     /// <p>The directory alias.</p>
@@ -615,6 +767,10 @@ pub struct WorkspaceDirectory {
     #[serde(rename = "WorkspaceSecurityGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_security_group_id: Option<String>,
+    /// <p>The identifiers of the IP access control groups associated with the directory.</p>
+    #[serde(rename = "ipGroupIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_group_ids: Option<Vec<String>>,
 }
 
 /// <p>Information about a WorkSpace.</p>
@@ -676,6 +832,344 @@ pub struct WorkspaceRequest {
     pub workspace_properties: Option<WorkspaceProperties>,
 }
 
+/// <p>Information about an IP access control group.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct WorkspacesIpGroup {
+    /// <p>The description of the group.</p>
+    #[serde(rename = "groupDesc")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_desc: Option<String>,
+    /// <p>The ID of the group.</p>
+    #[serde(rename = "groupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_id: Option<String>,
+    /// <p>The name of the group.</p>
+    #[serde(rename = "groupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
+    /// <p>The rules.</p>
+    #[serde(rename = "userRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_rules: Option<Vec<IpRuleItem>>,
+}
+
+/// Errors returned by AssociateIpGroups
+#[derive(Debug, PartialEq)]
+pub enum AssociateIpGroupsError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The state of the resource is not valid for this operation.</p>
+    InvalidResourceState(String),
+    /// <p>This operation is not supported.</p>
+    OperationNotSupported(String),
+    /// <p>Your resource limits have been exceeded.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl AssociateIpGroupsError {
+    pub fn from_body(body: &str) -> AssociateIpGroupsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        AssociateIpGroupsError::AccessDenied(String::from(error_message))
+                    }
+                    "InvalidParameterValuesException" => {
+                        AssociateIpGroupsError::InvalidParameterValues(String::from(error_message))
+                    }
+                    "InvalidResourceStateException" => {
+                        AssociateIpGroupsError::InvalidResourceState(String::from(error_message))
+                    }
+                    "OperationNotSupportedException" => {
+                        AssociateIpGroupsError::OperationNotSupported(String::from(error_message))
+                    }
+                    "ResourceLimitExceededException" => {
+                        AssociateIpGroupsError::ResourceLimitExceeded(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        AssociateIpGroupsError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        AssociateIpGroupsError::Validation(error_message.to_string())
+                    }
+                    _ => AssociateIpGroupsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AssociateIpGroupsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AssociateIpGroupsError {
+    fn from(err: serde_json::error::Error) -> AssociateIpGroupsError {
+        AssociateIpGroupsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AssociateIpGroupsError {
+    fn from(err: CredentialsError) -> AssociateIpGroupsError {
+        AssociateIpGroupsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AssociateIpGroupsError {
+    fn from(err: HttpDispatchError) -> AssociateIpGroupsError {
+        AssociateIpGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AssociateIpGroupsError {
+    fn from(err: io::Error) -> AssociateIpGroupsError {
+        AssociateIpGroupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AssociateIpGroupsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssociateIpGroupsError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateIpGroupsError::AccessDenied(ref cause) => cause,
+            AssociateIpGroupsError::InvalidParameterValues(ref cause) => cause,
+            AssociateIpGroupsError::InvalidResourceState(ref cause) => cause,
+            AssociateIpGroupsError::OperationNotSupported(ref cause) => cause,
+            AssociateIpGroupsError::ResourceLimitExceeded(ref cause) => cause,
+            AssociateIpGroupsError::ResourceNotFound(ref cause) => cause,
+            AssociateIpGroupsError::Validation(ref cause) => cause,
+            AssociateIpGroupsError::Credentials(ref err) => err.description(),
+            AssociateIpGroupsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AssociateIpGroupsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by AuthorizeIpRules
+#[derive(Debug, PartialEq)]
+pub enum AuthorizeIpRulesError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The state of the resource is not valid for this operation.</p>
+    InvalidResourceState(String),
+    /// <p>Your resource limits have been exceeded.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl AuthorizeIpRulesError {
+    pub fn from_body(body: &str) -> AuthorizeIpRulesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        AuthorizeIpRulesError::AccessDenied(String::from(error_message))
+                    }
+                    "InvalidParameterValuesException" => {
+                        AuthorizeIpRulesError::InvalidParameterValues(String::from(error_message))
+                    }
+                    "InvalidResourceStateException" => {
+                        AuthorizeIpRulesError::InvalidResourceState(String::from(error_message))
+                    }
+                    "ResourceLimitExceededException" => {
+                        AuthorizeIpRulesError::ResourceLimitExceeded(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        AuthorizeIpRulesError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        AuthorizeIpRulesError::Validation(error_message.to_string())
+                    }
+                    _ => AuthorizeIpRulesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AuthorizeIpRulesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AuthorizeIpRulesError {
+    fn from(err: serde_json::error::Error) -> AuthorizeIpRulesError {
+        AuthorizeIpRulesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AuthorizeIpRulesError {
+    fn from(err: CredentialsError) -> AuthorizeIpRulesError {
+        AuthorizeIpRulesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AuthorizeIpRulesError {
+    fn from(err: HttpDispatchError) -> AuthorizeIpRulesError {
+        AuthorizeIpRulesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AuthorizeIpRulesError {
+    fn from(err: io::Error) -> AuthorizeIpRulesError {
+        AuthorizeIpRulesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AuthorizeIpRulesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AuthorizeIpRulesError {
+    fn description(&self) -> &str {
+        match *self {
+            AuthorizeIpRulesError::AccessDenied(ref cause) => cause,
+            AuthorizeIpRulesError::InvalidParameterValues(ref cause) => cause,
+            AuthorizeIpRulesError::InvalidResourceState(ref cause) => cause,
+            AuthorizeIpRulesError::ResourceLimitExceeded(ref cause) => cause,
+            AuthorizeIpRulesError::ResourceNotFound(ref cause) => cause,
+            AuthorizeIpRulesError::Validation(ref cause) => cause,
+            AuthorizeIpRulesError::Credentials(ref err) => err.description(),
+            AuthorizeIpRulesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            AuthorizeIpRulesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateIpGroup
+#[derive(Debug, PartialEq)]
+pub enum CreateIpGroupError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The specified resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The resource could not be created.</p>
+    ResourceCreationFailed(String),
+    /// <p>Your resource limits have been exceeded.</p>
+    ResourceLimitExceeded(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateIpGroupError {
+    pub fn from_body(body: &str) -> CreateIpGroupError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        CreateIpGroupError::AccessDenied(String::from(error_message))
+                    }
+                    "InvalidParameterValuesException" => {
+                        CreateIpGroupError::InvalidParameterValues(String::from(error_message))
+                    }
+                    "ResourceAlreadyExistsException" => {
+                        CreateIpGroupError::ResourceAlreadyExists(String::from(error_message))
+                    }
+                    "ResourceCreationFailedException" => {
+                        CreateIpGroupError::ResourceCreationFailed(String::from(error_message))
+                    }
+                    "ResourceLimitExceededException" => {
+                        CreateIpGroupError::ResourceLimitExceeded(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateIpGroupError::Validation(error_message.to_string())
+                    }
+                    _ => CreateIpGroupError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateIpGroupError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateIpGroupError {
+    fn from(err: serde_json::error::Error) -> CreateIpGroupError {
+        CreateIpGroupError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateIpGroupError {
+    fn from(err: CredentialsError) -> CreateIpGroupError {
+        CreateIpGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateIpGroupError {
+    fn from(err: HttpDispatchError) -> CreateIpGroupError {
+        CreateIpGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateIpGroupError {
+    fn from(err: io::Error) -> CreateIpGroupError {
+        CreateIpGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateIpGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateIpGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateIpGroupError::AccessDenied(ref cause) => cause,
+            CreateIpGroupError::InvalidParameterValues(ref cause) => cause,
+            CreateIpGroupError::ResourceAlreadyExists(ref cause) => cause,
+            CreateIpGroupError::ResourceCreationFailed(ref cause) => cause,
+            CreateIpGroupError::ResourceLimitExceeded(ref cause) => cause,
+            CreateIpGroupError::Validation(ref cause) => cause,
+            CreateIpGroupError::Credentials(ref err) => err.description(),
+            CreateIpGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateIpGroupError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateTags
 #[derive(Debug, PartialEq)]
 pub enum CreateTagsError {
@@ -850,6 +1344,103 @@ impl Error for CreateWorkspacesError {
         }
     }
 }
+/// Errors returned by DeleteIpGroup
+#[derive(Debug, PartialEq)]
+pub enum DeleteIpGroupError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The resource is associated with a directory.</p>
+    ResourceAssociated(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteIpGroupError {
+    pub fn from_body(body: &str) -> DeleteIpGroupError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        DeleteIpGroupError::AccessDenied(String::from(error_message))
+                    }
+                    "InvalidParameterValuesException" => {
+                        DeleteIpGroupError::InvalidParameterValues(String::from(error_message))
+                    }
+                    "ResourceAssociatedException" => {
+                        DeleteIpGroupError::ResourceAssociated(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DeleteIpGroupError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteIpGroupError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteIpGroupError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteIpGroupError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteIpGroupError {
+    fn from(err: serde_json::error::Error) -> DeleteIpGroupError {
+        DeleteIpGroupError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteIpGroupError {
+    fn from(err: CredentialsError) -> DeleteIpGroupError {
+        DeleteIpGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteIpGroupError {
+    fn from(err: HttpDispatchError) -> DeleteIpGroupError {
+        DeleteIpGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteIpGroupError {
+    fn from(err: io::Error) -> DeleteIpGroupError {
+        DeleteIpGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteIpGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteIpGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteIpGroupError::AccessDenied(ref cause) => cause,
+            DeleteIpGroupError::InvalidParameterValues(ref cause) => cause,
+            DeleteIpGroupError::ResourceAssociated(ref cause) => cause,
+            DeleteIpGroupError::ResourceNotFound(ref cause) => cause,
+            DeleteIpGroupError::Validation(ref cause) => cause,
+            DeleteIpGroupError::Credentials(ref err) => err.description(),
+            DeleteIpGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteIpGroupError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {
@@ -930,6 +1521,91 @@ impl Error for DeleteTagsError {
             DeleteTagsError::Credentials(ref err) => err.description(),
             DeleteTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteTagsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeIpGroups
+#[derive(Debug, PartialEq)]
+pub enum DescribeIpGroupsError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeIpGroupsError {
+    pub fn from_body(body: &str) -> DescribeIpGroupsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        DescribeIpGroupsError::AccessDenied(String::from(error_message))
+                    }
+                    "InvalidParameterValuesException" => {
+                        DescribeIpGroupsError::InvalidParameterValues(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeIpGroupsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeIpGroupsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeIpGroupsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeIpGroupsError {
+    fn from(err: serde_json::error::Error) -> DescribeIpGroupsError {
+        DescribeIpGroupsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeIpGroupsError {
+    fn from(err: CredentialsError) -> DescribeIpGroupsError {
+        DescribeIpGroupsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeIpGroupsError {
+    fn from(err: HttpDispatchError) -> DescribeIpGroupsError {
+        DescribeIpGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeIpGroupsError {
+    fn from(err: io::Error) -> DescribeIpGroupsError {
+        DescribeIpGroupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeIpGroupsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeIpGroupsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeIpGroupsError::AccessDenied(ref cause) => cause,
+            DescribeIpGroupsError::InvalidParameterValues(ref cause) => cause,
+            DescribeIpGroupsError::Validation(ref cause) => cause,
+            DescribeIpGroupsError::Credentials(ref err) => err.description(),
+            DescribeIpGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DescribeIpGroupsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -1348,6 +2024,107 @@ impl Error for DescribeWorkspacesConnectionStatusError {
         }
     }
 }
+/// Errors returned by DisassociateIpGroups
+#[derive(Debug, PartialEq)]
+pub enum DisassociateIpGroupsError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The state of the resource is not valid for this operation.</p>
+    InvalidResourceState(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DisassociateIpGroupsError {
+    pub fn from_body(body: &str) -> DisassociateIpGroupsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        DisassociateIpGroupsError::AccessDenied(String::from(error_message))
+                    }
+                    "InvalidParameterValuesException" => {
+                        DisassociateIpGroupsError::InvalidParameterValues(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidResourceStateException" => {
+                        DisassociateIpGroupsError::InvalidResourceState(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DisassociateIpGroupsError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DisassociateIpGroupsError::Validation(error_message.to_string())
+                    }
+                    _ => DisassociateIpGroupsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DisassociateIpGroupsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DisassociateIpGroupsError {
+    fn from(err: serde_json::error::Error) -> DisassociateIpGroupsError {
+        DisassociateIpGroupsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DisassociateIpGroupsError {
+    fn from(err: CredentialsError) -> DisassociateIpGroupsError {
+        DisassociateIpGroupsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DisassociateIpGroupsError {
+    fn from(err: HttpDispatchError) -> DisassociateIpGroupsError {
+        DisassociateIpGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisassociateIpGroupsError {
+    fn from(err: io::Error) -> DisassociateIpGroupsError {
+        DisassociateIpGroupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DisassociateIpGroupsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisassociateIpGroupsError {
+    fn description(&self) -> &str {
+        match *self {
+            DisassociateIpGroupsError::AccessDenied(ref cause) => cause,
+            DisassociateIpGroupsError::InvalidParameterValues(ref cause) => cause,
+            DisassociateIpGroupsError::InvalidResourceState(ref cause) => cause,
+            DisassociateIpGroupsError::ResourceNotFound(ref cause) => cause,
+            DisassociateIpGroupsError::Validation(ref cause) => cause,
+            DisassociateIpGroupsError::Credentials(ref err) => err.description(),
+            DisassociateIpGroupsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DisassociateIpGroupsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ModifyWorkspaceProperties
 #[derive(Debug, PartialEq)]
 pub enum ModifyWorkspacePropertiesError {
@@ -1355,7 +2132,7 @@ pub enum ModifyWorkspacePropertiesError {
     AccessDenied(String),
     /// <p>One or more parameter values are not valid.</p>
     InvalidParameterValues(String),
-    /// <p>The state of the WorkSpace is not valid for this operation.</p>
+    /// <p>The state of the resource is not valid for this operation.</p>
     InvalidResourceState(String),
     /// <p>The properties of this WorkSpace are currently being modified. Try again in a moment.</p>
     OperationInProgress(String),
@@ -1474,6 +2251,101 @@ impl Error for ModifyWorkspacePropertiesError {
                 dispatch_error.description()
             }
             ModifyWorkspacePropertiesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ModifyWorkspaceState
+#[derive(Debug, PartialEq)]
+pub enum ModifyWorkspaceStateError {
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The state of the resource is not valid for this operation.</p>
+    InvalidResourceState(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ModifyWorkspaceStateError {
+    pub fn from_body(body: &str) -> ModifyWorkspaceStateError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParameterValuesException" => {
+                        ModifyWorkspaceStateError::InvalidParameterValues(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidResourceStateException" => {
+                        ModifyWorkspaceStateError::InvalidResourceState(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        ModifyWorkspaceStateError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ModifyWorkspaceStateError::Validation(error_message.to_string())
+                    }
+                    _ => ModifyWorkspaceStateError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ModifyWorkspaceStateError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ModifyWorkspaceStateError {
+    fn from(err: serde_json::error::Error) -> ModifyWorkspaceStateError {
+        ModifyWorkspaceStateError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ModifyWorkspaceStateError {
+    fn from(err: CredentialsError) -> ModifyWorkspaceStateError {
+        ModifyWorkspaceStateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ModifyWorkspaceStateError {
+    fn from(err: HttpDispatchError) -> ModifyWorkspaceStateError {
+        ModifyWorkspaceStateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyWorkspaceStateError {
+    fn from(err: io::Error) -> ModifyWorkspaceStateError {
+        ModifyWorkspaceStateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ModifyWorkspaceStateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyWorkspaceStateError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifyWorkspaceStateError::InvalidParameterValues(ref cause) => cause,
+            ModifyWorkspaceStateError::InvalidResourceState(ref cause) => cause,
+            ModifyWorkspaceStateError::ResourceNotFound(ref cause) => cause,
+            ModifyWorkspaceStateError::Validation(ref cause) => cause,
+            ModifyWorkspaceStateError::Credentials(ref err) => err.description(),
+            ModifyWorkspaceStateError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ModifyWorkspaceStateError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -1622,6 +2494,103 @@ impl Error for RebuildWorkspacesError {
                 dispatch_error.description()
             }
             RebuildWorkspacesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by RevokeIpRules
+#[derive(Debug, PartialEq)]
+pub enum RevokeIpRulesError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The state of the resource is not valid for this operation.</p>
+    InvalidResourceState(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl RevokeIpRulesError {
+    pub fn from_body(body: &str) -> RevokeIpRulesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        RevokeIpRulesError::AccessDenied(String::from(error_message))
+                    }
+                    "InvalidParameterValuesException" => {
+                        RevokeIpRulesError::InvalidParameterValues(String::from(error_message))
+                    }
+                    "InvalidResourceStateException" => {
+                        RevokeIpRulesError::InvalidResourceState(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        RevokeIpRulesError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        RevokeIpRulesError::Validation(error_message.to_string())
+                    }
+                    _ => RevokeIpRulesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => RevokeIpRulesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for RevokeIpRulesError {
+    fn from(err: serde_json::error::Error) -> RevokeIpRulesError {
+        RevokeIpRulesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for RevokeIpRulesError {
+    fn from(err: CredentialsError) -> RevokeIpRulesError {
+        RevokeIpRulesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for RevokeIpRulesError {
+    fn from(err: HttpDispatchError) -> RevokeIpRulesError {
+        RevokeIpRulesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RevokeIpRulesError {
+    fn from(err: io::Error) -> RevokeIpRulesError {
+        RevokeIpRulesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for RevokeIpRulesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RevokeIpRulesError {
+    fn description(&self) -> &str {
+        match *self {
+            RevokeIpRulesError::AccessDenied(ref cause) => cause,
+            RevokeIpRulesError::InvalidParameterValues(ref cause) => cause,
+            RevokeIpRulesError::InvalidResourceState(ref cause) => cause,
+            RevokeIpRulesError::ResourceNotFound(ref cause) => cause,
+            RevokeIpRulesError::Validation(ref cause) => cause,
+            RevokeIpRulesError::Credentials(ref err) => err.description(),
+            RevokeIpRulesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            RevokeIpRulesError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -1846,9 +2815,136 @@ impl Error for TerminateWorkspacesError {
         }
     }
 }
+/// Errors returned by UpdateRulesOfIpGroup
+#[derive(Debug, PartialEq)]
+pub enum UpdateRulesOfIpGroupError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The state of the resource is not valid for this operation.</p>
+    InvalidResourceState(String),
+    /// <p>Your resource limits have been exceeded.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateRulesOfIpGroupError {
+    pub fn from_body(body: &str) -> UpdateRulesOfIpGroupError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        UpdateRulesOfIpGroupError::AccessDenied(String::from(error_message))
+                    }
+                    "InvalidParameterValuesException" => {
+                        UpdateRulesOfIpGroupError::InvalidParameterValues(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidResourceStateException" => {
+                        UpdateRulesOfIpGroupError::InvalidResourceState(String::from(error_message))
+                    }
+                    "ResourceLimitExceededException" => {
+                        UpdateRulesOfIpGroupError::ResourceLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpdateRulesOfIpGroupError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateRulesOfIpGroupError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateRulesOfIpGroupError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateRulesOfIpGroupError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateRulesOfIpGroupError {
+    fn from(err: serde_json::error::Error) -> UpdateRulesOfIpGroupError {
+        UpdateRulesOfIpGroupError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateRulesOfIpGroupError {
+    fn from(err: CredentialsError) -> UpdateRulesOfIpGroupError {
+        UpdateRulesOfIpGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateRulesOfIpGroupError {
+    fn from(err: HttpDispatchError) -> UpdateRulesOfIpGroupError {
+        UpdateRulesOfIpGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateRulesOfIpGroupError {
+    fn from(err: io::Error) -> UpdateRulesOfIpGroupError {
+        UpdateRulesOfIpGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateRulesOfIpGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateRulesOfIpGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateRulesOfIpGroupError::AccessDenied(ref cause) => cause,
+            UpdateRulesOfIpGroupError::InvalidParameterValues(ref cause) => cause,
+            UpdateRulesOfIpGroupError::InvalidResourceState(ref cause) => cause,
+            UpdateRulesOfIpGroupError::ResourceLimitExceeded(ref cause) => cause,
+            UpdateRulesOfIpGroupError::ResourceNotFound(ref cause) => cause,
+            UpdateRulesOfIpGroupError::Validation(ref cause) => cause,
+            UpdateRulesOfIpGroupError::Credentials(ref err) => err.description(),
+            UpdateRulesOfIpGroupError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateRulesOfIpGroupError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the Amazon WorkSpaces API. Amazon WorkSpaces clients implement this trait.
 pub trait Workspaces {
-    /// <p>Creates tags for the specified WorkSpace.</p>
+    /// <p>Associates the specified IP access control group with the specified directory.</p>
+    fn associate_ip_groups(
+        &self,
+        input: AssociateIpGroupsRequest,
+    ) -> RusotoFuture<AssociateIpGroupsResult, AssociateIpGroupsError>;
+
+    /// <p>Adds one or more rules to the specified IP access control group.</p> <p>This action gives users permission to access their WorkSpaces from the CIDR address ranges specified in the rules.</p>
+    fn authorize_ip_rules(
+        &self,
+        input: AuthorizeIpRulesRequest,
+    ) -> RusotoFuture<AuthorizeIpRulesResult, AuthorizeIpRulesError>;
+
+    /// <p>Creates an IP access control group.</p> <p>An IP access control group provides you with the ability to control the IP addresses from which users are allowed to access their WorkSpaces. To specify the CIDR address ranges, add rules to your IP access control group and then associate the group with your directory. You can add rules when you create the group or at any time using <a>AuthorizeIpRules</a>.</p> <p>There is a default IP access control group associated with your directory. If you don't associate an IP access control group with your directory, the default group is used. The default group includes a default rule that allows users to access their WorkSpaces from anywhere. You cannot modify the default IP access control group for your directory.</p>
+    fn create_ip_group(
+        &self,
+        input: CreateIpGroupRequest,
+    ) -> RusotoFuture<CreateIpGroupResult, CreateIpGroupError>;
+
+    /// <p>Creates the specified tags for the specified WorkSpace.</p>
     fn create_tags(
         &self,
         input: CreateTagsRequest,
@@ -1860,13 +2956,25 @@ pub trait Workspaces {
         input: CreateWorkspacesRequest,
     ) -> RusotoFuture<CreateWorkspacesResult, CreateWorkspacesError>;
 
-    /// <p>Deletes the specified tags from a WorkSpace.</p>
+    /// <p>Deletes the specified IP access control group.</p> <p>You cannot delete an IP access control group that is associated with a directory.</p>
+    fn delete_ip_group(
+        &self,
+        input: DeleteIpGroupRequest,
+    ) -> RusotoFuture<DeleteIpGroupResult, DeleteIpGroupError>;
+
+    /// <p>Deletes the specified tags from the specified WorkSpace.</p>
     fn delete_tags(
         &self,
         input: DeleteTagsRequest,
     ) -> RusotoFuture<DeleteTagsResult, DeleteTagsError>;
 
-    /// <p>Describes the tags for the specified WorkSpace.</p>
+    /// <p>Describes one or more of your IP access control groups.</p>
+    fn describe_ip_groups(
+        &self,
+        input: DescribeIpGroupsRequest,
+    ) -> RusotoFuture<DescribeIpGroupsResult, DescribeIpGroupsError>;
+
+    /// <p>Describes the specified tags for the specified WorkSpace.</p>
     fn describe_tags(
         &self,
         input: DescribeTagsRequest,
@@ -1899,23 +3007,41 @@ pub trait Workspaces {
         DescribeWorkspacesConnectionStatusError,
     >;
 
+    /// <p>Disassociates the specified IP access control group from the specified directory.</p>
+    fn disassociate_ip_groups(
+        &self,
+        input: DisassociateIpGroupsRequest,
+    ) -> RusotoFuture<DisassociateIpGroupsResult, DisassociateIpGroupsError>;
+
     /// <p>Modifies the specified WorkSpace properties.</p>
     fn modify_workspace_properties(
         &self,
         input: ModifyWorkspacePropertiesRequest,
     ) -> RusotoFuture<ModifyWorkspacePropertiesResult, ModifyWorkspacePropertiesError>;
 
-    /// <p>Reboots the specified WorkSpaces.</p> <p>You cannot reboot a WorkSpace unless its state is <code>AVAILABLE</code>, <code>IMPAIRED</code>, or <code>INOPERABLE</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p>
+    /// <p>Sets the state of the specified WorkSpace.</p> <p>To maintain a WorkSpace without being interrupted, set the WorkSpace state to <code>ADMIN_MAINTENANCE</code>. WorkSpaces in this state do not respond to requests to reboot, stop, start, or rebuild. An AutoStop WorkSpace in this state is not stopped. Users can log into a WorkSpace in the <code>ADMIN_MAINTENANCE</code> state.</p>
+    fn modify_workspace_state(
+        &self,
+        input: ModifyWorkspaceStateRequest,
+    ) -> RusotoFuture<ModifyWorkspaceStateResult, ModifyWorkspaceStateError>;
+
+    /// <p>Reboots the specified WorkSpaces.</p> <p>You cannot reboot a WorkSpace unless its state is <code>AVAILABLE</code> or <code>UNHEALTHY</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p>
     fn reboot_workspaces(
         &self,
         input: RebootWorkspacesRequest,
     ) -> RusotoFuture<RebootWorkspacesResult, RebootWorkspacesError>;
 
-    /// <p>Rebuilds the specified WorkSpaces.</p> <p>You cannot rebuild a WorkSpace unless its state is <code>AVAILABLE</code> or <code>ERROR</code>.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="http://docs.aws.amazon.com/workspaces/latest/adminguide/reset-workspace.html">Rebuild a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p>
+    /// <p>Rebuilds the specified WorkSpace.</p> <p>You cannot rebuild a WorkSpace unless its state is <code>AVAILABLE</code>, <code>ERROR</code>, or <code>UNHEALTHY</code>.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="http://docs.aws.amazon.com/workspaces/latest/adminguide/reset-workspace.html">Rebuild a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p>
     fn rebuild_workspaces(
         &self,
         input: RebuildWorkspacesRequest,
     ) -> RusotoFuture<RebuildWorkspacesResult, RebuildWorkspacesError>;
+
+    /// <p>Removes one or more rules from the specified IP access control group.</p>
+    fn revoke_ip_rules(
+        &self,
+        input: RevokeIpRulesRequest,
+    ) -> RusotoFuture<RevokeIpRulesResult, RevokeIpRulesError>;
 
     /// <p>Starts the specified WorkSpaces.</p> <p>You cannot start a WorkSpace unless it has a running mode of <code>AutoStop</code> and a state of <code>STOPPED</code>.</p>
     fn start_workspaces(
@@ -1934,6 +3060,12 @@ pub trait Workspaces {
         &self,
         input: TerminateWorkspacesRequest,
     ) -> RusotoFuture<TerminateWorkspacesResult, TerminateWorkspacesError>;
+
+    /// <p>Replaces the current rules of the specified IP access control group with the specified rules.</p>
+    fn update_rules_of_ip_group(
+        &self,
+        input: UpdateRulesOfIpGroupRequest,
+    ) -> RusotoFuture<UpdateRulesOfIpGroupResult, UpdateRulesOfIpGroupError>;
 }
 /// A client for the Amazon WorkSpaces API.
 pub struct WorkspacesClient {
@@ -1971,7 +3103,112 @@ impl WorkspacesClient {
 }
 
 impl Workspaces for WorkspacesClient {
-    /// <p>Creates tags for the specified WorkSpace.</p>
+    /// <p>Associates the specified IP access control group with the specified directory.</p>
+    fn associate_ip_groups(
+        &self,
+        input: AssociateIpGroupsRequest,
+    ) -> RusotoFuture<AssociateIpGroupsResult, AssociateIpGroupsError> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkspacesService.AssociateIpGroups");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<AssociateIpGroupsResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(AssociateIpGroupsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Adds one or more rules to the specified IP access control group.</p> <p>This action gives users permission to access their WorkSpaces from the CIDR address ranges specified in the rules.</p>
+    fn authorize_ip_rules(
+        &self,
+        input: AuthorizeIpRulesRequest,
+    ) -> RusotoFuture<AuthorizeIpRulesResult, AuthorizeIpRulesError> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkspacesService.AuthorizeIpRules");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<AuthorizeIpRulesResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(AuthorizeIpRulesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Creates an IP access control group.</p> <p>An IP access control group provides you with the ability to control the IP addresses from which users are allowed to access their WorkSpaces. To specify the CIDR address ranges, add rules to your IP access control group and then associate the group with your directory. You can add rules when you create the group or at any time using <a>AuthorizeIpRules</a>.</p> <p>There is a default IP access control group associated with your directory. If you don't associate an IP access control group with your directory, the default group is used. The default group includes a default rule that allows users to access their WorkSpaces from anywhere. You cannot modify the default IP access control group for your directory.</p>
+    fn create_ip_group(
+        &self,
+        input: CreateIpGroupRequest,
+    ) -> RusotoFuture<CreateIpGroupResult, CreateIpGroupError> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkspacesService.CreateIpGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateIpGroupResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateIpGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Creates the specified tags for the specified WorkSpace.</p>
     fn create_tags(
         &self,
         input: CreateTagsRequest,
@@ -2041,7 +3278,42 @@ impl Workspaces for WorkspacesClient {
         })
     }
 
-    /// <p>Deletes the specified tags from a WorkSpace.</p>
+    /// <p>Deletes the specified IP access control group.</p> <p>You cannot delete an IP access control group that is associated with a directory.</p>
+    fn delete_ip_group(
+        &self,
+        input: DeleteIpGroupRequest,
+    ) -> RusotoFuture<DeleteIpGroupResult, DeleteIpGroupError> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkspacesService.DeleteIpGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteIpGroupResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteIpGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Deletes the specified tags from the specified WorkSpace.</p>
     fn delete_tags(
         &self,
         input: DeleteTagsRequest,
@@ -2076,7 +3348,42 @@ impl Workspaces for WorkspacesClient {
         })
     }
 
-    /// <p>Describes the tags for the specified WorkSpace.</p>
+    /// <p>Describes one or more of your IP access control groups.</p>
+    fn describe_ip_groups(
+        &self,
+        input: DescribeIpGroupsRequest,
+    ) -> RusotoFuture<DescribeIpGroupsResult, DescribeIpGroupsError> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkspacesService.DescribeIpGroups");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeIpGroupsResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeIpGroupsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Describes the specified tags for the specified WorkSpace.</p>
     fn describe_tags(
         &self,
         input: DescribeTagsRequest,
@@ -2260,6 +3567,41 @@ impl Workspaces for WorkspacesClient {
         })
     }
 
+    /// <p>Disassociates the specified IP access control group from the specified directory.</p>
+    fn disassociate_ip_groups(
+        &self,
+        input: DisassociateIpGroupsRequest,
+    ) -> RusotoFuture<DisassociateIpGroupsResult, DisassociateIpGroupsError> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkspacesService.DisassociateIpGroups");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DisassociateIpGroupsResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DisassociateIpGroupsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Modifies the specified WorkSpace properties.</p>
     fn modify_workspace_properties(
         &self,
@@ -2298,7 +3640,42 @@ impl Workspaces for WorkspacesClient {
         })
     }
 
-    /// <p>Reboots the specified WorkSpaces.</p> <p>You cannot reboot a WorkSpace unless its state is <code>AVAILABLE</code>, <code>IMPAIRED</code>, or <code>INOPERABLE</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p>
+    /// <p>Sets the state of the specified WorkSpace.</p> <p>To maintain a WorkSpace without being interrupted, set the WorkSpace state to <code>ADMIN_MAINTENANCE</code>. WorkSpaces in this state do not respond to requests to reboot, stop, start, or rebuild. An AutoStop WorkSpace in this state is not stopped. Users can log into a WorkSpace in the <code>ADMIN_MAINTENANCE</code> state.</p>
+    fn modify_workspace_state(
+        &self,
+        input: ModifyWorkspaceStateRequest,
+    ) -> RusotoFuture<ModifyWorkspaceStateResult, ModifyWorkspaceStateError> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkspacesService.ModifyWorkspaceState");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ModifyWorkspaceStateResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ModifyWorkspaceStateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Reboots the specified WorkSpaces.</p> <p>You cannot reboot a WorkSpace unless its state is <code>AVAILABLE</code> or <code>UNHEALTHY</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p>
     fn reboot_workspaces(
         &self,
         input: RebootWorkspacesRequest,
@@ -2333,7 +3710,7 @@ impl Workspaces for WorkspacesClient {
         })
     }
 
-    /// <p>Rebuilds the specified WorkSpaces.</p> <p>You cannot rebuild a WorkSpace unless its state is <code>AVAILABLE</code> or <code>ERROR</code>.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="http://docs.aws.amazon.com/workspaces/latest/adminguide/reset-workspace.html">Rebuild a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p>
+    /// <p>Rebuilds the specified WorkSpace.</p> <p>You cannot rebuild a WorkSpace unless its state is <code>AVAILABLE</code>, <code>ERROR</code>, or <code>UNHEALTHY</code>.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="http://docs.aws.amazon.com/workspaces/latest/adminguide/reset-workspace.html">Rebuild a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p>
     fn rebuild_workspaces(
         &self,
         input: RebuildWorkspacesRequest,
@@ -2361,6 +3738,41 @@ impl Workspaces for WorkspacesClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RebuildWorkspacesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Removes one or more rules from the specified IP access control group.</p>
+    fn revoke_ip_rules(
+        &self,
+        input: RevokeIpRulesRequest,
+    ) -> RusotoFuture<RevokeIpRulesResult, RevokeIpRulesError> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkspacesService.RevokeIpRules");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<RevokeIpRulesResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(RevokeIpRulesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -2466,6 +3878,41 @@ impl Workspaces for WorkspacesClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(TerminateWorkspacesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Replaces the current rules of the specified IP access control group with the specified rules.</p>
+    fn update_rules_of_ip_group(
+        &self,
+        input: UpdateRulesOfIpGroupRequest,
+    ) -> RusotoFuture<UpdateRulesOfIpGroupResult, UpdateRulesOfIpGroupError> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkspacesService.UpdateRulesOfIpGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateRulesOfIpGroupResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateRulesOfIpGroupError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

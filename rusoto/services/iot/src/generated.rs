@@ -32,7 +32,7 @@ use serde_json::Value as SerdeJsonValue;
 /// <p>The input for the AcceptCertificateTransfer operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AcceptCertificateTransferRequest {
-    /// <p>The ID of the certificate.</p>
+    /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
     #[serde(rename = "certificateId")]
     pub certificate_id: String,
     /// <p>Specifies whether the certificate is active.</p>
@@ -68,6 +68,10 @@ pub struct Action {
     #[serde(rename = "firehose")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub firehose: Option<FirehoseAction>,
+    /// <p>Sends message data to an AWS IoT Analytics channel.</p>
+    #[serde(rename = "iotAnalytics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iot_analytics: Option<IotAnalyticsAction>,
     /// <p>Write data to an Amazon Kinesis stream.</p>
     #[serde(rename = "kinesis")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -96,6 +100,43 @@ pub struct Action {
     #[serde(rename = "sqs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sqs: Option<SqsAction>,
+    /// <p>Starts execution of a Step Functions state machine.</p>
+    #[serde(rename = "stepFunctions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_functions: Option<StepFunctionsAction>,
+}
+
+/// <p>Information about an active Device Defender security profile behavior violation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ActiveViolation {
+    /// <p>The behavior which is being violated.</p>
+    #[serde(rename = "behavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub behavior: Option<Behavior>,
+    /// <p>The time the most recent violation occurred.</p>
+    #[serde(rename = "lastViolationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_violation_time: Option<f64>,
+    /// <p>The value of the metric (the measurement) which caused the most recent violation.</p>
+    #[serde(rename = "lastViolationValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_violation_value: Option<MetricValue>,
+    /// <p>The security profile whose behavior is in violation.</p>
+    #[serde(rename = "securityProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_profile_name: Option<String>,
+    /// <p>The name of the thing responsible for the active violation.</p>
+    #[serde(rename = "thingName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_name: Option<String>,
+    /// <p>The ID of the active violation.</p>
+    #[serde(rename = "violationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_id: Option<String>,
+    /// <p>The time the violation started.</p>
+    #[serde(rename = "violationStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_start_time: Option<f64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -120,6 +161,17 @@ pub struct AddThingToThingGroupRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AddThingToThingGroupResponse {}
+
+/// <p>A structure containing the alert target ARN and the role ARN.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AlertTarget {
+    /// <p>The ARN of the notification target to which alerts are sent.</p>
+    #[serde(rename = "alertTargetArn")]
+    pub alert_target_arn: String,
+    /// <p>The ARN of the role that grants permission to send alerts to the notification target.</p>
+    #[serde(rename = "roleArn")]
+    pub role_arn: String,
+}
 
 /// <p>Contains information that allowed the authorization.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -181,6 +233,19 @@ pub struct AttachPrincipalPolicyRequest {
     pub principal: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AttachSecurityProfileRequest {
+    /// <p>The security profile that is attached.</p>
+    #[serde(rename = "securityProfileName")]
+    pub security_profile_name: String,
+    /// <p>The ARN of the target (thing group) to which the security profile is attached.</p>
+    #[serde(rename = "securityProfileTargetArn")]
+    pub security_profile_target_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct AttachSecurityProfileResponse {}
+
 /// <p>The input for the AttachThingPrincipal operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AttachThingPrincipalRequest {
@@ -207,6 +272,119 @@ pub struct AttributePayload {
     #[serde(rename = "merge")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub merge: Option<bool>,
+}
+
+/// <p>Which audit checks are enabled and disabled for this account.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AuditCheckConfiguration {
+    /// <p>True if this audit check is enabled for this account.</p>
+    #[serde(rename = "enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+}
+
+/// <p>Information about the audit check.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct AuditCheckDetails {
+    /// <p>True if the check completed and found all resources compliant.</p>
+    #[serde(rename = "checkCompliant")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub check_compliant: Option<bool>,
+    /// <p>The completion status of this check, one of "IN_PROGRESS", "WAITING_FOR_DATA_COLLECTION", "CANCELED", "COMPLETED_COMPLIANT", "COMPLETED_NON_COMPLIANT", or "FAILED".</p>
+    #[serde(rename = "checkRunStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub check_run_status: Option<String>,
+    /// <p>The code of any error encountered when performing this check during this audit. One of "INSUFFICIENT_PERMISSIONS", or "AUDIT_CHECK_DISABLED".</p>
+    #[serde(rename = "errorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p>The message associated with any error encountered when performing this check during this audit.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>The number of resources that the check found non-compliant.</p>
+    #[serde(rename = "nonCompliantResourcesCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub non_compliant_resources_count: Option<i64>,
+    /// <p>The number of resources on which the check was performed.</p>
+    #[serde(rename = "totalResourcesCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_resources_count: Option<i64>,
+}
+
+/// <p>The findings (results) of the audit.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct AuditFinding {
+    /// <p>The audit check that generated this result.</p>
+    #[serde(rename = "checkName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub check_name: Option<String>,
+    /// <p>The time the result (finding) was discovered.</p>
+    #[serde(rename = "findingTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finding_time: Option<f64>,
+    /// <p>The resource that was found to be non-compliant with the audit check.</p>
+    #[serde(rename = "nonCompliantResource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub non_compliant_resource: Option<NonCompliantResource>,
+    /// <p>The reason the resource was non-compliant.</p>
+    #[serde(rename = "reasonForNonCompliance")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reason_for_non_compliance: Option<String>,
+    /// <p>A code which indicates the reason that the resource was non-compliant.</p>
+    #[serde(rename = "reasonForNonComplianceCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reason_for_non_compliance_code: Option<String>,
+    /// <p>The list of related resources.</p>
+    #[serde(rename = "relatedResources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub related_resources: Option<Vec<RelatedResource>>,
+    /// <p>The severity of the result (finding).</p>
+    #[serde(rename = "severity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub severity: Option<String>,
+    /// <p>The ID of the audit that generated this result (finding)</p>
+    #[serde(rename = "taskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_id: Option<String>,
+    /// <p>The time the audit started.</p>
+    #[serde(rename = "taskStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_start_time: Option<f64>,
+}
+
+/// <p>Information about the targets to which audit notifications are sent.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AuditNotificationTarget {
+    /// <p>True if notifications to the target are enabled.</p>
+    #[serde(rename = "enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>The ARN of the role that grants permission to send notifications to the target.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>The ARN of the target (SNS topic) to which audit notifications are sent.</p>
+    #[serde(rename = "targetArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_arn: Option<String>,
+}
+
+/// <p>The audits that were performed.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct AuditTaskMetadata {
+    /// <p>The ID of this audit.</p>
+    #[serde(rename = "taskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_id: Option<String>,
+    /// <p>The status of this audit: one of "IN_PROGRESS", "COMPLETED", "FAILED" or "CANCELED".</p>
+    #[serde(rename = "taskStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_status: Option<String>,
+    /// <p>The type of this audit: one of "ON_DEMAND_AUDIT_TASK" or "SCHEDULED_AUDIT_TASK".</p>
+    #[serde(rename = "taskType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_type: Option<String>,
 }
 
 /// <p>A collection of authorization information.</p>
@@ -297,6 +475,39 @@ pub struct AuthorizerSummary {
     pub authorizer_name: Option<String>,
 }
 
+/// <p>A Device Defender security profile behavior.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Behavior {
+    /// <p>The criteria that determine if a device is behaving normally in regard to the <code>metric</code>.</p>
+    #[serde(rename = "criteria")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub criteria: Option<BehaviorCriteria>,
+    /// <p>What is measured by the behavior.</p>
+    #[serde(rename = "metric")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric: Option<String>,
+    /// <p>The name you have given to the behavior.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+}
+
+/// <p>The criteria by which the behavior is determined to be normal.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct BehaviorCriteria {
+    /// <p>The operator that relates the thing measured (<code>metric</code>) to the criteria (<code>value</code>).</p>
+    #[serde(rename = "comparisonOperator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comparison_operator: Option<String>,
+    /// <p>Use this to specify the period of time over which the behavior is evaluated, for those criteria which have a time dimension (for example, <code>NUM_MESSAGES_SENT</code>).</p>
+    #[serde(rename = "durationSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub duration_seconds: Option<i64>,
+    /// <p>The value to be compared with the <code>metric</code>.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<MetricValue>,
+}
+
 /// <p>A CA certificate.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CACertificate {
@@ -341,12 +552,15 @@ pub struct CACertificateDescription {
     #[serde(rename = "creationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
+    /// <p>The customer version of the CA certificate.</p>
     #[serde(rename = "customerVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_version: Option<i64>,
+    /// <p>The generation ID of the CA certificate.</p>
     #[serde(rename = "generationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub generation_id: Option<String>,
+    /// <p>The date the CA certificate was last modified.</p>
     #[serde(rename = "lastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
@@ -358,14 +572,50 @@ pub struct CACertificateDescription {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p>When the CA certificate is valid.</p>
+    #[serde(rename = "validity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validity: Option<CertificateValidity>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CancelAuditTaskRequest {
+    /// <p>The ID of the audit you want to cancel. You can only cancel an audit that is "IN_PROGRESS".</p>
+    #[serde(rename = "taskId")]
+    pub task_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct CancelAuditTaskResponse {}
 
 /// <p>The input for the CancelCertificateTransfer operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CancelCertificateTransferRequest {
-    /// <p>The ID of the certificate.</p>
+    /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
     #[serde(rename = "certificateId")]
     pub certificate_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CancelJobExecutionRequest {
+    /// <p>(Optional) The expected current version of the job execution. Each time you update the job execution, its version is incremented. If the version of the job execution stored in Jobs does not match, the update is rejected with a VersionMismatch error, and an ErrorResponse that contains the current job execution status data is returned. (This makes it unnecessary to perform a separate DescribeJobExecution request in order to obtain the job execution status data.)</p>
+    #[serde(rename = "expectedVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expected_version: Option<i64>,
+    /// <p>(Optional) If <code>true</code> the job execution will be canceled if it has status IN_PROGRESS or QUEUED, otherwise the job execution will be canceled only if it has status QUEUED. If you attempt to cancel a job execution that is IN_PROGRESS, and you do not set <code>force</code> to <code>true</code>, then an <code>InvalidStateTransitionException</code> will be thrown. The default is <code>false</code>.</p> <p>Canceling a job execution which is "IN_PROGRESS", will cause the device to be unable to update the job execution status. Use caution and ensure that the device is able to recover to a valid state.</p>
+    #[serde(rename = "force")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub force: Option<bool>,
+    /// <p>The ID of the job to be canceled.</p>
+    #[serde(rename = "jobId")]
+    pub job_id: String,
+    /// <p>A collection of name/value pairs that describe the status of the job execution. If not specified, the statusDetails are unchanged. You can specify at most 10 name/value pairs.</p>
+    #[serde(rename = "statusDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_details: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The name of the thing whose execution of the job will be canceled.</p>
+    #[serde(rename = "thingName")]
+    pub thing_name: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -374,6 +624,10 @@ pub struct CancelJobRequest {
     #[serde(rename = "comment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
+    /// <p>(Optional) If <code>true</code> job executions with status "IN_PROGRESS" and "QUEUED" are canceled, otherwise only job executions with status "QUEUED" are canceled. The default is <code>false</code>.</p> <p>Canceling a job which is "IN_PROGRESS", will cause a device which is executing the job to be unable to update the job execution status. Use caution and ensure that each device executing a job which is canceled is able to recover to a valid state.</p>
+    #[serde(rename = "force")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub force: Option<bool>,
     /// <p>The unique identifier you assigned to this job when it was created.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
@@ -402,7 +656,7 @@ pub struct Certificate {
     #[serde(rename = "certificateArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    /// <p>The ID of the certificate.</p>
+    /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
     #[serde(rename = "certificateId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_id: Option<String>,
@@ -439,9 +693,11 @@ pub struct CertificateDescription {
     #[serde(rename = "creationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
+    /// <p>The customer version of the certificate.</p>
     #[serde(rename = "customerVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_version: Option<i64>,
+    /// <p>The generation ID of the certificate.</p>
     #[serde(rename = "generationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub generation_id: Option<String>,
@@ -465,6 +721,23 @@ pub struct CertificateDescription {
     #[serde(rename = "transferData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transfer_data: Option<TransferData>,
+    /// <p>When the certificate is valid.</p>
+    #[serde(rename = "validity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validity: Option<CertificateValidity>,
+}
+
+/// <p>When the certificate is valid.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct CertificateValidity {
+    /// <p>The certificate is not valid after this date.</p>
+    #[serde(rename = "notAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_after: Option<f64>,
+    /// <p>The certificate is not valid before this date.</p>
+    #[serde(rename = "notBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_before: Option<f64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -641,10 +914,6 @@ pub struct CreateJobRequest {
     #[serde(rename = "document")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document: Option<String>,
-    /// <p>Parameters for the job document.</p>
-    #[serde(rename = "documentParameters")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub document_parameters: Option<::std::collections::HashMap<String, String>>,
     /// <p>An S3 link to the job document.</p>
     #[serde(rename = "documentSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -862,6 +1131,65 @@ pub struct CreateRoleAliasResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateScheduledAuditRequest {
+    /// <p>The day of the month on which the scheduled audit takes place. Can be "1" through "31" or "LAST". This field is required if the "frequency" parameter is set to "MONTHLY". If days 29-31 are specified, and the month does not have that many days, the audit takes place on the "LAST" day of the month.</p>
+    #[serde(rename = "dayOfMonth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub day_of_month: Option<String>,
+    /// <p>The day of the week on which the scheduled audit takes place. Can be one of "SUN", "MON", "TUE", "WED", "THU", "FRI" or "SAT". This field is required if the "frequency" parameter is set to "WEEKLY" or "BIWEEKLY".</p>
+    #[serde(rename = "dayOfWeek")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub day_of_week: Option<String>,
+    /// <p>How often the scheduled audit takes place. Can be one of "DAILY", "WEEKLY", "BIWEEKLY" or "MONTHLY". The actual start time of each audit is determined by the system.</p>
+    #[serde(rename = "frequency")]
+    pub frequency: String,
+    /// <p>The name you want to give to the scheduled audit. (Max. 128 chars)</p>
+    #[serde(rename = "scheduledAuditName")]
+    pub scheduled_audit_name: String,
+    /// <p>Which checks are performed during the scheduled audit. Checks must be enabled for your account. (Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.)</p>
+    #[serde(rename = "targetCheckNames")]
+    pub target_check_names: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct CreateScheduledAuditResponse {
+    /// <p>The ARN of the scheduled audit.</p>
+    #[serde(rename = "scheduledAuditArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_audit_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateSecurityProfileRequest {
+    /// <p>Specifies the destinations to which alerts are sent. (Alerts are always sent to the console.) Alerts are generated when a device (thing) violates a behavior.</p>
+    #[serde(rename = "alertTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alert_targets: Option<::std::collections::HashMap<String, AlertTarget>>,
+    /// <p>Specifies the behaviors that, when violated by a device (thing), cause an alert.</p>
+    #[serde(rename = "behaviors")]
+    pub behaviors: Vec<Behavior>,
+    /// <p>A description of the security profile.</p>
+    #[serde(rename = "securityProfileDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_profile_description: Option<String>,
+    /// <p>The name you are giving to the security profile.</p>
+    #[serde(rename = "securityProfileName")]
+    pub security_profile_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct CreateSecurityProfileResponse {
+    /// <p>The ARN of the security profile.</p>
+    #[serde(rename = "securityProfileArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_profile_arn: Option<String>,
+    /// <p>The name you gave to the security profile.</p>
+    #[serde(rename = "securityProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_profile_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateStreamRequest {
     /// <p>A description of the stream.</p>
     #[serde(rename = "description")]
@@ -1024,6 +1352,17 @@ pub struct CustomCodeSigning {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteAccountAuditConfigurationRequest {
+    /// <p>If true, all scheduled audits are deleted.</p>
+    #[serde(rename = "deleteScheduledAudits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delete_scheduled_audits: Option<bool>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DeleteAccountAuditConfigurationResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteAuthorizerRequest {
     /// <p>The name of the authorizer to delete.</p>
     #[serde(rename = "authorizerName")]
@@ -1036,7 +1375,7 @@ pub struct DeleteAuthorizerResponse {}
 /// <p>Input for the DeleteCACertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteCACertificateRequest {
-    /// <p>The ID of the certificate to delete.</p>
+    /// <p>The ID of the certificate to delete. (The last part of the certificate ARN contains the certificate ID.)</p>
     #[serde(rename = "certificateId")]
     pub certificate_id: String,
 }
@@ -1048,13 +1387,41 @@ pub struct DeleteCACertificateResponse {}
 /// <p>The input for the DeleteCertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteCertificateRequest {
-    /// <p>The ID of the certificate.</p>
+    /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
     #[serde(rename = "certificateId")]
     pub certificate_id: String,
     /// <p>Forces a certificate request to be deleted.</p>
     #[serde(rename = "forceDelete")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub force_delete: Option<bool>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteJobExecutionRequest {
+    /// <p>The ID of the job execution to be deleted. The <code>executionNumber</code> refers to the execution of a particular job on a particular device.</p> <p>Note that once a job execution is deleted, the <code>executionNumber</code> may be reused by IoT, so be sure you get and use the correct value here.</p>
+    #[serde(rename = "executionNumber")]
+    pub execution_number: i64,
+    /// <p><p>(Optional) When true, you can delete a job execution which is &quot;IN<em>PROGRESS&quot;. Otherwise, you can only delete a job execution which is in a terminal state (&quot;SUCCEEDED&quot;, &quot;FAILED&quot;, &quot;REJECTED&quot;, &quot;REMOVED&quot; or &quot;CANCELED&quot;) or an exception will occur. The default is false.</p> <note> <p>Deleting a job execution which is &quot;IN</em>PROGRESS&quot;, will cause the device to be unable to access job information or update the job execution status. Use caution and ensure that the device is able to recover to a valid state.</p> </note></p>
+    #[serde(rename = "force")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub force: Option<bool>,
+    /// <p>The ID of the job whose execution on a particular device will be deleted.</p>
+    #[serde(rename = "jobId")]
+    pub job_id: String,
+    /// <p>The name of the thing whose job execution will be deleted.</p>
+    #[serde(rename = "thingName")]
+    pub thing_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteJobRequest {
+    /// <p><p>(Optional) When true, you can delete a job which is &quot;IN<em>PROGRESS&quot;. Otherwise, you can only delete a job which is in a terminal state (&quot;COMPLETED&quot; or &quot;CANCELED&quot;) or an exception will occur. The default is false.</p> <note> <p>Deleting a job which is &quot;IN</em>PROGRESS&quot;, will cause a device which is executing the job to be unable to access job information or update the job execution status. Use caution and ensure that each device executing a job which is deleted is able to recover to a valid state.</p> </note></p>
+    #[serde(rename = "force")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub force: Option<bool>,
+    /// <p>The ID of the job to be deleted.</p> <p>After a job deletion is completed, you may reuse this jobId when you create a new job. However, this is not recommended, and you must ensure that your devices are not using the jobId to refer to the deleted job.</p>
+    #[serde(rename = "jobId")]
+    pub job_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1103,6 +1470,30 @@ pub struct DeleteRoleAliasRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteRoleAliasResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteScheduledAuditRequest {
+    /// <p>The name of the scheduled audit you want to delete.</p>
+    #[serde(rename = "scheduledAuditName")]
+    pub scheduled_audit_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DeleteScheduledAuditResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteSecurityProfileRequest {
+    /// <p>The expected version of the security profile. A new version is generated whenever the security profile is updated. If you specify a value that is different than the actual version, a <code>VersionConflictException</code> is thrown.</p>
+    #[serde(rename = "expectedVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expected_version: Option<i64>,
+    /// <p>The name of the security profile to be deleted.</p>
+    #[serde(rename = "securityProfileName")]
+    pub security_profile_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DeleteSecurityProfileResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteStreamRequest {
@@ -1204,6 +1595,62 @@ pub struct DeprecateThingTypeRequest {
 pub struct DeprecateThingTypeResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeAccountAuditConfigurationRequest {}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DescribeAccountAuditConfigurationResponse {
+    /// <p>Which audit checks are enabled and disabled for this account.</p>
+    #[serde(rename = "auditCheckConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audit_check_configurations:
+        Option<::std::collections::HashMap<String, AuditCheckConfiguration>>,
+    /// <p>Information about the targets to which audit notifications are sent for this account.</p>
+    #[serde(rename = "auditNotificationTargetConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audit_notification_target_configurations:
+        Option<::std::collections::HashMap<String, AuditNotificationTarget>>,
+    /// <p>The ARN of the role that grants permission to AWS IoT to access information about your devices, policies, certificates and other items as necessary when performing an audit.</p> <p>On the first call to <code>UpdateAccountAuditConfiguration</code> this parameter is required.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeAuditTaskRequest {
+    /// <p>The ID of the audit whose information you want to get.</p>
+    #[serde(rename = "taskId")]
+    pub task_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DescribeAuditTaskResponse {
+    /// <p>Detailed information about each check performed during this audit.</p>
+    #[serde(rename = "auditDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audit_details: Option<::std::collections::HashMap<String, AuditCheckDetails>>,
+    /// <p>The name of the scheduled audit (only if the audit was a scheduled audit).</p>
+    #[serde(rename = "scheduledAuditName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_audit_name: Option<String>,
+    /// <p>The time the audit started.</p>
+    #[serde(rename = "taskStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_start_time: Option<f64>,
+    /// <p>Statistical information about the audit.</p>
+    #[serde(rename = "taskStatistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_statistics: Option<TaskStatistics>,
+    /// <p>The status of the audit: one of "IN_PROGRESS", "COMPLETED", "FAILED", or "CANCELED".</p>
+    #[serde(rename = "taskStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_status: Option<String>,
+    /// <p>The type of audit: "ON_DEMAND_AUDIT_TASK" or "SCHEDULED_AUDIT_TASK".</p>
+    #[serde(rename = "taskType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_type: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeAuthorizerRequest {
     /// <p>The name of the authorizer to describe.</p>
     #[serde(rename = "authorizerName")]
@@ -1242,7 +1689,7 @@ pub struct DescribeCACertificateResponse {
 /// <p>The input for the DescribeCertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeCertificateRequest {
-    /// <p>The ID of the certificate.</p>
+    /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
     #[serde(rename = "certificateId")]
     pub certificate_id: String,
 }
@@ -1381,6 +1828,84 @@ pub struct DescribeRoleAliasResponse {
     #[serde(rename = "roleAliasDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_alias_description: Option<RoleAliasDescription>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeScheduledAuditRequest {
+    /// <p>The name of the scheduled audit whose information you want to get.</p>
+    #[serde(rename = "scheduledAuditName")]
+    pub scheduled_audit_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DescribeScheduledAuditResponse {
+    /// <p>The day of the month on which the scheduled audit takes place. Will be "1" through "31" or "LAST". If days 29-31 are specified, and the month does not have that many days, the audit takes place on the "LAST" day of the month.</p>
+    #[serde(rename = "dayOfMonth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub day_of_month: Option<String>,
+    /// <p>The day of the week on which the scheduled audit takes place. One of "SUN", "MON", "TUE", "WED", "THU", "FRI" or "SAT".</p>
+    #[serde(rename = "dayOfWeek")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub day_of_week: Option<String>,
+    /// <p>How often the scheduled audit takes place. One of "DAILY", "WEEKLY", "BIWEEKLY" or "MONTHLY". The actual start time of each audit is determined by the system.</p>
+    #[serde(rename = "frequency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub frequency: Option<String>,
+    /// <p>The ARN of the scheduled audit.</p>
+    #[serde(rename = "scheduledAuditArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_audit_arn: Option<String>,
+    /// <p>The name of the scheduled audit.</p>
+    #[serde(rename = "scheduledAuditName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_audit_name: Option<String>,
+    /// <p>Which checks are performed during the scheduled audit. (Note that checks must be enabled for your account. (Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.)</p>
+    #[serde(rename = "targetCheckNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_check_names: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeSecurityProfileRequest {
+    /// <p>The name of the security profile whose information you want to get.</p>
+    #[serde(rename = "securityProfileName")]
+    pub security_profile_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DescribeSecurityProfileResponse {
+    /// <p>Where the alerts are sent. (Alerts are always sent to the console.)</p>
+    #[serde(rename = "alertTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alert_targets: Option<::std::collections::HashMap<String, AlertTarget>>,
+    /// <p>Specifies the behaviors that, when violated by a device (thing), cause an alert.</p>
+    #[serde(rename = "behaviors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub behaviors: Option<Vec<Behavior>>,
+    /// <p>The time the security profile was created.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>The time the security profile was last modified.</p>
+    #[serde(rename = "lastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
+    /// <p>The ARN of the security profile.</p>
+    #[serde(rename = "securityProfileArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_profile_arn: Option<String>,
+    /// <p>A description of the security profile (associated with the security profile when it was created or updated).</p>
+    #[serde(rename = "securityProfileDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_profile_description: Option<String>,
+    /// <p>The name of the security profile.</p>
+    #[serde(rename = "securityProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_profile_name: Option<String>,
+    /// <p>The version of the security profile. A new version is generated whenever the security profile is updated.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1586,6 +2111,19 @@ pub struct DetachPrincipalPolicyRequest {
     #[serde(rename = "principal")]
     pub principal: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DetachSecurityProfileRequest {
+    /// <p>The security profile that is detached.</p>
+    #[serde(rename = "securityProfileName")]
+    pub security_profile_name: String,
+    /// <p>The ARN of the thing group from which the security profile is detached.</p>
+    #[serde(rename = "securityProfileTargetArn")]
+    pub security_profile_target_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DetachSecurityProfileResponse {}
 
 /// <p>The input for the DetachThingPrincipal operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1839,6 +2377,7 @@ pub struct GetPolicyRequest {
 /// <p>The output from the GetPolicy operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetPolicyResponse {
+    /// <p>The date the policy was created.</p>
     #[serde(rename = "creationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
@@ -1846,9 +2385,11 @@ pub struct GetPolicyResponse {
     #[serde(rename = "defaultVersionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_version_id: Option<String>,
+    /// <p>The generation ID of the policy.</p>
     #[serde(rename = "generationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub generation_id: Option<String>,
+    /// <p>The date the policy was last modified.</p>
     #[serde(rename = "lastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
@@ -1880,9 +2421,11 @@ pub struct GetPolicyVersionRequest {
 /// <p>The output from the GetPolicyVersion operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetPolicyVersionResponse {
+    /// <p>The date the policy version was created.</p>
     #[serde(rename = "creationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
+    /// <p>The generation ID of the policy version.</p>
     #[serde(rename = "generationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub generation_id: Option<String>,
@@ -1890,6 +2433,7 @@ pub struct GetPolicyVersionResponse {
     #[serde(rename = "isDefaultVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_default_version: Option<bool>,
+    /// <p>The date the policy version was last modified.</p>
     #[serde(rename = "lastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
@@ -1986,6 +2530,23 @@ pub struct ImplicitDeny {
     pub policies: Option<Vec<Policy>>,
 }
 
+/// <p>Sends messge data to an AWS IoT Analytics channel.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct IotAnalyticsAction {
+    /// <p>(deprecated) The ARN of the IoT Analytics channel to which message data will be sent.</p>
+    #[serde(rename = "channelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+    /// <p>The name of the IoT Analytics channel to which message data will be sent.</p>
+    #[serde(rename = "channelName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_name: Option<String>,
+    /// <p>The ARN of the role which has a policy that grants IoT Analytics permission to send message data via IoT Analytics (iotanalytics:BatchPutMessage).</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
 /// <p>The <code>Job</code> object contains details about a job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Job {
@@ -2005,10 +2566,10 @@ pub struct Job {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The parameters specified for the job document.</p>
-    #[serde(rename = "documentParameters")]
+    /// <p>Will be <code>true</code> if the job was canceled with the optional <code>force</code> parameter set to <code>true</code>.</p>
+    #[serde(rename = "forceCanceled")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub document_parameters: Option<::std::collections::HashMap<String, String>>,
+    pub force_canceled: Option<bool>,
     /// <p>An ARN identifying the job with format "arn:aws:iot:region:account:job/jobId".</p>
     #[serde(rename = "jobArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2054,6 +2615,10 @@ pub struct JobExecution {
     #[serde(rename = "executionNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_number: Option<i64>,
+    /// <p>Will be <code>true</code> if the job execution was canceled with the optional <code>force</code> parameter set to <code>true</code>.</p>
+    #[serde(rename = "forceCanceled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub force_canceled: Option<bool>,
     /// <p>The unique identifier you assigned to the job when it was created.</p>
     #[serde(rename = "jobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2082,6 +2647,10 @@ pub struct JobExecution {
     #[serde(rename = "thingArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_arn: Option<String>,
+    /// <p>The version of the job execution. Job execution versions are incremented each time they are updated by a device.</p>
+    #[serde(rename = "versionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_number: Option<i64>,
 }
 
 /// <p>Details of the job execution status.</p>
@@ -2184,7 +2753,7 @@ pub struct JobProcessDetails {
     #[serde(rename = "numberOfSucceededThings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_succeeded_things: Option<i64>,
-    /// <p>The devices on which the job is executing.</p>
+    /// <p>The target devices to which the job execution is being rolled out. This value will be null after the job execution has finished rolling out to all the target devices.</p>
     #[serde(rename = "processingTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub processing_targets: Option<Vec<String>>,
@@ -2264,6 +2833,38 @@ pub struct LambdaAction {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListActiveViolationsRequest {
+    /// <p>The maximum number of results to return at one time.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The name of the Device Defender security profile for which violations are listed.</p>
+    #[serde(rename = "securityProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_profile_name: Option<String>,
+    /// <p>The name of the thing whose active violations are listed.</p>
+    #[serde(rename = "thingName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ListActiveViolationsResponse {
+    /// <p>The list of active violations.</p>
+    #[serde(rename = "activeViolations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_violations: Option<Vec<ActiveViolation>>,
+    /// <p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListAttachedPoliciesRequest {
     /// <p>The token to retrieve the next set of results.</p>
     #[serde(rename = "marker")]
@@ -2292,6 +2893,88 @@ pub struct ListAttachedPoliciesResponse {
     #[serde(rename = "policies")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policies: Option<Vec<Policy>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListAuditFindingsRequest {
+    /// <p>A filter to limit results to the findings for the specified audit check.</p>
+    #[serde(rename = "checkName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub check_name: Option<String>,
+    /// <p>A filter to limit results to those found before the specified time. You must specify either the startTime and endTime or the taskId, but not both.</p>
+    #[serde(rename = "endTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The maximum number of results to return at one time. The default is 25.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Information identifying the non-compliant resource.</p>
+    #[serde(rename = "resourceIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_identifier: Option<ResourceIdentifier>,
+    /// <p>A filter to limit results to those found after the specified time. You must specify either the startTime and endTime or the taskId, but not both.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p>A filter to limit results to the audit with the specified ID. You must specify either the taskId or the startTime and endTime, but not both.</p>
+    #[serde(rename = "taskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ListAuditFindingsResponse {
+    /// <p>The findings (results) of the audit.</p>
+    #[serde(rename = "findings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub findings: Option<Vec<AuditFinding>>,
+    /// <p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListAuditTasksRequest {
+    /// <p>The end of the time period.</p>
+    #[serde(rename = "endTime")]
+    pub end_time: f64,
+    /// <p>The maximum number of results to return at one time. The default is 25.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The beginning of the time period. Note that audit information is retained for a limited time (180 days). Requesting a start time prior to what is retained results in an "InvalidRequestException".</p>
+    #[serde(rename = "startTime")]
+    pub start_time: f64,
+    /// <p>A filter to limit the output to audits with the specified completion status: can be one of "IN_PROGRESS", "COMPLETED", "FAILED" or "CANCELED".</p>
+    #[serde(rename = "taskStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_status: Option<String>,
+    /// <p>A filter to limit the output to the specified type of audit: can be one of "ON_DEMAND_AUDIT_TASK" or "SCHEDULED__AUDIT_TASK".</p>
+    #[serde(rename = "taskType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_type: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ListAuditTasksResponse {
+    /// <p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The audits that were performed during the specified time period.</p>
+    #[serde(rename = "tasks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tasks: Option<Vec<AuditTaskMetadata>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2551,7 +3234,7 @@ pub struct ListOTAUpdatesRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>A token used to retreive the next set of results.</p>
+    /// <p>A token used to retrieve the next set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2723,7 +3406,7 @@ pub struct ListPrincipalThingsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to retrieve the next set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2771,6 +3454,85 @@ pub struct ListRoleAliasesResponse {
     #[serde(rename = "roleAliases")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_aliases: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListScheduledAuditsRequest {
+    /// <p>The maximum number of results to return at one time. The default is 25.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ListScheduledAuditsResponse {
+    /// <p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The list of scheduled audits.</p>
+    #[serde(rename = "scheduledAudits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_audits: Option<Vec<ScheduledAuditMetadata>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListSecurityProfilesForTargetRequest {
+    /// <p>The maximum number of results to return at one time.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>If true, return child groups as well.</p>
+    #[serde(rename = "recursive")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recursive: Option<bool>,
+    /// <p>The ARN of the target (thing group) whose attached security profiles you want to get.</p>
+    #[serde(rename = "securityProfileTargetArn")]
+    pub security_profile_target_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ListSecurityProfilesForTargetResponse {
+    /// <p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of security profiles and their associated targets.</p>
+    #[serde(rename = "securityProfileTargetMappings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_profile_target_mappings: Option<Vec<SecurityProfileTargetMapping>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListSecurityProfilesRequest {
+    /// <p>The maximum number of results to return at one time.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ListSecurityProfilesResponse {
+    /// <p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of security profile identifiers (names and ARNs).</p>
+    #[serde(rename = "securityProfileIdentifiers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_profile_identifiers: Option<Vec<SecurityProfileIdentifier>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2829,12 +3591,39 @@ pub struct ListTargetsForPolicyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTargetsForSecurityProfileRequest {
+    /// <p>The maximum number of results to return at one time.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The security profile.</p>
+    #[serde(rename = "securityProfileName")]
+    pub security_profile_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ListTargetsForSecurityProfileResponse {
+    /// <p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The thing groups to which the security profile is attached.</p>
+    #[serde(rename = "securityProfileTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_profile_targets: Option<Vec<SecurityProfileTarget>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListThingGroupsForThingRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to retrieve the next set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2865,7 +3654,7 @@ pub struct ListThingGroupsRequest {
     #[serde(rename = "namePrefixFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name_prefix_filter: Option<String>,
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to retrieve the next set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2928,7 +3717,7 @@ pub struct ListThingRegistrationTaskReportsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListThingRegistrationTaskReportsResponse {
-    /// <p>The token to retrieve the next set of results.</p>
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2948,7 +3737,7 @@ pub struct ListThingRegistrationTasksRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to retrieve the next set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2977,7 +3766,7 @@ pub struct ListThingTypesRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to retrieve the next set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -3006,7 +3795,7 @@ pub struct ListThingsInThingGroupRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to retrieve the next set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -3046,7 +3835,7 @@ pub struct ListThingsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token to retrieve the next set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -3131,6 +3920,44 @@ pub struct ListV2LoggingLevelsResponse {
     pub next_token: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListViolationEventsRequest {
+    /// <p>The end time for the alerts to be listed.</p>
+    #[serde(rename = "endTime")]
+    pub end_time: f64,
+    /// <p>The maximum number of results to return at one time.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A filter to limit results to those alerts generated by the specified security profile.</p>
+    #[serde(rename = "securityProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_profile_name: Option<String>,
+    /// <p>The start time for the alerts to be listed.</p>
+    #[serde(rename = "startTime")]
+    pub start_time: f64,
+    /// <p>A filter to limit results to those alerts caused by the specified thing.</p>
+    #[serde(rename = "thingName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ListViolationEventsResponse {
+    /// <p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The security profile violation alerts issued for this account during the given time frame, potentially filtered by security profile, behavior violated, or thing (device) violating.</p>
+    #[serde(rename = "violationEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_events: Option<Vec<ViolationEvent>>,
+}
+
 /// <p>A log target.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LogTarget {
@@ -3166,6 +3993,40 @@ pub struct LoggingOptionsPayload {
     /// <p>The ARN of the IAM role that grants access.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
+}
+
+/// <p>The value to be compared with the <code>metric</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MetricValue {
+    /// <p>If the <code>comparisonOperator</code> calls for a set of CIDRs, use this to specify that set to be compared with the <code>metric</code>.</p>
+    #[serde(rename = "cidrs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cidrs: Option<Vec<String>>,
+    /// <p>If the <code>comparisonOperator</code> calls for a numeric value, use this to specify that numeric value to be compared with the <code>metric</code>.</p>
+    #[serde(rename = "count")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub count: Option<i64>,
+    /// <p>If the <code>comparisonOperator</code> calls for a set of ports, use this to specify that set to be compared with the <code>metric</code>.</p>
+    #[serde(rename = "ports")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ports: Option<Vec<i64>>,
+}
+
+/// <p>Information about the resource that was non-compliant with the audit check.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct NonCompliantResource {
+    /// <p>Additional information about the non-compliant resource.</p>
+    #[serde(rename = "additionalInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_info: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Information identifying the non-compliant resource.</p>
+    #[serde(rename = "resourceIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_identifier: Option<ResourceIdentifier>,
+    /// <p>The type of the non-compliant resource.</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
 }
 
 /// <p>Describes a file to be associated with an OTA update.</p>
@@ -3326,6 +4187,19 @@ pub struct PolicyVersion {
     pub version_id: Option<String>,
 }
 
+/// <p>Information about the version of the policy associated with the resource.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PolicyVersionIdentifier {
+    /// <p>The name of the policy.</p>
+    #[serde(rename = "policyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_name: Option<String>,
+    /// <p>The ID of the version of the policy associated with the resource.</p>
+    #[serde(rename = "policyVersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_version_id: Option<String>,
+}
+
 /// <p>Configuration for pre-signed S3 URLs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PresignedUrlConfig {
@@ -3414,17 +4288,18 @@ pub struct RegisterCertificateResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterThingRequest {
-    /// <p>The parameters for provisioning a thing.</p>
+    /// <p>The parameters for provisioning a thing. See <a href="http://docs.aws.amazon.com/iot/latest/developerguide/programmatic-provisioning.html">Programmatic Provisioning</a> for more information.</p>
     #[serde(rename = "parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The provisioning template. </p>
+    /// <p>The provisioning template. See <a href="http://docs.aws.amazon.com/iot/latest/developerguide/programmatic-provisioning.html">Programmatic Provisioning</a> for more information.</p>
     #[serde(rename = "templateBody")]
     pub template_body: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RegisterThingResponse {
+    /// <p>.</p>
     #[serde(rename = "certificatePem")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_pem: Option<String>,
@@ -3450,13 +4325,30 @@ pub struct RegistrationConfig {
 /// <p>The input for the RejectCertificateTransfer operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RejectCertificateTransferRequest {
-    /// <p>The ID of the certificate.</p>
+    /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
     #[serde(rename = "certificateId")]
     pub certificate_id: String,
     /// <p>The reason the certificate transfer was rejected.</p>
     #[serde(rename = "rejectReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reject_reason: Option<String>,
+}
+
+/// <p>Information about a related resource.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct RelatedResource {
+    /// <p>Additional information about the resource.</p>
+    #[serde(rename = "additionalInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_info: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Information identifying the resource.</p>
+    #[serde(rename = "resourceIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_identifier: Option<ResourceIdentifier>,
+    /// <p>The type of resource.</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3504,6 +4396,35 @@ pub struct RepublishAction {
     pub topic: String,
 }
 
+/// <p>Information identifying the non-compliant resource.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ResourceIdentifier {
+    /// <p>The account with which the resource is associated.</p>
+    #[serde(rename = "account")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account: Option<String>,
+    /// <p>The ID of the CA certificate used to authorize the certificate.</p>
+    #[serde(rename = "caCertificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ca_certificate_id: Option<String>,
+    /// <p>The client ID.</p>
+    #[serde(rename = "clientId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_id: Option<String>,
+    /// <p>The ID of the Cognito Identity Pool.</p>
+    #[serde(rename = "cognitoIdentityPoolId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cognito_identity_pool_id: Option<String>,
+    /// <p>The ID of the certificate attached to the resource.</p>
+    #[serde(rename = "deviceCertificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_certificate_id: Option<String>,
+    /// <p>The version of the policy associated with the resource.</p>
+    #[serde(rename = "policyVersionIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_version_identifier: Option<PolicyVersionIdentifier>,
+}
+
 /// <p>Role alias description.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RoleAliasDescription {
@@ -3527,6 +4448,7 @@ pub struct RoleAliasDescription {
     #[serde(rename = "roleAlias")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_alias: Option<String>,
+    /// <p>The ARN of the role alias.</p>
     #[serde(rename = "roleAliasArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_alias_arn: Option<String>,
@@ -3580,6 +4502,31 @@ pub struct SalesforceAction {
     pub url: String,
 }
 
+/// <p>Information about the scheduled audit.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ScheduledAuditMetadata {
+    /// <p>The day of the month on which the scheduled audit is run (if the <code>frequency</code> is "MONTHLY"). If days 29-31 are specified, and the month does not have that many days, the audit takes place on the "LAST" day of the month.</p>
+    #[serde(rename = "dayOfMonth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub day_of_month: Option<String>,
+    /// <p>The day of the week on which the scheduled audit is run (if the <code>frequency</code> is "WEEKLY" or "BIWEEKLY").</p>
+    #[serde(rename = "dayOfWeek")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub day_of_week: Option<String>,
+    /// <p>How often the scheduled audit takes place.</p>
+    #[serde(rename = "frequency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub frequency: Option<String>,
+    /// <p>The ARN of the scheduled audit.</p>
+    #[serde(rename = "scheduledAuditArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_audit_arn: Option<String>,
+    /// <p>The name of the scheduled audit.</p>
+    #[serde(rename = "scheduledAuditName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_audit_name: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SearchIndexRequest {
     /// <p>The search index name.</p>
@@ -3613,6 +4560,38 @@ pub struct SearchIndexResponse {
     #[serde(rename = "things")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub things: Option<Vec<ThingDocument>>,
+}
+
+/// <p>Identifying information for a Device Defender security profile.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct SecurityProfileIdentifier {
+    /// <p>The ARN of the security profile.</p>
+    #[serde(rename = "arn")]
+    pub arn: String,
+    /// <p>The name you have given to the security profile.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+}
+
+/// <p>A target to which an alert is sent when a security profile behavior is violated.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct SecurityProfileTarget {
+    /// <p>The ARN of the security profile.</p>
+    #[serde(rename = "arn")]
+    pub arn: String,
+}
+
+/// <p>Information about a security profile and the target associated with it.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct SecurityProfileTargetMapping {
+    /// <p>Information that identifies the security profile.</p>
+    #[serde(rename = "securityProfileIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_profile_identifier: Option<SecurityProfileIdentifier>,
+    /// <p>Information about the target (thing group) associated with the security profile.</p>
+    #[serde(rename = "target")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target: Option<SecurityProfileTarget>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3669,11 +4648,11 @@ pub struct SetV2LoggingOptionsRequest {
     #[serde(rename = "defaultLogLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_log_level: Option<String>,
-    /// <p>Set to true to disable all logs, otherwise set to false.</p>
+    /// <p>If true all logs are disabled. The default is false.</p>
     #[serde(rename = "disableAllLogs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disable_all_logs: Option<bool>,
-    /// <p>The role ARN that allows IoT to write to Cloudwatch logs.</p>
+    /// <p>The ARN of the role that allows IoT to write to Cloudwatch logs.</p>
     #[serde(rename = "roleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
@@ -3682,7 +4661,7 @@ pub struct SetV2LoggingOptionsRequest {
 /// <p>Describes an action to publish to an Amazon SNS topic.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SnsAction {
-    /// <p>The message format of the message to publish. Optional. Accepted values are "JSON" and "RAW". The default value of the attribute is "RAW". SNS uses this setting to determine if the payload should be parsed and relevant platform-specific bits of the payload should be extracted. To read more about SNS message formats, see <a href="http://docs.aws.amazon.com/sns/latest/dg/json-formats.html">http://docs.aws.amazon.com/sns/latest/dg/json-formats.html</a> refer to their official documentation.</p>
+    /// <p>(Optional) The message format of the message to publish. Accepted values are "JSON" and "RAW". The default value of the attribute is "RAW". SNS uses this setting to determine if the payload should be parsed and relevant platform-specific bits of the payload should be extracted. To read more about SNS message formats, see <a href="http://docs.aws.amazon.com/sns/latest/dg/json-formats.html">http://docs.aws.amazon.com/sns/latest/dg/json-formats.html</a> refer to their official documentation.</p>
     #[serde(rename = "messageFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_format: Option<String>,
@@ -3710,6 +4689,21 @@ pub struct SqsAction {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartOnDemandAuditTaskRequest {
+    /// <p>Which checks are performed during the audit. The checks you specify must be enabled for your account or an exception occurs. Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.</p>
+    #[serde(rename = "targetCheckNames")]
+    pub target_check_names: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct StartOnDemandAuditTaskResponse {
+    /// <p>The ID of the on-demand audit you started.</p>
+    #[serde(rename = "taskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartThingRegistrationTaskRequest {
     /// <p>The S3 bucket that contains the input file.</p>
     #[serde(rename = "inputFileBucket")]
@@ -3731,6 +4725,21 @@ pub struct StartThingRegistrationTaskResponse {
     #[serde(rename = "taskId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_id: Option<String>,
+}
+
+/// <p>Starts execution of a Step Functions state machine.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StepFunctionsAction {
+    /// <p>(Optional) A name will be given to the state machine execution consisting of this prefix followed by a UUID. Step Functions automatically creates a unique name for each state machine execution if one is not provided.</p>
+    #[serde(rename = "executionNamePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_name_prefix: Option<String>,
+    /// <p>The ARN of the role that grants IoT permission to start execution of a state machine ("Action":"states:StartExecution").</p>
+    #[serde(rename = "roleArn")]
+    pub role_arn: String,
+    /// <p>The name of the Step Functions state machine whose execution will be started.</p>
+    #[serde(rename = "stateMachineName")]
+    pub state_machine_name: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3825,6 +4834,39 @@ pub struct StreamSummary {
     #[serde(rename = "streamVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_version: Option<i64>,
+}
+
+/// <p>Statistics for the checks performed during the audit.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct TaskStatistics {
+    /// <p>The number of checks that did not run because the audit was canceled.</p>
+    #[serde(rename = "canceledChecks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub canceled_checks: Option<i64>,
+    /// <p>The number of checks that found compliant resources.</p>
+    #[serde(rename = "compliantChecks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compliant_checks: Option<i64>,
+    /// <p>The number of checks </p>
+    #[serde(rename = "failedChecks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed_checks: Option<i64>,
+    /// <p>The number of checks in progress.</p>
+    #[serde(rename = "inProgressChecks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub in_progress_checks: Option<i64>,
+    /// <p>The number of checks that found non-compliant resources.</p>
+    #[serde(rename = "nonCompliantChecks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub non_compliant_checks: Option<i64>,
+    /// <p>The number of checks in this audit.</p>
+    #[serde(rename = "totalChecks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_checks: Option<i64>,
+    /// <p>The number of checks waiting for data collection.</p>
+    #[serde(rename = "waitingForDataCollectionChecks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub waiting_for_data_collection_checks: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3931,7 +4973,7 @@ pub struct ThingDocument {
     #[serde(rename = "attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The thing shadow.</p>
+    /// <p>The shadow.</p>
     #[serde(rename = "shadow")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shadow: Option<String>,
@@ -4135,7 +5177,7 @@ pub struct TopicRulePayload {
 /// <p>The input for the TransferCertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TransferCertificateRequest {
-    /// <p>The ID of the certificate.</p>
+    /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
     #[serde(rename = "certificateId")]
     pub certificate_id: String,
     /// <p>The AWS account.</p>
@@ -4180,6 +5222,27 @@ pub struct TransferData {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transfer_message: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateAccountAuditConfigurationRequest {
+    /// <p>Specifies which audit checks are enabled and disabled for this account. Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are currently enabled.</p> <p>Note that some data collection may begin immediately when certain checks are enabled. When a check is disabled, any data collected so far in relation to the check is deleted.</p> <p>You cannot disable a check if it is used by any scheduled audit. You must first delete the check from the scheduled audit or delete the scheduled audit itself.</p> <p>On the first call to <code>UpdateAccountAuditConfiguration</code> this parameter is required and must specify at least one enabled check.</p>
+    #[serde(rename = "auditCheckConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audit_check_configurations:
+        Option<::std::collections::HashMap<String, AuditCheckConfiguration>>,
+    /// <p>Information about the targets to which audit notifications are sent.</p>
+    #[serde(rename = "auditNotificationTargetConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audit_notification_target_configurations:
+        Option<::std::collections::HashMap<String, AuditNotificationTarget>>,
+    /// <p>The ARN of the role that grants permission to AWS IoT to access information about your devices, policies, certificates and other items as necessary when performing an audit.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct UpdateAccountAuditConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateAuthorizerRequest {
@@ -4243,7 +5306,7 @@ pub struct UpdateCACertificateRequest {
 /// <p>The input for the UpdateCertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateCertificateRequest {
-    /// <p>The ID of the certificate.</p>
+    /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
     #[serde(rename = "certificateId")]
     pub certificate_id: String,
     /// <p>The new status.</p> <p> <b>Note:</b> Setting the status to PENDING_TRANSFER will result in an exception being thrown. PENDING_TRANSFER is a status used internally by AWS IoT. It is not intended for developer use.</p> <p> <b>Note:</b> The status value REGISTER_INACTIVE is deprecated and should not be used.</p>
@@ -4298,6 +5361,96 @@ pub struct UpdateRoleAliasResponse {
     #[serde(rename = "roleAliasArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_alias_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateScheduledAuditRequest {
+    /// <p>The day of the month on which the scheduled audit takes place. Can be "1" through "31" or "LAST". This field is required if the "frequency" parameter is set to "MONTHLY". If days 29-31 are specified, and the month does not have that many days, the audit takes place on the "LAST" day of the month.</p>
+    #[serde(rename = "dayOfMonth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub day_of_month: Option<String>,
+    /// <p>The day of the week on which the scheduled audit takes place. Can be one of "SUN", "MON", "TUE", "WED", "THU", "FRI" or "SAT". This field is required if the "frequency" parameter is set to "WEEKLY" or "BIWEEKLY".</p>
+    #[serde(rename = "dayOfWeek")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub day_of_week: Option<String>,
+    /// <p>How often the scheduled audit takes place. Can be one of "DAILY", "WEEKLY", "BIWEEKLY" or "MONTHLY". The actual start time of each audit is determined by the system.</p>
+    #[serde(rename = "frequency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub frequency: Option<String>,
+    /// <p>The name of the scheduled audit. (Max. 128 chars)</p>
+    #[serde(rename = "scheduledAuditName")]
+    pub scheduled_audit_name: String,
+    /// <p>Which checks are performed during the scheduled audit. Checks must be enabled for your account. (Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.)</p>
+    #[serde(rename = "targetCheckNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_check_names: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct UpdateScheduledAuditResponse {
+    /// <p>The ARN of the scheduled audit.</p>
+    #[serde(rename = "scheduledAuditArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_audit_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateSecurityProfileRequest {
+    /// <p>Where the alerts are sent. (Alerts are always sent to the console.)</p>
+    #[serde(rename = "alertTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alert_targets: Option<::std::collections::HashMap<String, AlertTarget>>,
+    /// <p>Specifies the behaviors that, when violated by a device (thing), cause an alert.</p>
+    #[serde(rename = "behaviors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub behaviors: Option<Vec<Behavior>>,
+    /// <p>The expected version of the security profile. A new version is generated whenever the security profile is updated. If you specify a value that is different than the actual version, a <code>VersionConflictException</code> is thrown.</p>
+    #[serde(rename = "expectedVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expected_version: Option<i64>,
+    /// <p>A description of the security profile.</p>
+    #[serde(rename = "securityProfileDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_profile_description: Option<String>,
+    /// <p>The name of the security profile you want to update.</p>
+    #[serde(rename = "securityProfileName")]
+    pub security_profile_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct UpdateSecurityProfileResponse {
+    /// <p>Where the alerts are sent. (Alerts are always sent to the console.)</p>
+    #[serde(rename = "alertTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alert_targets: Option<::std::collections::HashMap<String, AlertTarget>>,
+    /// <p>Specifies the behaviors that, when violated by a device (thing), cause an alert.</p>
+    #[serde(rename = "behaviors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub behaviors: Option<Vec<Behavior>>,
+    /// <p>The time the security profile was created.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>The time the security profile was last modified.</p>
+    #[serde(rename = "lastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
+    /// <p>The ARN of the security profile that was updated.</p>
+    #[serde(rename = "securityProfileArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_profile_arn: Option<String>,
+    /// <p>The description of the security profile.</p>
+    #[serde(rename = "securityProfileDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_profile_description: Option<String>,
+    /// <p>The name of the security profile that was updated.</p>
+    #[serde(rename = "securityProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_profile_name: Option<String>,
+    /// <p>The updated version of the security profile.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -4407,6 +5560,67 @@ pub struct UpdateThingRequest {
 /// <p>The output from the UpdateThing operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateThingResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ValidateSecurityProfileBehaviorsRequest {
+    /// <p>Specifies the behaviors that, when violated by a device (thing), cause an alert.</p>
+    #[serde(rename = "behaviors")]
+    pub behaviors: Vec<Behavior>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ValidateSecurityProfileBehaviorsResponse {
+    /// <p>True if the behaviors were valid.</p>
+    #[serde(rename = "valid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub valid: Option<bool>,
+    /// <p>The list of any errors found in the behaviors.</p>
+    #[serde(rename = "validationErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation_errors: Option<Vec<ValidationError>>,
+}
+
+/// <p>Information about an error found in a behavior specification.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ValidationError {
+    /// <p>The description of an error found in the behaviors.</p>
+    #[serde(rename = "errorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+}
+
+/// <p>Information about a Device Defender security profile behavior violation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ViolationEvent {
+    /// <p>The behavior which was violated.</p>
+    #[serde(rename = "behavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub behavior: Option<Behavior>,
+    /// <p>The value of the metric (the measurement).</p>
+    #[serde(rename = "metricValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_value: Option<MetricValue>,
+    /// <p>The name of the security profile whose behavior was violated.</p>
+    #[serde(rename = "securityProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_profile_name: Option<String>,
+    /// <p>The name of the thing responsible for the violation event.</p>
+    #[serde(rename = "thingName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_name: Option<String>,
+    /// <p>The time the violation event occurred.</p>
+    #[serde(rename = "violationEventTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_event_time: Option<f64>,
+    /// <p>The type of violation event.</p>
+    #[serde(rename = "violationEventType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_event_type: Option<String>,
+    /// <p>The ID of the violation event.</p>
+    #[serde(rename = "violationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_id: Option<String>,
+}
 
 /// Errors returned by AcceptCertificateTransfer
 #[derive(Debug, PartialEq)]
@@ -4635,7 +5849,7 @@ impl Error for AddThingToThingGroupError {
 pub enum AssociateTargetsWithJobError {
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    /// <p>The number of attached entities exceeds the limit.</p>
+    /// <p>A limit has been exceeded.</p>
     LimitExceeded(String),
     /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
@@ -4744,7 +5958,7 @@ pub enum AttachPolicyError {
     InternalFailure(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    /// <p>The number of attached entities exceeds the limit.</p>
+    /// <p>A limit has been exceeded.</p>
     LimitExceeded(String),
     /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
@@ -4859,7 +6073,7 @@ pub enum AttachPrincipalPolicyError {
     InternalFailure(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    /// <p>The number of attached entities exceeds the limit.</p>
+    /// <p>A limit has been exceeded.</p>
     LimitExceeded(String),
     /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
@@ -4966,6 +6180,117 @@ impl Error for AttachPrincipalPolicyError {
                 dispatch_error.description()
             }
             AttachPrincipalPolicyError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by AttachSecurityProfile
+#[derive(Debug, PartialEq)]
+pub enum AttachSecurityProfileError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>A limit has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>An exception thrown when the version of an entity specified with the <code>expectedVersion</code> parameter does not match the latest version in the system.</p>
+    VersionConflict(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl AttachSecurityProfileError {
+    pub fn from_body(body: &str) -> AttachSecurityProfileError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        AttachSecurityProfileError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        AttachSecurityProfileError::InvalidRequest(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        AttachSecurityProfileError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        AttachSecurityProfileError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        AttachSecurityProfileError::Throttling(String::from(error_message))
+                    }
+                    "VersionConflictException" => {
+                        AttachSecurityProfileError::VersionConflict(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        AttachSecurityProfileError::Validation(error_message.to_string())
+                    }
+                    _ => AttachSecurityProfileError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AttachSecurityProfileError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AttachSecurityProfileError {
+    fn from(err: serde_json::error::Error) -> AttachSecurityProfileError {
+        AttachSecurityProfileError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AttachSecurityProfileError {
+    fn from(err: CredentialsError) -> AttachSecurityProfileError {
+        AttachSecurityProfileError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AttachSecurityProfileError {
+    fn from(err: HttpDispatchError) -> AttachSecurityProfileError {
+        AttachSecurityProfileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AttachSecurityProfileError {
+    fn from(err: io::Error) -> AttachSecurityProfileError {
+        AttachSecurityProfileError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AttachSecurityProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AttachSecurityProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            AttachSecurityProfileError::InternalFailure(ref cause) => cause,
+            AttachSecurityProfileError::InvalidRequest(ref cause) => cause,
+            AttachSecurityProfileError::LimitExceeded(ref cause) => cause,
+            AttachSecurityProfileError::ResourceNotFound(ref cause) => cause,
+            AttachSecurityProfileError::Throttling(ref cause) => cause,
+            AttachSecurityProfileError::VersionConflict(ref cause) => cause,
+            AttachSecurityProfileError::Validation(ref cause) => cause,
+            AttachSecurityProfileError::Credentials(ref err) => err.description(),
+            AttachSecurityProfileError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AttachSecurityProfileError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -5077,6 +6402,103 @@ impl Error for AttachThingPrincipalError {
                 dispatch_error.description()
             }
             AttachThingPrincipalError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CancelAuditTask
+#[derive(Debug, PartialEq)]
+pub enum CancelAuditTaskError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CancelAuditTaskError {
+    pub fn from_body(body: &str) -> CancelAuditTaskError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        CancelAuditTaskError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        CancelAuditTaskError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        CancelAuditTaskError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        CancelAuditTaskError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CancelAuditTaskError::Validation(error_message.to_string())
+                    }
+                    _ => CancelAuditTaskError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CancelAuditTaskError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CancelAuditTaskError {
+    fn from(err: serde_json::error::Error) -> CancelAuditTaskError {
+        CancelAuditTaskError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CancelAuditTaskError {
+    fn from(err: CredentialsError) -> CancelAuditTaskError {
+        CancelAuditTaskError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CancelAuditTaskError {
+    fn from(err: HttpDispatchError) -> CancelAuditTaskError {
+        CancelAuditTaskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CancelAuditTaskError {
+    fn from(err: io::Error) -> CancelAuditTaskError {
+        CancelAuditTaskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CancelAuditTaskError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CancelAuditTaskError {
+    fn description(&self) -> &str {
+        match *self {
+            CancelAuditTaskError::InternalFailure(ref cause) => cause,
+            CancelAuditTaskError::InvalidRequest(ref cause) => cause,
+            CancelAuditTaskError::ResourceNotFound(ref cause) => cause,
+            CancelAuditTaskError::Throttling(ref cause) => cause,
+            CancelAuditTaskError::Validation(ref cause) => cause,
+            CancelAuditTaskError::Credentials(ref err) => err.description(),
+            CancelAuditTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CancelAuditTaskError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -5298,6 +6720,117 @@ impl Error for CancelJobError {
         }
     }
 }
+/// Errors returned by CancelJobExecution
+#[derive(Debug, PartialEq)]
+pub enum CancelJobExecutionError {
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>An attempt was made to change to an invalid state, for example by deleting a job or a job execution which is "IN_PROGRESS" without setting the <code>force</code> parameter.</p>
+    InvalidStateTransition(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>An exception thrown when the version of an entity specified with the <code>expectedVersion</code> parameter does not match the latest version in the system.</p>
+    VersionConflict(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CancelJobExecutionError {
+    pub fn from_body(body: &str) -> CancelJobExecutionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidRequestException" => {
+                        CancelJobExecutionError::InvalidRequest(String::from(error_message))
+                    }
+                    "InvalidStateTransitionException" => {
+                        CancelJobExecutionError::InvalidStateTransition(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        CancelJobExecutionError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        CancelJobExecutionError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        CancelJobExecutionError::Throttling(String::from(error_message))
+                    }
+                    "VersionConflictException" => {
+                        CancelJobExecutionError::VersionConflict(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CancelJobExecutionError::Validation(error_message.to_string())
+                    }
+                    _ => CancelJobExecutionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CancelJobExecutionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CancelJobExecutionError {
+    fn from(err: serde_json::error::Error) -> CancelJobExecutionError {
+        CancelJobExecutionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CancelJobExecutionError {
+    fn from(err: CredentialsError) -> CancelJobExecutionError {
+        CancelJobExecutionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CancelJobExecutionError {
+    fn from(err: HttpDispatchError) -> CancelJobExecutionError {
+        CancelJobExecutionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CancelJobExecutionError {
+    fn from(err: io::Error) -> CancelJobExecutionError {
+        CancelJobExecutionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CancelJobExecutionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CancelJobExecutionError {
+    fn description(&self) -> &str {
+        match *self {
+            CancelJobExecutionError::InvalidRequest(ref cause) => cause,
+            CancelJobExecutionError::InvalidStateTransition(ref cause) => cause,
+            CancelJobExecutionError::ResourceNotFound(ref cause) => cause,
+            CancelJobExecutionError::ServiceUnavailable(ref cause) => cause,
+            CancelJobExecutionError::Throttling(ref cause) => cause,
+            CancelJobExecutionError::VersionConflict(ref cause) => cause,
+            CancelJobExecutionError::Validation(ref cause) => cause,
+            CancelJobExecutionError::Credentials(ref err) => err.description(),
+            CancelJobExecutionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CancelJobExecutionError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ClearDefaultAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum ClearDefaultAuthorizerError {
@@ -5416,7 +6949,7 @@ pub enum CreateAuthorizerError {
     InternalFailure(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    /// <p>The number of attached entities exceeds the limit.</p>
+    /// <p>A limit has been exceeded.</p>
     LimitExceeded(String),
     /// <p>The resource already exists.</p>
     ResourceAlreadyExists(String),
@@ -5636,7 +7169,7 @@ impl Error for CreateCertificateFromCsrError {
 pub enum CreateJobError {
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    /// <p>The number of attached entities exceeds the limit.</p>
+    /// <p>A limit has been exceeded.</p>
     LimitExceeded(String),
     /// <p>The resource already exists.</p>
     ResourceAlreadyExists(String),
@@ -6205,7 +7738,7 @@ pub enum CreateRoleAliasError {
     InternalFailure(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    /// <p>The number of attached entities exceeds the limit.</p>
+    /// <p>A limit has been exceeded.</p>
     LimitExceeded(String),
     /// <p>The resource already exists.</p>
     ResourceAlreadyExists(String),
@@ -6310,6 +7843,206 @@ impl Error for CreateRoleAliasError {
             CreateRoleAliasError::Credentials(ref err) => err.description(),
             CreateRoleAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             CreateRoleAliasError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateScheduledAudit
+#[derive(Debug, PartialEq)]
+pub enum CreateScheduledAuditError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>A limit has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateScheduledAuditError {
+    pub fn from_body(body: &str) -> CreateScheduledAuditError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        CreateScheduledAuditError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        CreateScheduledAuditError::InvalidRequest(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        CreateScheduledAuditError::LimitExceeded(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        CreateScheduledAuditError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateScheduledAuditError::Validation(error_message.to_string())
+                    }
+                    _ => CreateScheduledAuditError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateScheduledAuditError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateScheduledAuditError {
+    fn from(err: serde_json::error::Error) -> CreateScheduledAuditError {
+        CreateScheduledAuditError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateScheduledAuditError {
+    fn from(err: CredentialsError) -> CreateScheduledAuditError {
+        CreateScheduledAuditError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateScheduledAuditError {
+    fn from(err: HttpDispatchError) -> CreateScheduledAuditError {
+        CreateScheduledAuditError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateScheduledAuditError {
+    fn from(err: io::Error) -> CreateScheduledAuditError {
+        CreateScheduledAuditError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateScheduledAuditError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateScheduledAuditError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateScheduledAuditError::InternalFailure(ref cause) => cause,
+            CreateScheduledAuditError::InvalidRequest(ref cause) => cause,
+            CreateScheduledAuditError::LimitExceeded(ref cause) => cause,
+            CreateScheduledAuditError::Throttling(ref cause) => cause,
+            CreateScheduledAuditError::Validation(ref cause) => cause,
+            CreateScheduledAuditError::Credentials(ref err) => err.description(),
+            CreateScheduledAuditError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateScheduledAuditError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateSecurityProfile
+#[derive(Debug, PartialEq)]
+pub enum CreateSecurityProfileError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateSecurityProfileError {
+    pub fn from_body(body: &str) -> CreateSecurityProfileError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        CreateSecurityProfileError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        CreateSecurityProfileError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceAlreadyExistsException" => {
+                        CreateSecurityProfileError::ResourceAlreadyExists(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ThrottlingException" => {
+                        CreateSecurityProfileError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateSecurityProfileError::Validation(error_message.to_string())
+                    }
+                    _ => CreateSecurityProfileError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateSecurityProfileError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateSecurityProfileError {
+    fn from(err: serde_json::error::Error) -> CreateSecurityProfileError {
+        CreateSecurityProfileError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateSecurityProfileError {
+    fn from(err: CredentialsError) -> CreateSecurityProfileError {
+        CreateSecurityProfileError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateSecurityProfileError {
+    fn from(err: HttpDispatchError) -> CreateSecurityProfileError {
+        CreateSecurityProfileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateSecurityProfileError {
+    fn from(err: io::Error) -> CreateSecurityProfileError {
+        CreateSecurityProfileError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateSecurityProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateSecurityProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateSecurityProfileError::InternalFailure(ref cause) => cause,
+            CreateSecurityProfileError::InvalidRequest(ref cause) => cause,
+            CreateSecurityProfileError::ResourceAlreadyExists(ref cause) => cause,
+            CreateSecurityProfileError::Throttling(ref cause) => cause,
+            CreateSecurityProfileError::Validation(ref cause) => cause,
+            CreateSecurityProfileError::Credentials(ref err) => err.description(),
+            CreateSecurityProfileError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateSecurityProfileError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -6852,6 +8585,111 @@ impl Error for CreateTopicRuleError {
         }
     }
 }
+/// Errors returned by DeleteAccountAuditConfiguration
+#[derive(Debug, PartialEq)]
+pub enum DeleteAccountAuditConfigurationError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteAccountAuditConfigurationError {
+    pub fn from_body(body: &str) -> DeleteAccountAuditConfigurationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        DeleteAccountAuditConfigurationError::InternalFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => {
+                        DeleteAccountAuditConfigurationError::InvalidRequest(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        DeleteAccountAuditConfigurationError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ThrottlingException" => DeleteAccountAuditConfigurationError::Throttling(
+                        String::from(error_message),
+                    ),
+                    "ValidationException" => {
+                        DeleteAccountAuditConfigurationError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteAccountAuditConfigurationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteAccountAuditConfigurationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteAccountAuditConfigurationError {
+    fn from(err: serde_json::error::Error) -> DeleteAccountAuditConfigurationError {
+        DeleteAccountAuditConfigurationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteAccountAuditConfigurationError {
+    fn from(err: CredentialsError) -> DeleteAccountAuditConfigurationError {
+        DeleteAccountAuditConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteAccountAuditConfigurationError {
+    fn from(err: HttpDispatchError) -> DeleteAccountAuditConfigurationError {
+        DeleteAccountAuditConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteAccountAuditConfigurationError {
+    fn from(err: io::Error) -> DeleteAccountAuditConfigurationError {
+        DeleteAccountAuditConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteAccountAuditConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteAccountAuditConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteAccountAuditConfigurationError::InternalFailure(ref cause) => cause,
+            DeleteAccountAuditConfigurationError::InvalidRequest(ref cause) => cause,
+            DeleteAccountAuditConfigurationError::ResourceNotFound(ref cause) => cause,
+            DeleteAccountAuditConfigurationError::Throttling(ref cause) => cause,
+            DeleteAccountAuditConfigurationError::Validation(ref cause) => cause,
+            DeleteAccountAuditConfigurationError::Credentials(ref err) => err.description(),
+            DeleteAccountAuditConfigurationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteAccountAuditConfigurationError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum DeleteAuthorizerError {
@@ -7204,6 +9042,218 @@ impl Error for DeleteCertificateError {
                 dispatch_error.description()
             }
             DeleteCertificateError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteJob
+#[derive(Debug, PartialEq)]
+pub enum DeleteJobError {
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>An attempt was made to change to an invalid state, for example by deleting a job or a job execution which is "IN_PROGRESS" without setting the <code>force</code> parameter.</p>
+    InvalidStateTransition(String),
+    /// <p>A limit has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteJobError {
+    pub fn from_body(body: &str) -> DeleteJobError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidRequestException" => {
+                        DeleteJobError::InvalidRequest(String::from(error_message))
+                    }
+                    "InvalidStateTransitionException" => {
+                        DeleteJobError::InvalidStateTransition(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        DeleteJobError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DeleteJobError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        DeleteJobError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DeleteJobError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => DeleteJobError::Validation(error_message.to_string()),
+                    _ => DeleteJobError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteJobError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteJobError {
+    fn from(err: serde_json::error::Error) -> DeleteJobError {
+        DeleteJobError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteJobError {
+    fn from(err: CredentialsError) -> DeleteJobError {
+        DeleteJobError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteJobError {
+    fn from(err: HttpDispatchError) -> DeleteJobError {
+        DeleteJobError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteJobError {
+    fn from(err: io::Error) -> DeleteJobError {
+        DeleteJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteJobError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteJobError::InvalidRequest(ref cause) => cause,
+            DeleteJobError::InvalidStateTransition(ref cause) => cause,
+            DeleteJobError::LimitExceeded(ref cause) => cause,
+            DeleteJobError::ResourceNotFound(ref cause) => cause,
+            DeleteJobError::ServiceUnavailable(ref cause) => cause,
+            DeleteJobError::Throttling(ref cause) => cause,
+            DeleteJobError::Validation(ref cause) => cause,
+            DeleteJobError::Credentials(ref err) => err.description(),
+            DeleteJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteJobError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteJobExecution
+#[derive(Debug, PartialEq)]
+pub enum DeleteJobExecutionError {
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>An attempt was made to change to an invalid state, for example by deleting a job or a job execution which is "IN_PROGRESS" without setting the <code>force</code> parameter.</p>
+    InvalidStateTransition(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteJobExecutionError {
+    pub fn from_body(body: &str) -> DeleteJobExecutionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidRequestException" => {
+                        DeleteJobExecutionError::InvalidRequest(String::from(error_message))
+                    }
+                    "InvalidStateTransitionException" => {
+                        DeleteJobExecutionError::InvalidStateTransition(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DeleteJobExecutionError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        DeleteJobExecutionError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DeleteJobExecutionError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteJobExecutionError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteJobExecutionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteJobExecutionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteJobExecutionError {
+    fn from(err: serde_json::error::Error) -> DeleteJobExecutionError {
+        DeleteJobExecutionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteJobExecutionError {
+    fn from(err: CredentialsError) -> DeleteJobExecutionError {
+        DeleteJobExecutionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteJobExecutionError {
+    fn from(err: HttpDispatchError) -> DeleteJobExecutionError {
+        DeleteJobExecutionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteJobExecutionError {
+    fn from(err: io::Error) -> DeleteJobExecutionError {
+        DeleteJobExecutionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteJobExecutionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteJobExecutionError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteJobExecutionError::InvalidRequest(ref cause) => cause,
+            DeleteJobExecutionError::InvalidStateTransition(ref cause) => cause,
+            DeleteJobExecutionError::ResourceNotFound(ref cause) => cause,
+            DeleteJobExecutionError::ServiceUnavailable(ref cause) => cause,
+            DeleteJobExecutionError::Throttling(ref cause) => cause,
+            DeleteJobExecutionError::Validation(ref cause) => cause,
+            DeleteJobExecutionError::Credentials(ref err) => err.description(),
+            DeleteJobExecutionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteJobExecutionError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -7768,6 +9818,204 @@ impl Error for DeleteRoleAliasError {
         }
     }
 }
+/// Errors returned by DeleteScheduledAudit
+#[derive(Debug, PartialEq)]
+pub enum DeleteScheduledAuditError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteScheduledAuditError {
+    pub fn from_body(body: &str) -> DeleteScheduledAuditError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        DeleteScheduledAuditError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        DeleteScheduledAuditError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DeleteScheduledAuditError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DeleteScheduledAuditError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteScheduledAuditError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteScheduledAuditError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteScheduledAuditError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteScheduledAuditError {
+    fn from(err: serde_json::error::Error) -> DeleteScheduledAuditError {
+        DeleteScheduledAuditError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteScheduledAuditError {
+    fn from(err: CredentialsError) -> DeleteScheduledAuditError {
+        DeleteScheduledAuditError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteScheduledAuditError {
+    fn from(err: HttpDispatchError) -> DeleteScheduledAuditError {
+        DeleteScheduledAuditError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteScheduledAuditError {
+    fn from(err: io::Error) -> DeleteScheduledAuditError {
+        DeleteScheduledAuditError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteScheduledAuditError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteScheduledAuditError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteScheduledAuditError::InternalFailure(ref cause) => cause,
+            DeleteScheduledAuditError::InvalidRequest(ref cause) => cause,
+            DeleteScheduledAuditError::ResourceNotFound(ref cause) => cause,
+            DeleteScheduledAuditError::Throttling(ref cause) => cause,
+            DeleteScheduledAuditError::Validation(ref cause) => cause,
+            DeleteScheduledAuditError::Credentials(ref err) => err.description(),
+            DeleteScheduledAuditError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteScheduledAuditError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteSecurityProfile
+#[derive(Debug, PartialEq)]
+pub enum DeleteSecurityProfileError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>An exception thrown when the version of an entity specified with the <code>expectedVersion</code> parameter does not match the latest version in the system.</p>
+    VersionConflict(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteSecurityProfileError {
+    pub fn from_body(body: &str) -> DeleteSecurityProfileError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        DeleteSecurityProfileError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        DeleteSecurityProfileError::InvalidRequest(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DeleteSecurityProfileError::Throttling(String::from(error_message))
+                    }
+                    "VersionConflictException" => {
+                        DeleteSecurityProfileError::VersionConflict(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteSecurityProfileError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteSecurityProfileError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteSecurityProfileError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteSecurityProfileError {
+    fn from(err: serde_json::error::Error) -> DeleteSecurityProfileError {
+        DeleteSecurityProfileError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteSecurityProfileError {
+    fn from(err: CredentialsError) -> DeleteSecurityProfileError {
+        DeleteSecurityProfileError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteSecurityProfileError {
+    fn from(err: HttpDispatchError) -> DeleteSecurityProfileError {
+        DeleteSecurityProfileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteSecurityProfileError {
+    fn from(err: io::Error) -> DeleteSecurityProfileError {
+        DeleteSecurityProfileError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteSecurityProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteSecurityProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteSecurityProfileError::InternalFailure(ref cause) => cause,
+            DeleteSecurityProfileError::InvalidRequest(ref cause) => cause,
+            DeleteSecurityProfileError::Throttling(ref cause) => cause,
+            DeleteSecurityProfileError::VersionConflict(ref cause) => cause,
+            DeleteSecurityProfileError::Validation(ref cause) => cause,
+            DeleteSecurityProfileError::Credentials(ref err) => err.description(),
+            DeleteSecurityProfileError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteSecurityProfileError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteStream
 #[derive(Debug, PartialEq)]
 pub enum DeleteStreamError {
@@ -7898,7 +10146,7 @@ pub enum DeleteThingError {
     Throttling(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
-    /// <p>An exception thrown when the version of a thing passed to a command is different than the version specified with the --version parameter.</p>
+    /// <p>An exception thrown when the version of an entity specified with the <code>expectedVersion</code> parameter does not match the latest version in the system.</p>
     VersionConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8007,7 +10255,7 @@ pub enum DeleteThingGroupError {
     InvalidRequest(String),
     /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    /// <p>An exception thrown when the version of a thing passed to a command is different than the version specified with the --version parameter.</p>
+    /// <p>An exception thrown when the version of an entity specified with the <code>expectedVersion</code> parameter does not match the latest version in the system.</p>
     VersionConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8502,6 +10750,194 @@ impl Error for DeprecateThingTypeError {
                 dispatch_error.description()
             }
             DeprecateThingTypeError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeAccountAuditConfiguration
+#[derive(Debug, PartialEq)]
+pub enum DescribeAccountAuditConfigurationError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeAccountAuditConfigurationError {
+    pub fn from_body(body: &str) -> DescribeAccountAuditConfigurationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        DescribeAccountAuditConfigurationError::InternalFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ThrottlingException" => DescribeAccountAuditConfigurationError::Throttling(
+                        String::from(error_message),
+                    ),
+                    "ValidationException" => DescribeAccountAuditConfigurationError::Validation(
+                        error_message.to_string(),
+                    ),
+                    _ => DescribeAccountAuditConfigurationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeAccountAuditConfigurationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeAccountAuditConfigurationError {
+    fn from(err: serde_json::error::Error) -> DescribeAccountAuditConfigurationError {
+        DescribeAccountAuditConfigurationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeAccountAuditConfigurationError {
+    fn from(err: CredentialsError) -> DescribeAccountAuditConfigurationError {
+        DescribeAccountAuditConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeAccountAuditConfigurationError {
+    fn from(err: HttpDispatchError) -> DescribeAccountAuditConfigurationError {
+        DescribeAccountAuditConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAccountAuditConfigurationError {
+    fn from(err: io::Error) -> DescribeAccountAuditConfigurationError {
+        DescribeAccountAuditConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeAccountAuditConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeAccountAuditConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeAccountAuditConfigurationError::InternalFailure(ref cause) => cause,
+            DescribeAccountAuditConfigurationError::Throttling(ref cause) => cause,
+            DescribeAccountAuditConfigurationError::Validation(ref cause) => cause,
+            DescribeAccountAuditConfigurationError::Credentials(ref err) => err.description(),
+            DescribeAccountAuditConfigurationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeAccountAuditConfigurationError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeAuditTask
+#[derive(Debug, PartialEq)]
+pub enum DescribeAuditTaskError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeAuditTaskError {
+    pub fn from_body(body: &str) -> DescribeAuditTaskError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        DescribeAuditTaskError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        DescribeAuditTaskError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeAuditTaskError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DescribeAuditTaskError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeAuditTaskError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeAuditTaskError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeAuditTaskError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeAuditTaskError {
+    fn from(err: serde_json::error::Error) -> DescribeAuditTaskError {
+        DescribeAuditTaskError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeAuditTaskError {
+    fn from(err: CredentialsError) -> DescribeAuditTaskError {
+        DescribeAuditTaskError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeAuditTaskError {
+    fn from(err: HttpDispatchError) -> DescribeAuditTaskError {
+        DescribeAuditTaskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAuditTaskError {
+    fn from(err: io::Error) -> DescribeAuditTaskError {
+        DescribeAuditTaskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeAuditTaskError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeAuditTaskError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeAuditTaskError::InternalFailure(ref cause) => cause,
+            DescribeAuditTaskError::InvalidRequest(ref cause) => cause,
+            DescribeAuditTaskError::ResourceNotFound(ref cause) => cause,
+            DescribeAuditTaskError::Throttling(ref cause) => cause,
+            DescribeAuditTaskError::Validation(ref cause) => cause,
+            DescribeAuditTaskError::Credentials(ref err) => err.description(),
+            DescribeAuditTaskError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeAuditTaskError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -9555,6 +11991,204 @@ impl Error for DescribeRoleAliasError {
         }
     }
 }
+/// Errors returned by DescribeScheduledAudit
+#[derive(Debug, PartialEq)]
+pub enum DescribeScheduledAuditError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeScheduledAuditError {
+    pub fn from_body(body: &str) -> DescribeScheduledAuditError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        DescribeScheduledAuditError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        DescribeScheduledAuditError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeScheduledAuditError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DescribeScheduledAuditError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeScheduledAuditError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeScheduledAuditError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeScheduledAuditError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeScheduledAuditError {
+    fn from(err: serde_json::error::Error) -> DescribeScheduledAuditError {
+        DescribeScheduledAuditError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeScheduledAuditError {
+    fn from(err: CredentialsError) -> DescribeScheduledAuditError {
+        DescribeScheduledAuditError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeScheduledAuditError {
+    fn from(err: HttpDispatchError) -> DescribeScheduledAuditError {
+        DescribeScheduledAuditError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeScheduledAuditError {
+    fn from(err: io::Error) -> DescribeScheduledAuditError {
+        DescribeScheduledAuditError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeScheduledAuditError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeScheduledAuditError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeScheduledAuditError::InternalFailure(ref cause) => cause,
+            DescribeScheduledAuditError::InvalidRequest(ref cause) => cause,
+            DescribeScheduledAuditError::ResourceNotFound(ref cause) => cause,
+            DescribeScheduledAuditError::Throttling(ref cause) => cause,
+            DescribeScheduledAuditError::Validation(ref cause) => cause,
+            DescribeScheduledAuditError::Credentials(ref err) => err.description(),
+            DescribeScheduledAuditError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeScheduledAuditError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeSecurityProfile
+#[derive(Debug, PartialEq)]
+pub enum DescribeSecurityProfileError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeSecurityProfileError {
+    pub fn from_body(body: &str) -> DescribeSecurityProfileError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        DescribeSecurityProfileError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        DescribeSecurityProfileError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeSecurityProfileError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DescribeSecurityProfileError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeSecurityProfileError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeSecurityProfileError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeSecurityProfileError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeSecurityProfileError {
+    fn from(err: serde_json::error::Error) -> DescribeSecurityProfileError {
+        DescribeSecurityProfileError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeSecurityProfileError {
+    fn from(err: CredentialsError) -> DescribeSecurityProfileError {
+        DescribeSecurityProfileError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeSecurityProfileError {
+    fn from(err: HttpDispatchError) -> DescribeSecurityProfileError {
+        DescribeSecurityProfileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeSecurityProfileError {
+    fn from(err: io::Error) -> DescribeSecurityProfileError {
+        DescribeSecurityProfileError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeSecurityProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeSecurityProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeSecurityProfileError::InternalFailure(ref cause) => cause,
+            DescribeSecurityProfileError::InvalidRequest(ref cause) => cause,
+            DescribeSecurityProfileError::ResourceNotFound(ref cause) => cause,
+            DescribeSecurityProfileError::Throttling(ref cause) => cause,
+            DescribeSecurityProfileError::Validation(ref cause) => cause,
+            DescribeSecurityProfileError::Credentials(ref err) => err.description(),
+            DescribeSecurityProfileError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeSecurityProfileError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeStream
 #[derive(Debug, PartialEq)]
 pub enum DescribeStreamError {
@@ -10101,7 +12735,7 @@ pub enum DetachPolicyError {
     InternalFailure(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    /// <p>The number of attached entities exceeds the limit.</p>
+    /// <p>A limit has been exceeded.</p>
     LimitExceeded(String),
     /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
@@ -10311,6 +12945,105 @@ impl Error for DetachPrincipalPolicyError {
                 dispatch_error.description()
             }
             DetachPrincipalPolicyError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DetachSecurityProfile
+#[derive(Debug, PartialEq)]
+pub enum DetachSecurityProfileError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DetachSecurityProfileError {
+    pub fn from_body(body: &str) -> DetachSecurityProfileError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        DetachSecurityProfileError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        DetachSecurityProfileError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DetachSecurityProfileError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DetachSecurityProfileError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DetachSecurityProfileError::Validation(error_message.to_string())
+                    }
+                    _ => DetachSecurityProfileError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DetachSecurityProfileError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DetachSecurityProfileError {
+    fn from(err: serde_json::error::Error) -> DetachSecurityProfileError {
+        DetachSecurityProfileError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DetachSecurityProfileError {
+    fn from(err: CredentialsError) -> DetachSecurityProfileError {
+        DetachSecurityProfileError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DetachSecurityProfileError {
+    fn from(err: HttpDispatchError) -> DetachSecurityProfileError {
+        DetachSecurityProfileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DetachSecurityProfileError {
+    fn from(err: io::Error) -> DetachSecurityProfileError {
+        DetachSecurityProfileError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DetachSecurityProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DetachSecurityProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            DetachSecurityProfileError::InternalFailure(ref cause) => cause,
+            DetachSecurityProfileError::InvalidRequest(ref cause) => cause,
+            DetachSecurityProfileError::ResourceNotFound(ref cause) => cause,
+            DetachSecurityProfileError::Throttling(ref cause) => cause,
+            DetachSecurityProfileError::Validation(ref cause) => cause,
+            DetachSecurityProfileError::Credentials(ref err) => err.description(),
+            DetachSecurityProfileError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DetachSecurityProfileError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -10626,7 +13359,7 @@ pub enum GetEffectivePoliciesError {
     InternalFailure(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    /// <p>The number of attached entities exceeds the limit.</p>
+    /// <p>A limit has been exceeded.</p>
     LimitExceeded(String),
     /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
@@ -11563,8 +14296,8 @@ impl Error for GetTopicRuleError {
 pub enum GetV2LoggingOptionsError {
     /// <p>An unexpected error has occurred.</p>
     Internal(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
+    /// <p>The resource is not configured.</p>
+    NotConfigured(String),
     /// <p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
     /// An error occurred dispatching the HTTP request
@@ -11594,8 +14327,8 @@ impl GetV2LoggingOptionsError {
                     "InternalException" => {
                         GetV2LoggingOptionsError::Internal(String::from(error_message))
                     }
-                    "InvalidRequestException" => {
-                        GetV2LoggingOptionsError::InvalidRequest(String::from(error_message))
+                    "NotConfiguredException" => {
+                        GetV2LoggingOptionsError::NotConfigured(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         GetV2LoggingOptionsError::ServiceUnavailable(String::from(error_message))
@@ -11640,7 +14373,7 @@ impl Error for GetV2LoggingOptionsError {
     fn description(&self) -> &str {
         match *self {
             GetV2LoggingOptionsError::Internal(ref cause) => cause,
-            GetV2LoggingOptionsError::InvalidRequest(ref cause) => cause,
+            GetV2LoggingOptionsError::NotConfigured(ref cause) => cause,
             GetV2LoggingOptionsError::ServiceUnavailable(ref cause) => cause,
             GetV2LoggingOptionsError::Validation(ref cause) => cause,
             GetV2LoggingOptionsError::Credentials(ref err) => err.description(),
@@ -11651,6 +14384,105 @@ impl Error for GetV2LoggingOptionsError {
         }
     }
 }
+/// Errors returned by ListActiveViolations
+#[derive(Debug, PartialEq)]
+pub enum ListActiveViolationsError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListActiveViolationsError {
+    pub fn from_body(body: &str) -> ListActiveViolationsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ListActiveViolationsError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        ListActiveViolationsError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListActiveViolationsError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        ListActiveViolationsError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListActiveViolationsError::Validation(error_message.to_string())
+                    }
+                    _ => ListActiveViolationsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListActiveViolationsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListActiveViolationsError {
+    fn from(err: serde_json::error::Error) -> ListActiveViolationsError {
+        ListActiveViolationsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListActiveViolationsError {
+    fn from(err: CredentialsError) -> ListActiveViolationsError {
+        ListActiveViolationsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListActiveViolationsError {
+    fn from(err: HttpDispatchError) -> ListActiveViolationsError {
+        ListActiveViolationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListActiveViolationsError {
+    fn from(err: io::Error) -> ListActiveViolationsError {
+        ListActiveViolationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListActiveViolationsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListActiveViolationsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListActiveViolationsError::InternalFailure(ref cause) => cause,
+            ListActiveViolationsError::InvalidRequest(ref cause) => cause,
+            ListActiveViolationsError::ResourceNotFound(ref cause) => cause,
+            ListActiveViolationsError::Throttling(ref cause) => cause,
+            ListActiveViolationsError::Validation(ref cause) => cause,
+            ListActiveViolationsError::Credentials(ref err) => err.description(),
+            ListActiveViolationsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListActiveViolationsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListAttachedPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListAttachedPoliciesError {
@@ -11658,7 +14490,7 @@ pub enum ListAttachedPoliciesError {
     InternalFailure(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    /// <p>The number of attached entities exceeds the limit.</p>
+    /// <p>A limit has been exceeded.</p>
     LimitExceeded(String),
     /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
@@ -11765,6 +14597,190 @@ impl Error for ListAttachedPoliciesError {
                 dispatch_error.description()
             }
             ListAttachedPoliciesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListAuditFindings
+#[derive(Debug, PartialEq)]
+pub enum ListAuditFindingsError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListAuditFindingsError {
+    pub fn from_body(body: &str) -> ListAuditFindingsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ListAuditFindingsError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        ListAuditFindingsError::InvalidRequest(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        ListAuditFindingsError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListAuditFindingsError::Validation(error_message.to_string())
+                    }
+                    _ => ListAuditFindingsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListAuditFindingsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListAuditFindingsError {
+    fn from(err: serde_json::error::Error) -> ListAuditFindingsError {
+        ListAuditFindingsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListAuditFindingsError {
+    fn from(err: CredentialsError) -> ListAuditFindingsError {
+        ListAuditFindingsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListAuditFindingsError {
+    fn from(err: HttpDispatchError) -> ListAuditFindingsError {
+        ListAuditFindingsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAuditFindingsError {
+    fn from(err: io::Error) -> ListAuditFindingsError {
+        ListAuditFindingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListAuditFindingsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListAuditFindingsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListAuditFindingsError::InternalFailure(ref cause) => cause,
+            ListAuditFindingsError::InvalidRequest(ref cause) => cause,
+            ListAuditFindingsError::Throttling(ref cause) => cause,
+            ListAuditFindingsError::Validation(ref cause) => cause,
+            ListAuditFindingsError::Credentials(ref err) => err.description(),
+            ListAuditFindingsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListAuditFindingsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListAuditTasks
+#[derive(Debug, PartialEq)]
+pub enum ListAuditTasksError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListAuditTasksError {
+    pub fn from_body(body: &str) -> ListAuditTasksError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ListAuditTasksError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        ListAuditTasksError::InvalidRequest(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        ListAuditTasksError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListAuditTasksError::Validation(error_message.to_string())
+                    }
+                    _ => ListAuditTasksError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListAuditTasksError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListAuditTasksError {
+    fn from(err: serde_json::error::Error) -> ListAuditTasksError {
+        ListAuditTasksError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListAuditTasksError {
+    fn from(err: CredentialsError) -> ListAuditTasksError {
+        ListAuditTasksError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListAuditTasksError {
+    fn from(err: HttpDispatchError) -> ListAuditTasksError {
+        ListAuditTasksError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAuditTasksError {
+    fn from(err: io::Error) -> ListAuditTasksError {
+        ListAuditTasksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListAuditTasksError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListAuditTasksError {
+    fn description(&self) -> &str {
+        match *self {
+            ListAuditTasksError::InternalFailure(ref cause) => cause,
+            ListAuditTasksError::InvalidRequest(ref cause) => cause,
+            ListAuditTasksError::Throttling(ref cause) => cause,
+            ListAuditTasksError::Validation(ref cause) => cause,
+            ListAuditTasksError::Credentials(ref err) => err.description(),
+            ListAuditTasksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListAuditTasksError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -13444,6 +16460,297 @@ impl Error for ListRoleAliasesError {
         }
     }
 }
+/// Errors returned by ListScheduledAudits
+#[derive(Debug, PartialEq)]
+pub enum ListScheduledAuditsError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListScheduledAuditsError {
+    pub fn from_body(body: &str) -> ListScheduledAuditsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ListScheduledAuditsError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        ListScheduledAuditsError::InvalidRequest(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        ListScheduledAuditsError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListScheduledAuditsError::Validation(error_message.to_string())
+                    }
+                    _ => ListScheduledAuditsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListScheduledAuditsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListScheduledAuditsError {
+    fn from(err: serde_json::error::Error) -> ListScheduledAuditsError {
+        ListScheduledAuditsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListScheduledAuditsError {
+    fn from(err: CredentialsError) -> ListScheduledAuditsError {
+        ListScheduledAuditsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListScheduledAuditsError {
+    fn from(err: HttpDispatchError) -> ListScheduledAuditsError {
+        ListScheduledAuditsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListScheduledAuditsError {
+    fn from(err: io::Error) -> ListScheduledAuditsError {
+        ListScheduledAuditsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListScheduledAuditsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListScheduledAuditsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListScheduledAuditsError::InternalFailure(ref cause) => cause,
+            ListScheduledAuditsError::InvalidRequest(ref cause) => cause,
+            ListScheduledAuditsError::Throttling(ref cause) => cause,
+            ListScheduledAuditsError::Validation(ref cause) => cause,
+            ListScheduledAuditsError::Credentials(ref err) => err.description(),
+            ListScheduledAuditsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListScheduledAuditsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListSecurityProfiles
+#[derive(Debug, PartialEq)]
+pub enum ListSecurityProfilesError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListSecurityProfilesError {
+    pub fn from_body(body: &str) -> ListSecurityProfilesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ListSecurityProfilesError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        ListSecurityProfilesError::InvalidRequest(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        ListSecurityProfilesError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListSecurityProfilesError::Validation(error_message.to_string())
+                    }
+                    _ => ListSecurityProfilesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListSecurityProfilesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListSecurityProfilesError {
+    fn from(err: serde_json::error::Error) -> ListSecurityProfilesError {
+        ListSecurityProfilesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListSecurityProfilesError {
+    fn from(err: CredentialsError) -> ListSecurityProfilesError {
+        ListSecurityProfilesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListSecurityProfilesError {
+    fn from(err: HttpDispatchError) -> ListSecurityProfilesError {
+        ListSecurityProfilesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListSecurityProfilesError {
+    fn from(err: io::Error) -> ListSecurityProfilesError {
+        ListSecurityProfilesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListSecurityProfilesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListSecurityProfilesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListSecurityProfilesError::InternalFailure(ref cause) => cause,
+            ListSecurityProfilesError::InvalidRequest(ref cause) => cause,
+            ListSecurityProfilesError::Throttling(ref cause) => cause,
+            ListSecurityProfilesError::Validation(ref cause) => cause,
+            ListSecurityProfilesError::Credentials(ref err) => err.description(),
+            ListSecurityProfilesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListSecurityProfilesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListSecurityProfilesForTarget
+#[derive(Debug, PartialEq)]
+pub enum ListSecurityProfilesForTargetError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListSecurityProfilesForTargetError {
+    pub fn from_body(body: &str) -> ListSecurityProfilesForTargetError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ListSecurityProfilesForTargetError::InternalFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => {
+                        ListSecurityProfilesForTargetError::InvalidRequest(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListSecurityProfilesForTargetError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ThrottlingException" => {
+                        ListSecurityProfilesForTargetError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListSecurityProfilesForTargetError::Validation(error_message.to_string())
+                    }
+                    _ => ListSecurityProfilesForTargetError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListSecurityProfilesForTargetError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListSecurityProfilesForTargetError {
+    fn from(err: serde_json::error::Error) -> ListSecurityProfilesForTargetError {
+        ListSecurityProfilesForTargetError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListSecurityProfilesForTargetError {
+    fn from(err: CredentialsError) -> ListSecurityProfilesForTargetError {
+        ListSecurityProfilesForTargetError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListSecurityProfilesForTargetError {
+    fn from(err: HttpDispatchError) -> ListSecurityProfilesForTargetError {
+        ListSecurityProfilesForTargetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListSecurityProfilesForTargetError {
+    fn from(err: io::Error) -> ListSecurityProfilesForTargetError {
+        ListSecurityProfilesForTargetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListSecurityProfilesForTargetError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListSecurityProfilesForTargetError {
+    fn description(&self) -> &str {
+        match *self {
+            ListSecurityProfilesForTargetError::InternalFailure(ref cause) => cause,
+            ListSecurityProfilesForTargetError::InvalidRequest(ref cause) => cause,
+            ListSecurityProfilesForTargetError::ResourceNotFound(ref cause) => cause,
+            ListSecurityProfilesForTargetError::Throttling(ref cause) => cause,
+            ListSecurityProfilesForTargetError::Validation(ref cause) => cause,
+            ListSecurityProfilesForTargetError::Credentials(ref err) => err.description(),
+            ListSecurityProfilesForTargetError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListSecurityProfilesForTargetError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListStreams
 #[derive(Debug, PartialEq)]
 pub enum ListStreamsError {
@@ -13554,7 +16861,7 @@ pub enum ListTargetsForPolicyError {
     InternalFailure(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    /// <p>The number of attached entities exceeds the limit.</p>
+    /// <p>A limit has been exceeded.</p>
     LimitExceeded(String),
     /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
@@ -13661,6 +16968,111 @@ impl Error for ListTargetsForPolicyError {
                 dispatch_error.description()
             }
             ListTargetsForPolicyError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListTargetsForSecurityProfile
+#[derive(Debug, PartialEq)]
+pub enum ListTargetsForSecurityProfileError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListTargetsForSecurityProfileError {
+    pub fn from_body(body: &str) -> ListTargetsForSecurityProfileError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ListTargetsForSecurityProfileError::InternalFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => {
+                        ListTargetsForSecurityProfileError::InvalidRequest(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListTargetsForSecurityProfileError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ThrottlingException" => {
+                        ListTargetsForSecurityProfileError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListTargetsForSecurityProfileError::Validation(error_message.to_string())
+                    }
+                    _ => ListTargetsForSecurityProfileError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListTargetsForSecurityProfileError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListTargetsForSecurityProfileError {
+    fn from(err: serde_json::error::Error) -> ListTargetsForSecurityProfileError {
+        ListTargetsForSecurityProfileError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListTargetsForSecurityProfileError {
+    fn from(err: CredentialsError) -> ListTargetsForSecurityProfileError {
+        ListTargetsForSecurityProfileError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListTargetsForSecurityProfileError {
+    fn from(err: HttpDispatchError) -> ListTargetsForSecurityProfileError {
+        ListTargetsForSecurityProfileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTargetsForSecurityProfileError {
+    fn from(err: io::Error) -> ListTargetsForSecurityProfileError {
+        ListTargetsForSecurityProfileError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListTargetsForSecurityProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTargetsForSecurityProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTargetsForSecurityProfileError::InternalFailure(ref cause) => cause,
+            ListTargetsForSecurityProfileError::InvalidRequest(ref cause) => cause,
+            ListTargetsForSecurityProfileError::ResourceNotFound(ref cause) => cause,
+            ListTargetsForSecurityProfileError::Throttling(ref cause) => cause,
+            ListTargetsForSecurityProfileError::Validation(ref cause) => cause,
+            ListTargetsForSecurityProfileError::Credentials(ref err) => err.description(),
+            ListTargetsForSecurityProfileError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListTargetsForSecurityProfileError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -14648,6 +18060,99 @@ impl Error for ListV2LoggingLevelsError {
         }
     }
 }
+/// Errors returned by ListViolationEvents
+#[derive(Debug, PartialEq)]
+pub enum ListViolationEventsError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListViolationEventsError {
+    pub fn from_body(body: &str) -> ListViolationEventsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ListViolationEventsError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        ListViolationEventsError::InvalidRequest(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        ListViolationEventsError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListViolationEventsError::Validation(error_message.to_string())
+                    }
+                    _ => ListViolationEventsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListViolationEventsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListViolationEventsError {
+    fn from(err: serde_json::error::Error) -> ListViolationEventsError {
+        ListViolationEventsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListViolationEventsError {
+    fn from(err: CredentialsError) -> ListViolationEventsError {
+        ListViolationEventsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListViolationEventsError {
+    fn from(err: HttpDispatchError) -> ListViolationEventsError {
+        ListViolationEventsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListViolationEventsError {
+    fn from(err: io::Error) -> ListViolationEventsError {
+        ListViolationEventsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListViolationEventsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListViolationEventsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListViolationEventsError::InternalFailure(ref cause) => cause,
+            ListViolationEventsError::InvalidRequest(ref cause) => cause,
+            ListViolationEventsError::Throttling(ref cause) => cause,
+            ListViolationEventsError::Validation(ref cause) => cause,
+            ListViolationEventsError::Credentials(ref err) => err.description(),
+            ListViolationEventsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListViolationEventsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by RegisterCACertificate
 #[derive(Debug, PartialEq)]
 pub enum RegisterCACertificateError {
@@ -14657,7 +18162,7 @@ pub enum RegisterCACertificateError {
     InternalFailure(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    /// <p>The number of attached entities exceeds the limit.</p>
+    /// <p>A limit has been exceeded.</p>
     LimitExceeded(String),
     /// <p>The registration code is invalid.</p>
     RegistrationCodeValidation(String),
@@ -15992,6 +19497,105 @@ impl Error for SetV2LoggingOptionsError {
         }
     }
 }
+/// Errors returned by StartOnDemandAuditTask
+#[derive(Debug, PartialEq)]
+pub enum StartOnDemandAuditTaskError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>A limit has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl StartOnDemandAuditTaskError {
+    pub fn from_body(body: &str) -> StartOnDemandAuditTaskError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        StartOnDemandAuditTaskError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        StartOnDemandAuditTaskError::InvalidRequest(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        StartOnDemandAuditTaskError::LimitExceeded(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        StartOnDemandAuditTaskError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        StartOnDemandAuditTaskError::Validation(error_message.to_string())
+                    }
+                    _ => StartOnDemandAuditTaskError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => StartOnDemandAuditTaskError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for StartOnDemandAuditTaskError {
+    fn from(err: serde_json::error::Error) -> StartOnDemandAuditTaskError {
+        StartOnDemandAuditTaskError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StartOnDemandAuditTaskError {
+    fn from(err: CredentialsError) -> StartOnDemandAuditTaskError {
+        StartOnDemandAuditTaskError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StartOnDemandAuditTaskError {
+    fn from(err: HttpDispatchError) -> StartOnDemandAuditTaskError {
+        StartOnDemandAuditTaskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartOnDemandAuditTaskError {
+    fn from(err: io::Error) -> StartOnDemandAuditTaskError {
+        StartOnDemandAuditTaskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StartOnDemandAuditTaskError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartOnDemandAuditTaskError {
+    fn description(&self) -> &str {
+        match *self {
+            StartOnDemandAuditTaskError::InternalFailure(ref cause) => cause,
+            StartOnDemandAuditTaskError::InvalidRequest(ref cause) => cause,
+            StartOnDemandAuditTaskError::LimitExceeded(ref cause) => cause,
+            StartOnDemandAuditTaskError::Throttling(ref cause) => cause,
+            StartOnDemandAuditTaskError::Validation(ref cause) => cause,
+            StartOnDemandAuditTaskError::Credentials(ref err) => err.description(),
+            StartOnDemandAuditTaskError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StartOnDemandAuditTaskError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by StartThingRegistrationTask
 #[derive(Debug, PartialEq)]
 pub enum StartThingRegistrationTaskError {
@@ -16205,7 +19809,7 @@ pub enum TestAuthorizationError {
     InternalFailure(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    /// <p>The number of attached entities exceeds the limit.</p>
+    /// <p>A limit has been exceeded.</p>
     LimitExceeded(String),
     /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
@@ -16555,6 +20159,103 @@ impl Error for TransferCertificateError {
         }
     }
 }
+/// Errors returned by UpdateAccountAuditConfiguration
+#[derive(Debug, PartialEq)]
+pub enum UpdateAccountAuditConfigurationError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateAccountAuditConfigurationError {
+    pub fn from_body(body: &str) -> UpdateAccountAuditConfigurationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        UpdateAccountAuditConfigurationError::InternalFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => {
+                        UpdateAccountAuditConfigurationError::InvalidRequest(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ThrottlingException" => UpdateAccountAuditConfigurationError::Throttling(
+                        String::from(error_message),
+                    ),
+                    "ValidationException" => {
+                        UpdateAccountAuditConfigurationError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateAccountAuditConfigurationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateAccountAuditConfigurationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateAccountAuditConfigurationError {
+    fn from(err: serde_json::error::Error) -> UpdateAccountAuditConfigurationError {
+        UpdateAccountAuditConfigurationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateAccountAuditConfigurationError {
+    fn from(err: CredentialsError) -> UpdateAccountAuditConfigurationError {
+        UpdateAccountAuditConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateAccountAuditConfigurationError {
+    fn from(err: HttpDispatchError) -> UpdateAccountAuditConfigurationError {
+        UpdateAccountAuditConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateAccountAuditConfigurationError {
+    fn from(err: io::Error) -> UpdateAccountAuditConfigurationError {
+        UpdateAccountAuditConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateAccountAuditConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateAccountAuditConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateAccountAuditConfigurationError::InternalFailure(ref cause) => cause,
+            UpdateAccountAuditConfigurationError::InvalidRequest(ref cause) => cause,
+            UpdateAccountAuditConfigurationError::Throttling(ref cause) => cause,
+            UpdateAccountAuditConfigurationError::Validation(ref cause) => cause,
+            UpdateAccountAuditConfigurationError::Credentials(ref err) => err.description(),
+            UpdateAccountAuditConfigurationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateAccountAuditConfigurationError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum UpdateAuthorizerError {
@@ -16562,7 +20263,7 @@ pub enum UpdateAuthorizerError {
     InternalFailure(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    /// <p>The number of attached entities exceeds the limit.</p>
+    /// <p>A limit has been exceeded.</p>
     LimitExceeded(String),
     /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
@@ -17209,6 +20910,210 @@ impl Error for UpdateRoleAliasError {
         }
     }
 }
+/// Errors returned by UpdateScheduledAudit
+#[derive(Debug, PartialEq)]
+pub enum UpdateScheduledAuditError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateScheduledAuditError {
+    pub fn from_body(body: &str) -> UpdateScheduledAuditError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        UpdateScheduledAuditError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        UpdateScheduledAuditError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpdateScheduledAuditError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        UpdateScheduledAuditError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateScheduledAuditError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateScheduledAuditError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateScheduledAuditError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateScheduledAuditError {
+    fn from(err: serde_json::error::Error) -> UpdateScheduledAuditError {
+        UpdateScheduledAuditError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateScheduledAuditError {
+    fn from(err: CredentialsError) -> UpdateScheduledAuditError {
+        UpdateScheduledAuditError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateScheduledAuditError {
+    fn from(err: HttpDispatchError) -> UpdateScheduledAuditError {
+        UpdateScheduledAuditError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateScheduledAuditError {
+    fn from(err: io::Error) -> UpdateScheduledAuditError {
+        UpdateScheduledAuditError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateScheduledAuditError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateScheduledAuditError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateScheduledAuditError::InternalFailure(ref cause) => cause,
+            UpdateScheduledAuditError::InvalidRequest(ref cause) => cause,
+            UpdateScheduledAuditError::ResourceNotFound(ref cause) => cause,
+            UpdateScheduledAuditError::Throttling(ref cause) => cause,
+            UpdateScheduledAuditError::Validation(ref cause) => cause,
+            UpdateScheduledAuditError::Credentials(ref err) => err.description(),
+            UpdateScheduledAuditError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateScheduledAuditError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateSecurityProfile
+#[derive(Debug, PartialEq)]
+pub enum UpdateSecurityProfileError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>An exception thrown when the version of an entity specified with the <code>expectedVersion</code> parameter does not match the latest version in the system.</p>
+    VersionConflict(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateSecurityProfileError {
+    pub fn from_body(body: &str) -> UpdateSecurityProfileError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        UpdateSecurityProfileError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        UpdateSecurityProfileError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpdateSecurityProfileError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        UpdateSecurityProfileError::Throttling(String::from(error_message))
+                    }
+                    "VersionConflictException" => {
+                        UpdateSecurityProfileError::VersionConflict(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateSecurityProfileError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateSecurityProfileError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateSecurityProfileError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateSecurityProfileError {
+    fn from(err: serde_json::error::Error) -> UpdateSecurityProfileError {
+        UpdateSecurityProfileError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateSecurityProfileError {
+    fn from(err: CredentialsError) -> UpdateSecurityProfileError {
+        UpdateSecurityProfileError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateSecurityProfileError {
+    fn from(err: HttpDispatchError) -> UpdateSecurityProfileError {
+        UpdateSecurityProfileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateSecurityProfileError {
+    fn from(err: io::Error) -> UpdateSecurityProfileError {
+        UpdateSecurityProfileError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateSecurityProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateSecurityProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateSecurityProfileError::InternalFailure(ref cause) => cause,
+            UpdateSecurityProfileError::InvalidRequest(ref cause) => cause,
+            UpdateSecurityProfileError::ResourceNotFound(ref cause) => cause,
+            UpdateSecurityProfileError::Throttling(ref cause) => cause,
+            UpdateSecurityProfileError::VersionConflict(ref cause) => cause,
+            UpdateSecurityProfileError::Validation(ref cause) => cause,
+            UpdateSecurityProfileError::Credentials(ref err) => err.description(),
+            UpdateSecurityProfileError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateSecurityProfileError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateStream
 #[derive(Debug, PartialEq)]
 pub enum UpdateStreamError {
@@ -17333,7 +21238,7 @@ pub enum UpdateThingError {
     Throttling(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
-    /// <p>An exception thrown when the version of a thing passed to a command is different than the version specified with the --version parameter.</p>
+    /// <p>An exception thrown when the version of an entity specified with the <code>expectedVersion</code> parameter does not match the latest version in the system.</p>
     VersionConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -17444,7 +21349,7 @@ pub enum UpdateThingGroupError {
     ResourceNotFound(String),
     /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    /// <p>An exception thrown when the version of a thing passed to a command is different than the version specified with the --version parameter.</p>
+    /// <p>An exception thrown when the version of an entity specified with the <code>expectedVersion</code> parameter does not match the latest version in the system.</p>
     VersionConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -17637,6 +21542,103 @@ impl Error for UpdateThingGroupsForThingError {
         }
     }
 }
+/// Errors returned by ValidateSecurityProfileBehaviors
+#[derive(Debug, PartialEq)]
+pub enum ValidateSecurityProfileBehaviorsError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ValidateSecurityProfileBehaviorsError {
+    pub fn from_body(body: &str) -> ValidateSecurityProfileBehaviorsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ValidateSecurityProfileBehaviorsError::InternalFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => {
+                        ValidateSecurityProfileBehaviorsError::InvalidRequest(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ThrottlingException" => ValidateSecurityProfileBehaviorsError::Throttling(
+                        String::from(error_message),
+                    ),
+                    "ValidationException" => {
+                        ValidateSecurityProfileBehaviorsError::Validation(error_message.to_string())
+                    }
+                    _ => ValidateSecurityProfileBehaviorsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ValidateSecurityProfileBehaviorsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ValidateSecurityProfileBehaviorsError {
+    fn from(err: serde_json::error::Error) -> ValidateSecurityProfileBehaviorsError {
+        ValidateSecurityProfileBehaviorsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ValidateSecurityProfileBehaviorsError {
+    fn from(err: CredentialsError) -> ValidateSecurityProfileBehaviorsError {
+        ValidateSecurityProfileBehaviorsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ValidateSecurityProfileBehaviorsError {
+    fn from(err: HttpDispatchError) -> ValidateSecurityProfileBehaviorsError {
+        ValidateSecurityProfileBehaviorsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ValidateSecurityProfileBehaviorsError {
+    fn from(err: io::Error) -> ValidateSecurityProfileBehaviorsError {
+        ValidateSecurityProfileBehaviorsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ValidateSecurityProfileBehaviorsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ValidateSecurityProfileBehaviorsError {
+    fn description(&self) -> &str {
+        match *self {
+            ValidateSecurityProfileBehaviorsError::InternalFailure(ref cause) => cause,
+            ValidateSecurityProfileBehaviorsError::InvalidRequest(ref cause) => cause,
+            ValidateSecurityProfileBehaviorsError::Throttling(ref cause) => cause,
+            ValidateSecurityProfileBehaviorsError::Validation(ref cause) => cause,
+            ValidateSecurityProfileBehaviorsError::Credentials(ref err) => err.description(),
+            ValidateSecurityProfileBehaviorsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ValidateSecurityProfileBehaviorsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the AWS IoT API. AWS IoT clients implement this trait.
 pub trait Iot {
     /// <p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>
@@ -17666,11 +21668,23 @@ pub trait Iot {
         input: AttachPrincipalPolicyRequest,
     ) -> RusotoFuture<(), AttachPrincipalPolicyError>;
 
+    /// <p>Associates a Device Defender security profile with a thing group or with this account. Each thing group or account can have up to five security profiles associated with it.</p>
+    fn attach_security_profile(
+        &self,
+        input: AttachSecurityProfileRequest,
+    ) -> RusotoFuture<AttachSecurityProfileResponse, AttachSecurityProfileError>;
+
     /// <p>Attaches the specified principal to the specified thing.</p>
     fn attach_thing_principal(
         &self,
         input: AttachThingPrincipalRequest,
     ) -> RusotoFuture<AttachThingPrincipalResponse, AttachThingPrincipalError>;
+
+    /// <p>Cancels an audit that is in progress. The audit can be either scheduled or on-demand. If the audit is not in progress, an "InvalidRequestException" occurs.</p>
+    fn cancel_audit_task(
+        &self,
+        input: CancelAuditTaskRequest,
+    ) -> RusotoFuture<CancelAuditTaskResponse, CancelAuditTaskError>;
 
     /// <p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>
     fn cancel_certificate_transfer(
@@ -17683,6 +21697,12 @@ pub trait Iot {
         &self,
         input: CancelJobRequest,
     ) -> RusotoFuture<CancelJobResponse, CancelJobError>;
+
+    /// <p>Cancels the execution of a job for a given thing.</p>
+    fn cancel_job_execution(
+        &self,
+        input: CancelJobExecutionRequest,
+    ) -> RusotoFuture<(), CancelJobExecutionError>;
 
     /// <p>Clears the default authorizer.</p>
     fn clear_default_authorizer(
@@ -17737,19 +21757,31 @@ pub trait Iot {
         input: CreateRoleAliasRequest,
     ) -> RusotoFuture<CreateRoleAliasResponse, CreateRoleAliasError>;
 
+    /// <p>Creates a scheduled audit that is run at a specified time interval.</p>
+    fn create_scheduled_audit(
+        &self,
+        input: CreateScheduledAuditRequest,
+    ) -> RusotoFuture<CreateScheduledAuditResponse, CreateScheduledAuditError>;
+
+    /// <p>Creates a Device Defender security profile.</p>
+    fn create_security_profile(
+        &self,
+        input: CreateSecurityProfileRequest,
+    ) -> RusotoFuture<CreateSecurityProfileResponse, CreateSecurityProfileError>;
+
     /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream. The total size of a file associated with the stream cannot exceed more than 2 MB. The stream will be created with version 0. If a stream is created with the same streamID as a stream that existed and was deleted within last 90 days, we will resurrect that old stream by incrementing the version by 1.</p>
     fn create_stream(
         &self,
         input: CreateStreamRequest,
     ) -> RusotoFuture<CreateStreamResponse, CreateStreamError>;
 
-    /// <p>Creates a thing record in the thing registry.</p>
+    /// <p><p>Creates a thing record in the registry.</p> <note> <p>This is a control plane operation. See <a href="http://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
     fn create_thing(
         &self,
         input: CreateThingRequest,
     ) -> RusotoFuture<CreateThingResponse, CreateThingError>;
 
-    /// <p>Create a thing group.</p>
+    /// <p><p>Create a thing group.</p> <note> <p>This is a control plane operation. See <a href="http://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
     fn create_thing_group(
         &self,
         input: CreateThingGroupRequest,
@@ -17766,6 +21798,12 @@ pub trait Iot {
         &self,
         input: CreateTopicRuleRequest,
     ) -> RusotoFuture<(), CreateTopicRuleError>;
+
+    /// <p>Restores the default settings for Device Defender audits for this account. Any configuration data you entered is deleted and all audit checks are reset to disabled. </p>
+    fn delete_account_audit_configuration(
+        &self,
+        input: DeleteAccountAuditConfigurationRequest,
+    ) -> RusotoFuture<DeleteAccountAuditConfigurationResponse, DeleteAccountAuditConfigurationError>;
 
     /// <p>Deletes an authorizer.</p>
     fn delete_authorizer(
@@ -17784,6 +21822,15 @@ pub trait Iot {
         &self,
         input: DeleteCertificateRequest,
     ) -> RusotoFuture<(), DeleteCertificateError>;
+
+    /// <p>Deletes a job and its related job executions.</p> <p>Deleting a job may take time, depending on the number of job executions created for the job and various other factors. While the job is being deleted, the status of the job will be shown as "DELETION_IN_PROGRESS". Attempting to delete or cancel a job whose status is already "DELETION_IN_PROGRESS" will result in an error.</p> <p>Only 10 jobs may have status "DELETION_IN_PROGRESS" at the same time, or a LimitExceededException will occur.</p>
+    fn delete_job(&self, input: DeleteJobRequest) -> RusotoFuture<(), DeleteJobError>;
+
+    /// <p>Deletes a job execution.</p>
+    fn delete_job_execution(
+        &self,
+        input: DeleteJobExecutionRequest,
+    ) -> RusotoFuture<(), DeleteJobExecutionError>;
 
     /// <p>Delete an OTA update.</p>
     fn delete_ota_update(
@@ -17810,6 +21857,18 @@ pub trait Iot {
         &self,
         input: DeleteRoleAliasRequest,
     ) -> RusotoFuture<DeleteRoleAliasResponse, DeleteRoleAliasError>;
+
+    /// <p>Deletes a scheduled audit.</p>
+    fn delete_scheduled_audit(
+        &self,
+        input: DeleteScheduledAuditRequest,
+    ) -> RusotoFuture<DeleteScheduledAuditResponse, DeleteScheduledAuditError>;
+
+    /// <p>Deletes a Device Defender security profile.</p>
+    fn delete_security_profile(
+        &self,
+        input: DeleteSecurityProfileRequest,
+    ) -> RusotoFuture<DeleteSecurityProfileResponse, DeleteSecurityProfileError>;
 
     /// <p>Deletes a stream.</p>
     fn delete_stream(
@@ -17852,6 +21911,20 @@ pub trait Iot {
         &self,
         input: DeprecateThingTypeRequest,
     ) -> RusotoFuture<DeprecateThingTypeResponse, DeprecateThingTypeError>;
+
+    /// <p>Gets information about the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
+    fn describe_account_audit_configuration(
+        &self,
+    ) -> RusotoFuture<
+        DescribeAccountAuditConfigurationResponse,
+        DescribeAccountAuditConfigurationError,
+    >;
+
+    /// <p>Gets information about a Device Defender audit.</p>
+    fn describe_audit_task(
+        &self,
+        input: DescribeAuditTaskRequest,
+    ) -> RusotoFuture<DescribeAuditTaskResponse, DescribeAuditTaskError>;
 
     /// <p>Describes an authorizer.</p>
     fn describe_authorizer(
@@ -17911,6 +21984,18 @@ pub trait Iot {
         input: DescribeRoleAliasRequest,
     ) -> RusotoFuture<DescribeRoleAliasResponse, DescribeRoleAliasError>;
 
+    /// <p>Gets information about a scheduled audit.</p>
+    fn describe_scheduled_audit(
+        &self,
+        input: DescribeScheduledAuditRequest,
+    ) -> RusotoFuture<DescribeScheduledAuditResponse, DescribeScheduledAuditError>;
+
+    /// <p>Gets information about a Device Defender security profile.</p>
+    fn describe_security_profile(
+        &self,
+        input: DescribeSecurityProfileRequest,
+    ) -> RusotoFuture<DescribeSecurityProfileResponse, DescribeSecurityProfileError>;
+
     /// <p>Gets information about a stream.</p>
     fn describe_stream(
         &self,
@@ -17950,6 +22035,12 @@ pub trait Iot {
         input: DetachPrincipalPolicyRequest,
     ) -> RusotoFuture<(), DetachPrincipalPolicyError>;
 
+    /// <p>Disassociates a Device Defender security profile from a thing group or from this account.</p>
+    fn detach_security_profile(
+        &self,
+        input: DetachSecurityProfileRequest,
+    ) -> RusotoFuture<DetachSecurityProfileResponse, DetachSecurityProfileError>;
+
     /// <p>Detaches the specified principal from the specified thing.</p>
     fn detach_thing_principal(
         &self,
@@ -17968,7 +22059,7 @@ pub trait Iot {
         input: EnableTopicRuleRequest,
     ) -> RusotoFuture<(), EnableTopicRuleError>;
 
-    /// <p>Gets effective policies.</p>
+    /// <p>Gets a list of the policies that have an effect on the authorization behavior of the specified device when it connects to the AWS IoT device gateway.</p>
     fn get_effective_policies(
         &self,
         input: GetEffectivePoliciesRequest,
@@ -17985,7 +22076,7 @@ pub trait Iot {
         input: GetJobDocumentRequest,
     ) -> RusotoFuture<GetJobDocumentResponse, GetJobDocumentError>;
 
-    /// <p>Gets the logging options.</p>
+    /// <p>Gets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>GetV2LoggingOptions</code> instead.</p>
     fn get_logging_options(
         &self,
     ) -> RusotoFuture<GetLoggingOptionsResponse, GetLoggingOptionsError>;
@@ -18024,11 +22115,29 @@ pub trait Iot {
         &self,
     ) -> RusotoFuture<GetV2LoggingOptionsResponse, GetV2LoggingOptionsError>;
 
+    /// <p>Lists the active violations for a given Device Defender security profile.</p>
+    fn list_active_violations(
+        &self,
+        input: ListActiveViolationsRequest,
+    ) -> RusotoFuture<ListActiveViolationsResponse, ListActiveViolationsError>;
+
     /// <p>Lists the policies attached to the specified thing group.</p>
     fn list_attached_policies(
         &self,
         input: ListAttachedPoliciesRequest,
     ) -> RusotoFuture<ListAttachedPoliciesResponse, ListAttachedPoliciesError>;
+
+    /// <p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 180 days.)</p>
+    fn list_audit_findings(
+        &self,
+        input: ListAuditFindingsRequest,
+    ) -> RusotoFuture<ListAuditFindingsResponse, ListAuditFindingsError>;
+
+    /// <p>Lists the Device Defender audits that have been performed during a given time period.</p>
+    fn list_audit_tasks(
+        &self,
+        input: ListAuditTasksRequest,
+    ) -> RusotoFuture<ListAuditTasksResponse, ListAuditTasksError>;
 
     /// <p>Lists the authorizers registered in your account.</p>
     fn list_authorizers(
@@ -18123,6 +22232,24 @@ pub trait Iot {
         input: ListRoleAliasesRequest,
     ) -> RusotoFuture<ListRoleAliasesResponse, ListRoleAliasesError>;
 
+    /// <p>Lists all of your scheduled audits.</p>
+    fn list_scheduled_audits(
+        &self,
+        input: ListScheduledAuditsRequest,
+    ) -> RusotoFuture<ListScheduledAuditsResponse, ListScheduledAuditsError>;
+
+    /// <p>Lists the Device Defender security profiles you have created. You can use filters to list only those security profiles associated with a thing group or only those associated with your account.</p>
+    fn list_security_profiles(
+        &self,
+        input: ListSecurityProfilesRequest,
+    ) -> RusotoFuture<ListSecurityProfilesResponse, ListSecurityProfilesError>;
+
+    /// <p>Lists the Device Defender security profiles attached to a target (thing group).</p>
+    fn list_security_profiles_for_target(
+        &self,
+        input: ListSecurityProfilesForTargetRequest,
+    ) -> RusotoFuture<ListSecurityProfilesForTargetResponse, ListSecurityProfilesForTargetError>;
+
     /// <p>Lists all of the streams in your AWS account.</p>
     fn list_streams(
         &self,
@@ -18134,6 +22261,12 @@ pub trait Iot {
         &self,
         input: ListTargetsForPolicyRequest,
     ) -> RusotoFuture<ListTargetsForPolicyResponse, ListTargetsForPolicyError>;
+
+    /// <p>Lists the targets (thing groups) associated with a given Device Defender security profile.</p>
+    fn list_targets_for_security_profile(
+        &self,
+        input: ListTargetsForSecurityProfileRequest,
+    ) -> RusotoFuture<ListTargetsForSecurityProfileResponse, ListTargetsForSecurityProfileError>;
 
     /// <p>List the thing groups in your account.</p>
     fn list_thing_groups(
@@ -18195,6 +22328,12 @@ pub trait Iot {
         input: ListV2LoggingLevelsRequest,
     ) -> RusotoFuture<ListV2LoggingLevelsResponse, ListV2LoggingLevelsError>;
 
+    /// <p>Lists the Device Defender security profile violations discovered during the given time period. You can use filters to limit the results to those alerts issued for a particular security profile, behavior or thing (device).</p>
+    fn list_violation_events(
+        &self,
+        input: ListViolationEventsRequest,
+    ) -> RusotoFuture<ListViolationEventsResponse, ListViolationEventsError>;
+
     /// <p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>
     fn register_ca_certificate(
         &self,
@@ -18249,7 +22388,7 @@ pub trait Iot {
         input: SetDefaultPolicyVersionRequest,
     ) -> RusotoFuture<(), SetDefaultPolicyVersionError>;
 
-    /// <p>Sets the logging options.</p>
+    /// <p>Sets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>SetV2LoggingOptions</code> instead.</p>
     fn set_logging_options(
         &self,
         input: SetLoggingOptionsRequest,
@@ -18267,6 +22406,12 @@ pub trait Iot {
         input: SetV2LoggingOptionsRequest,
     ) -> RusotoFuture<(), SetV2LoggingOptionsError>;
 
+    /// <p>Starts an on-demand Device Defender audit.</p>
+    fn start_on_demand_audit_task(
+        &self,
+        input: StartOnDemandAuditTaskRequest,
+    ) -> RusotoFuture<StartOnDemandAuditTaskResponse, StartOnDemandAuditTaskError>;
+
     /// <p>Creates a bulk thing provisioning task.</p>
     fn start_thing_registration_task(
         &self,
@@ -18279,13 +22424,13 @@ pub trait Iot {
         input: StopThingRegistrationTaskRequest,
     ) -> RusotoFuture<StopThingRegistrationTaskResponse, StopThingRegistrationTaskError>;
 
-    /// <p>Test custom authorization.</p>
+    /// <p>Tests if a specified principal is authorized to perform an AWS IoT action on a specified resource. Use this to test and debug the authorization behavior of devices that connect to the AWS IoT device gateway.</p>
     fn test_authorization(
         &self,
         input: TestAuthorizationRequest,
     ) -> RusotoFuture<TestAuthorizationResponse, TestAuthorizationError>;
 
-    /// <p>Invoke the specified custom authorizer for testing purposes.</p>
+    /// <p>Tests a custom authorization behavior by invoking a specified custom authorizer. Use this to test and debug the custom authorization behavior of devices that connect to the AWS IoT device gateway.</p>
     fn test_invoke_authorizer(
         &self,
         input: TestInvokeAuthorizerRequest,
@@ -18296,6 +22441,12 @@ pub trait Iot {
         &self,
         input: TransferCertificateRequest,
     ) -> RusotoFuture<TransferCertificateResponse, TransferCertificateError>;
+
+    /// <p>Configures or reconfigures the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
+    fn update_account_audit_configuration(
+        &self,
+        input: UpdateAccountAuditConfigurationRequest,
+    ) -> RusotoFuture<UpdateAccountAuditConfigurationResponse, UpdateAccountAuditConfigurationError>;
 
     /// <p>Updates an authorizer.</p>
     fn update_authorizer(
@@ -18333,6 +22484,18 @@ pub trait Iot {
         input: UpdateRoleAliasRequest,
     ) -> RusotoFuture<UpdateRoleAliasResponse, UpdateRoleAliasError>;
 
+    /// <p>Updates a scheduled audit, including what checks are performed and how often the audit takes place.</p>
+    fn update_scheduled_audit(
+        &self,
+        input: UpdateScheduledAuditRequest,
+    ) -> RusotoFuture<UpdateScheduledAuditResponse, UpdateScheduledAuditError>;
+
+    /// <p>Updates a Device Defender security profile.</p>
+    fn update_security_profile(
+        &self,
+        input: UpdateSecurityProfileRequest,
+    ) -> RusotoFuture<UpdateSecurityProfileResponse, UpdateSecurityProfileError>;
+
     /// <p>Updates an existing stream. The stream version will be incremented by one.</p>
     fn update_stream(
         &self,
@@ -18356,6 +22519,12 @@ pub trait Iot {
         &self,
         input: UpdateThingGroupsForThingRequest,
     ) -> RusotoFuture<UpdateThingGroupsForThingResponse, UpdateThingGroupsForThingError>;
+
+    /// <p>Validates a Device Defender security profile behaviors specification.</p>
+    fn validate_security_profile_behaviors(
+        &self,
+        input: ValidateSecurityProfileBehaviorsRequest,
+    ) -> RusotoFuture<ValidateSecurityProfileBehaviorsResponse, ValidateSecurityProfileBehaviorsError>;
 }
 /// A client for the AWS IoT API.
 pub struct IotClient {
@@ -18576,6 +22745,54 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Associates a Device Defender security profile with a thing group or with this account. Each thing group or account can have up to five security profiles associated with it.</p>
+    fn attach_security_profile(
+        &self,
+        input: AttachSecurityProfileRequest,
+    ) -> RusotoFuture<AttachSecurityProfileResponse, AttachSecurityProfileError> {
+        let request_uri = format!(
+            "/security-profiles/{security_profile_name}/targets",
+            security_profile_name = input.security_profile_name
+        );
+
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        params.put(
+            "securityProfileTargetArn",
+            &input.security_profile_target_arn,
+        );
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<AttachSecurityProfileResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(AttachSecurityProfileError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Attaches the specified principal to the specified thing.</p>
     fn attach_thing_principal(
         &self,
@@ -18612,6 +22829,43 @@ impl Iot for IotClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AttachThingPrincipalError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Cancels an audit that is in progress. The audit can be either scheduled or on-demand. If the audit is not in progress, an "InvalidRequestException" occurs.</p>
+    fn cancel_audit_task(
+        &self,
+        input: CancelAuditTaskRequest,
+    ) -> RusotoFuture<CancelAuditTaskResponse, CancelAuditTaskError> {
+        let request_uri = format!("/audit/tasks/{task_id}/cancel", task_id = input.task_id);
+
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CancelAuditTaskResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CancelAuditTaskError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -18665,6 +22919,12 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
+        let mut params = Params::new();
+        if let Some(ref x) = input.force {
+            params.put("force", x);
+        }
+        request.set_params(params);
+
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
@@ -18683,6 +22943,47 @@ impl Iot for IotClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CancelJobError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Cancels the execution of a job for a given thing.</p>
+    fn cancel_job_execution(
+        &self,
+        input: CancelJobExecutionRequest,
+    ) -> RusotoFuture<(), CancelJobExecutionError> {
+        let request_uri = format!(
+            "/things/{thing_name}/jobs/{job_id}/cancel",
+            job_id = input.job_id,
+            thing_name = input.thing_name
+        );
+
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.force {
+            params.put("force", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CancelJobExecutionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -19067,6 +23368,92 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Creates a scheduled audit that is run at a specified time interval.</p>
+    fn create_scheduled_audit(
+        &self,
+        input: CreateScheduledAuditRequest,
+    ) -> RusotoFuture<CreateScheduledAuditResponse, CreateScheduledAuditError> {
+        let request_uri = format!(
+            "/audit/scheduledaudits/{scheduled_audit_name}",
+            scheduled_audit_name = input.scheduled_audit_name
+        );
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreateScheduledAuditResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateScheduledAuditError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Creates a Device Defender security profile.</p>
+    fn create_security_profile(
+        &self,
+        input: CreateSecurityProfileRequest,
+    ) -> RusotoFuture<CreateSecurityProfileResponse, CreateSecurityProfileError> {
+        let request_uri = format!(
+            "/security-profiles/{security_profile_name}",
+            security_profile_name = input.security_profile_name
+        );
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreateSecurityProfileResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateSecurityProfileError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream. The total size of a file associated with the stream cannot exceed more than 2 MB. The stream will be created with version 0. If a stream is created with the same streamID as a stream that existed and was deleted within last 90 days, we will resurrect that old stream by incrementing the version by 1.</p>
     fn create_stream(
         &self,
@@ -19106,7 +23493,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Creates a thing record in the thing registry.</p>
+    /// <p><p>Creates a thing record in the registry.</p> <note> <p>This is a control plane operation. See <a href="http://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
     fn create_thing(
         &self,
         input: CreateThingRequest,
@@ -19145,7 +23532,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Create a thing group.</p>
+    /// <p><p>Create a thing group.</p> <note> <p>This is a control plane operation. See <a href="http://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
     fn create_thing_group(
         &self,
         input: CreateThingGroupRequest,
@@ -19253,6 +23640,52 @@ impl Iot for IotClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateTopicRuleError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Restores the default settings for Device Defender audits for this account. Any configuration data you entered is deleted and all audit checks are reset to disabled. </p>
+    fn delete_account_audit_configuration(
+        &self,
+        input: DeleteAccountAuditConfigurationRequest,
+    ) -> RusotoFuture<DeleteAccountAuditConfigurationResponse, DeleteAccountAuditConfigurationError>
+    {
+        let request_uri = "/audit/configuration";
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.delete_scheduled_audits {
+            params.put("deleteScheduledAudits", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DeleteAccountAuditConfigurationResponse>(&body)
+                            .unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteAccountAuditConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -19372,6 +23805,78 @@ impl Iot for IotClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteCertificateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Deletes a job and its related job executions.</p> <p>Deleting a job may take time, depending on the number of job executions created for the job and various other factors. While the job is being deleted, the status of the job will be shown as "DELETION_IN_PROGRESS". Attempting to delete or cancel a job whose status is already "DELETION_IN_PROGRESS" will result in an error.</p> <p>Only 10 jobs may have status "DELETION_IN_PROGRESS" at the same time, or a LimitExceededException will occur.</p>
+    fn delete_job(&self, input: DeleteJobRequest) -> RusotoFuture<(), DeleteJobError> {
+        let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.force {
+            params.put("force", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteJobError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Deletes a job execution.</p>
+    fn delete_job_execution(
+        &self,
+        input: DeleteJobExecutionRequest,
+    ) -> RusotoFuture<(), DeleteJobExecutionError> {
+        let request_uri = format!(
+            "/things/{thing_name}/jobs/{job_id}/executionNumber/{execution_number}",
+            execution_number = input.execution_number,
+            job_id = input.job_id,
+            thing_name = input.thing_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.force {
+            params.put("force", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteJobExecutionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -19545,6 +24050,94 @@ impl Iot for IotClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteRoleAliasError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Deletes a scheduled audit.</p>
+    fn delete_scheduled_audit(
+        &self,
+        input: DeleteScheduledAuditRequest,
+    ) -> RusotoFuture<DeleteScheduledAuditResponse, DeleteScheduledAuditError> {
+        let request_uri = format!(
+            "/audit/scheduledaudits/{scheduled_audit_name}",
+            scheduled_audit_name = input.scheduled_audit_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DeleteScheduledAuditResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteScheduledAuditError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Deletes a Device Defender security profile.</p>
+    fn delete_security_profile(
+        &self,
+        input: DeleteSecurityProfileRequest,
+    ) -> RusotoFuture<DeleteSecurityProfileResponse, DeleteSecurityProfileError> {
+        let request_uri = format!(
+            "/security-profiles/{security_profile_name}",
+            security_profile_name = input.security_profile_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.expected_version {
+            params.put("expectedVersion", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DeleteSecurityProfileResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteSecurityProfileError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -19817,6 +24410,85 @@ impl Iot for IotClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeprecateThingTypeError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Gets information about the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
+    fn describe_account_audit_configuration(
+        &self,
+    ) -> RusotoFuture<
+        DescribeAccountAuditConfigurationResponse,
+        DescribeAccountAuditConfigurationError,
+    > {
+        let request_uri = "/audit/configuration";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DescribeAccountAuditConfigurationResponse>(&body)
+                            .unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeAccountAuditConfigurationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Gets information about a Device Defender audit.</p>
+    fn describe_audit_task(
+        &self,
+        input: DescribeAuditTaskRequest,
+    ) -> RusotoFuture<DescribeAuditTaskResponse, DescribeAuditTaskError> {
+        let request_uri = format!("/audit/tasks/{task_id}", task_id = input.task_id);
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DescribeAuditTaskResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeAuditTaskError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -20225,6 +24897,88 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Gets information about a scheduled audit.</p>
+    fn describe_scheduled_audit(
+        &self,
+        input: DescribeScheduledAuditRequest,
+    ) -> RusotoFuture<DescribeScheduledAuditResponse, DescribeScheduledAuditError> {
+        let request_uri = format!(
+            "/audit/scheduledaudits/{scheduled_audit_name}",
+            scheduled_audit_name = input.scheduled_audit_name
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DescribeScheduledAuditResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeScheduledAuditError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Gets information about a Device Defender security profile.</p>
+    fn describe_security_profile(
+        &self,
+        input: DescribeSecurityProfileRequest,
+    ) -> RusotoFuture<DescribeSecurityProfileResponse, DescribeSecurityProfileError> {
+        let request_uri = format!(
+            "/security-profiles/{security_profile_name}",
+            security_profile_name = input.security_profile_name
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DescribeSecurityProfileResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeSecurityProfileError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Gets information about a stream.</p>
     fn describe_stream(
         &self,
@@ -20489,6 +25243,54 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Disassociates a Device Defender security profile from a thing group or from this account.</p>
+    fn detach_security_profile(
+        &self,
+        input: DetachSecurityProfileRequest,
+    ) -> RusotoFuture<DetachSecurityProfileResponse, DetachSecurityProfileError> {
+        let request_uri = format!(
+            "/security-profiles/{security_profile_name}/targets",
+            security_profile_name = input.security_profile_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        params.put(
+            "securityProfileTargetArn",
+            &input.security_profile_target_arn,
+        );
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DetachSecurityProfileResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DetachSecurityProfileError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Detaches the specified principal from the specified thing.</p>
     fn detach_thing_principal(
         &self,
@@ -20590,7 +25392,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Gets effective policies.</p>
+    /// <p>Gets a list of the policies that have an effect on the authorization behavior of the specified device when it connects to the AWS IoT device gateway.</p>
     fn get_effective_policies(
         &self,
         input: GetEffectivePoliciesRequest,
@@ -20710,7 +25512,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Gets the logging options.</p>
+    /// <p>Gets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>GetV2LoggingOptions</code> instead.</p>
     fn get_logging_options(
         &self,
     ) -> RusotoFuture<GetLoggingOptionsResponse, GetLoggingOptionsError> {
@@ -20976,6 +25778,59 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Lists the active violations for a given Device Defender security profile.</p>
+    fn list_active_violations(
+        &self,
+        input: ListActiveViolationsRequest,
+    ) -> RusotoFuture<ListActiveViolationsResponse, ListActiveViolationsError> {
+        let request_uri = "/active-violations";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        if let Some(ref x) = input.security_profile_name {
+            params.put("securityProfileName", x);
+        }
+        if let Some(ref x) = input.thing_name {
+            params.put("thingName", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListActiveViolationsResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListActiveViolationsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Lists the policies attached to the specified thing group.</p>
     fn list_attached_policies(
         &self,
@@ -21019,6 +25874,100 @@ impl Iot for IotClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListAttachedPoliciesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 180 days.)</p>
+    fn list_audit_findings(
+        &self,
+        input: ListAuditFindingsRequest,
+    ) -> RusotoFuture<ListAuditFindingsResponse, ListAuditFindingsError> {
+        let request_uri = "/audit/findings";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListAuditFindingsResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListAuditFindingsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Lists the Device Defender audits that have been performed during a given time period.</p>
+    fn list_audit_tasks(
+        &self,
+        input: ListAuditTasksRequest,
+    ) -> RusotoFuture<ListAuditTasksResponse, ListAuditTasksError> {
+        let request_uri = "/audit/tasks";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        params.put("endTime", &input.end_time);
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        params.put("startTime", &input.start_time);
+        if let Some(ref x) = input.task_status {
+            params.put("taskStatus", x);
+        }
+        if let Some(ref x) = input.task_type {
+            params.put("taskType", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListAuditTasksResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListAuditTasksError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -21819,6 +26768,156 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Lists all of your scheduled audits.</p>
+    fn list_scheduled_audits(
+        &self,
+        input: ListScheduledAuditsRequest,
+    ) -> RusotoFuture<ListScheduledAuditsResponse, ListScheduledAuditsError> {
+        let request_uri = "/audit/scheduledaudits";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListScheduledAuditsResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListScheduledAuditsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Lists the Device Defender security profiles you have created. You can use filters to list only those security profiles associated with a thing group or only those associated with your account.</p>
+    fn list_security_profiles(
+        &self,
+        input: ListSecurityProfilesRequest,
+    ) -> RusotoFuture<ListSecurityProfilesResponse, ListSecurityProfilesError> {
+        let request_uri = "/security-profiles";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListSecurityProfilesResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListSecurityProfilesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Lists the Device Defender security profiles attached to a target (thing group).</p>
+    fn list_security_profiles_for_target(
+        &self,
+        input: ListSecurityProfilesForTargetRequest,
+    ) -> RusotoFuture<ListSecurityProfilesForTargetResponse, ListSecurityProfilesForTargetError>
+    {
+        let request_uri = "/security-profiles-for-target";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        if let Some(ref x) = input.recursive {
+            params.put("recursive", x);
+        }
+        params.put(
+            "securityProfileTargetArn",
+            &input.security_profile_target_arn,
+        );
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListSecurityProfilesForTargetResponse>(&body)
+                            .unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListSecurityProfilesForTargetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Lists all of the streams in your AWS account.</p>
     fn list_streams(
         &self,
@@ -21911,6 +27010,58 @@ impl Iot for IotClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListTargetsForPolicyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Lists the targets (thing groups) associated with a given Device Defender security profile.</p>
+    fn list_targets_for_security_profile(
+        &self,
+        input: ListTargetsForSecurityProfileRequest,
+    ) -> RusotoFuture<ListTargetsForSecurityProfileResponse, ListTargetsForSecurityProfileError>
+    {
+        let request_uri = format!(
+            "/security-profiles/{security_profile_name}/targets",
+            security_profile_name = input.security_profile_name
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListTargetsForSecurityProfileResponse>(&body)
+                            .unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListTargetsForSecurityProfileError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -22427,6 +27578,61 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Lists the Device Defender security profile violations discovered during the given time period. You can use filters to limit the results to those alerts issued for a particular security profile, behavior or thing (device).</p>
+    fn list_violation_events(
+        &self,
+        input: ListViolationEventsRequest,
+    ) -> RusotoFuture<ListViolationEventsResponse, ListViolationEventsError> {
+        let request_uri = "/violation-events";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        params.put("endTime", &input.end_time);
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        if let Some(ref x) = input.security_profile_name {
+            params.put("securityProfileName", x);
+        }
+        params.put("startTime", &input.start_time);
+        if let Some(ref x) = input.thing_name {
+            params.put("thingName", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListViolationEventsResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListViolationEventsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>
     fn register_ca_certificate(
         &self,
@@ -22772,7 +27978,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Sets the logging options.</p>
+    /// <p>Sets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>SetV2LoggingOptions</code> instead.</p>
     fn set_logging_options(
         &self,
         input: SetLoggingOptionsRequest,
@@ -22865,6 +28071,46 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Starts an on-demand Device Defender audit.</p>
+    fn start_on_demand_audit_task(
+        &self,
+        input: StartOnDemandAuditTaskRequest,
+    ) -> RusotoFuture<StartOnDemandAuditTaskResponse, StartOnDemandAuditTaskError> {
+        let request_uri = "/audit/tasks";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<StartOnDemandAuditTaskResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(StartOnDemandAuditTaskError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Creates a bulk thing provisioning task.</p>
     fn start_thing_registration_task(
         &self,
@@ -22947,7 +28193,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Test custom authorization.</p>
+    /// <p>Tests if a specified principal is authorized to perform an AWS IoT action on a specified resource. Use this to test and debug the authorization behavior of devices that connect to the AWS IoT device gateway.</p>
     fn test_authorization(
         &self,
         input: TestAuthorizationRequest,
@@ -22993,7 +28239,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Invoke the specified custom authorizer for testing purposes.</p>
+    /// <p>Tests a custom authorization behavior by invoking a specified custom authorizer. Use this to test and debug the custom authorization behavior of devices that connect to the AWS IoT device gateway.</p>
     fn test_invoke_authorizer(
         &self,
         input: TestInvokeAuthorizerRequest,
@@ -23076,6 +28322,48 @@ impl Iot for IotClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(TransferCertificateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Configures or reconfigures the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
+    fn update_account_audit_configuration(
+        &self,
+        input: UpdateAccountAuditConfigurationRequest,
+    ) -> RusotoFuture<UpdateAccountAuditConfigurationResponse, UpdateAccountAuditConfigurationError>
+    {
+        let request_uri = "/audit/configuration";
+
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<UpdateAccountAuditConfigurationResponse>(&body)
+                            .unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateAccountAuditConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -23324,6 +28612,98 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Updates a scheduled audit, including what checks are performed and how often the audit takes place.</p>
+    fn update_scheduled_audit(
+        &self,
+        input: UpdateScheduledAuditRequest,
+    ) -> RusotoFuture<UpdateScheduledAuditResponse, UpdateScheduledAuditError> {
+        let request_uri = format!(
+            "/audit/scheduledaudits/{scheduled_audit_name}",
+            scheduled_audit_name = input.scheduled_audit_name
+        );
+
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<UpdateScheduledAuditResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateScheduledAuditError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Updates a Device Defender security profile.</p>
+    fn update_security_profile(
+        &self,
+        input: UpdateSecurityProfileRequest,
+    ) -> RusotoFuture<UpdateSecurityProfileResponse, UpdateSecurityProfileError> {
+        let request_uri = format!(
+            "/security-profiles/{security_profile_name}",
+            security_profile_name = input.security_profile_name
+        );
+
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.expected_version {
+            params.put("expectedVersion", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<UpdateSecurityProfileResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateSecurityProfileError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Updates an existing stream. The stream version will be incremented by one.</p>
     fn update_stream(
         &self,
@@ -23477,6 +28857,48 @@ impl Iot for IotClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateThingGroupsForThingError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Validates a Device Defender security profile behaviors specification.</p>
+    fn validate_security_profile_behaviors(
+        &self,
+        input: ValidateSecurityProfileBehaviorsRequest,
+    ) -> RusotoFuture<ValidateSecurityProfileBehaviorsResponse, ValidateSecurityProfileBehaviorsError>
+    {
+        let request_uri = "/security-profile-behaviors/validate";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ValidateSecurityProfileBehaviorsResponse>(&body)
+                            .unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ValidateSecurityProfileBehaviorsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

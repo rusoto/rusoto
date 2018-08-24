@@ -42,10 +42,22 @@ pub struct Backup {
     #[serde(rename = "ClusterId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_id: Option<String>,
+    #[serde(rename = "CopyTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub copy_timestamp: Option<f64>,
     /// <p>The date and time when the backup was created.</p>
     #[serde(rename = "CreateTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_timestamp: Option<f64>,
+    #[serde(rename = "SourceBackup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_backup: Option<String>,
+    #[serde(rename = "SourceCluster")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_cluster: Option<String>,
+    #[serde(rename = "SourceRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_region: Option<String>,
 }
 
 /// <p>Contains one or more certificates or a certificate signing request (CSR).</p>
@@ -128,6 +140,21 @@ pub struct Cluster {
     #[serde(rename = "VpcId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CopyBackupToRegionRequest {
+    #[serde(rename = "BackupId")]
+    pub backup_id: String,
+    #[serde(rename = "DestinationRegion")]
+    pub destination_region: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct CopyBackupToRegionResponse {
+    #[serde(rename = "DestinationBackup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_backup: Option<DestinationBackup>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -230,6 +257,9 @@ pub struct DescribeBackupsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    #[serde(rename = "SortAscending")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_ascending: Option<bool>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -270,6 +300,22 @@ pub struct DescribeClustersResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DestinationBackup {
+    #[serde(rename = "CreateTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_timestamp: Option<f64>,
+    #[serde(rename = "SourceBackup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_backup: Option<String>,
+    #[serde(rename = "SourceCluster")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_cluster: Option<String>,
+    #[serde(rename = "SourceRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_region: Option<String>,
 }
 
 /// <p>Contains information about a hardware security module (HSM) in an AWS CloudHSM cluster.</p>
@@ -396,6 +442,115 @@ pub struct UntagResourceRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UntagResourceResponse {}
 
+/// Errors returned by CopyBackupToRegion
+#[derive(Debug, PartialEq)]
+pub enum CopyBackupToRegionError {
+    /// <p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
+    CloudHsmAccessDenied(String),
+    /// <p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
+    CloudHsmInternalFailure(String),
+    /// <p>The request was rejected because it is not a valid request.</p>
+    CloudHsmInvalidRequest(String),
+    /// <p>The request was rejected because it refers to a resource that cannot be found.</p>
+    CloudHsmResourceNotFound(String),
+    /// <p>The request was rejected because an error occurred.</p>
+    CloudHsmService(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CopyBackupToRegionError {
+    pub fn from_body(body: &str) -> CopyBackupToRegionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "CloudHsmAccessDeniedException" => {
+                        CopyBackupToRegionError::CloudHsmAccessDenied(String::from(error_message))
+                    }
+                    "CloudHsmInternalFailureException" => {
+                        CopyBackupToRegionError::CloudHsmInternalFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "CloudHsmInvalidRequestException" => {
+                        CopyBackupToRegionError::CloudHsmInvalidRequest(String::from(error_message))
+                    }
+                    "CloudHsmResourceNotFoundException" => {
+                        CopyBackupToRegionError::CloudHsmResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "CloudHsmServiceException" => {
+                        CopyBackupToRegionError::CloudHsmService(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CopyBackupToRegionError::Validation(error_message.to_string())
+                    }
+                    _ => CopyBackupToRegionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CopyBackupToRegionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CopyBackupToRegionError {
+    fn from(err: serde_json::error::Error) -> CopyBackupToRegionError {
+        CopyBackupToRegionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CopyBackupToRegionError {
+    fn from(err: CredentialsError) -> CopyBackupToRegionError {
+        CopyBackupToRegionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CopyBackupToRegionError {
+    fn from(err: HttpDispatchError) -> CopyBackupToRegionError {
+        CopyBackupToRegionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CopyBackupToRegionError {
+    fn from(err: io::Error) -> CopyBackupToRegionError {
+        CopyBackupToRegionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CopyBackupToRegionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CopyBackupToRegionError {
+    fn description(&self) -> &str {
+        match *self {
+            CopyBackupToRegionError::CloudHsmAccessDenied(ref cause) => cause,
+            CopyBackupToRegionError::CloudHsmInternalFailure(ref cause) => cause,
+            CopyBackupToRegionError::CloudHsmInvalidRequest(ref cause) => cause,
+            CopyBackupToRegionError::CloudHsmResourceNotFound(ref cause) => cause,
+            CopyBackupToRegionError::CloudHsmService(ref cause) => cause,
+            CopyBackupToRegionError::Validation(ref cause) => cause,
+            CopyBackupToRegionError::Credentials(ref err) => err.description(),
+            CopyBackupToRegionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CopyBackupToRegionError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateCluster
 #[derive(Debug, PartialEq)]
 pub enum CreateClusterError {
@@ -1420,6 +1575,11 @@ impl Error for UntagResourceError {
 }
 /// Trait representing the capabilities of the CloudHSM V2 API. CloudHSM V2 clients implement this trait.
 pub trait CloudHsmv2 {
+    fn copy_backup_to_region(
+        &self,
+        input: CopyBackupToRegionRequest,
+    ) -> RusotoFuture<CopyBackupToRegionResponse, CopyBackupToRegionError>;
+
     /// <p>Creates a new AWS CloudHSM cluster.</p>
     fn create_cluster(
         &self,
@@ -1513,6 +1673,40 @@ impl CloudHsmv2Client {
 }
 
 impl CloudHsmv2 for CloudHsmv2Client {
+    fn copy_backup_to_region(
+        &self,
+        input: CopyBackupToRegionRequest,
+    ) -> RusotoFuture<CopyBackupToRegionResponse, CopyBackupToRegionError> {
+        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        request.set_endpoint_prefix("cloudhsmv2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "BaldrApiService.CopyBackupToRegion");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CopyBackupToRegionResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CopyBackupToRegionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Creates a new AWS CloudHSM cluster.</p>
     fn create_cluster(
         &self,

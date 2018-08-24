@@ -177,14 +177,27 @@ pub struct ClusterMetadata {
     #[serde(rename = "RoleARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    /// <p><p>The shipping speed for each node in this cluster. This speed doesn&#39;t dictate how soon you&#39;ll get each Snowball Edge appliance, rather it represents how quickly each appliance moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, appliances shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowball Edges shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowball Edges are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
+    /// <p><p>The shipping speed for each node in this cluster. This speed doesn&#39;t dictate how soon you&#39;ll get each Snowball Edge device, rather it represents how quickly each device moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowball Edges shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowball Edges are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
     #[serde(rename = "ShippingOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shipping_option: Option<String>,
-    /// <p>The type of AWS Snowball appliance to use for this cluster. Currently, the only supported appliance type for cluster jobs is <code>EDGE</code>.</p>
+    /// <p>The type of AWS Snowball device to use for this cluster. Currently, the only supported device type for cluster jobs is <code>EDGE</code>.</p>
     #[serde(rename = "SnowballType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_type: Option<String>,
+}
+
+/// <p>A JSON-formatted object that describes a compatible Amazon Machine Image (AMI), including the ID and name for a Snowball Edge AMI. This AMI is compatible with the device's physical hardware requirements, and it should be able to be run in an SBE1 instance on the device.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct CompatibleImage {
+    /// <p>The unique identifier for an individual Snowball Edge AMI.</p>
+    #[serde(rename = "AmiId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ami_id: Option<String>,
+    /// <p>The optional name of a compatible image.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -232,10 +245,10 @@ pub struct CreateClusterRequest {
     /// <p>The <code>RoleARN</code> that you want to associate with this cluster. <code>RoleArn</code> values are created by using the <a href="http://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html">CreateRole</a> API action in AWS Identity and Access Management (IAM).</p>
     #[serde(rename = "RoleARN")]
     pub role_arn: String,
-    /// <p><p>The shipping speed for each node in this cluster. This speed doesn&#39;t dictate how soon you&#39;ll get each Snowball Edge appliance, rather it represents how quickly each appliance moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, appliances shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowball Edges shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowball Edges are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
+    /// <p><p>The shipping speed for each node in this cluster. This speed doesn&#39;t dictate how soon you&#39;ll get each Snowball Edge device, rather it represents how quickly each device moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowball Edges shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowball Edges are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
     #[serde(rename = "ShippingOption")]
     pub shipping_option: String,
-    /// <p>The type of AWS Snowball appliance to use for this cluster. Currently, the only supported appliance type for cluster jobs is <code>EDGE</code>.</p>
+    /// <p>The type of AWS Snowball device to use for this cluster. Currently, the only supported device type for cluster jobs is <code>EDGE</code>.</p>
     #[serde(rename = "SnowballType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_type: Option<String>,
@@ -295,7 +308,7 @@ pub struct CreateJobRequest {
     #[serde(rename = "SnowballCapacityPreference")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_capacity_preference: Option<String>,
-    /// <p>The type of AWS Snowball appliance to use for this job. Currently, the only supported appliance type for cluster jobs is <code>EDGE</code>.</p>
+    /// <p>The type of AWS Snowball device to use for this job. Currently, the only supported device type for cluster jobs is <code>EDGE</code>.</p>
     #[serde(rename = "SnowballType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_type: Option<String>,
@@ -309,7 +322,7 @@ pub struct CreateJobResult {
     pub job_id: Option<String>,
 }
 
-/// <p>Defines the real-time status of a Snowball's data transfer while the appliance is at AWS. This data is only available while a job has a <code>JobState</code> value of <code>InProgress</code>, for both import and export jobs.</p>
+/// <p>Defines the real-time status of a Snowball's data transfer while the device is at AWS. This data is only available while a job has a <code>JobState</code> value of <code>InProgress</code>, for both import and export jobs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DataTransfer {
     /// <p>The number of bytes transferred between a Snowball and Amazon S3.</p>
@@ -403,6 +416,18 @@ pub struct DescribeJobResult {
     pub sub_job_metadata: Option<Vec<JobMetadata>>,
 }
 
+/// <p>A JSON-formatted object that contains the IDs for an Amazon Machine Image (AMI), including the Amazon EC2 AMI ID and the Snowball Edge AMI ID. Each AMI has these two IDs to simplify identifying the AMI in both the AWS Cloud and on the device.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Ec2AmiResource {
+    /// <p>The ID of the AMI in Amazon EC2.</p>
+    #[serde(rename = "AmiId")]
+    pub ami_id: String,
+    /// <p>The ID of the AMI on the Snowball Edge device.</p>
+    #[serde(rename = "SnowballAmiId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub snowball_ami_id: Option<String>,
+}
+
 /// <p>The container for the <a>EventTriggerDefinition$EventResourceARN</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EventTriggerDefinition {
@@ -484,7 +509,7 @@ pub struct JobListEntry {
     #[serde(rename = "JobType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_type: Option<String>,
-    /// <p>The type of appliance used with this job.</p>
+    /// <p>The type of device used with this job.</p>
     #[serde(rename = "SnowballType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_type: Option<String>,
@@ -522,7 +547,7 @@ pub struct JobMetadata {
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    /// <p>A value that defines the real-time status of a Snowball's data transfer while the appliance is at AWS. This data is only available while a job has a <code>JobState</code> value of <code>InProgress</code>, for both import and export jobs.</p>
+    /// <p>A value that defines the real-time status of a Snowball's data transfer while the device is at AWS. This data is only available while a job has a <code>JobState</code> value of <code>InProgress</code>, for both import and export jobs.</p>
     #[serde(rename = "DataTransferProgress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_transfer_progress: Option<DataTransfer>,
@@ -574,15 +599,19 @@ pub struct JobMetadata {
     #[serde(rename = "SnowballCapacityPreference")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_capacity_preference: Option<String>,
-    /// <p>The type of appliance used with this job.</p>
+    /// <p>The type of device used with this job.</p>
     #[serde(rename = "SnowballType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_type: Option<String>,
 }
 
-/// <p>Contains an array of <code>S3Resource</code> objects. Each <code>S3Resource</code> object represents an Amazon S3 bucket that your transferred data will be exported from or imported into.</p>
+/// <p>Contains an array of AWS resource objects. Each object represents an Amazon S3 bucket, an AWS Lambda function, or an Amazon Machine Image (AMI) based on Amazon EC2 that is associated with a particular job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct JobResource {
+    /// <p>The Amazon Machine Images (AMIs) associated with this job.</p>
+    #[serde(rename = "Ec2AmiResources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ec_2_ami_resources: Option<Vec<Ec2AmiResource>>,
     /// <p>The Python-language Lambda functions for this job.</p>
     #[serde(rename = "LambdaResources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -665,6 +694,30 @@ pub struct ListClustersResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_list_entries: Option<Vec<ClusterListEntry>>,
     /// <p>HTTP requests are stateless. If you use the automatically generated <code>NextToken</code> value in your next <code>ClusterListEntry</code> call, your list of returned clusters will start from this point in the array.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListCompatibleImagesRequest {
+    /// <p>The maximum number of results for the list of compatible images. Currently, a Snowball Edge device can store 10 AMIs.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>HTTP requests are stateless. To identify what object comes "next" in the list of compatible images, you can specify a value for <code>NextToken</code> as the starting point for your list of returned images.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ListCompatibleImagesResult {
+    /// <p>A JSON-formatted object that describes a compatible AMI, including the ID and name for a Snowball Edge AMI.</p>
+    #[serde(rename = "CompatibleImages")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compatible_images: Option<Vec<CompatibleImage>>,
+    /// <p>Because HTTP requests are stateless, this is the starting point for your next list of returned images.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -813,7 +866,7 @@ pub struct UpdateJobRequest {
     #[serde(rename = "Notification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification: Option<Notification>,
-    /// <p>The updated <a>S3Resource</a> object (for a single Amazon S3 bucket or key range), or the updated <a>JobResource</a> object (for multiple buckets or key ranges). </p>
+    /// <p>The updated <code>JobResource</code> object, or the updated <a>JobResource</a> object. </p>
     #[serde(rename = "Resources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resources: Option<JobResource>,
@@ -1102,6 +1155,8 @@ impl Error for CreateAddressError {
 /// Errors returned by CreateCluster
 #[derive(Debug, PartialEq)]
 pub enum CreateClusterError {
+    /// <p>Your IAM user lacks the necessary Amazon EC2 permissions to perform the attempted action.</p>
+    Ec2RequestFailed(String),
     /// <p>Job or cluster creation failed. One ore more inputs were invalid. Confirm that the <a>CreateClusterRequest$SnowballType</a> value supports your <a>CreateJobRequest$JobType</a>, and try again.</p>
     InvalidInputCombination(String),
     /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
@@ -1132,6 +1187,9 @@ impl CreateClusterError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "Ec2RequestFailedException" => {
+                        CreateClusterError::Ec2RequestFailed(String::from(error_message))
+                    }
                     "InvalidInputCombinationException" => {
                         CreateClusterError::InvalidInputCombination(String::from(error_message))
                     }
@@ -1180,6 +1238,7 @@ impl fmt::Display for CreateClusterError {
 impl Error for CreateClusterError {
     fn description(&self) -> &str {
         match *self {
+            CreateClusterError::Ec2RequestFailed(ref cause) => cause,
             CreateClusterError::InvalidInputCombination(ref cause) => cause,
             CreateClusterError::InvalidResource(ref cause) => cause,
             CreateClusterError::KMSRequestFailed(ref cause) => cause,
@@ -1195,6 +1254,8 @@ impl Error for CreateClusterError {
 pub enum CreateJobError {
     /// <p>Job creation failed. Currently, clusters support five nodes. If you have less than five nodes for your cluster and you have more nodes to create for this cluster, try again and create jobs until your cluster has exactly five notes.</p>
     ClusterLimitExceeded(String),
+    /// <p>Your IAM user lacks the necessary Amazon EC2 permissions to perform the attempted action.</p>
+    Ec2RequestFailed(String),
     /// <p>Job or cluster creation failed. One ore more inputs were invalid. Confirm that the <a>CreateClusterRequest$SnowballType</a> value supports your <a>CreateJobRequest$JobType</a>, and try again.</p>
     InvalidInputCombination(String),
     /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
@@ -1227,6 +1288,9 @@ impl CreateJobError {
                 match *error_type {
                     "ClusterLimitExceededException" => {
                         CreateJobError::ClusterLimitExceeded(String::from(error_message))
+                    }
+                    "Ec2RequestFailedException" => {
+                        CreateJobError::Ec2RequestFailed(String::from(error_message))
                     }
                     "InvalidInputCombinationException" => {
                         CreateJobError::InvalidInputCombination(String::from(error_message))
@@ -1275,6 +1339,7 @@ impl Error for CreateJobError {
     fn description(&self) -> &str {
         match *self {
             CreateJobError::ClusterLimitExceeded(ref cause) => cause,
+            CreateJobError::Ec2RequestFailed(ref cause) => cause,
             CreateJobError::InvalidInputCombination(ref cause) => cause,
             CreateJobError::InvalidResource(ref cause) => cause,
             CreateJobError::KMSRequestFailed(ref cause) => cause,
@@ -2016,6 +2081,93 @@ impl Error for ListClustersError {
         }
     }
 }
+/// Errors returned by ListCompatibleImages
+#[derive(Debug, PartialEq)]
+pub enum ListCompatibleImagesError {
+    /// <p>Your IAM user lacks the necessary Amazon EC2 permissions to perform the attempted action.</p>
+    Ec2RequestFailed(String),
+    /// <p>The <code>NextToken</code> string was altered unexpectedly, and the operation has stopped. Run the operation without changing the <code>NextToken</code> string, and try again.</p>
+    InvalidNextToken(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListCompatibleImagesError {
+    pub fn from_body(body: &str) -> ListCompatibleImagesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "Ec2RequestFailedException" => {
+                        ListCompatibleImagesError::Ec2RequestFailed(String::from(error_message))
+                    }
+                    "InvalidNextTokenException" => {
+                        ListCompatibleImagesError::InvalidNextToken(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListCompatibleImagesError::Validation(error_message.to_string())
+                    }
+                    _ => ListCompatibleImagesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListCompatibleImagesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListCompatibleImagesError {
+    fn from(err: serde_json::error::Error) -> ListCompatibleImagesError {
+        ListCompatibleImagesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListCompatibleImagesError {
+    fn from(err: CredentialsError) -> ListCompatibleImagesError {
+        ListCompatibleImagesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListCompatibleImagesError {
+    fn from(err: HttpDispatchError) -> ListCompatibleImagesError {
+        ListCompatibleImagesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListCompatibleImagesError {
+    fn from(err: io::Error) -> ListCompatibleImagesError {
+        ListCompatibleImagesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListCompatibleImagesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListCompatibleImagesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListCompatibleImagesError::Ec2RequestFailed(ref cause) => cause,
+            ListCompatibleImagesError::InvalidNextToken(ref cause) => cause,
+            ListCompatibleImagesError::Validation(ref cause) => cause,
+            ListCompatibleImagesError::Credentials(ref err) => err.description(),
+            ListCompatibleImagesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListCompatibleImagesError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListJobs
 #[derive(Debug, PartialEq)]
 pub enum ListJobsError {
@@ -2096,6 +2248,8 @@ impl Error for ListJobsError {
 /// Errors returned by UpdateCluster
 #[derive(Debug, PartialEq)]
 pub enum UpdateClusterError {
+    /// <p>Your IAM user lacks the necessary Amazon EC2 permissions to perform the attempted action.</p>
+    Ec2RequestFailed(String),
     /// <p>Job or cluster creation failed. One ore more inputs were invalid. Confirm that the <a>CreateClusterRequest$SnowballType</a> value supports your <a>CreateJobRequest$JobType</a>, and try again.</p>
     InvalidInputCombination(String),
     /// <p>The action can't be performed because the job's current state doesn't allow that action to be performed.</p>
@@ -2128,6 +2282,9 @@ impl UpdateClusterError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "Ec2RequestFailedException" => {
+                        UpdateClusterError::Ec2RequestFailed(String::from(error_message))
+                    }
                     "InvalidInputCombinationException" => {
                         UpdateClusterError::InvalidInputCombination(String::from(error_message))
                     }
@@ -2179,6 +2336,7 @@ impl fmt::Display for UpdateClusterError {
 impl Error for UpdateClusterError {
     fn description(&self) -> &str {
         match *self {
+            UpdateClusterError::Ec2RequestFailed(ref cause) => cause,
             UpdateClusterError::InvalidInputCombination(ref cause) => cause,
             UpdateClusterError::InvalidJobState(ref cause) => cause,
             UpdateClusterError::InvalidResource(ref cause) => cause,
@@ -2195,6 +2353,8 @@ impl Error for UpdateClusterError {
 pub enum UpdateJobError {
     /// <p>Job creation failed. Currently, clusters support five nodes. If you have less than five nodes for your cluster and you have more nodes to create for this cluster, try again and create jobs until your cluster has exactly five notes.</p>
     ClusterLimitExceeded(String),
+    /// <p>Your IAM user lacks the necessary Amazon EC2 permissions to perform the attempted action.</p>
+    Ec2RequestFailed(String),
     /// <p>Job or cluster creation failed. One ore more inputs were invalid. Confirm that the <a>CreateClusterRequest$SnowballType</a> value supports your <a>CreateJobRequest$JobType</a>, and try again.</p>
     InvalidInputCombination(String),
     /// <p>The action can't be performed because the job's current state doesn't allow that action to be performed.</p>
@@ -2229,6 +2389,9 @@ impl UpdateJobError {
                 match *error_type {
                     "ClusterLimitExceededException" => {
                         UpdateJobError::ClusterLimitExceeded(String::from(error_message))
+                    }
+                    "Ec2RequestFailedException" => {
+                        UpdateJobError::Ec2RequestFailed(String::from(error_message))
                     }
                     "InvalidInputCombinationException" => {
                         UpdateJobError::InvalidInputCombination(String::from(error_message))
@@ -2280,6 +2443,7 @@ impl Error for UpdateJobError {
     fn description(&self) -> &str {
         match *self {
             UpdateJobError::ClusterLimitExceeded(ref cause) => cause,
+            UpdateJobError::Ec2RequestFailed(ref cause) => cause,
             UpdateJobError::InvalidInputCombination(ref cause) => cause,
             UpdateJobError::InvalidJobState(ref cause) => cause,
             UpdateJobError::InvalidResource(ref cause) => cause,
@@ -2299,7 +2463,7 @@ pub trait Snowball {
         input: CancelClusterRequest,
     ) -> RusotoFuture<CancelClusterResult, CancelClusterError>;
 
-    /// <p>Cancels the specified job. You can only cancel a job before its <code>JobState</code> value changes to <code>PreparingAppliance</code>. Requesting the <code>ListJobs</code> or <code>DescribeJob</code> action will return a job's <code>JobState</code> as part of the response element data returned.</p>
+    /// <p>Cancels the specified job. You can only cancel a job before its <code>JobState</code> value changes to <code>PreparingAppliance</code>. Requesting the <code>ListJobs</code> or <code>DescribeJob</code> action returns a job's <code>JobState</code> as part of the response element data returned.</p>
     fn cancel_job(&self, input: CancelJobRequest) -> RusotoFuture<CancelJobResult, CancelJobError>;
 
     /// <p>Creates an address for a Snowball to be shipped to. In most regions, addresses are validated at the time of creation. The address you provide must be located within the serviceable area of your region. If the address is invalid or unsupported, then an exception is thrown.</p>
@@ -2367,6 +2531,12 @@ pub trait Snowball {
         &self,
         input: ListClustersRequest,
     ) -> RusotoFuture<ListClustersResult, ListClustersError>;
+
+    /// <p>This action returns a list of the different Amazon EC2 Amazon Machine Images (AMIs) that are owned by your AWS account that would be supported for use on a Snowball Edge device. Currently, supported AMIs are based on the CentOS 7 (x86_64) - with Updates HVM, Ubuntu Server 14.04 LTS (HVM), and Ubuntu 16.04 LTS - Xenial (HVM) images, available on the AWS Marketplace.</p>
+    fn list_compatible_images(
+        &self,
+        input: ListCompatibleImagesRequest,
+    ) -> RusotoFuture<ListCompatibleImagesResult, ListCompatibleImagesError>;
 
     /// <p>Returns an array of <code>JobListEntry</code> objects of the specified length. Each <code>JobListEntry</code> object contains a job's state, a job's ID, and a value that indicates whether the job is a job part, in the case of export jobs. Calling this API action in one of the US regions will return jobs from the list of all jobs associated with this account in all US regions.</p>
     fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResult, ListJobsError>;
@@ -2454,7 +2624,7 @@ impl Snowball for SnowballClient {
         })
     }
 
-    /// <p>Cancels the specified job. You can only cancel a job before its <code>JobState</code> value changes to <code>PreparingAppliance</code>. Requesting the <code>ListJobs</code> or <code>DescribeJob</code> action will return a job's <code>JobState</code> as part of the response element data returned.</p>
+    /// <p>Cancels the specified job. You can only cancel a job before its <code>JobState</code> value changes to <code>PreparingAppliance</code>. Requesting the <code>ListJobs</code> or <code>DescribeJob</code> action returns a job's <code>JobState</code> as part of the response element data returned.</p>
     fn cancel_job(&self, input: CancelJobRequest) -> RusotoFuture<CancelJobResult, CancelJobError> {
         let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
 
@@ -2931,6 +3101,44 @@ impl Snowball for SnowballClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListClustersError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>This action returns a list of the different Amazon EC2 Amazon Machine Images (AMIs) that are owned by your AWS account that would be supported for use on a Snowball Edge device. Currently, supported AMIs are based on the CentOS 7 (x86_64) - with Updates HVM, Ubuntu Server 14.04 LTS (HVM), and Ubuntu 16.04 LTS - Xenial (HVM) images, available on the AWS Marketplace.</p>
+    fn list_compatible_images(
+        &self,
+        input: ListCompatibleImagesRequest,
+    ) -> RusotoFuture<ListCompatibleImagesResult, ListCompatibleImagesError> {
+        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSIESnowballJobManagementService.ListCompatibleImages",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListCompatibleImagesResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListCompatibleImagesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

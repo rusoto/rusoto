@@ -45,9 +45,19 @@ enum DeserializerNext {
 /// <p>Information about an action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Action {
-    /// <p>The Amazon Resource Name (ARN) of the target group.</p>
-    pub target_group_arn: String,
-    /// <p>The type of action.</p>
+    /// <p>[HTTPS listener] Information for using Amazon Cognito to authenticate users. Specify only when <code>Type</code> is <code>authenticate-cognito</code>.</p>
+    pub authenticate_cognito_config: Option<AuthenticateCognitoActionConfig>,
+    /// <p>[HTTPS listener] Information about an identity provider that is compliant with OpenID Connect (OIDC). Specify only when <code>Type</code> is <code>authenticate-oidc</code>.</p>
+    pub authenticate_oidc_config: Option<AuthenticateOidcActionConfig>,
+    /// <p>[Application Load Balancer] Information for creating an action that returns a custom HTTP response. Specify only when <code>Type</code> is <code>fixed-response</code>.</p>
+    pub fixed_response_config: Option<FixedResponseActionConfig>,
+    /// <p>The order for the action. This value is required for rules with multiple actions. The action with the lowest value for order is performed first. The final action to be performed must be a <code>forward</code> or a <code>fixed-response</code> action.</p>
+    pub order: Option<i64>,
+    /// <p>[Application Load Balancer] Information for creating a redirect action. Specify only when <code>Type</code> is <code>redirect</code>.</p>
+    pub redirect_config: Option<RedirectActionConfig>,
+    /// <p>The Amazon Resource Name (ARN) of the target group. Specify only when <code>Type</code> is <code>forward</code>.</p>
+    pub target_group_arn: Option<String>,
+    /// <p>The type of action. Each rule must include exactly one of the following types of actions: <code>forward</code>, <code>fixed-response</code>, or <code>redirect</code>.</p>
     pub type_: String,
 }
 
@@ -73,11 +83,42 @@ impl ActionDeserializer {
 
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
+                    "AuthenticateCognitoConfig" => {
+                        obj.authenticate_cognito_config = Some(try!(
+                            AuthenticateCognitoActionConfigDeserializer::deserialize(
+                                "AuthenticateCognitoConfig",
+                                stack
+                            )
+                        ));
+                    }
+                    "AuthenticateOidcConfig" => {
+                        obj.authenticate_oidc_config =
+                            Some(try!(AuthenticateOidcActionConfigDeserializer::deserialize(
+                                "AuthenticateOidcConfig",
+                                stack
+                            )));
+                    }
+                    "FixedResponseConfig" => {
+                        obj.fixed_response_config =
+                            Some(try!(FixedResponseActionConfigDeserializer::deserialize(
+                                "FixedResponseConfig",
+                                stack
+                            )));
+                    }
+                    "Order" => {
+                        obj.order =
+                            Some(try!(ActionOrderDeserializer::deserialize("Order", stack)));
+                    }
+                    "RedirectConfig" => {
+                        obj.redirect_config = Some(try!(
+                            RedirectActionConfigDeserializer::deserialize("RedirectConfig", stack)
+                        ));
+                    }
                     "TargetGroupArn" => {
-                        obj.target_group_arn = try!(TargetGroupArnDeserializer::deserialize(
+                        obj.target_group_arn = Some(try!(TargetGroupArnDeserializer::deserialize(
                             "TargetGroupArn",
                             stack
-                        ));
+                        )));
                     }
                     "Type" => {
                         obj.type_ = try!(ActionTypeEnumDeserializer::deserialize("Type", stack));
@@ -106,14 +147,58 @@ impl ActionSerializer {
             prefix.push_str(".");
         }
 
-        params.put(
-            &format!("{}{}", prefix, "TargetGroupArn"),
-            &obj.target_group_arn,
-        );
+        if let Some(ref field_value) = obj.authenticate_cognito_config {
+            AuthenticateCognitoActionConfigSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "AuthenticateCognitoConfig"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.authenticate_oidc_config {
+            AuthenticateOidcActionConfigSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "AuthenticateOidcConfig"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.fixed_response_config {
+            FixedResponseActionConfigSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "FixedResponseConfig"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.order {
+            params.put(&format!("{}{}", prefix, "Order"), &field_value.to_string());
+        }
+        if let Some(ref field_value) = obj.redirect_config {
+            RedirectActionConfigSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "RedirectConfig"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.target_group_arn {
+            params.put(&format!("{}{}", prefix, "TargetGroupArn"), &field_value);
+        }
         params.put(&format!("{}{}", prefix, "Type"), &obj.type_);
     }
 }
 
+struct ActionOrderDeserializer;
+impl ActionOrderDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 struct ActionTypeEnumDeserializer;
 impl ActionTypeEnumDeserializer {
     #[allow(unused_variables)]
@@ -301,6 +386,735 @@ impl AddTagsOutputDeserializer {
 }
 struct AllocationIdDeserializer;
 impl AllocationIdDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct AuthenticateCognitoActionAuthenticationRequestExtraParamsDeserializer;
+impl AuthenticateCognitoActionAuthenticationRequestExtraParamsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ::std::collections::HashMap::new();
+
+        while try!(peek_at_name(stack)) == "entry" {
+            try!(start_element("entry", stack));
+            let key = try!(
+                AuthenticateCognitoActionAuthenticationRequestParamNameDeserializer::deserialize(
+                    "key", stack
+                )
+            );
+            let value = try!(
+                AuthenticateCognitoActionAuthenticationRequestParamValueDeserializer::deserialize(
+                    "value", stack
+                )
+            );
+            obj.insert(key, value);
+            try!(end_element("entry", stack));
+        }
+
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+/// Serialize `AuthenticateCognitoActionAuthenticationRequestExtraParams` contents to a `SignedRequest`.
+struct AuthenticateCognitoActionAuthenticationRequestExtraParamsSerializer;
+impl AuthenticateCognitoActionAuthenticationRequestExtraParamsSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &::std::collections::HashMap<String, String>,
+    ) {
+        for (index, (key, value)) in obj.iter().enumerate() {
+            let prefix = format!("{}.{}", name, index + 1);
+            params.put(&format!("{}.{}", prefix, "key"), &key);
+            params.put(&key, &value);
+        }
+    }
+}
+
+struct AuthenticateCognitoActionAuthenticationRequestParamNameDeserializer;
+impl AuthenticateCognitoActionAuthenticationRequestParamNameDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct AuthenticateCognitoActionAuthenticationRequestParamValueDeserializer;
+impl AuthenticateCognitoActionAuthenticationRequestParamValueDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct AuthenticateCognitoActionConditionalBehaviorEnumDeserializer;
+impl AuthenticateCognitoActionConditionalBehaviorEnumDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Request parameters to use when integrating with Amazon Cognito to authenticate users.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AuthenticateCognitoActionConfig {
+    /// <p>The query parameters (up to 10) to include in the redirect request to the authorization endpoint.</p>
+    pub authentication_request_extra_params: Option<::std::collections::HashMap<String, String>>,
+    /// <p><p>The behavior if the user is not authenticated. The following are possible values:</p> <ul> <li> <p>deny<code/> - Return an HTTP 401 Unauthorized error.</p> </li> <li> <p>allow<code/> - Allow the request to be forwarded to the target.</p> </li> <li> <p>authenticate<code/> - Redirect the request to the IdP authorization endpoint. This is the default value.</p> </li> </ul></p>
+    pub on_unauthenticated_request: Option<String>,
+    /// <p>The set of user claims to be requested from the IdP. The default is <code>openid</code>.</p> <p>To verify which scope values your IdP supports and how to separate multiple values, see the documentation for your IdP.</p>
+    pub scope: Option<String>,
+    /// <p>The name of the cookie used to maintain session information. The default is AWSELBAuthSessionCookie.</p>
+    pub session_cookie_name: Option<String>,
+    /// <p>The maximum duration of the authentication session, in seconds. The default is 604800 seconds (7 days).</p>
+    pub session_timeout: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) of the Amazon Cognito user pool.</p>
+    pub user_pool_arn: String,
+    /// <p>The ID of the Amazon Cognito user pool client.</p>
+    pub user_pool_client_id: String,
+    /// <p>The domain prefix or fully-qualified domain name of the Amazon Cognito user pool.</p>
+    pub user_pool_domain: String,
+}
+
+struct AuthenticateCognitoActionConfigDeserializer;
+impl AuthenticateCognitoActionConfigDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AuthenticateCognitoActionConfig, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = AuthenticateCognitoActionConfig::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AuthenticationRequestExtraParams" => {
+                        obj.authentication_request_extra_params = Some(try!(AuthenticateCognitoActionAuthenticationRequestExtraParamsDeserializer::deserialize("AuthenticationRequestExtraParams", stack)));
+                    }
+                    "OnUnauthenticatedRequest" => {
+                        obj.on_unauthenticated_request = Some(try!(AuthenticateCognitoActionConditionalBehaviorEnumDeserializer::deserialize("OnUnauthenticatedRequest", stack)));
+                    }
+                    "Scope" => {
+                        obj.scope = Some(try!(
+                            AuthenticateCognitoActionScopeDeserializer::deserialize("Scope", stack)
+                        ));
+                    }
+                    "SessionCookieName" => {
+                        obj.session_cookie_name = Some(try!(
+                            AuthenticateCognitoActionSessionCookieNameDeserializer::deserialize(
+                                "SessionCookieName",
+                                stack
+                            )
+                        ));
+                    }
+                    "SessionTimeout" => {
+                        obj.session_timeout = Some(try!(
+                            AuthenticateCognitoActionSessionTimeoutDeserializer::deserialize(
+                                "SessionTimeout",
+                                stack
+                            )
+                        ));
+                    }
+                    "UserPoolArn" => {
+                        obj.user_pool_arn = try!(
+                            AuthenticateCognitoActionUserPoolArnDeserializer::deserialize(
+                                "UserPoolArn",
+                                stack
+                            )
+                        );
+                    }
+                    "UserPoolClientId" => {
+                        obj.user_pool_client_id = try!(
+                            AuthenticateCognitoActionUserPoolClientIdDeserializer::deserialize(
+                                "UserPoolClientId",
+                                stack
+                            )
+                        );
+                    }
+                    "UserPoolDomain" => {
+                        obj.user_pool_domain = try!(
+                            AuthenticateCognitoActionUserPoolDomainDeserializer::deserialize(
+                                "UserPoolDomain",
+                                stack
+                            )
+                        );
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `AuthenticateCognitoActionConfig` contents to a `SignedRequest`.
+struct AuthenticateCognitoActionConfigSerializer;
+impl AuthenticateCognitoActionConfigSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AuthenticateCognitoActionConfig) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.authentication_request_extra_params {
+            AuthenticateCognitoActionAuthenticationRequestExtraParamsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "AuthenticationRequestExtraParams"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.on_unauthenticated_request {
+            params.put(
+                &format!("{}{}", prefix, "OnUnauthenticatedRequest"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.scope {
+            params.put(&format!("{}{}", prefix, "Scope"), &field_value);
+        }
+        if let Some(ref field_value) = obj.session_cookie_name {
+            params.put(&format!("{}{}", prefix, "SessionCookieName"), &field_value);
+        }
+        if let Some(ref field_value) = obj.session_timeout {
+            params.put(
+                &format!("{}{}", prefix, "SessionTimeout"),
+                &field_value.to_string(),
+            );
+        }
+        params.put(&format!("{}{}", prefix, "UserPoolArn"), &obj.user_pool_arn);
+        params.put(
+            &format!("{}{}", prefix, "UserPoolClientId"),
+            &obj.user_pool_client_id,
+        );
+        params.put(
+            &format!("{}{}", prefix, "UserPoolDomain"),
+            &obj.user_pool_domain,
+        );
+    }
+}
+
+struct AuthenticateCognitoActionScopeDeserializer;
+impl AuthenticateCognitoActionScopeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct AuthenticateCognitoActionSessionCookieNameDeserializer;
+impl AuthenticateCognitoActionSessionCookieNameDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct AuthenticateCognitoActionSessionTimeoutDeserializer;
+impl AuthenticateCognitoActionSessionTimeoutDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct AuthenticateCognitoActionUserPoolArnDeserializer;
+impl AuthenticateCognitoActionUserPoolArnDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct AuthenticateCognitoActionUserPoolClientIdDeserializer;
+impl AuthenticateCognitoActionUserPoolClientIdDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct AuthenticateCognitoActionUserPoolDomainDeserializer;
+impl AuthenticateCognitoActionUserPoolDomainDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct AuthenticateOidcActionAuthenticationRequestExtraParamsDeserializer;
+impl AuthenticateOidcActionAuthenticationRequestExtraParamsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ::std::collections::HashMap::new();
+
+        while try!(peek_at_name(stack)) == "entry" {
+            try!(start_element("entry", stack));
+            let key = try!(
+                AuthenticateOidcActionAuthenticationRequestParamNameDeserializer::deserialize(
+                    "key", stack
+                )
+            );
+            let value = try!(
+                AuthenticateOidcActionAuthenticationRequestParamValueDeserializer::deserialize(
+                    "value", stack
+                )
+            );
+            obj.insert(key, value);
+            try!(end_element("entry", stack));
+        }
+
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+/// Serialize `AuthenticateOidcActionAuthenticationRequestExtraParams` contents to a `SignedRequest`.
+struct AuthenticateOidcActionAuthenticationRequestExtraParamsSerializer;
+impl AuthenticateOidcActionAuthenticationRequestExtraParamsSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &::std::collections::HashMap<String, String>,
+    ) {
+        for (index, (key, value)) in obj.iter().enumerate() {
+            let prefix = format!("{}.{}", name, index + 1);
+            params.put(&format!("{}.{}", prefix, "key"), &key);
+            params.put(&key, &value);
+        }
+    }
+}
+
+struct AuthenticateOidcActionAuthenticationRequestParamNameDeserializer;
+impl AuthenticateOidcActionAuthenticationRequestParamNameDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct AuthenticateOidcActionAuthenticationRequestParamValueDeserializer;
+impl AuthenticateOidcActionAuthenticationRequestParamValueDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct AuthenticateOidcActionAuthorizationEndpointDeserializer;
+impl AuthenticateOidcActionAuthorizationEndpointDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct AuthenticateOidcActionClientIdDeserializer;
+impl AuthenticateOidcActionClientIdDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct AuthenticateOidcActionClientSecretDeserializer;
+impl AuthenticateOidcActionClientSecretDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct AuthenticateOidcActionConditionalBehaviorEnumDeserializer;
+impl AuthenticateOidcActionConditionalBehaviorEnumDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Request parameters when using an identity provider (IdP) that is compliant with OpenID Connect (OIDC) to authenticate users.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AuthenticateOidcActionConfig {
+    /// <p>The query parameters (up to 10) to include in the redirect request to the authorization endpoint.</p>
+    pub authentication_request_extra_params: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The authorization endpoint of the IdP. This must be a full URL, including the HTTPS protocol, the domain, and the path.</p>
+    pub authorization_endpoint: String,
+    /// <p>The OAuth 2.0 client identifier.</p>
+    pub client_id: String,
+    /// <p>The OAuth 2.0 client secret.</p>
+    pub client_secret: String,
+    /// <p>The OIDC issuer identifier of the IdP. This must be a full URL, including the HTTPS protocol, the domain, and the path.</p>
+    pub issuer: String,
+    /// <p><p>The behavior if the user is not authenticated. The following are possible values:</p> <ul> <li> <p>deny<code/> - Return an HTTP 401 Unauthorized error.</p> </li> <li> <p>allow<code/> - Allow the request to be forwarded to the target.</p> </li> <li> <p>authenticate<code/> - Redirect the request to the IdP authorization endpoint. This is the default value.</p> </li> </ul></p>
+    pub on_unauthenticated_request: Option<String>,
+    /// <p>The set of user claims to be requested from the IdP. The default is <code>openid</code>.</p> <p>To verify which scope values your IdP supports and how to separate multiple values, see the documentation for your IdP.</p>
+    pub scope: Option<String>,
+    /// <p>The name of the cookie used to maintain session information. The default is AWSELBAuthSessionCookie.</p>
+    pub session_cookie_name: Option<String>,
+    /// <p>The maximum duration of the authentication session, in seconds. The default is 604800 seconds (7 days).</p>
+    pub session_timeout: Option<i64>,
+    /// <p>The token endpoint of the IdP. This must be a full URL, including the HTTPS protocol, the domain, and the path.</p>
+    pub token_endpoint: String,
+    /// <p>The user info endpoint of the IdP. This must be a full URL, including the HTTPS protocol, the domain, and the path.</p>
+    pub user_info_endpoint: String,
+}
+
+struct AuthenticateOidcActionConfigDeserializer;
+impl AuthenticateOidcActionConfigDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AuthenticateOidcActionConfig, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = AuthenticateOidcActionConfig::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "AuthenticationRequestExtraParams" => {
+                            obj.authentication_request_extra_params = Some(try!(AuthenticateOidcActionAuthenticationRequestExtraParamsDeserializer::deserialize("AuthenticationRequestExtraParams", stack)));
+                        }
+                        "AuthorizationEndpoint" => {
+                            obj.authorization_endpoint = try!(AuthenticateOidcActionAuthorizationEndpointDeserializer::deserialize("AuthorizationEndpoint", stack));
+                        }
+                        "ClientId" => {
+                            obj.client_id =
+                                try!(AuthenticateOidcActionClientIdDeserializer::deserialize(
+                                    "ClientId", stack
+                                ));
+                        }
+                        "ClientSecret" => {
+                            obj.client_secret =
+                                try!(AuthenticateOidcActionClientSecretDeserializer::deserialize(
+                                    "ClientSecret",
+                                    stack
+                                ));
+                        }
+                        "Issuer" => {
+                            obj.issuer =
+                                try!(AuthenticateOidcActionIssuerDeserializer::deserialize(
+                                    "Issuer", stack
+                                ));
+                        }
+                        "OnUnauthenticatedRequest" => {
+                            obj.on_unauthenticated_request = Some(try!(AuthenticateOidcActionConditionalBehaviorEnumDeserializer::deserialize("OnUnauthenticatedRequest", stack)));
+                        }
+                        "Scope" => {
+                            obj.scope =
+                                Some(try!(AuthenticateOidcActionScopeDeserializer::deserialize(
+                                    "Scope", stack
+                                )));
+                        }
+                        "SessionCookieName" => {
+                            obj.session_cookie_name = Some(try!(
+                                AuthenticateOidcActionSessionCookieNameDeserializer::deserialize(
+                                    "SessionCookieName",
+                                    stack
+                                )
+                            ));
+                        }
+                        "SessionTimeout" => {
+                            obj.session_timeout = Some(try!(
+                                AuthenticateOidcActionSessionTimeoutDeserializer::deserialize(
+                                    "SessionTimeout",
+                                    stack
+                                )
+                            ));
+                        }
+                        "TokenEndpoint" => {
+                            obj.token_endpoint = try!(
+                                AuthenticateOidcActionTokenEndpointDeserializer::deserialize(
+                                    "TokenEndpoint",
+                                    stack
+                                )
+                            );
+                        }
+                        "UserInfoEndpoint" => {
+                            obj.user_info_endpoint = try!(
+                                AuthenticateOidcActionUserInfoEndpointDeserializer::deserialize(
+                                    "UserInfoEndpoint",
+                                    stack
+                                )
+                            );
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `AuthenticateOidcActionConfig` contents to a `SignedRequest`.
+struct AuthenticateOidcActionConfigSerializer;
+impl AuthenticateOidcActionConfigSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AuthenticateOidcActionConfig) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.authentication_request_extra_params {
+            AuthenticateOidcActionAuthenticationRequestExtraParamsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "AuthenticationRequestExtraParams"),
+                field_value,
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "AuthorizationEndpoint"),
+            &obj.authorization_endpoint,
+        );
+        params.put(&format!("{}{}", prefix, "ClientId"), &obj.client_id);
+        params.put(&format!("{}{}", prefix, "ClientSecret"), &obj.client_secret);
+        params.put(&format!("{}{}", prefix, "Issuer"), &obj.issuer);
+        if let Some(ref field_value) = obj.on_unauthenticated_request {
+            params.put(
+                &format!("{}{}", prefix, "OnUnauthenticatedRequest"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.scope {
+            params.put(&format!("{}{}", prefix, "Scope"), &field_value);
+        }
+        if let Some(ref field_value) = obj.session_cookie_name {
+            params.put(&format!("{}{}", prefix, "SessionCookieName"), &field_value);
+        }
+        if let Some(ref field_value) = obj.session_timeout {
+            params.put(
+                &format!("{}{}", prefix, "SessionTimeout"),
+                &field_value.to_string(),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "TokenEndpoint"),
+            &obj.token_endpoint,
+        );
+        params.put(
+            &format!("{}{}", prefix, "UserInfoEndpoint"),
+            &obj.user_info_endpoint,
+        );
+    }
+}
+
+struct AuthenticateOidcActionIssuerDeserializer;
+impl AuthenticateOidcActionIssuerDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct AuthenticateOidcActionScopeDeserializer;
+impl AuthenticateOidcActionScopeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct AuthenticateOidcActionSessionCookieNameDeserializer;
+impl AuthenticateOidcActionSessionCookieNameDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct AuthenticateOidcActionSessionTimeoutDeserializer;
+impl AuthenticateOidcActionSessionTimeoutDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct AuthenticateOidcActionTokenEndpointDeserializer;
+impl AuthenticateOidcActionTokenEndpointDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct AuthenticateOidcActionUserInfoEndpointDeserializer;
+impl AuthenticateOidcActionUserInfoEndpointDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(
         tag_name: &str,
@@ -711,9 +1525,9 @@ impl ConditionFieldNameDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateListenerInput {
-    /// <p>[HTTPS listeners] The SSL server certificate. You must provide exactly one certificate.</p>
+    /// <p>[HTTPS listeners] The default SSL server certificate. You must provide exactly one default certificate. To create a certificate list, use <a>AddListenerCertificates</a>.</p>
     pub certificates: Option<Vec<Certificate>>,
-    /// <p>The default action for the listener. For Application Load Balancers, the protocol of the specified target group must be HTTP or HTTPS. For Network Load Balancers, the protocol of the specified target group must be TCP.</p>
+    /// <p>The actions for the default rule. The rule must include one forward action or one or more fixed-response actions.</p> <p>If the action type is <code>forward</code>, you can specify a single target group. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer or TCP for a Network Load Balancer.</p> <p>[HTTPS listener] If the action type is <code>authenticate-oidc</code>, you can use an identity provider that is OpenID Connect (OIDC) compliant to authenticate users as they access your application.</p> <p>[HTTPS listener] If the action type is <code>authenticate-cognito</code>, you can use Amazon Cognito to authenticate users as they access your application.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you can redirect HTTP and HTTPS requests.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you can return a custom HTTP response.</p>
     pub default_actions: Vec<Action>,
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
@@ -808,9 +1622,9 @@ impl CreateListenerOutputDeserializer {
 pub struct CreateLoadBalancerInput {
     /// <p>[Application Load Balancers] The type of IP addresses used by the subnets for your load balancer. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses). Internal load balancers must use <code>ipv4</code>.</p>
     pub ip_address_type: Option<String>,
-    /// <p>The name of the load balancer.</p> <p>This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and must not begin or end with a hyphen.</p>
+    /// <p>The name of the load balancer.</p> <p>This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, must not begin or end with a hyphen, and must not begin with "internal-".</p>
     pub name: String,
-    /// <p>The nodes of an Internet-facing load balancer have public IP addresses. The DNS name of an Internet-facing load balancer is publicly resolvable to the public IP addresses of the nodes. Therefore, Internet-facing load balancers can route requests from clients over the Internet.</p> <p>The nodes of an internal load balancer have only private IP addresses. The DNS name of an internal load balancer is publicly resolvable to the private IP addresses of the nodes. Therefore, internal load balancers can only route requests from clients with access to the VPC for the load balancer.</p> <p>The default is an Internet-facing load balancer.</p>
+    /// <p>The nodes of an Internet-facing load balancer have public IP addresses. The DNS name of an Internet-facing load balancer is publicly resolvable to the public IP addresses of the nodes. Therefore, Internet-facing load balancers can route requests from clients over the internet.</p> <p>The nodes of an internal load balancer have only private IP addresses. The DNS name of an internal load balancer is publicly resolvable to the private IP addresses of the nodes. Therefore, internal load balancers can only route requests from clients with access to the VPC for the load balancer.</p> <p>The default is an Internet-facing load balancer.</p>
     pub scheme: Option<String>,
     /// <p>[Application Load Balancers] The IDs of the security groups for the load balancer.</p>
     pub security_groups: Option<Vec<String>>,
@@ -916,13 +1730,13 @@ impl CreateLoadBalancerOutputDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateRuleInput {
-    /// <p>An action. Each action has the type <code>forward</code> and specifies a target group.</p>
+    /// <p>The actions. Each rule must include exactly one of the following types of actions: <code>forward</code>, <code>fixed-response</code>, or <code>redirect</code>.</p> <p>If the action type is <code>forward</code>, you can specify a single target group.</p> <p>[HTTPS listener] If the action type is <code>authenticate-oidc</code>, you can use an identity provider that is OpenID Connect (OIDC) compliant to authenticate users as they access your application.</p> <p>[HTTPS listener] If the action type is <code>authenticate-cognito</code>, you can use Amazon Cognito to authenticate users as they access your application.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you can redirect HTTP and HTTPS requests.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you can return a custom HTTP response.</p>
     pub actions: Vec<Action>,
-    /// <p><p>The conditions. Each condition specifies a field name and a single value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern. A path pattern is case sensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ &quot; &#39; @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul></p>
+    /// <p><p>The conditions. Each condition specifies a field name and a single value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. You can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern. A path pattern is case-sensitive, can be up to 128 characters in length, and can contain any of the following characters. You can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ &quot; &#39; @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul></p>
     pub conditions: Vec<RuleCondition>,
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     pub listener_arn: String,
-    /// <p>The priority for the rule. A listener can't have multiple rules with the same priority.</p>
+    /// <p>The rule priority. A listener can't have multiple rules with the same priority.</p>
     pub priority: i64,
 }
 
@@ -996,7 +1810,7 @@ impl CreateRuleOutputDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateTargetGroupInput {
-    /// <p>The approximate amount of time, in seconds, between health checks of an individual target. For Application Load Balancers, the range is 5 to 300 seconds. For Network Load Balancers, the supported values are 10 or 30 seconds. The default is 30 seconds.</p>
+    /// <p>The approximate amount of time, in seconds, between health checks of an individual target. For Application Load Balancers, the range is 5–300 seconds. For Network Load Balancers, the supported values are 10 or 30 seconds. The default is 30 seconds.</p>
     pub health_check_interval_seconds: Option<i64>,
     /// <p>[HTTP/HTTPS health checks] The ping path that is the destination on the targets for health checks. The default is /.</p>
     pub health_check_path: Option<String>,
@@ -1004,7 +1818,7 @@ pub struct CreateTargetGroupInput {
     pub health_check_port: Option<String>,
     /// <p>The protocol the load balancer uses when performing health checks on targets. The TCP protocol is supported only if the protocol of the target group is TCP. For Application Load Balancers, the default is HTTP. For Network Load Balancers, the default is TCP.</p>
     pub health_check_protocol: Option<String>,
-    /// <p>The amount of time, in seconds, during which no response from a target means a failed health check. For Application Load Balancers, the range is 2 to 60 seconds and the default is 5 seconds. For Network Load Balancers, this is 10 seconds for TCP and HTTPS health checks and 6 seconds for HTTP health checks.</p>
+    /// <p>The amount of time, in seconds, during which no response from a target means a failed health check. For Application Load Balancers, the range is 2–60 seconds and the default is 5 seconds. For Network Load Balancers, this is 10 seconds for TCP and HTTPS health checks and 6 seconds for HTTP health checks.</p>
     pub health_check_timeout_seconds: Option<i64>,
     /// <p>The number of consecutive health checks successes required before considering an unhealthy target healthy. For Application Load Balancers, the default is 5. For Network Load Balancers, the default is 3.</p>
     pub healthy_threshold_count: Option<i64>,
@@ -1016,7 +1830,7 @@ pub struct CreateTargetGroupInput {
     pub port: i64,
     /// <p>The protocol to use for routing traffic to the targets. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocol is TCP.</p>
     pub protocol: String,
-    /// <p>The type of target that you must specify when registering targets with this target group. The possible values are <code>instance</code> (targets are specified by instance ID) or <code>ip</code> (targets are specified by IP address). The default is <code>instance</code>. Note that you can't specify targets for a target group using both instance IDs and IP addresses.</p> <p>If the target type is <code>ip</code>, specify IP addresses from the subnets of the virtual private cloud (VPC) for the target group, the RFC 1918 range (10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16), and the RFC 6598 range (100.64.0.0/10). You can't specify publicly routable IP addresses.</p>
+    /// <p>The type of target that you must specify when registering targets with this target group. The possible values are <code>instance</code> (targets are specified by instance ID) or <code>ip</code> (targets are specified by IP address). The default is <code>instance</code>. You can't specify targets for a target group using both instance IDs and IP addresses.</p> <p>If the target type is <code>ip</code>, specify IP addresses from the subnets of the virtual private cloud (VPC) for the target group, the RFC 1918 range (10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16), and the RFC 6598 range (100.64.0.0/10). You can't specify publicly routable IP addresses.</p>
     pub target_type: Option<String>,
     /// <p>The number of consecutive health check failures required before considering a target unhealthy. For Application Load Balancers, the default is 2. For Network Load Balancers, this value must be the same as the healthy threshold count.</p>
     pub unhealthy_threshold_count: Option<i64>,
@@ -2334,6 +3148,137 @@ impl DescriptionDeserializer {
         Ok(obj)
     }
 }
+/// <p>Information about an action that returns a custom HTTP response.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct FixedResponseActionConfig {
+    /// <p>The content type.</p> <p>Valid Values: text/plain | text/css | text/html | application/javascript | application/json</p>
+    pub content_type: Option<String>,
+    /// <p>The message.</p>
+    pub message_body: Option<String>,
+    /// <p>The HTTP response code (2XX, 4XX, or 5XX).</p>
+    pub status_code: String,
+}
+
+struct FixedResponseActionConfigDeserializer;
+impl FixedResponseActionConfigDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<FixedResponseActionConfig, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = FixedResponseActionConfig::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ContentType" => {
+                        obj.content_type = Some(try!(
+                            FixedResponseActionContentTypeDeserializer::deserialize(
+                                "ContentType",
+                                stack
+                            )
+                        ));
+                    }
+                    "MessageBody" => {
+                        obj.message_body =
+                            Some(try!(FixedResponseActionMessageDeserializer::deserialize(
+                                "MessageBody",
+                                stack
+                            )));
+                    }
+                    "StatusCode" => {
+                        obj.status_code =
+                            try!(FixedResponseActionStatusCodeDeserializer::deserialize(
+                                "StatusCode",
+                                stack
+                            ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `FixedResponseActionConfig` contents to a `SignedRequest`.
+struct FixedResponseActionConfigSerializer;
+impl FixedResponseActionConfigSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &FixedResponseActionConfig) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.content_type {
+            params.put(&format!("{}{}", prefix, "ContentType"), &field_value);
+        }
+        if let Some(ref field_value) = obj.message_body {
+            params.put(&format!("{}{}", prefix, "MessageBody"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "StatusCode"), &obj.status_code);
+    }
+}
+
+struct FixedResponseActionContentTypeDeserializer;
+impl FixedResponseActionContentTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct FixedResponseActionMessageDeserializer;
+impl FixedResponseActionMessageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct FixedResponseActionStatusCodeDeserializer;
+impl FixedResponseActionStatusCodeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 struct HealthCheckIntervalSecondsDeserializer;
 impl HealthCheckIntervalSecondsDeserializer {
     #[allow(unused_variables)]
@@ -2764,7 +3709,7 @@ pub struct LoadBalancer {
     pub load_balancer_arn: Option<String>,
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: Option<String>,
-    /// <p>The nodes of an Internet-facing load balancer have public IP addresses. The DNS name of an Internet-facing load balancer is publicly resolvable to the public IP addresses of the nodes. Therefore, Internet-facing load balancers can route requests from clients over the Internet.</p> <p>The nodes of an internal load balancer have only private IP addresses. The DNS name of an internal load balancer is publicly resolvable to the private IP addresses of the nodes. Therefore, internal load balancers can only route requests from clients with access to the VPC for the load balancer.</p>
+    /// <p>The nodes of an Internet-facing load balancer have public IP addresses. The DNS name of an Internet-facing load balancer is publicly resolvable to the public IP addresses of the nodes. Therefore, Internet-facing load balancers can route requests from clients over the internet.</p> <p>The nodes of an internal load balancer have only private IP addresses. The DNS name of an internal load balancer is publicly resolvable to the private IP addresses of the nodes. Therefore, internal load balancers can only route requests from clients with access to the VPC for the load balancer.</p>
     pub scheme: Option<String>,
     /// <p>The IDs of the security groups for the load balancer.</p>
     pub security_groups: Option<Vec<String>>,
@@ -3042,7 +3987,7 @@ impl LoadBalancerArnsSerializer {
 /// <p>Information about a load balancer attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LoadBalancerAttribute {
-    /// <p><p>The name of the attribute.</p> <ul> <li> <p> <code>access<em>logs.s3.enabled</code> - [Application Load Balancers] Indicates whether access logs stored in Amazon S3 are enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>access</em>logs.s3.bucket</code> - [Application Load Balancers] The name of the S3 bucket for the access logs. This attribute is required if access logs in Amazon S3 are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permission to write to the bucket.</p> </li> <li> <p> <code>access<em>logs.s3.prefix</code> - [Application Load Balancers] The prefix for the location in the S3 bucket. If you don&#39;t specify a prefix, the access logs are stored in the root of the bucket.</p> </li> <li> <p> <code>deletion</em>protection.enabled</code> - Indicates whether deletion protection is enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>idle<em>timeout.timeout</em>seconds</code> - [Application Load Balancers] The idle timeout value, in seconds. The valid range is 1-4000. The default is 60 seconds.</p> </li> <li> <p> <code>load<em>balancing.cross</em>zone.enabled</code> - [Network Load Balancers] Indicates whether cross-zone load balancing is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> <li> <p> <code>routing.http2.enabled</code> - [Application Load Balancers] Indicates whether HTTP/2 is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>true</code>.</p> </li> </ul></p>
+    /// <p><p>The name of the attribute.</p> <p>The following attributes are supported by both Application Load Balancers and Network Load Balancers:</p> <ul> <li> <p> <code>deletion<em>protection.enabled</code> - Indicates whether deletion protection is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul> <p>The following attributes are supported by only Application Load Balancers:</p> <ul> <li> <p> <code>access</em>logs.s3.enabled</code> - Indicates whether access logs are enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> <li> <p> <code>access<em>logs.s3.bucket</code> - The name of the S3 bucket for the access logs. This attribute is required if access logs are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permissions to write to the bucket.</p> </li> <li> <p> <code>access</em>logs.s3.prefix</code> - The prefix for the location in the S3 bucket for the access logs.</p> </li> <li> <p> <code>idle<em>timeout.timeout</em>seconds</code> - The idle timeout value, in seconds. The valid range is 1-4000 seconds. The default is 60 seconds.</p> </li> <li> <p> <code>routing.http2.enabled</code> - Indicates whether HTTP/2 is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>true</code>.</p> </li> </ul> <p>The following attributes are supported by only Network Load Balancers:</p> <ul> <li> <p> <code>load<em>balancing.cross</em>zone.enabled</code> - Indicates whether cross-zone load balancing is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul></p>
     pub key: Option<String>,
     /// <p>The value of the attribute.</p>
     pub value: Option<String>,
@@ -3374,7 +4319,7 @@ impl MarkerDeserializer {
 /// <p>Information to use when checking for a successful response from a target.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Matcher {
-    /// <p>The HTTP codes.</p> <p>For Application Load Balancers, you can specify values between 200 and 499, and the default value is 200. You can specify multiple values (for example, "200,202") or a range of values (for example, "200-299").</p> <p>For Network Load Balancers, this is 200 to 399.</p>
+    /// <p>The HTTP codes.</p> <p>For Application Load Balancers, you can specify values between 200 and 499, and the default value is 200. You can specify multiple values (for example, "200,202") or a range of values (for example, "200-299").</p> <p>For Network Load Balancers, this is 200–399.</p>
     pub http_code: String,
 }
 
@@ -3447,9 +4392,9 @@ impl MaxDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyListenerInput {
-    /// <p>The default SSL server certificate.</p>
+    /// <p>[HTTPS listeners] The default SSL server certificate. You must provide exactly one default certificate. To create a certificate list, use <a>AddListenerCertificates</a>.</p>
     pub certificates: Option<Vec<Certificate>>,
-    /// <p>The default action. For Application Load Balancers, the protocol of the specified target group must be HTTP or HTTPS. For Network Load Balancers, the protocol of the specified target group must be TCP.</p>
+    /// <p>The actions for the default rule. The rule must include one forward action or one or more fixed-response actions.</p> <p>If the action type is <code>forward</code>, you can specify a single target group. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer or TCP for a Network Load Balancer.</p> <p>[HTTPS listener] If the action type is <code>authenticate-oidc</code>, you can use an identity provider that is OpenID Connect (OIDC) compliant to authenticate users as they access your application.</p> <p>[HTTPS listener] If the action type is <code>authenticate-cognito</code>, you can use Amazon Cognito to authenticate users as they access your application.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you can redirect HTTP and HTTPS requests.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you can return a custom HTTP response.</p>
     pub default_actions: Option<Vec<Action>>,
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     pub listener_arn: String,
@@ -3457,7 +4402,7 @@ pub struct ModifyListenerInput {
     pub port: Option<i64>,
     /// <p>The protocol for connections from clients to the load balancer. Application Load Balancers support HTTP and HTTPS and Network Load Balancers support TCP.</p>
     pub protocol: Option<String>,
-    /// <p>The security policy that defines which protocols and ciphers are supported. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
+    /// <p>[HTTPS listeners] The security policy that defines which protocols and ciphers are supported. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
     pub ssl_policy: Option<String>,
 }
 
@@ -3499,7 +4444,7 @@ impl ModifyListenerInputSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyListenerOutput {
-    /// <p>Information about the modified listeners.</p>
+    /// <p>Information about the modified listener.</p>
     pub listeners: Option<Vec<Listener>>,
 }
 
@@ -3621,9 +4566,9 @@ impl ModifyLoadBalancerAttributesOutputDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyRuleInput {
-    /// <p>The actions. The target group must use the HTTP or HTTPS protocol.</p>
+    /// <p>The actions.</p> <p>If the action type is <code>forward</code>, you can specify a single target group.</p> <p>If the action type is <code>authenticate-oidc</code>, you can use an identity provider that is OpenID Connect (OIDC) compliant to authenticate users as they access your application.</p> <p>If the action type is <code>authenticate-cognito</code>, you can use Amazon Cognito to authenticate users as they access your application.</p>
     pub actions: Option<Vec<Action>>,
-    /// <p>The conditions.</p>
+    /// <p><p>The conditions. Each condition specifies a field name and a single value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. You can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern. A path pattern is case-sensitive, can be up to 128 characters in length, and can contain any of the following characters. You can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ &quot; &#39; @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul></p>
     pub conditions: Option<Vec<RuleCondition>>,
     /// <p>The Amazon Resource Name (ARN) of the rule.</p>
     pub rule_arn: String,
@@ -3654,7 +4599,7 @@ impl ModifyRuleInputSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyRuleOutput {
-    /// <p>Information about the rule.</p>
+    /// <p>Information about the modified rule.</p>
     pub rules: Option<Vec<Rule>>,
 }
 
@@ -3775,7 +4720,7 @@ impl ModifyTargetGroupAttributesOutputDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyTargetGroupInput {
-    /// <p>The approximate amount of time, in seconds, between health checks of an individual target. For Application Load Balancers, the range is 5 to 300 seconds. For Network Load Balancers, the supported values are 10 or 30 seconds.</p>
+    /// <p>The approximate amount of time, in seconds, between health checks of an individual target. For Application Load Balancers, the range is 5–300 seconds. For Network Load Balancers, the supported values are 10 or 30 seconds.</p>
     pub health_check_interval_seconds: Option<i64>,
     /// <p>[HTTP/HTTPS health checks] The ping path that is the destination for the health check request.</p>
     pub health_check_path: Option<String>,
@@ -3852,7 +4797,7 @@ impl ModifyTargetGroupInputSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyTargetGroupOutput {
-    /// <p>Information about the target group.</p>
+    /// <p>Information about the modified target group.</p>
     pub target_groups: Option<Vec<TargetGroup>>,
 }
 
@@ -3942,6 +4887,204 @@ impl PortDeserializer {
 }
 struct ProtocolEnumDeserializer;
 impl ProtocolEnumDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Information about a redirect action.</p> <p>A URI consists of the following components: protocol://hostname:port/path?query. You must modify at least one of the following components to avoid a redirect loop: protocol, hostname, port, or path. Any components that you do not modify retain their original values.</p> <p>You can reuse URI components using the following reserved keywords:</p> <ul> <li> <p>#{protocol}</p> </li> <li> <p>#{host}</p> </li> <li> <p>#{port}</p> </li> <li> <p>#{path} (the leading "/" is removed)</p> </li> <li> <p>#{query}</p> </li> </ul> <p>For example, you can change the path to "/new/#{path}", the hostname to "example.#{host}", or the query to "#{query}&amp;value=xyz".</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RedirectActionConfig {
+    /// <p>The hostname. This component is not percent-encoded. The hostname can contain #{host}.</p>
+    pub host: Option<String>,
+    /// <p>The absolute path, starting with the leading "/". This component is not percent-encoded. The path can contain #{host}, #{path}, and #{port}.</p>
+    pub path: Option<String>,
+    /// <p>The port. You can specify a value from 1 to 65535 or #{port}.</p>
+    pub port: Option<String>,
+    /// <p>The protocol. You can specify HTTP, HTTPS, or #{protocol}. You can redirect HTTP to HTTP, HTTP to HTTPS, and HTTPS to HTTPS. You cannot redirect HTTPS to HTTP.</p>
+    pub protocol: Option<String>,
+    /// <p>The query parameters, URL-encoded when necessary, but not percent-encoded. Do not include the leading "?", as it is automatically added. You can specify any of the reserved keywords.</p>
+    pub query: Option<String>,
+    /// <p>The HTTP redirect code. The redirect is either permanent (HTTP 301) or temporary (HTTP 302).</p>
+    pub status_code: String,
+}
+
+struct RedirectActionConfigDeserializer;
+impl RedirectActionConfigDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RedirectActionConfig, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = RedirectActionConfig::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Host" => {
+                        obj.host = Some(try!(RedirectActionHostDeserializer::deserialize(
+                            "Host", stack
+                        )));
+                    }
+                    "Path" => {
+                        obj.path = Some(try!(RedirectActionPathDeserializer::deserialize(
+                            "Path", stack
+                        )));
+                    }
+                    "Port" => {
+                        obj.port = Some(try!(RedirectActionPortDeserializer::deserialize(
+                            "Port", stack
+                        )));
+                    }
+                    "Protocol" => {
+                        obj.protocol = Some(try!(RedirectActionProtocolDeserializer::deserialize(
+                            "Protocol", stack
+                        )));
+                    }
+                    "Query" => {
+                        obj.query = Some(try!(RedirectActionQueryDeserializer::deserialize(
+                            "Query", stack
+                        )));
+                    }
+                    "StatusCode" => {
+                        obj.status_code =
+                            try!(RedirectActionStatusCodeEnumDeserializer::deserialize(
+                                "StatusCode",
+                                stack
+                            ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `RedirectActionConfig` contents to a `SignedRequest`.
+struct RedirectActionConfigSerializer;
+impl RedirectActionConfigSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RedirectActionConfig) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.host {
+            params.put(&format!("{}{}", prefix, "Host"), &field_value);
+        }
+        if let Some(ref field_value) = obj.path {
+            params.put(&format!("{}{}", prefix, "Path"), &field_value);
+        }
+        if let Some(ref field_value) = obj.port {
+            params.put(&format!("{}{}", prefix, "Port"), &field_value);
+        }
+        if let Some(ref field_value) = obj.protocol {
+            params.put(&format!("{}{}", prefix, "Protocol"), &field_value);
+        }
+        if let Some(ref field_value) = obj.query {
+            params.put(&format!("{}{}", prefix, "Query"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "StatusCode"), &obj.status_code);
+    }
+}
+
+struct RedirectActionHostDeserializer;
+impl RedirectActionHostDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct RedirectActionPathDeserializer;
+impl RedirectActionPathDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct RedirectActionPortDeserializer;
+impl RedirectActionPortDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct RedirectActionProtocolDeserializer;
+impl RedirectActionProtocolDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct RedirectActionQueryDeserializer;
+impl RedirectActionQueryDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct RedirectActionStatusCodeEnumDeserializer;
+impl RedirectActionStatusCodeEnumDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(
         tag_name: &str,
@@ -4222,7 +5365,7 @@ impl RuleArnsSerializer {
 pub struct RuleCondition {
     /// <p>The name of the field. The possible values are <code>host-header</code> and <code>path-pattern</code>.</p>
     pub field: Option<String>,
-    /// <p><p>The condition value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern (for example, /img/<em>). A path pattern is case sensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ &quot; &#39; @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p></em> (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul></p>
+    /// <p><p>The condition value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. You can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern (for example, /img/<em>). A path pattern is case-sensitive, can be up to 128 characters in length, and can contain any of the following characters. You can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ &quot; &#39; @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p></em> (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul></p>
     pub values: Option<Vec<String>>,
 }
 
@@ -4724,7 +5867,7 @@ pub struct SetSubnetsInput {
     /// <p>The IDs of the public subnets. You must specify subnets from at least two Availability Zones. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>You cannot specify Elastic IP addresses for your subnets.</p>
     pub subnet_mappings: Option<Vec<SubnetMapping>>,
     /// <p>The IDs of the public subnets. You must specify subnets from at least two Availability Zones. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p>
-    pub subnets: Vec<String>,
+    pub subnets: Option<Vec<String>>,
 }
 
 /// Serialize `SetSubnetsInput` contents to a `SignedRequest`.
@@ -4747,7 +5890,9 @@ impl SetSubnetsInputSerializer {
                 field_value,
             );
         }
-        SubnetsSerializer::serialize(params, &format!("{}{}", prefix, "Subnets"), &obj.subnets);
+        if let Some(ref field_value) = obj.subnets {
+            SubnetsSerializer::serialize(params, &format!("{}{}", prefix, "Subnets"), field_value);
+        }
     }
 }
 
@@ -5611,7 +6756,7 @@ impl TargetGroupArnsSerializer {
 /// <p>Information about a target group attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TargetGroupAttribute {
-    /// <p><p>The name of the attribute.</p> <ul> <li> <p> <code>deregistration<em>delay.timeout</em>seconds</code> - The amount time for Elastic Load Balancing to wait before changing the state of a deregistering target from <code>draining</code> to <code>unused</code>. The range is 0-3600 seconds. The default value is 300 seconds.</p> </li> <li> <p> <code>proxy<em>protocol</em>v2.enabled</code> - [Network Load Balancers] Indicates whether Proxy Protocol version 2 is enabled.</p> </li> <li> <p> <code>stickiness.enabled</code> - [Application Load Balancers] Indicates whether sticky sessions are enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>stickiness.type</code> - [Application Load Balancers] The type of sticky sessions. The possible value is <code>lb<em>cookie</code>.</p> </li> <li> <p> <code>stickiness.lb</em>cookie.duration_seconds</code> - [Application Load Balancers] The time period, in seconds, during which requests from a client should be routed to the same target. After this time period expires, the load balancer-generated cookie is considered stale. The range is 1 second to 1 week (604800 seconds). The default value is 1 day (86400 seconds).</p> </li> </ul></p>
+    /// <p><p>The name of the attribute.</p> <p>The following attributes are supported by both Application Load Balancers and Network Load Balancers:</p> <ul> <li> <p> <code>deregistration<em>delay.timeout</em>seconds</code> - The amount of time, in seconds, for Elastic Load Balancing to wait before changing the state of a deregistering target from <code>draining</code> to <code>unused</code>. The range is 0-3600 seconds. The default value is 300 seconds.</p> </li> </ul> <p>The following attributes are supported by only Application Load Balancers:</p> <ul> <li> <p> <code>slow<em>start.duration</em>seconds</code> - The time period, in seconds, during which a newly registered target receives a linearly increasing share of the traffic to the target group. After this time period ends, the target receives its full share of traffic. The range is 30-900 seconds (15 minutes). Slow start mode is disabled by default.</p> </li> <li> <p> <code>stickiness.enabled</code> - Indicates whether sticky sessions are enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> <li> <p> <code>stickiness.type</code> - The type of sticky sessions. The possible value is <code>lb<em>cookie</code>.</p> </li> <li> <p> <code>stickiness.lb</em>cookie.duration<em>seconds</code> - The time period, in seconds, during which requests from a client should be routed to the same target. After this time period expires, the load balancer-generated cookie is considered stale. The range is 1 second to 1 week (604800 seconds). The default value is 1 day (86400 seconds).</p> </li> </ul> <p>The following attributes are supported by only Network Load Balancers:</p> <ul> <li> <p> <code>proxy</em>protocol_v2.enabled</code> - Indicates whether Proxy Protocol version 2 is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul></p>
     pub key: Option<String>,
     /// <p>The value of the attribute.</p>
     pub value: Option<String>,
@@ -6277,6 +7422,8 @@ pub enum CreateListenerError {
     IncompatibleProtocols(String),
     /// <p>The requested configuration is not valid.</p>
     InvalidConfigurationRequest(String),
+    /// <p>The requested action is not valid.</p>
+    InvalidLoadBalancerAction(String),
     /// <p>The specified load balancer does not exist.</p>
     LoadBalancerNotFound(String),
     /// <p>The specified SSL policy does not exist.</p>
@@ -6285,6 +7432,8 @@ pub enum CreateListenerError {
     TargetGroupAssociationLimit(String),
     /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
+    /// <p>You've reached the limit on the number of actions per rule.</p>
+    TooManyActions(String),
     /// <p>You've reached the limit on the number of certificates per load balancer.</p>
     TooManyCertificates(String),
     /// <p>You've reached the limit on the number of listeners per load balancer.</p>
@@ -6324,6 +7473,9 @@ impl CreateListenerError {
                 "InvalidConfigurationRequest" => CreateListenerError::InvalidConfigurationRequest(
                     String::from(parsed_error.message),
                 ),
+                "InvalidLoadBalancerAction" => CreateListenerError::InvalidLoadBalancerAction(
+                    String::from(parsed_error.message),
+                ),
                 "LoadBalancerNotFound" => {
                     CreateListenerError::LoadBalancerNotFound(String::from(parsed_error.message))
                 }
@@ -6335,6 +7487,9 @@ impl CreateListenerError {
                 ),
                 "TargetGroupNotFound" => {
                     CreateListenerError::TargetGroupNotFound(String::from(parsed_error.message))
+                }
+                "TooManyActions" => {
+                    CreateListenerError::TooManyActions(String::from(parsed_error.message))
                 }
                 "TooManyCertificates" => {
                     CreateListenerError::TooManyCertificates(String::from(parsed_error.message))
@@ -6401,10 +7556,12 @@ impl Error for CreateListenerError {
             CreateListenerError::DuplicateListener(ref cause) => cause,
             CreateListenerError::IncompatibleProtocols(ref cause) => cause,
             CreateListenerError::InvalidConfigurationRequest(ref cause) => cause,
+            CreateListenerError::InvalidLoadBalancerAction(ref cause) => cause,
             CreateListenerError::LoadBalancerNotFound(ref cause) => cause,
             CreateListenerError::SSLPolicyNotFound(ref cause) => cause,
             CreateListenerError::TargetGroupAssociationLimit(ref cause) => cause,
             CreateListenerError::TargetGroupNotFound(ref cause) => cause,
+            CreateListenerError::TooManyActions(ref cause) => cause,
             CreateListenerError::TooManyCertificates(ref cause) => cause,
             CreateListenerError::TooManyListeners(ref cause) => cause,
             CreateListenerError::TooManyRegistrationsForTargetId(ref cause) => cause,
@@ -6579,6 +7736,8 @@ pub enum CreateRuleError {
     IncompatibleProtocols(String),
     /// <p>The requested configuration is not valid.</p>
     InvalidConfigurationRequest(String),
+    /// <p>The requested action is not valid.</p>
+    InvalidLoadBalancerAction(String),
     /// <p>The specified listener does not exist.</p>
     ListenerNotFound(String),
     /// <p>The specified priority is in use.</p>
@@ -6587,6 +7746,8 @@ pub enum CreateRuleError {
     TargetGroupAssociationLimit(String),
     /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
+    /// <p>You've reached the limit on the number of actions per rule.</p>
+    TooManyActions(String),
     /// <p>You've reached the limit on the number of times a target can be registered with a load balancer.</p>
     TooManyRegistrationsForTargetId(String),
     /// <p>You've reached the limit on the number of rules per load balancer.</p>
@@ -6595,6 +7756,8 @@ pub enum CreateRuleError {
     TooManyTargetGroups(String),
     /// <p>You've reached the limit on the number of targets.</p>
     TooManyTargets(String),
+    /// <p>The specified protocol is not supported.</p>
+    UnsupportedProtocol(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -6618,6 +7781,9 @@ impl CreateRuleError {
                 "InvalidConfigurationRequest" => {
                     CreateRuleError::InvalidConfigurationRequest(String::from(parsed_error.message))
                 }
+                "InvalidLoadBalancerAction" => {
+                    CreateRuleError::InvalidLoadBalancerAction(String::from(parsed_error.message))
+                }
                 "ListenerNotFound" => {
                     CreateRuleError::ListenerNotFound(String::from(parsed_error.message))
                 }
@@ -6630,6 +7796,9 @@ impl CreateRuleError {
                 "TargetGroupNotFound" => {
                     CreateRuleError::TargetGroupNotFound(String::from(parsed_error.message))
                 }
+                "TooManyActions" => {
+                    CreateRuleError::TooManyActions(String::from(parsed_error.message))
+                }
                 "TooManyRegistrationsForTargetId" => {
                     CreateRuleError::TooManyRegistrationsForTargetId(String::from(
                         parsed_error.message,
@@ -6641,6 +7810,9 @@ impl CreateRuleError {
                 }
                 "TooManyTargets" => {
                     CreateRuleError::TooManyTargets(String::from(parsed_error.message))
+                }
+                "UnsupportedProtocol" => {
+                    CreateRuleError::UnsupportedProtocol(String::from(parsed_error.message))
                 }
                 _ => CreateRuleError::Unknown(String::from(body)),
             },
@@ -6688,14 +7860,17 @@ impl Error for CreateRuleError {
         match *self {
             CreateRuleError::IncompatibleProtocols(ref cause) => cause,
             CreateRuleError::InvalidConfigurationRequest(ref cause) => cause,
+            CreateRuleError::InvalidLoadBalancerAction(ref cause) => cause,
             CreateRuleError::ListenerNotFound(ref cause) => cause,
             CreateRuleError::PriorityInUse(ref cause) => cause,
             CreateRuleError::TargetGroupAssociationLimit(ref cause) => cause,
             CreateRuleError::TargetGroupNotFound(ref cause) => cause,
+            CreateRuleError::TooManyActions(ref cause) => cause,
             CreateRuleError::TooManyRegistrationsForTargetId(ref cause) => cause,
             CreateRuleError::TooManyRules(ref cause) => cause,
             CreateRuleError::TooManyTargetGroups(ref cause) => cause,
             CreateRuleError::TooManyTargets(ref cause) => cause,
+            CreateRuleError::UnsupportedProtocol(ref cause) => cause,
             CreateRuleError::Validation(ref cause) => cause,
             CreateRuleError::Credentials(ref err) => err.description(),
             CreateRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -7368,6 +8543,8 @@ pub enum DescribeListenersError {
     ListenerNotFound(String),
     /// <p>The specified load balancer does not exist.</p>
     LoadBalancerNotFound(String),
+    /// <p>The specified protocol is not supported.</p>
+    UnsupportedProtocol(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -7390,6 +8567,9 @@ impl DescribeListenersError {
                 }
                 "LoadBalancerNotFound" => {
                     DescribeListenersError::LoadBalancerNotFound(String::from(parsed_error.message))
+                }
+                "UnsupportedProtocol" => {
+                    DescribeListenersError::UnsupportedProtocol(String::from(parsed_error.message))
                 }
                 _ => DescribeListenersError::Unknown(String::from(body)),
             },
@@ -7437,6 +8617,7 @@ impl Error for DescribeListenersError {
         match *self {
             DescribeListenersError::ListenerNotFound(ref cause) => cause,
             DescribeListenersError::LoadBalancerNotFound(ref cause) => cause,
+            DescribeListenersError::UnsupportedProtocol(ref cause) => cause,
             DescribeListenersError::Validation(ref cause) => cause,
             DescribeListenersError::Credentials(ref err) => err.description(),
             DescribeListenersError::HttpDispatch(ref dispatch_error) => {
@@ -7613,6 +8794,8 @@ pub enum DescribeRulesError {
     ListenerNotFound(String),
     /// <p>The specified rule does not exist.</p>
     RuleNotFound(String),
+    /// <p>The specified protocol is not supported.</p>
+    UnsupportedProtocol(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -7635,6 +8818,9 @@ impl DescribeRulesError {
                 }
                 "RuleNotFound" => {
                     DescribeRulesError::RuleNotFound(String::from(parsed_error.message))
+                }
+                "UnsupportedProtocol" => {
+                    DescribeRulesError::UnsupportedProtocol(String::from(parsed_error.message))
                 }
                 _ => DescribeRulesError::Unknown(String::from(body)),
             },
@@ -7682,6 +8868,7 @@ impl Error for DescribeRulesError {
         match *self {
             DescribeRulesError::ListenerNotFound(ref cause) => cause,
             DescribeRulesError::RuleNotFound(ref cause) => cause,
+            DescribeRulesError::UnsupportedProtocol(ref cause) => cause,
             DescribeRulesError::Validation(ref cause) => cause,
             DescribeRulesError::Credentials(ref err) => err.description(),
             DescribeRulesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -8129,6 +9316,8 @@ pub enum ModifyListenerError {
     IncompatibleProtocols(String),
     /// <p>The requested configuration is not valid.</p>
     InvalidConfigurationRequest(String),
+    /// <p>The requested action is not valid.</p>
+    InvalidLoadBalancerAction(String),
     /// <p>The specified listener does not exist.</p>
     ListenerNotFound(String),
     /// <p>The specified SSL policy does not exist.</p>
@@ -8137,6 +9326,8 @@ pub enum ModifyListenerError {
     TargetGroupAssociationLimit(String),
     /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
+    /// <p>You've reached the limit on the number of actions per rule.</p>
+    TooManyActions(String),
     /// <p>You've reached the limit on the number of certificates per load balancer.</p>
     TooManyCertificates(String),
     /// <p>You've reached the limit on the number of listeners per load balancer.</p>
@@ -8176,6 +9367,9 @@ impl ModifyListenerError {
                 "InvalidConfigurationRequest" => ModifyListenerError::InvalidConfigurationRequest(
                     String::from(parsed_error.message),
                 ),
+                "InvalidLoadBalancerAction" => ModifyListenerError::InvalidLoadBalancerAction(
+                    String::from(parsed_error.message),
+                ),
                 "ListenerNotFound" => {
                     ModifyListenerError::ListenerNotFound(String::from(parsed_error.message))
                 }
@@ -8187,6 +9381,9 @@ impl ModifyListenerError {
                 ),
                 "TargetGroupNotFound" => {
                     ModifyListenerError::TargetGroupNotFound(String::from(parsed_error.message))
+                }
+                "TooManyActions" => {
+                    ModifyListenerError::TooManyActions(String::from(parsed_error.message))
                 }
                 "TooManyCertificates" => {
                     ModifyListenerError::TooManyCertificates(String::from(parsed_error.message))
@@ -8253,10 +9450,12 @@ impl Error for ModifyListenerError {
             ModifyListenerError::DuplicateListener(ref cause) => cause,
             ModifyListenerError::IncompatibleProtocols(ref cause) => cause,
             ModifyListenerError::InvalidConfigurationRequest(ref cause) => cause,
+            ModifyListenerError::InvalidLoadBalancerAction(ref cause) => cause,
             ModifyListenerError::ListenerNotFound(ref cause) => cause,
             ModifyListenerError::SSLPolicyNotFound(ref cause) => cause,
             ModifyListenerError::TargetGroupAssociationLimit(ref cause) => cause,
             ModifyListenerError::TargetGroupNotFound(ref cause) => cause,
+            ModifyListenerError::TooManyActions(ref cause) => cause,
             ModifyListenerError::TooManyCertificates(ref cause) => cause,
             ModifyListenerError::TooManyListeners(ref cause) => cause,
             ModifyListenerError::TooManyRegistrationsForTargetId(ref cause) => cause,
@@ -8361,6 +9560,8 @@ impl Error for ModifyLoadBalancerAttributesError {
 pub enum ModifyRuleError {
     /// <p>The specified configuration is not valid with this protocol.</p>
     IncompatibleProtocols(String),
+    /// <p>The requested action is not valid.</p>
+    InvalidLoadBalancerAction(String),
     /// <p>This operation is not allowed.</p>
     OperationNotPermitted(String),
     /// <p>The specified rule does not exist.</p>
@@ -8369,10 +9570,14 @@ pub enum ModifyRuleError {
     TargetGroupAssociationLimit(String),
     /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
+    /// <p>You've reached the limit on the number of actions per rule.</p>
+    TooManyActions(String),
     /// <p>You've reached the limit on the number of times a target can be registered with a load balancer.</p>
     TooManyRegistrationsForTargetId(String),
     /// <p>You've reached the limit on the number of targets.</p>
     TooManyTargets(String),
+    /// <p>The specified protocol is not supported.</p>
+    UnsupportedProtocol(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -8393,6 +9598,9 @@ impl ModifyRuleError {
                 "IncompatibleProtocols" => {
                     ModifyRuleError::IncompatibleProtocols(String::from(parsed_error.message))
                 }
+                "InvalidLoadBalancerAction" => {
+                    ModifyRuleError::InvalidLoadBalancerAction(String::from(parsed_error.message))
+                }
                 "OperationNotPermitted" => {
                     ModifyRuleError::OperationNotPermitted(String::from(parsed_error.message))
                 }
@@ -8403,6 +9611,9 @@ impl ModifyRuleError {
                 "TargetGroupNotFound" => {
                     ModifyRuleError::TargetGroupNotFound(String::from(parsed_error.message))
                 }
+                "TooManyActions" => {
+                    ModifyRuleError::TooManyActions(String::from(parsed_error.message))
+                }
                 "TooManyRegistrationsForTargetId" => {
                     ModifyRuleError::TooManyRegistrationsForTargetId(String::from(
                         parsed_error.message,
@@ -8410,6 +9621,9 @@ impl ModifyRuleError {
                 }
                 "TooManyTargets" => {
                     ModifyRuleError::TooManyTargets(String::from(parsed_error.message))
+                }
+                "UnsupportedProtocol" => {
+                    ModifyRuleError::UnsupportedProtocol(String::from(parsed_error.message))
                 }
                 _ => ModifyRuleError::Unknown(String::from(body)),
             },
@@ -8456,12 +9670,15 @@ impl Error for ModifyRuleError {
     fn description(&self) -> &str {
         match *self {
             ModifyRuleError::IncompatibleProtocols(ref cause) => cause,
+            ModifyRuleError::InvalidLoadBalancerAction(ref cause) => cause,
             ModifyRuleError::OperationNotPermitted(ref cause) => cause,
             ModifyRuleError::RuleNotFound(ref cause) => cause,
             ModifyRuleError::TargetGroupAssociationLimit(ref cause) => cause,
             ModifyRuleError::TargetGroupNotFound(ref cause) => cause,
+            ModifyRuleError::TooManyActions(ref cause) => cause,
             ModifyRuleError::TooManyRegistrationsForTargetId(ref cause) => cause,
             ModifyRuleError::TooManyTargets(ref cause) => cause,
+            ModifyRuleError::UnsupportedProtocol(ref cause) => cause,
             ModifyRuleError::Validation(ref cause) => cause,
             ModifyRuleError::Credentials(ref err) => err.description(),
             ModifyRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -9327,7 +10544,7 @@ pub trait Elb {
         input: CreateLoadBalancerInput,
     ) -> RusotoFuture<CreateLoadBalancerOutput, CreateLoadBalancerError>;
 
-    /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the condition for a rule is met, the specified action is taken. If no conditions are met, the action for the default rule is taken. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
+    /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the conditions for a rule are met, its actions are performed. If the conditions for no rules are met, the actions for the default rule are performed. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
     fn create_rule(
         &self,
         input: CreateRuleInput,
@@ -9339,7 +10556,7 @@ pub trait Elb {
         input: CreateTargetGroupInput,
     ) -> RusotoFuture<CreateTargetGroupOutput, CreateTargetGroupError>;
 
-    /// <p>Deletes the specified listener.</p> <p>Alternatively, your listener is deleted when you delete the load balancer it is attached to using <a>DeleteLoadBalancer</a>.</p>
+    /// <p>Deletes the specified listener.</p> <p>Alternatively, your listener is deleted when you delete the load balancer to which it is attached, using <a>DeleteLoadBalancer</a>.</p>
     fn delete_listener(
         &self,
         input: DeleteListenerInput,
@@ -9387,7 +10604,7 @@ pub trait Elb {
         input: DescribeListenersInput,
     ) -> RusotoFuture<DescribeListenersOutput, DescribeListenersError>;
 
-    /// <p>Describes the attributes for the specified Application Load Balancer or Network Load Balancer.</p>
+    /// <p>Describes the attributes for the specified Application Load Balancer or Network Load Balancer.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn describe_load_balancer_attributes(
         &self,
         input: DescribeLoadBalancerAttributesInput,
@@ -9417,7 +10634,7 @@ pub trait Elb {
         input: DescribeTagsInput,
     ) -> RusotoFuture<DescribeTagsOutput, DescribeTagsError>;
 
-    /// <p>Describes the attributes for the specified target group.</p>
+    /// <p>Describes the attributes for the specified target group.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn describe_target_group_attributes(
         &self,
         input: DescribeTargetGroupAttributesInput,
@@ -9447,7 +10664,7 @@ pub trait Elb {
         input: ModifyLoadBalancerAttributesInput,
     ) -> RusotoFuture<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError>;
 
-    /// <p>Modifies the specified rule.</p> <p>Any existing properties that you do not modify retain their current values.</p> <p>To modify the default action, use <a>ModifyListener</a>.</p>
+    /// <p>Modifies the specified rule.</p> <p>Any existing properties that you do not modify retain their current values.</p> <p>To modify the actions for the default rule, use <a>ModifyListener</a>.</p>
     fn modify_rule(
         &self,
         input: ModifyRuleInput,
@@ -9483,7 +10700,7 @@ pub trait Elb {
         input: RemoveTagsInput,
     ) -> RusotoFuture<RemoveTagsOutput, RemoveTagsError>;
 
-    /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer or Network Load Balancer.</p> <p>Note that Network Load Balancers must use <code>ipv4</code>.</p>
+    /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer or Network Load Balancer.</p> <p>Network Load Balancers must use <code>ipv4</code>.</p>
     fn set_ip_address_type(
         &self,
         input: SetIpAddressTypeInput,
@@ -9495,13 +10712,13 @@ pub trait Elb {
         input: SetRulePrioritiesInput,
     ) -> RusotoFuture<SetRulePrioritiesOutput, SetRulePrioritiesError>;
 
-    /// <p>Associates the specified security groups with the specified Application Load Balancer. The specified security groups override the previously associated security groups.</p> <p>Note that you can't specify a security group for a Network Load Balancer.</p>
+    /// <p>Associates the specified security groups with the specified Application Load Balancer. The specified security groups override the previously associated security groups.</p> <p>You can't specify a security group for a Network Load Balancer.</p>
     fn set_security_groups(
         &self,
         input: SetSecurityGroupsInput,
     ) -> RusotoFuture<SetSecurityGroupsOutput, SetSecurityGroupsError>;
 
-    /// <p>Enables the Availability Zone for the specified public subnets for the specified Application Load Balancer. The specified subnets replace the previously enabled subnets.</p> <p>Note that you can't change the subnets for a Network Load Balancer.</p>
+    /// <p>Enables the Availability Zone for the specified public subnets for the specified Application Load Balancer. The specified subnets replace the previously enabled subnets.</p> <p>You can't change the subnets for a Network Load Balancer.</p>
     fn set_subnets(
         &self,
         input: SetSubnetsInput,
@@ -9748,7 +10965,7 @@ impl Elb for ElbClient {
         })
     }
 
-    /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the condition for a rule is met, the specified action is taken. If no conditions are met, the action for the default rule is taken. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
+    /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the conditions for a rule are met, its actions are performed. If the conditions for no rules are met, the actions for the default rule are performed. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
     fn create_rule(
         &self,
         input: CreateRuleInput,
@@ -9852,7 +11069,7 @@ impl Elb for ElbClient {
         })
     }
 
-    /// <p>Deletes the specified listener.</p> <p>Alternatively, your listener is deleted when you delete the load balancer it is attached to using <a>DeleteLoadBalancer</a>.</p>
+    /// <p>Deletes the specified listener.</p> <p>Alternatively, your listener is deleted when you delete the load balancer to which it is attached, using <a>DeleteLoadBalancer</a>.</p>
     fn delete_listener(
         &self,
         input: DeleteListenerInput,
@@ -10268,7 +11485,7 @@ impl Elb for ElbClient {
         })
     }
 
-    /// <p>Describes the attributes for the specified Application Load Balancer or Network Load Balancer.</p>
+    /// <p>Describes the attributes for the specified Application Load Balancer or Network Load Balancer.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn describe_load_balancer_attributes(
         &self,
         input: DescribeLoadBalancerAttributesInput,
@@ -10531,7 +11748,7 @@ impl Elb for ElbClient {
         })
     }
 
-    /// <p>Describes the attributes for the specified target group.</p>
+    /// <p>Describes the attributes for the specified target group.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn describe_target_group_attributes(
         &self,
         input: DescribeTargetGroupAttributesInput,
@@ -10793,7 +12010,7 @@ impl Elb for ElbClient {
         })
     }
 
-    /// <p>Modifies the specified rule.</p> <p>Any existing properties that you do not modify retain their current values.</p> <p>To modify the default action, use <a>ModifyListener</a>.</p>
+    /// <p>Modifies the specified rule.</p> <p>Any existing properties that you do not modify retain their current values.</p> <p>To modify the actions for the default rule, use <a>ModifyListener</a>.</p>
     fn modify_rule(
         &self,
         input: ModifyRuleInput,
@@ -11105,7 +12322,7 @@ impl Elb for ElbClient {
         })
     }
 
-    /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer or Network Load Balancer.</p> <p>Note that Network Load Balancers must use <code>ipv4</code>.</p>
+    /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer or Network Load Balancer.</p> <p>Network Load Balancers must use <code>ipv4</code>.</p>
     fn set_ip_address_type(
         &self,
         input: SetIpAddressTypeInput,
@@ -11209,7 +12426,7 @@ impl Elb for ElbClient {
         })
     }
 
-    /// <p>Associates the specified security groups with the specified Application Load Balancer. The specified security groups override the previously associated security groups.</p> <p>Note that you can't specify a security group for a Network Load Balancer.</p>
+    /// <p>Associates the specified security groups with the specified Application Load Balancer. The specified security groups override the previously associated security groups.</p> <p>You can't specify a security group for a Network Load Balancer.</p>
     fn set_security_groups(
         &self,
         input: SetSecurityGroupsInput,
@@ -11261,7 +12478,7 @@ impl Elb for ElbClient {
         })
     }
 
-    /// <p>Enables the Availability Zone for the specified public subnets for the specified Application Load Balancer. The specified subnets replace the previously enabled subnets.</p> <p>Note that you can't change the subnets for a Network Load Balancer.</p>
+    /// <p>Enables the Availability Zone for the specified public subnets for the specified Application Load Balancer. The specified subnets replace the previously enabled subnets.</p> <p>You can't change the subnets for a Network Load Balancer.</p>
     fn set_subnets(
         &self,
         input: SetSubnetsInput,

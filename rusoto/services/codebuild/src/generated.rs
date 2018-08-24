@@ -112,6 +112,10 @@ pub struct Build {
     #[serde(rename = "currentPhase")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub current_phase: Option<String>,
+    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) to be used for encrypting the build output artifacts.</p> <p>This is expressed either as the CMK's Amazon Resource Name (ARN) or, if specified, the CMK's alias (using the format <code>alias/<i>alias-name</i> </code>).</p>
+    #[serde(rename = "encryptionKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_key: Option<String>,
     /// <p>When the build process ended, expressed in Unix time format.</p>
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -144,6 +148,10 @@ pub struct Build {
     #[serde(rename = "projectName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub project_name: Option<String>,
+    /// <p>The name of a service role used for this build.</p>
+    #[serde(rename = "serviceRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_role: Option<String>,
     /// <p>Information about the source code to be built.</p>
     #[serde(rename = "source")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -169,6 +177,10 @@ pub struct Build {
 /// <p>Information about build output artifacts.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BuildArtifacts {
+    /// <p> Information that tells you if encryption for build artifacts is disabled. </p>
+    #[serde(rename = "encryptionDisabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_disabled: Option<bool>,
     /// <p>Information about the location of the build artifacts.</p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -254,8 +266,7 @@ pub struct CreateProjectInput {
     pub name: String,
     /// <p>The ARN of the AWS Identity and Access Management (IAM) role that enables AWS CodeBuild to interact with dependent AWS services on behalf of the AWS account.</p>
     #[serde(rename = "serviceRole")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub service_role: Option<String>,
+    pub service_role: String,
     /// <p>Information about the build input source code for the build project.</p>
     #[serde(rename = "source")]
     pub source: ProjectSource,
@@ -593,11 +604,15 @@ pub struct Project {
 /// <p>Information about the build output artifacts for the build project.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProjectArtifacts {
+    /// <p> Set to true if you do not want your output artifacts encrypted. This option is only valid if your artifacts type is Amazon S3. If this is set with another artifacts type, an invalidInputException will be thrown. </p>
+    #[serde(rename = "encryptionDisabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_disabled: Option<bool>,
     /// <p><p>Information about the build output artifact location, as follows:</p> <ul> <li> <p>If <code>type</code> is set to <code>CODEPIPELINE</code>, then AWS CodePipeline will ignore this value if specified. This is because AWS CodePipeline manages its build output locations instead of AWS CodeBuild.</p> </li> <li> <p>If <code>type</code> is set to <code>NO_ARTIFACTS</code>, then this value will be ignored if specified, because no build output will be produced.</p> </li> <li> <p>If <code>type</code> is set to <code>S3</code>, this is the name of the output bucket.</p> </li> </ul></p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
-    /// <p>Along with <code>path</code> and <code>namespaceType</code>, the pattern that AWS CodeBuild will use to name and store the output artifact, as follows:</p> <ul> <li> <p>If <code>type</code> is set to <code>CODEPIPELINE</code>, then AWS CodePipeline will ignore this value if specified. This is because AWS CodePipeline manages its build output names instead of AWS CodeBuild.</p> </li> <li> <p>If <code>type</code> is set to <code>NO_ARTIFACTS</code>, then this value will be ignored if specified, because no build output will be produced.</p> </li> <li> <p>If <code>type</code> is set to <code>S3</code>, this is the name of the output artifact object.</p> </li> </ul> <p>For example, if <code>path</code> is set to <code>MyArtifacts</code>, <code>namespaceType</code> is set to <code>BUILD_ID</code>, and <code>name</code> is set to <code>MyArtifact.zip</code>, then the output artifact would be stored in <code>MyArtifacts/<i>build-ID</i>/MyArtifact.zip</code>.</p>
+    /// <p><p>Along with <code>path</code> and <code>namespaceType</code>, the pattern that AWS CodeBuild will use to name and store the output artifact, as follows:</p> <ul> <li> <p>If <code>type</code> is set to <code>CODEPIPELINE</code>, then AWS CodePipeline will ignore this value if specified. This is because AWS CodePipeline manages its build output names instead of AWS CodeBuild.</p> </li> <li> <p>If <code>type</code> is set to <code>NO<em>ARTIFACTS</code>, then this value will be ignored if specified, because no build output will be produced.</p> </li> <li> <p>If <code>type</code> is set to <code>S3</code>, this is the name of the output artifact object. If you set the name to be a forward slash (&quot;/&quot;), then the artifact is stored in the root of the output bucket.</p> </li> </ul> <p>For example:</p> <ul> <li> <p> If <code>path</code> is set to <code>MyArtifacts</code>, <code>namespaceType</code> is set to <code>BUILD</em>ID</code>, and <code>name</code> is set to <code>MyArtifact.zip</code>, then the output artifact would be stored in <code>MyArtifacts/<i>build-ID</i>/MyArtifact.zip</code>. </p> </li> <li> <p> If <code>path</code> is empty, <code>namespaceType</code> is set to <code>NONE</code>, and <code>name</code> is set to &quot;<code>/</code>&quot;, then the output artifact would be stored in the root of the output bucket. </p> </li> <li> <p> If <code>path</code> is set to <code>MyArtifacts</code>, <code>namespaceType</code> is set to <code>BUILD_ID</code>, and <code>name</code> is set to &quot;<code>/</code>&quot;, then the output artifact would be stored in <code>MyArtifacts/<i>build-ID</i> </code>. </p> </li> </ul></p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -660,7 +675,7 @@ pub struct ProjectEnvironment {
     /// <p>The ID of the Docker image to use for this build project.</p>
     #[serde(rename = "image")]
     pub image: String,
-    /// <p>Enables running the Docker daemon inside a Docker container. Set to true only if the build project is be used to build Docker images, and the specified build environment image is not provided by AWS CodeBuild with Docker support. Otherwise, all associated builds that attempt to interact with the Docker daemon will fail. Note that you must also start the Docker daemon so that builds can interact with it. One way to do this is to initialize the Docker daemon during the install phase of your build spec by running the following build commands. (Do not run the following build commands if the specified build environment image is provided by AWS CodeBuild with Docker support.)</p> <p> <code>- nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay&amp; - timeout -t 15 sh -c "until docker info; do echo .; sleep 1; done"</code> </p>
+    /// <p>Enables running the Docker daemon inside a Docker container. Set to true only if the build project is be used to build Docker images, and the specified build environment image is not provided by AWS CodeBuild with Docker support. Otherwise, all associated builds that attempt to interact with the Docker daemon will fail. Note that you must also start the Docker daemon so that builds can interact with it. One way to do this is to initialize the Docker daemon during the install phase of your build spec by running the following build commands. (Do not run the following build commands if the specified build environment image is provided by AWS CodeBuild with Docker support.)</p> <p>If the operating system's base image is Ubuntu Linux:</p> <p> <code>- nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay&amp; - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"</code> </p> <p>If the operating system's base image is Alpine Linux, add the <code>-t</code> argument to <code>timeout</code>:</p> <p> <code>- nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay&amp; - timeout 15 -t sh -c "until docker info; do echo .; sleep 1; done"</code> </p>
     #[serde(rename = "privilegedMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub privileged_mode: Option<bool>,
@@ -692,6 +707,10 @@ pub struct ProjectSource {
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
+    /// <p> Set to true to report the status of a build's start and finish to your source provider. This option is only valid when your source provider is GitHub. If this is set and you use a different source provider, an invalidInputException is thrown. </p>
+    #[serde(rename = "reportBuildStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub report_build_status: Option<bool>,
     /// <p><p>The type of repository that contains the source code to be built. Valid values include:</p> <ul> <li> <p> <code>BITBUCKET</code>: The source code is in a Bitbucket repository.</p> </li> <li> <p> <code>CODECOMMIT</code>: The source code is in an AWS CodeCommit repository.</p> </li> <li> <p> <code>CODEPIPELINE</code>: The source code settings are specified in the source action of a pipeline in AWS CodePipeline.</p> </li> <li> <p> <code>GITHUB</code>: The source code is in a GitHub repository.</p> </li> <li> <p> <code>S3</code>: The source code is in an Amazon Simple Storage Service (Amazon S3) input bucket.</p> </li> </ul></p>
     #[serde(rename = "type")]
     pub type_: String,
@@ -719,6 +738,22 @@ pub struct StartBuildInput {
     #[serde(rename = "buildspecOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub buildspec_override: Option<String>,
+    /// <p>A ProjectCache object specified for this build that overrides the one defined in the build project.</p>
+    #[serde(rename = "cacheOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_override: Option<ProjectCache>,
+    /// <p>The name of a certificate for this build that overrides the one specified in the build project.</p>
+    #[serde(rename = "certificateOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_override: Option<String>,
+    /// <p>The name of a compute type for this build that overrides the one specified in the build project.</p>
+    #[serde(rename = "computeTypeOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compute_type_override: Option<String>,
+    /// <p>A container type for this build that overrides the one specified in the build project.</p>
+    #[serde(rename = "environmentTypeOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment_type_override: Option<String>,
     /// <p>A set of environment variables that overrides, for this build only, the latest ones already defined in the build project.</p>
     #[serde(rename = "environmentVariablesOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -727,9 +762,45 @@ pub struct StartBuildInput {
     #[serde(rename = "gitCloneDepthOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub git_clone_depth_override: Option<i64>,
+    /// <p>A unique, case sensitive identifier you provide to ensure the idempotency of the StartBuild request. The token is included in the StartBuild request and is valid for 12 hours. If you repeat the StartBuild request with the same token, but change a parameter, AWS CodeBuild returns a parameter mismatch error. </p>
+    #[serde(rename = "idempotencyToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub idempotency_token: Option<String>,
+    /// <p>The name of an image for this build that overrides the one specified in the build project.</p>
+    #[serde(rename = "imageOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_override: Option<String>,
+    /// <p>Enable this flag to override the insecure SSL setting that is specified in the build project. The insecure SSL setting determines whether to ignore SSL warnings while connecting to the project source code. This override applies only if the build's source is GitHub Enterprise.</p>
+    #[serde(rename = "insecureSslOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insecure_ssl_override: Option<bool>,
+    /// <p>Enable this flag to override privileged mode in the build project.</p>
+    #[serde(rename = "privilegedModeOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub privileged_mode_override: Option<bool>,
     /// <p>The name of the AWS CodeBuild build project to start running a build.</p>
     #[serde(rename = "projectName")]
     pub project_name: String,
+    /// <p> Set to true to report to your source provider the status of a build's start and completion. If you use this option with a source provider other than GitHub, an invalidInputException is thrown. </p>
+    #[serde(rename = "reportBuildStatusOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub report_build_status_override: Option<bool>,
+    /// <p>The name of a service role for this build that overrides the one specified in the build project.</p>
+    #[serde(rename = "serviceRoleOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_role_override: Option<String>,
+    /// <p>An authorization type for this build that overrides the one defined in the build project. This override applies only if the build project's source is BitBucket or GitHub.</p>
+    #[serde(rename = "sourceAuthOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_auth_override: Option<SourceAuth>,
+    /// <p>A location that overrides for this build the source location for the one defined in the build project.</p>
+    #[serde(rename = "sourceLocationOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_location_override: Option<String>,
+    /// <p>A source input type for this build that overrides the source input defined in the build project</p>
+    #[serde(rename = "sourceTypeOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_type_override: Option<String>,
     /// <p><p>A version of the build input to be built, for this build only. If not specified, the latest version will be used. If specified, must be one of:</p> <ul> <li> <p>For AWS CodeCommit: the commit ID to use.</p> </li> <li> <p>For GitHub: the commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a pull request ID is specified, it must use the format <code>pr/pull-request-ID</code> (for example <code>pr/25</code>). If a branch name is specified, the branch&#39;s HEAD commit ID will be used. If not specified, the default branch&#39;s HEAD commit ID will be used.</p> </li> <li> <p>For Bitbucket: the commit ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a branch name is specified, the branch&#39;s HEAD commit ID will be used. If not specified, the default branch&#39;s HEAD commit ID will be used.</p> </li> <li> <p>For Amazon Simple Storage Service (Amazon S3): the version ID of the object representing the build input ZIP file to use.</p> </li> </ul></p>
     #[serde(rename = "sourceVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2276,7 +2347,7 @@ pub trait CodeBuild {
         input: CreateProjectInput,
     ) -> RusotoFuture<CreateProjectOutput, CreateProjectError>;
 
-    /// <p><p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, enables AWS CodeBuild to begin automatically rebuilding the source code every time a code change is pushed to the repository.</p> <important> <p>If you enable webhooks for an AWS CodeBuild project, and the project is used as a build step in AWS CodePipeline, then two identical builds will be created for each commit. One build is triggered through webhooks, and one through AWS CodePipeline. Because billing is on a per-build basis, you will be billed for both builds. Therefore, if you are using AWS CodePipeline, we recommend that you disable webhooks in CodeBuild. In the AWS CodeBuild console, clear the Webhook box. For more information, see step 9 in <a href="http://docs.aws.amazon.com/codebuild/latest/userguide/change-project.html#change-project-console">Change a Build Project&#39;s Settings</a>.</p> </important></p>
+    /// <p><p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, enables AWS CodeBuild to begin automatically rebuilding the source code every time a code change is pushed to the repository.</p> <important> <p>If you enable webhooks for an AWS CodeBuild project, and the project is used as a build step in AWS CodePipeline, then two identical builds will be created for each commit. One build is triggered through webhooks, and one through AWS CodePipeline. Because billing is on a per-build basis, you will be billed for both builds. Therefore, if you are using AWS CodePipeline, we recommend that you disable webhooks in CodeBuild. In the AWS CodeBuild console, clear the Webhook box. For more information, see step 5 in <a href="http://docs.aws.amazon.com/codebuild/latest/userguide/change-project.html#change-project-console">Change a Build Project&#39;s Settings</a>.</p> </important></p>
     fn create_webhook(
         &self,
         input: CreateWebhookInput,
@@ -2520,7 +2591,7 @@ impl CodeBuild for CodeBuildClient {
         })
     }
 
-    /// <p><p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, enables AWS CodeBuild to begin automatically rebuilding the source code every time a code change is pushed to the repository.</p> <important> <p>If you enable webhooks for an AWS CodeBuild project, and the project is used as a build step in AWS CodePipeline, then two identical builds will be created for each commit. One build is triggered through webhooks, and one through AWS CodePipeline. Because billing is on a per-build basis, you will be billed for both builds. Therefore, if you are using AWS CodePipeline, we recommend that you disable webhooks in CodeBuild. In the AWS CodeBuild console, clear the Webhook box. For more information, see step 9 in <a href="http://docs.aws.amazon.com/codebuild/latest/userguide/change-project.html#change-project-console">Change a Build Project&#39;s Settings</a>.</p> </important></p>
+    /// <p><p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, enables AWS CodeBuild to begin automatically rebuilding the source code every time a code change is pushed to the repository.</p> <important> <p>If you enable webhooks for an AWS CodeBuild project, and the project is used as a build step in AWS CodePipeline, then two identical builds will be created for each commit. One build is triggered through webhooks, and one through AWS CodePipeline. Because billing is on a per-build basis, you will be billed for both builds. Therefore, if you are using AWS CodePipeline, we recommend that you disable webhooks in CodeBuild. In the AWS CodeBuild console, clear the Webhook box. For more information, see step 5 in <a href="http://docs.aws.amazon.com/codebuild/latest/userguide/change-project.html#change-project-console">Change a Build Project&#39;s Settings</a>.</p> </important></p>
     fn create_webhook(
         &self,
         input: CreateWebhookInput,

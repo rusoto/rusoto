@@ -34,11 +34,11 @@ pub struct CreateFileSystemRequest {
     /// <p>String of up to 64 ASCII characters. Amazon EFS uses this to ensure idempotent creation.</p>
     #[serde(rename = "CreationToken")]
     pub creation_token: String,
-    /// <p>A boolean value that, if true, creates an encrypted file system. When creating an encrypted file system, you have the option of specifying a <a>CreateFileSystemRequest$KmsKeyId</a> for an existing AWS Key Management Service (AWS KMS) customer master key (CMK). If you don't specify a CMK, then the default CMK for Amazon EFS, <code>/aws/elasticfilesystem</code>, is used to protect the encrypted file system. </p>
+    /// <p>A Boolean value that, if true, creates an encrypted file system. When creating an encrypted file system, you have the option of specifying a <a>CreateFileSystemRequest$KmsKeyId</a> for an existing AWS Key Management Service (AWS KMS) customer master key (CMK). If you don't specify a CMK, then the default CMK for Amazon EFS, <code>/aws/elasticfilesystem</code>, is used to protect the encrypted file system. </p>
     #[serde(rename = "Encrypted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encrypted: Option<bool>,
-    /// <p>The id of the AWS KMS CMK that will be used to protect the encrypted file system. This parameter is only required if you want to use a non-default CMK. If this parameter is not specified, the default CMK for Amazon EFS is used. This id can be in one of the following formats:</p> <ul> <li> <p>Key ID - A unique identifier of the key. For example, <code>1234abcd-12ab-34cd-56ef-1234567890ab</code>.</p> </li> <li> <p>ARN - An Amazon Resource Name for the key. For example, <code>arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code>.</p> </li> <li> <p>Key alias - A previously created display name for a key. For example, <code>alias/projectKey1</code>.</p> </li> <li> <p>Key alias ARN - An Amazon Resource Name for a key alias. For example, <code>arn:aws:kms:us-west-2:444455556666:alias/projectKey1</code>.</p> </li> </ul> <p>Note that if the KmsKeyId is specified, the <a>CreateFileSystemRequest$Encrypted</a> parameter must be set to true.</p>
+    /// <p>The ID of the AWS KMS CMK to be used to protect the encrypted file system. This parameter is only required if you want to use a non-default CMK. If this parameter is not specified, the default CMK for Amazon EFS is used. This ID can be in one of the following formats:</p> <ul> <li> <p>Key ID - A unique identifier of the key, for example, <code>1234abcd-12ab-34cd-56ef-1234567890ab</code>.</p> </li> <li> <p>ARN - An Amazon Resource Name (ARN) for the key, for example, <code>arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code>.</p> </li> <li> <p>Key alias - A previously created display name for a key. For example, <code>alias/projectKey1</code>.</p> </li> <li> <p>Key alias ARN - An ARN for a key alias, for example, <code>arn:aws:kms:us-west-2:444455556666:alias/projectKey1</code>.</p> </li> </ul> <p>If KmsKeyId is specified, the <a>CreateFileSystemRequest$Encrypted</a> parameter must be set to true.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -46,6 +46,14 @@ pub struct CreateFileSystemRequest {
     #[serde(rename = "PerformanceMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub performance_mode: Option<String>,
+    /// <p>The throughput, measured in MiB/s, that you want to provision for a file system that you're creating. The limit on throughput is 1024 MiB/s. You can get these limits increased by contacting AWS Support. For more information, see <a href="http://docs.aws.amazon.com/efs/latest/ug/limits.html#soft-limits">Amazon EFS Limits That You Can Increase</a> in the <i>Amazon EFS User Guide.</i> </p>
+    #[serde(rename = "ProvisionedThroughputInMibps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_throughput_in_mibps: Option<f64>,
+    /// <p>The throughput mode for the file system to be created. There are two throughput modes to choose from for your file system: bursting and provisioned. You can decrease your file system's throughput in Provisioned Throughput mode or change between the throughput modes as long as it’s been more than 24 hours since the last decrease or throughput mode change.</p>
+    #[serde(rename = "ThroughputMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub throughput_mode: Option<String>,
 }
 
 /// <p><p/></p>
@@ -236,14 +244,14 @@ pub struct FileSystemDescription {
     /// <p>Opaque string specified in the request.</p>
     #[serde(rename = "CreationToken")]
     pub creation_token: String,
-    /// <p>A boolean value that, if true, indicates that the file system is encrypted.</p>
+    /// <p>A Boolean value that, if true, indicates that the file system is encrypted.</p>
     #[serde(rename = "Encrypted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encrypted: Option<bool>,
     /// <p>ID of the file system, assigned by Amazon EFS.</p>
     #[serde(rename = "FileSystemId")]
     pub file_system_id: String,
-    /// <p>The id of an AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to protect the encrypted file system.</p>
+    /// <p>The ID of an AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to protect the encrypted file system.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -263,9 +271,17 @@ pub struct FileSystemDescription {
     /// <p>The <code>PerformanceMode</code> of the file system.</p>
     #[serde(rename = "PerformanceMode")]
     pub performance_mode: String,
-    /// <p>Latest known metered size (in bytes) of data stored in the file system, in bytes, in its <code>Value</code> field, and the time at which that size was determined in its <code>Timestamp</code> field. The <code>Timestamp</code> value is the integer number of seconds since 1970-01-01T00:00:00Z. Note that the value does not represent the size of a consistent snapshot of the file system, but it is eventually consistent when there are no writes to the file system. That is, the value will represent actual size only if the file system is not modified for a period longer than a couple of hours. Otherwise, the value is not the exact size the file system was at any instant in time. </p>
+    /// <p>The throughput, measured in MiB/s, that you want to provision for a file system. The limit on throughput is 1024 MiB/s. You can get these limits increased by contacting AWS Support. For more information, see <a href="http://docs.aws.amazon.com/efs/latest/ug/limits.html#soft-limits">Amazon EFS Limits That You Can Increase</a> in the <i>Amazon EFS User Guide.</i> </p>
+    #[serde(rename = "ProvisionedThroughputInMibps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_throughput_in_mibps: Option<f64>,
+    /// <p>Latest known metered size (in bytes) of data stored in the file system, in its <code>Value</code> field, and the time at which that size was determined in its <code>Timestamp</code> field. The <code>Timestamp</code> value is the integer number of seconds since 1970-01-01T00:00:00Z. The <code>SizeInBytes</code> value doesn't represent the size of a consistent snapshot of the file system, but it is eventually consistent when there are no writes to the file system. That is, <code>SizeInBytes</code> represents actual size only if the file system is not modified for a period longer than a couple of hours. Otherwise, the value is not the exact size that the file system was at any point in time. </p>
     #[serde(rename = "SizeInBytes")]
     pub size_in_bytes: FileSystemSize,
+    /// <p>The throughput mode for a file system. There are two throughput modes to choose from for your file system: bursting and provisioned. You can decrease your file system's throughput in Provisioned Throughput mode or change between the throughput modes as long as it’s been more than 24 hours since the last decrease or throughput mode change.</p>
+    #[serde(rename = "ThroughputMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub throughput_mode: Option<String>,
 }
 
 /// <p>Latest known metered size (in bytes) of data stored in the file system, in its <code>Value</code> field, and the time at which that size was determined in its <code>Timestamp</code> field. Note that the value does not represent the size of a consistent snapshot of the file system, but it is eventually consistent when there are no writes to the file system. That is, the value will represent the actual size only if the file system is not modified for a period longer than a couple of hours. Otherwise, the value is not necessarily the exact size the file system was at any instant in time.</p>
@@ -332,6 +348,21 @@ pub struct Tag {
     pub value: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateFileSystemRequest {
+    /// <p>The ID of the file system that you want to update.</p>
+    #[serde(rename = "FileSystemId")]
+    pub file_system_id: String,
+    /// <p>(Optional) The amount of throughput, in MiB/s, that you want to provision for your file system. If you're not updating the amount of provisioned throughput for your file system, you don't need to provide this value in your request.</p>
+    #[serde(rename = "ProvisionedThroughputInMibps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_throughput_in_mibps: Option<f64>,
+    /// <p>(Optional) The throughput mode that you want your file system to use. If you're not updating your throughput mode, you don't need to provide this value in your request.</p>
+    #[serde(rename = "ThroughputMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub throughput_mode: Option<String>,
+}
+
 /// Errors returned by CreateFileSystem
 #[derive(Debug, PartialEq)]
 pub enum CreateFileSystemError {
@@ -339,10 +370,14 @@ pub enum CreateFileSystemError {
     BadRequest(String),
     /// <p>Returned if the file system you are trying to create already exists, with the creation token you provided.</p>
     FileSystemAlreadyExists(String),
-    /// <p>Returned if the AWS account has already created maximum number of file systems allowed per account.</p>
+    /// <p>Returned if the AWS account has already created the maximum number of file systems allowed per account.</p>
     FileSystemLimitExceeded(String),
+    /// <p>Returned if there's not enough capacity to provision additional throughput. This value might be returned when you try to create a file system in provisioned throughput mode, when you attempt to increase the provisioned throughput of an existing file system, or when you attempt to change an existing file system from bursting to provisioned throughput mode.</p>
+    InsufficientThroughputCapacity(String),
     /// <p>Returned if an error occurred on the server side.</p>
     InternalServerError(String),
+    /// <p>Returned if the throughput mode or amount of provisioned throughput can't be changed because the throughput limit of 1024 MiB/s has been reached.</p>
+    ThroughputLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -374,8 +409,16 @@ impl CreateFileSystemError {
                     "FileSystemLimitExceeded" => {
                         CreateFileSystemError::FileSystemLimitExceeded(String::from(error_message))
                     }
+                    "InsufficientThroughputCapacity" => {
+                        CreateFileSystemError::InsufficientThroughputCapacity(String::from(
+                            error_message,
+                        ))
+                    }
                     "InternalServerError" => {
                         CreateFileSystemError::InternalServerError(String::from(error_message))
+                    }
+                    "ThroughputLimitExceeded" => {
+                        CreateFileSystemError::ThroughputLimitExceeded(String::from(error_message))
                     }
                     "ValidationException" => {
                         CreateFileSystemError::Validation(error_message.to_string())
@@ -419,7 +462,9 @@ impl Error for CreateFileSystemError {
             CreateFileSystemError::BadRequest(ref cause) => cause,
             CreateFileSystemError::FileSystemAlreadyExists(ref cause) => cause,
             CreateFileSystemError::FileSystemLimitExceeded(ref cause) => cause,
+            CreateFileSystemError::InsufficientThroughputCapacity(ref cause) => cause,
             CreateFileSystemError::InternalServerError(ref cause) => cause,
+            CreateFileSystemError::ThroughputLimitExceeded(ref cause) => cause,
             CreateFileSystemError::Validation(ref cause) => cause,
             CreateFileSystemError::Credentials(ref err) => err.description(),
             CreateFileSystemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -432,9 +477,9 @@ impl Error for CreateFileSystemError {
 pub enum CreateMountTargetError {
     /// <p>Returned if the request is malformed or contains an error such as an invalid parameter value or a missing required parameter.</p>
     BadRequest(String),
-    /// <p>Returned if the specified <code>FileSystemId</code> does not exist in the requester's AWS account.</p>
+    /// <p>Returned if the specified <code>FileSystemId</code> value doesn't exist in the requester's AWS account.</p>
     FileSystemNotFound(String),
-    /// <p>Returned if the file system's life cycle state is not "created".</p>
+    /// <p>Returned if the file system's lifecycle state is not "available".</p>
     IncorrectFileSystemLifeCycleState(String),
     /// <p>Returned if an error occurred on the server side.</p>
     InternalServerError(String),
@@ -442,13 +487,13 @@ pub enum CreateMountTargetError {
     IpAddressInUse(String),
     /// <p>Returned if the mount target would violate one of the specified restrictions based on the file system's existing mount targets.</p>
     MountTargetConflict(String),
-    /// <p> The calling account has reached the ENI limit for the specific AWS region. Client should try to delete some ENIs or get its account limit raised. For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html">Amazon VPC Limits</a> in the Amazon Virtual Private Cloud User Guide (see the Network interfaces per VPC entry in the table). </p>
+    /// <p>The calling account has reached the limit for elastic network interfaces for the specific AWS Region. The client should try to delete some elastic network interfaces or get the account limit raised. For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html">Amazon VPC Limits</a> in the <i>Amazon VPC User Guide </i> (see the Network interfaces per VPC entry in the table). </p>
     NetworkInterfaceLimitExceeded(String),
     /// <p>Returned if <code>IpAddress</code> was not specified in the request and there are no free IP addresses in the subnet.</p>
     NoFreeAddressesInSubnet(String),
     /// <p>Returned if the size of <code>SecurityGroups</code> specified in the request is greater than five.</p>
     SecurityGroupLimitExceeded(String),
-    /// <p>Returned if one of the specified security groups does not exist in the subnet's VPC.</p>
+    /// <p>Returned if one of the specified security groups doesn't exist in the subnet's VPC.</p>
     SecurityGroupNotFound(String),
     /// <p>Returned if there is no subnet with ID <code>SubnetId</code> provided in the request.</p>
     SubnetNotFound(String),
@@ -585,7 +630,7 @@ impl Error for CreateMountTargetError {
 pub enum CreateTagsError {
     /// <p>Returned if the request is malformed or contains an error such as an invalid parameter value or a missing required parameter.</p>
     BadRequest(String),
-    /// <p>Returned if the specified <code>FileSystemId</code> does not exist in the requester's AWS account.</p>
+    /// <p>Returned if the specified <code>FileSystemId</code> value doesn't exist in the requester's AWS account.</p>
     FileSystemNotFound(String),
     /// <p>Returned if an error occurred on the server side.</p>
     InternalServerError(String),
@@ -674,7 +719,7 @@ pub enum DeleteFileSystemError {
     BadRequest(String),
     /// <p>Returned if a file system has mount targets.</p>
     FileSystemInUse(String),
-    /// <p>Returned if the specified <code>FileSystemId</code> does not exist in the requester's AWS account.</p>
+    /// <p>Returned if the specified <code>FileSystemId</code> value doesn't exist in the requester's AWS account.</p>
     FileSystemNotFound(String),
     /// <p>Returned if an error occurred on the server side.</p>
     InternalServerError(String),
@@ -864,7 +909,7 @@ impl Error for DeleteMountTargetError {
 pub enum DeleteTagsError {
     /// <p>Returned if the request is malformed or contains an error such as an invalid parameter value or a missing required parameter.</p>
     BadRequest(String),
-    /// <p>Returned if the specified <code>FileSystemId</code> does not exist in the requester's AWS account.</p>
+    /// <p>Returned if the specified <code>FileSystemId</code> value doesn't exist in the requester's AWS account.</p>
     FileSystemNotFound(String),
     /// <p>Returned if an error occurred on the server side.</p>
     InternalServerError(String),
@@ -951,7 +996,7 @@ impl Error for DeleteTagsError {
 pub enum DescribeFileSystemsError {
     /// <p>Returned if the request is malformed or contains an error such as an invalid parameter value or a missing required parameter.</p>
     BadRequest(String),
-    /// <p>Returned if the specified <code>FileSystemId</code> does not exist in the requester's AWS account.</p>
+    /// <p>Returned if the specified <code>FileSystemId</code> value doesn't exist in the requester's AWS account.</p>
     FileSystemNotFound(String),
     /// <p>Returned if an error occurred on the server side.</p>
     InternalServerError(String),
@@ -1149,7 +1194,7 @@ impl Error for DescribeMountTargetSecurityGroupsError {
 pub enum DescribeMountTargetsError {
     /// <p>Returned if the request is malformed or contains an error such as an invalid parameter value or a missing required parameter.</p>
     BadRequest(String),
-    /// <p>Returned if the specified <code>FileSystemId</code> does not exist in the requester's AWS account.</p>
+    /// <p>Returned if the specified <code>FileSystemId</code> value doesn't exist in the requester's AWS account.</p>
     FileSystemNotFound(String),
     /// <p>Returned if an error occurred on the server side.</p>
     InternalServerError(String),
@@ -1248,7 +1293,7 @@ impl Error for DescribeMountTargetsError {
 pub enum DescribeTagsError {
     /// <p>Returned if the request is malformed or contains an error such as an invalid parameter value or a missing required parameter.</p>
     BadRequest(String),
-    /// <p>Returned if the specified <code>FileSystemId</code> does not exist in the requester's AWS account.</p>
+    /// <p>Returned if the specified <code>FileSystemId</code> value doesn't exist in the requester's AWS account.</p>
     FileSystemNotFound(String),
     /// <p>Returned if an error occurred on the server side.</p>
     InternalServerError(String),
@@ -1345,7 +1390,7 @@ pub enum ModifyMountTargetSecurityGroupsError {
     MountTargetNotFound(String),
     /// <p>Returned if the size of <code>SecurityGroups</code> specified in the request is greater than five.</p>
     SecurityGroupLimitExceeded(String),
-    /// <p>Returned if one of the specified security groups does not exist in the subnet's VPC.</p>
+    /// <p>Returned if one of the specified security groups doesn't exist in the subnet's VPC.</p>
     SecurityGroupNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1453,6 +1498,123 @@ impl Error for ModifyMountTargetSecurityGroupsError {
         }
     }
 }
+/// Errors returned by UpdateFileSystem
+#[derive(Debug, PartialEq)]
+pub enum UpdateFileSystemError {
+    /// <p>Returned if the request is malformed or contains an error such as an invalid parameter value or a missing required parameter.</p>
+    BadRequest(String),
+    /// <p>Returned if the specified <code>FileSystemId</code> value doesn't exist in the requester's AWS account.</p>
+    FileSystemNotFound(String),
+    /// <p>Returned if the file system's lifecycle state is not "available".</p>
+    IncorrectFileSystemLifeCycleState(String),
+    /// <p>Returned if there's not enough capacity to provision additional throughput. This value might be returned when you try to create a file system in provisioned throughput mode, when you attempt to increase the provisioned throughput of an existing file system, or when you attempt to change an existing file system from bursting to provisioned throughput mode.</p>
+    InsufficientThroughputCapacity(String),
+    /// <p>Returned if an error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>Returned if the throughput mode or amount of provisioned throughput can't be changed because the throughput limit of 1024 MiB/s has been reached.</p>
+    ThroughputLimitExceeded(String),
+    /// <p>Returned if you don’t wait at least 24 hours before changing the throughput mode, or decreasing the Provisioned Throughput value.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateFileSystemError {
+    pub fn from_body(body: &str) -> UpdateFileSystemError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BadRequest" => UpdateFileSystemError::BadRequest(String::from(error_message)),
+                    "FileSystemNotFound" => {
+                        UpdateFileSystemError::FileSystemNotFound(String::from(error_message))
+                    }
+                    "IncorrectFileSystemLifeCycleState" => {
+                        UpdateFileSystemError::IncorrectFileSystemLifeCycleState(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InsufficientThroughputCapacity" => {
+                        UpdateFileSystemError::InsufficientThroughputCapacity(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InternalServerError" => {
+                        UpdateFileSystemError::InternalServerError(String::from(error_message))
+                    }
+                    "ThroughputLimitExceeded" => {
+                        UpdateFileSystemError::ThroughputLimitExceeded(String::from(error_message))
+                    }
+                    "TooManyRequests" => {
+                        UpdateFileSystemError::TooManyRequests(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateFileSystemError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateFileSystemError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateFileSystemError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateFileSystemError {
+    fn from(err: serde_json::error::Error) -> UpdateFileSystemError {
+        UpdateFileSystemError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateFileSystemError {
+    fn from(err: CredentialsError) -> UpdateFileSystemError {
+        UpdateFileSystemError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateFileSystemError {
+    fn from(err: HttpDispatchError) -> UpdateFileSystemError {
+        UpdateFileSystemError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateFileSystemError {
+    fn from(err: io::Error) -> UpdateFileSystemError {
+        UpdateFileSystemError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateFileSystemError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateFileSystemError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateFileSystemError::BadRequest(ref cause) => cause,
+            UpdateFileSystemError::FileSystemNotFound(ref cause) => cause,
+            UpdateFileSystemError::IncorrectFileSystemLifeCycleState(ref cause) => cause,
+            UpdateFileSystemError::InsufficientThroughputCapacity(ref cause) => cause,
+            UpdateFileSystemError::InternalServerError(ref cause) => cause,
+            UpdateFileSystemError::ThroughputLimitExceeded(ref cause) => cause,
+            UpdateFileSystemError::TooManyRequests(ref cause) => cause,
+            UpdateFileSystemError::Validation(ref cause) => cause,
+            UpdateFileSystemError::Credentials(ref err) => err.description(),
+            UpdateFileSystemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UpdateFileSystemError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the EFS API. EFS clients implement this trait.
 pub trait Efs {
     /// <p>Creates a new, empty file system. The operation requires a creation token in the request that Amazon EFS uses to ensure idempotent creation (calling the operation with same creation token has no effect). If a file system does not currently exist that is owned by the caller's AWS account with the specified creation token, this operation does the following:</p> <ul> <li> <p>Creates a new, empty file system. The file system will have an Amazon EFS assigned ID, and an initial lifecycle state <code>creating</code>.</p> </li> <li> <p>Returns with the description of the created file system.</p> </li> </ul> <p>Otherwise, this operation returns a <code>FileSystemAlreadyExists</code> error with the ID of the existing file system.</p> <note> <p>For basic use cases, you can use a randomly generated UUID for the creation token.</p> </note> <p> The idempotent operation allows you to retry a <code>CreateFileSystem</code> call without risk of creating an extra file system. This can happen when an initial call fails in a way that leaves it uncertain whether or not a file system was actually created. An example might be that a transport level timeout occurred or your connection was reset. As long as you use the same creation token, if the initial call had succeeded in creating a file system, the client can learn of its existence from the <code>FileSystemAlreadyExists</code> error.</p> <note> <p>The <code>CreateFileSystem</code> call returns while the file system's lifecycle state is still <code>creating</code>. You can check the file system creation status by calling the <a>DescribeFileSystems</a> operation, which among other things returns the file system state.</p> </note> <p>This operation also takes an optional <code>PerformanceMode</code> parameter that you choose for your file system. We recommend <code>generalPurpose</code> performance mode for most file systems. File systems using the <code>maxIO</code> performance mode can scale to higher levels of aggregate throughput and operations per second with a tradeoff of slightly higher latencies for most file operations. The performance mode can't be changed after the file system has been created. For more information, see <a href="http://docs.aws.amazon.com/efs/latest/ug/performance.html#performancemodes.html">Amazon EFS: Performance Modes</a>.</p> <p>After the file system is fully created, Amazon EFS sets its lifecycle state to <code>available</code>, at which point you can create one or more mount targets for the file system in your VPC. For more information, see <a>CreateMountTarget</a>. You mount your Amazon EFS file system on an EC2 instances in your VPC via the mount target. For more information, see <a href="http://docs.aws.amazon.com/efs/latest/ug/how-it-works.html">Amazon EFS: How it Works</a>. </p> <p> This operation requires permissions for the <code>elasticfilesystem:CreateFileSystem</code> action. </p>
@@ -1517,6 +1679,12 @@ pub trait Efs {
         &self,
         input: ModifyMountTargetSecurityGroupsRequest,
     ) -> RusotoFuture<(), ModifyMountTargetSecurityGroupsError>;
+
+    /// <p>Updates the throughput mode or the amount of provisioned throughput of an existing file system.</p>
+    fn update_file_system(
+        &self,
+        input: UpdateFileSystemRequest,
+    ) -> RusotoFuture<FileSystemDescription, UpdateFileSystemError>;
 }
 /// A client for the EFS API.
 pub struct EfsClient {
@@ -1979,6 +2147,48 @@ impl Efs for EfsClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyMountTargetSecurityGroupsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Updates the throughput mode or the amount of provisioned throughput of an existing file system.</p>
+    fn update_file_system(
+        &self,
+        input: UpdateFileSystemRequest,
+    ) -> RusotoFuture<FileSystemDescription, UpdateFileSystemError> {
+        let request_uri = format!(
+            "/2015-02-01/file-systems/{file_system_id}",
+            file_system_id = input.file_system_id
+        );
+
+        let mut request =
+            SignedRequest::new("PUT", "elasticfilesystem", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 202 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<FileSystemDescription>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateFileSystemError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

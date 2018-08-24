@@ -1014,6 +1014,10 @@ pub struct ListAcceptedPortfolioSharesInput {
     #[serde(rename = "PageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
+    /// <p><p>The type of shared portfolios to list. The default is to list imported portfolios.</p> <ul> <li> <p> <code>AWS_SERVICECATALOG</code> - List default portfolios</p> </li> <li> <p> <code>IMPORTED</code> - List imported portfolios</p> </li> </ul></p>
+    #[serde(rename = "PortfolioShareType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub portfolio_share_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]

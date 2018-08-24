@@ -34,22 +34,22 @@ use serde_json::Value as SerdeJsonValue;
 pub struct Application {
     /// <p>The application Amazon Resource Name (ARN).</p>
     pub application_id: String,
-    /// <p>The name of the author publishing the app.</p><p>Min Length=1. Max Length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
+    /// <p>The name of the author publishing the app.</p><p>Minimum length=1. Maximum length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
     pub author: String,
-    /// <p>The date/time this resource was created.</p>
+    /// <p>The date and time this resource was created.</p>
     pub creation_time: Option<String>,
-    /// <p>The description of the application.</p><p>Min Length=1. Max Length=256</p>
+    /// <p>The description of the application.</p><p>Minimum length=1. Maximum length=256</p>
     pub description: String,
     /// <p>A URL with more information about the application, for example
     /// the location of your GitHub repository for the application.</p>
     pub home_page_url: Option<String>,
-    /// <p>Labels to improve discovery of apps in search results.</p><p>Min Length=1. Max Length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
+    /// <p>Labels to improve discovery of apps in search results.</p><p>Minimum length=1. Maximum length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     pub labels: Option<Vec<String>>,
-    /// <p>A link to a license file of the app that matches the spdxLicenseID of your application.</p><p>Max size 5 MB</p>
+    /// <p>A link to a license file of the app that matches the spdxLicenseID value of your application.</p><p>Maximum size 5 MB</p>
     pub license_url: Option<String>,
-    /// <p>The name of the application.</p><p>Min Length=1. Max Length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
+    /// <p>The name of the application.</p><p>Minimum length=1. Maximum length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
     pub name: String,
-    /// <p>A link to the readme file that contains a more detailed description of the application and how it works in Markdown language.</p><p>Max size 5 MB</p>
+    /// <p>A link to the readme file in Markdown language that contains a more detailed description of the application and how it works.</p><p>Maximum size 5 MB</p>
     pub readme_url: Option<String>,
     /// <p>A valid identifier from https://spdx.org/licenses/.</p>
     pub spdx_license_id: Option<String>,
@@ -57,10 +57,10 @@ pub struct Application {
     pub version: Option<Version>,
 }
 
-/// <p>List of application details.</p>
+/// <p>A list of application details.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ApplicationPage {
-    /// <p>Array of application summaries.</p>
+    /// <p>An array of application summaries.</p>
     pub applications: Vec<ApplicationSummary>,
     /// <p>The token to request the next page of results.</p>
     pub next_token: Option<String>,
@@ -69,23 +69,14 @@ pub struct ApplicationPage {
 /// <p>Policy statements applied to the application.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ApplicationPolicy {
-    /// <p>Array of policy statements applied to the application.</p>
+    /// <p>An array of policy statements applied to the application.</p>
     pub statements: Vec<ApplicationPolicyStatement>,
 }
 
 /// <p>Policy statement applied to the application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ApplicationPolicyStatement {
-    /// <p>A list of supported actions:</p><p>
-    /// GetApplication
-    /// </p><p>
-    /// CreateCloudFormationChangeSet
-    /// </p><p>
-    /// ListApplicationVersions
-    /// </p><p>
-    /// SearchApplications
-    /// </p><p>
-    /// Deploy (Note: This action enables all other actions above.)</p>
+    /// <p>See <a href="https://docs.aws.amazon.com/serverlessrepo/latest/devguide/access-control-resource-based.html#application-permissions">Application Permissions</a> for the list of supported actions.</p>
     #[serde(rename = "Actions")]
     pub actions: Vec<String>,
     /// <p>An AWS account ID, or * to make the application public.</p>
@@ -100,17 +91,17 @@ pub struct ApplicationPolicyStatement {
 /// <p>Summary of details about the application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ApplicationSummary {
-    /// <p>The application ARN.</p>
+    /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
-    /// <p>The name of the author publishing the app.</p><p>Min Length=1. Max Length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
+    /// <p>The name of the author publishing the app.</p><p>Minimum length=1. Maximum length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
     #[serde(rename = "Author")]
     pub author: String,
-    /// <p>The date/time this resource was created.</p>
+    /// <p>The date and time this resource was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<String>,
-    /// <p>The description of the application.</p><p>Min Length=1. Max Length=256</p>
+    /// <p>The description of the application.</p><p>Minimum length=1. Maximum length=256</p>
     #[serde(rename = "Description")]
     pub description: String,
     /// <p>A URL with more information about the application, for example
@@ -118,11 +109,11 @@ pub struct ApplicationSummary {
     #[serde(rename = "HomePageUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_page_url: Option<String>,
-    /// <p>Labels to improve discovery of apps in search results.</p><p>Min Length=1. Max Length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
+    /// <p>Labels to improve discovery of apps in search results.</p><p>Minimum length=1. Maximum length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     #[serde(rename = "Labels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<String>>,
-    /// <p>The name of the application.</p><p>Min Length=1. Max Length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
+    /// <p>The name of the application.</p><p>Minimum length=1. Maximum length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>A valid identifier from <a href="https://spdx.org/licenses/">https://spdx.org/licenses/</a>.</p>
@@ -131,12 +122,12 @@ pub struct ApplicationSummary {
     pub spdx_license_id: Option<String>,
 }
 
-/// <p>List of version summaries for the application.</p>
+/// <p>A list of version summaries for the application.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ApplicationVersionPage {
     /// <p>The token to request the next page of results.</p>
     pub next_token: Option<String>,
-    /// <p>Array of version summaries for the application.</p>
+    /// <p>An array of version summaries for the application.</p>
     pub versions: Vec<VersionSummary>,
 }
 
@@ -145,7 +136,7 @@ pub struct ApplicationVersionPage {
 pub struct ChangeSetDetails {
     /// <p>The application Amazon Resource Name (ARN).</p>
     pub application_id: String,
-    /// <p>The ARN of the change set.</p><p>Length Constraints: Minimum length of 1.</p><p>Pattern: Amazon Resource Name (ARN):[-a-zA-Z0-9:/]*</p>
+    /// <p>The Amazon Resource Name (ARN) of the change set.</p><p>Length constraints: Minimum length of 1.</p><p>Pattern: ARN:[-a-zA-Z0-9:/]*</p>
     pub change_set_id: String,
     /// <p>The semantic version of the application:</p><p>
     /// <a href="https://semver.org/">https://semver.org/</a>
@@ -155,27 +146,29 @@ pub struct ChangeSetDetails {
     pub stack_id: String,
 }
 
-/// <p>Create application request.</p>
+/// <p>Create an application request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateApplicationInput {
-    /// <p>The name of the author publishing the app.</p><p>Min Length=1. Max Length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
+    /// <p>The name of the author publishing the app.</p><p>Minimum length=1. Maximum length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
     pub author: String,
-    /// <p>The description of the application.</p><p>Min Length=1. Max Length=256</p>
+    /// <p>The description of the application.</p><p>Minimum length=1. Maximum length=256</p>
     pub description: String,
     /// <p>A URL with more information about the application, for example
     /// the location of your GitHub repository for the application.</p>
     pub home_page_url: Option<String>,
-    /// <p>Labels to improve discovery of apps in search results.</p><p>Min Length=1. Max Length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
+    /// <p>Labels to improve discovery of apps in search results.</p><p>Minimum length=1. Maximum length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     pub labels: Option<Vec<String>>,
-    /// <p>A raw text file that contains the license of the app that matches the spdxLicenseID of your application.</p><p>Max size 5 MB</p>
+    /// <p>A local text file that contains the license of the app that matches the spdxLicenseID value of your application.
+    /// The file is of the format file://&lt;path>/&lt;filename>.</p><p>Maximum size 5 MB</p><p>Note: Only one of licenseBody and licenseUrl can be specified, otherwise an error will result.</p>
     pub license_body: Option<String>,
-    /// <p>A link to a license file of the app that matches the spdxLicenseID of your application.</p><p>Max size 5 MB</p>
+    /// <p>A link to the S3 object that contains the license of the app that matches the spdxLicenseID value of your application.</p><p>Maximum size 5 MB</p><p>Note: Only one of licenseBody and licenseUrl can be specified, otherwise an error will result.</p>
     pub license_url: Option<String>,
-    /// <p>The name of the application you want to publish.</p><p>Min Length=1. Max Length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
+    /// <p>The name of the application that you want to publish.</p><p>Minimum length=1. Maximum length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
     pub name: String,
-    /// <p>A raw text Readme file that contains a more detailed description of the application and how it works in markdown language.</p><p>Max size 5 MB</p>
+    /// <p>A local text readme file in Markdown language that contains a more detailed description of the application and how it works.
+    /// The file is of the format file://&lt;path>/&lt;filename>.</p><p>Maximum size 5 MB</p><p>Note: Only one of readmeBody and readmeUrl can be specified, otherwise an error will result.</p>
     pub readme_body: Option<String>,
-    /// <p>A link to the Readme file that contains a more detailed description of the application and how it works in markdown language.</p><p>Max size 5 MB</p>
+    /// <p>A link to the S3 object in Markdown language that contains a more detailed description of the application and how it works.</p><p>Maximum size 5 MB</p><p>Note: Only one of readmeBody and readmeUrl can be specified, otherwise an error will result.</p>
     pub readme_url: Option<String>,
     /// <p>The semantic version of the application:</p><p>
     /// <a href="https://semver.org/">https://semver.org/</a>
@@ -185,48 +178,48 @@ pub struct CreateApplicationInput {
     pub source_code_url: Option<String>,
     /// <p>A valid identifier from <a href="https://spdx.org/licenses/">https://spdx.org/licenses/</a>.</p>
     pub spdx_license_id: Option<String>,
-    /// <p>The raw packaged AWS SAM template of your application.</p>
+    /// <p>The local raw packaged AWS SAM template file of your application.
+    /// The file is of the format file://&lt;path>/&lt;filename>.</p><p>Note: Only one of templateBody and templateUrl can be specified, otherwise an error will result.</p>
     pub template_body: Option<String>,
-    /// <p>A link to the packaged AWS SAM template of your application.</p>
+    /// <p>A link to the S3 object cotaining the packaged AWS SAM template of your application.</p><p>Note: Only one of templateBody and templateUrl can be specified, otherwise an error will result.</p>
     pub template_url: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateApplicationRequest {
-    /// <p>The name of the author publishing the app.</p><p>Min Length=1. Max Length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
+    /// <p>The name of the author publishing the app.</p><p>Minimum length=1. Maximum length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
     #[serde(rename = "Author")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub author: Option<String>,
-    /// <p>The description of the application.</p><p>Min Length=1. Max Length=256</p>
+    pub author: String,
+    /// <p>The description of the application.</p><p>Minimum length=1. Maximum length=256</p>
     #[serde(rename = "Description")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
+    pub description: String,
     /// <p>A URL with more information about the application, for example
     /// the location of your GitHub repository for the application.</p>
     #[serde(rename = "HomePageUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_page_url: Option<String>,
-    /// <p>Labels to improve discovery of apps in search results.</p><p>Min Length=1. Max Length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
+    /// <p>Labels to improve discovery of apps in search results.</p><p>Minimum length=1. Maximum length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     #[serde(rename = "Labels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<String>>,
-    /// <p>A raw text file that contains the license of the app that matches the spdxLicenseID of your application.</p><p>Max size 5 MB</p>
+    /// <p>A local text file that contains the license of the app that matches the spdxLicenseID value of your application.
+    /// The file is of the format file://&lt;path>/&lt;filename>.</p><p>Maximum size 5 MB</p><p>Note: Only one of licenseBody and licenseUrl can be specified, otherwise an error will result.</p>
     #[serde(rename = "LicenseBody")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_body: Option<String>,
-    /// <p>A link to a license file of the app that matches the spdxLicenseID of your application.</p><p>Max size 5 MB</p>
+    /// <p>A link to the S3 object that contains the license of the app that matches the spdxLicenseID value of your application.</p><p>Maximum size 5 MB</p><p>Note: Only one of licenseBody and licenseUrl can be specified, otherwise an error will result.</p>
     #[serde(rename = "LicenseUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_url: Option<String>,
-    /// <p>The name of the application you want to publish.</p><p>Min Length=1. Max Length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
+    /// <p>The name of the application that you want to publish.</p><p>Minimum length=1. Maximum length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
     #[serde(rename = "Name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    /// <p>A raw text Readme file that contains a more detailed description of the application and how it works in markdown language.</p><p>Max size 5 MB</p>
+    pub name: String,
+    /// <p>A local text readme file in Markdown language that contains a more detailed description of the application and how it works.
+    /// The file is of the format file://&lt;path>/&lt;filename>.</p><p>Maximum size 5 MB</p><p>Note: Only one of readmeBody and readmeUrl can be specified, otherwise an error will result.</p>
     #[serde(rename = "ReadmeBody")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub readme_body: Option<String>,
-    /// <p>A link to the Readme file that contains a more detailed description of the application and how it works in markdown language.</p><p>Max size 5 MB</p>
+    /// <p>A link to the S3 object in Markdown language that contains a more detailed description of the application and how it works.</p><p>Maximum size 5 MB</p><p>Note: Only one of readmeBody and readmeUrl can be specified, otherwise an error will result.</p>
     #[serde(rename = "ReadmeUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub readme_url: Option<String>,
@@ -244,11 +237,12 @@ pub struct CreateApplicationRequest {
     #[serde(rename = "SpdxLicenseId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spdx_license_id: Option<String>,
-    /// <p>The raw packaged AWS SAM template of your application.</p>
+    /// <p>The local raw packaged AWS SAM template file of your application.
+    /// The file is of the format file://&lt;path>/&lt;filename>.</p><p>Note: Only one of templateBody and templateUrl can be specified, otherwise an error will result.</p>
     #[serde(rename = "TemplateBody")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_body: Option<String>,
-    /// <p>A link to the packaged AWS SAM template of your application.</p>
+    /// <p>A link to the S3 object cotaining the packaged AWS SAM template of your application.</p><p>Note: Only one of templateBody and templateUrl can be specified, otherwise an error will result.</p>
     #[serde(rename = "TemplateUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_url: Option<String>,
@@ -260,15 +254,15 @@ pub struct CreateApplicationResponse {
     #[serde(rename = "ApplicationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_id: Option<String>,
-    /// <p>The name of the author publishing the app.</p><p>Min Length=1. Max Length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
+    /// <p>The name of the author publishing the app.</p><p>Minimum length=1. Maximum length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
     #[serde(rename = "Author")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub author: Option<String>,
-    /// <p>The date/time this resource was created.</p>
+    /// <p>The date and time this resource was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<String>,
-    /// <p>The description of the application.</p><p>Min Length=1. Max Length=256</p>
+    /// <p>The description of the application.</p><p>Minimum length=1. Maximum length=256</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -277,19 +271,19 @@ pub struct CreateApplicationResponse {
     #[serde(rename = "HomePageUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_page_url: Option<String>,
-    /// <p>Labels to improve discovery of apps in search results.</p><p>Min Length=1. Max Length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
+    /// <p>Labels to improve discovery of apps in search results.</p><p>Minimum length=1. Maximum length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     #[serde(rename = "Labels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<String>>,
-    /// <p>A link to a license file of the app that matches the spdxLicenseID of your application.</p><p>Max size 5 MB</p>
+    /// <p>A link to a license file of the app that matches the spdxLicenseID value of your application.</p><p>Maximum size 5 MB</p>
     #[serde(rename = "LicenseUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_url: Option<String>,
-    /// <p>The name of the application.</p><p>Min Length=1. Max Length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
+    /// <p>The name of the application.</p><p>Minimum length=1. Maximum length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>A link to the readme file that contains a more detailed description of the application and how it works in Markdown language.</p><p>Max size 5 MB</p>
+    /// <p>A link to the readme file in Markdown language that contains a more detailed description of the application and how it works.</p><p>Maximum size 5 MB</p>
     #[serde(rename = "ReadmeUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub readme_url: Option<String>,
@@ -303,7 +297,7 @@ pub struct CreateApplicationResponse {
     pub version: Option<Version>,
 }
 
-/// <p>Create version request.</p>
+/// <p>Create a version request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateApplicationVersionInput {
     /// <p>A link to a public repository for the source code of your application.</p>
@@ -316,7 +310,7 @@ pub struct CreateApplicationVersionInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateApplicationVersionRequest {
-    /// <p>The ID of the application to get.</p>
+    /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
     /// <p>The semantic version of the new version.</p>
@@ -342,11 +336,11 @@ pub struct CreateApplicationVersionResponse {
     #[serde(rename = "ApplicationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_id: Option<String>,
-    /// <p>The date/time this resource was created.</p>
+    /// <p>The date and time this resource was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<String>,
-    /// <p>Array of parameter types supported by the application.</p>
+    /// <p>An array of parameter types supported by the application.</p>
     #[serde(rename = "ParameterDefinitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_definitions: Option<Vec<ParameterDefinition>>,
@@ -366,7 +360,7 @@ pub struct CreateApplicationVersionResponse {
     pub template_url: Option<String>,
 }
 
-/// <p>Create application ChangeSet request.</p>
+/// <p>Create an application change set request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateCloudFormationChangeSetInput {
     /// <p>A list of parameter values for the parameters of the application.</p>
@@ -383,7 +377,7 @@ pub struct CreateCloudFormationChangeSetInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateCloudFormationChangeSetRequest {
-    /// <p>The ID of the application to get.</p>
+    /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
     /// <p>A list of parameter values for the parameters of the application.</p>
@@ -400,8 +394,7 @@ pub struct CreateCloudFormationChangeSetRequest {
     /// the change set by comparing this stack's information with the information that you submit, such as a modified
     /// template or different parameter input values. </p><p>Constraints: Minimum length of 1.</p><p>Pattern: ([a-zA-Z][-a-zA-Z0-9]*)|(arn:\b(aws|aws-us-gov|aws-cn)\b:[-a-zA-Z0-9:/._+]*)</p>
     #[serde(rename = "StackName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub stack_name: Option<String>,
+    pub stack_name: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -410,7 +403,7 @@ pub struct CreateCloudFormationChangeSetResponse {
     #[serde(rename = "ApplicationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_id: Option<String>,
-    /// <p>The ARN of the change set.</p><p>Length Constraints: Minimum length of 1.</p><p>Pattern: Amazon Resource Name (ARN):[-a-zA-Z0-9:/]*</p>
+    /// <p>The Amazon Resource Name (ARN) of the change set.</p><p>Length constraints: Minimum length of 1.</p><p>Pattern: ARN:[-a-zA-Z0-9:/]*</p>
     #[serde(rename = "ChangeSetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub change_set_id: Option<String>,
@@ -428,21 +421,21 @@ pub struct CreateCloudFormationChangeSetResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteApplicationRequest {
-    /// <p>The ID of the application to get.</p>
+    /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetApplicationPolicyRequest {
-    /// <p>The ID of the application to get.</p>
+    /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetApplicationPolicyResponse {
-    /// <p>Array of policy statements applied to the application.</p>
+    /// <p>An array of policy statements applied to the application.</p>
     #[serde(rename = "Statements")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub statements: Option<Vec<ApplicationPolicyStatement>>,
@@ -450,7 +443,7 @@ pub struct GetApplicationPolicyResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetApplicationRequest {
-    /// <p>The ID of the application to get.</p>
+    /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
     /// <p>The semantic version of the application to get.</p>
@@ -465,15 +458,15 @@ pub struct GetApplicationResponse {
     #[serde(rename = "ApplicationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_id: Option<String>,
-    /// <p>The name of the author publishing the app.</p><p>Min Length=1. Max Length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
+    /// <p>The name of the author publishing the app.</p><p>Minimum length=1. Maximum length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
     #[serde(rename = "Author")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub author: Option<String>,
-    /// <p>The date/time this resource was created.</p>
+    /// <p>The date and time this resource was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<String>,
-    /// <p>The description of the application.</p><p>Min Length=1. Max Length=256</p>
+    /// <p>The description of the application.</p><p>Minimum length=1. Maximum length=256</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -482,19 +475,19 @@ pub struct GetApplicationResponse {
     #[serde(rename = "HomePageUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_page_url: Option<String>,
-    /// <p>Labels to improve discovery of apps in search results.</p><p>Min Length=1. Max Length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
+    /// <p>Labels to improve discovery of apps in search results.</p><p>Minimum length=1. Maximum length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     #[serde(rename = "Labels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<String>>,
-    /// <p>A link to a license file of the app that matches the spdxLicenseID of your application.</p><p>Max size 5 MB</p>
+    /// <p>A link to a license file of the app that matches the spdxLicenseID value of your application.</p><p>Maximum size 5 MB</p>
     #[serde(rename = "LicenseUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_url: Option<String>,
-    /// <p>The name of the application.</p><p>Min Length=1. Max Length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
+    /// <p>The name of the application.</p><p>Minimum length=1. Maximum length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>A link to the readme file that contains a more detailed description of the application and how it works in Markdown language.</p><p>Max size 5 MB</p>
+    /// <p>A link to the readme file in Markdown language that contains a more detailed description of the application and how it works.</p><p>Maximum size 5 MB</p>
     #[serde(rename = "ReadmeUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub readme_url: Option<String>,
@@ -510,7 +503,7 @@ pub struct GetApplicationResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListApplicationVersionsRequest {
-    /// <p>The ID of the application to get.</p>
+    /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
     /// <p>The total number of items to return.</p>
@@ -529,7 +522,7 @@ pub struct ListApplicationVersionsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Array of version summaries for the application.</p>
+    /// <p>An array of version summaries for the application.</p>
     #[serde(rename = "Versions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub versions: Option<Vec<VersionSummary>>,
@@ -549,7 +542,7 @@ pub struct ListApplicationsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListApplicationsResponse {
-    /// <p>Array of application summaries.</p>
+    /// <p>An array of application summaries.</p>
     #[serde(rename = "Applications")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub applications: Option<Vec<ApplicationSummary>>,
@@ -566,7 +559,7 @@ pub struct ParameterDefinition {
     #[serde(rename = "AllowedPattern")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_pattern: Option<String>,
-    /// <p>Array containing the list of values allowed for the parameter.</p>
+    /// <p>An array containing the list of values allowed for the parameter.</p>
     #[serde(rename = "AllowedValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_values: Option<Vec<String>>,
@@ -574,7 +567,7 @@ pub struct ParameterDefinition {
     /// a parameter that has an allowed pattern of [A-Za-z0-9]+ displays the following error message when the user
     /// specifies an invalid value:</p><p>
     /// Malformed input-Parameter MyParameter must match pattern [A-Za-z0-9]+
-    /// </p><p>By adding a constraint description, such as "must contain only uppercase and lowercase letters, and numbers," you can display
+    /// </p><p>By adding a constraint description, such as "must contain only uppercase and lowercase letters and numbers," you can display
     /// the following customized error message:</p><p>
     /// Malformed input-Parameter MyParameter must contain only uppercase and lowercase letters and numbers.
     /// </p>
@@ -590,19 +583,19 @@ pub struct ParameterDefinition {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>An integer value that determines the largest number of characters you want to allow for String types.</p>
+    /// <p>An integer value that determines the largest number of characters that you want to allow for String types.</p>
     #[serde(rename = "MaxLength")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_length: Option<i64>,
-    /// <p>A numeric value that determines the largest numeric value you want to allow for Number types.</p>
+    /// <p>A numeric value that determines the largest numeric value that you want to allow for Number types.</p>
     #[serde(rename = "MaxValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_value: Option<i64>,
-    /// <p>An integer value that determines the smallest number of characters you want to allow for String types.</p>
+    /// <p>An integer value that determines the smallest number of characters that you want to allow for String types.</p>
     #[serde(rename = "MinLength")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub min_length: Option<i64>,
-    /// <p>A numeric value that determines the smallest numeric value you want to allow for Number types.</p>
+    /// <p>A numeric value that determines the smallest numeric value that you want to allow for Number types.</p>
     #[serde(rename = "MinValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub min_value: Option<i64>,
@@ -619,13 +612,13 @@ pub struct ParameterDefinition {
     pub referenced_by_resources: Vec<String>,
     /// <p>The type of the parameter.</p><p>Valid values: String | Number | List&lt;Number> | CommaDelimitedList
     /// </p><p>
-    /// String: A literal string.</p><p>For example, users could specify "MyUserName".</p><p>
-    /// Number: An integer or float. AWS CloudFormation validates the parameter value as a number; however, when you use the
-    /// parameter elsewhere in your template (for example, by using the Ref intrinsic function), the parameter value becomes a string.</p><p>For example, users could specify "8888".</p><p>
-    /// List&lt;Number>: An array of integers or floats that are separated by commas. AWS CloudFormation validates the parameter value as numbers; however, when
-    /// you use the parameter elsewhere in your template (for example, by using the Ref intrinsic function), the parameter value becomes a list of strings.</p><p>For example, users could specify "80,20", and a Ref results in ["80","20"].</p><p>
+    /// String: A literal string.</p><p>For example, users can specify "MyUserName".</p><p>
+    /// Number: An integer or float. AWS CloudFormation validates the parameter value as a number. However, when you use the
+    /// parameter elsewhere in your template (for example, by using the Ref intrinsic function), the parameter value becomes a string.</p><p>For example, users might specify "8888".</p><p>
+    /// List&lt;Number>: An array of integers or floats that are separated by commas. AWS CloudFormation validates the parameter value as numbers. However, when
+    /// you use the parameter elsewhere in your template (for example, by using the Ref intrinsic function), the parameter value becomes a list of strings.</p><p>For example, users might specify "80,20", and then Ref results in ["80","20"].</p><p>
     /// CommaDelimitedList: An array of literal strings that are separated by commas. The total number of strings should be one more than the total number of commas.
-    /// Also, each member string is space-trimmed.</p><p>For example, users could specify "test,dev,prod", and a Ref results in ["test","dev","prod"].</p>
+    /// Also, each member string is space-trimmed.</p><p>For example, users might specify "test,dev,prod", and then Ref results in ["test","dev","prod"].</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -645,51 +638,50 @@ pub struct ParameterValue {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutApplicationPolicyRequest {
-    /// <p>The ID of the application to get.</p>
+    /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
-    /// <p>Array of policy statements applied to the application.</p>
+    /// <p>An array of policy statements applied to the application.</p>
     #[serde(rename = "Statements")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub statements: Option<Vec<ApplicationPolicyStatement>>,
+    pub statements: Vec<ApplicationPolicyStatement>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutApplicationPolicyResponse {
-    /// <p>Array of policy statements applied to the application.</p>
+    /// <p>An array of policy statements applied to the application.</p>
     #[serde(rename = "Statements")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub statements: Option<Vec<ApplicationPolicyStatement>>,
 }
 
-/// <p>Update application request.</p>
+/// <p>Update the application request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateApplicationInput {
-    /// <p>The name of the author publishing the app.</p><p>Min Length=1. Max Length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
+    /// <p>The name of the author publishing the app.</p><p>Minimum length=1. Maximum length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
     pub author: Option<String>,
-    /// <p>The description of the application.</p><p>Min Length=1. Max Length=256</p>
+    /// <p>The description of the application.</p><p>Minimum length=1. Maximum length=256</p>
     pub description: Option<String>,
     /// <p>A URL with more information about the application, for example
     /// the location of your GitHub repository for the application.</p>
     pub home_page_url: Option<String>,
-    /// <p>Labels to improve discovery of apps in search results.</p><p>Min Length=1. Max Length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
+    /// <p>Labels to improve discovery of apps in search results.</p><p>Minimum length=1. Maximum length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     pub labels: Option<Vec<String>>,
-    /// <p>A raw text Readme file that contains a more detailed description of the application and how it works in markdown language.</p><p>Max size 5 MB</p>
+    /// <p>A text readme file in Markdown language that contains a more detailed description of the application and how it works.</p><p>Maximum size 5 MB</p>
     pub readme_body: Option<String>,
-    /// <p>A link to the Readme file that contains a more detailed description of the application and how it works in markdown language.</p><p>Max size 5 MB</p>
+    /// <p>A link to the readme file in Markdown language that contains a more detailed description of the application and how it works.</p><p>Maximum size 5 MB</p>
     pub readme_url: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateApplicationRequest {
-    /// <p>The ID of the application to get.</p>
+    /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
-    /// <p>The name of the author publishing the app.</p><p>Min Length=1. Max Length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
+    /// <p>The name of the author publishing the app.</p><p>Minimum length=1. Maximum length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
     #[serde(rename = "Author")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub author: Option<String>,
-    /// <p>The description of the application.</p><p>Min Length=1. Max Length=256</p>
+    /// <p>The description of the application.</p><p>Minimum length=1. Maximum length=256</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -698,15 +690,15 @@ pub struct UpdateApplicationRequest {
     #[serde(rename = "HomePageUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_page_url: Option<String>,
-    /// <p>Labels to improve discovery of apps in search results.</p><p>Min Length=1. Max Length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
+    /// <p>Labels to improve discovery of apps in search results.</p><p>Minimum length=1. Maximum length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     #[serde(rename = "Labels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<String>>,
-    /// <p>A raw text Readme file that contains a more detailed description of the application and how it works in markdown language.</p><p>Max size 5 MB</p>
+    /// <p>A text readme file in Markdown language that contains a more detailed description of the application and how it works.</p><p>Maximum size 5 MB</p>
     #[serde(rename = "ReadmeBody")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub readme_body: Option<String>,
-    /// <p>A link to the Readme file that contains a more detailed description of the application and how it works in markdown language.</p><p>Max size 5 MB</p>
+    /// <p>A link to the readme file in Markdown language that contains a more detailed description of the application and how it works.</p><p>Maximum size 5 MB</p>
     #[serde(rename = "ReadmeUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub readme_url: Option<String>,
@@ -718,15 +710,15 @@ pub struct UpdateApplicationResponse {
     #[serde(rename = "ApplicationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_id: Option<String>,
-    /// <p>The name of the author publishing the app.</p><p>Min Length=1. Max Length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
+    /// <p>The name of the author publishing the app.</p><p>Minimum length=1. Maximum length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
     #[serde(rename = "Author")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub author: Option<String>,
-    /// <p>The date/time this resource was created.</p>
+    /// <p>The date and time this resource was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<String>,
-    /// <p>The description of the application.</p><p>Min Length=1. Max Length=256</p>
+    /// <p>The description of the application.</p><p>Minimum length=1. Maximum length=256</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -735,19 +727,19 @@ pub struct UpdateApplicationResponse {
     #[serde(rename = "HomePageUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_page_url: Option<String>,
-    /// <p>Labels to improve discovery of apps in search results.</p><p>Min Length=1. Max Length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
+    /// <p>Labels to improve discovery of apps in search results.</p><p>Minimum length=1. Maximum length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     #[serde(rename = "Labels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<String>>,
-    /// <p>A link to a license file of the app that matches the spdxLicenseID of your application.</p><p>Max size 5 MB</p>
+    /// <p>A link to a license file of the app that matches the spdxLicenseID value of your application.</p><p>Maximum size 5 MB</p>
     #[serde(rename = "LicenseUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_url: Option<String>,
-    /// <p>The name of the application.</p><p>Min Length=1. Max Length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
+    /// <p>The name of the application.</p><p>Minimum length=1. Maximum length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>A link to the readme file that contains a more detailed description of the application and how it works in Markdown language.</p><p>Max size 5 MB</p>
+    /// <p>A link to the readme file in Markdown language that contains a more detailed description of the application and how it works.</p><p>Maximum size 5 MB</p>
     #[serde(rename = "ReadmeUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub readme_url: Option<String>,
@@ -767,10 +759,10 @@ pub struct Version {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
-    /// <p>The date/time this resource was created.</p>
+    /// <p>The date and time this resource was created.</p>
     #[serde(rename = "CreationTime")]
     pub creation_time: String,
-    /// <p>Array of parameter types supported by the application.</p>
+    /// <p>An array of parameter types supported by the application.</p>
     #[serde(rename = "ParameterDefinitions")]
     pub parameter_definitions: Vec<ParameterDefinition>,
     /// <p>The semantic version of the application:</p><p>
@@ -787,13 +779,13 @@ pub struct Version {
     pub template_url: String,
 }
 
-/// <p>Application version summary.</p>
+/// <p>An application version summary.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct VersionSummary {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
-    /// <p>The date/time this resource was created.</p>
+    /// <p>The date and time this resource was created.</p>
     #[serde(rename = "CreationTime")]
     pub creation_time: String,
     /// <p>The semantic version of the application:</p><p>
@@ -818,7 +810,7 @@ pub enum CreateApplicationError {
     Forbidden(String),
     /// <p>The AWS Serverless Application Repository service encountered an internal error.</p>
     InternalServerError(String),
-    /// <p>The client is sending more than the allowed number of requests per unit time.</p>
+    /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -923,7 +915,7 @@ pub enum CreateApplicationVersionError {
     Forbidden(String),
     /// <p>The AWS Serverless Application Repository service encountered an internal error.</p>
     InternalServerError(String),
-    /// <p>The client is sending more than the allowed number of requests per unit time.</p>
+    /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1028,7 +1020,7 @@ pub enum CreateCloudFormationChangeSetError {
     Forbidden(String),
     /// <p>The AWS Serverless Application Repository service encountered an internal error.</p>
     InternalServerError(String),
-    /// <p>The client is sending more than the allowed number of requests per unit time.</p>
+    /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1133,9 +1125,9 @@ pub enum DeleteApplicationError {
     Forbidden(String),
     /// <p>The AWS Serverless Application Repository service encountered an internal error.</p>
     InternalServerError(String),
-    /// <p>The resource (for example, an access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, an access policy statement) specified in the request doesn't exist.</p>
     NotFound(String),
-    /// <p>The client is sending more than the allowed number of requests per unit time.</p>
+    /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1242,9 +1234,9 @@ pub enum GetApplicationError {
     Forbidden(String),
     /// <p>The AWS Serverless Application Repository service encountered an internal error.</p>
     InternalServerError(String),
-    /// <p>The resource (for example, an access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, an access policy statement) specified in the request doesn't exist.</p>
     NotFound(String),
-    /// <p>The client is sending more than the allowed number of requests per unit time.</p>
+    /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1345,9 +1337,9 @@ pub enum GetApplicationPolicyError {
     Forbidden(String),
     /// <p>The AWS Serverless Application Repository service encountered an internal error.</p>
     InternalServerError(String),
-    /// <p>The resource (for example, an access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, an access policy statement) specified in the request doesn't exist.</p>
     NotFound(String),
-    /// <p>The client is sending more than the allowed number of requests per unit time.</p>
+    /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1450,9 +1442,9 @@ pub enum ListApplicationVersionsError {
     Forbidden(String),
     /// <p>The AWS Serverless Application Repository service encountered an internal error.</p>
     InternalServerError(String),
-    /// <p>The resource (for example, an access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, an access policy statement) specified in the request doesn't exist.</p>
     NotFound(String),
-    /// <p>The client is sending more than the allowed number of requests per unit time.</p>
+    /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1557,7 +1549,7 @@ pub enum ListApplicationsError {
     Forbidden(String),
     /// <p>The AWS Serverless Application Repository service encountered an internal error.</p>
     InternalServerError(String),
-    /// <p>The resource (for example, an access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, an access policy statement) specified in the request doesn't exist.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1654,9 +1646,9 @@ pub enum PutApplicationPolicyError {
     Forbidden(String),
     /// <p>The AWS Serverless Application Repository service encountered an internal error.</p>
     InternalServerError(String),
-    /// <p>The resource (for example, an access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, an access policy statement) specified in the request doesn't exist.</p>
     NotFound(String),
-    /// <p>The client is sending more than the allowed number of requests per unit time.</p>
+    /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1761,9 +1753,9 @@ pub enum UpdateApplicationError {
     Forbidden(String),
     /// <p>The AWS Serverless Application Repository service encountered an internal error.</p>
     InternalServerError(String),
-    /// <p>The resource (for example, an access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource (for example, an access policy statement) specified in the request doesn't exist.</p>
     NotFound(String),
-    /// <p>The client is sending more than the allowed number of requests per unit time.</p>
+    /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1875,7 +1867,7 @@ pub trait ServerlessRepo {
         input: CreateApplicationVersionRequest,
     ) -> RusotoFuture<CreateApplicationVersionResponse, CreateApplicationVersionError>;
 
-    /// <p>Creates an AWS CloudFormation ChangeSet for the given application.</p>
+    /// <p>Creates an AWS CloudFormation change set for the given application.</p>
     fn create_cloud_formation_change_set(
         &self,
         input: CreateCloudFormationChangeSetRequest,
@@ -1893,7 +1885,7 @@ pub trait ServerlessRepo {
         input: GetApplicationRequest,
     ) -> RusotoFuture<GetApplicationResponse, GetApplicationError>;
 
-    /// <p>Gets the policy for the specified application.</p>
+    /// <p>Retrieves the policy for the application.</p>
     fn get_application_policy(
         &self,
         input: GetApplicationPolicyRequest,
@@ -1911,7 +1903,9 @@ pub trait ServerlessRepo {
         input: ListApplicationsRequest,
     ) -> RusotoFuture<ListApplicationsResponse, ListApplicationsError>;
 
-    /// <p>Puts the policy for the specified application.</p>
+    /// <p>Sets the permission policy for an application. See
+    /// <a href="https://docs.aws.amazon.com/serverlessrepo/latest/devguide/access-control-resource-based.html#application-permissions">Application Permissions</a>
+    /// for the list of supported actions that can be used with this operation.</p>
     fn put_application_policy(
         &self,
         input: PutApplicationPolicyRequest,
@@ -2041,7 +2035,7 @@ impl ServerlessRepo for ServerlessRepoClient {
         })
     }
 
-    /// <p>Creates an AWS CloudFormation ChangeSet for the given application.</p>
+    /// <p>Creates an AWS CloudFormation change set for the given application.</p>
     fn create_cloud_formation_change_set(
         &self,
         input: CreateCloudFormationChangeSetRequest,
@@ -2160,7 +2154,7 @@ impl ServerlessRepo for ServerlessRepoClient {
         })
     }
 
-    /// <p>Gets the policy for the specified application.</p>
+    /// <p>Retrieves the policy for the application.</p>
     fn get_application_policy(
         &self,
         input: GetApplicationPolicyRequest,
@@ -2291,7 +2285,9 @@ impl ServerlessRepo for ServerlessRepoClient {
         })
     }
 
-    /// <p>Puts the policy for the specified application.</p>
+    /// <p>Sets the permission policy for an application. See
+    /// <a href="https://docs.aws.amazon.com/serverlessrepo/latest/devguide/access-control-resource-based.html#application-permissions">Application Permissions</a>
+    /// for the list of supported actions that can be used with this operation.</p>
     fn put_application_policy(
         &self,
         input: PutApplicationPolicyRequest,

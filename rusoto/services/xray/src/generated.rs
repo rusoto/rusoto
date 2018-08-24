@@ -172,6 +172,23 @@ pub struct EdgeStatistics {
     pub total_response_time: Option<f64>,
 }
 
+/// <p>A configuration document that specifies encryption configuration settings.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct EncryptionConfig {
+    /// <p>The ID of the customer master key (CMK) used for encryption, if applicable.</p>
+    #[serde(rename = "KeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_id: Option<String>,
+    /// <p>The encryption status. After modifying encryption configuration with <a>PutEncryptionConfig</a>, the status can be <code>UPDATING</code> for up to one hour before X-Ray starts encrypting data with the new key.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The type of encryption. Set to <code>KMS</code> for encryption with CMKs. Set to <code>NONE</code> for default encryption.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
 /// <p>Information about requests that failed with a 4xx Client Error status code.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ErrorStatistics {
@@ -200,6 +217,17 @@ pub struct FaultStatistics {
     #[serde(rename = "TotalCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total_count: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetEncryptionConfigRequest {}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct GetEncryptionConfigResult {
+    /// <p>The encryption configuration document.</p>
+    #[serde(rename = "EncryptionConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_config: Option<EncryptionConfig>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -295,7 +323,7 @@ pub struct GetTraceSummariesResult {
     #[serde(rename = "TraceSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trace_summaries: Option<Vec<TraceSummary>>,
-    /// <p>The number of traces that were processed to get this set of summaries.</p>
+    /// <p>The total number of traces processed, including traces that did not match the specified filter expression.</p>
     #[serde(rename = "TracesProcessedCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub traces_processed_count: Option<i64>,
@@ -340,6 +368,25 @@ pub struct Http {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct PutEncryptionConfigRequest {
+    /// <p>An AWS KMS customer master key (CMK) in one of the following formats:</p> <ul> <li> <p> <b>Alias</b> - The name of the key. For example, <code>alias/MyKey</code>.</p> </li> <li> <p> <b>Key ID</b> - The KMS key ID of the key. For example, <code>ae4aa6d49-a4d8-9df9-a475-4ff6d7898456</code>.</p> </li> <li> <p> <b>ARN</b> - The full Amazon Resource Name of the key ID or alias. For example, <code>arn:aws:kms:us-east-2:123456789012:key/ae4aa6d49-a4d8-9df9-a475-4ff6d7898456</code>. Use this format to specify a key in a different account.</p> </li> </ul> <p>Omit this key if you set <code>Type</code> to <code>NONE</code>.</p>
+    #[serde(rename = "KeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_id: Option<String>,
+    /// <p>The type of encryption. Set to <code>KMS</code> to use your own key for encryption. Set to <code>NONE</code> for default encryption.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct PutEncryptionConfigResult {
+    /// <p>The new encryption configuration.</p>
+    #[serde(rename = "EncryptionConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_config: Option<EncryptionConfig>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutTelemetryRecordsRequest {
     /// <p><p/></p>
     #[serde(rename = "EC2InstanceId")]
@@ -376,10 +423,10 @@ pub struct PutTraceSegmentsResult {
     pub unprocessed_trace_segments: Option<Vec<UnprocessedTraceSegment>>,
 }
 
-/// <p>A segment from a trace that has been ingested by the X-Ray service. The segment can be compiled from documents uploaded with <a>PutTraceSegments</a>, or an <code>inferred</code> segment for a downstream service, generated from a subsegment sent by the service that called it.</p>
+/// <p>A segment from a trace that has been ingested by the X-Ray service. The segment can be compiled from documents uploaded with <a>PutTraceSegments</a>, or an <code>inferred</code> segment for a downstream service, generated from a subsegment sent by the service that called it.</p> <p>For the full segment document schema, see <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html">AWS X-Ray Segment Documents</a> in the <i>AWS X-Ray Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Segment {
-    /// <p>The segment document</p>
+    /// <p>The segment document.</p>
     #[serde(rename = "Document")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document: Option<String>,
@@ -714,6 +761,93 @@ impl Error for BatchGetTracesError {
         }
     }
 }
+/// Errors returned by GetEncryptionConfig
+#[derive(Debug, PartialEq)]
+pub enum GetEncryptionConfigError {
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
+    InvalidRequest(String),
+    /// <p>The request exceeds the maximum number of requests per second.</p>
+    Throttled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetEncryptionConfigError {
+    pub fn from_body(body: &str) -> GetEncryptionConfigError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidRequestException" => {
+                        GetEncryptionConfigError::InvalidRequest(String::from(error_message))
+                    }
+                    "ThrottledException" => {
+                        GetEncryptionConfigError::Throttled(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetEncryptionConfigError::Validation(error_message.to_string())
+                    }
+                    _ => GetEncryptionConfigError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetEncryptionConfigError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetEncryptionConfigError {
+    fn from(err: serde_json::error::Error) -> GetEncryptionConfigError {
+        GetEncryptionConfigError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetEncryptionConfigError {
+    fn from(err: CredentialsError) -> GetEncryptionConfigError {
+        GetEncryptionConfigError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetEncryptionConfigError {
+    fn from(err: HttpDispatchError) -> GetEncryptionConfigError {
+        GetEncryptionConfigError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetEncryptionConfigError {
+    fn from(err: io::Error) -> GetEncryptionConfigError {
+        GetEncryptionConfigError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetEncryptionConfigError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetEncryptionConfigError {
+    fn description(&self) -> &str {
+        match *self {
+            GetEncryptionConfigError::InvalidRequest(ref cause) => cause,
+            GetEncryptionConfigError::Throttled(ref cause) => cause,
+            GetEncryptionConfigError::Validation(ref cause) => cause,
+            GetEncryptionConfigError::Credentials(ref err) => err.description(),
+            GetEncryptionConfigError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetEncryptionConfigError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetServiceGraph
 #[derive(Debug, PartialEq)]
 pub enum GetServiceGraphError {
@@ -971,6 +1105,93 @@ impl Error for GetTraceSummariesError {
         }
     }
 }
+/// Errors returned by PutEncryptionConfig
+#[derive(Debug, PartialEq)]
+pub enum PutEncryptionConfigError {
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
+    InvalidRequest(String),
+    /// <p>The request exceeds the maximum number of requests per second.</p>
+    Throttled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl PutEncryptionConfigError {
+    pub fn from_body(body: &str) -> PutEncryptionConfigError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidRequestException" => {
+                        PutEncryptionConfigError::InvalidRequest(String::from(error_message))
+                    }
+                    "ThrottledException" => {
+                        PutEncryptionConfigError::Throttled(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        PutEncryptionConfigError::Validation(error_message.to_string())
+                    }
+                    _ => PutEncryptionConfigError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => PutEncryptionConfigError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for PutEncryptionConfigError {
+    fn from(err: serde_json::error::Error) -> PutEncryptionConfigError {
+        PutEncryptionConfigError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for PutEncryptionConfigError {
+    fn from(err: CredentialsError) -> PutEncryptionConfigError {
+        PutEncryptionConfigError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutEncryptionConfigError {
+    fn from(err: HttpDispatchError) -> PutEncryptionConfigError {
+        PutEncryptionConfigError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutEncryptionConfigError {
+    fn from(err: io::Error) -> PutEncryptionConfigError {
+        PutEncryptionConfigError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutEncryptionConfigError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutEncryptionConfigError {
+    fn description(&self) -> &str {
+        match *self {
+            PutEncryptionConfigError::InvalidRequest(ref cause) => cause,
+            PutEncryptionConfigError::Throttled(ref cause) => cause,
+            PutEncryptionConfigError::Validation(ref cause) => cause,
+            PutEncryptionConfigError::Credentials(ref err) => err.description(),
+            PutEncryptionConfigError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutEncryptionConfigError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by PutTelemetryRecords
 #[derive(Debug, PartialEq)]
 pub enum PutTelemetryRecordsError {
@@ -1151,6 +1372,11 @@ pub trait XRay {
         input: BatchGetTracesRequest,
     ) -> RusotoFuture<BatchGetTracesResult, BatchGetTracesError>;
 
+    /// <p>Retrieves the current encryption configuration for X-Ray data.</p>
+    fn get_encryption_config(
+        &self,
+    ) -> RusotoFuture<GetEncryptionConfigResult, GetEncryptionConfigError>;
+
     /// <p>Retrieves a document that describes services that process incoming requests, and downstream services that they call as a result. Root services process incoming requests and make calls to downstream services. Root services are applications that use the AWS X-Ray SDK. Downstream services can be other applications, AWS resources, HTTP web APIs, or SQL databases.</p>
     fn get_service_graph(
         &self,
@@ -1169,13 +1395,19 @@ pub trait XRay {
         input: GetTraceSummariesRequest,
     ) -> RusotoFuture<GetTraceSummariesResult, GetTraceSummariesError>;
 
+    /// <p>Updates the encryption configuration for X-Ray data.</p>
+    fn put_encryption_config(
+        &self,
+        input: PutEncryptionConfigRequest,
+    ) -> RusotoFuture<PutEncryptionConfigResult, PutEncryptionConfigError>;
+
     /// <p>Used by the AWS X-Ray daemon to upload telemetry.</p>
     fn put_telemetry_records(
         &self,
         input: PutTelemetryRecordsRequest,
     ) -> RusotoFuture<PutTelemetryRecordsResult, PutTelemetryRecordsError>;
 
-    /// <p><p>Uploads segment documents to AWS X-Ray. The X-Ray SDK generates segment documents and sends them to the X-Ray daemon, which uploads them in batches. A segment document can be a completed segment, an in-progress segment, or an array of subsegments.</p> <p>Segments must include the following fields. For the full segment document schema, see <a href="http://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html">AWS X-Ray Segment Documents</a> in the <i>AWS X-Ray Developer Guide</i>.</p> <p class="title"> <b>Required Segment Document Fields</b> </p> <ul> <li> <p> <code>name</code> - The name of the service that handled the request.</p> </li> <li> <p> <code>id</code> - A 64-bit identifier for the segment, unique among segments in the same trace, in 16 hexadecimal digits.</p> </li> <li> <p> <code>trace<em>id</code> - A unique identifier that connects all segments and subsegments originating from a single client request.</p> </li> <li> <p> <code>start</em>time</code> - Time the segment or subsegment was created, in floating point seconds in epoch time, accurate to milliseconds. For example, <code>1480615200.010</code> or <code>1.480615200010E9</code>.</p> </li> <li> <p> <code>end<em>time</code> - Time the segment or subsegment was closed. For example, <code>1480615200.090</code> or <code>1.480615200090E9</code>. Specify either an <code>end</em>time</code> or <code>in<em>progress</code>.</p> </li> <li> <p> <code>in</em>progress</code> - Set to <code>true</code> instead of specifying an <code>end<em>time</code> to record that a segment has been started, but is not complete. Send an in progress segment when your application receives a request that will take a long time to serve, to trace the fact that the request was received. When the response is sent, send the complete segment to overwrite the in-progress segment.</p> </li> </ul> <p>A <code>trace</em>id</code> consists of three numbers separated by hyphens. For example, 1-58406520-a006649127e371903a2de979. This includes:</p> <p class="title"> <b>Trace ID Format</b> </p> <ul> <li> <p>The version number, i.e. <code>1</code>.</p> </li> <li> <p>The time of the original request, in Unix epoch time, in 8 hexadecimal digits. For example, 10:00AM December 2nd, 2016 PST in epoch time is <code>1480615200</code> seconds, or <code>58406520</code> in hexadecimal.</p> </li> <li> <p>A 96-bit identifier for the trace, globally unique, in 24 hexadecimal digits.</p> </li> </ul></p>
+    /// <p><p>Uploads segment documents to AWS X-Ray. The X-Ray SDK generates segment documents and sends them to the X-Ray daemon, which uploads them in batches. A segment document can be a completed segment, an in-progress segment, or an array of subsegments.</p> <p>Segments must include the following fields. For the full segment document schema, see <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html">AWS X-Ray Segment Documents</a> in the <i>AWS X-Ray Developer Guide</i>.</p> <p class="title"> <b>Required Segment Document Fields</b> </p> <ul> <li> <p> <code>name</code> - The name of the service that handled the request.</p> </li> <li> <p> <code>id</code> - A 64-bit identifier for the segment, unique among segments in the same trace, in 16 hexadecimal digits.</p> </li> <li> <p> <code>trace<em>id</code> - A unique identifier that connects all segments and subsegments originating from a single client request.</p> </li> <li> <p> <code>start</em>time</code> - Time the segment or subsegment was created, in floating point seconds in epoch time, accurate to milliseconds. For example, <code>1480615200.010</code> or <code>1.480615200010E9</code>.</p> </li> <li> <p> <code>end<em>time</code> - Time the segment or subsegment was closed. For example, <code>1480615200.090</code> or <code>1.480615200090E9</code>. Specify either an <code>end</em>time</code> or <code>in<em>progress</code>.</p> </li> <li> <p> <code>in</em>progress</code> - Set to <code>true</code> instead of specifying an <code>end<em>time</code> to record that a segment has been started, but is not complete. Send an in progress segment when your application receives a request that will take a long time to serve, to trace the fact that the request was received. When the response is sent, send the complete segment to overwrite the in-progress segment.</p> </li> </ul> <p>A <code>trace</em>id</code> consists of three numbers separated by hyphens. For example, 1-58406520-a006649127e371903a2de979. This includes:</p> <p class="title"> <b>Trace ID Format</b> </p> <ul> <li> <p>The version number, i.e. <code>1</code>.</p> </li> <li> <p>The time of the original request, in Unix epoch time, in 8 hexadecimal digits. For example, 10:00AM December 2nd, 2016 PST in epoch time is <code>1480615200</code> seconds, or <code>58406520</code> in hexadecimal.</p> </li> <li> <p>A 96-bit identifier for the trace, globally unique, in 24 hexadecimal digits.</p> </li> </ul></p>
     fn put_trace_segments(
         &self,
         input: PutTraceSegmentsRequest,
@@ -1248,6 +1480,41 @@ impl XRay for XRayClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(BatchGetTracesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Retrieves the current encryption configuration for X-Ray data.</p>
+    fn get_encryption_config(
+        &self,
+    ) -> RusotoFuture<GetEncryptionConfigResult, GetEncryptionConfigError> {
+        let request_uri = "/EncryptionConfig";
+
+        let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetEncryptionConfigResult>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetEncryptionConfigError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -1369,6 +1636,45 @@ impl XRay for XRayClient {
         })
     }
 
+    /// <p>Updates the encryption configuration for X-Ray data.</p>
+    fn put_encryption_config(
+        &self,
+        input: PutEncryptionConfigRequest,
+    ) -> RusotoFuture<PutEncryptionConfigResult, PutEncryptionConfigError> {
+        let request_uri = "/PutEncryptionConfig";
+
+        let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<PutEncryptionConfigResult>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(PutEncryptionConfigError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Used by the AWS X-Ray daemon to upload telemetry.</p>
     fn put_telemetry_records(
         &self,
@@ -1408,7 +1714,7 @@ impl XRay for XRayClient {
         })
     }
 
-    /// <p><p>Uploads segment documents to AWS X-Ray. The X-Ray SDK generates segment documents and sends them to the X-Ray daemon, which uploads them in batches. A segment document can be a completed segment, an in-progress segment, or an array of subsegments.</p> <p>Segments must include the following fields. For the full segment document schema, see <a href="http://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html">AWS X-Ray Segment Documents</a> in the <i>AWS X-Ray Developer Guide</i>.</p> <p class="title"> <b>Required Segment Document Fields</b> </p> <ul> <li> <p> <code>name</code> - The name of the service that handled the request.</p> </li> <li> <p> <code>id</code> - A 64-bit identifier for the segment, unique among segments in the same trace, in 16 hexadecimal digits.</p> </li> <li> <p> <code>trace<em>id</code> - A unique identifier that connects all segments and subsegments originating from a single client request.</p> </li> <li> <p> <code>start</em>time</code> - Time the segment or subsegment was created, in floating point seconds in epoch time, accurate to milliseconds. For example, <code>1480615200.010</code> or <code>1.480615200010E9</code>.</p> </li> <li> <p> <code>end<em>time</code> - Time the segment or subsegment was closed. For example, <code>1480615200.090</code> or <code>1.480615200090E9</code>. Specify either an <code>end</em>time</code> or <code>in<em>progress</code>.</p> </li> <li> <p> <code>in</em>progress</code> - Set to <code>true</code> instead of specifying an <code>end<em>time</code> to record that a segment has been started, but is not complete. Send an in progress segment when your application receives a request that will take a long time to serve, to trace the fact that the request was received. When the response is sent, send the complete segment to overwrite the in-progress segment.</p> </li> </ul> <p>A <code>trace</em>id</code> consists of three numbers separated by hyphens. For example, 1-58406520-a006649127e371903a2de979. This includes:</p> <p class="title"> <b>Trace ID Format</b> </p> <ul> <li> <p>The version number, i.e. <code>1</code>.</p> </li> <li> <p>The time of the original request, in Unix epoch time, in 8 hexadecimal digits. For example, 10:00AM December 2nd, 2016 PST in epoch time is <code>1480615200</code> seconds, or <code>58406520</code> in hexadecimal.</p> </li> <li> <p>A 96-bit identifier for the trace, globally unique, in 24 hexadecimal digits.</p> </li> </ul></p>
+    /// <p><p>Uploads segment documents to AWS X-Ray. The X-Ray SDK generates segment documents and sends them to the X-Ray daemon, which uploads them in batches. A segment document can be a completed segment, an in-progress segment, or an array of subsegments.</p> <p>Segments must include the following fields. For the full segment document schema, see <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html">AWS X-Ray Segment Documents</a> in the <i>AWS X-Ray Developer Guide</i>.</p> <p class="title"> <b>Required Segment Document Fields</b> </p> <ul> <li> <p> <code>name</code> - The name of the service that handled the request.</p> </li> <li> <p> <code>id</code> - A 64-bit identifier for the segment, unique among segments in the same trace, in 16 hexadecimal digits.</p> </li> <li> <p> <code>trace<em>id</code> - A unique identifier that connects all segments and subsegments originating from a single client request.</p> </li> <li> <p> <code>start</em>time</code> - Time the segment or subsegment was created, in floating point seconds in epoch time, accurate to milliseconds. For example, <code>1480615200.010</code> or <code>1.480615200010E9</code>.</p> </li> <li> <p> <code>end<em>time</code> - Time the segment or subsegment was closed. For example, <code>1480615200.090</code> or <code>1.480615200090E9</code>. Specify either an <code>end</em>time</code> or <code>in<em>progress</code>.</p> </li> <li> <p> <code>in</em>progress</code> - Set to <code>true</code> instead of specifying an <code>end<em>time</code> to record that a segment has been started, but is not complete. Send an in progress segment when your application receives a request that will take a long time to serve, to trace the fact that the request was received. When the response is sent, send the complete segment to overwrite the in-progress segment.</p> </li> </ul> <p>A <code>trace</em>id</code> consists of three numbers separated by hyphens. For example, 1-58406520-a006649127e371903a2de979. This includes:</p> <p class="title"> <b>Trace ID Format</b> </p> <ul> <li> <p>The version number, i.e. <code>1</code>.</p> </li> <li> <p>The time of the original request, in Unix epoch time, in 8 hexadecimal digits. For example, 10:00AM December 2nd, 2016 PST in epoch time is <code>1480615200</code> seconds, or <code>58406520</code> in hexadecimal.</p> </li> <li> <p>A 96-bit identifier for the trace, globally unique, in 24 hexadecimal digits.</p> </li> </ul></p>
     fn put_trace_segments(
         &self,
         input: PutTraceSegmentsRequest,

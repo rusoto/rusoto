@@ -177,9 +177,14 @@ pub struct CreateFleetRequest {
     #[serde(rename = "FleetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_type: Option<String>,
+    /// <p>The ARN of the public, private, or shared image to use.</p>
+    #[serde(rename = "ImageArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_arn: Option<String>,
     /// <p>The name of the image used to create the fleet.</p>
     #[serde(rename = "ImageName")]
-    pub image_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_name: Option<String>,
     /// <p><p>The instance type to use when launching fleet instances. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul></p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
@@ -226,9 +231,14 @@ pub struct CreateImageBuilderRequest {
     #[serde(rename = "EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
+    /// <p>The ARN of the public, private, or shared image to use.</p>
+    #[serde(rename = "ImageArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_arn: Option<String>,
     /// <p>The name of the image used to create the builder.</p>
     #[serde(rename = "ImageName")]
-    pub image_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_name: Option<String>,
     /// <p>The instance type to use when launching the image builder.</p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
@@ -297,6 +307,10 @@ pub struct CreateStackRequest {
     #[serde(rename = "StorageConnectors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_connectors: Option<Vec<StorageConnector>>,
+    /// <p>The actions that are enabled or disabled for users during their streaming sessions. By default, these actions are enabled. </p>
+    #[serde(rename = "UserSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_settings: Option<Vec<UserSetting>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -378,6 +392,19 @@ pub struct DeleteImageBuilderResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_builder: Option<ImageBuilder>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteImagePermissionsRequest {
+    /// <p>The name of the private image.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The 12-digit ID of the AWS account for which to delete image permissions.</p>
+    #[serde(rename = "SharedAccountId")]
+    pub shared_account_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DeleteImagePermissionsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteImageRequest {
@@ -485,11 +512,62 @@ pub struct DescribeImageBuildersResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeImagePermissionsRequest {
+    /// <p>The maximum size of each results page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The name of the private image for which to describe permissions. The image must be one that you own. </p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The pagination token to use to retrieve the next page of results. If this value is empty, only the first page is retrieved.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The 12-digit ID of one or more AWS accounts with which the image is shared.</p>
+    #[serde(rename = "SharedAwsAccountIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shared_aws_account_ids: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DescribeImagePermissionsResult {
+    /// <p>The name of the private image.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The pagination token to use to retrieve the next page of results. If this value is empty, only the first page is retrieved.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The permissions for a private image that you own. </p>
+    #[serde(rename = "SharedImagePermissionsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shared_image_permissions_list: Option<Vec<SharedImagePermissions>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeImagesRequest {
+    /// <p>The ARNs of the public, private, and shared images to describe.</p>
+    #[serde(rename = "Arns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arns: Option<Vec<String>>,
+    /// <p>The maximum size of each page of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
     /// <p>The names of the images to describe.</p>
     #[serde(rename = "Names")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub names: Option<Vec<String>>,
+    /// <p>The pagination token to use to retrieve the next page of results. If this value is empty, only the first page is retrieved.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The type of image (public, private, or shared) to describe. </p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -498,6 +576,10 @@ pub struct DescribeImagesResult {
     #[serde(rename = "Images")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub images: Option<Vec<Image>>,
+    /// <p>The pagination token to use to retrieve the next page of results. If there are no more pages, this value is null.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -659,9 +741,14 @@ pub struct Fleet {
     #[serde(rename = "FleetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_type: Option<String>,
+    /// <p>The ARN for the public, private, or shared image.</p>
+    #[serde(rename = "ImageArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_arn: Option<String>,
     /// <p>The name of the image used to create the fleet.</p>
     #[serde(rename = "ImageName")]
-    pub image_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_name: Option<String>,
     /// <p>The instance type to use when launching fleet instances.</p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
@@ -729,6 +816,10 @@ pub struct Image {
     #[serde(rename = "ImageBuilderSupported")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_builder_supported: Option<bool>,
+    /// <p>The permissions to provide to the destination AWS account for the specified image.</p>
+    #[serde(rename = "ImagePermissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_permissions: Option<ImagePermissions>,
     /// <p>The name of the image.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -831,6 +922,19 @@ pub struct ImageBuilderStateChangeReason {
     pub message: Option<String>,
 }
 
+/// <p>Describes the permissions for an image. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ImagePermissions {
+    /// <p>Indicates whether the image can be used for a fleet.</p>
+    #[serde(rename = "allowFleet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_fleet: Option<bool>,
+    /// <p>Indicates whether the image can be used for an image builder.</p>
+    #[serde(rename = "allowImageBuilder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_image_builder: Option<bool>,
+}
+
 /// <p>Describes the reason why the last image state change occurred.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ImageStateChangeReason {
@@ -857,7 +961,7 @@ pub struct ListAssociatedFleetsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListAssociatedFleetsResult {
-    /// <p>The names of the fleets.</p>
+    /// <p>The name of the fleet.</p>
     #[serde(rename = "Names")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub names: Option<Vec<String>>,
@@ -880,7 +984,7 @@ pub struct ListAssociatedStacksRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListAssociatedStacksResult {
-    /// <p>The names of the stacks.</p>
+    /// <p>The name of the stack.</p>
     #[serde(rename = "Names")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub names: Option<Vec<String>>,
@@ -903,6 +1007,19 @@ pub struct ListTagsForResourceResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>The network details of the fleet instance for the streaming session.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct NetworkAccessConfiguration {
+    /// <p>The resource identifier of the elastic network interface that is attached to instances in your VPC. All network interfaces have the eni-xxxxxxxx resource identifier.</p>
+    #[serde(rename = "EniId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub eni_id: Option<String>,
+    /// <p>The private IP address of the elastic network interface that is attached to instances in your VPC.</p>
+    #[serde(rename = "EniPrivateIpAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub eni_private_ip_address: Option<String>,
 }
 
 /// <p>Describes a resource error.</p>
@@ -946,6 +1063,10 @@ pub struct Session {
     /// <p>The ID of the streaming session.</p>
     #[serde(rename = "Id")]
     pub id: String,
+    /// <p>The network details for the streaming session.</p>
+    #[serde(rename = "NetworkAccessConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_access_configuration: Option<NetworkAccessConfiguration>,
     /// <p>The name of the stack for the streaming session.</p>
     #[serde(rename = "StackName")]
     pub stack_name: String,
@@ -955,6 +1076,17 @@ pub struct Session {
     /// <p>The identifier of the user for whom the session was created.</p>
     #[serde(rename = "UserId")]
     pub user_id: String,
+}
+
+/// <p>Describes the permissions that are available to the specified AWS account for a shared image.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct SharedImagePermissions {
+    /// <p>Describes the permissions for a shared image.</p>
+    #[serde(rename = "imagePermissions")]
+    pub image_permissions: ImagePermissions,
+    /// <p>The 12-digit ID of the AWS account with which the image is shared.</p>
+    #[serde(rename = "sharedAccountId")]
+    pub shared_account_id: String,
 }
 
 /// <p>Describes a stack.</p>
@@ -995,6 +1127,10 @@ pub struct Stack {
     #[serde(rename = "StorageConnectors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_connectors: Option<Vec<StorageConnector>>,
+    /// <p>The actions that are enabled or disabled for users during their streaming sessions. By default these actions are enabled.</p>
+    #[serde(rename = "UserSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_settings: Option<Vec<UserSetting>>,
 }
 
 /// <p>Describes a stack error.</p>
@@ -1064,12 +1200,16 @@ pub struct StopImageBuilderResult {
     pub image_builder: Option<ImageBuilder>,
 }
 
-/// <p>Describes a storage connector.</p>
+/// <p>Describes a connector to enable persistent storage for users.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StorageConnector {
     /// <p>The type of storage connector.</p>
     #[serde(rename = "ConnectorType")]
     pub connector_type: String,
+    /// <p>The names of the domains for the G Suite account.</p>
+    #[serde(rename = "Domains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domains: Option<Vec<String>>,
     /// <p>The ARN of the storage connector.</p>
     #[serde(rename = "ResourceIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1104,7 +1244,7 @@ pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDirectoryConfigRequest {
-    /// <p>The name of the directory configuration.</p>
+    /// <p>The name of the Directory Config object.</p>
     #[serde(rename = "DirectoryName")]
     pub directory_name: String,
     /// <p>The distinguished names of the organizational units for computer accounts.</p>
@@ -1119,7 +1259,7 @@ pub struct UpdateDirectoryConfigRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateDirectoryConfigResult {
-    /// <p>Information about the directory configuration.</p>
+    /// <p>Information about the Directory Config object.</p>
     #[serde(rename = "DirectoryConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_config: Option<DirectoryConfig>,
@@ -1155,6 +1295,10 @@ pub struct UpdateFleetRequest {
     #[serde(rename = "EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
+    /// <p>The ARN of the public, private, or shared image to use.</p>
+    #[serde(rename = "ImageArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_arn: Option<String>,
     /// <p>The name of the image used to create the fleet.</p>
     #[serde(rename = "ImageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1169,7 +1313,8 @@ pub struct UpdateFleetRequest {
     pub max_user_duration_in_seconds: Option<i64>,
     /// <p>A unique name for the fleet.</p>
     #[serde(rename = "Name")]
-    pub name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
     /// <p>The VPC configuration for the fleet.</p>
     #[serde(rename = "VpcConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1183,6 +1328,22 @@ pub struct UpdateFleetResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet: Option<Fleet>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateImagePermissionsRequest {
+    /// <p>The permissions for the image.</p>
+    #[serde(rename = "ImagePermissions")]
+    pub image_permissions: ImagePermissions,
+    /// <p>The name of the private image.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The 12-digit ID of the AWS account for which you want add or update image permissions.</p>
+    #[serde(rename = "SharedAccountId")]
+    pub shared_account_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct UpdateImagePermissionsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateStackRequest {
@@ -1213,6 +1374,10 @@ pub struct UpdateStackRequest {
     #[serde(rename = "StorageConnectors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_connectors: Option<Vec<StorageConnector>>,
+    /// <p>The actions that are enabled or disabled for users during their streaming sessions. By default, these actions are enabled.</p>
+    #[serde(rename = "UserSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_settings: Option<Vec<UserSetting>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1221,6 +1386,17 @@ pub struct UpdateStackResult {
     #[serde(rename = "Stack")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stack: Option<Stack>,
+}
+
+/// <p>Describes an action and whether the action is enabled or disabled for users during their streaming sessions.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct UserSetting {
+    /// <p>The action that is enabled or disabled.</p>
+    #[serde(rename = "Action")]
+    pub action: String,
+    /// <p>Indicates whether the action is enabled or disabled.</p>
+    #[serde(rename = "Permission")]
+    pub permission: String,
 }
 
 /// <p>Describes VPC configuration information.</p>
@@ -1564,6 +1740,8 @@ pub enum CreateFleetError {
     InvalidRole(String),
     /// <p>The requested limit exceeds the permitted limit for an account.</p>
     LimitExceeded(String),
+    /// <p>The attempted operation is not permitted.</p>
+    OperationNotPermitted(String),
     /// <p>The specified resource already exists.</p>
     ResourceAlreadyExists(String),
     /// <p>The specified resource exists and is not in use, but isn't available.</p>
@@ -1611,6 +1789,9 @@ impl CreateFleetError {
                     }
                     "LimitExceededException" => {
                         CreateFleetError::LimitExceeded(String::from(error_message))
+                    }
+                    "OperationNotPermittedException" => {
+                        CreateFleetError::OperationNotPermitted(String::from(error_message))
                     }
                     "ResourceAlreadyExistsException" => {
                         CreateFleetError::ResourceAlreadyExists(String::from(error_message))
@@ -1666,6 +1847,7 @@ impl Error for CreateFleetError {
             CreateFleetError::InvalidParameterCombination(ref cause) => cause,
             CreateFleetError::InvalidRole(ref cause) => cause,
             CreateFleetError::LimitExceeded(ref cause) => cause,
+            CreateFleetError::OperationNotPermitted(ref cause) => cause,
             CreateFleetError::ResourceAlreadyExists(ref cause) => cause,
             CreateFleetError::ResourceNotAvailable(ref cause) => cause,
             CreateFleetError::ResourceNotFound(ref cause) => cause,
@@ -1691,6 +1873,8 @@ pub enum CreateImageBuilderError {
     InvalidRole(String),
     /// <p>The requested limit exceeds the permitted limit for an account.</p>
     LimitExceeded(String),
+    /// <p>The attempted operation is not permitted.</p>
+    OperationNotPermitted(String),
     /// <p>The specified resource already exists.</p>
     ResourceAlreadyExists(String),
     /// <p>The specified resource exists and is not in use, but isn't available.</p>
@@ -1740,6 +1924,9 @@ impl CreateImageBuilderError {
                     }
                     "LimitExceededException" => {
                         CreateImageBuilderError::LimitExceeded(String::from(error_message))
+                    }
+                    "OperationNotPermittedException" => {
+                        CreateImageBuilderError::OperationNotPermitted(String::from(error_message))
                     }
                     "ResourceAlreadyExistsException" => {
                         CreateImageBuilderError::ResourceAlreadyExists(String::from(error_message))
@@ -1795,6 +1982,7 @@ impl Error for CreateImageBuilderError {
             CreateImageBuilderError::InvalidParameterCombination(ref cause) => cause,
             CreateImageBuilderError::InvalidRole(ref cause) => cause,
             CreateImageBuilderError::LimitExceeded(ref cause) => cause,
+            CreateImageBuilderError::OperationNotPermitted(ref cause) => cause,
             CreateImageBuilderError::ResourceAlreadyExists(ref cause) => cause,
             CreateImageBuilderError::ResourceNotAvailable(ref cause) => cause,
             CreateImageBuilderError::ResourceNotFound(ref cause) => cause,
@@ -2482,6 +2670,95 @@ impl Error for DeleteImageBuilderError {
         }
     }
 }
+/// Errors returned by DeleteImagePermissions
+#[derive(Debug, PartialEq)]
+pub enum DeleteImagePermissionsError {
+    /// <p>The specified resource exists and is not in use, but isn't available.</p>
+    ResourceNotAvailable(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteImagePermissionsError {
+    pub fn from_body(body: &str) -> DeleteImagePermissionsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ResourceNotAvailableException" => {
+                        DeleteImagePermissionsError::ResourceNotAvailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        DeleteImagePermissionsError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteImagePermissionsError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteImagePermissionsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteImagePermissionsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteImagePermissionsError {
+    fn from(err: serde_json::error::Error) -> DeleteImagePermissionsError {
+        DeleteImagePermissionsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteImagePermissionsError {
+    fn from(err: CredentialsError) -> DeleteImagePermissionsError {
+        DeleteImagePermissionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteImagePermissionsError {
+    fn from(err: HttpDispatchError) -> DeleteImagePermissionsError {
+        DeleteImagePermissionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteImagePermissionsError {
+    fn from(err: io::Error) -> DeleteImagePermissionsError {
+        DeleteImagePermissionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteImagePermissionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteImagePermissionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteImagePermissionsError::ResourceNotAvailable(ref cause) => cause,
+            DeleteImagePermissionsError::ResourceNotFound(ref cause) => cause,
+            DeleteImagePermissionsError::Validation(ref cause) => cause,
+            DeleteImagePermissionsError::Credentials(ref err) => err.description(),
+            DeleteImagePermissionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteImagePermissionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteStack
 #[derive(Debug, PartialEq)]
 pub enum DeleteStackError {
@@ -2814,9 +3091,92 @@ impl Error for DescribeImageBuildersError {
         }
     }
 }
+/// Errors returned by DescribeImagePermissions
+#[derive(Debug, PartialEq)]
+pub enum DescribeImagePermissionsError {
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeImagePermissionsError {
+    pub fn from_body(body: &str) -> DescribeImagePermissionsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ResourceNotFoundException" => {
+                        DescribeImagePermissionsError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeImagePermissionsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeImagePermissionsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeImagePermissionsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeImagePermissionsError {
+    fn from(err: serde_json::error::Error) -> DescribeImagePermissionsError {
+        DescribeImagePermissionsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeImagePermissionsError {
+    fn from(err: CredentialsError) -> DescribeImagePermissionsError {
+        DescribeImagePermissionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeImagePermissionsError {
+    fn from(err: HttpDispatchError) -> DescribeImagePermissionsError {
+        DescribeImagePermissionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeImagePermissionsError {
+    fn from(err: io::Error) -> DescribeImagePermissionsError {
+        DescribeImagePermissionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeImagePermissionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeImagePermissionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeImagePermissionsError::ResourceNotFound(ref cause) => cause,
+            DescribeImagePermissionsError::Validation(ref cause) => cause,
+            DescribeImagePermissionsError::Credentials(ref err) => err.description(),
+            DescribeImagePermissionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeImagePermissionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeImages
 #[derive(Debug, PartialEq)]
 pub enum DescribeImagesError {
+    /// <p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
+    InvalidParameterCombination(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -2843,6 +3203,11 @@ impl DescribeImagesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "InvalidParameterCombinationException" => {
+                        DescribeImagesError::InvalidParameterCombination(String::from(
+                            error_message,
+                        ))
+                    }
                     "ResourceNotFoundException" => {
                         DescribeImagesError::ResourceNotFound(String::from(error_message))
                     }
@@ -2885,6 +3250,7 @@ impl fmt::Display for DescribeImagesError {
 impl Error for DescribeImagesError {
     fn description(&self) -> &str {
         match *self {
+            DescribeImagesError::InvalidParameterCombination(ref cause) => cause,
             DescribeImagesError::ResourceNotFound(ref cause) => cause,
             DescribeImagesError::Validation(ref cause) => cause,
             DescribeImagesError::Credentials(ref err) => err.description(),
@@ -4228,6 +4594,101 @@ impl Error for UpdateFleetError {
         }
     }
 }
+/// Errors returned by UpdateImagePermissions
+#[derive(Debug, PartialEq)]
+pub enum UpdateImagePermissionsError {
+    /// <p>The requested limit exceeds the permitted limit for an account.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource exists and is not in use, but isn't available.</p>
+    ResourceNotAvailable(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateImagePermissionsError {
+    pub fn from_body(body: &str) -> UpdateImagePermissionsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "LimitExceededException" => {
+                        UpdateImagePermissionsError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceNotAvailableException" => {
+                        UpdateImagePermissionsError::ResourceNotAvailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpdateImagePermissionsError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateImagePermissionsError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateImagePermissionsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateImagePermissionsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateImagePermissionsError {
+    fn from(err: serde_json::error::Error) -> UpdateImagePermissionsError {
+        UpdateImagePermissionsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateImagePermissionsError {
+    fn from(err: CredentialsError) -> UpdateImagePermissionsError {
+        UpdateImagePermissionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateImagePermissionsError {
+    fn from(err: HttpDispatchError) -> UpdateImagePermissionsError {
+        UpdateImagePermissionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateImagePermissionsError {
+    fn from(err: io::Error) -> UpdateImagePermissionsError {
+        UpdateImagePermissionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateImagePermissionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateImagePermissionsError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateImagePermissionsError::LimitExceeded(ref cause) => cause,
+            UpdateImagePermissionsError::ResourceNotAvailable(ref cause) => cause,
+            UpdateImagePermissionsError::ResourceNotFound(ref cause) => cause,
+            UpdateImagePermissionsError::Validation(ref cause) => cause,
+            UpdateImagePermissionsError::Credentials(ref err) => err.description(),
+            UpdateImagePermissionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateImagePermissionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateStack
 #[derive(Debug, PartialEq)]
 pub enum UpdateStackError {
@@ -4241,6 +4702,8 @@ pub enum UpdateStackError {
     InvalidRole(String),
     /// <p>The requested limit exceeds the permitted limit for an account.</p>
     LimitExceeded(String),
+    /// <p>The attempted operation is not permitted.</p>
+    OperationNotPermitted(String),
     /// <p>The specified resource is in use.</p>
     ResourceInUse(String),
     /// <p>The specified resource was not found.</p>
@@ -4283,6 +4746,9 @@ impl UpdateStackError {
                     }
                     "LimitExceededException" => {
                         UpdateStackError::LimitExceeded(String::from(error_message))
+                    }
+                    "OperationNotPermittedException" => {
+                        UpdateStackError::OperationNotPermitted(String::from(error_message))
                     }
                     "ResourceInUseException" => {
                         UpdateStackError::ResourceInUse(String::from(error_message))
@@ -4334,6 +4800,7 @@ impl Error for UpdateStackError {
             UpdateStackError::InvalidParameterCombination(ref cause) => cause,
             UpdateStackError::InvalidRole(ref cause) => cause,
             UpdateStackError::LimitExceeded(ref cause) => cause,
+            UpdateStackError::OperationNotPermitted(ref cause) => cause,
             UpdateStackError::ResourceInUse(ref cause) => cause,
             UpdateStackError::ResourceNotFound(ref cause) => cause,
             UpdateStackError::Validation(ref cause) => cause,
@@ -4357,19 +4824,19 @@ pub trait AppStream {
         input: CopyImageRequest,
     ) -> RusotoFuture<CopyImageResponse, CopyImageError>;
 
-    /// <p>Creates a directory configuration.</p>
+    /// <p>Creates a Directory Config object in AppStream 2.0. This object includes the information required to join streaming instances to an Active Directory domain.</p>
     fn create_directory_config(
         &self,
         input: CreateDirectoryConfigRequest,
     ) -> RusotoFuture<CreateDirectoryConfigResult, CreateDirectoryConfigError>;
 
-    /// <p>Creates a fleet.</p>
+    /// <p>Creates a fleet. A fleet consists of streaming instances that run a specified image.</p>
     fn create_fleet(
         &self,
         input: CreateFleetRequest,
     ) -> RusotoFuture<CreateFleetResult, CreateFleetError>;
 
-    /// <p>Creates an image builder.</p> <p>The initial state of the builder is <code>PENDING</code>. When it is ready, the state is <code>RUNNING</code>.</p>
+    /// <p>Creates an image builder. An image builder is a virtual machine that is used to create an image.</p> <p>The initial state of the builder is <code>PENDING</code>. When it is ready, the state is <code>RUNNING</code>.</p>
     fn create_image_builder(
         &self,
         input: CreateImageBuilderRequest,
@@ -4381,19 +4848,19 @@ pub trait AppStream {
         input: CreateImageBuilderStreamingURLRequest,
     ) -> RusotoFuture<CreateImageBuilderStreamingURLResult, CreateImageBuilderStreamingURLError>;
 
-    /// <p>Creates a stack.</p>
+    /// <p>Creates a stack to start streaming applications to users. A stack consists of an associated fleet, user access policies, and storage configurations. </p>
     fn create_stack(
         &self,
         input: CreateStackRequest,
     ) -> RusotoFuture<CreateStackResult, CreateStackError>;
 
-    /// <p>Creates a URL to start a streaming session for the specified user.</p>
+    /// <p>Creates a temporary URL to start an AppStream 2.0 streaming session for the specified user. A streaming URL enables application streaming to be tested without user setup. </p>
     fn create_streaming_url(
         &self,
         input: CreateStreamingURLRequest,
     ) -> RusotoFuture<CreateStreamingURLResult, CreateStreamingURLError>;
 
-    /// <p>Deletes the specified directory configuration.</p>
+    /// <p>Deletes the specified Directory Config object from AppStream 2.0. This object includes the information required to join streaming instances to an Active Directory domain.</p>
     fn delete_directory_config(
         &self,
         input: DeleteDirectoryConfigRequest,
@@ -4405,7 +4872,7 @@ pub trait AppStream {
         input: DeleteFleetRequest,
     ) -> RusotoFuture<DeleteFleetResult, DeleteFleetError>;
 
-    /// <p>Deletes the specified image. You cannot delete an image that is currently in use. After you delete an image, you cannot provision new capacity using the image.</p>
+    /// <p>Deletes the specified image. You cannot delete an image when it is in use. After you delete an image, you cannot provision new capacity using the image.</p>
     fn delete_image(
         &self,
         input: DeleteImageRequest,
@@ -4417,43 +4884,55 @@ pub trait AppStream {
         input: DeleteImageBuilderRequest,
     ) -> RusotoFuture<DeleteImageBuilderResult, DeleteImageBuilderError>;
 
-    /// <p>Deletes the specified stack. After this operation completes, the environment can no longer be activated and any reservations made for the stack are released.</p>
+    /// <p>Deletes permissions for the specified private image. After you delete permissions for an image, AWS accounts to which you previously granted these permissions can no longer use the image.</p>
+    fn delete_image_permissions(
+        &self,
+        input: DeleteImagePermissionsRequest,
+    ) -> RusotoFuture<DeleteImagePermissionsResult, DeleteImagePermissionsError>;
+
+    /// <p>Deletes the specified stack. After the stack is deleted, the application streaming environment provided by the stack is no longer available to users. Also, any reservations made for application streaming sessions for the stack are released.</p>
     fn delete_stack(
         &self,
         input: DeleteStackRequest,
     ) -> RusotoFuture<DeleteStackResult, DeleteStackError>;
 
-    /// <p>Describes the specified directory configurations. Note that although the response syntax in this topic includes the account password, this password is not returned in the actual response. </p>
+    /// <p>Retrieves a list that describes one or more specified Directory Config objects for AppStream 2.0, if the names for these objects are provided. Otherwise, all Directory Config objects in the account are described. These objects include the information required to join streaming instances to an Active Directory domain. </p> <p>Although the response syntax in this topic includes the account password, this password is not returned in the actual response.</p>
     fn describe_directory_configs(
         &self,
         input: DescribeDirectoryConfigsRequest,
     ) -> RusotoFuture<DescribeDirectoryConfigsResult, DescribeDirectoryConfigsError>;
 
-    /// <p>Describes the specified fleets or all fleets in the account.</p>
+    /// <p>Retrieves a list that describes one or more specified fleets, if the fleet names are provided. Otherwise, all fleets in the account are described.</p>
     fn describe_fleets(
         &self,
         input: DescribeFleetsRequest,
     ) -> RusotoFuture<DescribeFleetsResult, DescribeFleetsError>;
 
-    /// <p>Describes the specified image builders or all image builders in the account.</p>
+    /// <p>Retrieves a list that describes one or more specified image builders, if the image builder names are provided. Otherwise, all image builders in the account are described.</p>
     fn describe_image_builders(
         &self,
         input: DescribeImageBuildersRequest,
     ) -> RusotoFuture<DescribeImageBuildersResult, DescribeImageBuildersError>;
 
-    /// <p>Describes the specified images or all images in the account.</p>
+    /// <p>Retrieves a list that describes the permissions for a private image that you own. </p>
+    fn describe_image_permissions(
+        &self,
+        input: DescribeImagePermissionsRequest,
+    ) -> RusotoFuture<DescribeImagePermissionsResult, DescribeImagePermissionsError>;
+
+    /// <p>Retrieves a list that describes one or more specified images, if the image names are provided. Otherwise, all images in the account are described.</p>
     fn describe_images(
         &self,
         input: DescribeImagesRequest,
     ) -> RusotoFuture<DescribeImagesResult, DescribeImagesError>;
 
-    /// <p>Describes the streaming sessions for the specified stack and fleet. If a user ID is provided, only the streaming sessions for only that user are returned. If an authentication type is not provided, the default is to authenticate users using a streaming URL.</p>
+    /// <p>Retrieves a list that describes the streaming sessions for a specified stack and fleet. If a user ID is provided for the stack and fleet, only streaming sessions for that user are described. If an authentication type is not provided, the default is to authenticate users using a streaming URL.</p>
     fn describe_sessions(
         &self,
         input: DescribeSessionsRequest,
     ) -> RusotoFuture<DescribeSessionsResult, DescribeSessionsError>;
 
-    /// <p>Describes the specified stacks or all stacks in the account.</p>
+    /// <p>Retrieves a list that describes one or more specified stacks, if the stack names are provided. Otherwise, all stacks in the account are described.</p>
     fn describe_stacks(
         &self,
         input: DescribeStacksRequest,
@@ -4465,25 +4944,25 @@ pub trait AppStream {
         input: DisassociateFleetRequest,
     ) -> RusotoFuture<DisassociateFleetResult, DisassociateFleetError>;
 
-    /// <p>Stops the specified streaming session.</p>
+    /// <p>Immediately stops the specified streaming session.</p>
     fn expire_session(
         &self,
         input: ExpireSessionRequest,
     ) -> RusotoFuture<ExpireSessionResult, ExpireSessionError>;
 
-    /// <p>Lists the fleets associated with the specified stack.</p>
+    /// <p>Retrieves the name of the fleet that is associated with the specified stack.</p>
     fn list_associated_fleets(
         &self,
         input: ListAssociatedFleetsRequest,
     ) -> RusotoFuture<ListAssociatedFleetsResult, ListAssociatedFleetsError>;
 
-    /// <p>Lists the stacks associated with the specified fleet.</p>
+    /// <p>Retrieves the name of the stack with which the specified fleet is associated.</p>
     fn list_associated_stacks(
         &self,
         input: ListAssociatedStacksRequest,
     ) -> RusotoFuture<ListAssociatedStacksResult, ListAssociatedStacksError>;
 
-    /// <p>Lists the tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>Retrieves a list of all tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -4516,13 +4995,13 @@ pub trait AppStream {
         input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
 
-    /// <p>Disassociates the specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>Disassociates one or more specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn untag_resource(
         &self,
         input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
 
-    /// <p>Updates the specified directory configuration.</p>
+    /// <p>Updates the specified Directory Config object in AppStream 2.0. This object includes the information required to join streaming instances to an Active Directory domain.</p>
     fn update_directory_config(
         &self,
         input: UpdateDirectoryConfigRequest,
@@ -4534,7 +5013,13 @@ pub trait AppStream {
         input: UpdateFleetRequest,
     ) -> RusotoFuture<UpdateFleetResult, UpdateFleetError>;
 
-    /// <p>Updates the specified stack.</p>
+    /// <p>Adds or updates permissions for the specified private image. </p>
+    fn update_image_permissions(
+        &self,
+        input: UpdateImagePermissionsRequest,
+    ) -> RusotoFuture<UpdateImagePermissionsResult, UpdateImagePermissionsError>;
+
+    /// <p>Updates the specified fields for the specified stack.</p>
     fn update_stack(
         &self,
         input: UpdateStackRequest,
@@ -4646,7 +5131,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Creates a directory configuration.</p>
+    /// <p>Creates a Directory Config object in AppStream 2.0. This object includes the information required to join streaming instances to an Active Directory domain.</p>
     fn create_directory_config(
         &self,
         input: CreateDirectoryConfigRequest,
@@ -4684,7 +5169,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Creates a fleet.</p>
+    /// <p>Creates a fleet. A fleet consists of streaming instances that run a specified image.</p>
     fn create_fleet(
         &self,
         input: CreateFleetRequest,
@@ -4719,7 +5204,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Creates an image builder.</p> <p>The initial state of the builder is <code>PENDING</code>. When it is ready, the state is <code>RUNNING</code>.</p>
+    /// <p>Creates an image builder. An image builder is a virtual machine that is used to create an image.</p> <p>The initial state of the builder is <code>PENDING</code>. When it is ready, the state is <code>RUNNING</code>.</p>
     fn create_image_builder(
         &self,
         input: CreateImageBuilderRequest,
@@ -4793,7 +5278,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Creates a stack.</p>
+    /// <p>Creates a stack to start streaming applications to users. A stack consists of an associated fleet, user access policies, and storage configurations. </p>
     fn create_stack(
         &self,
         input: CreateStackRequest,
@@ -4828,7 +5313,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Creates a URL to start a streaming session for the specified user.</p>
+    /// <p>Creates a temporary URL to start an AppStream 2.0 streaming session for the specified user. A streaming URL enables application streaming to be tested without user setup. </p>
     fn create_streaming_url(
         &self,
         input: CreateStreamingURLRequest,
@@ -4863,7 +5348,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Deletes the specified directory configuration.</p>
+    /// <p>Deletes the specified Directory Config object from AppStream 2.0. This object includes the information required to join streaming instances to an Active Directory domain.</p>
     fn delete_directory_config(
         &self,
         input: DeleteDirectoryConfigRequest,
@@ -4936,7 +5421,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Deletes the specified image. You cannot delete an image that is currently in use. After you delete an image, you cannot provision new capacity using the image.</p>
+    /// <p>Deletes the specified image. You cannot delete an image when it is in use. After you delete an image, you cannot provision new capacity using the image.</p>
     fn delete_image(
         &self,
         input: DeleteImageRequest,
@@ -5006,7 +5491,45 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Deletes the specified stack. After this operation completes, the environment can no longer be activated and any reservations made for the stack are released.</p>
+    /// <p>Deletes permissions for the specified private image. After you delete permissions for an image, AWS accounts to which you previously granted these permissions can no longer use the image.</p>
+    fn delete_image_permissions(
+        &self,
+        input: DeleteImagePermissionsRequest,
+    ) -> RusotoFuture<DeleteImagePermissionsResult, DeleteImagePermissionsError> {
+        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        request.set_endpoint_prefix("appstream2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "PhotonAdminProxyService.DeleteImagePermissions",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteImagePermissionsResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteImagePermissionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Deletes the specified stack. After the stack is deleted, the application streaming environment provided by the stack is no longer available to users. Also, any reservations made for application streaming sessions for the stack are released.</p>
     fn delete_stack(
         &self,
         input: DeleteStackRequest,
@@ -5041,7 +5564,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Describes the specified directory configurations. Note that although the response syntax in this topic includes the account password, this password is not returned in the actual response. </p>
+    /// <p>Retrieves a list that describes one or more specified Directory Config objects for AppStream 2.0, if the names for these objects are provided. Otherwise, all Directory Config objects in the account are described. These objects include the information required to join streaming instances to an Active Directory domain. </p> <p>Although the response syntax in this topic includes the account password, this password is not returned in the actual response.</p>
     fn describe_directory_configs(
         &self,
         input: DescribeDirectoryConfigsRequest,
@@ -5079,7 +5602,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Describes the specified fleets or all fleets in the account.</p>
+    /// <p>Retrieves a list that describes one or more specified fleets, if the fleet names are provided. Otherwise, all fleets in the account are described.</p>
     fn describe_fleets(
         &self,
         input: DescribeFleetsRequest,
@@ -5114,7 +5637,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Describes the specified image builders or all image builders in the account.</p>
+    /// <p>Retrieves a list that describes one or more specified image builders, if the image builder names are provided. Otherwise, all image builders in the account are described.</p>
     fn describe_image_builders(
         &self,
         input: DescribeImageBuildersRequest,
@@ -5152,7 +5675,45 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Describes the specified images or all images in the account.</p>
+    /// <p>Retrieves a list that describes the permissions for a private image that you own. </p>
+    fn describe_image_permissions(
+        &self,
+        input: DescribeImagePermissionsRequest,
+    ) -> RusotoFuture<DescribeImagePermissionsResult, DescribeImagePermissionsError> {
+        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        request.set_endpoint_prefix("appstream2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "PhotonAdminProxyService.DescribeImagePermissions",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeImagePermissionsResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeImagePermissionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Retrieves a list that describes one or more specified images, if the image names are provided. Otherwise, all images in the account are described.</p>
     fn describe_images(
         &self,
         input: DescribeImagesRequest,
@@ -5187,7 +5748,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Describes the streaming sessions for the specified stack and fleet. If a user ID is provided, only the streaming sessions for only that user are returned. If an authentication type is not provided, the default is to authenticate users using a streaming URL.</p>
+    /// <p>Retrieves a list that describes the streaming sessions for a specified stack and fleet. If a user ID is provided for the stack and fleet, only streaming sessions for that user are described. If an authentication type is not provided, the default is to authenticate users using a streaming URL.</p>
     fn describe_sessions(
         &self,
         input: DescribeSessionsRequest,
@@ -5222,7 +5783,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Describes the specified stacks or all stacks in the account.</p>
+    /// <p>Retrieves a list that describes one or more specified stacks, if the stack names are provided. Otherwise, all stacks in the account are described.</p>
     fn describe_stacks(
         &self,
         input: DescribeStacksRequest,
@@ -5292,7 +5853,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Stops the specified streaming session.</p>
+    /// <p>Immediately stops the specified streaming session.</p>
     fn expire_session(
         &self,
         input: ExpireSessionRequest,
@@ -5327,7 +5888,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Lists the fleets associated with the specified stack.</p>
+    /// <p>Retrieves the name of the fleet that is associated with the specified stack.</p>
     fn list_associated_fleets(
         &self,
         input: ListAssociatedFleetsRequest,
@@ -5365,7 +5926,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Lists the stacks associated with the specified fleet.</p>
+    /// <p>Retrieves the name of the stack with which the specified fleet is associated.</p>
     fn list_associated_stacks(
         &self,
         input: ListAssociatedStacksRequest,
@@ -5403,7 +5964,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Lists the tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>Retrieves a list of all tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -5613,7 +6174,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Disassociates the specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>Disassociates one or more specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -5648,7 +6209,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Updates the specified directory configuration.</p>
+    /// <p>Updates the specified Directory Config object in AppStream 2.0. This object includes the information required to join streaming instances to an Active Directory domain.</p>
     fn update_directory_config(
         &self,
         input: UpdateDirectoryConfigRequest,
@@ -5721,7 +6282,45 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Updates the specified stack.</p>
+    /// <p>Adds or updates permissions for the specified private image. </p>
+    fn update_image_permissions(
+        &self,
+        input: UpdateImagePermissionsRequest,
+    ) -> RusotoFuture<UpdateImagePermissionsResult, UpdateImagePermissionsError> {
+        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        request.set_endpoint_prefix("appstream2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "PhotonAdminProxyService.UpdateImagePermissions",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateImagePermissionsResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateImagePermissionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Updates the specified fields for the specified stack.</p>
     fn update_stack(
         &self,
         input: UpdateStackRequest,

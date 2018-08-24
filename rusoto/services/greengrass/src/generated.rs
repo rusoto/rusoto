@@ -2283,7 +2283,7 @@ pub struct LocalVolumeResourceData {
     #[serde(rename = "GroupOwnerSetting")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_owner_setting: Option<GroupOwnerSetting>,
-    /// <p>The local absolute path of the volume resource on the host. The source path for a volume resource type cannot start with &#39;&#39;/proc&#39;&#39; or &#39;&#39;/sys&#39;&#39;.</p>
+    /// <p>The local absolute path of the volume resource on the host. The source path for a volume resource type cannot start with &#39;&#39;/sys&#39;&#39;.</p>
     #[serde(rename = "SourcePath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_path: Option<String>,

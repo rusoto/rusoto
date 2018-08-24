@@ -42,6 +42,80 @@ enum DeserializerNext {
     Skip,
     Element(String),
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AcceptReservedNodeExchangeInputMessage {
+    /// <p>A string representing the node identifier of the DC1 Reserved Node to be exchanged.</p>
+    pub reserved_node_id: String,
+    /// <p>The unique identifier of the DC2 Reserved Node offering to be used for the exchange. You can obtain the value for the parameter by calling <a>GetReservedNodeExchangeOfferings</a> </p>
+    pub target_reserved_node_offering_id: String,
+}
+
+/// Serialize `AcceptReservedNodeExchangeInputMessage` contents to a `SignedRequest`.
+struct AcceptReservedNodeExchangeInputMessageSerializer;
+impl AcceptReservedNodeExchangeInputMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AcceptReservedNodeExchangeInputMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ReservedNodeId"),
+            &obj.reserved_node_id,
+        );
+        params.put(
+            &format!("{}{}", prefix, "TargetReservedNodeOfferingId"),
+            &obj.target_reserved_node_offering_id,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AcceptReservedNodeExchangeOutputMessage {
+    pub exchanged_reserved_node: Option<ReservedNode>,
+}
+
+struct AcceptReservedNodeExchangeOutputMessageDeserializer;
+impl AcceptReservedNodeExchangeOutputMessageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AcceptReservedNodeExchangeOutputMessage, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = AcceptReservedNodeExchangeOutputMessage::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ExchangedReservedNode" => {
+                        obj.exchanged_reserved_node = Some(try!(
+                            ReservedNodeDeserializer::deserialize("ExchangedReservedNode", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Describes an AWS customer account authorized to restore a snapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccountWithRestoreAccess {
@@ -488,6 +562,8 @@ pub struct Cluster {
     pub iam_roles: Option<Vec<ClusterIamRole>>,
     /// <p>The AWS Key Management Service (AWS KMS) key ID of the encryption key used to encrypt data in the cluster.</p>
     pub kms_key_id: Option<String>,
+    /// <p>The name of the maintenance track for the cluster.</p>
+    pub maintenance_track_name: Option<String>,
     /// <p>The master user name for the cluster. This name is used to connect to the database that is specified in the <b>DBName</b> parameter. </p>
     pub master_username: Option<String>,
     /// <p>The status of a modify operation, if any, initiated for the cluster.</p>
@@ -496,6 +572,8 @@ pub struct Cluster {
     pub node_type: Option<String>,
     /// <p>The number of compute nodes in the cluster.</p>
     pub number_of_nodes: Option<i64>,
+    /// <p>Cluster operations that are waiting to be started.</p>
+    pub pending_actions: Option<Vec<String>>,
     /// <p>A value that, if present, indicates that changes to the cluster are pending. Specific pending changes are identified by subelements.</p>
     pub pending_modified_values: Option<PendingModifiedValues>,
     /// <p>The weekly time range, in Universal Coordinated Time (UTC), during which system maintenance can occur.</p>
@@ -658,6 +736,12 @@ impl ClusterDeserializer {
                         obj.kms_key_id =
                             Some(try!(StringDeserializer::deserialize("KmsKeyId", stack)));
                     }
+                    "MaintenanceTrackName" => {
+                        obj.maintenance_track_name = Some(try!(StringDeserializer::deserialize(
+                            "MaintenanceTrackName",
+                            stack
+                        )));
+                    }
                     "MasterUsername" => {
                         obj.master_username = Some(try!(StringDeserializer::deserialize(
                             "MasterUsername",
@@ -677,6 +761,11 @@ impl ClusterDeserializer {
                             "NumberOfNodes",
                             stack
                         )));
+                    }
+                    "PendingActions" => {
+                        obj.pending_actions = Some(try!(
+                            PendingActionsListDeserializer::deserialize("PendingActions", stack)
+                        ));
                     }
                     "PendingModifiedValues" => {
                         obj.pending_modified_values =
@@ -775,6 +864,173 @@ impl ClusterCredentialsDeserializer {
                     "Expiration" => {
                         obj.expiration =
                             Some(try!(TStampDeserializer::deserialize("Expiration", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Describes a <code>ClusterDbRevision</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ClusterDbRevision {
+    /// <p>The unique identifier of the cluster.</p>
+    pub cluster_identifier: Option<String>,
+    /// <p>A string representing the current cluster version.</p>
+    pub current_database_revision: Option<String>,
+    /// <p>The date on which the database revision was released.</p>
+    pub database_revision_release_date: Option<String>,
+    /// <p>A list of <code>RevisionTarget</code> objects, where each object describes the database revision that a cluster can be updated to.</p>
+    pub revision_targets: Option<Vec<RevisionTarget>>,
+}
+
+struct ClusterDbRevisionDeserializer;
+impl ClusterDbRevisionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ClusterDbRevision, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ClusterDbRevision::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ClusterIdentifier" => {
+                        obj.cluster_identifier = Some(try!(StringDeserializer::deserialize(
+                            "ClusterIdentifier",
+                            stack
+                        )));
+                    }
+                    "CurrentDatabaseRevision" => {
+                        obj.current_database_revision = Some(try!(
+                            StringDeserializer::deserialize("CurrentDatabaseRevision", stack)
+                        ));
+                    }
+                    "DatabaseRevisionReleaseDate" => {
+                        obj.database_revision_release_date = Some(try!(
+                            TStampDeserializer::deserialize("DatabaseRevisionReleaseDate", stack)
+                        ));
+                    }
+                    "RevisionTargets" => {
+                        obj.revision_targets = Some(try!(
+                            RevisionTargetsListDeserializer::deserialize("RevisionTargets", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct ClusterDbRevisionsListDeserializer;
+impl ClusterDbRevisionsListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<ClusterDbRevision>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "ClusterDbRevision" {
+                        obj.push(try!(ClusterDbRevisionDeserializer::deserialize(
+                            "ClusterDbRevision",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ClusterDbRevisionsMessage {
+    /// <p>A list of revisions.</p>
+    pub cluster_db_revisions: Option<Vec<ClusterDbRevision>>,
+    /// <p>A string representing the starting point for the next set of revisions. If a value is returned in a response, you can retrieve the next set of revisions by providing the value in the <code>marker</code> parameter and retrying the command. If the <code>marker</code> field is empty, all revisions have already been returned.</p>
+    pub marker: Option<String>,
+}
+
+struct ClusterDbRevisionsMessageDeserializer;
+impl ClusterDbRevisionsMessageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ClusterDbRevisionsMessage, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ClusterDbRevisionsMessage::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ClusterDbRevisions" => {
+                        obj.cluster_db_revisions =
+                            Some(try!(ClusterDbRevisionsListDeserializer::deserialize(
+                                "ClusterDbRevisions",
+                                stack
+                            )));
+                    }
+                    "Marker" => {
+                        obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
                     }
                     _ => skip_tree(stack),
                 },
@@ -2334,6 +2590,8 @@ pub struct CreateClusterMessage {
     pub iam_roles: Option<Vec<String>>,
     /// <p>The AWS Key Management Service (KMS) key ID of the encryption key that you want to use to encrypt data in the cluster.</p>
     pub kms_key_id: Option<String>,
+    /// <p>An optional parameter for the name of the maintenance track for the cluster. If you don't provide a maintenance track name, the cluster is assigned to the <code>current</code> track.</p>
+    pub maintenance_track_name: Option<String>,
     /// <p><p>The password associated with the master user account for the cluster that is being created.</p> <p>Constraints:</p> <ul> <li> <p>Must be between 8 and 64 characters in length.</p> </li> <li> <p>Must contain at least one uppercase letter.</p> </li> <li> <p>Must contain at least one lowercase letter.</p> </li> <li> <p>Must contain one number.</p> </li> <li> <p>Can be any printable ASCII character (ASCII code 33 to 126) except &#39; (single quote), &quot; (double quote), \, /, @, or space.</p> </li> </ul></p>
     pub master_user_password: String,
     /// <p><p>The user name associated with the master user account for the cluster that is being created.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 - 128 alphanumeric characters. The user name can&#39;t be <code>PUBLIC</code>.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href="http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html">Reserved Words</a> in the Amazon Redshift Database Developer Guide. </p> </li> </ul></p>
@@ -2449,6 +2707,12 @@ impl CreateClusterMessageSerializer {
         }
         if let Some(ref field_value) = obj.kms_key_id {
             params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
+        }
+        if let Some(ref field_value) = obj.maintenance_track_name {
+            params.put(
+                &format!("{}{}", prefix, "MaintenanceTrackName"),
+                &field_value,
+            );
         }
         params.put(
             &format!("{}{}", prefix, "MasterUserPassword"),
@@ -3676,6 +3940,40 @@ impl DeleteTagsMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeClusterDbRevisionsMessage {
+    /// <p>A unique identifier for a cluster whose <code>ClusterDbRevisions</code> you are requesting. This parameter is case sensitive. All clusters defined for an account are returned by default.</p>
+    pub cluster_identifier: Option<String>,
+    /// <p>An optional parameter that specifies the starting point for returning a set of response records. When the results of a <code>DescribeClusterDbRevisions</code> request exceed the value specified in <code>MaxRecords</code>, Amazon Redshift returns a value in the <code>marker</code> field of the response. You can retrieve the next set of response records by providing the returned <code>marker</code> value in the <code>marker</code> parameter and retrying the request. </p> <p>Constraints: You can specify either the <code>ClusterIdentifier</code> parameter, or the <code>marker</code> parameter, but not both.</p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified MaxRecords value, a value is returned in the <code>marker</code> field of the response. You can retrieve the next set of response records by providing the returned <code>marker</code> value in the <code>marker</code> parameter and retrying the request. </p> <p>Default: 100</p> <p>Constraints: minimum 20, maximum 100.</p>
+    pub max_records: Option<i64>,
+}
+
+/// Serialize `DescribeClusterDbRevisionsMessage` contents to a `SignedRequest`.
+struct DescribeClusterDbRevisionsMessageSerializer;
+impl DescribeClusterDbRevisionsMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeClusterDbRevisionsMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.cluster_identifier {
+            params.put(&format!("{}{}", prefix, "ClusterIdentifier"), &field_value);
+        }
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(
+                &format!("{}{}", prefix, "MaxRecords"),
+                &field_value.to_string(),
+            );
+        }
+    }
+}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeClusterParameterGroupsMessage {
@@ -3963,6 +4261,43 @@ impl DescribeClusterSubnetGroupsMessageSerializer {
                 params,
                 &format!("{}{}", prefix, "TagValue"),
                 field_value,
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeClusterTracksMessage {
+    /// <p>The name of the maintenance track. </p>
+    pub maintenance_track_name: Option<String>,
+    /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <code>DescribeClusterTracks</code> request exceed the value specified in <code>MaxRecords</code>, Amazon Redshift returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
+    pub marker: Option<String>,
+    /// <p>An integer value for the maximum number of maintenance tracks to return.</p>
+    pub max_records: Option<i64>,
+}
+
+/// Serialize `DescribeClusterTracksMessage` contents to a `SignedRequest`.
+struct DescribeClusterTracksMessageSerializer;
+impl DescribeClusterTracksMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeClusterTracksMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.maintenance_track_name {
+            params.put(
+                &format!("{}{}", prefix, "MaintenanceTrackName"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(
+                &format!("{}{}", prefix, "MaxRecords"),
+                &field_value.to_string(),
             );
         }
     }
@@ -4989,6 +5324,49 @@ impl ElasticIpStatusDeserializer {
         Ok(obj)
     }
 }
+struct EligibleTracksToUpdateListDeserializer;
+impl EligibleTracksToUpdateListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<UpdateTarget>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "UpdateTarget" {
+                        obj.push(try!(UpdateTargetDeserializer::deserialize(
+                            "UpdateTarget",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct EnableLoggingMessage {
@@ -5921,6 +6299,100 @@ impl GetClusterCredentialsMessageSerializer {
     }
 }
 
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetReservedNodeExchangeOfferingsInputMessage {
+    /// <p>A value that indicates the starting point for the next set of ReservedNodeOfferings.</p>
+    pub marker: Option<String>,
+    /// <p>An integer setting the maximum number of ReservedNodeOfferings to retrieve.</p>
+    pub max_records: Option<i64>,
+    /// <p>A string representing the node identifier for the DC1 Reserved Node to be exchanged.</p>
+    pub reserved_node_id: String,
+}
+
+/// Serialize `GetReservedNodeExchangeOfferingsInputMessage` contents to a `SignedRequest`.
+struct GetReservedNodeExchangeOfferingsInputMessageSerializer;
+impl GetReservedNodeExchangeOfferingsInputMessageSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &GetReservedNodeExchangeOfferingsInputMessage,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(
+                &format!("{}{}", prefix, "MaxRecords"),
+                &field_value.to_string(),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "ReservedNodeId"),
+            &obj.reserved_node_id,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetReservedNodeExchangeOfferingsOutputMessage {
+    /// <p>An optional parameter that specifies the starting point for returning a set of response records. When the results of a <code>GetReservedNodeExchangeOfferings</code> request exceed the value specified in MaxRecords, Amazon Redshift returns a value in the marker field of the response. You can retrieve the next set of response records by providing the returned marker value in the marker parameter and retrying the request. </p>
+    pub marker: Option<String>,
+    /// <p>Returns an array of <a>ReservedNodeOffering</a> objects.</p>
+    pub reserved_node_offerings: Option<Vec<ReservedNodeOffering>>,
+}
+
+struct GetReservedNodeExchangeOfferingsOutputMessageDeserializer;
+impl GetReservedNodeExchangeOfferingsOutputMessageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetReservedNodeExchangeOfferingsOutputMessage, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = GetReservedNodeExchangeOfferingsOutputMessage::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Marker" => {
+                        obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
+                    }
+                    "ReservedNodeOfferings" => {
+                        obj.reserved_node_offerings =
+                            Some(try!(ReservedNodeOfferingListDeserializer::deserialize(
+                                "ReservedNodeOfferings",
+                                stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Returns information about an HSM client certificate. The certificate is stored in a secure Hardware Storage Module (HSM), and used by the Amazon Redshift cluster to encrypt data files.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct HsmClientCertificate {
@@ -6682,6 +7154,145 @@ impl LongOptionalDeserializer {
         Ok(obj)
     }
 }
+/// <p>Defines a maintenance track that determines which Amazon Redshift version to apply during a maintenance window. If the value for <code>MaintenanceTrack</code> is <code>current</code>, the cluster is updated to the most recently certified maintenance release. If the value is <code>trailing</code>, the cluster is updated to the previously certified maintenance release. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MaintenanceTrack {
+    /// <p>The version number for the cluster release.</p>
+    pub database_version: Option<String>,
+    /// <p>The name of the maintenance track. Possible values are <code>current</code> and <code>trailing</code>.</p>
+    pub maintenance_track_name: Option<String>,
+    /// <p>An array of <a>UpdateTarget</a> objects to update with the maintenance track. </p>
+    pub update_targets: Option<Vec<UpdateTarget>>,
+}
+
+struct MaintenanceTrackDeserializer;
+impl MaintenanceTrackDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<MaintenanceTrack, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = MaintenanceTrack::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DatabaseVersion" => {
+                        obj.database_version = Some(try!(StringDeserializer::deserialize(
+                            "DatabaseVersion",
+                            stack
+                        )));
+                    }
+                    "MaintenanceTrackName" => {
+                        obj.maintenance_track_name = Some(try!(StringDeserializer::deserialize(
+                            "MaintenanceTrackName",
+                            stack
+                        )));
+                    }
+                    "UpdateTargets" => {
+                        obj.update_targets =
+                            Some(try!(EligibleTracksToUpdateListDeserializer::deserialize(
+                                "UpdateTargets",
+                                stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyClusterDbRevisionMessage {
+    /// <p>The unique identifier of a cluster whose database revision you want to modify. </p> <p>Example: <code>examplecluster</code> </p>
+    pub cluster_identifier: String,
+    /// <p>The identifier of the database revision. You can retrieve this value from the response to the <a>DescribeClusterDbRevisions</a> request.</p>
+    pub revision_target: String,
+}
+
+/// Serialize `ModifyClusterDbRevisionMessage` contents to a `SignedRequest`.
+struct ModifyClusterDbRevisionMessageSerializer;
+impl ModifyClusterDbRevisionMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyClusterDbRevisionMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ClusterIdentifier"),
+            &obj.cluster_identifier,
+        );
+        params.put(
+            &format!("{}{}", prefix, "RevisionTarget"),
+            &obj.revision_target,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyClusterDbRevisionResult {
+    pub cluster: Option<Cluster>,
+}
+
+struct ModifyClusterDbRevisionResultDeserializer;
+impl ModifyClusterDbRevisionResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyClusterDbRevisionResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ModifyClusterDbRevisionResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Cluster" => {
+                        obj.cluster =
+                            Some(try!(ClusterDeserializer::deserialize("Cluster", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyClusterIamRolesMessage {
@@ -6793,6 +7404,8 @@ pub struct ModifyClusterMessage {
     pub hsm_client_certificate_identifier: Option<String>,
     /// <p>Specifies the name of the HSM configuration that contains the information the Amazon Redshift cluster can use to retrieve and store keys in an HSM.</p>
     pub hsm_configuration_identifier: Option<String>,
+    /// <p>The name for the maintenance track that you want to assign for the cluster. This name change is asynchronous. The new track name stays in the <code>PendingModifiedValues</code> for the cluster until the next maintenance window. When the maintenance track changes, the cluster is switched to the latest cluster release available for the maintenance track. At this point, the maintenance track name is applied.</p>
+    pub maintenance_track_name: Option<String>,
     /// <p><p>The new password for the cluster master user. This change is asynchronously applied as soon as possible. Between the time of the request and the completion of the request, the <code>MasterUserPassword</code> element exists in the <code>PendingModifiedValues</code> element of the operation response. </p> <note> <p>Operations never return the password, so this operation provides a way to regain access to the master user account for a cluster if the password is lost.</p> </note> <p>Default: Uses existing setting.</p> <p>Constraints:</p> <ul> <li> <p>Must be between 8 and 64 characters in length.</p> </li> <li> <p>Must contain at least one uppercase letter.</p> </li> <li> <p>Must contain at least one lowercase letter.</p> </li> <li> <p>Must contain one number.</p> </li> <li> <p>Can be any printable ASCII character (ASCII code 33 to 126) except &#39; (single quote), &quot; (double quote), \, /, @, or space.</p> </li> </ul></p>
     pub master_user_password: Option<String>,
     /// <p>The new identifier for the cluster.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul> <p>Example: <code>examplecluster</code> </p>
@@ -6805,7 +7418,7 @@ pub struct ModifyClusterMessage {
     pub preferred_maintenance_window: Option<String>,
     /// <p>If <code>true</code>, the cluster can be accessed from a public network. Only clusters in VPCs can be set to be publicly available.</p>
     pub publicly_accessible: Option<bool>,
-    /// <p>A list of virtual private cloud (VPC) security groups to be associated with the cluster.</p>
+    /// <p>A list of virtual private cloud (VPC) security groups to be associated with the cluster. This change is asynchronously applied as soon as possible.</p>
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
@@ -6871,6 +7484,12 @@ impl ModifyClusterMessageSerializer {
         if let Some(ref field_value) = obj.hsm_configuration_identifier {
             params.put(
                 &format!("{}{}", prefix, "HsmConfigurationIdentifier"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.maintenance_track_name {
+            params.put(
+                &format!("{}{}", prefix, "MaintenanceTrackName"),
                 &field_value,
             );
         }
@@ -7685,6 +8304,46 @@ impl ParametersListSerializer {
     }
 }
 
+struct PendingActionsListDeserializer;
+impl PendingActionsListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "member" {
+                        obj.push(try!(StringDeserializer::deserialize("member", stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
 /// <p>Describes cluster attributes that are in a pending state. A change to one or more the attributes was requested and is in progress or will be applied.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PendingModifiedValues {
@@ -7698,6 +8357,8 @@ pub struct PendingModifiedValues {
     pub cluster_version: Option<String>,
     /// <p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>
     pub enhanced_vpc_routing: Option<bool>,
+    /// <p>The name of the maintenance track that the cluster will change to during the next maintenance window.</p>
+    pub maintenance_track_name: Option<String>,
     /// <p>The pending or in-progress change of the master user password for the cluster.</p>
     pub master_user_password: Option<String>,
     /// <p>The pending or in-progress change of the cluster's node type.</p>
@@ -7757,6 +8418,12 @@ impl PendingModifiedValuesDeserializer {
                         obj.enhanced_vpc_routing = Some(try!(
                             BooleanOptionalDeserializer::deserialize("EnhancedVpcRouting", stack)
                         ));
+                    }
+                    "MaintenanceTrackName" => {
+                        obj.maintenance_track_name = Some(try!(StringDeserializer::deserialize(
+                            "MaintenanceTrackName",
+                            stack
+                        )));
                     }
                     "MasterUserPassword" => {
                         obj.master_user_password = Some(try!(StringDeserializer::deserialize(
@@ -8062,7 +8729,7 @@ pub struct ReservedNode {
     pub reserved_node_offering_type: Option<String>,
     /// <p>The time the reservation started. You purchase a reserved node offering for a duration. This is the start time of that duration.</p>
     pub start_time: Option<String>,
-    /// <p><p>The state of the reserved compute node.</p> <p>Possible Values:</p> <ul> <li> <p>pending-payment-This reserved node has recently been purchased, and the sale has been approved, but payment has not yet been confirmed.</p> </li> <li> <p>active-This reserved node is owned by the caller and is available for use.</p> </li> <li> <p>payment-failed-Payment failed for the purchase attempt.</p> </li> </ul></p>
+    /// <p><p>The state of the reserved compute node.</p> <p>Possible Values:</p> <ul> <li> <p>pending-payment-This reserved node has recently been purchased, and the sale has been approved, but payment has not yet been confirmed.</p> </li> <li> <p>active-This reserved node is owned by the caller and is available for use.</p> </li> <li> <p>payment-failed-Payment failed for the purchase attempt.</p> </li> <li> <p>retired-The reserved node is no longer available. </p> </li> <li> <p>exchanging-The owner is exchanging the reserved node for another reserved node.</p> </li> </ul></p>
     pub state: Option<String>,
     /// <p>The hourly rate Amazon Redshift charges you for this reserved node.</p>
     pub usage_price: Option<f64>,
@@ -8718,6 +9385,8 @@ pub struct RestoreFromClusterSnapshotMessage {
     pub iam_roles: Option<Vec<String>>,
     /// <p>The AWS Key Management Service (KMS) key ID of the encryption key that you want to use to encrypt data in the cluster that you restore from a shared snapshot.</p>
     pub kms_key_id: Option<String>,
+    /// <p>The name of the maintenance track for the restored cluster. When you take a snapshot, the snapshot inherits the <code>MaintenanceTrack</code> value from the cluster. The snapshot might be on a different track than the cluster that was the source for the snapshot. For example, suppose that you take a snapshot of a cluster that is on the current track and then change the cluster to be on the trailing track. In this case, the snapshot and the source cluster are on different tracks.</p>
+    pub maintenance_track_name: Option<String>,
     /// <p>The node type that the restored cluster will be provisioned with.</p> <p>Default: The node type of the cluster from which the snapshot was taken. You can modify this if you are using any DS node type. In that case, you can choose to restore into another DS node type of the same size. For example, you can restore ds1.8xlarge into ds2.8xlarge, or ds1.xlarge into ds2.xlarge. If you have a DC instance type, you must restore into that same instance type and size. In other words, you can only restore a dc1.large instance type into another dc1.large instance type or dc2.large instance type. You can't restore dc1.8xlarge to dc2.8xlarge. First restore to a dc1.8xlareg cluster, then resize to a dc2.8large cluster. For more information about node types, see <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#rs-about-clusters-and-nodes"> About Clusters and Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     pub node_type: Option<String>,
     /// <p>The AWS customer account used to create or copy the snapshot. Required if you are restoring a snapshot you do not own, optional if you own the snapshot.</p>
@@ -8816,6 +9485,12 @@ impl RestoreFromClusterSnapshotMessageSerializer {
         }
         if let Some(ref field_value) = obj.kms_key_id {
             params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
+        }
+        if let Some(ref field_value) = obj.maintenance_track_name {
+            params.put(
+                &format!("{}{}", prefix, "MaintenanceTrackName"),
+                &field_value,
+            );
         }
         if let Some(ref field_value) = obj.node_type {
             params.put(&format!("{}{}", prefix, "NodeType"), &field_value);
@@ -9096,6 +9771,111 @@ impl RestoreTableFromClusterSnapshotResultDeserializer {
         }
 
         try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Describes a <code>RevisionTarget</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RevisionTarget {
+    /// <p>A unique string that identifies the version to update the cluster to. You can use this value in <a>ModifyClusterDbRevision</a>.</p>
+    pub database_revision: Option<String>,
+    /// <p>The date on which the database revision was released.</p>
+    pub database_revision_release_date: Option<String>,
+    /// <p>A string that describes the changes and features that will be applied to the cluster when it is updated to the corresponding <a>ClusterDbRevision</a>.</p>
+    pub description: Option<String>,
+}
+
+struct RevisionTargetDeserializer;
+impl RevisionTargetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RevisionTarget, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = RevisionTarget::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DatabaseRevision" => {
+                        obj.database_revision = Some(try!(StringDeserializer::deserialize(
+                            "DatabaseRevision",
+                            stack
+                        )));
+                    }
+                    "DatabaseRevisionReleaseDate" => {
+                        obj.database_revision_release_date = Some(try!(
+                            TStampDeserializer::deserialize("DatabaseRevisionReleaseDate", stack)
+                        ));
+                    }
+                    "Description" => {
+                        obj.description =
+                            Some(try!(StringDeserializer::deserialize("Description", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct RevisionTargetsListDeserializer;
+impl RevisionTargetsListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<RevisionTarget>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "RevisionTarget" {
+                        obj.push(try!(RevisionTargetDeserializer::deserialize(
+                            "RevisionTarget",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
 
         Ok(obj)
     }
@@ -9389,6 +10169,8 @@ pub struct Snapshot {
     pub estimated_seconds_to_completion: Option<i64>,
     /// <p>The AWS Key Management Service (KMS) key ID of the encryption key that was used to encrypt data in the cluster from which the snapshot was taken.</p>
     pub kms_key_id: Option<String>,
+    /// <p>The name of the maintenance track for the snapshot.</p>
+    pub maintenance_track_name: Option<String>,
     /// <p>The master user name for the cluster.</p>
     pub master_username: Option<String>,
     /// <p>The node type of the nodes in the cluster.</p>
@@ -9525,6 +10307,12 @@ impl SnapshotDeserializer {
                     "KmsKeyId" => {
                         obj.kms_key_id =
                             Some(try!(StringDeserializer::deserialize("KmsKeyId", stack)));
+                    }
+                    "MaintenanceTrackName" => {
+                        obj.maintenance_track_name = Some(try!(StringDeserializer::deserialize(
+                            "MaintenanceTrackName",
+                            stack
+                        )));
                     }
                     "MasterUsername" => {
                         obj.master_username = Some(try!(StringDeserializer::deserialize(
@@ -10706,6 +11494,159 @@ impl TaggedResourceListMessageDeserializer {
         Ok(obj)
     }
 }
+struct TrackListDeserializer;
+impl TrackListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<MaintenanceTrack>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "MaintenanceTrack" {
+                        obj.push(try!(MaintenanceTrackDeserializer::deserialize(
+                            "MaintenanceTrack",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TrackListMessage {
+    /// <p>A list of maintenance tracks output by the <code>DescribeClusterTracks</code> operation. </p>
+    pub maintenance_tracks: Option<Vec<MaintenanceTrack>>,
+    /// <p>The starting point to return a set of response tracklist records. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request.</p>
+    pub marker: Option<String>,
+}
+
+struct TrackListMessageDeserializer;
+impl TrackListMessageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TrackListMessage, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = TrackListMessage::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "MaintenanceTracks" => {
+                        obj.maintenance_tracks = Some(try!(TrackListDeserializer::deserialize(
+                            "MaintenanceTracks",
+                            stack
+                        )));
+                    }
+                    "Marker" => {
+                        obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>A maintenance track that you can switch the current track to.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateTarget {
+    /// <p>The cluster version for the new maintenance track.</p>
+    pub database_version: Option<String>,
+    /// <p>The name of the new maintenance track.</p>
+    pub maintenance_track_name: Option<String>,
+}
+
+struct UpdateTargetDeserializer;
+impl UpdateTargetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateTarget, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = UpdateTarget::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DatabaseVersion" => {
+                        obj.database_version = Some(try!(StringDeserializer::deserialize(
+                            "DatabaseVersion",
+                            stack
+                        )));
+                    }
+                    "MaintenanceTrackName" => {
+                        obj.maintenance_track_name = Some(try!(StringDeserializer::deserialize(
+                            "MaintenanceTrackName",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 
 /// Serialize `VpcSecurityGroupIdList` contents to a `SignedRequest`.
 struct VpcSecurityGroupIdListSerializer;
@@ -10813,6 +11754,135 @@ impl VpcSecurityGroupMembershipListDeserializer {
         }
 
         Ok(obj)
+    }
+}
+/// Errors returned by AcceptReservedNodeExchange
+#[derive(Debug, PartialEq)]
+pub enum AcceptReservedNodeExchangeError {
+    /// <p>Your request cannot be completed because a dependent internal service is temporarily unavailable. Wait 30 to 60 seconds and try again.</p>
+    DependentServiceUnavailableFault(String),
+    /// <p>Indicates that the Reserved Node being exchanged is not in an active state.</p>
+    InvalidReservedNodeStateFault(String),
+    /// <p>User already has a reservation with the given identifier.</p>
+    ReservedNodeAlreadyExistsFault(String),
+    /// <p>Indicates that the reserved node has already been exchanged.</p>
+    ReservedNodeAlreadyMigratedFault(String),
+    /// <p>The specified reserved compute node not found.</p>
+    ReservedNodeNotFoundFault(String),
+    /// <p>Specified offering does not exist.</p>
+    ReservedNodeOfferingNotFoundFault(String),
+    /// <p>The requested operation isn't supported.</p>
+    UnsupportedOperationFault(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl AcceptReservedNodeExchangeError {
+    pub fn from_body(body: &str) -> AcceptReservedNodeExchangeError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match Self::deserialize(&mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "DependentServiceUnavailableFault" => {
+                    AcceptReservedNodeExchangeError::DependentServiceUnavailableFault(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidReservedNodeState" => {
+                    AcceptReservedNodeExchangeError::InvalidReservedNodeStateFault(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "ReservedNodeAlreadyExists" => {
+                    AcceptReservedNodeExchangeError::ReservedNodeAlreadyExistsFault(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "ReservedNodeAlreadyMigrated" => {
+                    AcceptReservedNodeExchangeError::ReservedNodeAlreadyMigratedFault(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "ReservedNodeNotFound" => {
+                    AcceptReservedNodeExchangeError::ReservedNodeNotFoundFault(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "ReservedNodeOfferingNotFound" => {
+                    AcceptReservedNodeExchangeError::ReservedNodeOfferingNotFoundFault(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "UnsupportedOperation" => {
+                    AcceptReservedNodeExchangeError::UnsupportedOperationFault(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => AcceptReservedNodeExchangeError::Unknown(String::from(body)),
+            },
+            Err(_) => AcceptReservedNodeExchangeError::Unknown(body.to_string()),
+        }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for AcceptReservedNodeExchangeError {
+    fn from(err: XmlParseError) -> AcceptReservedNodeExchangeError {
+        let XmlParseError(message) = err;
+        AcceptReservedNodeExchangeError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for AcceptReservedNodeExchangeError {
+    fn from(err: CredentialsError) -> AcceptReservedNodeExchangeError {
+        AcceptReservedNodeExchangeError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AcceptReservedNodeExchangeError {
+    fn from(err: HttpDispatchError) -> AcceptReservedNodeExchangeError {
+        AcceptReservedNodeExchangeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AcceptReservedNodeExchangeError {
+    fn from(err: io::Error) -> AcceptReservedNodeExchangeError {
+        AcceptReservedNodeExchangeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AcceptReservedNodeExchangeError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AcceptReservedNodeExchangeError {
+    fn description(&self) -> &str {
+        match *self {
+            AcceptReservedNodeExchangeError::DependentServiceUnavailableFault(ref cause) => cause,
+            AcceptReservedNodeExchangeError::InvalidReservedNodeStateFault(ref cause) => cause,
+            AcceptReservedNodeExchangeError::ReservedNodeAlreadyExistsFault(ref cause) => cause,
+            AcceptReservedNodeExchangeError::ReservedNodeAlreadyMigratedFault(ref cause) => cause,
+            AcceptReservedNodeExchangeError::ReservedNodeNotFoundFault(ref cause) => cause,
+            AcceptReservedNodeExchangeError::ReservedNodeOfferingNotFoundFault(ref cause) => cause,
+            AcceptReservedNodeExchangeError::UnsupportedOperationFault(ref cause) => cause,
+            AcceptReservedNodeExchangeError::Validation(ref cause) => cause,
+            AcceptReservedNodeExchangeError::Credentials(ref err) => err.description(),
+            AcceptReservedNodeExchangeError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AcceptReservedNodeExchangeError::Unknown(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by AuthorizeClusterSecurityGroupIngress
@@ -11177,6 +12247,8 @@ pub enum CreateClusterError {
     InsufficientClusterCapacityFault(String),
     /// <p>The cluster subnet group cannot be deleted because it is in use.</p>
     InvalidClusterSubnetGroupStateFault(String),
+    /// <p>The provided cluster track name is not valid.</p>
+    InvalidClusterTrackFault(String),
     /// <p>The Elastic IP (EIP) is invalid or cannot be found.</p>
     InvalidElasticIpFault(String),
     /// <p>The requested subnet is not valid, or not all of the subnets are in the same VPC.</p>
@@ -11191,7 +12263,7 @@ pub enum CreateClusterError {
     NumberOfNodesPerClusterLimitExceededFault(String),
     /// <p>The operation would exceed the number of nodes allotted to the account. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     NumberOfNodesQuotaExceededFault(String),
-    /// <p>The request exceeds the limit of 10 tags for the resource.</p>
+    /// <p>The number of tables in your source cluster exceeds the limit for the target cluster. Resize to a larger cluster node type.</p>
     TagLimitExceededFault(String),
     /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
@@ -11257,6 +12329,9 @@ impl CreateClusterError {
                     CreateClusterError::InvalidClusterSubnetGroupStateFault(String::from(
                         parsed_error.message,
                     ))
+                }
+                "InvalidClusterTrack" => {
+                    CreateClusterError::InvalidClusterTrackFault(String::from(parsed_error.message))
                 }
                 "InvalidElasticIpFault" => {
                     CreateClusterError::InvalidElasticIpFault(String::from(parsed_error.message))
@@ -11343,6 +12418,7 @@ impl Error for CreateClusterError {
             CreateClusterError::HsmConfigurationNotFoundFault(ref cause) => cause,
             CreateClusterError::InsufficientClusterCapacityFault(ref cause) => cause,
             CreateClusterError::InvalidClusterSubnetGroupStateFault(ref cause) => cause,
+            CreateClusterError::InvalidClusterTrackFault(ref cause) => cause,
             CreateClusterError::InvalidElasticIpFault(ref cause) => cause,
             CreateClusterError::InvalidSubnet(ref cause) => cause,
             CreateClusterError::InvalidTagFault(ref cause) => cause,
@@ -11368,7 +12444,7 @@ pub enum CreateClusterParameterGroupError {
     ClusterParameterGroupQuotaExceededFault(String),
     /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    /// <p>The request exceeds the limit of 10 tags for the resource.</p>
+    /// <p>The number of tables in your source cluster exceeds the limit for the target cluster. Resize to a larger cluster node type.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11473,7 +12549,7 @@ pub enum CreateClusterSecurityGroupError {
     ClusterSecurityGroupQuotaExceededFault(String),
     /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    /// <p>The request exceeds the limit of 10 tags for the resource.</p>
+    /// <p>The number of tables in your source cluster exceeds the limit for the target cluster. Resize to a larger cluster node type.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11582,7 +12658,7 @@ pub enum CreateClusterSnapshotError {
     InvalidClusterStateFault(String),
     /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    /// <p>The request exceeds the limit of 10 tags for the resource.</p>
+    /// <p>The number of tables in your source cluster exceeds the limit for the target cluster. Resize to a larger cluster node type.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11697,7 +12773,7 @@ pub enum CreateClusterSubnetGroupError {
     InvalidSubnet(String),
     /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    /// <p>The request exceeds the limit of 10 tags for the resource.</p>
+    /// <p>The number of tables in your source cluster exceeds the limit for the target cluster. Resize to a larger cluster node type.</p>
     TagLimitExceededFault(String),
     /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
@@ -11836,7 +12912,7 @@ pub enum CreateEventSubscriptionError {
     SubscriptionEventIdNotFoundFault(String),
     /// <p>The value specified for the event severity was not one of the allowed values, or it specified a severity that does not apply to the specified source type. The allowed values are ERROR and INFO.</p>
     SubscriptionSeverityNotFoundFault(String),
-    /// <p>The request exceeds the limit of 10 tags for the resource.</p>
+    /// <p>The number of tables in your source cluster exceeds the limit for the target cluster. Resize to a larger cluster node type.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11971,7 +13047,7 @@ pub enum CreateHsmClientCertificateError {
     HsmClientCertificateQuotaExceededFault(String),
     /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    /// <p>The request exceeds the limit of 10 tags for the resource.</p>
+    /// <p>The number of tables in your source cluster exceeds the limit for the target cluster. Resize to a larger cluster node type.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12076,7 +13152,7 @@ pub enum CreateHsmConfigurationError {
     HsmConfigurationQuotaExceededFault(String),
     /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    /// <p>The request exceeds the limit of 10 tags for the resource.</p>
+    /// <p>The number of tables in your source cluster exceeds the limit for the target cluster. Resize to a larger cluster node type.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12181,7 +13257,7 @@ pub enum CreateSnapshotCopyGrantError {
     SnapshotCopyGrantAlreadyExistsFault(String),
     /// <p>The AWS account has exceeded the maximum number of snapshot copy grants in this region.</p>
     SnapshotCopyGrantQuotaExceededFault(String),
-    /// <p>The request exceeds the limit of 10 tags for the resource.</p>
+    /// <p>The number of tables in your source cluster exceeds the limit for the target cluster. Resize to a larger cluster node type.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12292,7 +13368,7 @@ pub enum CreateTagsError {
     InvalidTagFault(String),
     /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
-    /// <p>The request exceeds the limit of 10 tags for the resource.</p>
+    /// <p>The number of tables in your source cluster exceeds the limit for the target cluster. Resize to a larger cluster node type.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13282,6 +14358,85 @@ impl Error for DeleteTagsError {
         }
     }
 }
+/// Errors returned by DescribeClusterDbRevisions
+#[derive(Debug, PartialEq)]
+pub enum DescribeClusterDbRevisionsError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeClusterDbRevisionsError {
+    pub fn from_body(body: &str) -> DescribeClusterDbRevisionsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match Self::deserialize(&mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "ClusterNotFound" => DescribeClusterDbRevisionsError::ClusterNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                _ => DescribeClusterDbRevisionsError::Unknown(String::from(body)),
+            },
+            Err(_) => DescribeClusterDbRevisionsError::Unknown(body.to_string()),
+        }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for DescribeClusterDbRevisionsError {
+    fn from(err: XmlParseError) -> DescribeClusterDbRevisionsError {
+        let XmlParseError(message) = err;
+        DescribeClusterDbRevisionsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribeClusterDbRevisionsError {
+    fn from(err: CredentialsError) -> DescribeClusterDbRevisionsError {
+        DescribeClusterDbRevisionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeClusterDbRevisionsError {
+    fn from(err: HttpDispatchError) -> DescribeClusterDbRevisionsError {
+        DescribeClusterDbRevisionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeClusterDbRevisionsError {
+    fn from(err: io::Error) -> DescribeClusterDbRevisionsError {
+        DescribeClusterDbRevisionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeClusterDbRevisionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeClusterDbRevisionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeClusterDbRevisionsError::ClusterNotFoundFault(ref cause) => cause,
+            DescribeClusterDbRevisionsError::Validation(ref cause) => cause,
+            DescribeClusterDbRevisionsError::Credentials(ref err) => err.description(),
+            DescribeClusterDbRevisionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeClusterDbRevisionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeClusterParameterGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterParameterGroupsError {
@@ -13718,6 +14873,91 @@ impl Error for DescribeClusterSubnetGroupsError {
                 dispatch_error.description()
             }
             DescribeClusterSubnetGroupsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeClusterTracks
+#[derive(Debug, PartialEq)]
+pub enum DescribeClusterTracksError {
+    /// <p>The provided cluster track name is not valid.</p>
+    InvalidClusterTrackFault(String),
+    /// <p>Your account is not authorized to perform the requested operation.</p>
+    UnauthorizedOperation(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeClusterTracksError {
+    pub fn from_body(body: &str) -> DescribeClusterTracksError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match Self::deserialize(&mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidClusterTrack" => DescribeClusterTracksError::InvalidClusterTrackFault(
+                    String::from(parsed_error.message),
+                ),
+                "UnauthorizedOperation" => DescribeClusterTracksError::UnauthorizedOperation(
+                    String::from(parsed_error.message),
+                ),
+                _ => DescribeClusterTracksError::Unknown(String::from(body)),
+            },
+            Err(_) => DescribeClusterTracksError::Unknown(body.to_string()),
+        }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for DescribeClusterTracksError {
+    fn from(err: XmlParseError) -> DescribeClusterTracksError {
+        let XmlParseError(message) = err;
+        DescribeClusterTracksError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribeClusterTracksError {
+    fn from(err: CredentialsError) -> DescribeClusterTracksError {
+        DescribeClusterTracksError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeClusterTracksError {
+    fn from(err: HttpDispatchError) -> DescribeClusterTracksError {
+        DescribeClusterTracksError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeClusterTracksError {
+    fn from(err: io::Error) -> DescribeClusterTracksError {
+        DescribeClusterTracksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeClusterTracksError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeClusterTracksError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeClusterTracksError::InvalidClusterTrackFault(ref cause) => cause,
+            DescribeClusterTracksError::UnauthorizedOperation(ref cause) => cause,
+            DescribeClusterTracksError::Validation(ref cause) => cause,
+            DescribeClusterTracksError::Credentials(ref err) => err.description(),
+            DescribeClusterTracksError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeClusterTracksError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -15544,6 +16784,135 @@ impl Error for GetClusterCredentialsError {
         }
     }
 }
+/// Errors returned by GetReservedNodeExchangeOfferings
+#[derive(Debug, PartialEq)]
+pub enum GetReservedNodeExchangeOfferingsError {
+    /// <p>Your request cannot be completed because a dependent internal service is temporarily unavailable. Wait 30 to 60 seconds and try again.</p>
+    DependentServiceUnavailableFault(String),
+    /// <p>Indicates that the Reserved Node being exchanged is not in an active state.</p>
+    InvalidReservedNodeStateFault(String),
+    /// <p>Indicates that the reserved node has already been exchanged.</p>
+    ReservedNodeAlreadyMigratedFault(String),
+    /// <p>The specified reserved compute node not found.</p>
+    ReservedNodeNotFoundFault(String),
+    /// <p>Specified offering does not exist.</p>
+    ReservedNodeOfferingNotFoundFault(String),
+    /// <p>The requested operation isn't supported.</p>
+    UnsupportedOperationFault(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetReservedNodeExchangeOfferingsError {
+    pub fn from_body(body: &str) -> GetReservedNodeExchangeOfferingsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match Self::deserialize(&mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "DependentServiceUnavailableFault" => {
+                    GetReservedNodeExchangeOfferingsError::DependentServiceUnavailableFault(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "InvalidReservedNodeState" => {
+                    GetReservedNodeExchangeOfferingsError::InvalidReservedNodeStateFault(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "ReservedNodeAlreadyMigrated" => {
+                    GetReservedNodeExchangeOfferingsError::ReservedNodeAlreadyMigratedFault(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "ReservedNodeNotFound" => {
+                    GetReservedNodeExchangeOfferingsError::ReservedNodeNotFoundFault(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "ReservedNodeOfferingNotFound" => {
+                    GetReservedNodeExchangeOfferingsError::ReservedNodeOfferingNotFoundFault(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "UnsupportedOperation" => {
+                    GetReservedNodeExchangeOfferingsError::UnsupportedOperationFault(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => GetReservedNodeExchangeOfferingsError::Unknown(String::from(body)),
+            },
+            Err(_) => GetReservedNodeExchangeOfferingsError::Unknown(body.to_string()),
+        }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for GetReservedNodeExchangeOfferingsError {
+    fn from(err: XmlParseError) -> GetReservedNodeExchangeOfferingsError {
+        let XmlParseError(message) = err;
+        GetReservedNodeExchangeOfferingsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetReservedNodeExchangeOfferingsError {
+    fn from(err: CredentialsError) -> GetReservedNodeExchangeOfferingsError {
+        GetReservedNodeExchangeOfferingsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetReservedNodeExchangeOfferingsError {
+    fn from(err: HttpDispatchError) -> GetReservedNodeExchangeOfferingsError {
+        GetReservedNodeExchangeOfferingsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetReservedNodeExchangeOfferingsError {
+    fn from(err: io::Error) -> GetReservedNodeExchangeOfferingsError {
+        GetReservedNodeExchangeOfferingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetReservedNodeExchangeOfferingsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetReservedNodeExchangeOfferingsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetReservedNodeExchangeOfferingsError::DependentServiceUnavailableFault(ref cause) => {
+                cause
+            }
+            GetReservedNodeExchangeOfferingsError::InvalidReservedNodeStateFault(ref cause) => {
+                cause
+            }
+            GetReservedNodeExchangeOfferingsError::ReservedNodeAlreadyMigratedFault(ref cause) => {
+                cause
+            }
+            GetReservedNodeExchangeOfferingsError::ReservedNodeNotFoundFault(ref cause) => cause,
+            GetReservedNodeExchangeOfferingsError::ReservedNodeOfferingNotFoundFault(ref cause) => {
+                cause
+            }
+            GetReservedNodeExchangeOfferingsError::UnsupportedOperationFault(ref cause) => cause,
+            GetReservedNodeExchangeOfferingsError::Validation(ref cause) => cause,
+            GetReservedNodeExchangeOfferingsError::Credentials(ref err) => err.description(),
+            GetReservedNodeExchangeOfferingsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetReservedNodeExchangeOfferingsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ModifyCluster
 #[derive(Debug, PartialEq)]
 pub enum ModifyClusterError {
@@ -15567,6 +16936,8 @@ pub enum ModifyClusterError {
     InvalidClusterSecurityGroupStateFault(String),
     /// <p>The specified cluster is not in the <code>available</code> state. </p>
     InvalidClusterStateFault(String),
+    /// <p>The provided cluster track name is not valid.</p>
+    InvalidClusterTrackFault(String),
     /// <p>The Elastic IP (EIP) is invalid or cannot be found.</p>
     InvalidElasticIpFault(String),
     /// <p>The encryption key has exceeded its grant limit in AWS KMS.</p>
@@ -15575,6 +16946,8 @@ pub enum ModifyClusterError {
     NumberOfNodesPerClusterLimitExceededFault(String),
     /// <p>The operation would exceed the number of nodes allotted to the account. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     NumberOfNodesQuotaExceededFault(String),
+    /// <p>The number of tables in the cluster exceeds the limit for the requested new cluster node type. </p>
+    TableLimitExceededFault(String),
     /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
     /// <p>A request option was specified that is not supported.</p>
@@ -15640,6 +17013,9 @@ impl ModifyClusterError {
                 "InvalidClusterState" => {
                     ModifyClusterError::InvalidClusterStateFault(String::from(parsed_error.message))
                 }
+                "InvalidClusterTrack" => {
+                    ModifyClusterError::InvalidClusterTrackFault(String::from(parsed_error.message))
+                }
                 "InvalidElasticIpFault" => {
                     ModifyClusterError::InvalidElasticIpFault(String::from(parsed_error.message))
                 }
@@ -15655,6 +17031,9 @@ impl ModifyClusterError {
                     ModifyClusterError::NumberOfNodesQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
+                }
+                "TableLimitExceeded" => {
+                    ModifyClusterError::TableLimitExceededFault(String::from(parsed_error.message))
                 }
                 "UnauthorizedOperation" => {
                     ModifyClusterError::UnauthorizedOperation(String::from(parsed_error.message))
@@ -15716,16 +17095,111 @@ impl Error for ModifyClusterError {
             ModifyClusterError::InsufficientClusterCapacityFault(ref cause) => cause,
             ModifyClusterError::InvalidClusterSecurityGroupStateFault(ref cause) => cause,
             ModifyClusterError::InvalidClusterStateFault(ref cause) => cause,
+            ModifyClusterError::InvalidClusterTrackFault(ref cause) => cause,
             ModifyClusterError::InvalidElasticIpFault(ref cause) => cause,
             ModifyClusterError::LimitExceededFault(ref cause) => cause,
             ModifyClusterError::NumberOfNodesPerClusterLimitExceededFault(ref cause) => cause,
             ModifyClusterError::NumberOfNodesQuotaExceededFault(ref cause) => cause,
+            ModifyClusterError::TableLimitExceededFault(ref cause) => cause,
             ModifyClusterError::UnauthorizedOperation(ref cause) => cause,
             ModifyClusterError::UnsupportedOptionFault(ref cause) => cause,
             ModifyClusterError::Validation(ref cause) => cause,
             ModifyClusterError::Credentials(ref err) => err.description(),
             ModifyClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             ModifyClusterError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ModifyClusterDbRevision
+#[derive(Debug, PartialEq)]
+pub enum ModifyClusterDbRevisionError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>Cluster is already on the latest database revision.</p>
+    ClusterOnLatestRevisionFault(String),
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
+    InvalidClusterStateFault(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ModifyClusterDbRevisionError {
+    pub fn from_body(body: &str) -> ModifyClusterDbRevisionError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match Self::deserialize(&mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "ClusterNotFound" => ModifyClusterDbRevisionError::ClusterNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "ClusterOnLatestRevision" => {
+                    ModifyClusterDbRevisionError::ClusterOnLatestRevisionFault(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidClusterState" => ModifyClusterDbRevisionError::InvalidClusterStateFault(
+                    String::from(parsed_error.message),
+                ),
+                _ => ModifyClusterDbRevisionError::Unknown(String::from(body)),
+            },
+            Err(_) => ModifyClusterDbRevisionError::Unknown(body.to_string()),
+        }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for ModifyClusterDbRevisionError {
+    fn from(err: XmlParseError) -> ModifyClusterDbRevisionError {
+        let XmlParseError(message) = err;
+        ModifyClusterDbRevisionError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ModifyClusterDbRevisionError {
+    fn from(err: CredentialsError) -> ModifyClusterDbRevisionError {
+        ModifyClusterDbRevisionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ModifyClusterDbRevisionError {
+    fn from(err: HttpDispatchError) -> ModifyClusterDbRevisionError {
+        ModifyClusterDbRevisionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyClusterDbRevisionError {
+    fn from(err: io::Error) -> ModifyClusterDbRevisionError {
+        ModifyClusterDbRevisionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ModifyClusterDbRevisionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyClusterDbRevisionError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifyClusterDbRevisionError::ClusterNotFoundFault(ref cause) => cause,
+            ModifyClusterDbRevisionError::ClusterOnLatestRevisionFault(ref cause) => cause,
+            ModifyClusterDbRevisionError::InvalidClusterStateFault(ref cause) => cause,
+            ModifyClusterDbRevisionError::Validation(ref cause) => cause,
+            ModifyClusterDbRevisionError::Credentials(ref err) => err.description(),
+            ModifyClusterDbRevisionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ModifyClusterDbRevisionError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -16572,6 +18046,8 @@ pub enum RestoreFromClusterSnapshotError {
     InvalidClusterSnapshotStateFault(String),
     /// <p>The cluster subnet group cannot be deleted because it is in use.</p>
     InvalidClusterSubnetGroupStateFault(String),
+    /// <p>The provided cluster track name is not valid.</p>
+    InvalidClusterTrackFault(String),
     /// <p>The Elastic IP (EIP) is invalid or cannot be found.</p>
     InvalidElasticIpFault(String),
     /// <p>The restore is invalid.</p>
@@ -16670,6 +18146,9 @@ impl RestoreFromClusterSnapshotError {
                         String::from(parsed_error.message),
                     )
                 }
+                "InvalidClusterTrack" => RestoreFromClusterSnapshotError::InvalidClusterTrackFault(
+                    String::from(parsed_error.message),
+                ),
                 "InvalidElasticIpFault" => RestoreFromClusterSnapshotError::InvalidElasticIpFault(
                     String::from(parsed_error.message),
                 ),
@@ -16761,6 +18240,7 @@ impl Error for RestoreFromClusterSnapshotError {
             RestoreFromClusterSnapshotError::InvalidClusterSubnetGroupStateFault(ref cause) => {
                 cause
             }
+            RestoreFromClusterSnapshotError::InvalidClusterTrackFault(ref cause) => cause,
             RestoreFromClusterSnapshotError::InvalidElasticIpFault(ref cause) => cause,
             RestoreFromClusterSnapshotError::InvalidRestoreFault(ref cause) => cause,
             RestoreFromClusterSnapshotError::InvalidSubnet(ref cause) => cause,
@@ -17202,6 +18682,12 @@ impl Error for RotateEncryptionKeyError {
 }
 /// Trait representing the capabilities of the Amazon Redshift API. Amazon Redshift clients implement this trait.
 pub trait Redshift {
+    /// <p>Exchanges a DC1 Reserved Node for a DC2 Reserved Node with no changes to the configuration (term, payment type, or number of nodes) and no additional costs. </p>
+    fn accept_reserved_node_exchange(
+        &self,
+        input: AcceptReservedNodeExchangeInputMessage,
+    ) -> RusotoFuture<AcceptReservedNodeExchangeOutputMessage, AcceptReservedNodeExchangeError>;
+
     /// <p>Adds an inbound (ingress) rule to an Amazon Redshift security group. Depending on whether the application accessing your cluster is running on the Internet or an Amazon EC2 instance, you can authorize inbound access to either a Classless Interdomain Routing (CIDR)/Internet Protocol (IP) range or to an Amazon EC2 security group. You can add as many as 20 ingress rules to an Amazon Redshift security group.</p> <p>If you authorize access to an Amazon EC2 security group, specify <i>EC2SecurityGroupName</i> and <i>EC2SecurityGroupOwnerId</i>. The Amazon EC2 security group and Amazon Redshift cluster must be in the same AWS region. </p> <p>If you authorize access to a CIDR/IP address range, specify <i>CIDRIP</i>. For an overview of CIDR blocks, see the Wikipedia article on <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Classless Inter-Domain Routing</a>. </p> <p>You must also associate the security group with a cluster so that clients running on these IP addresses or the EC2 instance are authorized to connect to the cluster. For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Working with Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn authorize_cluster_security_group_ingress(
         &self,
@@ -17223,7 +18709,7 @@ pub trait Redshift {
         input: CopyClusterSnapshotMessage,
     ) -> RusotoFuture<CopyClusterSnapshotResult, CopyClusterSnapshotError>;
 
-    /// <p>Creates a new cluster.</p> <p>To create the cluster in Virtual Private Cloud (VPC), you must provide a cluster subnet group name. The cluster subnet group identifies the subnets of your VPC that Amazon Redshift uses when creating the cluster. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    /// <p>Creates a new cluster.</p> <p>To create a cluster in Virtual Private Cloud (VPC), you must provide a cluster subnet group name. The cluster subnet group identifies the subnets of your VPC that Amazon Redshift uses when creating the cluster. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster(
         &self,
         input: CreateClusterMessage,
@@ -17277,7 +18763,7 @@ pub trait Redshift {
         input: CreateSnapshotCopyGrantMessage,
     ) -> RusotoFuture<CreateSnapshotCopyGrantResult, CreateSnapshotCopyGrantError>;
 
-    /// <p>Adds one or more tags to a specified resource.</p> <p>A resource can have up to 10 tags. If you try to create more than 10 tags for a resource, you will receive an error and the attempt will fail.</p> <p>If you specify a key that already exists for the resource, the value for that key will be updated with the new value.</p>
+    /// <p>Adds one or more tags to a specified resource.</p> <p>A resource can have up to 50 tags. If you try to create more than 50 tags for a resource, you will receive an error and the attempt will fail.</p> <p>If you specify a key that already exists for the resource, the value for that key will be updated with the new value.</p>
     fn create_tags(&self, input: CreateTagsMessage) -> RusotoFuture<(), CreateTagsError>;
 
     /// <p>Deletes a previously provisioned cluster. A successful response from the web service indicates that the request was received correctly. Use <a>DescribeClusters</a> to monitor the status of the deletion. The delete operation cannot be canceled or reverted once submitted. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you want to shut down the cluster and retain it for future use, set <i>SkipFinalClusterSnapshot</i> to <code>false</code> and specify a name for <i>FinalClusterSnapshotIdentifier</i>. You can later restore this snapshot to resume using the cluster. If a final cluster snapshot is requested, the status of the cluster will be "final-snapshot" while the snapshot is being taken, then it's "deleting" once Amazon Redshift begins deleting the cluster. </p> <p> For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
@@ -17337,6 +18823,12 @@ pub trait Redshift {
     /// <p>Deletes a tag or tags from a resource. You must provide the ARN of the resource from which you want to delete the tag or tags.</p>
     fn delete_tags(&self, input: DeleteTagsMessage) -> RusotoFuture<(), DeleteTagsError>;
 
+    /// <p>Returns an array of <code>ClusterDbRevision</code> objects.</p>
+    fn describe_cluster_db_revisions(
+        &self,
+        input: DescribeClusterDbRevisionsMessage,
+    ) -> RusotoFuture<ClusterDbRevisionsMessage, DescribeClusterDbRevisionsError>;
+
     /// <p>Returns a list of Amazon Redshift parameter groups, including parameter groups you created and the default parameter group. For each parameter group, the response includes the parameter group name, description, and parameter group family name. You can optionally specify a name to retrieve the description of a specific parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all parameter groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all parameter groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, parameter groups are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_parameter_groups(
         &self,
@@ -17366,6 +18858,12 @@ pub trait Redshift {
         &self,
         input: DescribeClusterSubnetGroupsMessage,
     ) -> RusotoFuture<ClusterSubnetGroupMessage, DescribeClusterSubnetGroupsError>;
+
+    /// <p>Returns a list of all the available maintenance tracks.</p>
+    fn describe_cluster_tracks(
+        &self,
+        input: DescribeClusterTracksMessage,
+    ) -> RusotoFuture<TrackListMessage, DescribeClusterTracksError>;
 
     /// <p>Returns descriptions of the available Amazon Redshift cluster versions. You can call this operation even before creating any clusters to learn more about the Amazon Redshift versions. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_cluster_versions(
@@ -17493,11 +18991,26 @@ pub trait Redshift {
         input: GetClusterCredentialsMessage,
     ) -> RusotoFuture<ClusterCredentials, GetClusterCredentialsError>;
 
+    /// <p>Returns an array of DC2 ReservedNodeOfferings that matches the payment type, term, and usage price of the given DC1 reserved node.</p>
+    fn get_reserved_node_exchange_offerings(
+        &self,
+        input: GetReservedNodeExchangeOfferingsInputMessage,
+    ) -> RusotoFuture<
+        GetReservedNodeExchangeOfferingsOutputMessage,
+        GetReservedNodeExchangeOfferingsError,
+    >;
+
     /// <p>Modifies the settings for a cluster. For example, you can add another security or parameter group, update the preferred maintenance window, or change the master user password. Resetting a cluster password or modifying the security groups associated with a cluster do not need a reboot. However, modifying a parameter group requires a reboot for parameters to take effect. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>You can also change node type and the number of nodes to scale up or down the cluster. When resizing a cluster, you must specify both the number of nodes and the node type even if one of the parameters does not change.</p>
     fn modify_cluster(
         &self,
         input: ModifyClusterMessage,
     ) -> RusotoFuture<ModifyClusterResult, ModifyClusterError>;
+
+    /// <p>Modifies the database revision of a cluster. The database revision is a unique revision of the database running in a cluster.</p>
+    fn modify_cluster_db_revision(
+        &self,
+        input: ModifyClusterDbRevisionMessage,
+    ) -> RusotoFuture<ModifyClusterDbRevisionResult, ModifyClusterDbRevisionError>;
 
     /// <p>Modifies the list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services.</p> <p>A cluster can have up to 10 IAM roles associated at any time.</p>
     fn modify_cluster_iam_roles(
@@ -17613,6 +19126,61 @@ impl RedshiftClient {
 }
 
 impl Redshift for RedshiftClient {
+    /// <p>Exchanges a DC1 Reserved Node for a DC2 Reserved Node with no changes to the configuration (term, payment type, or number of nodes) and no additional costs. </p>
+    fn accept_reserved_node_exchange(
+        &self,
+        input: AcceptReservedNodeExchangeInputMessage,
+    ) -> RusotoFuture<AcceptReservedNodeExchangeOutputMessage, AcceptReservedNodeExchangeError>
+    {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "AcceptReservedNodeExchange");
+        params.put("Version", "2012-12-01");
+        AcceptReservedNodeExchangeInputMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(AcceptReservedNodeExchangeError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = AcceptReservedNodeExchangeOutputMessage::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(
+                        AcceptReservedNodeExchangeOutputMessageDeserializer::deserialize(
+                            "AcceptReservedNodeExchangeResult",
+                            &mut stack
+                        )
+                    );
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+
+                Ok(result)
+            }))
+        })
+    }
+
     /// <p>Adds an inbound (ingress) rule to an Amazon Redshift security group. Depending on whether the application accessing your cluster is running on the Internet or an Amazon EC2 instance, you can authorize inbound access to either a Classless Interdomain Routing (CIDR)/Internet Protocol (IP) range or to an Amazon EC2 security group. You can add as many as 20 ingress rules to an Amazon Redshift security group.</p> <p>If you authorize access to an Amazon EC2 security group, specify <i>EC2SecurityGroupName</i> and <i>EC2SecurityGroupOwnerId</i>. The Amazon EC2 security group and Amazon Redshift cluster must be in the same AWS region. </p> <p>If you authorize access to a CIDR/IP address range, specify <i>CIDRIP</i>. For an overview of CIDR blocks, see the Wikipedia article on <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Classless Inter-Domain Routing</a>. </p> <p>You must also associate the security group with a cluster so that clients running on these IP addresses or the EC2 instance are authorized to connect to the cluster. For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Working with Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn authorize_cluster_security_group_ingress(
         &self,
@@ -17774,7 +19342,7 @@ impl Redshift for RedshiftClient {
         })
     }
 
-    /// <p>Creates a new cluster.</p> <p>To create the cluster in Virtual Private Cloud (VPC), you must provide a cluster subnet group name. The cluster subnet group identifies the subnets of your VPC that Amazon Redshift uses when creating the cluster. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    /// <p>Creates a new cluster.</p> <p>To create a cluster in Virtual Private Cloud (VPC), you must provide a cluster subnet group name. The cluster subnet group identifies the subnets of your VPC that Amazon Redshift uses when creating the cluster. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster(
         &self,
         input: CreateClusterMessage,
@@ -18242,7 +19810,7 @@ impl Redshift for RedshiftClient {
         })
     }
 
-    /// <p>Adds one or more tags to a specified resource.</p> <p>A resource can have up to 10 tags. If you try to create more than 10 tags for a resource, you will receive an error and the attempt will fail.</p> <p>If you specify a key that already exists for the resource, the value for that key will be updated with the new value.</p>
+    /// <p>Adds one or more tags to a specified resource.</p> <p>A resource can have up to 50 tags. If you try to create more than 50 tags for a resource, you will receive an error and the attempt will fail.</p> <p>If you specify a key that already exists for the resource, the value for that key will be updated with the new value.</p>
     fn create_tags(&self, input: CreateTagsMessage) -> RusotoFuture<(), CreateTagsError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
@@ -18601,6 +20169,58 @@ impl Redshift for RedshiftClient {
         })
     }
 
+    /// <p>Returns an array of <code>ClusterDbRevision</code> objects.</p>
+    fn describe_cluster_db_revisions(
+        &self,
+        input: DescribeClusterDbRevisionsMessage,
+    ) -> RusotoFuture<ClusterDbRevisionsMessage, DescribeClusterDbRevisionsError> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeClusterDbRevisions");
+        params.put("Version", "2012-12-01");
+        DescribeClusterDbRevisionsMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeClusterDbRevisionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ClusterDbRevisionsMessage::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(ClusterDbRevisionsMessageDeserializer::deserialize(
+                        "DescribeClusterDbRevisionsResult",
+                        &mut stack
+                    ));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+
+                Ok(result)
+            }))
+        })
+    }
+
     /// <p>Returns a list of Amazon Redshift parameter groups, including parameter groups you created and the default parameter group. For each parameter group, the response includes the parameter group name, description, and parameter group family name. You can optionally specify a name to retrieve the description of a specific parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all parameter groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all parameter groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, parameter groups are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_parameter_groups(
         &self,
@@ -18850,6 +20470,58 @@ impl Redshift for RedshiftClient {
                     try!(start_element(&actual_tag_name, &mut stack));
                     result = try!(ClusterSubnetGroupMessageDeserializer::deserialize(
                         "DescribeClusterSubnetGroupsResult",
+                        &mut stack
+                    ));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Returns a list of all the available maintenance tracks.</p>
+    fn describe_cluster_tracks(
+        &self,
+        input: DescribeClusterTracksMessage,
+    ) -> RusotoFuture<TrackListMessage, DescribeClusterTracksError> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeClusterTracks");
+        params.put("Version", "2012-12-01");
+        DescribeClusterTracksMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeClusterTracksError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = TrackListMessage::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(TrackListMessageDeserializer::deserialize(
+                        "DescribeClusterTracksResult",
                         &mut stack
                     ));
                     skip_tree(&mut stack);
@@ -19956,6 +21628,63 @@ impl Redshift for RedshiftClient {
         })
     }
 
+    /// <p>Returns an array of DC2 ReservedNodeOfferings that matches the payment type, term, and usage price of the given DC1 reserved node.</p>
+    fn get_reserved_node_exchange_offerings(
+        &self,
+        input: GetReservedNodeExchangeOfferingsInputMessage,
+    ) -> RusotoFuture<
+        GetReservedNodeExchangeOfferingsOutputMessage,
+        GetReservedNodeExchangeOfferingsError,
+    > {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetReservedNodeExchangeOfferings");
+        params.put("Version", "2012-12-01");
+        GetReservedNodeExchangeOfferingsInputMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetReservedNodeExchangeOfferingsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = GetReservedNodeExchangeOfferingsOutputMessage::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(
+                        GetReservedNodeExchangeOfferingsOutputMessageDeserializer::deserialize(
+                            "GetReservedNodeExchangeOfferingsResult",
+                            &mut stack
+                        )
+                    );
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+
+                Ok(result)
+            }))
+        })
+    }
+
     /// <p>Modifies the settings for a cluster. For example, you can add another security or parameter group, update the preferred maintenance window, or change the master user password. Resetting a cluster password or modifying the security groups associated with a cluster do not need a reboot. However, modifying a parameter group requires a reboot for parameters to take effect. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>You can also change node type and the number of nodes to scale up or down the cluster. When resizing a cluster, you must specify both the number of nodes and the node type even if one of the parameters does not change.</p>
     fn modify_cluster(
         &self,
@@ -19997,6 +21726,58 @@ impl Redshift for RedshiftClient {
                     try!(start_element(&actual_tag_name, &mut stack));
                     result = try!(ModifyClusterResultDeserializer::deserialize(
                         "ModifyClusterResult",
+                        &mut stack
+                    ));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Modifies the database revision of a cluster. The database revision is a unique revision of the database running in a cluster.</p>
+    fn modify_cluster_db_revision(
+        &self,
+        input: ModifyClusterDbRevisionMessage,
+    ) -> RusotoFuture<ModifyClusterDbRevisionResult, ModifyClusterDbRevisionError> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyClusterDbRevision");
+        params.put("Version", "2012-12-01");
+        ModifyClusterDbRevisionMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ModifyClusterDbRevisionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ModifyClusterDbRevisionResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(ModifyClusterDbRevisionResultDeserializer::deserialize(
+                        "ModifyClusterDbRevisionResult",
                         &mut stack
                     ));
                     skip_tree(&mut stack);

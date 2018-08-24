@@ -368,7 +368,7 @@ pub struct AdminInitiateAuthResponse {
     #[serde(rename = "AuthenticationResult")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_result: Option<AuthenticationResultType>,
-    /// <p><p>The name of the challenge which you are responding to with this call. This is returned to you in the <code>AdminInitiateAuth</code> response if you need to pass another challenge.</p> <ul> <li> <p> <code>SMS<em>MFA</code>: Next challenge is to supply an <code>SMS</em>MFA<em>CODE</code>, delivered via SMS.</p> </li> <li> <p> <code>PASSWORD</em>VERIFIER</code>: Next challenge is to supply <code>PASSWORD<em>CLAIM</em>SIGNATURE</code>, <code>PASSWORD<em>CLAIM</em>SECRET<em>BLOCK</code>, and <code>TIMESTAMP</code> after the client-side SRP calculations.</p> </li> <li> <p> <code>CUSTOM</em>CHALLENGE</code>: This is returned if your custom authentication flow determines that the user should pass another challenge before tokens are issued.</p> </li> <li> <p> <code>DEVICE<em>SRP</em>AUTH</code>: If device tracking was enabled on your user pool and the previous challenges were passed, this challenge is returned so that Amazon Cognito can start tracking this device.</p> </li> <li> <p> <code>DEVICE<em>PASSWORD</em>VERIFIER</code>: Similar to <code>PASSWORD<em>VERIFIER</code>, but for devices only.</p> </li> <li> <p> <code>ADMIN</em>NO<em>SRP</em>AUTH</code>: This is returned if you need to authenticate with <code>USERNAME</code> and <code>PASSWORD</code> directly. An app client must be enabled to use this flow.</p> </li> <li> <p> <code>NEW<em>PASSWORD</em>REQUIRED</code>: For users which are required to change their passwords after successful first login. This challenge should be passed with <code>NEW_PASSWORD</code> and any other required attributes.</p> </li> </ul></p>
+    /// <p><p>The name of the challenge which you are responding to with this call. This is returned to you in the <code>AdminInitiateAuth</code> response if you need to pass another challenge.</p> <ul> <li> <p> <code>MFA<em>SETUP</code>: If MFA is required, users who do not have at least one of the MFA methods set up are presented with an <code>MFA</em>SETUP</code> challenge. The user must set up at least one MFA type to continue to authenticate.</p> </li> <li> <p> <code>SELECT<em>MFA</em>TYPE</code>: Selects the MFA type. Valid MFA options are <code>SMS<em>MFA</code> for text SMS MFA, and <code>SOFTWARE</em>TOKEN<em>MFA</code> for TOTP software token MFA.</p> </li> <li> <p> <code>SMS</em>MFA</code>: Next challenge is to supply an <code>SMS<em>MFA</em>CODE</code>, delivered via SMS.</p> </li> <li> <p> <code>PASSWORD<em>VERIFIER</code>: Next challenge is to supply <code>PASSWORD</em>CLAIM<em>SIGNATURE</code>, <code>PASSWORD</em>CLAIM<em>SECRET</em>BLOCK</code>, and <code>TIMESTAMP</code> after the client-side SRP calculations.</p> </li> <li> <p> <code>CUSTOM<em>CHALLENGE</code>: This is returned if your custom authentication flow determines that the user should pass another challenge before tokens are issued.</p> </li> <li> <p> <code>DEVICE</em>SRP<em>AUTH</code>: If device tracking was enabled on your user pool and the previous challenges were passed, this challenge is returned so that Amazon Cognito can start tracking this device.</p> </li> <li> <p> <code>DEVICE</em>PASSWORD<em>VERIFIER</code>: Similar to <code>PASSWORD</em>VERIFIER</code>, but for devices only.</p> </li> <li> <p> <code>ADMIN<em>NO</em>SRP<em>AUTH</code>: This is returned if you need to authenticate with <code>USERNAME</code> and <code>PASSWORD</code> directly. An app client must be enabled to use this flow.</p> </li> <li> <p> <code>NEW</em>PASSWORD<em>REQUIRED</code>: For users which are required to change their passwords after successful first login. This challenge should be passed with <code>NEW</em>PASSWORD</code> and any other required attributes.</p> </li> </ul></p>
     #[serde(rename = "ChallengeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_name: Option<String>,
@@ -789,7 +789,7 @@ pub struct AuthenticationResultType {
     #[serde(rename = "AccessToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_token: Option<String>,
-    /// <p>The expiration period of the authentication result.</p>
+    /// <p>The expiration period of the authentication result in seconds.</p>
     #[serde(rename = "ExpiresIn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expires_in: Option<i64>,
@@ -1122,14 +1122,14 @@ pub struct CreateUserPoolClientRequest {
     #[serde(rename = "AnalyticsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub analytics_configuration: Option<AnalyticsConfigurationType>,
-    /// <p>A list of allowed callback URLs for the identity providers.</p>
+    /// <p>A list of allowed redirect (callback) URLs for the identity providers.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p>
     #[serde(rename = "CallbackURLs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub callback_ur_ls: Option<Vec<String>>,
     /// <p>The client name for the user pool client you would like to create.</p>
     #[serde(rename = "ClientName")]
     pub client_name: String,
-    /// <p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p>
+    /// <p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p>
     #[serde(rename = "DefaultRedirectURI")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_redirect_uri: Option<String>,
@@ -2652,7 +2652,7 @@ pub struct SchemaAttributeType {
     #[serde(rename = "DeveloperOnlyAttribute")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub developer_only_attribute: Option<bool>,
-    /// <p>Specifies whether the attribute can be changed once it has been created.</p>
+    /// <p>Specifies whether the value of the attribute can be changed.</p>
     #[serde(rename = "Mutable")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mutable: Option<bool>,
@@ -3148,7 +3148,7 @@ pub struct UpdateUserPoolClientRequest {
     #[serde(rename = "AnalyticsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub analytics_configuration: Option<AnalyticsConfigurationType>,
-    /// <p>A list of allowed callback URLs for the identity providers.</p>
+    /// <p>A list of allowed redirect (callback) URLs for the identity providers.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p>
     #[serde(rename = "CallbackURLs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub callback_ur_ls: Option<Vec<String>>,
@@ -3159,7 +3159,7 @@ pub struct UpdateUserPoolClientRequest {
     #[serde(rename = "ClientName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_name: Option<String>,
-    /// <p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p>
+    /// <p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p>
     #[serde(rename = "DefaultRedirectURI")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_redirect_uri: Option<String>,
@@ -3383,7 +3383,7 @@ pub struct UserPoolClientType {
     #[serde(rename = "AnalyticsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub analytics_configuration: Option<AnalyticsConfigurationType>,
-    /// <p>A list of allowed callback URLs for the identity providers.</p>
+    /// <p>A list of allowed redirect (callback) URLs for the identity providers.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p>
     #[serde(rename = "CallbackURLs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub callback_ur_ls: Option<Vec<String>>,
@@ -3403,7 +3403,7 @@ pub struct UserPoolClientType {
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    /// <p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p>
+    /// <p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p>
     #[serde(rename = "DefaultRedirectURI")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_redirect_uri: Option<String>,
@@ -3490,6 +3490,10 @@ pub struct UserPoolType {
     #[serde(rename = "AliasAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub alias_attributes: Option<Vec<String>>,
+    /// <p>The Amazon Resource Name (ARN) for the user pool.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
     /// <p>Specifies the attributes that are auto-verified in a user pool.</p>
     #[serde(rename = "AutoVerifiedAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3530,7 +3534,7 @@ pub struct UserPoolType {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The AWS Lambda triggers associated with tue user pool.</p>
+    /// <p>The AWS Lambda triggers associated with the user pool.</p>
     #[serde(rename = "LambdaConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_config: Option<LambdaConfigType>,
@@ -15928,7 +15932,7 @@ pub trait CognitoIdentityProvider {
         input: UpdateUserPoolClientRequest,
     ) -> RusotoFuture<UpdateUserPoolClientResponse, UpdateUserPoolClientError>;
 
-    /// <p>Use this API to register a user's entered TOTP code and mark the user's software token MFA status as "verified" if successful,</p>
+    /// <p>Use this API to register a user's entered TOTP code and mark the user's software token MFA status as "verified" if successful. The request takes an access token or a session string, but not both.</p>
     fn verify_software_token(
         &self,
         input: VerifySoftwareTokenRequest,
@@ -19375,7 +19379,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Use this API to register a user's entered TOTP code and mark the user's software token MFA status as "verified" if successful,</p>
+    /// <p>Use this API to register a user's entered TOTP code and mark the user's software token MFA status as "verified" if successful. The request takes an access token or a session string, but not both.</p>
     fn verify_software_token(
         &self,
         input: VerifySoftwareTokenRequest,

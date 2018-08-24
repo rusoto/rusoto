@@ -31,7 +31,7 @@ use serde_json::Value as SerdeJsonValue;
 /// <p>Defines an action to be initiated by a trigger.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Action {
-    /// <p>Arguments to be passed to the job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
+    /// <p>Arguments to be passed to the job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
@@ -39,6 +39,14 @@ pub struct Action {
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
+    /// <p>Specifies configuration properties of a job run notification.</p>
+    #[serde(rename = "NotificationProperty")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_property: Option<NotificationProperty>,
+    /// <p>The job run timeout in minutes. It overrides the timeout value of the job.</p>
+    #[serde(rename = "Timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -190,18 +198,18 @@ pub struct BatchGetPartitionResponse {
     pub unprocessed_keys: Option<Vec<PartitionValueList>>,
 }
 
-/// <p>Records an error that occurred when attempting to stop a specified JobRun.</p>
+/// <p>Records an error that occurred when attempting to stop a specified job run.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BatchStopJobRunError {
     /// <p>Specifies details about the error that was encountered.</p>
     #[serde(rename = "ErrorDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_detail: Option<ErrorDetail>,
-    /// <p>The name of the Job in question.</p>
+    /// <p>The name of the job definition used in the job run in question.</p>
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    /// <p>The JobRunId of the JobRun in question.</p>
+    /// <p>The JobRunId of the job run in question.</p>
     #[serde(rename = "JobRunId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_run_id: Option<String>,
@@ -209,10 +217,10 @@ pub struct BatchStopJobRunError {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchStopJobRunRequest {
-    /// <p>The name of the Job in question.</p>
+    /// <p>The name of the job definition for which to stop job runs.</p>
     #[serde(rename = "JobName")]
     pub job_name: String,
-    /// <p>A list of the JobRunIds that should be stopped for that Job.</p>
+    /// <p>A list of the JobRunIds that should be stopped for that job definition.</p>
     #[serde(rename = "JobRunIds")]
     pub job_run_ids: Vec<String>,
 }
@@ -232,11 +240,11 @@ pub struct BatchStopJobRunResponse {
 /// <p>Records a successful request to stop a specified JobRun.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BatchStopJobRunSuccessfulSubmission {
-    /// <p>The Name of the Job in question.</p>
+    /// <p>The name of the job definition used in the job run that was stopped.</p>
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    /// <p>The JobRunId of the JobRun in question.</p>
+    /// <p>The JobRunId of the job run that was stopped.</p>
     #[serde(rename = "JobRunId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_run_id: Option<String>,
@@ -270,7 +278,7 @@ pub struct CatalogImportStatus {
     pub imported_by: Option<String>,
 }
 
-/// <p>Classifiers are written in Python and triggered during a crawl task. You can write your own classifiers to best categorize your data sources and specify the appropriate schemas to use for them. A classifier checks whether a given file is in a format it can handle, and if it is, the classifier creates a schema in the form of a <code>StructType</code> object that matches that data format.</p> <p>A classifier can be a <code>grok</code> classifier, an XML classifier, or a JSON classifier, asspecified in one of the fields in the <code>Classifier</code> object.</p>
+/// <p>Classifiers are triggered during a crawl task. A classifier checks whether a given file is in a format it can handle, and if it is, the classifier creates a schema in the form of a <code>StructType</code> object that matches that data format.</p> <p>You can use the standard classifiers that AWS Glue supplies, or you can write your own classifiers to best categorize your data sources and specify the appropriate schemas to use for them. A classifier can be a <code>grok</code> classifier, an <code>XML</code> classifier, or a <code>JSON</code> classifier, as specified in one of the fields in the <code>Classifier</code> object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Classifier {
     /// <p>A <code>GrokClassifier</code> object.</p>
@@ -362,7 +370,7 @@ pub struct Condition {
     #[serde(rename = "LogicalOperator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logical_operator: Option<String>,
-    /// <p>The condition state. Currently, the values supported are SUCCEEDED, STOPPED and FAILED.</p>
+    /// <p>The condition state. Currently, the values supported are SUCCEEDED, STOPPED, TIMEOUT and FAILED.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -451,7 +459,7 @@ pub struct Crawler {
     #[serde(rename = "Classifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classifiers: Option<Vec<String>>,
-    /// <p>Crawler configuration information. This versioned JSON string allows users to specify aspects of a Crawler's behavior.</p> <p>You can use this field to force partitions to inherit metadata such as classification, input format, output format, serde information, and schema from their parent table, rather than detect this information separately for each partition. Use the following JSON string to specify that behavior:</p> <p>Example: <code>'{ "Version": 1.0, "CrawlerOutput": { "Partitions": { "AddOrUpdateBehavior": "InheritFromTable" } } }'</code> </p>
+    /// <p>Crawler configuration information. This versioned JSON string allows users to specify aspects of a crawler's behavior. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/crawler-configuration.html">Configuring a Crawler</a>.</p>
     #[serde(rename = "Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<String>,
@@ -553,6 +561,10 @@ pub struct CrawlerMetrics {
 /// <p>Specifies data stores to crawl.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CrawlerTargets {
+    /// <p>Specifies DynamoDB targets.</p>
+    #[serde(rename = "DynamoDBTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dynamo_db_targets: Option<Vec<DynamoDBTarget>>,
     /// <p>Specifies JDBC targets.</p>
     #[serde(rename = "JdbcTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -598,11 +610,11 @@ pub struct CreateConnectionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateCrawlerRequest {
-    /// <p>A list of custom classifiers that the user has registered. By default, all AWS classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>
+    /// <p>A list of custom classifiers that the user has registered. By default, all built-in classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>
     #[serde(rename = "Classifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classifiers: Option<Vec<String>>,
-    /// <p>Crawler configuration information. This versioned JSON string allows users to specify aspects of a Crawler's behavior.</p> <p>You can use this field to force partitions to inherit metadata such as classification, input format, output format, serde information, and schema from their parent table, rather than detect this information separately for each partition. Use the following JSON string to specify that behavior:</p> <p>Example: <code>'{ "Version": 1.0, "CrawlerOutput": { "Partitions": { "AddOrUpdateBehavior": "InheritFromTable" } } }'</code> </p>
+    /// <p>Crawler configuration information. This versioned JSON string allows users to specify aspects of a crawler's behavior. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/crawler-configuration.html">Configuring a Crawler</a>.</p>
     #[serde(rename = "Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<String>,
@@ -670,10 +682,14 @@ pub struct CreateDevEndpointRequest {
     #[serde(rename = "NumberOfNodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_nodes: Option<i64>,
-    /// <p>The public key to use for authentication.</p>
+    /// <p>The public key to be used by this DevEndpoint for authentication. This attribute is provided for backward compatibility, as the recommended attribute to use is public keys.</p>
     #[serde(rename = "PublicKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_key: Option<String>,
+    /// <p><p>A list of public keys to be used by the DevEndpoints for authentication. The use of this attribute is preferred over a single public key because the public keys allow you to have a different private key per client.</p> <note> <p>If you previously created an endpoint with a public key, you must remove that key to be able to set a list of public keys: call the <code>UpdateDevEndpoint</code> API with the public key content in the <code>deletePublicKeys</code> attribute, and the list of new keys in the <code>addPublicKeys</code> attribute.</p> </note></p>
+    #[serde(rename = "PublicKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub public_keys: Option<Vec<String>>,
     /// <p>The IAM role for the DevEndpoint.</p>
     #[serde(rename = "RoleArn")]
     pub role_arn: String,
@@ -778,11 +794,11 @@ pub struct CreateJobRequest {
     #[serde(rename = "Connections")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connections: Option<ConnectionsList>,
-    /// <p>The default arguments for this job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
+    /// <p>The default arguments for this job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "DefaultArguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_arguments: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Description of the job.</p>
+    /// <p>Description of the job being defined.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -798,17 +814,25 @@ pub struct CreateJobRequest {
     #[serde(rename = "MaxRetries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_retries: Option<i64>,
-    /// <p>The name you assign to this job. It must be unique in your account.</p>
+    /// <p>The name you assign to this job definition. It must be unique in your account.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The name of the IAM role associated with this job.</p>
+    /// <p>Specifies configuration properties of a job notification.</p>
+    #[serde(rename = "NotificationProperty")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_property: Option<NotificationProperty>,
+    /// <p>The name or ARN of the IAM role associated with this job.</p>
     #[serde(rename = "Role")]
     pub role: String,
+    /// <p>The job timeout in minutes. The default is 2880 minutes (48 hours).</p>
+    #[serde(rename = "Timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateJobResponse {
-    /// <p>The unique name that was provided.</p>
+    /// <p>The unique name that was provided for this job definition.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -910,6 +934,10 @@ pub struct CreateTriggerRequest {
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
+    /// <p>Set to true to start SCHEDULED and CONDITIONAL triggers when created. True not supported for ON_DEMAND triggers.</p>
+    #[serde(rename = "StartOnCreation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_on_creation: Option<bool>,
     /// <p>The type of the new trigger.</p>
     #[serde(rename = "Type")]
     pub type_: String,
@@ -1059,14 +1087,14 @@ pub struct DeleteDevEndpointResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteJobRequest {
-    /// <p>The name of the job to delete.</p>
+    /// <p>The name of the job definition to delete.</p>
     #[serde(rename = "JobName")]
     pub job_name: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteJobResponse {
-    /// <p>The name of the job that was deleted.</p>
+    /// <p>The name of the job definition that was deleted.</p>
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
@@ -1200,7 +1228,7 @@ pub struct DevEndpoint {
     #[serde(rename = "NumberOfNodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_nodes: Option<i64>,
-    /// <p>The private address used by this DevEndpoint.</p>
+    /// <p>A private DNS to access the DevEndpoint within a VPC, if the DevEndpoint is created within one.</p>
     #[serde(rename = "PrivateAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub private_address: Option<String>,
@@ -1208,10 +1236,14 @@ pub struct DevEndpoint {
     #[serde(rename = "PublicAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_address: Option<String>,
-    /// <p>The public key to be used by this DevEndpoint for authentication.</p>
+    /// <p>The public key to be used by this DevEndpoint for authentication. This attribute is provided for backward compatibility, as the recommended attribute to use is public keys.</p>
     #[serde(rename = "PublicKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_key: Option<String>,
+    /// <p><p>A list of public keys to be used by the DevEndpoints for authentication. The use of this attribute is preferred over a single public key because the public keys allow you to have a different private key per client.</p> <note> <p>If you previously created an endpoint with a public key, you must remove that key to be able to set a list of public keys: call the <code>UpdateDevEndpoint</code> API with the public key content in the <code>deletePublicKeys</code> attribute, and the list of new keys in the <code>addPublicKeys</code> attribute.</p> </note></p>
+    #[serde(rename = "PublicKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub public_keys: Option<Vec<String>>,
     /// <p>The AWS ARN of the IAM role used in this DevEndpoint.</p>
     #[serde(rename = "RoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1255,6 +1287,15 @@ pub struct DevEndpointCustomLibraries {
     pub extra_python_libs_s3_path: Option<String>,
 }
 
+/// <p>Specifies a DynamoDB table to crawl.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DynamoDBTarget {
+    /// <p>The name of the DynamoDB table to crawl.</p>
+    #[serde(rename = "Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
+}
+
 /// <p>Contains details about an error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ErrorDetail {
@@ -1271,7 +1312,7 @@ pub struct ErrorDetail {
 /// <p>An execution property of a job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ExecutionProperty {
-    /// <p>The maximum number of concurrent runs allowed for a job. The default is 1. An error is returned when this threshold is reached. The maximum value you can specify is controlled by a service limit.</p>
+    /// <p>The maximum number of concurrent runs allowed for the job. The default is 1. An error is returned when this threshold is reached. The maximum value you can specify is controlled by a service limit.</p>
     #[serde(rename = "MaxConcurrentRuns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrent_runs: Option<i64>,
@@ -1570,7 +1611,7 @@ pub struct GetDevEndpointsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetJobRequest {
-    /// <p>The name of the job to retrieve.</p>
+    /// <p>The name of the job definition to retrieve.</p>
     #[serde(rename = "JobName")]
     pub job_name: String,
 }
@@ -1585,7 +1626,7 @@ pub struct GetJobResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetJobRunRequest {
-    /// <p>Name of the job being run.</p>
+    /// <p>Name of the job definition being run.</p>
     #[serde(rename = "JobName")]
     pub job_name: String,
     /// <p>True if a list of predecessor runs should be returned.</p>
@@ -1607,7 +1648,7 @@ pub struct GetJobRunResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetJobRunsRequest {
-    /// <p>The name of the job for which to retrieve all job runs.</p>
+    /// <p>The name of the job definition for which to retrieve all job runs.</p>
     #[serde(rename = "JobName")]
     pub job_name: String,
     /// <p>The maximum size of the response.</p>
@@ -1646,11 +1687,11 @@ pub struct GetJobsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetJobsResponse {
-    /// <p>A list of jobs.</p>
+    /// <p>A list of job definitions.</p>
     #[serde(rename = "Jobs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub jobs: Option<Vec<Job>>,
-    /// <p>A continuation token, if not all jobs have yet been returned.</p>
+    /// <p>A continuation token, if not all job definitions have yet been returned.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2053,10 +2094,10 @@ pub struct JdbcTarget {
     pub path: Option<String>,
 }
 
-/// <p>Specifies a job.</p>
+/// <p>Specifies a job definition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Job {
-    /// <p>The number of AWS Glue data processing units (DPUs) allocated to this Job. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p>
+    /// <p>The number of AWS Glue data processing units (DPUs) allocated to runs of this job. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p>
     #[serde(rename = "AllocatedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_capacity: Option<i64>,
@@ -2068,15 +2109,15 @@ pub struct Job {
     #[serde(rename = "Connections")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connections: Option<ConnectionsList>,
-    /// <p>The time and date that this job specification was created.</p>
+    /// <p>The time and date that this job definition was created.</p>
     #[serde(rename = "CreatedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_on: Option<f64>,
-    /// <p>The default arguments for this job, specified as name-value pairs.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
+    /// <p>The default arguments for this job, specified as name-value pairs.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "DefaultArguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_arguments: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Description of this job.</p>
+    /// <p>Description of the job being defined.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -2084,7 +2125,7 @@ pub struct Job {
     #[serde(rename = "ExecutionProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_property: Option<ExecutionProperty>,
-    /// <p>The last point in time when this job specification was modified.</p>
+    /// <p>The last point in time when this job definition was modified.</p>
     #[serde(rename = "LastModifiedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_on: Option<f64>,
@@ -2092,18 +2133,26 @@ pub struct Job {
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
-    /// <p>The maximum number of times to retry this job if it fails.</p>
+    /// <p>The maximum number of times to retry this job after a JobRun fails.</p>
     #[serde(rename = "MaxRetries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_retries: Option<i64>,
-    /// <p>The name you assign to this job.</p>
+    /// <p>The name you assign to this job definition.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The name of the IAM role associated with this job.</p>
+    /// <p>Specifies configuration properties of a job notification.</p>
+    #[serde(rename = "NotificationProperty")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_property: Option<NotificationProperty>,
+    /// <p>The name or ARN of the IAM role associated with this job.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
+    /// <p>The job timeout in minutes.</p>
+    #[serde(rename = "Timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<i64>,
 }
 
 /// <p>Defines a point which a job can resume processing.</p>
@@ -2131,7 +2180,7 @@ pub struct JobBookmarkEntry {
     pub version: Option<i64>,
 }
 
-/// <p>Specifies code that executes a job.</p>
+/// <p>Specifies code executed when a job is run.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct JobCommand {
     /// <p>The name of the job command: this must be <code>glueetl</code>.</p>
@@ -2151,7 +2200,7 @@ pub struct JobRun {
     #[serde(rename = "AllocatedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_capacity: Option<i64>,
-    /// <p>The job arguments associated with this run. These override equivalent default arguments set for the job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
+    /// <p>The job arguments associated with this run. These override equivalent default arguments set for the job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
@@ -2167,11 +2216,15 @@ pub struct JobRun {
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
+    /// <p>The amount of time (in seconds) that the job run consumed resources.</p>
+    #[serde(rename = "ExecutionTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_time: Option<i64>,
     /// <p>The ID of this job run.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The name of the job being run.</p>
+    /// <p>The name of the job definition being used in this run.</p>
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
@@ -2183,6 +2236,10 @@ pub struct JobRun {
     #[serde(rename = "LastModifiedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_on: Option<f64>,
+    /// <p>Specifies configuration properties of a job run notification.</p>
+    #[serde(rename = "NotificationProperty")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_property: Option<NotificationProperty>,
     /// <p>A list of predecessors to this job run.</p>
     #[serde(rename = "PredecessorRuns")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2195,13 +2252,17 @@ pub struct JobRun {
     #[serde(rename = "StartedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub started_on: Option<f64>,
+    /// <p>The job run timeout in minutes.</p>
+    #[serde(rename = "Timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<i64>,
     /// <p>The name of the trigger that started this job run.</p>
     #[serde(rename = "TriggerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger_name: Option<String>,
 }
 
-/// <p>Specifies information used to update an existing job. Note that the previous job definition will be completely overwritten by this information.</p>
+/// <p>Specifies information used to update an existing job definition. Note that the previous job definition will be completely overwritten by this information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct JobUpdate {
     /// <p>The number of AWS Glue data processing units (DPUs) to allocate to this Job. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p>
@@ -2216,11 +2277,11 @@ pub struct JobUpdate {
     #[serde(rename = "Connections")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connections: Option<ConnectionsList>,
-    /// <p>The default arguments for this job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
+    /// <p>The default arguments for this job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "DefaultArguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_arguments: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Description of the job.</p>
+    /// <p>Description of the job being defined.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -2236,10 +2297,18 @@ pub struct JobUpdate {
     #[serde(rename = "MaxRetries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_retries: Option<i64>,
-    /// <p>The name of the IAM role associated with this job (required).</p>
+    /// <p>Specifies configuration properties of a job notification.</p>
+    #[serde(rename = "NotificationProperty")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_property: Option<NotificationProperty>,
+    /// <p>The name or ARN of the IAM role associated with this job (required).</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
+    /// <p>The job timeout in minutes. The default is 2880 minutes (48 hours).</p>
+    #[serde(rename = "Timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<i64>,
 }
 
 /// <p>A classifier for <code>JSON</code> content.</p>
@@ -2297,6 +2366,10 @@ pub struct LastCrawlInfo {
 /// <p>The location of resources.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct Location {
+    /// <p>A DynamoDB Table location.</p>
+    #[serde(rename = "DynamoDB")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dynamo_db: Option<Vec<CodeGenNodeArg>>,
     /// <p>A JDBC location.</p>
     #[serde(rename = "Jdbc")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2334,6 +2407,15 @@ pub struct MappingEntry {
     #[serde(rename = "TargetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_type: Option<String>,
+}
+
+/// <p>Specifies configuration properties of a notification.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct NotificationProperty {
+    /// <p>After a job run starts, the number of minutes to wait before sending a job run delay notification.</p>
+    #[serde(rename = "NotifyDelayAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notify_delay_after: Option<i64>,
 }
 
 /// <p>Specifies the sort order of a sorted column.</p>
@@ -2450,7 +2532,7 @@ pub struct PhysicalConnectionRequirements {
 /// <p>A job run that was used in the predicate of a conditional trigger that triggered this job run.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Predecessor {
-    /// <p>The name of the predecessor job.</p>
+    /// <p>The name of the job definition used by the predecessor job run.</p>
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
@@ -2467,7 +2549,7 @@ pub struct Predicate {
     #[serde(rename = "Conditions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub conditions: Option<Vec<Condition>>,
-    /// <p>Currently "OR" is not supported.</p>
+    /// <p>Optional field if only one condition is listed. If multiple conditions are listed, then this field is required.</p>
     #[serde(rename = "Logical")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logical: Option<String>,
@@ -2611,17 +2693,25 @@ pub struct StartJobRunRequest {
     #[serde(rename = "AllocatedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_capacity: Option<i64>,
-    /// <p>The job arguments specifically for this run. They override the equivalent default arguments set for the job itself.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
+    /// <p>The job arguments specifically for this run. They override the equivalent default arguments set for in the job definition itself.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The name of the job to start.</p>
+    /// <p>The name of the job definition to use.</p>
     #[serde(rename = "JobName")]
     pub job_name: String,
     /// <p>The ID of a previous JobRun to retry.</p>
     #[serde(rename = "JobRunId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_run_id: Option<String>,
+    /// <p>Specifies configuration properties of a job run notification.</p>
+    #[serde(rename = "NotificationProperty")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_property: Option<NotificationProperty>,
+    /// <p>The job run timeout in minutes. It overrides the timeout value of the job.</p>
+    #[serde(rename = "Timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2998,11 +3088,11 @@ pub struct UpdateConnectionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateCrawlerRequest {
-    /// <p>A list of custom classifiers that the user has registered. By default, all classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>
+    /// <p>A list of custom classifiers that the user has registered. By default, all built-in classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>
     #[serde(rename = "Classifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classifiers: Option<Vec<String>>,
-    /// <p>Crawler configuration information. This versioned JSON string allows users to specify aspects of a Crawler's behavior.</p> <p>You can use this field to force partitions to inherit metadata such as classification, input format, output format, serde information, and schema from their parent table, rather than detect this information separately for each partition. Use the following JSON string to specify that behavior:</p> <p>Example: <code>'{ "Version": 1.0, "CrawlerOutput": { "Partitions": { "AddOrUpdateBehavior": "InheritFromTable" } } }'</code> </p>
+    /// <p>Crawler configuration information. This versioned JSON string allows users to specify aspects of a crawler's behavior. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/crawler-configuration.html">Configuring a Crawler</a>.</p>
     #[serde(rename = "Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<String>,
@@ -3075,10 +3165,18 @@ pub struct UpdateDatabaseResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDevEndpointRequest {
+    /// <p>The list of public keys for the DevEndpoint to use.</p>
+    #[serde(rename = "AddPublicKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub add_public_keys: Option<Vec<String>>,
     /// <p>Custom Python or Java libraries to be loaded in the DevEndpoint.</p>
     #[serde(rename = "CustomLibraries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_libraries: Option<DevEndpointCustomLibraries>,
+    /// <p>The list of public keys to be deleted from the DevEndpoint. </p>
+    #[serde(rename = "DeletePublicKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delete_public_keys: Option<Vec<String>>,
     /// <p>The name of the DevEndpoint to be updated.</p>
     #[serde(rename = "EndpointName")]
     pub endpoint_name: String,
@@ -3120,14 +3218,14 @@ pub struct UpdateJobRequest {
     /// <p>Name of the job definition to update.</p>
     #[serde(rename = "JobName")]
     pub job_name: String,
-    /// <p>Specifies the values with which to update the job.</p>
+    /// <p>Specifies the values with which to update the job definition.</p>
     #[serde(rename = "JobUpdate")]
     pub job_update: JobUpdate,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateJobResponse {
-    /// <p>Returns the name of the updated job.</p>
+    /// <p>Returns the name of the updated job definition.</p>
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
@@ -10934,7 +11032,7 @@ pub trait Glue {
         input: BatchGetPartitionRequest,
     ) -> RusotoFuture<BatchGetPartitionResponse, BatchGetPartitionError>;
 
-    /// <p>Stops one or more job runs for a specified Job.</p>
+    /// <p>Stops one or more job runs for a specified job definition.</p>
     fn batch_stop_job_run(
         &self,
         input: BatchStopJobRunRequest,
@@ -10952,7 +11050,7 @@ pub trait Glue {
         input: CreateConnectionRequest,
     ) -> RusotoFuture<CreateConnectionResponse, CreateConnectionError>;
 
-    /// <p>Creates a new crawler with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in either the <i>s3Targets</i> or the <i>jdbcTargets</i> field.</p>
+    /// <p>Creates a new crawler with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in the <i>s3Targets</i> field, the <i>jdbcTargets</i> field, or the <i>DynamoDBTargets</i> field.</p>
     fn create_crawler(
         &self,
         input: CreateCrawlerRequest,
@@ -10970,7 +11068,7 @@ pub trait Glue {
         input: CreateDevEndpointRequest,
     ) -> RusotoFuture<CreateDevEndpointResponse, CreateDevEndpointError>;
 
-    /// <p>Creates a new job.</p>
+    /// <p>Creates a new job definition.</p>
     fn create_job(
         &self,
         input: CreateJobRequest,
@@ -11036,7 +11134,7 @@ pub trait Glue {
         input: DeleteDevEndpointRequest,
     ) -> RusotoFuture<DeleteDevEndpointResponse, DeleteDevEndpointError>;
 
-    /// <p>Deletes a specified job. If the job is not found, no exception is thrown.</p>
+    /// <p>Deletes a specified job definition. If the job definition is not found, no exception is thrown.</p>
     fn delete_job(
         &self,
         input: DeleteJobRequest,
@@ -11159,13 +11257,13 @@ pub trait Glue {
         input: GetJobRunRequest,
     ) -> RusotoFuture<GetJobRunResponse, GetJobRunError>;
 
-    /// <p>Retrieves metadata for all runs of a given job.</p>
+    /// <p>Retrieves metadata for all runs of a given job definition.</p>
     fn get_job_runs(
         &self,
         input: GetJobRunsRequest,
     ) -> RusotoFuture<GetJobRunsResponse, GetJobRunsError>;
 
-    /// <p>Retrieves all current jobs.</p>
+    /// <p>Retrieves all current job definitions.</p>
     fn get_jobs(&self, input: GetJobsRequest) -> RusotoFuture<GetJobsResponse, GetJobsError>;
 
     /// <p>Creates mappings.</p>
@@ -11246,7 +11344,7 @@ pub trait Glue {
         input: ResetJobBookmarkRequest,
     ) -> RusotoFuture<ResetJobBookmarkResponse, ResetJobBookmarkError>;
 
-    /// <p>Starts a crawl using the specified crawler, regardless of what is scheduled. If the crawler is already running, does nothing.</p>
+    /// <p>Starts a crawl using the specified crawler, regardless of what is scheduled. If the crawler is already running, returns a <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-exceptions.html#aws-glue-api-exceptions-CrawlerRunningException">CrawlerRunningException</a>.</p>
     fn start_crawler(
         &self,
         input: StartCrawlerRequest,
@@ -11258,7 +11356,7 @@ pub trait Glue {
         input: StartCrawlerScheduleRequest,
     ) -> RusotoFuture<StartCrawlerScheduleResponse, StartCrawlerScheduleError>;
 
-    /// <p>Runs a job.</p>
+    /// <p>Starts a job run using a job definition.</p>
     fn start_job_run(
         &self,
         input: StartJobRunRequest,
@@ -11600,7 +11698,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Stops one or more job runs for a specified Job.</p>
+    /// <p>Stops one or more job runs for a specified job definition.</p>
     fn batch_stop_job_run(
         &self,
         input: BatchStopJobRunRequest,
@@ -11705,7 +11803,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Creates a new crawler with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in either the <i>s3Targets</i> or the <i>jdbcTargets</i> field.</p>
+    /// <p>Creates a new crawler with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in the <i>s3Targets</i> field, the <i>jdbcTargets</i> field, or the <i>DynamoDBTargets</i> field.</p>
     fn create_crawler(
         &self,
         input: CreateCrawlerRequest,
@@ -11810,7 +11908,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Creates a new job.</p>
+    /// <p>Creates a new job definition.</p>
     fn create_job(
         &self,
         input: CreateJobRequest,
@@ -12195,7 +12293,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Deletes a specified job. If the job is not found, no exception is thrown.</p>
+    /// <p>Deletes a specified job definition. If the job definition is not found, no exception is thrown.</p>
     fn delete_job(
         &self,
         input: DeleteJobRequest,
@@ -12927,7 +13025,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Retrieves metadata for all runs of a given job.</p>
+    /// <p>Retrieves metadata for all runs of a given job definition.</p>
     fn get_job_runs(
         &self,
         input: GetJobRunsRequest,
@@ -12962,7 +13060,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Retrieves all current jobs.</p>
+    /// <p>Retrieves all current job definitions.</p>
     fn get_jobs(&self, input: GetJobsRequest) -> RusotoFuture<GetJobsResponse, GetJobsError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
@@ -13478,7 +13576,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Starts a crawl using the specified crawler, regardless of what is scheduled. If the crawler is already running, does nothing.</p>
+    /// <p>Starts a crawl using the specified crawler, regardless of what is scheduled. If the crawler is already running, returns a <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-exceptions.html#aws-glue-api-exceptions-CrawlerRunningException">CrawlerRunningException</a>.</p>
     fn start_crawler(
         &self,
         input: StartCrawlerRequest,
@@ -13548,7 +13646,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Runs a job.</p>
+    /// <p>Starts a job run using a job definition.</p>
     fn start_job_run(
         &self,
         input: StartJobRunRequest,
