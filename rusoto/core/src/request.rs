@@ -12,7 +12,7 @@ use std::io;
 use std::collections::hash_map::{self, HashMap};
 use std::rc::Rc;
 use std::sync::Arc;
-use std::time::{Instant, Duration};
+use std::time::Duration;
 use std::mem;
 
 use futures::{Async, Future, Poll, Stream};
@@ -26,7 +26,7 @@ use hyper::StatusCode;
 use hyper::Method;
 use hyper::client::HttpConnector;
 use hyper_tls::HttpsConnector;
-use tokio_timer::Deadline;
+use tokio_timer::Timeout;
 
 use log::Level::Debug;
 
@@ -212,7 +212,7 @@ pub struct HttpClientFuture(ClientFutureInner);
 
 enum ClientFutureInner {
     Hyper(HyperResponseFuture),
-    HyperWithTimeout(Deadline<HyperResponseFuture>),
+    HyperWithTimeout(Timeout<HyperResponseFuture>),
     Error(String)
 }
 
@@ -416,8 +416,7 @@ impl<C> DispatchSignedRequest for HttpClient<C>
         let inner = match timeout {
             None => ClientFutureInner::Hyper(self.inner.request(http_request)),
             Some(duration) => {
-                let deadline = Instant::now() + duration;
-                let future = Deadline::new(self.inner.request(http_request), deadline);
+                let future = Timeout::new(self.inner.request(http_request), duration);
                 ClientFutureInner::HyperWithTimeout(future)
             }
         };
