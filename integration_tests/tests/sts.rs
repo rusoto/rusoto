@@ -3,14 +3,17 @@
 extern crate futures;
 extern crate rusoto_core;
 extern crate rusoto_sts;
+extern crate rusoto_ec2;
 
 use futures::Future;
 
 use rusoto_sts::{Sts, StsClient};
 use rusoto_sts::{AssumeRoleRequest, AssumeRoleError};
 use rusoto_sts::{GetSessionTokenRequest, GetSessionTokenError};
-use rusoto_sts::StsSessionCredentialsProvider;
+use rusoto_sts::{StsSessionCredentialsProvider, StsAssumeRoleSessionCredentialsProvider};
 use rusoto_core::{ProvideAwsCredentials, Region};
+use rusoto_core::request::HttpClient;
+use rusoto_ec2::Ec2Client;
 
 #[test]
 fn main() {
@@ -46,4 +49,16 @@ fn main() {
         Err(e) => panic!("sts credentials provider error: {:?}", e),
         Ok(r) => println!("sts credentials provider result: {:?}", r)
     }
+
+    // check that it's possible to create a new ec2 client with sts
+    let provider = StsAssumeRoleSessionCredentialsProvider::new(
+        StsClient::new(Region::UsEast1),
+        "arn:aws:sts::1122334455:role/myrole".to_owned(),
+        "session-name".to_owned(),
+        None,
+        None,
+        None,
+        None,
+    );
+    Ec2Client::new_with(HttpClient::new().unwrap(), provider, Region::default());
 }
