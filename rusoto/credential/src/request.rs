@@ -1,13 +1,13 @@
 use std::io::{Error as IoError};
 use std::io::ErrorKind::InvalidData;
 use std::mem;
-use std::time::{Duration, Instant};
+use std::time::Duration;
 
 use futures::{Async, Future, Poll, Stream};
 use futures::stream::Concat2;
 use hyper::{Client as HyperClient, Body, Request, Uri};
 use hyper::client::{ResponseFuture as HyperResponseFuture, HttpConnector};
-use tokio_timer::Deadline;
+use tokio_timer::Timeout;
 
 use super::CredentialsError;
 
@@ -63,7 +63,7 @@ impl Future for RequestFuture {
 }
 
 enum ClientFutureInner {
-    Request(Deadline<RequestFuture>),
+    Request(Timeout<RequestFuture>),
     Error(String)
 }
 
@@ -115,8 +115,7 @@ impl HttpClient {
 
     pub fn request(&self, req: Request<Body>, timeout: Duration) -> HttpClientFuture {
         let future = RequestFuture::Waiting(self.inner.request(req));
-        let deadline = Instant::now() + timeout;
-        let inner = ClientFutureInner::Request(Deadline::new(future, deadline));
+        let inner = ClientFutureInner::Request(Timeout::new(future, timeout));
         HttpClientFuture(inner)
     }
 }
