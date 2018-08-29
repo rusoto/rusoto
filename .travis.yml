@@ -6,7 +6,7 @@ cache:
     - ~/.cargo
 # run builds for all the trains (and more)
 rust:
-  - 1.23.0 # test against minimum Rust version supported
+  - 1.25.0 # test against minimum Rust version supported
   - stable
   - beta
   - nightly
