@@ -35,7 +35,7 @@ You may be looking for:
 
 ## Requirements
 
-Rust 1.25.0 or later is required.
+Rust 1.26.1 or later is required.
 
 On Linux, OpenSSL is required.
 
