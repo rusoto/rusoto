@@ -679,6 +679,15 @@ fn build_hostname(service: &str, region: &Region) -> String {
                 _ => "route53.amazonaws.com".to_owned(),
             }
         }
+        "sdb" => {
+            match *region {
+                Region::Custom { ref endpoint, .. } => {
+                    remove_scheme_from_custom_hostname(endpoint).to_owned()
+                }
+                Region::UsEast1 => "sdb.amazonaws.com".to_string(),
+                _ => format!("sdb.{}.amazonaws.com", region.name()),
+            }
+        }
         _ => {
             match *region {
                 Region::Custom { ref endpoint, .. } => {
