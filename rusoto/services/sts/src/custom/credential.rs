@@ -91,7 +91,7 @@ impl<T> StsSessionCredentialsClient for T where T: Sts {
 /// You will need to ensure the provider has a valid code each time you
 /// acquire a new STS token.
 pub struct StsSessionCredentialsProvider {
-    sts_client: Box<StsSessionCredentialsClient>,
+    sts_client: Box<StsSessionCredentialsClient + Send + Sync>,
     session_duration: Duration,
     mfa_serial: Option<String>,
     mfa_code: Option<String>,
@@ -179,7 +179,7 @@ impl ProvideAwsCredentials for StsSessionCredentialsProvider {
 /// You will need to ensure the provider has a valid code each time you
 /// acquire a new STS token.
 pub struct StsAssumeRoleSessionCredentialsProvider {
-    sts_client: Box<StsSessionCredentialsClient>,
+    sts_client: Box<StsSessionCredentialsClient + Send + Sync>,
     role_arn: String,
     session_name: String,
     external_id: Option<String>,
@@ -285,7 +285,7 @@ impl ProvideAwsCredentials for StsAssumeRoleSessionCredentialsProvider {
 /// [AwsCredentials](../rusoto_credential/struct.AwsCredentials.html) provider that calls
 /// `AssumeRoleWithWebIdentity` using the provided [StsClient](struct.StsClient.html).
 pub struct StsWebIdentityFederationSessionCredentialsProvider {
-    sts_client: Box<StsSessionCredentialsClient>,
+    sts_client: Box<StsSessionCredentialsClient + Send + Sync>,
     wif_token: String,
     wif_provider: Option<String>,
     role_arn: String,
@@ -385,4 +385,13 @@ impl ProvideAwsCredentials for StsWebIdentityFederationSessionCredentialsProvide
     fn credentials(&self) -> Self::Future {
         self.assume_role_with_web_identity()
     }
+}
+
+#[test]
+fn sts_futures_are_send() {
+    fn is_send<T: Send>() {}
+
+    is_send::<StsSessionCredentialsProvider>();
+    is_send::<StsAssumeRoleSessionCredentialsProvider>();
+    is_send::<StsWebIdentityFederationSessionCredentialsProvider>();
 }
