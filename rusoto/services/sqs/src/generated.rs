@@ -1562,7 +1562,7 @@ impl QueueAttributeMapSerializer {
         for (index, (key, value)) in obj.iter().enumerate() {
             let prefix = format!("{}.{}", name, index + 1);
             params.put(&format!("{}.{}", prefix, "Name"), &key);
-            params.put(&key, &value);
+            params.put(&format!("{}.{}", prefix, "Value"), &value);
         }
     }
 }
@@ -2271,7 +2271,7 @@ impl TagMapSerializer {
         for (index, (key, value)) in obj.iter().enumerate() {
             let prefix = format!("{}.{}", name, index + 1);
             params.put(&format!("{}.{}", prefix, "Key"), &key);
-            params.put(&key, &value);
+            params.put(&format!("{}.{}", prefix, "Value"), &value);
         }
     }
 }
