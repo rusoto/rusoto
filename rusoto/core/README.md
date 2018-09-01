@@ -33,7 +33,7 @@ You may be looking for:
 
 Rust 1.26.1 or later is required.
 
-On Linux, OpenSSL is required.
+On Linux, OpenSSL is required unless `features=["rustls"]` is used.
 
 ## Installation
 
@@ -91,6 +91,17 @@ fn main() {
         },
     }
 }
+```
+
+### Usage with rustls
+
+If you do not want to use OpenSSL, you can replace it with rustls by editing your Cargo.toml:
+
+``` toml
+[dependencies]
+rusoto_core = { version="0.32.0", default_features=false, features=["rustls"] }
+rusoto_sqs = { version="0.32.0", default_features=false, features=["rustls"] }
+rusoto_s3 = { version="0.32.0", default_features=false, features=["rustls"] }
 ```
 
 ### Credentials

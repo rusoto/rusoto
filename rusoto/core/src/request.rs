@@ -25,7 +25,7 @@ use hyper::body::Payload;
 use hyper::StatusCode;
 use hyper::Method;
 use hyper::client::HttpConnector;
-use hyper_tls::HttpsConnector;
+use tls::HttpsConnector;
 use tokio_timer::Timeout;
 
 use log::Level::Debug;
@@ -302,6 +302,7 @@ pub struct HttpClient<C = HttpsConnector<HttpConnector>> {
 impl HttpClient {
     /// Create a tls-enabled http client.
     pub fn new() -> Result<Self, TlsError> {
+        #[cfg(feature="native-tls")]
         let connector = match HttpsConnector::new(4) {
             Ok(connector) => connector,
             Err(tls_error) => {
@@ -310,6 +311,9 @@ impl HttpClient {
                 })
             }
         };
+
+        #[cfg(feature="rustls")]
+        let connector = HttpsConnector::new(4);
 
         Ok(Self::from_connector(connector))
     }

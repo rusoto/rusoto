@@ -12,7 +12,10 @@
 
 extern crate futures;
 extern crate hyper;
-extern crate hyper_tls;
+#[cfg(feature = "native-tls")]
+extern crate hyper_tls as tls;
+#[cfg(feature = "rustls")]
+extern crate hyper_rustls as tls;
 #[macro_use]
 extern crate lazy_static;
 #[macro_use]

@@ -104,7 +104,7 @@ impl <'b> Service <'b> {
             path: Some("../../core".into()),
             version: Some(self.config.core_version.clone()),
             optional: None,
-            default_features: None,
+            default_features: Some(false),
             features: None
         });
 

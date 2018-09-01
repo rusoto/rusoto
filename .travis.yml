@@ -37,6 +37,20 @@ script:
           cargo check --tests --features "all" )
       fi
   - |
+      if [ "$JOB" = "unit_tests_rustls_A" ]; then
+        echo "Running Rusoto tests (rustls phase A)" \
+         && pip install --user toml \
+         && .travis/split_workspace 1 2 \
+         && cargo test --all -v --no-default-features --features=rustls
+      fi
+  - |
+      if [ "$JOB" = "unit_tests_rustls_B" ]; then
+        echo "Running Rusoto tests (rustls phase B)" \
+         && pip install --user toml \
+         && .travis/split_workspace 2 2 \
+         && cargo test --all -v --no-default-features --features=rustls
+      fi
+  - |
       if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "stable" && "$JOB" == "integration_tests_and_docs" ]]; then
         echo "Running cargo docs on stable Rust on Linux" &&
         cargo doc --all --no-deps
@@ -59,6 +73,8 @@ env:
     - JOB=unit_tests_A
     - JOB=unit_tests_B
     - JOB=integration_tests_and_docs
+    - JOB=unit_tests_rustls_A
+    - JOB=unit_tests_rustls_B
 branches:
   only:
     - master
