@@ -7,6 +7,7 @@ extern crate time;
 extern crate env_logger;
 
 use std::time::Duration;
+use std::collections::HashMap;
 
 use rusoto_sqs::{Sqs, SqsClient};
 use rusoto_sqs::{ListQueuesRequest, CreateQueueRequest, GetQueueUrlRequest, SendMessageRequest};
@@ -31,7 +32,10 @@ fn sqs_roundtrip_tests() {
 
     // create a new queue
     let q_name = &format!("test_q_{}", rand::random::<u64>());
+    let mut attrs = HashMap::new();
+    attrs.insert(String::from("ReceiveMessageWaitTimeSeconds"), String::from("1"));
     let q_creation_req = CreateQueueRequest {
+        attributes: Some(attrs),
         queue_name: q_name.clone(),
         ..Default::default()
     };

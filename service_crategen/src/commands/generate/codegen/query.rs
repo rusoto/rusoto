@@ -208,8 +208,7 @@ fn generate_map_serializer(service: &Service, shape: &Shape) -> String {
     let primitive_value = value_shape.is_primitive();
 
     if primitive_value {
-        parts.push(format!("params.put(&key, {});",
-                           serialize_primitive_expression(&value_shape.shape_type, "value")));
+        parts.push(format!("params.put(&format!(\"{{}}.{{}}\", prefix, \"Value\"), &value);"));
     } else {
         parts.push(format!("{value_type}Serializer::serialize(
                     params,
@@ -217,7 +216,7 @@ fn generate_map_serializer(service: &Service, shape: &Shape) -> String {
                     value,
                 );",
                            value_type = shape.value_type(),
-                           value_name = value_name(service, shape)))
+                           value_name = value_name(service, shape)));
     }
 
     parts.push("}".to_owned());
