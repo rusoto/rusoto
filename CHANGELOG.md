@@ -3,8 +3,14 @@
 ## [Unreleased]
 - Add example to Rusoto Logs documentation
 - Add custom dev dependency capability to services crategen
-
 - Allow replacing OpenSSL with rustls by adding `features = ["rustls"], default_features=false` to your Cargo.toml
+- Fix codegen for query types not sending values correctly
+- Bump minimum supported version of Rust to 1.26
+- Make STS provider `Send`
+- Remove unused package `hyper-tls` in credentials crate
+- Send parameters in request body instead of query string for query based services and EC2
+- Allow AWS credentials in environment variables to have a custom prefix
+- Fix bug in presigned URLs for S3
 
 ## [0.33.1] - 2018-08-07
 
