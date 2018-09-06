@@ -46,7 +46,8 @@ class Docker:
     def _kill(self):
         if self.container is not None:
             print("terminating docker:", self)
-            subprocess.check_call(["docker", "kill", self.container])
+            if subprocess.call(["docker", "kill", self.container]) != 0:
+                print("Failed to terminate container.")
 
     def __str__(self):
         if self.container is not None:
