@@ -23,7 +23,7 @@ To use `rusoto_logs` in your application, add it as a dependency in your `Cargo.
 
 ```toml
 [dependencies]
-rusoto_logs = "0.33.1"
+rusoto_logs = "0.34.0"
 ```
 
 ## Contributing
