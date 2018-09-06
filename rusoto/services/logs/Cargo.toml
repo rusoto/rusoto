@@ -27,7 +27,7 @@ default-features = false
 chrono = "0.4"
 
 [dev-dependencies.rusoto_mock]
-version = "0.27.0"
+version = "0.28.0"
 path = "../../../mock"
 
 [features]
