@@ -1,6 +1,9 @@
 # Rusoto changes
 
 ## [Unreleased]
+
+## [0.34.0] - 2018-09-05
+
 - Add example to Rusoto Logs documentation
 - Add custom dev dependency capability to services crategen
 - Allow replacing OpenSSL with rustls by adding `features = ["rustls"], default_features=false` to your Cargo.toml

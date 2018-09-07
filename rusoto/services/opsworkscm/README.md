@@ -23,7 +23,7 @@ To use `rusoto_opsworkscm` in your application, add it as a dependency in your `
 
 ```toml
 [dependencies]
-rusoto_opsworkscm = "0.33.1"
+rusoto_opsworkscm = "0.34.0"
 ```
 
 ## Contributing

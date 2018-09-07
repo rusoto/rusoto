@@ -23,7 +23,7 @@ To use `rusoto_alexaforbusiness` in your application, add it as a dependency in 
 
 ```toml
 [dependencies]
-rusoto_alexaforbusiness = "0.33.1"
+rusoto_alexaforbusiness = "0.34.0"
 ```
 
 ## Contributing

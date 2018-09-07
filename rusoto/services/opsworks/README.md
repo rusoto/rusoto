@@ -23,7 +23,7 @@ To use `rusoto_opsworks` in your application, add it as a dependency in your `Ca
 
 ```toml
 [dependencies]
-rusoto_opsworks = "0.33.1"
+rusoto_opsworks = "0.34.0"
 ```
 
 ## Contributing
