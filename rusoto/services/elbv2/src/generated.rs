@@ -441,7 +441,7 @@ impl AuthenticateCognitoActionAuthenticationRequestExtraParamsSerializer {
         for (index, (key, value)) in obj.iter().enumerate() {
             let prefix = format!("{}.{}", name, index + 1);
             params.put(&format!("{}.{}", prefix, "key"), &key);
-            params.put(&key, &value);
+            params.put(&format!("{}.{}", prefix, "Value"), &value);
         }
     }
 }
@@ -770,7 +770,7 @@ impl AuthenticateOidcActionAuthenticationRequestExtraParamsSerializer {
         for (index, (key, value)) in obj.iter().enumerate() {
             let prefix = format!("{}.{}", name, index + 1);
             params.put(&format!("{}.{}", prefix, "key"), &key);
-            params.put(&key, &value);
+            params.put(&format!("{}.{}", prefix, "Value"), &value);
         }
     }
 }
