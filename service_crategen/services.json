@@ -257,6 +257,12 @@
     "protocolVersion": "2015-02-01",
     "baseTypeName": "Efs"
   },
+  "eks": {
+    "version": "0.34.0",
+    "coreVersion": "0.34.0",
+    "protocolVersion": "2017-11-01",
+    "baseTypeName": "Eks"
+  },
   "elastictranscoder": {
     "version": "0.34.0",
     "coreVersion": "0.34.0",

@@ -195,6 +195,10 @@ path = "../rusoto/services/elasticbeanstalk"
 optional = true
 path = "../rusoto/services/efs"
 
+[dependencies.rusoto_eks]
+optional = true
+path = "../rusoto/services/eks"
+
 [dependencies.rusoto_elastictranscoder]
 optional = true
 path = "../rusoto/services/elastictranscoder"
@@ -497,6 +501,7 @@ all = [
 	   	"elasticache",
 	   	"elasticbeanstalk",
 		"efs",
+		"eks",
 	   	"elastictranscoder",
 	   	"elb",
 	   	"elbv2",
@@ -603,6 +608,7 @@ ecs = ["rusoto_ecs"]
 elasticache = ["rusoto_elasticache"]
 elasticbeanstalk = ["rusoto_elasticbeanstalk"]
 efs = ["rusoto_efs"]
+eks = ["rusoto_eks"]
 elastictranscoder = ["rusoto_elastictranscoder"]
 elb = ["rusoto_elb"]
 elbv2 = ["rusoto_elbv2"]
