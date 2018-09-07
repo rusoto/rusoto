@@ -295,6 +295,10 @@ path = "../rusoto/services/neptune"
 optional = true
 path = "../rusoto/services/machinelearning"
 
+[dependencies.rusoto_macie]
+optional = true
+path = "../rusoto/services/macie"
+
 [dependencies.rusoto_marketplacecommerceanalytics]
 optional = true
 path = "../rusoto/services/marketplacecommerceanalytics"
@@ -518,6 +522,7 @@ all = [
 		"logs",
 		"neptune",
 	   	"machinelearning",
+		"macie",
 	   	"marketplacecommerceanalytics",
 		"marketplace-entitlement",
 		"mgh",
@@ -623,6 +628,7 @@ lex-runtime = ["rusoto_lex_runtime"]
 logs = ["rusoto_logs"]
 neptune = ["rusoto_neptune"]
 machinelearning = ["rusoto_machinelearning"]
+macie = ["rusoto_macie"]
 marketplacecommerceanalytics = ["rusoto_marketplacecommerceanalytics"]
 marketplace-entitlement = ["rusoto_marketplace_entitlement"]
 mgh = ["rusoto_mgh"]

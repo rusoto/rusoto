@@ -71,6 +71,7 @@ members = [
     "rusoto/services/logs",
     "rusoto/services/neptune",
     "rusoto/services/machinelearning",
+    "rusoto/services/macie",
     "rusoto/services/marketplacecommerceanalytics",
     "rusoto/services/marketplace-entitlement",
     "rusoto/services/meteringmarketplace",
