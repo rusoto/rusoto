@@ -482,6 +482,12 @@
     "protocolVersion": "2016-06-10",
     "baseTypeName": "Polly"
   },
+  "pricing": {
+    "version": "0.34.0",
+    "coreVersion": "0.34.0",
+    "protocolVersion": "2017-10-15",
+    "baseTypeName": "Pricing"
+  },
   "rds": {
     "version": "0.34.0",
     "coreVersion": "0.34.0",
