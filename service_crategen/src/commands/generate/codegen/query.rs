@@ -307,6 +307,9 @@ fn optional_primitive_field_serializer(service: &Service,
                                        member_name: &str,
                                        member: &Member)
                                        -> String {
+    if member.deprecated() {
+        return "".to_owned();
+    }
     let member_shape = service.shape_for_member(member).unwrap();
     let expression = serialize_primitive_expression(&member_shape.shape_type, "field_value");
 

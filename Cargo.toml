@@ -68,6 +68,7 @@ members = [
     "rusoto/services/lex-runtime",
     "rusoto/services/lightsail",
     "rusoto/services/logs",
+    "rusoto/services/neptune",
     "rusoto/services/machinelearning",
     "rusoto/services/marketplacecommerceanalytics",
     "rusoto/services/marketplace-entitlement",

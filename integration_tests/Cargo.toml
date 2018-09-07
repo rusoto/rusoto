@@ -283,6 +283,10 @@ path = "../rusoto/services/lex-runtime"
 optional = true
 path = "../rusoto/services/logs"
 
+[dependencies.rusoto_neptune]
+optional = true
+path = "../rusoto/services/neptune"
+
 [dependencies.rusoto_machinelearning]
 optional = true
 path = "../rusoto/services/machinelearning"
@@ -506,7 +510,8 @@ all = [
 		"lex-models",
 		"lightsail",
 		"lex-runtime",
-	   	"logs",
+		"logs",
+		"neptune",
 	   	"machinelearning",
 	   	"marketplacecommerceanalytics",
 		"marketplace-entitlement",
@@ -610,6 +615,7 @@ lightsail = ["rusoto_lightsail"]
 lex-models = ["rusoto_lex_models"]
 lex-runtime = ["rusoto_lex_runtime"]
 logs = ["rusoto_logs"]
+neptune = ["rusoto_neptune"]
 machinelearning = ["rusoto_machinelearning"]
 marketplacecommerceanalytics = ["rusoto_marketplacecommerceanalytics"]
 marketplace-entitlement = ["rusoto_marketplace_entitlement"]
