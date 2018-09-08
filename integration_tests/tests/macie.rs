@@ -7,7 +7,7 @@ use rusoto_macie::{Macie, MacieClient, ListS3ResourcesRequest};
 use rusoto_core::Region;
 
 #[test]
-fn should_describe_batch_predictions() {
+fn should_list_s3_resources() {
     let client = MacieClient::new(Region::UsEast1);
     let request = ListS3ResourcesRequest::default();
 
