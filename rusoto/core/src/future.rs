@@ -13,6 +13,41 @@ lazy_static! {
 }
 
 /// Future that is returned from all rusoto service APIs.
+///
+/// ## Mocking
+///
+/// To mock service traits, you can use the `From` implementation to create `RusotoFuture`
+/// instance.
+///
+/// ```rust,ignore
+/// use rusoto_core::RusotoFuture;
+/// use rusoto_s3::*;
+///
+/// pub struct S3Mock;
+///
+/// impl S3 for S3Mock {
+///     fn abort_multipart_upload(
+///         &self,
+///         _input: AbortMultipartUploadRequest,
+///     ) -> RusotoFuture<AbortMultipartUploadOutput, AbortMultipartUploadError> {
+///         unimplemented!();
+///     }
+///
+///     ...
+///
+///     fn put_object(&self, input: PutObjectRequest) -> RusotoFuture<PutObjectOutput, PutObjectError> {
+///         if input.bucket == "foo" {
+///             Ok(PutObjectOutput {
+///                 ..Default::default()
+///             }).into()
+///         } else {
+///             Err(PutObjectError::Validation("Invalid bucket".to_string())).into()
+///         }
+///     }
+///
+///     ...
+/// }
+/// ```
 pub struct RusotoFuture<T, E> {
     state: Option<RusotoFutureState<T, E>>
 }
