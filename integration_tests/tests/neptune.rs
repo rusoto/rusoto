@@ -7,7 +7,7 @@ use rusoto_core::Region;
 use rusoto_neptune::{NeptuneClient, Neptune, DescribeDBClustersMessage};
 
 #[test]
-fn should_list_hits() {
+fn should_describe_db_clusters() {
     let client = NeptuneClient::new(Region::UsEast1);
     let request = DescribeDBClustersMessage::default();
 
