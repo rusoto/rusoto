@@ -434,6 +434,12 @@
     "protocolVersion": "2017-01-17",
     "baseTypeName": "MechanicalTurk"
   },
+  "neptune": {
+    "version": "0.34.0",
+    "coreVersion": "0.34.0",
+    "protocolVersion": "2014-10-31",
+    "baseTypeName": "Neptune"
+  },
   "opsworks": {
     "version": "0.34.0",
     "coreVersion": "0.34.0",

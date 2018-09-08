@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Added Neptune support
+
 ## [0.34.0] - 2018-09-05
 
 - Add example to Rusoto Logs documentation
