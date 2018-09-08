@@ -410,6 +410,12 @@
     "protocolVersion": "2014-12-12",
     "baseTypeName": "MachineLearning"
   },
+  "macie": {
+    "version": "0.34.0",
+    "coreVersion": "0.34.0",
+    "protocolVersion": "2017-12-19",
+    "baseTypeName": "Macie"
+  },
   "marketplacecommerceanalytics": {
     "version": "0.34.0",
     "coreVersion": "0.34.0",

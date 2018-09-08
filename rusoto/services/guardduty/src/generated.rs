@@ -74,12 +74,10 @@ pub struct AccessKeyDetails {
 pub struct AccountDetail {
     /// <p>Member account ID.</p>
     #[serde(rename = "AccountId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub account_id: Option<String>,
+    pub account_id: String,
     /// <p>Member account&#39;s email address.</p>
     #[serde(rename = "Email")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub email: Option<String>,
+    pub email: String,
 }
 
 /// <p>Information about the activity described in a finding.</p>
@@ -157,7 +155,7 @@ pub struct City {
 }
 
 /// <p>Finding attribute (for example, accountId) for which conditions and values must be specified when querying findings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Condition {
     /// <p>Represents the equal condition to be applied to a single field when querying for findings.</p>
     #[serde(rename = "Eq")]
@@ -213,6 +211,46 @@ pub struct CreateDetectorResponse {
     #[serde(rename = "DetectorId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detector_id: Option<String>,
+}
+
+/// <p>CreateFilterRequest request body.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateFilterRequest {
+    /// <p>Specifies the action that is to be applied to the findings that match the filter.</p>
+    #[serde(rename = "Action")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action: Option<String>,
+    /// <p>The idempotency token for the create request.</p>
+    #[serde(rename = "ClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_token: Option<String>,
+    /// <p>The description of the filter.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The unique ID of the detector that you want to update.</p>
+    #[serde(rename = "DetectorId")]
+    pub detector_id: String,
+    /// <p>Represents the criteria to be used in the filter for querying findings.</p>
+    #[serde(rename = "FindingCriteria")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finding_criteria: Option<FindingCriteria>,
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>Specifies the position of the filter in the list of current filters. Also specifies the order in which this filter is applied to the findings.</p>
+    #[serde(rename = "Rank")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rank: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct CreateFilterResponse {
+    /// <p>The name of the successfully created filter.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
 }
 
 /// <p>CreateIPSet request body.</p>
@@ -340,6 +378,19 @@ pub struct DeleteDetectorRequest {
 pub struct DeleteDetectorResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteFilterRequest {
+    /// <p>The unique ID that specifies the detector where you want to delete a filter.</p>
+    #[serde(rename = "DetectorId")]
+    pub detector_id: String,
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "FilterName")]
+    pub filter_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DeleteFilterResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteIPSetRequest {
     /// <p>The detectorID that specifies the GuardDuty service whose IPSet you want to delete.</p>
     #[serde(rename = "DetectorId")]
@@ -459,68 +510,58 @@ pub struct ErrorResponse {
 pub struct Finding {
     /// <p>AWS account ID where the activity occurred that prompted GuardDuty to generate a finding.</p>
     #[serde(rename = "AccountId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub account_id: Option<String>,
+    pub account_id: String,
     /// <p>The ARN of a finding described by the action.</p>
     #[serde(rename = "Arn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub arn: Option<String>,
+    pub arn: String,
     /// <p>The confidence level of a finding.</p>
     #[serde(rename = "Confidence")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub confidence: Option<f64>,
     /// <p>The time stamp at which a finding was generated.</p>
     #[serde(rename = "CreatedAt")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<String>,
+    pub created_at: String,
     /// <p>The description of a finding.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// <p>The identifier that corresponds to a finding described by the action.</p>
     #[serde(rename = "Id")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub id: Option<String>,
+    pub id: String,
     /// <p>The AWS resource partition.</p>
     #[serde(rename = "Partition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub partition: Option<String>,
     /// <p>The AWS region where the activity occurred that prompted GuardDuty to generate a finding.</p>
     #[serde(rename = "Region")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub region: Option<String>,
+    pub region: String,
     /// <p>The AWS resource associated with the activity that prompted GuardDuty to generate a finding.</p>
     #[serde(rename = "Resource")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource: Option<Resource>,
+    pub resource: Resource,
     /// <p>Findings&#39; schema version.</p>
     #[serde(rename = "SchemaVersion")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub schema_version: Option<String>,
+    pub schema_version: String,
     /// <p>Additional information assigned to the generated finding by GuardDuty.</p>
     #[serde(rename = "Service")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service: Option<Service>,
     /// <p>The severity of a finding.</p>
     #[serde(rename = "Severity")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub severity: Option<f64>,
+    pub severity: f64,
     /// <p>The title of a finding.</p>
     #[serde(rename = "Title")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
     /// <p>The type of a finding described by the action.</p>
     #[serde(rename = "Type")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: String,
     /// <p>The time stamp at which a finding was last updated.</p>
     #[serde(rename = "UpdatedAt")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub updated_at: Option<String>,
+    pub updated_at: String,
 }
 
 /// <p>Represents the criteria used for querying findings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FindingCriteria {
     /// <p>Represents a map of finding properties that match specified conditions and values when querying findings.</p>
     #[serde(rename = "Criterion")]
@@ -571,6 +612,40 @@ pub struct GetDetectorResponse {
     #[serde(rename = "UpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetFilterRequest {
+    /// <p>The detector ID that specifies the GuardDuty service where you want to list the details of the specified filter.</p>
+    #[serde(rename = "DetectorId")]
+    pub detector_id: String,
+    /// <p>The name of the filter whose details you want to get.</p>
+    #[serde(rename = "FilterName")]
+    pub filter_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct GetFilterResponse {
+    /// <p>Specifies the action that is to be applied to the findings that match the filter.</p>
+    #[serde(rename = "Action")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action: Option<String>,
+    /// <p>The description of the filter.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Represents the criteria to be used in the filter for querying findings.</p>
+    #[serde(rename = "FindingCriteria")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finding_criteria: Option<FindingCriteria>,
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>Specifies the position of the filter in the list of current filters. Also specifies the order in which this filter is applied to the findings.</p>
+    #[serde(rename = "Rank")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rank: Option<i64>,
 }
 
 /// <p>GetFindings request body.</p>
@@ -751,6 +826,10 @@ pub struct InstanceDetails {
     #[serde(rename = "IamInstanceProfile")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_instance_profile: Option<IamInstanceProfile>,
+    /// <p>The image description of the EC2 instance.</p>
+    #[serde(rename = "ImageDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_description: Option<String>,
     /// <p>The image ID of the EC2 instance.</p>
     #[serde(rename = "ImageId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -820,7 +899,11 @@ pub struct InviteMembersRequest {
     /// <p>The unique ID of the detector of the GuardDuty account with which you want to invite members.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>The invitation message that you want to send to the accounts that you&#39;re inviting to GuardDuty as members.</p>
+    /// <p>A boolean value that specifies whether you want to disable email notification to the accounts that you’re inviting to GuardDuty as members.</p>
+    #[serde(rename = "DisableEmailNotification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_email_notification: Option<bool>,
+    /// <p>The invitation message that you want to send to the accounts that you’re inviting to GuardDuty as members.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
@@ -851,6 +934,31 @@ pub struct ListDetectorsResponse {
     #[serde(rename = "DetectorIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detector_ids: Option<Vec<String>>,
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListFiltersRequest {
+    /// <p>The ID of the detector that specifies the GuardDuty service where you want to list filters.</p>
+    #[serde(rename = "DetectorId")]
+    pub detector_id: String,
+    /// <p>Indicates the maximum number of items that you want in the response. The maximum value is 50.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Paginates results. Set the value of this parameter to NULL on your first call to the ListFilters operation.For subsequent calls to the operation, fill nextToken in the request with the value of nextToken from the previous response to continue listing data.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ListFiltersResponse {
+    #[serde(rename = "FilterNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_names: Option<Vec<String>>,
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1029,29 +1137,24 @@ pub struct Master {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Member {
     #[serde(rename = "AccountId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub account_id: Option<String>,
+    pub account_id: String,
     #[serde(rename = "DetectorId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detector_id: Option<String>,
     /// <p>Member account&#39;s email address.</p>
     #[serde(rename = "Email")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub email: Option<String>,
+    pub email: String,
     /// <p>Timestamp at which the invitation was sent</p>
     #[serde(rename = "InvitedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invited_at: Option<String>,
     #[serde(rename = "MasterId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub master_id: Option<String>,
+    pub master_id: String,
     /// <p>The status of the relationship between the member and the master.</p>
     #[serde(rename = "RelationshipStatus")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub relationship_status: Option<String>,
+    pub relationship_status: String,
     #[serde(rename = "UpdatedAt")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub updated_at: Option<String>,
+    pub updated_at: String,
 }
 
 /// <p>Information about the NETWORK_CONNECTION action described in this finding.</p>
@@ -1090,6 +1193,10 @@ pub struct NetworkInterface {
     #[serde(rename = "Ipv6Addresses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ipv_6_addresses: Option<Vec<String>>,
+    /// <p>The ID of the network interface</p>
+    #[serde(rename = "NetworkInterfaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_interface_id: Option<String>,
     /// <p>Private DNS name of the EC2 instance.</p>
     #[serde(rename = "PrivateDnsName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1390,12 +1497,10 @@ pub struct UnarchiveFindingsResponse {}
 pub struct UnprocessedAccount {
     /// <p>AWS Account ID.</p>
     #[serde(rename = "AccountId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub account_id: Option<String>,
+    pub account_id: String,
     /// <p>A reason why the account hasn&#39;t been processed.</p>
     #[serde(rename = "Result")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub result: Option<String>,
+    pub result: String,
 }
 
 /// <p>UpdateDetector request body.</p>
@@ -1412,6 +1517,41 @@ pub struct UpdateDetectorRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateDetectorResponse {}
+
+/// <p>UpdateFilterRequest request body.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateFilterRequest {
+    /// <p>Specifies the action that is to be applied to the findings that match the filter.</p>
+    #[serde(rename = "Action")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action: Option<String>,
+    /// <p>The description of the filter.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The unique ID of the detector that specifies the GuardDuty service where you want to update a filter.</p>
+    #[serde(rename = "DetectorId")]
+    pub detector_id: String,
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "FilterName")]
+    pub filter_name: String,
+    /// <p>Represents the criteria to be used in the filter for querying findings.</p>
+    #[serde(rename = "FindingCriteria")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finding_criteria: Option<FindingCriteria>,
+    /// <p>Specifies the position of the filter in the list of current filters. Also specifies the order in which this filter is applied to the findings.</p>
+    #[serde(rename = "Rank")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rank: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct UpdateFilterResponse {
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
 
 /// <p>UpdateFindingsFeedback request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1740,6 +1880,91 @@ impl Error for CreateDetectorError {
             CreateDetectorError::Credentials(ref err) => err.description(),
             CreateDetectorError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             CreateDetectorError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateFilter
+#[derive(Debug, PartialEq)]
+pub enum CreateFilterError {
+    /// <p>Error response object.</p>
+    BadRequest(String),
+    /// <p>Error response object.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateFilterError {
+    pub fn from_body(body: &str) -> CreateFilterError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BadRequestException" => {
+                        CreateFilterError::BadRequest(String::from(error_message))
+                    }
+                    "InternalServerErrorException" => {
+                        CreateFilterError::InternalServerError(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateFilterError::Validation(error_message.to_string())
+                    }
+                    _ => CreateFilterError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateFilterError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateFilterError {
+    fn from(err: serde_json::error::Error) -> CreateFilterError {
+        CreateFilterError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateFilterError {
+    fn from(err: CredentialsError) -> CreateFilterError {
+        CreateFilterError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateFilterError {
+    fn from(err: HttpDispatchError) -> CreateFilterError {
+        CreateFilterError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateFilterError {
+    fn from(err: io::Error) -> CreateFilterError {
+        CreateFilterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateFilterError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateFilterError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateFilterError::BadRequest(ref cause) => cause,
+            CreateFilterError::InternalServerError(ref cause) => cause,
+            CreateFilterError::Validation(ref cause) => cause,
+            CreateFilterError::Credentials(ref err) => err.description(),
+            CreateFilterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateFilterError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2256,6 +2481,91 @@ impl Error for DeleteDetectorError {
             DeleteDetectorError::Credentials(ref err) => err.description(),
             DeleteDetectorError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteDetectorError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteFilter
+#[derive(Debug, PartialEq)]
+pub enum DeleteFilterError {
+    /// <p>Error response object.</p>
+    BadRequest(String),
+    /// <p>Error response object.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteFilterError {
+    pub fn from_body(body: &str) -> DeleteFilterError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BadRequestException" => {
+                        DeleteFilterError::BadRequest(String::from(error_message))
+                    }
+                    "InternalServerErrorException" => {
+                        DeleteFilterError::InternalServerError(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteFilterError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteFilterError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteFilterError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteFilterError {
+    fn from(err: serde_json::error::Error) -> DeleteFilterError {
+        DeleteFilterError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteFilterError {
+    fn from(err: CredentialsError) -> DeleteFilterError {
+        DeleteFilterError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteFilterError {
+    fn from(err: HttpDispatchError) -> DeleteFilterError {
+        DeleteFilterError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteFilterError {
+    fn from(err: io::Error) -> DeleteFilterError {
+        DeleteFilterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteFilterError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteFilterError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteFilterError::BadRequest(ref cause) => cause,
+            DeleteFilterError::InternalServerError(ref cause) => cause,
+            DeleteFilterError::Validation(ref cause) => cause,
+            DeleteFilterError::Credentials(ref err) => err.description(),
+            DeleteFilterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteFilterError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2861,6 +3171,89 @@ impl Error for GetDetectorError {
             GetDetectorError::Credentials(ref err) => err.description(),
             GetDetectorError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             GetDetectorError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetFilter
+#[derive(Debug, PartialEq)]
+pub enum GetFilterError {
+    /// <p>Error response object.</p>
+    BadRequest(String),
+    /// <p>Error response object.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetFilterError {
+    pub fn from_body(body: &str) -> GetFilterError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BadRequestException" => {
+                        GetFilterError::BadRequest(String::from(error_message))
+                    }
+                    "InternalServerErrorException" => {
+                        GetFilterError::InternalServerError(String::from(error_message))
+                    }
+                    "ValidationException" => GetFilterError::Validation(error_message.to_string()),
+                    _ => GetFilterError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetFilterError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetFilterError {
+    fn from(err: serde_json::error::Error) -> GetFilterError {
+        GetFilterError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetFilterError {
+    fn from(err: CredentialsError) -> GetFilterError {
+        GetFilterError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetFilterError {
+    fn from(err: HttpDispatchError) -> GetFilterError {
+        GetFilterError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetFilterError {
+    fn from(err: io::Error) -> GetFilterError {
+        GetFilterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetFilterError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetFilterError {
+    fn description(&self) -> &str {
+        match *self {
+            GetFilterError::BadRequest(ref cause) => cause,
+            GetFilterError::InternalServerError(ref cause) => cause,
+            GetFilterError::Validation(ref cause) => cause,
+            GetFilterError::Credentials(ref err) => err.description(),
+            GetFilterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetFilterError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -3626,6 +4019,91 @@ impl Error for ListDetectorsError {
             ListDetectorsError::Credentials(ref err) => err.description(),
             ListDetectorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             ListDetectorsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListFilters
+#[derive(Debug, PartialEq)]
+pub enum ListFiltersError {
+    /// <p>Error response object.</p>
+    BadRequest(String),
+    /// <p>Error response object.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListFiltersError {
+    pub fn from_body(body: &str) -> ListFiltersError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BadRequestException" => {
+                        ListFiltersError::BadRequest(String::from(error_message))
+                    }
+                    "InternalServerErrorException" => {
+                        ListFiltersError::InternalServerError(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListFiltersError::Validation(error_message.to_string())
+                    }
+                    _ => ListFiltersError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListFiltersError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListFiltersError {
+    fn from(err: serde_json::error::Error) -> ListFiltersError {
+        ListFiltersError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListFiltersError {
+    fn from(err: CredentialsError) -> ListFiltersError {
+        ListFiltersError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListFiltersError {
+    fn from(err: HttpDispatchError) -> ListFiltersError {
+        ListFiltersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListFiltersError {
+    fn from(err: io::Error) -> ListFiltersError {
+        ListFiltersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListFiltersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListFiltersError {
+    fn description(&self) -> &str {
+        match *self {
+            ListFiltersError::BadRequest(ref cause) => cause,
+            ListFiltersError::InternalServerError(ref cause) => cause,
+            ListFiltersError::Validation(ref cause) => cause,
+            ListFiltersError::Credentials(ref err) => err.description(),
+            ListFiltersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListFiltersError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -4402,6 +4880,91 @@ impl Error for UpdateDetectorError {
         }
     }
 }
+/// Errors returned by UpdateFilter
+#[derive(Debug, PartialEq)]
+pub enum UpdateFilterError {
+    /// <p>Error response object.</p>
+    BadRequest(String),
+    /// <p>Error response object.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateFilterError {
+    pub fn from_body(body: &str) -> UpdateFilterError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BadRequestException" => {
+                        UpdateFilterError::BadRequest(String::from(error_message))
+                    }
+                    "InternalServerErrorException" => {
+                        UpdateFilterError::InternalServerError(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateFilterError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateFilterError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateFilterError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateFilterError {
+    fn from(err: serde_json::error::Error) -> UpdateFilterError {
+        UpdateFilterError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateFilterError {
+    fn from(err: CredentialsError) -> UpdateFilterError {
+        UpdateFilterError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateFilterError {
+    fn from(err: HttpDispatchError) -> UpdateFilterError {
+        UpdateFilterError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateFilterError {
+    fn from(err: io::Error) -> UpdateFilterError {
+        UpdateFilterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateFilterError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateFilterError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateFilterError::BadRequest(ref cause) => cause,
+            UpdateFilterError::InternalServerError(ref cause) => cause,
+            UpdateFilterError::Validation(ref cause) => cause,
+            UpdateFilterError::Credentials(ref err) => err.description(),
+            UpdateFilterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UpdateFilterError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateFindingsFeedback
 #[derive(Debug, PartialEq)]
 pub enum UpdateFindingsFeedbackError {
@@ -4683,6 +5246,12 @@ pub trait GuardDuty {
         input: CreateDetectorRequest,
     ) -> RusotoFuture<CreateDetectorResponse, CreateDetectorError>;
 
+    /// <p>Creates a filter using the specified finding criteria.</p>
+    fn create_filter(
+        &self,
+        input: CreateFilterRequest,
+    ) -> RusotoFuture<CreateFilterResponse, CreateFilterError>;
+
     /// <p>Creates a new IPSet - a list of trusted IP addresses that have been whitelisted for secure communication with AWS infrastructure and applications.</p>
     fn create_ip_set(
         &self,
@@ -4718,6 +5287,12 @@ pub trait GuardDuty {
         &self,
         input: DeleteDetectorRequest,
     ) -> RusotoFuture<DeleteDetectorResponse, DeleteDetectorError>;
+
+    /// <p>Deletes the filter specified by the filter name.</p>
+    fn delete_filter(
+        &self,
+        input: DeleteFilterRequest,
+    ) -> RusotoFuture<DeleteFilterResponse, DeleteFilterError>;
 
     /// <p>Deletes the IPSet specified by the IPSet ID.</p>
     fn delete_ip_set(
@@ -4760,6 +5335,12 @@ pub trait GuardDuty {
         &self,
         input: GetDetectorRequest,
     ) -> RusotoFuture<GetDetectorResponse, GetDetectorError>;
+
+    /// <p>Returns the details of the filter specified by the filter name.</p>
+    fn get_filter(
+        &self,
+        input: GetFilterRequest,
+    ) -> RusotoFuture<GetFilterResponse, GetFilterError>;
 
     /// <p>Describes Amazon GuardDuty findings specified by finding IDs.</p>
     fn get_findings(
@@ -4811,6 +5392,12 @@ pub trait GuardDuty {
         input: ListDetectorsRequest,
     ) -> RusotoFuture<ListDetectorsResponse, ListDetectorsError>;
 
+    /// <p>Returns a paginated list of the current filters.</p>
+    fn list_filters(
+        &self,
+        input: ListFiltersRequest,
+    ) -> RusotoFuture<ListFiltersResponse, ListFiltersError>;
+
     /// <p>Lists Amazon GuardDuty findings for the specified detector ID.</p>
     fn list_findings(
         &self,
@@ -4847,7 +5434,7 @@ pub trait GuardDuty {
         input: StartMonitoringMembersRequest,
     ) -> RusotoFuture<StartMonitoringMembersResponse, StartMonitoringMembersError>;
 
-    /// <p>Disables GuardDuty from monitoring findings of the member accounts specified by the account IDs. After running this command, a master GuardDuty account can run StartMonitoringMembers to re-enable GuardDuty to monitor these members&#39; findings.</p>
+    /// <p>Disables GuardDuty from monitoring findings of the member accounts specified by the account IDs. After running this command, a master GuardDuty account can run StartMonitoringMembers to re-enable GuardDuty to monitor these members’ findings.</p>
     fn stop_monitoring_members(
         &self,
         input: StopMonitoringMembersRequest,
@@ -4864,6 +5451,12 @@ pub trait GuardDuty {
         &self,
         input: UpdateDetectorRequest,
     ) -> RusotoFuture<UpdateDetectorResponse, UpdateDetectorError>;
+
+    /// <p>Updates the filter specified by the filter name.</p>
+    fn update_filter(
+        &self,
+        input: UpdateFilterRequest,
+    ) -> RusotoFuture<UpdateFilterResponse, UpdateFilterError>;
 
     /// <p>Marks specified Amazon GuardDuty findings as useful or not useful.</p>
     fn update_findings_feedback(
@@ -5032,6 +5625,47 @@ impl GuardDuty for GuardDutyClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateDetectorError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Creates a filter using the specified finding criteria.</p>
+    fn create_filter(
+        &self,
+        input: CreateFilterRequest,
+    ) -> RusotoFuture<CreateFilterResponse, CreateFilterError> {
+        let request_uri = format!(
+            "/detector/{detector_id}/filter",
+            detector_id = input.detector_id
+        );
+
+        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateFilterResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateFilterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -5272,6 +5906,45 @@ impl GuardDuty for GuardDutyClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDetectorError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Deletes the filter specified by the filter name.</p>
+    fn delete_filter(
+        &self,
+        input: DeleteFilterRequest,
+    ) -> RusotoFuture<DeleteFilterResponse, DeleteFilterError> {
+        let request_uri = format!(
+            "/detector/{detector_id}/filter/{filter_name}",
+            detector_id = input.detector_id,
+            filter_name = input.filter_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "guardduty", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DeleteFilterResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteFilterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -5549,6 +6222,45 @@ impl GuardDuty for GuardDutyClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetDetectorError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Returns the details of the filter specified by the filter name.</p>
+    fn get_filter(
+        &self,
+        input: GetFilterRequest,
+    ) -> RusotoFuture<GetFilterResponse, GetFilterError> {
+        let request_uri = format!(
+            "/detector/{detector_id}/filter/{filter_name}",
+            detector_id = input.detector_id,
+            filter_name = input.filter_name
+        );
+
+        let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetFilterResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetFilterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -5914,6 +6626,53 @@ impl GuardDuty for GuardDutyClient {
         })
     }
 
+    /// <p>Returns a paginated list of the current filters.</p>
+    fn list_filters(
+        &self,
+        input: ListFiltersRequest,
+    ) -> RusotoFuture<ListFiltersResponse, ListFiltersError> {
+        let request_uri = format!(
+            "/detector/{detector_id}/filter",
+            detector_id = input.detector_id
+        );
+
+        let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListFiltersResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListFiltersError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Lists Amazon GuardDuty findings for the specified detector ID.</p>
     fn list_findings(
         &self,
@@ -6186,7 +6945,7 @@ impl GuardDuty for GuardDutyClient {
         })
     }
 
-    /// <p>Disables GuardDuty from monitoring findings of the member accounts specified by the account IDs. After running this command, a master GuardDuty account can run StartMonitoringMembers to re-enable GuardDuty to monitor these members&#39; findings.</p>
+    /// <p>Disables GuardDuty from monitoring findings of the member accounts specified by the account IDs. After running this command, a master GuardDuty account can run StartMonitoringMembers to re-enable GuardDuty to monitor these members’ findings.</p>
     fn stop_monitoring_members(
         &self,
         input: StopMonitoringMembersRequest,
@@ -6301,6 +7060,48 @@ impl GuardDuty for GuardDutyClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateDetectorError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Updates the filter specified by the filter name.</p>
+    fn update_filter(
+        &self,
+        input: UpdateFilterRequest,
+    ) -> RusotoFuture<UpdateFilterResponse, UpdateFilterError> {
+        let request_uri = format!(
+            "/detector/{detector_id}/filter/{filter_name}",
+            detector_id = input.detector_id,
+            filter_name = input.filter_name
+        );
+
+        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UpdateFilterResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateFilterError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
