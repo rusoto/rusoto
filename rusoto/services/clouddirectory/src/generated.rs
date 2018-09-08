@@ -98,8 +98,7 @@ pub struct AttachObjectResponse {
 pub struct AttachPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> where both objects reside. For more information, see <a>arns</a>.</p>
     #[serde(rename = "DirectoryArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub directory_arn: Option<String>,
+    pub directory_arn: String,
     /// <p>The reference that identifies the object to which the policy will be attached.</p>
     #[serde(rename = "ObjectReference")]
     pub object_reference: ObjectReference,
@@ -334,16 +333,19 @@ pub struct BatchCreateIndexResponse {
 pub struct BatchCreateObject {
     /// <p>The batch reference name. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_advanced.html#batches">Batches</a> for more information.</p>
     #[serde(rename = "BatchReferenceName")]
-    pub batch_reference_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub batch_reference_name: Option<String>,
     /// <p>The name of the link.</p>
     #[serde(rename = "LinkName")]
-    pub link_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub link_name: Option<String>,
     /// <p>An attribute map, which contains an attribute ARN as the key and attribute value as the map value.</p>
     #[serde(rename = "ObjectAttributeList")]
     pub object_attribute_list: Vec<AttributeKeyAndValue>,
     /// <p>If specified, the parent reference to which this object will be attached.</p>
     #[serde(rename = "ParentReference")]
-    pub parent_reference: ObjectReference,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_reference: Option<ObjectReference>,
     /// <p>A list of <code>FacetArns</code> that will be associated with the object. For more information, see <a>arns</a>.</p>
     #[serde(rename = "SchemaFacet")]
     pub schema_facet: Vec<SchemaFacet>,
@@ -395,7 +397,8 @@ pub struct BatchDetachFromIndexResponse {
 pub struct BatchDetachObject {
     /// <p>The batch reference name. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_advanced.html#batches">Batches</a> for more information.</p>
     #[serde(rename = "BatchReferenceName")]
-    pub batch_reference_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub batch_reference_name: Option<String>,
     /// <p>The name of the link.</p>
     #[serde(rename = "LinkName")]
     pub link_name: String,
@@ -439,6 +442,49 @@ pub struct BatchDetachTypedLink {
 /// <p>Represents the output of a <a>DetachTypedLink</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BatchDetachTypedLinkResponse {}
+
+/// <p>Retrieves attributes that are associated with a typed link inside a <a>BatchRead</a> operation. For more information, see <a>GetLinkAttributes</a> and <a>BatchReadRequest$Operations</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct BatchGetLinkAttributes {
+    /// <p>A list of attribute names whose values will be retrieved.</p>
+    #[serde(rename = "AttributeNames")]
+    pub attribute_names: Vec<String>,
+    /// <p>Allows a typed link specifier to be accepted as input.</p>
+    #[serde(rename = "TypedLinkSpecifier")]
+    pub typed_link_specifier: TypedLinkSpecifier,
+}
+
+/// <p>Represents the output of a <a>GetLinkAttributes</a> response operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct BatchGetLinkAttributesResponse {
+    /// <p>The attributes that are associated with the typed link.</p>
+    #[serde(rename = "Attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<Vec<AttributeKeyAndValue>>,
+}
+
+/// <p>Retrieves attributes within a facet that are associated with an object inside an <a>BatchRead</a> operation. For more information, see <a>GetObjectAttributes</a> and <a>BatchReadRequest$Operations</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct BatchGetObjectAttributes {
+    /// <p>List of attribute names whose values will be retrieved.</p>
+    #[serde(rename = "AttributeNames")]
+    pub attribute_names: Vec<String>,
+    /// <p>Reference that identifies the object whose attributes will be retrieved.</p>
+    #[serde(rename = "ObjectReference")]
+    pub object_reference: ObjectReference,
+    /// <p>Identifier for the facet whose attributes will be retrieved. See <a>SchemaFacet</a> for details.</p>
+    #[serde(rename = "SchemaFacet")]
+    pub schema_facet: SchemaFacet,
+}
+
+/// <p>Represents the output of a <a>GetObjectAttributes</a> response operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct BatchGetObjectAttributesResponse {
+    /// <p>The attribute values that are associated with an object.</p>
+    #[serde(rename = "Attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<Vec<AttributeKeyAndValue>>,
+}
 
 /// <p>Retrieves metadata about an object inside a <a>BatchRead</a> operation. For more information, see <a>GetObjectInformation</a> and <a>BatchReadRequest$Operations</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -791,6 +837,14 @@ pub struct BatchReadException {
 /// <p>Represents the output of a <code>BatchRead</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchReadOperation {
+    /// <p>Retrieves attributes that are associated with a typed link.</p>
+    #[serde(rename = "GetLinkAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub get_link_attributes: Option<BatchGetLinkAttributes>,
+    /// <p>Retrieves attributes within a facet that are associated with an object.</p>
+    #[serde(rename = "GetObjectAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub get_object_attributes: Option<BatchGetObjectAttributes>,
     /// <p>Retrieves metadata about an object.</p>
     #[serde(rename = "GetObjectInformation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -875,6 +929,14 @@ pub struct BatchReadResponse {
 /// <p>Represents the output of a <code>BatchRead</code> success response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BatchReadSuccessfulResponse {
+    /// <p>The list of attributes to retrieve from the typed link.</p>
+    #[serde(rename = "GetLinkAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub get_link_attributes: Option<BatchGetLinkAttributesResponse>,
+    /// <p>Retrieves attributes within a facet that are associated with an object.</p>
+    #[serde(rename = "GetObjectAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub get_object_attributes: Option<BatchGetObjectAttributesResponse>,
     /// <p>Retrieves metadata about an object.</p>
     #[serde(rename = "GetObjectInformation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -935,6 +997,21 @@ pub struct BatchRemoveFacetFromObject {
 /// <p>An empty result that represents success.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BatchRemoveFacetFromObjectResponse {}
+
+/// <p>Updates a given typed link’s attributes inside a <a>BatchRead</a> operation. Attributes to be updated must not contribute to the typed link’s identity, as defined by its <code>IdentityAttributeOrder</code>. For more information, see <a>UpdateLinkAttributes</a> and <a>BatchReadRequest$Operations</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct BatchUpdateLinkAttributes {
+    /// <p>The attributes update structure.</p>
+    #[serde(rename = "AttributeUpdates")]
+    pub attribute_updates: Vec<LinkAttributeUpdate>,
+    /// <p>Allows a typed link specifier to be accepted as input.</p>
+    #[serde(rename = "TypedLinkSpecifier")]
+    pub typed_link_specifier: TypedLinkSpecifier,
+}
+
+/// <p>Represents the output of a <a>UpdateLinkAttributes</a> response operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct BatchUpdateLinkAttributesResponse {}
 
 /// <p>Represents the output of a <code>BatchUpdate</code> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1012,6 +1089,10 @@ pub struct BatchWriteOperation {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remove_facet_from_object: Option<BatchRemoveFacetFromObject>,
     /// <p>Updates a given object's attributes.</p>
+    #[serde(rename = "UpdateLinkAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_link_attributes: Option<BatchUpdateLinkAttributes>,
+    /// <p>Updates a given object's attributes.</p>
     #[serde(rename = "UpdateObjectAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub update_object_attributes: Option<BatchUpdateObjectAttributes>,
@@ -1072,6 +1153,10 @@ pub struct BatchWriteOperationResponse {
     #[serde(rename = "RemoveFacetFromObject")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remove_facet_from_object: Option<BatchRemoveFacetFromObjectResponse>,
+    /// <p>Represents the output of a <code>BatchWrite</code> response operation.</p>
+    #[serde(rename = "UpdateLinkAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_link_attributes: Option<BatchUpdateLinkAttributesResponse>,
     /// <p>Updates a given object’s attributes.</p>
     #[serde(rename = "UpdateObjectAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1414,7 +1499,7 @@ pub struct EnableDirectoryResponse {
     pub directory_arn: String,
 }
 
-/// <p>A structure that contains <code>Name</code>, <code>ARN</code>, <code>Attributes</code>, <a>Rule</a>s, and <code>ObjectTypes</code>.</p>
+/// <p>A structure that contains <code>Name</code>, <code>ARN</code>, <code>Attributes</code>, <code> <a>Rule</a>s</code>, and <code>ObjectTypes</code>. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/whatarefacets.html">Facets</a> for more information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Facet {
     /// <p>The name of the <a>Facet</a>.</p>
@@ -1539,6 +1624,59 @@ pub struct GetFacetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetLinkAttributesRequest {
+    /// <p>A list of attribute names whose values will be retrieved.</p>
+    #[serde(rename = "AttributeNames")]
+    pub attribute_names: Vec<String>,
+    /// <p>The consistency level at which to retrieve the attributes on a typed link.</p>
+    #[serde(rename = "ConsistencyLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub consistency_level: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) that is associated with the Directory where the typed link resides. For more information, see <a>arns</a> or <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    #[serde(rename = "DirectoryArn")]
+    pub directory_arn: String,
+    /// <p>Allows a typed link specifier to be accepted as input.</p>
+    #[serde(rename = "TypedLinkSpecifier")]
+    pub typed_link_specifier: TypedLinkSpecifier,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct GetLinkAttributesResponse {
+    /// <p>The attributes that are associated with the typed link.</p>
+    #[serde(rename = "Attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<Vec<AttributeKeyAndValue>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetObjectAttributesRequest {
+    /// <p>List of attribute names whose values will be retrieved.</p>
+    #[serde(rename = "AttributeNames")]
+    pub attribute_names: Vec<String>,
+    /// <p>The consistency level at which to retrieve the attributes on an object.</p>
+    #[serde(rename = "ConsistencyLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub consistency_level: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> where the object resides.</p>
+    #[serde(rename = "DirectoryArn")]
+    pub directory_arn: String,
+    /// <p>Reference that identifies the object whose attributes will be retrieved.</p>
+    #[serde(rename = "ObjectReference")]
+    pub object_reference: ObjectReference,
+    /// <p>Identifier for the facet whose attributes will be retrieved. See <a>SchemaFacet</a> for details.</p>
+    #[serde(rename = "SchemaFacet")]
+    pub schema_facet: SchemaFacet,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct GetObjectAttributesResponse {
+    /// <p>The attributes that are associated with the object.</p>
+    #[serde(rename = "Attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<Vec<AttributeKeyAndValue>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetObjectInformationRequest {
     /// <p>The consistency level at which to retrieve the object information.</p>
     #[serde(rename = "ConsistencyLevel")]
@@ -1612,6 +1750,32 @@ pub struct IndexAttachment {
     #[serde(rename = "ObjectIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub object_identifier: Option<String>,
+}
+
+/// <p>The action to take on a typed link attribute value. Updates are only supported for attributes which don’t contribute to link identity.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct LinkAttributeAction {
+    /// <p>A type that can be either <code>UPDATE_OR_CREATE</code> or <code>DELETE</code>.</p>
+    #[serde(rename = "AttributeActionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attribute_action_type: Option<String>,
+    /// <p>The value that you want to update to.</p>
+    #[serde(rename = "AttributeUpdateValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attribute_update_value: Option<TypedAttributeValue>,
+}
+
+/// <p>Structure that contains attribute update information.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct LinkAttributeUpdate {
+    /// <p>The action to perform as part of the attribute update.</p>
+    #[serde(rename = "AttributeAction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attribute_action: Option<LinkAttributeAction>,
+    /// <p>The key of the attribute being updated.</p>
+    #[serde(rename = "AttributeKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attribute_key: Option<AttributeKey>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2487,7 +2651,7 @@ pub struct TypedAttributeValue {
     pub string_value: Option<String>,
 }
 
-/// <p>A range of attribute values.</p>
+/// <p>A range of attribute values. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#rangefilters">Range Filters</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TypedAttributeValueRange {
     /// <p>The inclusive or exclusive range end.</p>
@@ -2632,6 +2796,22 @@ pub struct UpdateFacetRequest {
 pub struct UpdateFacetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateLinkAttributesRequest {
+    /// <p>The attributes update structure.</p>
+    #[serde(rename = "AttributeUpdates")]
+    pub attribute_updates: Vec<LinkAttributeUpdate>,
+    /// <p>The Amazon Resource Name (ARN) that is associated with the Directory where the updated typed link resides. For more information, see <a>arns</a> or <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    #[serde(rename = "DirectoryArn")]
+    pub directory_arn: String,
+    /// <p>Allows a typed link specifier to be accepted as input.</p>
+    #[serde(rename = "TypedLinkSpecifier")]
+    pub typed_link_specifier: TypedLinkSpecifier,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct UpdateLinkAttributesResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateObjectAttributesRequest {
     /// <p>The attributes update structure.</p>
     #[serde(rename = "AttributeUpdates")]
@@ -2745,7 +2925,7 @@ pub struct UpgradePublishedSchemaResponse {
 pub enum AddFacetToObjectError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
@@ -2981,7 +3161,7 @@ impl Error for ApplySchemaError {
 pub enum AttachObjectError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
@@ -3114,7 +3294,7 @@ impl Error for AttachObjectError {
 pub enum AttachPolicyError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
@@ -3235,7 +3415,7 @@ impl Error for AttachPolicyError {
 pub enum AttachToIndexError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>An object has been attempted to be attached to an object that does not have the appropriate attribute value.</p>
     IndexedAttributeMissing(String),
@@ -3243,6 +3423,8 @@ pub enum AttachToIndexError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
+    /// <p>Indicates that an attempt to attach an object with the same link name or to apply a schema with the same name has occurred. Rename the link or the schema and then try again.</p>
+    InvalidAttachment(String),
     /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>Indicates that a link could not be created due to a naming conflict. Choose a different name and then try again.</p>
@@ -3291,6 +3473,9 @@ impl AttachToIndexError {
                     }
                     "InvalidArnException" => {
                         AttachToIndexError::InvalidArn(String::from(error_message))
+                    }
+                    "InvalidAttachmentException" => {
+                        AttachToIndexError::InvalidAttachment(String::from(error_message))
                     }
                     "LimitExceededException" => {
                         AttachToIndexError::LimitExceeded(String::from(error_message))
@@ -3351,6 +3536,7 @@ impl Error for AttachToIndexError {
             AttachToIndexError::IndexedAttributeMissing(ref cause) => cause,
             AttachToIndexError::InternalService(ref cause) => cause,
             AttachToIndexError::InvalidArn(ref cause) => cause,
+            AttachToIndexError::InvalidAttachment(ref cause) => cause,
             AttachToIndexError::LimitExceeded(ref cause) => cause,
             AttachToIndexError::LinkNameAlreadyInUse(ref cause) => cause,
             AttachToIndexError::NotIndex(ref cause) => cause,
@@ -3368,7 +3554,7 @@ impl Error for AttachToIndexError {
 pub enum AttachTypedLinkError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
@@ -3495,7 +3681,7 @@ impl Error for AttachTypedLinkError {
 pub enum BatchReadError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
@@ -3604,7 +3790,7 @@ pub enum BatchWriteError {
     AccessDenied(String),
     /// <p>A <code>BatchWrite</code> exception has occurred.</p>
     BatchWrite(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
@@ -3957,7 +4143,7 @@ impl Error for CreateFacetError {
 pub enum CreateIndexError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
@@ -4090,7 +4276,7 @@ impl Error for CreateIndexError {
 pub enum CreateObjectError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
@@ -4703,7 +4889,7 @@ impl Error for DeleteFacetError {
 pub enum DeleteObjectError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
@@ -5056,7 +5242,7 @@ impl Error for DeleteTypedLinkFacetError {
 pub enum DetachFromIndexError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
@@ -5183,7 +5369,7 @@ impl Error for DetachFromIndexError {
 pub enum DetachObjectError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
@@ -5191,6 +5377,8 @@ pub enum DetachObjectError {
     InvalidArn(String),
     /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
+    /// <p>Occurs when any invalid operations are performed on an object that is not a node, such as calling <code>ListObjectChildren</code> for a leaf node object.</p>
+    NotNode(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
@@ -5234,6 +5422,7 @@ impl DetachObjectError {
                     "LimitExceededException" => {
                         DetachObjectError::LimitExceeded(String::from(error_message))
                     }
+                    "NotNodeException" => DetachObjectError::NotNode(String::from(error_message)),
                     "ResourceNotFoundException" => {
                         DetachObjectError::ResourceNotFound(String::from(error_message))
                     }
@@ -5284,6 +5473,7 @@ impl Error for DetachObjectError {
             DetachObjectError::InternalService(ref cause) => cause,
             DetachObjectError::InvalidArn(ref cause) => cause,
             DetachObjectError::LimitExceeded(ref cause) => cause,
+            DetachObjectError::NotNode(ref cause) => cause,
             DetachObjectError::ResourceNotFound(ref cause) => cause,
             DetachObjectError::RetryableConflict(ref cause) => cause,
             DetachObjectError::Validation(ref cause) => cause,
@@ -5298,7 +5488,7 @@ impl Error for DetachObjectError {
 pub enum DetachPolicyError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
@@ -5419,7 +5609,7 @@ impl Error for DetachPolicyError {
 pub enum DetachTypedLinkError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
@@ -6090,12 +6280,258 @@ impl Error for GetFacetError {
         }
     }
 }
+/// Errors returned by GetLinkAttributes
+#[derive(Debug, PartialEq)]
+pub enum GetLinkAttributesError {
+    /// <p>Access denied. Check your permissions.</p>
+    AccessDenied(String),
+    /// <p>Operations are only permitted on enabled directories.</p>
+    DirectoryNotEnabled(String),
+    /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
+    FacetValidation(String),
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    InternalService(String),
+    /// <p>Indicates that the provided ARN value is not valid.</p>
+    InvalidArn(String),
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    RetryableConflict(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetLinkAttributesError {
+    pub fn from_body(body: &str) -> GetLinkAttributesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        GetLinkAttributesError::AccessDenied(String::from(error_message))
+                    }
+                    "DirectoryNotEnabledException" => {
+                        GetLinkAttributesError::DirectoryNotEnabled(String::from(error_message))
+                    }
+                    "FacetValidationException" => {
+                        GetLinkAttributesError::FacetValidation(String::from(error_message))
+                    }
+                    "InternalServiceException" => {
+                        GetLinkAttributesError::InternalService(String::from(error_message))
+                    }
+                    "InvalidArnException" => {
+                        GetLinkAttributesError::InvalidArn(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        GetLinkAttributesError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        GetLinkAttributesError::ResourceNotFound(String::from(error_message))
+                    }
+                    "RetryableConflictException" => {
+                        GetLinkAttributesError::RetryableConflict(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetLinkAttributesError::Validation(error_message.to_string())
+                    }
+                    _ => GetLinkAttributesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetLinkAttributesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetLinkAttributesError {
+    fn from(err: serde_json::error::Error) -> GetLinkAttributesError {
+        GetLinkAttributesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetLinkAttributesError {
+    fn from(err: CredentialsError) -> GetLinkAttributesError {
+        GetLinkAttributesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetLinkAttributesError {
+    fn from(err: HttpDispatchError) -> GetLinkAttributesError {
+        GetLinkAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetLinkAttributesError {
+    fn from(err: io::Error) -> GetLinkAttributesError {
+        GetLinkAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetLinkAttributesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetLinkAttributesError {
+    fn description(&self) -> &str {
+        match *self {
+            GetLinkAttributesError::AccessDenied(ref cause) => cause,
+            GetLinkAttributesError::DirectoryNotEnabled(ref cause) => cause,
+            GetLinkAttributesError::FacetValidation(ref cause) => cause,
+            GetLinkAttributesError::InternalService(ref cause) => cause,
+            GetLinkAttributesError::InvalidArn(ref cause) => cause,
+            GetLinkAttributesError::LimitExceeded(ref cause) => cause,
+            GetLinkAttributesError::ResourceNotFound(ref cause) => cause,
+            GetLinkAttributesError::RetryableConflict(ref cause) => cause,
+            GetLinkAttributesError::Validation(ref cause) => cause,
+            GetLinkAttributesError::Credentials(ref err) => err.description(),
+            GetLinkAttributesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetLinkAttributesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetObjectAttributes
+#[derive(Debug, PartialEq)]
+pub enum GetObjectAttributesError {
+    /// <p>Access denied. Check your permissions.</p>
+    AccessDenied(String),
+    /// <p>Operations are only permitted on enabled directories.</p>
+    DirectoryNotEnabled(String),
+    /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
+    FacetValidation(String),
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    InternalService(String),
+    /// <p>Indicates that the provided ARN value is not valid.</p>
+    InvalidArn(String),
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    RetryableConflict(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetObjectAttributesError {
+    pub fn from_body(body: &str) -> GetObjectAttributesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        GetObjectAttributesError::AccessDenied(String::from(error_message))
+                    }
+                    "DirectoryNotEnabledException" => {
+                        GetObjectAttributesError::DirectoryNotEnabled(String::from(error_message))
+                    }
+                    "FacetValidationException" => {
+                        GetObjectAttributesError::FacetValidation(String::from(error_message))
+                    }
+                    "InternalServiceException" => {
+                        GetObjectAttributesError::InternalService(String::from(error_message))
+                    }
+                    "InvalidArnException" => {
+                        GetObjectAttributesError::InvalidArn(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        GetObjectAttributesError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        GetObjectAttributesError::ResourceNotFound(String::from(error_message))
+                    }
+                    "RetryableConflictException" => {
+                        GetObjectAttributesError::RetryableConflict(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetObjectAttributesError::Validation(error_message.to_string())
+                    }
+                    _ => GetObjectAttributesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetObjectAttributesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetObjectAttributesError {
+    fn from(err: serde_json::error::Error) -> GetObjectAttributesError {
+        GetObjectAttributesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetObjectAttributesError {
+    fn from(err: CredentialsError) -> GetObjectAttributesError {
+        GetObjectAttributesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetObjectAttributesError {
+    fn from(err: HttpDispatchError) -> GetObjectAttributesError {
+        GetObjectAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetObjectAttributesError {
+    fn from(err: io::Error) -> GetObjectAttributesError {
+        GetObjectAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetObjectAttributesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetObjectAttributesError {
+    fn description(&self) -> &str {
+        match *self {
+            GetObjectAttributesError::AccessDenied(ref cause) => cause,
+            GetObjectAttributesError::DirectoryNotEnabled(ref cause) => cause,
+            GetObjectAttributesError::FacetValidation(ref cause) => cause,
+            GetObjectAttributesError::InternalService(ref cause) => cause,
+            GetObjectAttributesError::InvalidArn(ref cause) => cause,
+            GetObjectAttributesError::LimitExceeded(ref cause) => cause,
+            GetObjectAttributesError::ResourceNotFound(ref cause) => cause,
+            GetObjectAttributesError::RetryableConflict(ref cause) => cause,
+            GetObjectAttributesError::Validation(ref cause) => cause,
+            GetObjectAttributesError::Credentials(ref err) => err.description(),
+            GetObjectAttributesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetObjectAttributesError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetObjectInformation
 #[derive(Debug, PartialEq)]
 pub enum GetObjectInformationError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
@@ -6569,7 +7005,7 @@ impl Error for ListAppliedSchemaArnsError {
 pub enum ListAttachedIndicesError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
@@ -7156,7 +7592,7 @@ impl Error for ListFacetNamesError {
 pub enum ListIncomingTypedLinksError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
@@ -7287,12 +7723,16 @@ impl Error for ListIncomingTypedLinksError {
 pub enum ListIndexError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
+    /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
+    FacetValidation(String),
     /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
+    /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
+    InvalidNextToken(String),
     /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>Indicates that the requested operation can only operate on index objects.</p>
@@ -7331,11 +7771,17 @@ impl ListIndexError {
                     "DirectoryNotEnabledException" => {
                         ListIndexError::DirectoryNotEnabled(String::from(error_message))
                     }
+                    "FacetValidationException" => {
+                        ListIndexError::FacetValidation(String::from(error_message))
+                    }
                     "InternalServiceException" => {
                         ListIndexError::InternalService(String::from(error_message))
                     }
                     "InvalidArnException" => {
                         ListIndexError::InvalidArn(String::from(error_message))
+                    }
+                    "InvalidNextTokenException" => {
+                        ListIndexError::InvalidNextToken(String::from(error_message))
                     }
                     "LimitExceededException" => {
                         ListIndexError::LimitExceeded(String::from(error_message))
@@ -7386,8 +7832,10 @@ impl Error for ListIndexError {
         match *self {
             ListIndexError::AccessDenied(ref cause) => cause,
             ListIndexError::DirectoryNotEnabled(ref cause) => cause,
+            ListIndexError::FacetValidation(ref cause) => cause,
             ListIndexError::InternalService(ref cause) => cause,
             ListIndexError::InvalidArn(ref cause) => cause,
+            ListIndexError::InvalidNextToken(ref cause) => cause,
             ListIndexError::LimitExceeded(ref cause) => cause,
             ListIndexError::NotIndex(ref cause) => cause,
             ListIndexError::ResourceNotFound(ref cause) => cause,
@@ -7404,7 +7852,7 @@ impl Error for ListIndexError {
 pub enum ListObjectAttributesError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
@@ -7533,7 +7981,7 @@ impl Error for ListObjectAttributesError {
 pub enum ListObjectChildrenError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
@@ -7662,7 +8110,7 @@ impl Error for ListObjectChildrenError {
 pub enum ListObjectParentPathsError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
@@ -7787,7 +8235,7 @@ pub enum ListObjectParentsError {
     AccessDenied(String),
     /// <p>Cannot list the parents of a <a>Directory</a> root.</p>
     CannotListParentOfRoot(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
@@ -7914,7 +8362,7 @@ impl Error for ListObjectParentsError {
 pub enum ListObjectPoliciesError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
@@ -8037,7 +8485,7 @@ impl Error for ListObjectPoliciesError {
 pub enum ListOutgoingTypedLinksError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
@@ -8168,7 +8616,7 @@ impl Error for ListOutgoingTypedLinksError {
 pub enum ListPolicyAttachmentsError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
@@ -8779,7 +9227,7 @@ impl Error for ListTypedLinkFacetNamesError {
 pub enum LookupPolicyError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
@@ -9132,7 +9580,7 @@ impl Error for PutSchemaFromJsonError {
 pub enum RemoveFacetFromObjectError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
@@ -9607,12 +10055,12 @@ impl Error for UpdateFacetError {
         }
     }
 }
-/// Errors returned by UpdateObjectAttributes
+/// Errors returned by UpdateLinkAttributes
 #[derive(Debug, PartialEq)]
-pub enum UpdateObjectAttributesError {
+pub enum UpdateLinkAttributesError {
     /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    /// <p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>Operations are only permitted on enabled directories.</p>
     DirectoryNotEnabled(String),
     /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
@@ -9622,6 +10070,131 @@ pub enum UpdateObjectAttributesError {
     InvalidArn(String),
     /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
+    /// <p>The specified resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    RetryableConflict(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateLinkAttributesError {
+    pub fn from_body(body: &str) -> UpdateLinkAttributesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        UpdateLinkAttributesError::AccessDenied(String::from(error_message))
+                    }
+                    "DirectoryNotEnabledException" => {
+                        UpdateLinkAttributesError::DirectoryNotEnabled(String::from(error_message))
+                    }
+                    "FacetValidationException" => {
+                        UpdateLinkAttributesError::FacetValidation(String::from(error_message))
+                    }
+                    "InternalServiceException" => {
+                        UpdateLinkAttributesError::InternalService(String::from(error_message))
+                    }
+                    "InvalidArnException" => {
+                        UpdateLinkAttributesError::InvalidArn(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        UpdateLinkAttributesError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpdateLinkAttributesError::ResourceNotFound(String::from(error_message))
+                    }
+                    "RetryableConflictException" => {
+                        UpdateLinkAttributesError::RetryableConflict(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateLinkAttributesError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateLinkAttributesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateLinkAttributesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateLinkAttributesError {
+    fn from(err: serde_json::error::Error) -> UpdateLinkAttributesError {
+        UpdateLinkAttributesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateLinkAttributesError {
+    fn from(err: CredentialsError) -> UpdateLinkAttributesError {
+        UpdateLinkAttributesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateLinkAttributesError {
+    fn from(err: HttpDispatchError) -> UpdateLinkAttributesError {
+        UpdateLinkAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateLinkAttributesError {
+    fn from(err: io::Error) -> UpdateLinkAttributesError {
+        UpdateLinkAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateLinkAttributesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateLinkAttributesError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateLinkAttributesError::AccessDenied(ref cause) => cause,
+            UpdateLinkAttributesError::DirectoryNotEnabled(ref cause) => cause,
+            UpdateLinkAttributesError::FacetValidation(ref cause) => cause,
+            UpdateLinkAttributesError::InternalService(ref cause) => cause,
+            UpdateLinkAttributesError::InvalidArn(ref cause) => cause,
+            UpdateLinkAttributesError::LimitExceeded(ref cause) => cause,
+            UpdateLinkAttributesError::ResourceNotFound(ref cause) => cause,
+            UpdateLinkAttributesError::RetryableConflict(ref cause) => cause,
+            UpdateLinkAttributesError::Validation(ref cause) => cause,
+            UpdateLinkAttributesError::Credentials(ref err) => err.description(),
+            UpdateLinkAttributesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateLinkAttributesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateObjectAttributes
+#[derive(Debug, PartialEq)]
+pub enum UpdateObjectAttributesError {
+    /// <p>Access denied. Check your permissions.</p>
+    AccessDenied(String),
+    /// <p>Operations are only permitted on enabled directories.</p>
+    DirectoryNotEnabled(String),
+    /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
+    FacetValidation(String),
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    InternalService(String),
+    /// <p>Indicates that the provided ARN value is not valid.</p>
+    InvalidArn(String),
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    LimitExceeded(String),
+    /// <p>Indicates that a link could not be created due to a naming conflict. Choose a different name and then try again.</p>
+    LinkNameAlreadyInUse(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
@@ -9669,6 +10242,11 @@ impl UpdateObjectAttributesError {
                     }
                     "LimitExceededException" => {
                         UpdateObjectAttributesError::LimitExceeded(String::from(error_message))
+                    }
+                    "LinkNameAlreadyInUseException" => {
+                        UpdateObjectAttributesError::LinkNameAlreadyInUse(String::from(
+                            error_message,
+                        ))
                     }
                     "ResourceNotFoundException" => {
                         UpdateObjectAttributesError::ResourceNotFound(String::from(error_message))
@@ -9721,6 +10299,7 @@ impl Error for UpdateObjectAttributesError {
             UpdateObjectAttributesError::InternalService(ref cause) => cause,
             UpdateObjectAttributesError::InvalidArn(ref cause) => cause,
             UpdateObjectAttributesError::LimitExceeded(ref cause) => cause,
+            UpdateObjectAttributesError::LinkNameAlreadyInUse(ref cause) => cause,
             UpdateObjectAttributesError::ResourceNotFound(ref cause) => cause,
             UpdateObjectAttributesError::RetryableConflict(ref cause) => cause,
             UpdateObjectAttributesError::Validation(ref cause) => cause,
@@ -10218,7 +10797,7 @@ impl Error for UpgradePublishedSchemaError {
 }
 /// Trait representing the capabilities of the Amazon CloudDirectory API. Amazon CloudDirectory clients implement this trait.
 pub trait CloudDirectory {
-    /// <p>Adds a new <a>Facet</a> to an object.</p>
+    /// <p>Adds a new <a>Facet</a> to an object. An object can have more than one facet applied on it.</p>
     fn add_facet_to_object(
         &self,
         input: AddFacetToObjectRequest,
@@ -10383,6 +10962,18 @@ pub trait CloudDirectory {
     /// <p>Gets details of the <a>Facet</a>, such as facet name, attributes, <a>Rule</a>s, or <code>ObjectType</code>. You can call this on all kinds of schema facets -- published, development, or applied.</p>
     fn get_facet(&self, input: GetFacetRequest) -> RusotoFuture<GetFacetResponse, GetFacetError>;
 
+    /// <p>Retrieves attributes that are associated with a typed link.</p>
+    fn get_link_attributes(
+        &self,
+        input: GetLinkAttributesRequest,
+    ) -> RusotoFuture<GetLinkAttributesResponse, GetLinkAttributesError>;
+
+    /// <p>Retrieves attributes within a facet that are associated with an object.</p>
+    fn get_object_attributes(
+        &self,
+        input: GetObjectAttributesRequest,
+    ) -> RusotoFuture<GetObjectAttributesResponse, GetObjectAttributesError>;
+
     /// <p>Retrieves metadata about an object.</p>
     fn get_object_information(
         &self,
@@ -10443,7 +11034,7 @@ pub trait CloudDirectory {
         input: ListIncomingTypedLinksRequest,
     ) -> RusotoFuture<ListIncomingTypedLinksResponse, ListIncomingTypedLinksError>;
 
-    /// <p>Lists objects and indexed values attached to the index.</p>
+    /// <p>Lists objects attached to the specified index.</p>
     fn list_index(
         &self,
         input: ListIndexRequest,
@@ -10491,7 +11082,7 @@ pub trait CloudDirectory {
         input: ListPolicyAttachmentsRequest,
     ) -> RusotoFuture<ListPolicyAttachmentsResponse, ListPolicyAttachmentsError>;
 
-    /// <p>Lists schema major versions for a published schema. If <code>SchemaArn</code> is provided, lists the minor version.</p>
+    /// <p>Lists the major version families of each published schema. If a major version ARN is provided as <code>SchemaArn</code>, the minor version revisions in that family are listed instead.</p>
     fn list_published_schema_arns(
         &self,
         input: ListPublishedSchemaArnsRequest,
@@ -10556,6 +11147,12 @@ pub trait CloudDirectory {
         &self,
         input: UpdateFacetRequest,
     ) -> RusotoFuture<UpdateFacetResponse, UpdateFacetError>;
+
+    /// <p>Updates a given typed link’s attributes. Attributes to be updated must not contribute to the typed link’s identity, as defined by its <code>IdentityAttributeOrder</code>.</p>
+    fn update_link_attributes(
+        &self,
+        input: UpdateLinkAttributesRequest,
+    ) -> RusotoFuture<UpdateLinkAttributesResponse, UpdateLinkAttributesError>;
 
     /// <p>Updates a given object's attributes.</p>
     fn update_object_attributes(
@@ -10623,7 +11220,7 @@ impl CloudDirectoryClient {
 }
 
 impl CloudDirectory for CloudDirectoryClient {
-    /// <p>Adds a new <a>Facet</a> to an object.</p>
+    /// <p>Adds a new <a>Facet</a> to an object. An object can have more than one facet applied on it.</p>
     fn add_facet_to_object(
         &self,
         input: AddFacetToObjectRequest,
@@ -10752,10 +11349,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-
-        if let Some(ref directory_arn) = input.directory_arn {
-            request.add_header("x-amz-data-partition", &directory_arn.to_string());
-        }
+        request.add_header("x-amz-data-partition", &input.directory_arn);
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
@@ -11702,6 +12296,90 @@ impl CloudDirectory for CloudDirectoryClient {
         })
     }
 
+    /// <p>Retrieves attributes that are associated with a typed link.</p>
+    fn get_link_attributes(
+        &self,
+        input: GetLinkAttributesRequest,
+    ) -> RusotoFuture<GetLinkAttributesResponse, GetLinkAttributesError> {
+        let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/attributes/get";
+
+        let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+        request.add_header("x-amz-data-partition", &input.directory_arn);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetLinkAttributesResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetLinkAttributesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Retrieves attributes within a facet that are associated with an object.</p>
+    fn get_object_attributes(
+        &self,
+        input: GetObjectAttributesRequest,
+    ) -> RusotoFuture<GetObjectAttributesResponse, GetObjectAttributesError> {
+        let request_uri = "/amazonclouddirectory/2017-01-11/object/attributes/get";
+
+        let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        if let Some(ref consistency_level) = input.consistency_level {
+            request.add_header("x-amz-consistency-level", &consistency_level.to_string());
+        }
+        request.add_header("x-amz-data-partition", &input.directory_arn);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetObjectAttributesResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetObjectAttributesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Retrieves metadata about an object.</p>
     fn get_object_information(
         &self,
@@ -12103,7 +12781,7 @@ impl CloudDirectory for CloudDirectoryClient {
         })
     }
 
-    /// <p>Lists objects and indexed values attached to the index.</p>
+    /// <p>Lists objects attached to the specified index.</p>
     fn list_index(
         &self,
         input: ListIndexRequest,
@@ -12446,7 +13124,7 @@ impl CloudDirectory for CloudDirectoryClient {
         })
     }
 
-    /// <p>Lists schema major versions for a published schema. If <code>SchemaArn</code> is provided, lists the minor version.</p>
+    /// <p>Lists the major version families of each published schema. If a major version ARN is provided as <code>SchemaArn</code>, the minor version revisions in that family are listed instead.</p>
     fn list_published_schema_arns(
         &self,
         input: ListPublishedSchemaArnsRequest,
@@ -12871,6 +13549,46 @@ impl CloudDirectory for CloudDirectoryClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateFacetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Updates a given typed link’s attributes. Attributes to be updated must not contribute to the typed link’s identity, as defined by its <code>IdentityAttributeOrder</code>.</p>
+    fn update_link_attributes(
+        &self,
+        input: UpdateLinkAttributesRequest,
+    ) -> RusotoFuture<UpdateLinkAttributesResponse, UpdateLinkAttributesError> {
+        let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/attributes/update";
+
+        let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+        request.add_header("x-amz-data-partition", &input.directory_arn);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<UpdateLinkAttributesResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateLinkAttributesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

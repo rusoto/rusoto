@@ -271,7 +271,7 @@ pub struct BlueInstanceTerminationOption {
     #[serde(rename = "action")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<String>,
-    /// <p>The number of minutes to wait after a successful blue/green deployment before terminating instances from the original environment.</p>
+    /// <p>The number of minutes to wait after a successful blue/green deployment before terminating instances from the original environment. The maximum setting is 2880 minutes (2 days).</p>
     #[serde(rename = "terminationWaitTimeInMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub termination_wait_time_in_minutes: Option<i64>,
@@ -772,7 +772,7 @@ pub struct DeploymentOverview {
 /// <p>Information about how traffic is rerouted to instances in a replacement environment in a blue/green deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeploymentReadyOption {
-    /// <p><p>Information about when to reroute traffic from an original environment to a replacement environment in a blue/green deployment.</p> <ul> <li> <p>CONTINUE<em>DEPLOYMENT: Register new instances with the load balancer immediately after the new application revision is installed on the instances in the replacement environment.</p> </li> <li> <p>STOP</em>DEPLOYMENT: Do not register new instances with load balancer unless traffic is rerouted manually. If traffic is not rerouted manually before the end of the specified wait period, the deployment status is changed to Stopped.</p> </li> </ul></p>
+    /// <p><p>Information about when to reroute traffic from an original environment to a replacement environment in a blue/green deployment.</p> <ul> <li> <p>CONTINUE<em>DEPLOYMENT: Register new instances with the load balancer immediately after the new application revision is installed on the instances in the replacement environment.</p> </li> <li> <p>STOP</em>DEPLOYMENT: Do not register new instances with a load balancer unless traffic rerouting is started using <a>ContinueDeployment</a>. If traffic rerouting is not started before the end of the specified wait period, the deployment status is changed to Stopped.</p> </li> </ul></p>
     #[serde(rename = "actionOnTimeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_on_timeout: Option<String>,
@@ -1407,11 +1407,11 @@ pub struct ListOnPremisesInstancesOutput {
 /// <p>Information about the Elastic Load Balancing load balancer or target group used in a deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoadBalancerInfo {
-    /// <p>An array containing information about the load balancer to use for load balancing in a deployment. In Elastic Load Balancing, load balancers are used with Classic Load Balancers.</p>
+    /// <p><p>An array containing information about the load balancer to use for load balancing in a deployment. In Elastic Load Balancing, load balancers are used with Classic Load Balancers.</p> <note> <p> Adding more than one load balancer to the array is not supported. </p> </note></p>
     #[serde(rename = "elbInfoList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub elb_info_list: Option<Vec<ELBInfo>>,
-    /// <p>An array containing information about the target group to use for load balancing in a deployment. In Elastic Load Balancing, target groups are used with Application Load Balancers.</p>
+    /// <p><p>An array containing information about the target group to use for load balancing in a deployment. In Elastic Load Balancing, target groups are used with Application Load Balancers.</p> <note> <p> Adding more than one target group to the array is not supported. </p> </note></p>
     #[serde(rename = "targetGroupInfoList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_group_info_list: Option<Vec<TargetGroupInfo>>,
@@ -2893,6 +2893,8 @@ pub enum CreateDeploymentError {
     InvalidDeploymentGroupName(String),
     /// <p>An invalid fileExistsBehavior option was specified to determine how AWS CodeDeploy handles files or directories that already exist in a deployment target location but weren't part of the previous successful deployment. Valid values include "DISALLOW", "OVERWRITE", and "RETAIN".</p>
     InvalidFileExistsBehavior(String),
+    /// <p>The GitHub token is not valid.</p>
+    InvalidGitHubAccountToken(String),
     /// <p>The IgnoreApplicationStopFailures value is invalid. For AWS Lambda deployments, <code>false</code> is expected. For EC2/On-premises deployments, <code>true</code> or <code>false</code> is expected.</p>
     InvalidIgnoreApplicationStopFailuresValue(String),
     /// <p>An invalid load balancer name, or no load balancer name, was specified.</p>
@@ -2988,6 +2990,11 @@ impl CreateDeploymentError {
                             error_message,
                         ))
                     }
+                    "InvalidGitHubAccountTokenException" => {
+                        CreateDeploymentError::InvalidGitHubAccountToken(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidIgnoreApplicationStopFailuresValueException" => {
                         CreateDeploymentError::InvalidIgnoreApplicationStopFailuresValue(
                             String::from(error_message),
@@ -3071,6 +3078,7 @@ impl Error for CreateDeploymentError {
             CreateDeploymentError::InvalidDeploymentConfigName(ref cause) => cause,
             CreateDeploymentError::InvalidDeploymentGroupName(ref cause) => cause,
             CreateDeploymentError::InvalidFileExistsBehavior(ref cause) => cause,
+            CreateDeploymentError::InvalidGitHubAccountToken(ref cause) => cause,
             CreateDeploymentError::InvalidIgnoreApplicationStopFailuresValue(ref cause) => cause,
             CreateDeploymentError::InvalidLoadBalancerInfo(ref cause) => cause,
             CreateDeploymentError::InvalidRevision(ref cause) => cause,

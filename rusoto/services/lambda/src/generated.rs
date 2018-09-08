@@ -183,7 +183,7 @@ pub struct CreateAliasRequest {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateEventSourceMappingRequest {
-    /// <p>The largest number of records that AWS Lambda will retrieve from your event source at the time of invoking your function. Your function receives an event with all the retrieved records. The default is 100 records.</p>
+    /// <p>The largest number of records that AWS Lambda will retrieve from your event source at the time of invoking your function. Your function receives an event with all the retrieved records. The default for Amazon Kinesis and Amazon DynamoDB is 100 records. For SQS, the default is 1.</p>
     #[serde(rename = "BatchSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_size: Option<i64>,
@@ -191,7 +191,7 @@ pub struct CreateEventSourceMappingRequest {
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p>The Amazon Resource Name (ARN) of the Amazon Kinesis or the Amazon DynamoDB stream that is the event source. Any record added to this stream could cause AWS Lambda to invoke your Lambda function, it depends on the <code>BatchSize</code>. AWS Lambda POSTs the Amazon Kinesis event, containing records, to your Lambda function as JSON.</p>
+    /// <p>The Amazon Resource Name (ARN) of the event source. Any record added to this source could cause AWS Lambda to invoke your Lambda function, it depends on the <code>BatchSize</code>. AWS Lambda POSTs the event's records to your Lambda function as JSON.</p>
     #[serde(rename = "EventSourceArn")]
     pub event_source_arn: String,
     /// <p>The Lambda function to invoke when AWS Lambda detects an event on the stream.</p> <p> You can specify the function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). </p> <p> If you are using versioning, you can also provide a qualified function ARN (ARN that is qualified with function version or alias name as suffix). For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a> </p> <p>AWS Lambda also allows you to specify only the function name with the account ID qualifier (for example, <code>account-id:Thumbnail</code>). </p> <p>Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
@@ -199,7 +199,8 @@ pub struct CreateEventSourceMappingRequest {
     pub function_name: String,
     /// <p>The position in the DynamoDB or Kinesis stream where AWS Lambda should start reading. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetShardIterator.html#Kinesis-GetShardIterator-request-ShardIteratorType">GetShardIterator</a> in the <i>Amazon Kinesis API Reference Guide</i> or <a href="http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_streams_GetShardIterator.html">GetShardIterator</a> in the <i>Amazon DynamoDB API Reference Guide</i>. The <code>AT_TIMESTAMP</code> value is supported only for <a href="http://docs.aws.amazon.com/streams/latest/dev/amazon-kinesis-streams.html">Kinesis streams</a>. </p>
     #[serde(rename = "StartingPosition")]
-    pub starting_position: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub starting_position: Option<String>,
     /// <p>The timestamp of the data record from which to start reading. Used with <a href="http://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetShardIterator.html#Kinesis-GetShardIterator-request-ShardIteratorType">shard iterator type</a> AT_TIMESTAMP. If a record with this exact timestamp does not exist, the iterator returned is for the next (later) record. If the timestamp is older than the current trim horizon, the iterator returned is for the oldest untrimmed data record (TRIM_HORIZON). Valid only for <a href="http://docs.aws.amazon.com/streams/latest/dev/amazon-kinesis-streams.html">Kinesis streams</a>. </p>
     #[serde(rename = "StartingPositionTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -344,18 +345,18 @@ pub struct EnvironmentResponse {
     pub variables: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>Describes mapping between an Amazon Kinesis stream and a Lambda function.</p>
+/// <p>Describes mapping between an Amazon Kinesis or DynamoDB stream or an Amazon SQS queue and a Lambda function.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct EventSourceMappingConfiguration {
     /// <p>The largest number of records that AWS Lambda will retrieve from your event source at the time of invoking your function. Your function receives an event with all the retrieved records.</p>
     #[serde(rename = "BatchSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_size: Option<i64>,
-    /// <p>The Amazon Resource Name (ARN) of the Amazon Kinesis stream that is the source of events.</p>
+    /// <p>The Amazon Resource Name (ARN) of the Amazon Kinesis or DynamoDB stream or the SQS queue that is the source of events.</p>
     #[serde(rename = "EventSourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_source_arn: Option<String>,
-    /// <p>The Lambda function to invoke when AWS Lambda detects an event on the stream.</p>
+    /// <p>The Lambda function to invoke when AWS Lambda detects an event on the poll-based source.</p>
     #[serde(rename = "FunctionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub function_arn: Option<String>,
@@ -705,7 +706,7 @@ pub struct ListAliasesResponse {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListEventSourceMappingsRequest {
-    /// <p>The Amazon Resource Name (ARN) of the Amazon Kinesis stream. (This parameter is optional.)</p>
+    /// <p>The Amazon Resource Name (ARN) of the Amazon Kinesis or DynamoDB stream, or an SQS queue. (This parameter is optional.)</p>
     #[serde(rename = "EventSourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_source_arn: Option<String>,
@@ -1594,6 +1595,8 @@ impl Error for DeleteAliasError {
 pub enum DeleteEventSourceMappingError {
     /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
     InvalidParameterValue(String),
+    /// <p>The operation conflicts with the resource's availability. For example, you attempted to update an EventSoure Mapping in CREATING, or tried to delete a EventSoure mapping currently in the UPDATING state. </p>
+    ResourceInUse(String),
     /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
@@ -1628,6 +1631,9 @@ impl DeleteEventSourceMappingError {
                         DeleteEventSourceMappingError::InvalidParameterValue(String::from(
                             error_message,
                         ))
+                    }
+                    "ResourceInUseException" => {
+                        DeleteEventSourceMappingError::ResourceInUse(String::from(error_message))
                     }
                     "ResourceNotFoundException" => {
                         DeleteEventSourceMappingError::ResourceNotFound(String::from(error_message))
@@ -1678,6 +1684,7 @@ impl Error for DeleteEventSourceMappingError {
     fn description(&self) -> &str {
         match *self {
             DeleteEventSourceMappingError::InvalidParameterValue(ref cause) => cause,
+            DeleteEventSourceMappingError::ResourceInUse(ref cause) => cause,
             DeleteEventSourceMappingError::ResourceNotFound(ref cause) => cause,
             DeleteEventSourceMappingError::Service(ref cause) => cause,
             DeleteEventSourceMappingError::TooManyRequests(ref cause) => cause,
@@ -3832,6 +3839,8 @@ pub enum UpdateEventSourceMappingError {
     InvalidParameterValue(String),
     /// <p>The resource already exists.</p>
     ResourceConflict(String),
+    /// <p>The operation conflicts with the resource's availability. For example, you attempted to update an EventSoure Mapping in CREATING, or tried to delete a EventSoure mapping currently in the UPDATING state. </p>
+    ResourceInUse(String),
     /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
@@ -3869,6 +3878,9 @@ impl UpdateEventSourceMappingError {
                     }
                     "ResourceConflictException" => {
                         UpdateEventSourceMappingError::ResourceConflict(String::from(error_message))
+                    }
+                    "ResourceInUseException" => {
+                        UpdateEventSourceMappingError::ResourceInUse(String::from(error_message))
                     }
                     "ResourceNotFoundException" => {
                         UpdateEventSourceMappingError::ResourceNotFound(String::from(error_message))
@@ -3920,6 +3932,7 @@ impl Error for UpdateEventSourceMappingError {
         match *self {
             UpdateEventSourceMappingError::InvalidParameterValue(ref cause) => cause,
             UpdateEventSourceMappingError::ResourceConflict(ref cause) => cause,
+            UpdateEventSourceMappingError::ResourceInUse(ref cause) => cause,
             UpdateEventSourceMappingError::ResourceNotFound(ref cause) => cause,
             UpdateEventSourceMappingError::Service(ref cause) => cause,
             UpdateEventSourceMappingError::TooManyRequests(ref cause) => cause,
@@ -4178,7 +4191,7 @@ pub trait Lambda {
         input: CreateAliasRequest,
     ) -> RusotoFuture<AliasConfiguration, CreateAliasError>;
 
-    /// <p>Identifies a stream as an event source for a Lambda function. It can be either an Amazon Kinesis stream or an Amazon DynamoDB stream. AWS Lambda invokes the specified function when records are posted to the stream.</p> <p>This association between a stream source and a Lambda function is called the event source mapping.</p> <p>You provide mapping information (for example, which stream to read from and which Lambda function to invoke) in the request body.</p> <p>Each event source, such as an Amazon Kinesis or a DynamoDB stream, can be associated with multiple AWS Lambda functions. A given Lambda function can be associated with multiple AWS event sources.</p> <p>If you are using versioning, you can specify a specific function version or an alias via the function name parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateEventSourceMapping</code> action.</p>
+    /// <p>Identifies a poll-based event source for a Lambda function. It can be either an Amazon Kinesis or DynamoDB stream, or an Amazon SQS queue. AWS Lambda invokes the specified function when records are posted to the event source.</p> <p>This association between a poll-based source and a Lambda function is called the event source mapping.</p> <p>You provide mapping information (for example, which stream or SQS queue to read from and which Lambda function to invoke) in the request body.</p> <p>Amazon Kinesis or DynamoDB stream event sources can be associated with multiple AWS Lambda functions and a given Lambda function can be associated with multiple AWS event sources. For Amazon SQS, you can configure multiple queues as event sources for a single Lambda function, but an SQS queue can be mapped only to a single Lambda function.</p> <p>If you are using versioning, you can specify a specific function version or an alias via the function name parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateEventSourceMapping</code> action.</p>
     fn create_event_source_mapping(
         &self,
         input: CreateEventSourceMappingRequest,
@@ -4451,7 +4464,7 @@ impl Lambda for LambdaClient {
         })
     }
 
-    /// <p>Identifies a stream as an event source for a Lambda function. It can be either an Amazon Kinesis stream or an Amazon DynamoDB stream. AWS Lambda invokes the specified function when records are posted to the stream.</p> <p>This association between a stream source and a Lambda function is called the event source mapping.</p> <p>You provide mapping information (for example, which stream to read from and which Lambda function to invoke) in the request body.</p> <p>Each event source, such as an Amazon Kinesis or a DynamoDB stream, can be associated with multiple AWS Lambda functions. A given Lambda function can be associated with multiple AWS event sources.</p> <p>If you are using versioning, you can specify a specific function version or an alias via the function name parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateEventSourceMapping</code> action.</p>
+    /// <p>Identifies a poll-based event source for a Lambda function. It can be either an Amazon Kinesis or DynamoDB stream, or an Amazon SQS queue. AWS Lambda invokes the specified function when records are posted to the event source.</p> <p>This association between a poll-based source and a Lambda function is called the event source mapping.</p> <p>You provide mapping information (for example, which stream or SQS queue to read from and which Lambda function to invoke) in the request body.</p> <p>Amazon Kinesis or DynamoDB stream event sources can be associated with multiple AWS Lambda functions and a given Lambda function can be associated with multiple AWS event sources. For Amazon SQS, you can configure multiple queues as event sources for a single Lambda function, but an SQS queue can be mapped only to a single Lambda function.</p> <p>If you are using versioning, you can specify a specific function version or an alias via the function name parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateEventSourceMapping</code> action.</p>
     fn create_event_source_mapping(
         &self,
         input: CreateEventSourceMappingRequest,

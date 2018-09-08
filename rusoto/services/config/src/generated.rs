@@ -34,7 +34,7 @@ pub struct AccountAggregationSource {
     /// <p>The 12-digit account ID of the account being aggregated. </p>
     #[serde(rename = "AccountIds")]
     pub account_ids: Vec<String>,
-    /// <p>If true, aggreagate existing AWS Config regions and future regions.</p>
+    /// <p>If true, aggregate existing AWS Config regions and future regions.</p>
     #[serde(rename = "AllAwsRegions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub all_aws_regions: Option<bool>,
@@ -736,6 +736,13 @@ pub struct DeletePendingAggregationRequestRequest {
     pub requester_aws_region: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteRetentionConfigurationRequest {
+    /// <p>The name of the retention configuration to delete.</p>
+    #[serde(rename = "RetentionConfigurationName")]
+    pub retention_configuration_name: String,
+}
+
 /// <p>The input for the <a>DeliverConfigSnapshot</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeliverConfigSnapshotRequest {
@@ -999,7 +1006,7 @@ pub struct DescribeConfigurationAggregatorSourcesStatusRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeConfigurationAggregatorSourcesStatusResponse {
-    /// <p>Retuns an AggregatedSourceStatus object. </p>
+    /// <p>Returns an AggregatedSourceStatus object. </p>
     #[serde(rename = "AggregatedSourceStatusList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aggregated_source_status_list: Option<Vec<AggregatedSourceStatus>>,
@@ -1131,6 +1138,30 @@ pub struct DescribePendingAggregationRequestsResponse {
     #[serde(rename = "PendingAggregationRequests")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pending_aggregation_requests: Option<Vec<PendingAggregationRequest>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeRetentionConfigurationsRequest {
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p><p>A list of names of retention configurations for which you want details. If you do not specify a name, AWS Config returns details for all the retention configurations for that account.</p> <note> <p>Currently, AWS Config supports only one retention configuration per region in your account.</p> </note></p>
+    #[serde(rename = "RetentionConfigurationNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_configuration_names: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DescribeRetentionConfigurationsResponse {
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Returns a retention configuration object.</p>
+    #[serde(rename = "RetentionConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_configurations: Option<Vec<RetentionConfiguration>>,
 }
 
 /// <p>Identifies an AWS resource and indicates whether it complies with the AWS Config rule that it was evaluated against.</p>
@@ -1504,7 +1535,7 @@ pub struct ListDiscoveredResourcesResponse {
 /// <p>This object contains regions to setup the aggregator and an IAM role to retrieve organization details.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct OrganizationAggregationSource {
-    /// <p>If true, aggreagate existing AWS Config regions and future regions.</p>
+    /// <p>If true, aggregate existing AWS Config regions and future regions.</p>
     #[serde(rename = "AllAwsRegions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub all_aws_regions: Option<bool>,
@@ -1619,6 +1650,21 @@ pub struct PutEvaluationsResponse {
     pub failed_evaluations: Option<Vec<Evaluation>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct PutRetentionConfigurationRequest {
+    /// <p><p>Number of days AWS Config stores your historical information.</p> <note> <p>Currently, only applicable to the configuration item history.</p> </note></p>
+    #[serde(rename = "RetentionPeriodInDays")]
+    pub retention_period_in_days: i64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct PutRetentionConfigurationResponse {
+    /// <p>Returns a retention configuration object.</p>
+    #[serde(rename = "RetentionConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_configuration: Option<RetentionConfiguration>,
+}
+
 /// <p>Specifies the types of AWS resource for which AWS Config records configuration changes.</p> <p>In the recording group, you specify whether all supported types or specific types of resources are recorded.</p> <p>By default, AWS Config records configuration changes for all supported types of regional resources that AWS Config discovers in the region in which it is running. Regional resources are tied to a region and can be used only in that region. Examples of regional resources are EC2 instances and EBS volumes.</p> <p>You can also have AWS Config record configuration changes for supported types of global resources (for example, IAM resources). Global resources are not tied to an individual region and can be used in all regions.</p> <important> <p>The configuration details for any global resource are the same in all regions. If you customize AWS Config in multiple regions to record global resources, it will create multiple configuration items each time a global resource changes: one configuration item for each region. These configuration items will contain identical data. To prevent duplicate configuration items, you should consider customizing AWS Config in only one region to record global resources, unless you want the configuration items to be available in multiple regions.</p> </important> <p>If you don't want AWS Config to record all resources, you can specify which types of resources it will record with the <code>resourceTypes</code> parameter.</p> <p>For a list of supported resource types, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html#supported-resources">Supported Resource Types</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/select-resources.html">Selecting Which Resources AWS Config Records</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RecordingGroup {
@@ -1702,6 +1748,17 @@ pub struct ResourceKey {
     pub resource_type: String,
 }
 
+/// <p>An object with the name of the retention configuration and the retention period in days. The object stores the configuration for data retention in AWS Config.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct RetentionConfiguration {
+    /// <p>The name of the retention configuration object.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p><p>Number of days AWS Config stores your historical information.</p> <note> <p>Currently, only applicable to the configuration item history.</p> </note></p>
+    #[serde(rename = "RetentionPeriodInDays")]
+    pub retention_period_in_days: i64,
+}
+
 /// <p>Defines which resources trigger an evaluation for an AWS Config rule. The scope can include one or more resource types, a combination of a tag key and value, or a combination of one resource type and one resource ID. Specify a scope to constrain which resources trigger an evaluation for a rule. Otherwise, evaluations for the rule are triggered when any resource in your recording group changes in configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Scope {
@@ -1749,7 +1806,7 @@ pub struct SourceDetail {
     #[serde(rename = "MaximumExecutionFrequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_execution_frequency: Option<String>,
-    /// <p>The type of notification that triggers AWS Config to run an evaluation for a rule. You can specify the following notification types:</p> <ul> <li> <p> <code>ConfigurationItemChangeNotification</code> - Triggers an evaluation when AWS Config delivers a configuration item as a result of a resource change.</p> </li> <li> <p> <code>OversizedConfigurationItemChangeNotification</code> - Triggers an evaluation when AWS Config delivers an oversized configuration item. AWS Config may generate this notification type when a resource changes and the notification exceeds the maximum size allowed by Amazon SNS.</p> </li> <li> <p> <code>ScheduledNotification</code> - Triggers a periodic evaluation at the frequency specified for <code>MaximumExecutionFrequency</code>.</p> </li> <li> <p> <code>ConfigurationSnapshotDeliveryCompleted</code> - Triggers a periodic evaluation when AWS Config delivers a configuration snapshot.</p> </li> </ul> <p>If you want your custom rule to be triggered by configuration changes, specify both <code>ConfigurationItemChangeNotification</code> and <code>OversizedConfigurationItemChangeNotification</code>. </p>
+    /// <p>The type of notification that triggers AWS Config to run an evaluation for a rule. You can specify the following notification types:</p> <ul> <li> <p> <code>ConfigurationItemChangeNotification</code> - Triggers an evaluation when AWS Config delivers a configuration item as a result of a resource change.</p> </li> <li> <p> <code>OversizedConfigurationItemChangeNotification</code> - Triggers an evaluation when AWS Config delivers an oversized configuration item. AWS Config may generate this notification type when a resource changes and the notification exceeds the maximum size allowed by Amazon SNS.</p> </li> <li> <p> <code>ScheduledNotification</code> - Triggers a periodic evaluation at the frequency specified for <code>MaximumExecutionFrequency</code>.</p> </li> <li> <p> <code>ConfigurationSnapshotDeliveryCompleted</code> - Triggers a periodic evaluation when AWS Config delivers a configuration snapshot.</p> </li> </ul> <p>If you want your custom rule to be triggered by configuration changes, specify two SourceDetail objects, one for <code>ConfigurationItemChangeNotification</code> and one for <code>OversizedConfigurationItemChangeNotification</code>.</p>
     #[serde(rename = "MessageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_type: Option<String>,
@@ -2459,6 +2516,97 @@ impl Error for DeletePendingAggregationRequestError {
                 dispatch_error.description()
             }
             DeletePendingAggregationRequestError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteRetentionConfiguration
+#[derive(Debug, PartialEq)]
+pub enum DeleteRetentionConfigurationError {
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
+    /// <p>You have specified a retention configuration that does not exist.</p>
+    NoSuchRetentionConfiguration(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteRetentionConfigurationError {
+    pub fn from_body(body: &str) -> DeleteRetentionConfigurationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParameterValueException" => {
+                        DeleteRetentionConfigurationError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NoSuchRetentionConfigurationException" => {
+                        DeleteRetentionConfigurationError::NoSuchRetentionConfiguration(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        DeleteRetentionConfigurationError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteRetentionConfigurationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteRetentionConfigurationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteRetentionConfigurationError {
+    fn from(err: serde_json::error::Error) -> DeleteRetentionConfigurationError {
+        DeleteRetentionConfigurationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteRetentionConfigurationError {
+    fn from(err: CredentialsError) -> DeleteRetentionConfigurationError {
+        DeleteRetentionConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteRetentionConfigurationError {
+    fn from(err: HttpDispatchError) -> DeleteRetentionConfigurationError {
+        DeleteRetentionConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteRetentionConfigurationError {
+    fn from(err: io::Error) -> DeleteRetentionConfigurationError {
+        DeleteRetentionConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteRetentionConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteRetentionConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteRetentionConfigurationError::InvalidParameterValue(ref cause) => cause,
+            DeleteRetentionConfigurationError::NoSuchRetentionConfiguration(ref cause) => cause,
+            DeleteRetentionConfigurationError::Validation(ref cause) => cause,
+            DeleteRetentionConfigurationError::Credentials(ref err) => err.description(),
+            DeleteRetentionConfigurationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteRetentionConfigurationError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -3777,6 +3925,105 @@ impl Error for DescribePendingAggregationRequestsError {
                 dispatch_error.description()
             }
             DescribePendingAggregationRequestsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeRetentionConfigurations
+#[derive(Debug, PartialEq)]
+pub enum DescribeRetentionConfigurationsError {
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
+    /// <p>You have specified a retention configuration that does not exist.</p>
+    NoSuchRetentionConfiguration(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeRetentionConfigurationsError {
+    pub fn from_body(body: &str) -> DescribeRetentionConfigurationsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidNextTokenException" => {
+                        DescribeRetentionConfigurationsError::InvalidNextToken(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterValueException" => {
+                        DescribeRetentionConfigurationsError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NoSuchRetentionConfigurationException" => {
+                        DescribeRetentionConfigurationsError::NoSuchRetentionConfiguration(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        DescribeRetentionConfigurationsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeRetentionConfigurationsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeRetentionConfigurationsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeRetentionConfigurationsError {
+    fn from(err: serde_json::error::Error) -> DescribeRetentionConfigurationsError {
+        DescribeRetentionConfigurationsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeRetentionConfigurationsError {
+    fn from(err: CredentialsError) -> DescribeRetentionConfigurationsError {
+        DescribeRetentionConfigurationsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeRetentionConfigurationsError {
+    fn from(err: HttpDispatchError) -> DescribeRetentionConfigurationsError {
+        DescribeRetentionConfigurationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeRetentionConfigurationsError {
+    fn from(err: io::Error) -> DescribeRetentionConfigurationsError {
+        DescribeRetentionConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeRetentionConfigurationsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeRetentionConfigurationsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeRetentionConfigurationsError::InvalidNextToken(ref cause) => cause,
+            DescribeRetentionConfigurationsError::InvalidParameterValue(ref cause) => cause,
+            DescribeRetentionConfigurationsError::NoSuchRetentionConfiguration(ref cause) => cause,
+            DescribeRetentionConfigurationsError::Validation(ref cause) => cause,
+            DescribeRetentionConfigurationsError::Credentials(ref err) => err.description(),
+            DescribeRetentionConfigurationsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeRetentionConfigurationsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -5237,6 +5484,99 @@ impl Error for PutEvaluationsError {
         }
     }
 }
+/// Errors returned by PutRetentionConfiguration
+#[derive(Debug, PartialEq)]
+pub enum PutRetentionConfigurationError {
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
+    /// <p>Failed to add the retention configuration because a retention configuration with that name already exists.</p>
+    MaxNumberOfRetentionConfigurationsExceeded(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl PutRetentionConfigurationError {
+    pub fn from_body(body: &str) -> PutRetentionConfigurationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParameterValueException" => {
+                        PutRetentionConfigurationError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "MaxNumberOfRetentionConfigurationsExceededException" => {
+                        PutRetentionConfigurationError::MaxNumberOfRetentionConfigurationsExceeded(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        PutRetentionConfigurationError::Validation(error_message.to_string())
+                    }
+                    _ => PutRetentionConfigurationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => PutRetentionConfigurationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for PutRetentionConfigurationError {
+    fn from(err: serde_json::error::Error) -> PutRetentionConfigurationError {
+        PutRetentionConfigurationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for PutRetentionConfigurationError {
+    fn from(err: CredentialsError) -> PutRetentionConfigurationError {
+        PutRetentionConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutRetentionConfigurationError {
+    fn from(err: HttpDispatchError) -> PutRetentionConfigurationError {
+        PutRetentionConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutRetentionConfigurationError {
+    fn from(err: io::Error) -> PutRetentionConfigurationError {
+        PutRetentionConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutRetentionConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutRetentionConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            PutRetentionConfigurationError::InvalidParameterValue(ref cause) => cause,
+            PutRetentionConfigurationError::MaxNumberOfRetentionConfigurationsExceeded(
+                ref cause,
+            ) => cause,
+            PutRetentionConfigurationError::Validation(ref cause) => cause,
+            PutRetentionConfigurationError::Credentials(ref err) => err.description(),
+            PutRetentionConfigurationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutRetentionConfigurationError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by StartConfigRulesEvaluation
 #[derive(Debug, PartialEq)]
 pub enum StartConfigRulesEvaluationError {
@@ -5564,6 +5904,12 @@ pub trait ConfigService {
         input: DeletePendingAggregationRequestRequest,
     ) -> RusotoFuture<(), DeletePendingAggregationRequestError>;
 
+    /// <p>Deletes the retention configuration.</p>
+    fn delete_retention_configuration(
+        &self,
+        input: DeleteRetentionConfigurationRequest,
+    ) -> RusotoFuture<(), DeleteRetentionConfigurationError>;
+
     /// <p><p>Schedules delivery of a configuration snapshot to the Amazon S3 bucket in the specified delivery channel. After the delivery has started, AWS Config sends the following notifications using an Amazon SNS topic that you have specified.</p> <ul> <li> <p>Notification of the start of the delivery.</p> </li> <li> <p>Notification of the completion of the delivery, if the delivery was successfully completed.</p> </li> <li> <p>Notification of delivery failure, if the delivery failed.</p> </li> </ul></p>
     fn deliver_config_snapshot(
         &self,
@@ -5666,6 +6012,12 @@ pub trait ConfigService {
         DescribePendingAggregationRequestsError,
     >;
 
+    /// <p><p>Returns the details of one or more retention configurations. If the retention configuration name is not specified, this action returns the details for all the retention configurations for that account.</p> <note> <p>Currently, AWS Config supports only one retention configuration per region in your account.</p> </note></p>
+    fn describe_retention_configurations(
+        &self,
+        input: DescribeRetentionConfigurationsRequest,
+    ) -> RusotoFuture<DescribeRetentionConfigurationsResponse, DescribeRetentionConfigurationsError>;
+
     /// <p><p>Returns the evaluation results for the specified AWS Config rule for a specific resource in a rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule. </p> <note> <p>The results can return an empty result page. But if you have a nextToken, the results are displayed on the next page.</p> </note></p>
     fn get_aggregate_compliance_details_by_config_rule(
         &self,
@@ -5716,7 +6068,7 @@ pub trait ConfigService {
         input: GetDiscoveredResourceCountsRequest,
     ) -> RusotoFuture<GetDiscoveredResourceCountsResponse, GetDiscoveredResourceCountsError>;
 
-    /// <p><p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval.</p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note></p>
+    /// <p><p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval. If you specified a retention period to retain your <code>ConfigurationItems</code> between a minimum of 30 days and a maximum of 7 years (2557 days), AWS Config returns the <code>ConfigurationItems</code> for the specified retention period. </p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note></p>
     fn get_resource_config_history(
         &self,
         input: GetResourceConfigHistoryRequest,
@@ -5737,7 +6089,7 @@ pub trait ConfigService {
     /// <p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom AWS Config rules and AWS managed Config rules. A custom AWS Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom AWS Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding an AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html">About AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 50.</p> <p>For information about requesting a rule limit increase, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>
     fn put_config_rule(&self, input: PutConfigRuleRequest) -> RusotoFuture<(), PutConfigRuleError>;
 
-    /// <p><p>Creates and updates the configuration aggregator with the selected source accounts and regions.</p> <note> <p>AWS Config should be enabled in accounts and regions you want to aggreagate.</p> </note></p>
+    /// <p><p>Creates and updates the configuration aggregator with the selected source accounts and regions. The source account can be individual account(s) or an organization.</p> <note> <p>AWS Config should be enabled in source accounts and regions you want to aggregate.</p> <p>If your source type is an organization, you must be signed in to the master account and all features must be enabled in your organization. AWS Config calls <code>EnableAwsServiceAccess</code> API to enable integration between AWS Config and AWS Organizations. </p> </note></p>
     fn put_configuration_aggregator(
         &self,
         input: PutConfigurationAggregatorRequest,
@@ -5760,6 +6112,12 @@ pub trait ConfigService {
         &self,
         input: PutEvaluationsRequest,
     ) -> RusotoFuture<PutEvaluationsResponse, PutEvaluationsError>;
+
+    /// <p><p>Creates and updates the retention configuration with details about retention period (number of days) that AWS Config stores your historical information. The API creates the <code>RetentionConfiguration</code> object and names the object as <b>default</b>. When you have a <code>RetentionConfiguration</code> object named <b>default</b>, calling the API modifies the default object. </p> <note> <p>Currently, AWS Config supports only one retention configuration per region in your account.</p> </note></p>
+    fn put_retention_configuration(
+        &self,
+        input: PutRetentionConfigurationRequest,
+    ) -> RusotoFuture<PutRetentionConfigurationResponse, PutRetentionConfigurationError>;
 
     /// <p><p>Runs an on-demand evaluation for the specified AWS Config rules against the last known configuration state of the resources. Use <code>StartConfigRulesEvaluation</code> when you want to test that a rule you updated is working as expected. <code>StartConfigRulesEvaluation</code> does not re-record the latest configuration state for your resources. It re-runs an evaluation against the last known state of your resources. </p> <p>You can specify up to 25 AWS Config rules per request. </p> <p>An existing <code>StartConfigRulesEvaluation</code> call for the specified rules must complete before you can call the API again. If you chose to have AWS Config stream to an Amazon SNS topic, you will receive a <code>ConfigRuleEvaluationStarted</code> notification when the evaluation starts.</p> <note> <p>You don&#39;t need to call the <code>StartConfigRulesEvaluation</code> API to run an evaluation for a new rule. When you create a rule, AWS Config evaluates your resources against the rule automatically. </p> </note> <p>The <code>StartConfigRulesEvaluation</code> API is useful if you want to run on-demand evaluations, such as the following example:</p> <ol> <li> <p>You have a custom rule that evaluates your IAM resources every 24 hours.</p> </li> <li> <p>You update your Lambda function to add additional conditions to your rule.</p> </li> <li> <p>Instead of waiting for the next periodic evaluation, you call the <code>StartConfigRulesEvaluation</code> API.</p> </li> <li> <p>AWS Config invokes your Lambda function and evaluates your IAM resources.</p> </li> <li> <p>Your custom rule will still run periodic evaluations every 24 hours.</p> </li> </ol></p>
     fn start_config_rules_evaluation(
@@ -6043,6 +6401,34 @@ impl ConfigService for ConfigServiceClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeletePendingAggregationRequestError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Deletes the retention configuration.</p>
+    fn delete_retention_configuration(
+        &self,
+        input: DeleteRetentionConfigurationRequest,
+    ) -> RusotoFuture<(), DeleteRetentionConfigurationError> {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DeleteRetentionConfiguration",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(future::ok(::std::mem::drop(response)))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteRetentionConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -6600,6 +6986,45 @@ impl ConfigService for ConfigServiceClient {
         })
     }
 
+    /// <p><p>Returns the details of one or more retention configurations. If the retention configuration name is not specified, this action returns the details for all the retention configurations for that account.</p> <note> <p>Currently, AWS Config supports only one retention configuration per region in your account.</p> </note></p>
+    fn describe_retention_configurations(
+        &self,
+        input: DescribeRetentionConfigurationsRequest,
+    ) -> RusotoFuture<DescribeRetentionConfigurationsResponse, DescribeRetentionConfigurationsError>
+    {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeRetentionConfigurations",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeRetentionConfigurationsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeRetentionConfigurationsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p><p>Returns the evaluation results for the specified AWS Config rule for a specific resource in a rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule. </p> <note> <p>The results can return an empty result page. But if you have a nextToken, the results are displayed on the next page.</p> </note></p>
     fn get_aggregate_compliance_details_by_config_rule(
         &self,
@@ -6876,7 +7301,7 @@ impl ConfigService for ConfigServiceClient {
         })
     }
 
-    /// <p><p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval.</p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note></p>
+    /// <p><p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval. If you specified a retention period to retain your <code>ConfigurationItems</code> between a minimum of 30 days and a maximum of 7 years (2557 days), AWS Config returns the <code>ConfigurationItems</code> for the specified retention period. </p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note></p>
     fn get_resource_config_history(
         &self,
         input: GetResourceConfigHistoryRequest,
@@ -7012,7 +7437,7 @@ impl ConfigService for ConfigServiceClient {
         })
     }
 
-    /// <p><p>Creates and updates the configuration aggregator with the selected source accounts and regions.</p> <note> <p>AWS Config should be enabled in accounts and regions you want to aggreagate.</p> </note></p>
+    /// <p><p>Creates and updates the configuration aggregator with the selected source accounts and regions. The source account can be individual account(s) or an organization.</p> <note> <p>AWS Config should be enabled in source accounts and regions you want to aggregate.</p> <p>If your source type is an organization, you must be signed in to the master account and all features must be enabled in your organization. AWS Config calls <code>EnableAwsServiceAccess</code> API to enable integration between AWS Config and AWS Organizations. </p> </note></p>
     fn put_configuration_aggregator(
         &self,
         input: PutConfigurationAggregatorRequest,
@@ -7131,6 +7556,44 @@ impl ConfigService for ConfigServiceClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutEvaluationsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p><p>Creates and updates the retention configuration with details about retention period (number of days) that AWS Config stores your historical information. The API creates the <code>RetentionConfiguration</code> object and names the object as <b>default</b>. When you have a <code>RetentionConfiguration</code> object named <b>default</b>, calling the API modifies the default object. </p> <note> <p>Currently, AWS Config supports only one retention configuration per region in your account.</p> </note></p>
+    fn put_retention_configuration(
+        &self,
+        input: PutRetentionConfigurationRequest,
+    ) -> RusotoFuture<PutRetentionConfigurationResponse, PutRetentionConfigurationError> {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.PutRetentionConfiguration",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<PutRetentionConfigurationResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(PutRetentionConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

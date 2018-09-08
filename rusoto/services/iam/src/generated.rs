@@ -586,6 +586,64 @@ impl AttachUserPolicyRequestSerializer {
     }
 }
 
+/// <p>Contains information about an attached permissions boundary.</p> <p>An attached permissions boundary is a managed policy that has been attached to a user or role to set the permissions boundary.</p> <p>For more information about permissions boundaries, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AttachedPermissionsBoundary {
+    /// <p> The ARN of the policy used to set the permissions boundary for the user or role.</p>
+    pub permissions_boundary_arn: Option<String>,
+    /// <p> The permissions boundary usage type that indicates what type of IAM resource is used as the permissions boundary for an entity. This data type can only have a value of <code>Policy</code>.</p>
+    pub permissions_boundary_type: Option<String>,
+}
+
+struct AttachedPermissionsBoundaryDeserializer;
+impl AttachedPermissionsBoundaryDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AttachedPermissionsBoundary, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = AttachedPermissionsBoundary::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "PermissionsBoundaryArn" => {
+                        obj.permissions_boundary_arn = Some(try!(
+                            ArnTypeDeserializer::deserialize("PermissionsBoundaryArn", stack)
+                        ));
+                    }
+                    "PermissionsBoundaryType" => {
+                        obj.permissions_boundary_type = Some(try!(
+                            PermissionsBoundaryAttachmentTypeDeserializer::deserialize(
+                                "PermissionsBoundaryType",
+                                stack
+                            )
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 struct AttachedPoliciesListTypeDeserializer;
 impl AttachedPoliciesListTypeDeserializer {
     #[allow(unused_variables)]
@@ -1605,6 +1663,8 @@ pub struct CreateRoleRequest {
     pub max_session_duration: Option<i64>,
     /// <p> The path to the role. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path: Option<String>,
+    /// <p>The ARN of the policy that is used to set the permissions boundary for the role.</p>
+    pub permissions_boundary: Option<String>,
     /// <p>The name of the role to create.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p> <p>Role names are not distinguished by case. For example, you cannot create roles named both "PRODROLE" and "prodrole".</p>
     pub role_name: String,
 }
@@ -1633,6 +1693,12 @@ impl CreateRoleRequestSerializer {
         }
         if let Some(ref field_value) = obj.path {
             params.put(&format!("{}{}", prefix, "Path"), &field_value);
+        }
+        if let Some(ref field_value) = obj.permissions_boundary {
+            params.put(
+                &format!("{}{}", prefix, "PermissionsBoundary"),
+                &field_value,
+            );
         }
         params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
     }
@@ -1910,6 +1976,8 @@ impl CreateServiceSpecificCredentialResponseDeserializer {
 pub struct CreateUserRequest {
     /// <p> The path for the user name. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path: Option<String>,
+    /// <p>The ARN of the policy that is used to set the permissions boundary for the user.</p>
+    pub permissions_boundary: Option<String>,
     /// <p>The name of the user to create.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-. User names are not distinguished by case. For example, you cannot create users named both "TESTUSER" and "testuser".</p>
     pub user_name: String,
 }
@@ -1925,6 +1993,12 @@ impl CreateUserRequestSerializer {
 
         if let Some(ref field_value) = obj.path {
             params.put(&format!("{}{}", prefix, "Path"), &field_value);
+        }
+        if let Some(ref field_value) = obj.permissions_boundary {
+            params.put(
+                &format!("{}{}", prefix, "PermissionsBoundary"),
+                &field_value,
+            );
         }
         params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
@@ -2277,6 +2351,25 @@ impl DeletePolicyVersionRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteRolePermissionsBoundaryRequest {
+    /// <p>The name (friendly name, not ARN) of the IAM role from which you want to remove the permissions boundary.</p>
+    pub role_name: String,
+}
+
+/// Serialize `DeleteRolePermissionsBoundaryRequest` contents to a `SignedRequest`.
+struct DeleteRolePermissionsBoundaryRequestSerializer;
+impl DeleteRolePermissionsBoundaryRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteRolePermissionsBoundaryRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteRolePolicyRequest {
     /// <p>The name of the inline policy to delete from the specified IAM role.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub policy_name: String,
@@ -2504,6 +2597,25 @@ impl DeleteSigningCertificateRequestSerializer {
         if let Some(ref field_value) = obj.user_name {
             params.put(&format!("{}{}", prefix, "UserName"), &field_value);
         }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteUserPermissionsBoundaryRequest {
+    /// <p>The name (friendly name, not ARN) of the IAM user from which you want to remove the permissions boundary.</p>
+    pub user_name: String,
+}
+
+/// Serialize `DeleteUserPermissionsBoundaryRequest` contents to a `SignedRequest`.
+struct DeleteUserPermissionsBoundaryRequestSerializer;
+impl DeleteUserPermissionsBoundaryRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteUserPermissionsBoundaryRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -4594,7 +4706,7 @@ impl GetUserRequestSerializer {
 /// <p>Contains the response to a successful <a>GetUser</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetUserResponse {
-    /// <p>A structure containing details about the IAM user.</p>
+    /// <p><p>A structure containing details about the IAM user.</p> <important> <p>Due to a service issue, password last used data does not include password use from May 3rd 2018 22:50 PDT to May 23rd 2018 14:08 PDT. This affects <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_finding-unused.html">last sign-in</a> dates shown in the IAM console and password last used dates in the <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html">IAM credential report</a>, and returned by this GetUser API. If users signed in during the affected time, the password last used date that is returned is the date the user last signed in before May 3rd 2018. For users that signed in after May 23rd 2018 14:08 PDT, the returned password last used date is accurate.</p> <p>If you use password last used information to identify unused credentials for deletion, such as deleting users who did not sign in to AWS in the last 90 days, we recommend that you adjust your evaluation window to include dates after May 23rd 2018. Alternatively, if your users use access keys to access AWS programmatically you can refer to access key last used information because it is accurate for all dates. </p> </important></p>
     pub user: User,
 }
 
@@ -5593,6 +5705,8 @@ pub struct ListEntitiesForPolicyRequest {
     pub path_prefix: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the IAM policy for which you want the versions.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
+    /// <p>The policy usage method to use for filtering the results.</p> <p>To list only permissions policies, set <code>PolicyUsageFilter</code> to <code>PermissionsPolicy</code>. To list only the policies used to set permissions boundaries, set the value to <code>PermissionsBoundary</code>.</p> <p>This parameter is optional. If it is not included, all policies are returned. </p>
+    pub policy_usage_filter: Option<String>,
 }
 
 /// Serialize `ListEntitiesForPolicyRequest` contents to a `SignedRequest`.
@@ -5620,6 +5734,9 @@ impl ListEntitiesForPolicyRequestSerializer {
             params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
         }
         params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        if let Some(ref field_value) = obj.policy_usage_filter {
+            params.put(&format!("{}{}", prefix, "PolicyUsageFilter"), &field_value);
+        }
     }
 }
 
@@ -6348,6 +6465,8 @@ pub struct ListPoliciesRequest {
     pub only_attached: Option<bool>,
     /// <p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all policies. This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path_prefix: Option<String>,
+    /// <p>The policy usage method to use for filtering the results.</p> <p>To list only permissions policies, set <code>PolicyUsageFilter</code> to <code>PermissionsPolicy</code>. To list only the policies used to set permissions boundaries, set the value to <code>PermissionsBoundary</code>.</p> <p>This parameter is optional. If it is not included, all policies are returned. </p>
+    pub policy_usage_filter: Option<String>,
     /// <p>The scope to use for filtering the results.</p> <p>To list only AWS managed policies, set <code>Scope</code> to <code>AWS</code>. To list only the customer managed policies in your AWS account, set <code>Scope</code> to <code>Local</code>.</p> <p>This parameter is optional. If it is not included, or if it is set to <code>All</code>, all policies are returned.</p>
     pub scope: Option<String>,
 }
@@ -6378,6 +6497,9 @@ impl ListPoliciesRequestSerializer {
         }
         if let Some(ref field_value) = obj.path_prefix {
             params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
+        }
+        if let Some(ref field_value) = obj.policy_usage_filter {
+            params.put(&format!("{}{}", prefix, "PolicyUsageFilter"), &field_value);
         }
         if let Some(ref field_value) = obj.scope {
             params.put(&format!("{}{}", prefix, "Scope"), &field_value);
@@ -7587,6 +7709,8 @@ pub struct ManagedPolicyDetail {
     pub is_attachable: Option<bool>,
     /// <p>The path to the policy.</p> <p>For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>
     pub path: Option<String>,
+    /// <p>The number of entities (users and roles) for which the policy is used as the permissions boundary. </p> <p>For more information about permissions boundaries, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
+    pub permissions_boundary_usage_count: Option<i64>,
     /// <p>The stable and unique string identifying the policy.</p> <p>For more information about IDs, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>
     pub policy_id: Option<String>,
     /// <p>The friendly name (not ARN) identifying the policy.</p>
@@ -7650,6 +7774,13 @@ impl ManagedPolicyDetailDeserializer {
                     "Path" => {
                         obj.path =
                             Some(try!(PolicyPathTypeDeserializer::deserialize("Path", stack)));
+                    }
+                    "PermissionsBoundaryUsageCount" => {
+                        obj.permissions_boundary_usage_count =
+                            Some(try!(AttachmentCountTypeDeserializer::deserialize(
+                                "PermissionsBoundaryUsageCount",
+                                stack
+                            )));
                     }
                     "PolicyId" => {
                         obj.policy_id =
@@ -8115,6 +8246,20 @@ impl PathTypeDeserializer {
         Ok(obj)
     }
 }
+struct PermissionsBoundaryAttachmentTypeDeserializer;
+impl PermissionsBoundaryAttachmentTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Contains information about a managed policy.</p> <p>This data type is used as a response element in the <a>CreatePolicy</a>, <a>GetPolicy</a>, and <a>ListPolicies</a> operations. </p> <p>For more information about managed policies, refer to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Policy {
@@ -8131,6 +8276,8 @@ pub struct Policy {
     pub is_attachable: Option<bool>,
     /// <p>The path to the policy.</p> <p>For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>
     pub path: Option<String>,
+    /// <p>The number of entities (users and roles) for which the policy is used to set the permissions boundary. </p> <p>For more information about permissions boundaries, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
+    pub permissions_boundary_usage_count: Option<i64>,
     /// <p>The stable and unique string identifying the policy.</p> <p>For more information about IDs, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>
     pub policy_id: Option<String>,
     /// <p>The friendly name (not ARN) identifying the policy.</p>
@@ -8192,6 +8339,13 @@ impl PolicyDeserializer {
                     "Path" => {
                         obj.path =
                             Some(try!(PolicyPathTypeDeserializer::deserialize("Path", stack)));
+                    }
+                    "PermissionsBoundaryUsageCount" => {
+                        obj.permissions_boundary_usage_count =
+                            Some(try!(AttachmentCountTypeDeserializer::deserialize(
+                                "PermissionsBoundaryUsageCount",
+                                stack
+                            )));
                     }
                     "PolicyId" => {
                         obj.policy_id =
@@ -9027,6 +9181,31 @@ impl PutGroupPolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutRolePermissionsBoundaryRequest {
+    /// <p>The ARN of the policy that is used to set the permissions boundary for the role.</p>
+    pub permissions_boundary: String,
+    /// <p>The name (friendly name, not ARN) of the IAM role for which you want to set the permissions boundary.</p>
+    pub role_name: String,
+}
+
+/// Serialize `PutRolePermissionsBoundaryRequest` contents to a `SignedRequest`.
+struct PutRolePermissionsBoundaryRequestSerializer;
+impl PutRolePermissionsBoundaryRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PutRolePermissionsBoundaryRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "PermissionsBoundary"),
+            &obj.permissions_boundary,
+        );
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutRolePolicyRequest {
     /// <p><p>The policy document.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub policy_document: String,
@@ -9051,6 +9230,31 @@ impl PutRolePolicyRequestSerializer {
         );
         params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
         params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutUserPermissionsBoundaryRequest {
+    /// <p>The ARN of the policy that is used to set the permissions boundary for the user.</p>
+    pub permissions_boundary: String,
+    /// <p>The name (friendly name, not ARN) of the IAM user for which you want to set the permissions boundary.</p>
+    pub user_name: String,
+}
+
+/// Serialize `PutUserPermissionsBoundaryRequest` contents to a `SignedRequest`.
+struct PutUserPermissionsBoundaryRequestSerializer;
+impl PutUserPermissionsBoundaryRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PutUserPermissionsBoundaryRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "PermissionsBoundary"),
+            &obj.permissions_boundary,
+        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
 }
 
@@ -9519,6 +9723,8 @@ pub struct Role {
     pub max_session_duration: Option<i64>,
     /// <p> The path to the role. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>
     pub path: String,
+    /// <p>The ARN of the policy used to set the permissions boundary for the role.</p> <p>For more information about permissions boundaries, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
+    pub permissions_boundary: Option<AttachedPermissionsBoundary>,
     /// <p> The stable and unique string identifying the role. For more information about IDs, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>
     pub role_id: String,
     /// <p>The friendly name that identifies the role.</p>
@@ -9577,6 +9783,13 @@ impl RoleDeserializer {
                     "Path" => {
                         obj.path = try!(PathTypeDeserializer::deserialize("Path", stack));
                     }
+                    "PermissionsBoundary" => {
+                        obj.permissions_boundary =
+                            Some(try!(AttachedPermissionsBoundaryDeserializer::deserialize(
+                                "PermissionsBoundary",
+                                stack
+                            )));
+                    }
                     "RoleId" => {
                         obj.role_id = try!(IdTypeDeserializer::deserialize("RoleId", stack));
                     }
@@ -9626,6 +9839,8 @@ pub struct RoleDetail {
     pub instance_profile_list: Option<Vec<InstanceProfile>>,
     /// <p>The path to the role. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>
     pub path: Option<String>,
+    /// <p>The ARN of the policy used to set the permissions boundary for the role.</p> <p>For more information about permissions boundaries, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
+    pub permissions_boundary: Option<AttachedPermissionsBoundary>,
     /// <p>The stable and unique string identifying the role. For more information about IDs, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>
     pub role_id: Option<String>,
     /// <p>The friendly name that identifies the role.</p>
@@ -9686,6 +9901,13 @@ impl RoleDetailDeserializer {
                     }
                     "Path" => {
                         obj.path = Some(try!(PathTypeDeserializer::deserialize("Path", stack)));
+                    }
+                    "PermissionsBoundary" => {
+                        obj.permissions_boundary =
+                            Some(try!(AttachedPermissionsBoundaryDeserializer::deserialize(
+                                "PermissionsBoundary",
+                                stack
+                            )));
                     }
                     "RoleId" => {
                         obj.role_id = Some(try!(IdTypeDeserializer::deserialize("RoleId", stack)));
@@ -10826,7 +11048,7 @@ pub struct SimulateCustomPolicyRequest {
     pub resource_arns: Option<Vec<String>>,
     /// <p><p>Specifies the type of simulation to run. Different API operations that support resource-based policies require different combinations of resources. By specifying the type of simulation to run, you enable the policy simulator to enforce the presence of the required resources to ensure reliable simulation results. If your simulation does not match one of the following scenarios, then you can omit this parameter. The following list shows each of the supported scenario values and the resources that you must define to run the simulation.</p> <p>Each of the EC2 scenarios requires that you specify instance, image, and security-group resources. If your scenario includes an EBS volume, then you must specify that volume as a resource. If the EC2 scenario includes VPC, then you must supply the network-interface resource. If it includes an IP subnet, then you must specify the subnet resource. For more information on the EC2 scenario options, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-platforms.html">Supported Platforms</a> in the <i>Amazon EC2 User Guide</i>.</p> <ul> <li> <p> <b>EC2-Classic-InstanceStore</b> </p> <p>instance, image, security-group</p> </li> <li> <p> <b>EC2-Classic-EBS</b> </p> <p>instance, image, security-group, volume</p> </li> <li> <p> <b>EC2-VPC-InstanceStore</b> </p> <p>instance, image, security-group, network-interface</p> </li> <li> <p> <b>EC2-VPC-InstanceStore-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet</p> </li> <li> <p> <b>EC2-VPC-EBS</b> </p> <p>instance, image, security-group, network-interface, volume</p> </li> <li> <p> <b>EC2-VPC-EBS-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet, volume</p> </li> </ul></p>
     pub resource_handling_option: Option<String>,
-    /// <p>An AWS account ID that specifies the owner of any simulated resource that does not identify its owner in the resource ARN, such as an S3 bucket or object. If <code>ResourceOwner</code> is specified, it is also used as the account owner of any <code>ResourcePolicy</code> included in the simulation. If the <code>ResourceOwner</code> parameter is not specified, then the owner of the resources and the resource policy defaults to the account of the identity provided in <code>CallerArn</code>. This parameter is required only if you specify a resource-based policy and account that owns the resource is different from the account that owns the simulated calling user <code>CallerArn</code>.</p>
+    /// <p>An ARN representing the AWS account ID that specifies the owner of any simulated resource that does not identify its owner in the resource ARN, such as an S3 bucket or object. If <code>ResourceOwner</code> is specified, it is also used as the account owner of any <code>ResourcePolicy</code> included in the simulation. If the <code>ResourceOwner</code> parameter is not specified, then the owner of the resources and the resource policy defaults to the account of the identity provided in <code>CallerArn</code>. This parameter is required only if you specify a resource-based policy and account that owns the resource is different from the account that owns the simulated calling user <code>CallerArn</code>.</p> <p>The ARN for an account uses the following syntax: <code>arn:aws:iam::<i>AWS-account-ID</i>:root</code>. For example, to represent the account with the 112233445566 ID, use the following ARN: <code>arn:aws:iam::112233445566-ID:root</code>. </p>
     pub resource_owner: Option<String>,
     /// <p><p>A resource-based policy to include in the simulation provided as a string. Each resource in the simulation is treated as if it had this policy attached. You can include only one resource-based policy in a simulation.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub resource_policy: Option<String>,
@@ -11360,7 +11582,7 @@ pub struct UpdateAccountPasswordPolicyRequest {
     pub require_lowercase_characters: Option<bool>,
     /// <p>Specifies whether IAM user passwords must contain at least one numeric character (0 to 9).</p> <p>If you do not specify a value for this parameter, then the operation uses the default value of <code>false</code>. The result is that passwords do not require at least one numeric character.</p>
     pub require_numbers: Option<bool>,
-    /// <p>Specifies whether IAM user passwords must contain at least one of the following non-alphanumeric characters:</p> <p>! @ # $ % ^ &amp;amp; * ( ) _ + - = [ ] { } | '</p> <p>If you do not specify a value for this parameter, then the operation uses the default value of <code>false</code>. The result is that passwords do not require at least one symbol character.</p>
+    /// <p>Specifies whether IAM user passwords must contain at least one of the following non-alphanumeric characters:</p> <p>! @ # $ % ^ &amp; * ( ) _ + - = [ ] { } | '</p> <p>If you do not specify a value for this parameter, then the operation uses the default value of <code>false</code>. The result is that passwords do not require at least one symbol character.</p>
     pub require_symbols: Option<bool>,
     /// <p>Specifies whether IAM user passwords must contain at least one uppercase character from the ISO basic Latin alphabet (A to Z).</p> <p>If you do not specify a value for this parameter, then the operation uses the default value of <code>false</code>. The result is that passwords do not require at least one uppercase character.</p>
     pub require_uppercase_characters: Option<bool>,
@@ -11900,7 +12122,7 @@ impl UpdateUserRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UploadSSHPublicKeyRequest {
-    /// <p><p>The SSH public key. The public key must be encoded in ssh-rsa format or PEM format.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
+    /// <p><p>The SSH public key. The public key must be encoded in ssh-rsa format or PEM format. The miminum bit-length of the public key is 2048 bits. For example, you can generate a 2048-bit key, and the resulting PEM file is 1679 bytes long.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub ssh_public_key_body: String,
     /// <p>The name of the IAM user to associate the SSH public key with.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
@@ -12150,6 +12372,8 @@ pub struct User {
     pub password_last_used: Option<String>,
     /// <p>The path to the user. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>
     pub path: String,
+    /// <p>The ARN of the policy used to set the permissions boundary for the user.</p> <p>For more information about permissions boundaries, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
+    pub permissions_boundary: Option<AttachedPermissionsBoundary>,
     /// <p>The stable and unique string identifying the user. For more information about IDs, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>
     pub user_id: String,
     /// <p>The friendly name identifying the user.</p>
@@ -12194,6 +12418,13 @@ impl UserDeserializer {
                     "Path" => {
                         obj.path = try!(PathTypeDeserializer::deserialize("Path", stack));
                     }
+                    "PermissionsBoundary" => {
+                        obj.permissions_boundary =
+                            Some(try!(AttachedPermissionsBoundaryDeserializer::deserialize(
+                                "PermissionsBoundary",
+                                stack
+                            )));
+                    }
                     "UserId" => {
                         obj.user_id = try!(IdTypeDeserializer::deserialize("UserId", stack));
                     }
@@ -12227,6 +12458,8 @@ pub struct UserDetail {
     pub group_list: Option<Vec<String>>,
     /// <p>The path to the user. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>
     pub path: Option<String>,
+    /// <p>The ARN of the policy used to set the permissions boundary for the user.</p> <p>For more information about permissions boundaries, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
+    pub permissions_boundary: Option<AttachedPermissionsBoundary>,
     /// <p>The stable and unique string identifying the user. For more information about IDs, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>
     pub user_id: Option<String>,
     /// <p>The friendly name identifying the user.</p>
@@ -12279,6 +12512,13 @@ impl UserDetailDeserializer {
                     }
                     "Path" => {
                         obj.path = Some(try!(PathTypeDeserializer::deserialize("Path", stack)));
+                    }
+                    "PermissionsBoundary" => {
+                        obj.permissions_boundary =
+                            Some(try!(AttachedPermissionsBoundaryDeserializer::deserialize(
+                                "PermissionsBoundary",
+                                stack
+                            )));
                     }
                     "UserId" => {
                         obj.user_id = Some(try!(IdTypeDeserializer::deserialize("UserId", stack)));
@@ -15711,6 +15951,97 @@ impl Error for DeleteRoleError {
         }
     }
 }
+/// Errors returned by DeleteRolePermissionsBoundary
+#[derive(Debug, PartialEq)]
+pub enum DeleteRolePermissionsBoundaryError {
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    NoSuchEntity(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
+    ServiceFailure(String),
+    /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
+    UnmodifiableEntity(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteRolePermissionsBoundaryError {
+    pub fn from_body(body: &str) -> DeleteRolePermissionsBoundaryError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match Self::deserialize(&mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "NoSuchEntity" => DeleteRolePermissionsBoundaryError::NoSuchEntity(String::from(
+                    parsed_error.message,
+                )),
+                "ServiceFailure" => DeleteRolePermissionsBoundaryError::ServiceFailure(
+                    String::from(parsed_error.message),
+                ),
+                "UnmodifiableEntity" => DeleteRolePermissionsBoundaryError::UnmodifiableEntity(
+                    String::from(parsed_error.message),
+                ),
+                _ => DeleteRolePermissionsBoundaryError::Unknown(String::from(body)),
+            },
+            Err(_) => DeleteRolePermissionsBoundaryError::Unknown(body.to_string()),
+        }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for DeleteRolePermissionsBoundaryError {
+    fn from(err: XmlParseError) -> DeleteRolePermissionsBoundaryError {
+        let XmlParseError(message) = err;
+        DeleteRolePermissionsBoundaryError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DeleteRolePermissionsBoundaryError {
+    fn from(err: CredentialsError) -> DeleteRolePermissionsBoundaryError {
+        DeleteRolePermissionsBoundaryError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteRolePermissionsBoundaryError {
+    fn from(err: HttpDispatchError) -> DeleteRolePermissionsBoundaryError {
+        DeleteRolePermissionsBoundaryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteRolePermissionsBoundaryError {
+    fn from(err: io::Error) -> DeleteRolePermissionsBoundaryError {
+        DeleteRolePermissionsBoundaryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteRolePermissionsBoundaryError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteRolePermissionsBoundaryError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteRolePermissionsBoundaryError::NoSuchEntity(ref cause) => cause,
+            DeleteRolePermissionsBoundaryError::ServiceFailure(ref cause) => cause,
+            DeleteRolePermissionsBoundaryError::UnmodifiableEntity(ref cause) => cause,
+            DeleteRolePermissionsBoundaryError::Validation(ref cause) => cause,
+            DeleteRolePermissionsBoundaryError::Credentials(ref err) => err.description(),
+            DeleteRolePermissionsBoundaryError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteRolePermissionsBoundaryError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteRolePolicyError {
@@ -16430,6 +16761,91 @@ impl Error for DeleteUserError {
             DeleteUserError::Credentials(ref err) => err.description(),
             DeleteUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteUserError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteUserPermissionsBoundary
+#[derive(Debug, PartialEq)]
+pub enum DeleteUserPermissionsBoundaryError {
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    NoSuchEntity(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
+    ServiceFailure(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteUserPermissionsBoundaryError {
+    pub fn from_body(body: &str) -> DeleteUserPermissionsBoundaryError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match Self::deserialize(&mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "NoSuchEntity" => DeleteUserPermissionsBoundaryError::NoSuchEntity(String::from(
+                    parsed_error.message,
+                )),
+                "ServiceFailure" => DeleteUserPermissionsBoundaryError::ServiceFailure(
+                    String::from(parsed_error.message),
+                ),
+                _ => DeleteUserPermissionsBoundaryError::Unknown(String::from(body)),
+            },
+            Err(_) => DeleteUserPermissionsBoundaryError::Unknown(body.to_string()),
+        }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for DeleteUserPermissionsBoundaryError {
+    fn from(err: XmlParseError) -> DeleteUserPermissionsBoundaryError {
+        let XmlParseError(message) = err;
+        DeleteUserPermissionsBoundaryError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DeleteUserPermissionsBoundaryError {
+    fn from(err: CredentialsError) -> DeleteUserPermissionsBoundaryError {
+        DeleteUserPermissionsBoundaryError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteUserPermissionsBoundaryError {
+    fn from(err: HttpDispatchError) -> DeleteUserPermissionsBoundaryError {
+        DeleteUserPermissionsBoundaryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteUserPermissionsBoundaryError {
+    fn from(err: io::Error) -> DeleteUserPermissionsBoundaryError {
+        DeleteUserPermissionsBoundaryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteUserPermissionsBoundaryError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteUserPermissionsBoundaryError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteUserPermissionsBoundaryError::NoSuchEntity(ref cause) => cause,
+            DeleteUserPermissionsBoundaryError::ServiceFailure(ref cause) => cause,
+            DeleteUserPermissionsBoundaryError::Validation(ref cause) => cause,
+            DeleteUserPermissionsBoundaryError::Credentials(ref err) => err.description(),
+            DeleteUserPermissionsBoundaryError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteUserPermissionsBoundaryError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -21126,6 +21542,109 @@ impl Error for PutGroupPolicyError {
         }
     }
 }
+/// Errors returned by PutRolePermissionsBoundary
+#[derive(Debug, PartialEq)]
+pub enum PutRolePermissionsBoundaryError {
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    InvalidInput(String),
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    NoSuchEntity(String),
+    /// <p>The request failed because AWS service role policies can only be attached to the service-linked role for that service.</p>
+    PolicyNotAttachable(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
+    ServiceFailure(String),
+    /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
+    UnmodifiableEntity(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl PutRolePermissionsBoundaryError {
+    pub fn from_body(body: &str) -> PutRolePermissionsBoundaryError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match Self::deserialize(&mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidInput" => PutRolePermissionsBoundaryError::InvalidInput(String::from(
+                    parsed_error.message,
+                )),
+                "NoSuchEntity" => PutRolePermissionsBoundaryError::NoSuchEntity(String::from(
+                    parsed_error.message,
+                )),
+                "PolicyNotAttachable" => PutRolePermissionsBoundaryError::PolicyNotAttachable(
+                    String::from(parsed_error.message),
+                ),
+                "ServiceFailure" => PutRolePermissionsBoundaryError::ServiceFailure(String::from(
+                    parsed_error.message,
+                )),
+                "UnmodifiableEntity" => PutRolePermissionsBoundaryError::UnmodifiableEntity(
+                    String::from(parsed_error.message),
+                ),
+                _ => PutRolePermissionsBoundaryError::Unknown(String::from(body)),
+            },
+            Err(_) => PutRolePermissionsBoundaryError::Unknown(body.to_string()),
+        }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for PutRolePermissionsBoundaryError {
+    fn from(err: XmlParseError) -> PutRolePermissionsBoundaryError {
+        let XmlParseError(message) = err;
+        PutRolePermissionsBoundaryError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for PutRolePermissionsBoundaryError {
+    fn from(err: CredentialsError) -> PutRolePermissionsBoundaryError {
+        PutRolePermissionsBoundaryError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutRolePermissionsBoundaryError {
+    fn from(err: HttpDispatchError) -> PutRolePermissionsBoundaryError {
+        PutRolePermissionsBoundaryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutRolePermissionsBoundaryError {
+    fn from(err: io::Error) -> PutRolePermissionsBoundaryError {
+        PutRolePermissionsBoundaryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutRolePermissionsBoundaryError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutRolePermissionsBoundaryError {
+    fn description(&self) -> &str {
+        match *self {
+            PutRolePermissionsBoundaryError::InvalidInput(ref cause) => cause,
+            PutRolePermissionsBoundaryError::NoSuchEntity(ref cause) => cause,
+            PutRolePermissionsBoundaryError::PolicyNotAttachable(ref cause) => cause,
+            PutRolePermissionsBoundaryError::ServiceFailure(ref cause) => cause,
+            PutRolePermissionsBoundaryError::UnmodifiableEntity(ref cause) => cause,
+            PutRolePermissionsBoundaryError::Validation(ref cause) => cause,
+            PutRolePermissionsBoundaryError::Credentials(ref err) => err.description(),
+            PutRolePermissionsBoundaryError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutRolePermissionsBoundaryError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by PutRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum PutRolePolicyError {
@@ -21224,6 +21743,103 @@ impl Error for PutRolePolicyError {
             PutRolePolicyError::Credentials(ref err) => err.description(),
             PutRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             PutRolePolicyError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by PutUserPermissionsBoundary
+#[derive(Debug, PartialEq)]
+pub enum PutUserPermissionsBoundaryError {
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    InvalidInput(String),
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    NoSuchEntity(String),
+    /// <p>The request failed because AWS service role policies can only be attached to the service-linked role for that service.</p>
+    PolicyNotAttachable(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
+    ServiceFailure(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl PutUserPermissionsBoundaryError {
+    pub fn from_body(body: &str) -> PutUserPermissionsBoundaryError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match Self::deserialize(&mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidInput" => PutUserPermissionsBoundaryError::InvalidInput(String::from(
+                    parsed_error.message,
+                )),
+                "NoSuchEntity" => PutUserPermissionsBoundaryError::NoSuchEntity(String::from(
+                    parsed_error.message,
+                )),
+                "PolicyNotAttachable" => PutUserPermissionsBoundaryError::PolicyNotAttachable(
+                    String::from(parsed_error.message),
+                ),
+                "ServiceFailure" => PutUserPermissionsBoundaryError::ServiceFailure(String::from(
+                    parsed_error.message,
+                )),
+                _ => PutUserPermissionsBoundaryError::Unknown(String::from(body)),
+            },
+            Err(_) => PutUserPermissionsBoundaryError::Unknown(body.to_string()),
+        }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for PutUserPermissionsBoundaryError {
+    fn from(err: XmlParseError) -> PutUserPermissionsBoundaryError {
+        let XmlParseError(message) = err;
+        PutUserPermissionsBoundaryError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for PutUserPermissionsBoundaryError {
+    fn from(err: CredentialsError) -> PutUserPermissionsBoundaryError {
+        PutUserPermissionsBoundaryError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutUserPermissionsBoundaryError {
+    fn from(err: HttpDispatchError) -> PutUserPermissionsBoundaryError {
+        PutUserPermissionsBoundaryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutUserPermissionsBoundaryError {
+    fn from(err: io::Error) -> PutUserPermissionsBoundaryError {
+        PutUserPermissionsBoundaryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutUserPermissionsBoundaryError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutUserPermissionsBoundaryError {
+    fn description(&self) -> &str {
+        match *self {
+            PutUserPermissionsBoundaryError::InvalidInput(ref cause) => cause,
+            PutUserPermissionsBoundaryError::NoSuchEntity(ref cause) => cause,
+            PutUserPermissionsBoundaryError::PolicyNotAttachable(ref cause) => cause,
+            PutUserPermissionsBoundaryError::ServiceFailure(ref cause) => cause,
+            PutUserPermissionsBoundaryError::Validation(ref cause) => cause,
+            PutUserPermissionsBoundaryError::Credentials(ref err) => err.description(),
+            PutUserPermissionsBoundaryError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutUserPermissionsBoundaryError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -23861,6 +24477,12 @@ pub trait Iam {
     /// <p><p>Deletes the specified role. The role must not have any policies attached. For more information about roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>.</p> <important> <p>Make sure that you do not have any Amazon EC2 instances running with the role you are about to delete. Deleting a role or instance profile that is associated with a running instance will break any applications running on the instance.</p> </important></p>
     fn delete_role(&self, input: DeleteRoleRequest) -> RusotoFuture<(), DeleteRoleError>;
 
+    /// <p><p>Deletes the permissions boundary for the specified IAM role. </p> <important> <p>Deleting the permissions boundary for a role might increase its permissions by allowing anyone who assumes the role to perform all the actions granted in its permissions policies. </p> </important></p>
+    fn delete_role_permissions_boundary(
+        &self,
+        input: DeleteRolePermissionsBoundaryRequest,
+    ) -> RusotoFuture<(), DeleteRolePermissionsBoundaryError>;
+
     /// <p>Deletes the specified inline policy that is embedded in the specified IAM role.</p> <p>A role can also have managed policies attached to it. To detach a managed policy from a role, use <a>DetachRolePolicy</a>. For more information about policies, refer to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn delete_role_policy(
         &self,
@@ -23905,6 +24527,12 @@ pub trait Iam {
 
     /// <p>Deletes the specified IAM user. The user must not belong to any groups or have any access keys, signing certificates, or attached policies.</p>
     fn delete_user(&self, input: DeleteUserRequest) -> RusotoFuture<(), DeleteUserError>;
+
+    /// <p><p>Deletes the permissions boundary for the specified IAM user.</p> <important> <p>Deleting the permissions boundary for a user might increase its permissions by allowing the user to perform all the actions granted in its permissions policies. </p> </important></p>
+    fn delete_user_permissions_boundary(
+        &self,
+        input: DeleteUserPermissionsBoundaryRequest,
+    ) -> RusotoFuture<(), DeleteUserPermissionsBoundaryError>;
 
     /// <p>Deletes the specified inline policy that is embedded in the specified IAM user.</p> <p>A user can also have managed policies attached to it. To detach a managed policy from a user, use <a>DetachUserPolicy</a>. For more information about policies, refer to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn delete_user_policy(
@@ -24226,8 +24854,20 @@ pub trait Iam {
         input: PutGroupPolicyRequest,
     ) -> RusotoFuture<(), PutGroupPolicyError>;
 
+    /// <p><p>Adds or updates the policy that is specified as the IAM role&#39;s permissions boundary. You can use an AWS managed policy or a customer managed policy to set the boundary for a role. Use the boundary to control the maximum permissions that the role can have. Setting a permissions boundary is an advanced feature that can affect the permissions for the role.</p> <p>You cannot set the boundary for a service-linked role. </p> <important> <p>Policies used as permissions boundaries do not provide permissions. You must also attach a permissions policy to the role. To learn how the effective permissions for a role are evaluated, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html">IAM JSON Policy Evaluation Logic</a> in the IAM User Guide. </p> </important></p>
+    fn put_role_permissions_boundary(
+        &self,
+        input: PutRolePermissionsBoundaryRequest,
+    ) -> RusotoFuture<(), PutRolePermissionsBoundaryError>;
+
     /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM role.</p> <p>When you embed an inline policy in a role, the inline policy is used as part of the role&#39;s access (permissions) policy. The role&#39;s trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role&#39;s trust policy using <a>UpdateAssumeRolePolicy</a>. For more information about IAM roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html">Using Roles to Delegate Permissions and Federate Identities</a>.</p> <p>A role can also have a managed policy attached to it. To attach a managed policy to a role, use <a>AttachRolePolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed with a role, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutRolePolicy</code>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn put_role_policy(&self, input: PutRolePolicyRequest) -> RusotoFuture<(), PutRolePolicyError>;
+
+    /// <p><p>Adds or updates the policy that is specified as the IAM user&#39;s permissions boundary. You can use an AWS managed policy or a customer managed policy to set the boundary for a user. Use the boundary to control the maximum permissions that the user can have. Setting a permissions boundary is an advanced feature that can affect the permissions for the user.</p> <important> <p>Policies that are used as permissions boundaries do not provide permissions. You must also attach a permissions policy to the user. To learn how the effective permissions for a user are evaluated, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html">IAM JSON Policy Evaluation Logic</a> in the IAM User Guide. </p> </important></p>
+    fn put_user_permissions_boundary(
+        &self,
+        input: PutUserPermissionsBoundaryRequest,
+    ) -> RusotoFuture<(), PutUserPermissionsBoundaryError>;
 
     /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM user.</p> <p>An IAM user can also have a managed policy attached to it. To attach a managed policy to a user, use <a>AttachUserPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a user, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutUserPolicy</code>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn put_user_policy(&self, input: PutUserPolicyRequest) -> RusotoFuture<(), PutUserPolicyError>;
@@ -24343,7 +24983,7 @@ pub trait Iam {
         input: UpdateServerCertificateRequest,
     ) -> RusotoFuture<(), UpdateServerCertificateError>;
 
-    /// <p>Sets the status of a service-specific credential to <code>Active</code> or <code>Inactive</code>. Service-specific credentials that are inactive cannot be used for authentication to the service. This operation can be used to disable a user’s service-specific credential as part of a credential rotation work flow.</p>
+    /// <p>Sets the status of a service-specific credential to <code>Active</code> or <code>Inactive</code>. Service-specific credentials that are inactive cannot be used for authentication to the service. This operation can be used to disable a user's service-specific credential as part of a credential rotation work flow.</p>
     fn update_service_specific_credential(
         &self,
         input: UpdateServiceSpecificCredentialRequest,
@@ -25661,6 +26301,35 @@ impl Iam for IamClient {
         })
     }
 
+    /// <p><p>Deletes the permissions boundary for the specified IAM role. </p> <important> <p>Deleting the permissions boundary for a role might increase its permissions by allowing anyone who assumes the role to perform all the actions granted in its permissions policies. </p> </important></p>
+    fn delete_role_permissions_boundary(
+        &self,
+        input: DeleteRolePermissionsBoundaryRequest,
+    ) -> RusotoFuture<(), DeleteRolePermissionsBoundaryError> {
+        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteRolePermissionsBoundary");
+        params.put("Version", "2010-05-08");
+        DeleteRolePermissionsBoundaryRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteRolePermissionsBoundaryError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
+
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
+    }
+
     /// <p>Deletes the specified inline policy that is embedded in the specified IAM role.</p> <p>A role can also have managed policies attached to it. To detach a managed policy from a role, use <a>DetachRolePolicy</a>. For more information about policies, refer to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn delete_role_policy(
         &self,
@@ -25904,6 +26573,35 @@ impl Iam for IamClient {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteUserError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
+
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
+    }
+
+    /// <p><p>Deletes the permissions boundary for the specified IAM user.</p> <important> <p>Deleting the permissions boundary for a user might increase its permissions by allowing the user to perform all the actions granted in its permissions policies. </p> </important></p>
+    fn delete_user_permissions_boundary(
+        &self,
+        input: DeleteUserPermissionsBoundaryRequest,
+    ) -> RusotoFuture<(), DeleteUserPermissionsBoundaryError> {
+        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteUserPermissionsBoundary");
+        params.put("Version", "2010-05-08");
+        DeleteUserPermissionsBoundaryRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteUserPermissionsBoundaryError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
@@ -28612,6 +29310,35 @@ impl Iam for IamClient {
         })
     }
 
+    /// <p><p>Adds or updates the policy that is specified as the IAM role&#39;s permissions boundary. You can use an AWS managed policy or a customer managed policy to set the boundary for a role. Use the boundary to control the maximum permissions that the role can have. Setting a permissions boundary is an advanced feature that can affect the permissions for the role.</p> <p>You cannot set the boundary for a service-linked role. </p> <important> <p>Policies used as permissions boundaries do not provide permissions. You must also attach a permissions policy to the role. To learn how the effective permissions for a role are evaluated, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html">IAM JSON Policy Evaluation Logic</a> in the IAM User Guide. </p> </important></p>
+    fn put_role_permissions_boundary(
+        &self,
+        input: PutRolePermissionsBoundaryRequest,
+    ) -> RusotoFuture<(), PutRolePermissionsBoundaryError> {
+        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "PutRolePermissionsBoundary");
+        params.put("Version", "2010-05-08");
+        PutRolePermissionsBoundaryRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(PutRolePermissionsBoundaryError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
+
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
+    }
+
     /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM role.</p> <p>When you embed an inline policy in a role, the inline policy is used as part of the role&#39;s access (permissions) policy. The role&#39;s trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role&#39;s trust policy using <a>UpdateAssumeRolePolicy</a>. For more information about IAM roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html">Using Roles to Delegate Permissions and Federate Identities</a>.</p> <p>A role can also have a managed policy attached to it. To attach a managed policy to a role, use <a>AttachRolePolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed with a role, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutRolePolicy</code>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn put_role_policy(&self, input: PutRolePolicyRequest) -> RusotoFuture<(), PutRolePolicyError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
@@ -28629,6 +29356,35 @@ impl Iam for IamClient {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutRolePolicyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
+
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
+    }
+
+    /// <p><p>Adds or updates the policy that is specified as the IAM user&#39;s permissions boundary. You can use an AWS managed policy or a customer managed policy to set the boundary for a user. Use the boundary to control the maximum permissions that the user can have. Setting a permissions boundary is an advanced feature that can affect the permissions for the user.</p> <important> <p>Policies that are used as permissions boundaries do not provide permissions. You must also attach a permissions policy to the user. To learn how the effective permissions for a user are evaluated, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html">IAM JSON Policy Evaluation Logic</a> in the IAM User Guide. </p> </important></p>
+    fn put_user_permissions_boundary(
+        &self,
+        input: PutUserPermissionsBoundaryRequest,
+    ) -> RusotoFuture<(), PutUserPermissionsBoundaryError> {
+        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "PutUserPermissionsBoundary");
+        params.put("Version", "2010-05-08");
+        PutUserPermissionsBoundaryRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(PutUserPermissionsBoundaryError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }));
@@ -29357,7 +30113,7 @@ impl Iam for IamClient {
         })
     }
 
-    /// <p>Sets the status of a service-specific credential to <code>Active</code> or <code>Inactive</code>. Service-specific credentials that are inactive cannot be used for authentication to the service. This operation can be used to disable a user’s service-specific credential as part of a credential rotation work flow.</p>
+    /// <p>Sets the status of a service-specific credential to <code>Active</code> or <code>Inactive</code>. Service-specific credentials that are inactive cannot be used for authentication to the service. This operation can be used to disable a user's service-specific credential as part of a credential rotation work flow.</p>
     fn update_service_specific_credential(
         &self,
         input: UpdateServiceSpecificCredentialRequest,

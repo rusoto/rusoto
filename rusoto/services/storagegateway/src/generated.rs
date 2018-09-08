@@ -140,6 +140,9 @@ pub struct CachediSCSIVolume {
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
+    #[serde(rename = "KMSKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key: Option<String>,
     /// <p>If the cached volume was created from a snapshot, this field contains the snapshot ID used, e.g. snap-78e22663. Otherwise, this field is not included.</p>
     #[serde(rename = "SourceSnapshotId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -239,12 +242,23 @@ pub struct ChapInfo {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateCachediSCSIVolumeInput {
+    /// <p>A unique identifier that you use to retry a request. If you retry a request, use the same <code>ClientToken</code> you specified in the initial request.</p>
     #[serde(rename = "ClientToken")]
     pub client_token: String,
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
+    /// <p>True to use Amazon S3 server side encryption with your own AWS KMS key, or false to use a key managed by Amazon S3. Optional.</p>
+    #[serde(rename = "KMSEncrypted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_encrypted: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS KMS key used for Amazon S3 server side encryption. This value can only be set when KMSEncrypted is true. Optional.</p>
+    #[serde(rename = "KMSKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key: Option<String>,
+    /// <p>The network interface of the gateway on which to expose the iSCSI target. Only IPv4 addresses are accepted. Use <a>DescribeGatewayInformation</a> to get a list of the network interfaces available on a gateway.</p> <p> Valid Values: A valid IP address.</p>
     #[serde(rename = "NetworkInterfaceId")]
     pub network_interface_id: String,
+    /// <p>The snapshot ID (e.g. "snap-1122aabb") of the snapshot to restore as the new cached volume. Specify this field if you want to create the iSCSI storage volume from a snapshot otherwise do not include this field. To list snapshots for your account use <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-DescribeSnapshots.html">DescribeSnapshots</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p>
     #[serde(rename = "SnapshotId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snapshot_id: Option<String>,
@@ -252,17 +266,21 @@ pub struct CreateCachediSCSIVolumeInput {
     #[serde(rename = "SourceVolumeARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_volume_arn: Option<String>,
+    /// <p>The name of the iSCSI target used by initiators to connect to the target and as a suffix for the target ARN. For example, specifying <code>TargetName</code> as <i>myvolume</i> results in the target ARN of arn:aws:storagegateway:us-east-2:111122223333:gateway/sgw-12A3456B/target/iqn.1997-05.com.amazon:myvolume. The target name must be unique across all volumes of a gateway.</p>
     #[serde(rename = "TargetName")]
     pub target_name: String,
+    /// <p>The size of the volume in bytes.</p>
     #[serde(rename = "VolumeSizeInBytes")]
     pub volume_size_in_bytes: i64,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateCachediSCSIVolumeOutput {
+    /// <p>he Amazon Resource Name (ARN) of the volume target that includes the iSCSI name that initiators can use to connect to the target.</p>
     #[serde(rename = "TargetARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_arn: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the configured volume.</p>
     #[serde(rename = "VolumeARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_arn: Option<String>,
@@ -278,14 +296,14 @@ pub struct CreateNFSFileShareInput {
     /// <p>A unique string value that you supply that is used by file gateway to ensure idempotent file share creation.</p>
     #[serde(rename = "ClientToken")]
     pub client_token: String,
-    /// <p>The default storage class for objects put into an Amazon S3 bucket by file gateway. Possible values are S3_STANDARD or S3_STANDARD_IA. If this field is not populated, the default value S3_STANDARD is used. Optional.</p>
+    /// <p>The default storage class for objects put into an Amazon S3 bucket by the file gateway. Possible values are <code>S3_STANDARD</code>, <code>S3_STANDARD_IA</code>, or <code>S3_ONEZONE_IA</code>. If this field is not populated, the default value <code>S3_STANDARD</code> is used. Optional.</p>
     #[serde(rename = "DefaultStorageClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_storage_class: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the file gateway on which you want to create a file share.</p>
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
-    /// <p>Enables guessing of the MIME type for uploaded objects based on file extensions. Set this value to true to enable MIME type guessing, and otherwise to false. The default value is true.</p>
+    /// <p>A value that enables guessing of the MIME type for uploaded objects based on file extensions. Set this value to true to enable MIME type guessing, and otherwise to false. The default value is true.</p>
     #[serde(rename = "GuessMIMETypeEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub guess_mime_type_enabled: Option<bool>,
@@ -293,7 +311,7 @@ pub struct CreateNFSFileShareInput {
     #[serde(rename = "KMSEncrypted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_encrypted: Option<bool>,
-    /// <p>The KMS key used for Amazon S3 server side encryption. This value can only be set when KmsEncrypted is true. Optional.</p>
+    /// <p>The Amazon Resource Name (ARN) AWS KMS key used for Amazon S3 server side encryption. This value can only be set when KMSEncrypted is true. Optional.</p>
     #[serde(rename = "KMSKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key: Option<String>,
@@ -304,22 +322,22 @@ pub struct CreateNFSFileShareInput {
     #[serde(rename = "NFSFileShareDefaults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nfs_file_share_defaults: Option<NFSFileShareDefaults>,
-    /// <p>Sets the access control list permission for objects in the Amazon S3 bucket that a file gateway puts objects into. The default value is "private".</p>
+    /// <p>A value that sets the access control list permission for objects in the S3 bucket that a file gateway puts objects into. The default value is "private".</p>
     #[serde(rename = "ObjectACL")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub object_acl: Option<String>,
-    /// <p>Sets the write status of a file share. This value is true if the write status is read-only, and otherwise false.</p>
+    /// <p>A value that sets the write status of a file share. This value is true if the write status is read-only, and otherwise false.</p>
     #[serde(rename = "ReadOnly")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub read_only: Option<bool>,
-    /// <p>Sets who pays the cost of the request and the data download from the Amazon S3 bucket. Set this value to true if you want the requester to pay instead of the bucket owner, and otherwise to false.</p>
+    /// <p>A value that sets the access control list permission for objects in the Amazon S3 bucket that a file gateway puts objects into. The default value is <code>private</code>.</p>
     #[serde(rename = "RequesterPays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub requester_pays: Option<bool>,
     /// <p>The ARN of the AWS Identity and Access Management (IAM) role that a file gateway assumes when it accesses the underlying storage. </p>
     #[serde(rename = "Role")]
     pub role: String,
-    /// <p><p>Maps a user to anonymous user. Valid options are the following: </p> <ul> <li> <p>&quot;RootSquash&quot; - Only root is mapped to anonymous user.</p> </li> <li> <p>&quot;NoSquash&quot; - No one is mapped to anonymous user.</p> </li> <li> <p>&quot;AllSquash&quot; - Everyone is mapped to anonymous user.</p> </li> </ul></p>
+    /// <p><p>Maps a user to anonymous user. Valid options are the following: </p> <ul> <li> <p> <code>RootSquash</code> - Only root is mapped to anonymous user.</p> </li> <li> <p> <code>NoSquash</code> - No one is mapped to anonymous user</p> </li> <li> <p> <code>AllSquash</code> - Everyone is mapped to anonymous user.</p> </li> </ul></p>
     #[serde(rename = "Squash")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub squash: Option<String>,
@@ -328,6 +346,72 @@ pub struct CreateNFSFileShareInput {
 /// <p>CreateNFSFileShareOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateNFSFileShareOutput {
+    /// <p>The Amazon Resource Name (ARN) of the newly created file share. </p>
+    #[serde(rename = "FileShareARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_share_arn: Option<String>,
+}
+
+/// <p>CreateSMBFileShareInput</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateSMBFileShareInput {
+    /// <p>The authentication method that users use to access the file share.</p> <p>Valid values are <code>ActiveDirectory</code> or <code>GuestAccess</code>. The default is <code>ActiveDirectory</code>.</p>
+    #[serde(rename = "Authentication")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authentication: Option<String>,
+    /// <p>A unique string value that you supply that is used by file gateway to ensure idempotent file share creation.</p>
+    #[serde(rename = "ClientToken")]
+    pub client_token: String,
+    /// <p>The default storage class for objects put into an Amazon S3 bucket by the file gateway. Possible values are <code>S3_STANDARD</code>, <code>S3_STANDARD_IA</code>, or <code>S3_ONEZONE_IA</code>. If this field is not populated, the default value <code>S3_STANDARD</code> is used. Optional.</p>
+    #[serde(rename = "DefaultStorageClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_storage_class: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the file gateway on which you want to create a file share.</p>
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
+    /// <p>A value that enables guessing of the MIME type for uploaded objects based on file extensions. Set this value to true to enable MIME type guessing, and otherwise to false. The default value is true.</p>
+    #[serde(rename = "GuessMIMETypeEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub guess_mime_type_enabled: Option<bool>,
+    /// <p>A list of users or groups in the Active Directory that are not allowed to access the file share. A group must be prefixed with the @ character. For example <code>@group1</code>. Can only be set if Authentication is set to <code>ActiveDirectory</code>.</p>
+    #[serde(rename = "InvalidUserList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invalid_user_list: Option<Vec<String>>,
+    /// <p>True to use Amazon S3 server side encryption with your own AWS KMS key, or false to use a key managed by Amazon S3. Optional.</p>
+    #[serde(rename = "KMSEncrypted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_encrypted: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS KMS key used for Amazon S3 server side encryption. This value can only be set when KMSEncrypted is true. Optional.</p>
+    #[serde(rename = "KMSKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key: Option<String>,
+    /// <p>The ARN of the backed storage used for storing file data. </p>
+    #[serde(rename = "LocationARN")]
+    pub location_arn: String,
+    /// <p>A value that sets the access control list permission for objects in the S3 bucket that a file gateway puts objects into. The default value is "private".</p>
+    #[serde(rename = "ObjectACL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub object_acl: Option<String>,
+    /// <p>A value that sets the write status of a file share. This value is true if the write status is read-only, and otherwise false.</p>
+    #[serde(rename = "ReadOnly")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub read_only: Option<bool>,
+    /// <p>A value that sets the access control list permission for objects in the Amazon S3 bucket that a file gateway puts objects into. The default value is <code>private</code>.</p>
+    #[serde(rename = "RequesterPays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub requester_pays: Option<bool>,
+    /// <p>The ARN of the AWS Identity and Access Management (IAM) role that a file gateway assumes when it accesses the underlying storage. </p>
+    #[serde(rename = "Role")]
+    pub role: String,
+    /// <p>A list of users or groups in the Active Directory that are allowed to access the file share. A group must be prefixed with the @ character. For example <code>@group1</code>. Can only be set if Authentication is set to <code>ActiveDirectory</code>.</p>
+    #[serde(rename = "ValidUserList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub valid_user_list: Option<Vec<String>>,
+}
+
+/// <p>CreateSMBFileShareOutput</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct CreateSMBFileShareOutput {
     /// <p>The Amazon Resource Name (ARN) of the newly created file share. </p>
     #[serde(rename = "FileShareARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -387,6 +471,14 @@ pub struct CreateStorediSCSIVolumeInput {
     pub disk_id: String,
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
+    /// <p>True to use Amazon S3 server side encryption with your own AWS KMS key, or false to use a key managed by Amazon S3. Optional.</p>
+    #[serde(rename = "KMSEncrypted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_encrypted: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) of the KMS key used for Amazon S3 server side encryption. This value can only be set when KMSEncrypted is true. Optional.</p>
+    #[serde(rename = "KMSKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key: Option<String>,
     /// <p>The network interface of the gateway on which to expose the iSCSI target. Only IPv4 addresses are accepted. Use <a>DescribeGatewayInformation</a> to get a list of the network interfaces available on a gateway.</p> <p> Valid Values: A valid IP address.</p>
     #[serde(rename = "NetworkInterfaceId")]
     pub network_interface_id: String,
@@ -425,6 +517,14 @@ pub struct CreateTapeWithBarcodeInput {
     /// <p>The unique Amazon Resource Name (ARN) that represents the gateway to associate the virtual tape with. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
+    /// <p>True to use Amazon S3 server side encryption with your own AWS KMS key, or false to use a key managed by Amazon S3. Optional.</p>
+    #[serde(rename = "KMSEncrypted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_encrypted: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS KMS Key used for Amazon S3 server side encryption. This value can only be set when KMSEncrypted is true. Optional.</p>
+    #[serde(rename = "KMSKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key: Option<String>,
     /// <p><p>The barcode that you want to assign to the tape.</p> <note> <p>Barcodes cannot be reused. This includes barcodes used for tapes that have been deleted.</p> </note></p>
     #[serde(rename = "TapeBarcode")]
     pub tape_barcode: String,
@@ -451,6 +551,14 @@ pub struct CreateTapesInput {
     /// <p>The unique Amazon Resource Name (ARN) that represents the gateway to associate the virtual tapes with. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
+    /// <p>True to use Amazon S3 server side encryption with your own AWS KMS key, or false to use a key managed by Amazon S3. Optional.</p>
+    #[serde(rename = "KMSEncrypted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_encrypted: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS KMS key used for Amazon S3 server side encryption. This value can only be set when KMSEncrypted is true. Optional.</p>
+    #[serde(rename = "KMSKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key: Option<String>,
     /// <p>The number of virtual tapes that you want to create.</p>
     #[serde(rename = "NumTapesToCreate")]
     pub num_tapes_to_create: i64,
@@ -796,6 +904,44 @@ pub struct DescribeNFSFileSharesOutput {
     pub nfs_file_share_info_list: Option<Vec<NFSFileShareInfo>>,
 }
 
+/// <p>DescribeSMBFileSharesInput</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeSMBFileSharesInput {
+    /// <p>An array containing the Amazon Resource Name (ARN) of each file share to be described. </p>
+    #[serde(rename = "FileShareARNList")]
+    pub file_share_arn_list: Vec<String>,
+}
+
+/// <p>DescribeSMBFileSharesOutput</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DescribeSMBFileSharesOutput {
+    /// <p>An array containing a description for each requested file share. </p>
+    #[serde(rename = "SMBFileShareInfoList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub smb_file_share_info_list: Option<Vec<SMBFileShareInfo>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeSMBSettingsInput {
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DescribeSMBSettingsOutput {
+    /// <p>The name of the domain that the gateway is joined to.</p>
+    #[serde(rename = "DomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    #[serde(rename = "GatewayARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gateway_arn: Option<String>,
+    /// <p>This value is true if a password for the guest user “smbguest” is set, and otherwise false.</p>
+    #[serde(rename = "SMBGuestPasswordSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub smb_guest_password_set: Option<bool>,
+}
+
 /// <p>A JSON object containing the <a>DescribeSnapshotScheduleInput$VolumeARN</a> of the volume.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeSnapshotScheduleInput {
@@ -862,7 +1008,7 @@ pub struct DescribeTapeArchivesOutput {
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    /// <p>An array of virtual tape objects in the virtual tape shelf (VTS). The description includes of the Amazon Resource Name(ARN) of the virtual tapes. The information returned includes the Amazon Resource Names (ARNs) of the tapes, size of the tapes, status of the tapes, progress of the description and tape barcode.</p>
+    /// <p>An array of virtual tape objects in the virtual tape shelf (VTS). The description includes of the Amazon Resource Name (ARN) of the virtual tapes. The information returned includes the Amazon Resource Names (ARNs) of the tapes, size of the tapes, status of the tapes, progress of the description and tape barcode.</p>
     #[serde(rename = "TapeArchives")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tape_archives: Option<Vec<TapeArchive>>,
@@ -1030,7 +1176,7 @@ pub struct DeviceiSCSIAttributes {
     #[serde(rename = "NetworkInterfacePort")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network_interface_port: Option<i64>,
-    /// <p>Specifies the unique Amazon Resource Name(ARN) that encodes the iSCSI qualified name(iqn) of a tape drive or media changer target.</p>
+    /// <p>Specifies the unique Amazon Resource Name (ARN) that encodes the iSCSI qualified name(iqn) of a tape drive or media changer target.</p>
     #[serde(rename = "TargetARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_arn: Option<String>,
@@ -1046,7 +1192,7 @@ pub struct DisableGatewayInput {
 /// <p>DisableGatewayOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DisableGatewayOutput {
-    /// <p>The unique Amazon Resource Name of the disabled gateway.</p>
+    /// <p>The unique Amazon Resource Name (ARN) of the disabled gateway.</p>
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_arn: Option<String>,
@@ -1089,6 +1235,9 @@ pub struct FileShareInfo {
     #[serde(rename = "FileShareStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_share_status: Option<String>,
+    #[serde(rename = "FileShareType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_share_type: Option<String>,
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_arn: Option<String>,
@@ -1117,6 +1266,32 @@ pub struct GatewayInfo {
     #[serde(rename = "GatewayType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_type: Option<String>,
+}
+
+/// <p>JoinDomainInput</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct JoinDomainInput {
+    /// <p>The name of the domain that you want the gateway to join.</p>
+    #[serde(rename = "DomainName")]
+    pub domain_name: String,
+    /// <p>The unique Amazon Resource Name (ARN) of the file gateway you want to add to the Active Directory domain. </p>
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
+    /// <p>Sets the password of the user who has permission to add the gateway to the Active Directory domain.</p>
+    #[serde(rename = "Password")]
+    pub password: String,
+    /// <p>Sets the user name of user who has permission to add the gateway to the Active Directory domain.</p>
+    #[serde(rename = "UserName")]
+    pub user_name: String,
+}
+
+/// <p>JoinDomainOutput</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct JoinDomainOutput {
+    /// <p>The unique Amazon Resource Name (ARN) of the gateway that joined the domain.</p>
+    #[serde(rename = "GatewayARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gateway_arn: Option<String>,
 }
 
 /// <p>ListFileShareInput</p>
@@ -1316,7 +1491,7 @@ pub struct ListVolumesOutput {
     pub volume_infos: Option<Vec<VolumeInfo>>,
 }
 
-/// <p>Describes file share default values. Files and folders stored as Amazon S3 objects in S3 buckets don't, by default, have Unix file permissions assigned to them. Upon discovery in an S3 bucket by Storage Gateway, the S3 objects that represent files and folders are assigned these default Unix permissions. This operation is only supported in the file gateway type.</p>
+/// <p>Describes Network File System (NFS) file share default values. Files and folders stored as Amazon S3 objects in S3 buckets don't, by default, have Unix file permissions assigned to them. Upon discovery in an S3 bucket by Storage Gateway, the S3 objects that represent files and folders are assigned these default Unix permissions. This operation is only supported for file gateways.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NFSFileShareDefaults {
     /// <p>The Unix directory mode in the form "nnnn". For example, "0666" represents the default access mode for all directories inside the file share. The default value is 0777.</p>
@@ -1343,7 +1518,7 @@ pub struct NFSFileShareInfo {
     #[serde(rename = "ClientList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_list: Option<Vec<String>>,
-    /// <p>The default storage class for objects put into an Amazon S3 bucket by file gateway. Possible values are S3_STANDARD or S3_STANDARD_IA. If this field is not populated, the default value S3_STANDARD is used. Optional.</p>
+    /// <p>The default storage class for objects put into an Amazon S3 bucket by the file gateway. Possible values are <code>S3_STANDARD</code>, <code>S3_STANDARD_IA</code>, or <code>S3_ONEZONE_IA</code>. If this field is not populated, the default value <code>S3_STANDARD</code> is used. Optional.</p>
     #[serde(rename = "DefaultStorageClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_storage_class: Option<String>,
@@ -1359,11 +1534,11 @@ pub struct NFSFileShareInfo {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_arn: Option<String>,
-    /// <p>Enables guessing of the MIME type for uploaded objects based on file extensions. Set this value to true to enable MIME type guessing, and otherwise to false. The default value is true.</p>
+    /// <p>A value that enables guessing of the MIME type for uploaded objects based on file extensions. Set this value to true to enable MIME type guessing, and otherwise to false. The default value is true.</p>
     #[serde(rename = "GuessMIMETypeEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub guess_mime_type_enabled: Option<bool>,
-    /// <p>True to use Amazon S3 server side encryption with your own KMS key, or false to use a key managed by Amazon S3. Optional. </p>
+    /// <p>True to use Amazon S3 server side encryption with your own AWS KMS key, or false to use a key managed by Amazon S3. Optional. </p>
     #[serde(rename = "KMSEncrypted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_encrypted: Option<bool>,
@@ -1382,11 +1557,11 @@ pub struct NFSFileShareInfo {
     #[serde(rename = "Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
-    /// <p>Sets the write status of a file share. This value is true if the write status is read-only, and otherwise false.</p>
+    /// <p>A value that sets the write status of a file share. This value is true if the write status is read-only, and otherwise false.</p>
     #[serde(rename = "ReadOnly")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub read_only: Option<bool>,
-    /// <p>Sets who pays the cost of the request and the data download from the Amazon S3 bucket. Set this value to true if you want the requester to pay instead of the bucket owner, and otherwise to false.</p>
+    /// <p>A value that sets the access control list permission for objects in the Amazon S3 bucket that a file gateway puts objects into. The default value is <code>private</code>.</p>
     #[serde(rename = "RequesterPays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub requester_pays: Option<bool>,
@@ -1516,6 +1691,70 @@ pub struct RetrieveTapeRecoveryPointOutput {
     pub tape_arn: Option<String>,
 }
 
+/// <p>The Windows file permissions and ownership information assigned, by default, to native S3 objects when file gateway discovers them in S3 buckets. This operation is only supported for file gateways.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct SMBFileShareInfo {
+    #[serde(rename = "Authentication")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authentication: Option<String>,
+    /// <p>The default storage class for objects put into an Amazon S3 bucket by the file gateway. Possible values are <code>S3_STANDARD</code>, <code>S3_STANDARD_IA</code>, or <code>S3_ONEZONE_IA</code>. If this field is not populated, the default value <code>S3_STANDARD</code> is used. Optional.</p>
+    #[serde(rename = "DefaultStorageClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_storage_class: Option<String>,
+    #[serde(rename = "FileShareARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_share_arn: Option<String>,
+    #[serde(rename = "FileShareId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_share_id: Option<String>,
+    #[serde(rename = "FileShareStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_share_status: Option<String>,
+    #[serde(rename = "GatewayARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gateway_arn: Option<String>,
+    /// <p>A value that enables guessing of the MIME type for uploaded objects based on file extensions. Set this value to true to enable MIME type guessing, and otherwise to false. The default value is true.</p>
+    #[serde(rename = "GuessMIMETypeEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub guess_mime_type_enabled: Option<bool>,
+    /// <p>A list of users or groups in the Active Directory that are not allowed to access the file share. A group must be prefixed with the @ character. For example <code>@group1</code>. Can only be set if Authentication is set to <code>ActiveDirectory</code>.</p>
+    #[serde(rename = "InvalidUserList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invalid_user_list: Option<Vec<String>>,
+    /// <p>True to use Amazon S3 server-side encryption with your own AWS KMS key, or false to use a key managed by Amazon S3. Optional. </p>
+    #[serde(rename = "KMSEncrypted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_encrypted: Option<bool>,
+    #[serde(rename = "KMSKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key: Option<String>,
+    #[serde(rename = "LocationARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location_arn: Option<String>,
+    #[serde(rename = "ObjectACL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub object_acl: Option<String>,
+    /// <p>The file share path used by the SMB client to identify the mount point.</p>
+    #[serde(rename = "Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
+    /// <p>A value that sets the write status of a file share. This value is true if the write status is read-only, and otherwise false.</p>
+    #[serde(rename = "ReadOnly")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub read_only: Option<bool>,
+    /// <p>A value that sets the access control list permission for objects in the Amazon S3 bucket that a file gateway puts objects into. The default value is <code>private</code>.</p>
+    #[serde(rename = "RequesterPays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub requester_pays: Option<bool>,
+    #[serde(rename = "Role")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<String>,
+    /// <p>A list of users or groups in the Active Directory that are allowed to access the file share. A group must be prefixed with the @ character. For example <code>@group1</code>. Can only be set if Authentication is set to <code>ActiveDirectory</code>.</p>
+    #[serde(rename = "ValidUserList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub valid_user_list: Option<Vec<String>>,
+}
+
 /// <p>SetLocalConsolePasswordInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SetLocalConsolePasswordInput {
@@ -1528,6 +1767,24 @@ pub struct SetLocalConsolePasswordInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SetLocalConsolePasswordOutput {
+    #[serde(rename = "GatewayARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gateway_arn: Option<String>,
+}
+
+/// <p>SetSMBGuestPasswordInput</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct SetSMBGuestPasswordInput {
+    /// <p>The Amazon Resource Name (ARN) of the file gateway the SMB file share is associated with.</p>
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
+    /// <p>The password that you want to set for your SMB Server.</p>
+    #[serde(rename = "Password")]
+    pub password: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct SetSMBGuestPasswordOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_arn: Option<String>,
@@ -1579,6 +1836,9 @@ pub struct StorediSCSIVolume {
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
+    #[serde(rename = "KMSKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key: Option<String>,
     /// <p>Indicates if when the stored volume was created, existing data on the underlying local disk was preserved.</p> <p> Valid Values: true, false</p>
     #[serde(rename = "PreservedExistingData")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1636,6 +1896,9 @@ pub struct Tag {
 /// <p>Describes a virtual tape object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Tape {
+    #[serde(rename = "KMSKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key: Option<String>,
     /// <p>For archiving virtual tapes, indicates how much data remains to be uploaded before archiving is complete.</p> <p>Range: 0 (not started) to 100 (complete).</p>
     #[serde(rename = "Progress")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1673,10 +1936,13 @@ pub struct Tape {
 /// <p>Represents a virtual tape that is archived in the virtual tape shelf (VTS).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TapeArchive {
-    /// <p>The time that the archiving of the virtual tape was completed.</p> <p>The string format of the completion time is in the ISO8601 extended YYYY-MM-DD'T'HH:MM:SS'Z' format.</p>
+    /// <p>The time that the archiving of the virtual tape was completed.</p> <p>The default time stamp format is in the ISO8601 extended YYYY-MM-DD'T'HH:MM:SS'Z' format.</p>
     #[serde(rename = "CompletionTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completion_time: Option<f64>,
+    #[serde(rename = "KMSKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the tape gateway that the virtual tape is being retrieved to.</p> <p>The virtual tape is retrieved from the virtual tape shelf (VTS).</p>
     #[serde(rename = "RetrievedTo")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1689,6 +1955,7 @@ pub struct TapeArchive {
     #[serde(rename = "TapeBarcode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tape_barcode: Option<String>,
+    /// <p>The date the virtual tape was created.</p>
     #[serde(rename = "TapeCreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tape_created_date: Option<f64>,
@@ -1738,7 +2005,7 @@ pub struct TapeRecoveryPointInfo {
     #[serde(rename = "TapeARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tape_arn: Option<String>,
-    /// <p>The time when the point-in-time view of the virtual tape was replicated for later recovery.</p> <p>The string format of the tape recovery point time is in the ISO8601 extended YYYY-MM-DD'T'HH:MM:SS'Z' format.</p>
+    /// <p>The time when the point-in-time view of the virtual tape was replicated for later recovery.</p> <p>The default time stamp format of the tape recovery point time is in the ISO8601 extended YYYY-MM-DD'T'HH:MM:SS'Z' format.</p>
     #[serde(rename = "TapeRecoveryPointTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tape_recovery_point_time: Option<f64>,
@@ -1874,14 +2141,14 @@ pub struct UpdateNFSFileShareInput {
     #[serde(rename = "ClientList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_list: Option<Vec<String>>,
-    /// <p>The default storage class for objects put into an Amazon S3 bucket by a file gateway. Possible values are S3_STANDARD or S3_STANDARD_IA. If this field is not populated, the default value S3_STANDARD is used. Optional.</p>
+    /// <p>The default storage class for objects put into an Amazon S3 bucket by the file gateway. Possible values are <code>S3_STANDARD</code>, <code>S3_STANDARD_IA</code>, or <code>S3_ONEZONE_IA</code>. If this field is not populated, the default value <code>S3_STANDARD</code> is used. Optional.</p>
     #[serde(rename = "DefaultStorageClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_storage_class: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the file share to be updated. </p>
     #[serde(rename = "FileShareARN")]
     pub file_share_arn: String,
-    /// <p>Enables guessing of the MIME type for uploaded objects based on file extensions. Set this value to true to enable MIME type guessing, and otherwise to false. The default value is true.</p>
+    /// <p>A value that enables guessing of the MIME type for uploaded objects based on file extensions. Set this value to true to enable MIME type guessing, and otherwise to false. The default value is true.</p>
     #[serde(rename = "GuessMIMETypeEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub guess_mime_type_enabled: Option<bool>,
@@ -1889,7 +2156,7 @@ pub struct UpdateNFSFileShareInput {
     #[serde(rename = "KMSEncrypted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_encrypted: Option<bool>,
-    /// <p>The KMS key used for Amazon S3 server side encryption. This value can only be set when KmsEncrypted is true. Optional. </p>
+    /// <p>The Amazon Resource Name (ARN) of the AWS KMS key used for Amazon S3 server side encryption. This value can only be set when KMSEncrypted is true. Optional. </p>
     #[serde(rename = "KMSKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key: Option<String>,
@@ -1897,19 +2164,19 @@ pub struct UpdateNFSFileShareInput {
     #[serde(rename = "NFSFileShareDefaults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nfs_file_share_defaults: Option<NFSFileShareDefaults>,
-    /// <p>Sets the access control list permission for objects in the S3 bucket that a file gateway puts objects into. The default value is "private".</p>
+    /// <p>A value that sets the access control list permission for objects in the S3 bucket that a file gateway puts objects into. The default value is "private".</p>
     #[serde(rename = "ObjectACL")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub object_acl: Option<String>,
-    /// <p>Sets the write status of a file share. This value is true if the write status is read-only, and otherwise false.</p>
+    /// <p>A value that sets the write status of a file share. This value is true if the write status is read-only, and otherwise false.</p>
     #[serde(rename = "ReadOnly")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub read_only: Option<bool>,
-    /// <p>Sets who pays the cost of the request and the data download from the Amazon S3 bucket. Set this value to true if you want the requester to pay instead of the bucket owner, and otherwise to false.</p>
+    /// <p>A value that sets the access control list permission for objects in the Amazon S3 bucket that a file gateway puts objects into. The default value is <code>private</code>.</p>
     #[serde(rename = "RequesterPays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub requester_pays: Option<bool>,
-    /// <p><p>The user mapped to anonymous user. Valid options are the following:</p> <ul> <li> <p>&quot;RootSquash&quot; - Only root is mapped to anonymous user.</p> </li> <li> <p>&quot;NoSquash&quot; - No one is mapped to anonymous user</p> </li> <li> <p>&quot;AllSquash&quot; - Everyone is mapped to anonymous user.</p> </li> </ul></p>
+    /// <p><p>The user mapped to anonymous user. Valid options are the following:</p> <ul> <li> <p> <code>RootSquash</code> - Only root is mapped to anonymous user.</p> </li> <li> <p> <code>NoSquash</code> - No one is mapped to anonymous user</p> </li> <li> <p> <code>AllSquash</code> - Everyone is mapped to anonymous user.</p> </li> </ul></p>
     #[serde(rename = "Squash")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub squash: Option<String>,
@@ -1919,6 +2186,59 @@ pub struct UpdateNFSFileShareInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateNFSFileShareOutput {
     /// <p>The Amazon Resource Name (ARN) of the updated file share. </p>
+    #[serde(rename = "FileShareARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_share_arn: Option<String>,
+}
+
+/// <p>UpdateSMBFileShareInput</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateSMBFileShareInput {
+    /// <p>The default storage class for objects put into an Amazon S3 bucket by the file gateway. Possible values are <code>S3_STANDARD</code>, <code>S3_STANDARD_IA</code>, or <code>S3_ONEZONE_IA</code>. If this field is not populated, the default value <code>S3_STANDARD</code> is used. Optional.</p>
+    #[serde(rename = "DefaultStorageClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_storage_class: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the SMB file share that you want to update.</p>
+    #[serde(rename = "FileShareARN")]
+    pub file_share_arn: String,
+    /// <p>A value that enables guessing of the MIME type for uploaded objects based on file extensions. Set this value to true to enable MIME type guessing, and otherwise to false. The default value is true.</p>
+    #[serde(rename = "GuessMIMETypeEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub guess_mime_type_enabled: Option<bool>,
+    /// <p>A list of users or groups in the Active Directory that are not allowed to access the file share. A group must be prefixed with the @ character. For example <code>@group1</code>. Can only be set if Authentication is set to <code>ActiveDirectory</code>.</p>
+    #[serde(rename = "InvalidUserList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invalid_user_list: Option<Vec<String>>,
+    /// <p>True to use Amazon S3 server side encryption with your own AWS KMS key, or false to use a key managed by Amazon S3. Optional.</p>
+    #[serde(rename = "KMSEncrypted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_encrypted: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS KMS key used for Amazon S3 server side encryption. This value can only be set when KMSEncrypted is true. Optional.</p>
+    #[serde(rename = "KMSKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key: Option<String>,
+    /// <p>A value that sets the access control list permission for objects in the S3 bucket that a file gateway puts objects into. The default value is "private".</p>
+    #[serde(rename = "ObjectACL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub object_acl: Option<String>,
+    /// <p>A value that sets the write status of a file share. This value is true if the write status is read-only, and otherwise false.</p>
+    #[serde(rename = "ReadOnly")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub read_only: Option<bool>,
+    /// <p>A value that sets the access control list permission for objects in the Amazon S3 bucket that a file gateway puts objects into. The default value is <code>private</code>.</p>
+    #[serde(rename = "RequesterPays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub requester_pays: Option<bool>,
+    /// <p>A list of users or groups in the Active Directory that are allowed to access the file share. A group must be prefixed with the @ character. For example <code>@group1</code>. Can only be set if Authentication is set to <code>ActiveDirectory</code>.</p>
+    #[serde(rename = "ValidUserList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub valid_user_list: Option<Vec<String>>,
+}
+
+/// <p>UpdateSMBFileShareOutput</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct UpdateSMBFileShareOutput {
+    /// <p>The Amazon Resource Name (ARN) of the updated SMB file share. </p>
     #[serde(rename = "FileShareARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_share_arn: Option<String>,
@@ -2830,6 +3150,93 @@ impl Error for CreateNFSFileShareError {
                 dispatch_error.description()
             }
             CreateNFSFileShareError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateSMBFileShare
+#[derive(Debug, PartialEq)]
+pub enum CreateSMBFileShareError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateSMBFileShareError {
+    pub fn from_body(body: &str) -> CreateSMBFileShareError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => {
+                        CreateSMBFileShareError::InternalServerError(String::from(error_message))
+                    }
+                    "InvalidGatewayRequestException" => {
+                        CreateSMBFileShareError::InvalidGatewayRequest(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateSMBFileShareError::Validation(error_message.to_string())
+                    }
+                    _ => CreateSMBFileShareError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateSMBFileShareError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateSMBFileShareError {
+    fn from(err: serde_json::error::Error) -> CreateSMBFileShareError {
+        CreateSMBFileShareError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateSMBFileShareError {
+    fn from(err: CredentialsError) -> CreateSMBFileShareError {
+        CreateSMBFileShareError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateSMBFileShareError {
+    fn from(err: HttpDispatchError) -> CreateSMBFileShareError {
+        CreateSMBFileShareError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateSMBFileShareError {
+    fn from(err: io::Error) -> CreateSMBFileShareError {
+        CreateSMBFileShareError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateSMBFileShareError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateSMBFileShareError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateSMBFileShareError::InternalServerError(ref cause) => cause,
+            CreateSMBFileShareError::InvalidGatewayRequest(ref cause) => cause,
+            CreateSMBFileShareError::Validation(ref cause) => cause,
+            CreateSMBFileShareError::Credentials(ref err) => err.description(),
+            CreateSMBFileShareError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateSMBFileShareError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -4601,6 +5008,182 @@ impl Error for DescribeNFSFileSharesError {
         }
     }
 }
+/// Errors returned by DescribeSMBFileShares
+#[derive(Debug, PartialEq)]
+pub enum DescribeSMBFileSharesError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeSMBFileSharesError {
+    pub fn from_body(body: &str) -> DescribeSMBFileSharesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => {
+                        DescribeSMBFileSharesError::InternalServerError(String::from(error_message))
+                    }
+                    "InvalidGatewayRequestException" => {
+                        DescribeSMBFileSharesError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        DescribeSMBFileSharesError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeSMBFileSharesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeSMBFileSharesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeSMBFileSharesError {
+    fn from(err: serde_json::error::Error) -> DescribeSMBFileSharesError {
+        DescribeSMBFileSharesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeSMBFileSharesError {
+    fn from(err: CredentialsError) -> DescribeSMBFileSharesError {
+        DescribeSMBFileSharesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeSMBFileSharesError {
+    fn from(err: HttpDispatchError) -> DescribeSMBFileSharesError {
+        DescribeSMBFileSharesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeSMBFileSharesError {
+    fn from(err: io::Error) -> DescribeSMBFileSharesError {
+        DescribeSMBFileSharesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeSMBFileSharesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeSMBFileSharesError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeSMBFileSharesError::InternalServerError(ref cause) => cause,
+            DescribeSMBFileSharesError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeSMBFileSharesError::Validation(ref cause) => cause,
+            DescribeSMBFileSharesError::Credentials(ref err) => err.description(),
+            DescribeSMBFileSharesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeSMBFileSharesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeSMBSettings
+#[derive(Debug, PartialEq)]
+pub enum DescribeSMBSettingsError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeSMBSettingsError {
+    pub fn from_body(body: &str) -> DescribeSMBSettingsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => {
+                        DescribeSMBSettingsError::InternalServerError(String::from(error_message))
+                    }
+                    "InvalidGatewayRequestException" => {
+                        DescribeSMBSettingsError::InvalidGatewayRequest(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeSMBSettingsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeSMBSettingsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeSMBSettingsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeSMBSettingsError {
+    fn from(err: serde_json::error::Error) -> DescribeSMBSettingsError {
+        DescribeSMBSettingsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeSMBSettingsError {
+    fn from(err: CredentialsError) -> DescribeSMBSettingsError {
+        DescribeSMBSettingsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeSMBSettingsError {
+    fn from(err: HttpDispatchError) -> DescribeSMBSettingsError {
+        DescribeSMBSettingsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeSMBSettingsError {
+    fn from(err: io::Error) -> DescribeSMBSettingsError {
+        DescribeSMBSettingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeSMBSettingsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeSMBSettingsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeSMBSettingsError::InternalServerError(ref cause) => cause,
+            DescribeSMBSettingsError::InvalidGatewayRequest(ref cause) => cause,
+            DescribeSMBSettingsError::Validation(ref cause) => cause,
+            DescribeSMBSettingsError::Credentials(ref err) => err.description(),
+            DescribeSMBSettingsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeSMBSettingsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeSnapshotSchedule
 #[derive(Debug, PartialEq)]
 pub enum DescribeSnapshotScheduleError {
@@ -5389,6 +5972,89 @@ impl Error for DisableGatewayError {
             DisableGatewayError::Credentials(ref err) => err.description(),
             DisableGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DisableGatewayError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by JoinDomain
+#[derive(Debug, PartialEq)]
+pub enum JoinDomainError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl JoinDomainError {
+    pub fn from_body(body: &str) -> JoinDomainError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => {
+                        JoinDomainError::InternalServerError(String::from(error_message))
+                    }
+                    "InvalidGatewayRequestException" => {
+                        JoinDomainError::InvalidGatewayRequest(String::from(error_message))
+                    }
+                    "ValidationException" => JoinDomainError::Validation(error_message.to_string()),
+                    _ => JoinDomainError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => JoinDomainError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for JoinDomainError {
+    fn from(err: serde_json::error::Error) -> JoinDomainError {
+        JoinDomainError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for JoinDomainError {
+    fn from(err: CredentialsError) -> JoinDomainError {
+        JoinDomainError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for JoinDomainError {
+    fn from(err: HttpDispatchError) -> JoinDomainError {
+        JoinDomainError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for JoinDomainError {
+    fn from(err: io::Error) -> JoinDomainError {
+        JoinDomainError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for JoinDomainError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for JoinDomainError {
+    fn description(&self) -> &str {
+        match *self {
+            JoinDomainError::InternalServerError(ref cause) => cause,
+            JoinDomainError::InvalidGatewayRequest(ref cause) => cause,
+            JoinDomainError::Validation(ref cause) => cause,
+            JoinDomainError::Credentials(ref err) => err.description(),
+            JoinDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            JoinDomainError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -6689,6 +7355,93 @@ impl Error for SetLocalConsolePasswordError {
         }
     }
 }
+/// Errors returned by SetSMBGuestPassword
+#[derive(Debug, PartialEq)]
+pub enum SetSMBGuestPasswordError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl SetSMBGuestPasswordError {
+    pub fn from_body(body: &str) -> SetSMBGuestPasswordError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => {
+                        SetSMBGuestPasswordError::InternalServerError(String::from(error_message))
+                    }
+                    "InvalidGatewayRequestException" => {
+                        SetSMBGuestPasswordError::InvalidGatewayRequest(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        SetSMBGuestPasswordError::Validation(error_message.to_string())
+                    }
+                    _ => SetSMBGuestPasswordError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => SetSMBGuestPasswordError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for SetSMBGuestPasswordError {
+    fn from(err: serde_json::error::Error) -> SetSMBGuestPasswordError {
+        SetSMBGuestPasswordError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for SetSMBGuestPasswordError {
+    fn from(err: CredentialsError) -> SetSMBGuestPasswordError {
+        SetSMBGuestPasswordError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SetSMBGuestPasswordError {
+    fn from(err: HttpDispatchError) -> SetSMBGuestPasswordError {
+        SetSMBGuestPasswordError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetSMBGuestPasswordError {
+    fn from(err: io::Error) -> SetSMBGuestPasswordError {
+        SetSMBGuestPasswordError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for SetSMBGuestPasswordError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SetSMBGuestPasswordError {
+    fn description(&self) -> &str {
+        match *self {
+            SetSMBGuestPasswordError::InternalServerError(ref cause) => cause,
+            SetSMBGuestPasswordError::InvalidGatewayRequest(ref cause) => cause,
+            SetSMBGuestPasswordError::Validation(ref cause) => cause,
+            SetSMBGuestPasswordError::Credentials(ref err) => err.description(),
+            SetSMBGuestPasswordError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            SetSMBGuestPasswordError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ShutdownGateway
 #[derive(Debug, PartialEq)]
 pub enum ShutdownGatewayError {
@@ -7391,6 +8144,93 @@ impl Error for UpdateNFSFileShareError {
         }
     }
 }
+/// Errors returned by UpdateSMBFileShare
+#[derive(Debug, PartialEq)]
+pub enum UpdateSMBFileShareError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateSMBFileShareError {
+    pub fn from_body(body: &str) -> UpdateSMBFileShareError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => {
+                        UpdateSMBFileShareError::InternalServerError(String::from(error_message))
+                    }
+                    "InvalidGatewayRequestException" => {
+                        UpdateSMBFileShareError::InvalidGatewayRequest(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateSMBFileShareError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateSMBFileShareError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateSMBFileShareError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateSMBFileShareError {
+    fn from(err: serde_json::error::Error) -> UpdateSMBFileShareError {
+        UpdateSMBFileShareError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateSMBFileShareError {
+    fn from(err: CredentialsError) -> UpdateSMBFileShareError {
+        UpdateSMBFileShareError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateSMBFileShareError {
+    fn from(err: HttpDispatchError) -> UpdateSMBFileShareError {
+        UpdateSMBFileShareError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateSMBFileShareError {
+    fn from(err: io::Error) -> UpdateSMBFileShareError {
+        UpdateSMBFileShareError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateSMBFileShareError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateSMBFileShareError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateSMBFileShareError::InternalServerError(ref cause) => cause,
+            UpdateSMBFileShareError::InvalidGatewayRequest(ref cause) => cause,
+            UpdateSMBFileShareError::Validation(ref cause) => cause,
+            UpdateSMBFileShareError::Credentials(ref err) => err.description(),
+            UpdateSMBFileShareError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateSMBFileShareError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateSnapshotSchedule
 #[derive(Debug, PartialEq)]
 pub enum UpdateSnapshotScheduleError {
@@ -7614,11 +8454,17 @@ pub trait StorageGateway {
         input: CreateCachediSCSIVolumeInput,
     ) -> RusotoFuture<CreateCachediSCSIVolumeOutput, CreateCachediSCSIVolumeError>;
 
-    /// <p><p>Creates a file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway exposes file shares using a Network File System (NFS) interface. This operation is only supported in the file gateway type.</p> <important> <p>File gateway requires AWS Security Token Service (AWS STS) to be activated to enable you create a file share. Make sure AWS STS is activated in the region you are creating your file gateway in. If AWS STS is not activated in the region, activate it. For information about how to activate AWS STS, see Activating and Deactivating AWS STS in an AWS Region in the AWS Identity and Access Management User Guide. </p> <p>File gateway does not support creating hard or symbolic links on a file share.</p> </important></p>
+    /// <p><p>Creates a Network File System (NFS) file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway exposes file shares using a NFS interface. This operation is only supported for file gateways.</p> <important> <p>File gateway requires AWS Security Token Service (AWS STS) to be activated to enable you create a file share. Make sure AWS STS is activated in the region you are creating your file gateway in. If AWS STS is not activated in the region, activate it. For information about how to activate AWS STS, see Activating and Deactivating AWS STS in an AWS Region in the AWS Identity and Access Management User Guide. </p> <p>File gateway does not support creating hard or symbolic links on a file share.</p> </important></p>
     fn create_nfs_file_share(
         &self,
         input: CreateNFSFileShareInput,
     ) -> RusotoFuture<CreateNFSFileShareOutput, CreateNFSFileShareError>;
+
+    /// <p><p>Creates a Server Message Block (SMB) file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway expose file shares using a SMB interface. This operation is only supported for file gateways.</p> <important> <p>File gateways require AWS Security Token Service (AWS STS) to be activated to enable you to create a file share. Make sure that AWS STS is activated in the AWS Region you are creating your file gateway in. If AWS STS is not activated in this AWS Region, activate it. For information about how to activate AWS STS, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide.</i> </p> <p>File gateways don&#39;t support creating hard or symbolic links on a file share.</p> </important></p>
+    fn create_smb_file_share(
+        &self,
+        input: CreateSMBFileShareInput,
+    ) -> RusotoFuture<CreateSMBFileShareOutput, CreateSMBFileShareError>;
 
     /// <p><p>Initiates a snapshot of a volume.</p> <p>AWS Storage Gateway provides the ability to back up point-in-time snapshots of your data to Amazon Simple Storage (S3) for durable off-site recovery, as well as import the data to an Amazon Elastic Block Store (EBS) volume in Amazon Elastic Compute Cloud (EC2). You can take snapshots of your gateway volume on a scheduled or ad-hoc basis. This API enables you to take ad-hoc snapshot. For more information, see <a href="http://docs.aws.amazon.com/storagegateway/latest/userguide/managing-volumes.html#SchedulingSnapshot">Editing a Snapshot Schedule</a>.</p> <p>In the CreateSnapshot request you identify the volume by providing its Amazon Resource Name (ARN). You must also provide description for the snapshot. When AWS Storage Gateway takes the snapshot of specified volume, the snapshot and description appears in the AWS Storage Gateway Console. In response, AWS Storage Gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot. This operation is only supported in stored and cached volume gateway type.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, see DescribeSnapshots or DeleteSnapshot in the <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_Operations.html">EC2 API reference</a>.</p> </note> <important> <p>Volume and snapshot IDs are changing to a longer length ID format. For more information, see the important note on the <a href="http://docs.aws.amazon.com/storagegateway/latest/APIReference/Welcome.html">Welcome</a> page.</p> </important></p>
     fn create_snapshot(
@@ -7665,7 +8511,7 @@ pub trait StorageGateway {
         input: DeleteChapCredentialsInput,
     ) -> RusotoFuture<DeleteChapCredentialsOutput, DeleteChapCredentialsError>;
 
-    /// <p>Deletes a file share from a file gateway. This operation is only supported in the file gateway type.</p>
+    /// <p>Deletes a file share from a file gateway. This operation is only supported for file gateways.</p>
     fn delete_file_share(
         &self,
         input: DeleteFileShareInput,
@@ -7737,11 +8583,23 @@ pub trait StorageGateway {
         input: DescribeMaintenanceStartTimeInput,
     ) -> RusotoFuture<DescribeMaintenanceStartTimeOutput, DescribeMaintenanceStartTimeError>;
 
-    /// <p>Gets a description for one or more file shares from a file gateway. This operation is only supported in the file gateway type.</p>
+    /// <p>Gets a description for one or more Network File System (NFS) file shares from a file gateway. This operation is only supported for file gateways.</p>
     fn describe_nfs_file_shares(
         &self,
         input: DescribeNFSFileSharesInput,
     ) -> RusotoFuture<DescribeNFSFileSharesOutput, DescribeNFSFileSharesError>;
+
+    /// <p>Gets a description for one or more Server Message Block (SMB) file shares from a file gateway. This operation is only supported for file gateways.</p>
+    fn describe_smb_file_shares(
+        &self,
+        input: DescribeSMBFileSharesInput,
+    ) -> RusotoFuture<DescribeSMBFileSharesOutput, DescribeSMBFileSharesError>;
+
+    /// <p>Gets a description of a Server Message Block (SMB) file share settings from a file gateway. This operation is only supported for file gateways.</p>
+    fn describe_smb_settings(
+        &self,
+        input: DescribeSMBSettingsInput,
+    ) -> RusotoFuture<DescribeSMBSettingsOutput, DescribeSMBSettingsError>;
 
     /// <p>Describes the snapshot schedule for the specified gateway volume. The snapshot schedule information includes intervals at which snapshots are automatically initiated on the volume. This operation is only supported in the cached volume and stored volume types.</p>
     fn describe_snapshot_schedule(
@@ -7797,7 +8655,13 @@ pub trait StorageGateway {
         input: DisableGatewayInput,
     ) -> RusotoFuture<DisableGatewayOutput, DisableGatewayError>;
 
-    /// <p>Gets a list of the file shares for a specific file gateway, or the list of file shares that belong to the calling user account. This operation is only supported in the file gateway type.</p>
+    /// <p>Adds a file gateway to an Active Directory domain. This operation is only supported for file gateways that support the SMB file protocol.</p>
+    fn join_domain(
+        &self,
+        input: JoinDomainInput,
+    ) -> RusotoFuture<JoinDomainOutput, JoinDomainError>;
+
+    /// <p>Gets a list of the file shares for a specific file gateway, or the list of file shares that belong to the calling user account. This operation is only supported for file gateways.</p>
     fn list_file_shares(
         &self,
         input: ListFileSharesInput,
@@ -7842,7 +8706,7 @@ pub trait StorageGateway {
         input: ListVolumesInput,
     ) -> RusotoFuture<ListVolumesOutput, ListVolumesError>;
 
-    /// <p>Sends you notification through CloudWatch Events when all files written to your NFS file share have been uploaded to Amazon S3.</p> <p>AWS Storage Gateway can send a notification through Amazon CloudWatch Events when all files written to your file share up to that point in time have been uploaded to Amazon S3. These files include files written to the NFS file share up to the time that you make a request for notification. When the upload is done, Storage Gateway sends you notification through an Amazon CloudWatch Event. You can configure CloudWatch Events to send the notification through event targets such as Amazon SNS or AWS Lambda function. This operation is only supported in the file gateway type.</p> <p>For more information, see Getting File Upload Notification in the Storage Gateway User Guide (https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-upload-notification). </p>
+    /// <p>Sends you notification through CloudWatch Events when all files written to your NFS file share have been uploaded to Amazon S3.</p> <p>AWS Storage Gateway can send a notification through Amazon CloudWatch Events when all files written to your file share up to that point in time have been uploaded to Amazon S3. These files include files written to the NFS file share up to the time that you make a request for notification. When the upload is done, Storage Gateway sends you notification through an Amazon CloudWatch Event. You can configure CloudWatch Events to send the notification through event targets such as Amazon SNS or AWS Lambda function. This operation is only supported for file gateways.</p> <p>For more information, see Getting File Upload Notification in the Storage Gateway User Guide (https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-upload-notification). </p>
     fn notify_when_uploaded(
         &self,
         input: NotifyWhenUploadedInput,
@@ -7883,6 +8747,12 @@ pub trait StorageGateway {
         &self,
         input: SetLocalConsolePasswordInput,
     ) -> RusotoFuture<SetLocalConsolePasswordOutput, SetLocalConsolePasswordError>;
+
+    /// <p>Sets the password for the guest user <code>smbguest</code>. The <code>smbguest</code> user is the user when the authentication method for the file share is set to <code>GuestAccess</code>.</p>
+    fn set_smb_guest_password(
+        &self,
+        input: SetSMBGuestPasswordInput,
+    ) -> RusotoFuture<SetSMBGuestPasswordOutput, SetSMBGuestPasswordError>;
 
     /// <p>Shuts down a gateway. To specify which gateway to shut down, use the Amazon Resource Name (ARN) of the gateway in the body of your request.</p> <p>The operation shuts down the gateway service component running in the gateway's virtual machine (VM) and not the host VM.</p> <note> <p>If you want to shut down the VM, it is recommended that you first shut down the gateway component in the VM to avoid unpredictable conditions.</p> </note> <p>After the gateway is shutdown, you cannot call any other API except <a>StartGateway</a>, <a>DescribeGatewayInformation</a>, and <a>ListGateways</a>. For more information, see <a>ActivateGateway</a>. Your applications cannot read from or write to the gateway's storage volumes, and there are no snapshots taken.</p> <note> <p>When you make a shutdown request, you will get a <code>200 OK</code> success response immediately. However, it might take some time for the gateway to shut down. You can call the <a>DescribeGatewayInformation</a> API to check the status. For more information, see <a>ActivateGateway</a>.</p> </note> <p>If do not intend to use the gateway again, you must delete the gateway (using <a>DeleteGateway</a>) to no longer pay software charges associated with the gateway.</p>
     fn shutdown_gateway(
@@ -7926,11 +8796,17 @@ pub trait StorageGateway {
         input: UpdateMaintenanceStartTimeInput,
     ) -> RusotoFuture<UpdateMaintenanceStartTimeOutput, UpdateMaintenanceStartTimeError>;
 
-    /// <p><p>Updates a file share. This operation is only supported in the file gateway type.</p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null.</p> </note> <p>Updates the following file share setting:</p> <ul> <li> <p>Default storage class for your S3 bucket</p> </li> <li> <p>Metadata defaults for your S3 bucket</p> </li> <li> <p>Allowed NFS clients for your file share</p> </li> <li> <p>Squash settings</p> </li> <li> <p>Write status of your file share</p> </li> </ul> <note> <p>To leave a file share field unchanged, set the corresponding input field to null. This operation is only supported in file gateways.</p> </note></p>
+    /// <p><p>Updates a Network File System (NFS) file share. This operation is only supported in the file gateway type.</p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null.</p> </note> <p>Updates the following file share setting:</p> <ul> <li> <p>Default storage class for your S3 bucket</p> </li> <li> <p>Metadata defaults for your S3 bucket</p> </li> <li> <p>Allowed NFS clients for your file share</p> </li> <li> <p>Squash settings</p> </li> <li> <p>Write status of your file share</p> </li> </ul> <note> <p>To leave a file share field unchanged, set the corresponding input field to null. This operation is only supported in file gateways.</p> </note></p>
     fn update_nfs_file_share(
         &self,
         input: UpdateNFSFileShareInput,
     ) -> RusotoFuture<UpdateNFSFileShareOutput, UpdateNFSFileShareError>;
+
+    /// <p><p>Updates a Server Message Block (SMB) file share.</p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null. This operation is only supported for file gateways.</p> </note> <important> <p>File gateways require AWS Security Token Service (AWS STS) to be activated to enable you to create a file share. Make sure that AWS STS is activated in the AWS Region you are creating your file gateway in. If AWS STS is not activated in this AWS Region, activate it. For information about how to activate AWS STS, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide.</i> </p> <p>File gateways don&#39;t support creating hard or symbolic links on a file share.</p> </important></p>
+    fn update_smb_file_share(
+        &self,
+        input: UpdateSMBFileShareInput,
+    ) -> RusotoFuture<UpdateSMBFileShareOutput, UpdateSMBFileShareError>;
 
     /// <p>Updates a snapshot schedule configured for a gateway volume. This operation is only supported in the cached volume and stored volume gateway types.</p> <p>The default snapshot schedule for volume is once every 24 hours, starting at the creation time of the volume. You can use this API to change the snapshot schedule configured for the volume.</p> <p>In the request you must identify the gateway volume whose snapshot schedule you want to update, and the schedule information, including when you want the snapshot to begin on a day and the frequency (in hours) of snapshots.</p>
     fn update_snapshot_schedule(
@@ -8260,7 +9136,7 @@ impl StorageGateway for StorageGatewayClient {
         })
     }
 
-    /// <p><p>Creates a file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway exposes file shares using a Network File System (NFS) interface. This operation is only supported in the file gateway type.</p> <important> <p>File gateway requires AWS Security Token Service (AWS STS) to be activated to enable you create a file share. Make sure AWS STS is activated in the region you are creating your file gateway in. If AWS STS is not activated in the region, activate it. For information about how to activate AWS STS, see Activating and Deactivating AWS STS in an AWS Region in the AWS Identity and Access Management User Guide. </p> <p>File gateway does not support creating hard or symbolic links on a file share.</p> </important></p>
+    /// <p><p>Creates a Network File System (NFS) file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway exposes file shares using a NFS interface. This operation is only supported for file gateways.</p> <important> <p>File gateway requires AWS Security Token Service (AWS STS) to be activated to enable you create a file share. Make sure AWS STS is activated in the region you are creating your file gateway in. If AWS STS is not activated in the region, activate it. For information about how to activate AWS STS, see Activating and Deactivating AWS STS in an AWS Region in the AWS Identity and Access Management User Guide. </p> <p>File gateway does not support creating hard or symbolic links on a file share.</p> </important></p>
     fn create_nfs_file_share(
         &self,
         input: CreateNFSFileShareInput,
@@ -8288,6 +9164,41 @@ impl StorageGateway for StorageGatewayClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateNFSFileShareError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p><p>Creates a Server Message Block (SMB) file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway expose file shares using a SMB interface. This operation is only supported for file gateways.</p> <important> <p>File gateways require AWS Security Token Service (AWS STS) to be activated to enable you to create a file share. Make sure that AWS STS is activated in the AWS Region you are creating your file gateway in. If AWS STS is not activated in this AWS Region, activate it. For information about how to activate AWS STS, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide.</i> </p> <p>File gateways don&#39;t support creating hard or symbolic links on a file share.</p> </important></p>
+    fn create_smb_file_share(
+        &self,
+        input: CreateSMBFileShareInput,
+    ) -> RusotoFuture<CreateSMBFileShareOutput, CreateSMBFileShareError> {
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "StorageGateway_20130630.CreateSMBFileShare");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateSMBFileShareOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateSMBFileShareError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -8558,7 +9469,7 @@ impl StorageGateway for StorageGatewayClient {
         })
     }
 
-    /// <p>Deletes a file share from a file gateway. This operation is only supported in the file gateway type.</p>
+    /// <p>Deletes a file share from a file gateway. This operation is only supported for file gateways.</p>
     fn delete_file_share(
         &self,
         input: DeleteFileShareInput,
@@ -8996,7 +9907,7 @@ impl StorageGateway for StorageGatewayClient {
         })
     }
 
-    /// <p>Gets a description for one or more file shares from a file gateway. This operation is only supported in the file gateway type.</p>
+    /// <p>Gets a description for one or more Network File System (NFS) file shares from a file gateway. This operation is only supported for file gateways.</p>
     fn describe_nfs_file_shares(
         &self,
         input: DescribeNFSFileSharesInput,
@@ -9027,6 +9938,82 @@ impl StorageGateway for StorageGatewayClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeNFSFileSharesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Gets a description for one or more Server Message Block (SMB) file shares from a file gateway. This operation is only supported for file gateways.</p>
+    fn describe_smb_file_shares(
+        &self,
+        input: DescribeSMBFileSharesInput,
+    ) -> RusotoFuture<DescribeSMBFileSharesOutput, DescribeSMBFileSharesError> {
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StorageGateway_20130630.DescribeSMBFileShares",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeSMBFileSharesOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeSMBFileSharesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Gets a description of a Server Message Block (SMB) file share settings from a file gateway. This operation is only supported for file gateways.</p>
+    fn describe_smb_settings(
+        &self,
+        input: DescribeSMBSettingsInput,
+    ) -> RusotoFuture<DescribeSMBSettingsOutput, DescribeSMBSettingsError> {
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StorageGateway_20130630.DescribeSMBSettings",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeSMBSettingsOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeSMBSettingsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -9367,7 +10354,42 @@ impl StorageGateway for StorageGatewayClient {
         })
     }
 
-    /// <p>Gets a list of the file shares for a specific file gateway, or the list of file shares that belong to the calling user account. This operation is only supported in the file gateway type.</p>
+    /// <p>Adds a file gateway to an Active Directory domain. This operation is only supported for file gateways that support the SMB file protocol.</p>
+    fn join_domain(
+        &self,
+        input: JoinDomainInput,
+    ) -> RusotoFuture<JoinDomainOutput, JoinDomainError> {
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "StorageGateway_20130630.JoinDomain");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<JoinDomainOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(JoinDomainError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Gets a list of the file shares for a specific file gateway, or the list of file shares that belong to the calling user account. This operation is only supported for file gateways.</p>
     fn list_file_shares(
         &self,
         input: ListFileSharesInput,
@@ -9653,7 +10675,7 @@ impl StorageGateway for StorageGatewayClient {
         })
     }
 
-    /// <p>Sends you notification through CloudWatch Events when all files written to your NFS file share have been uploaded to Amazon S3.</p> <p>AWS Storage Gateway can send a notification through Amazon CloudWatch Events when all files written to your file share up to that point in time have been uploaded to Amazon S3. These files include files written to the NFS file share up to the time that you make a request for notification. When the upload is done, Storage Gateway sends you notification through an Amazon CloudWatch Event. You can configure CloudWatch Events to send the notification through event targets such as Amazon SNS or AWS Lambda function. This operation is only supported in the file gateway type.</p> <p>For more information, see Getting File Upload Notification in the Storage Gateway User Guide (https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-upload-notification). </p>
+    /// <p>Sends you notification through CloudWatch Events when all files written to your NFS file share have been uploaded to Amazon S3.</p> <p>AWS Storage Gateway can send a notification through Amazon CloudWatch Events when all files written to your file share up to that point in time have been uploaded to Amazon S3. These files include files written to the NFS file share up to the time that you make a request for notification. When the upload is done, Storage Gateway sends you notification through an Amazon CloudWatch Event. You can configure CloudWatch Events to send the notification through event targets such as Amazon SNS or AWS Lambda function. This operation is only supported for file gateways.</p> <p>For more information, see Getting File Upload Notification in the Storage Gateway User Guide (https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-upload-notification). </p>
     fn notify_when_uploaded(
         &self,
         input: NotifyWhenUploadedInput,
@@ -9903,6 +10925,44 @@ impl StorageGateway for StorageGatewayClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetLocalConsolePasswordError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Sets the password for the guest user <code>smbguest</code>. The <code>smbguest</code> user is the user when the authentication method for the file share is set to <code>GuestAccess</code>.</p>
+    fn set_smb_guest_password(
+        &self,
+        input: SetSMBGuestPasswordInput,
+    ) -> RusotoFuture<SetSMBGuestPasswordOutput, SetSMBGuestPasswordError> {
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StorageGateway_20130630.SetSMBGuestPassword",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<SetSMBGuestPasswordOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(SetSMBGuestPasswordError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -10170,7 +11230,7 @@ impl StorageGateway for StorageGatewayClient {
         })
     }
 
-    /// <p><p>Updates a file share. This operation is only supported in the file gateway type.</p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null.</p> </note> <p>Updates the following file share setting:</p> <ul> <li> <p>Default storage class for your S3 bucket</p> </li> <li> <p>Metadata defaults for your S3 bucket</p> </li> <li> <p>Allowed NFS clients for your file share</p> </li> <li> <p>Squash settings</p> </li> <li> <p>Write status of your file share</p> </li> </ul> <note> <p>To leave a file share field unchanged, set the corresponding input field to null. This operation is only supported in file gateways.</p> </note></p>
+    /// <p><p>Updates a Network File System (NFS) file share. This operation is only supported in the file gateway type.</p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null.</p> </note> <p>Updates the following file share setting:</p> <ul> <li> <p>Default storage class for your S3 bucket</p> </li> <li> <p>Metadata defaults for your S3 bucket</p> </li> <li> <p>Allowed NFS clients for your file share</p> </li> <li> <p>Squash settings</p> </li> <li> <p>Write status of your file share</p> </li> </ul> <note> <p>To leave a file share field unchanged, set the corresponding input field to null. This operation is only supported in file gateways.</p> </note></p>
     fn update_nfs_file_share(
         &self,
         input: UpdateNFSFileShareInput,
@@ -10198,6 +11258,41 @@ impl StorageGateway for StorageGatewayClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateNFSFileShareError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p><p>Updates a Server Message Block (SMB) file share.</p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null. This operation is only supported for file gateways.</p> </note> <important> <p>File gateways require AWS Security Token Service (AWS STS) to be activated to enable you to create a file share. Make sure that AWS STS is activated in the AWS Region you are creating your file gateway in. If AWS STS is not activated in this AWS Region, activate it. For information about how to activate AWS STS, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide.</i> </p> <p>File gateways don&#39;t support creating hard or symbolic links on a file share.</p> </important></p>
+    fn update_smb_file_share(
+        &self,
+        input: UpdateSMBFileShareInput,
+    ) -> RusotoFuture<UpdateSMBFileShareOutput, UpdateSMBFileShareError> {
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "StorageGateway_20130630.UpdateSMBFileShare");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateSMBFileShareOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateSMBFileShareError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

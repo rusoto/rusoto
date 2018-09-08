@@ -199,6 +199,109 @@ pub struct AssociationDescription {
     pub targets: Option<Vec<Target>>,
 }
 
+/// <p>Includes information about the specified association.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct AssociationExecution {
+    /// <p>The association ID.</p>
+    #[serde(rename = "AssociationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub association_id: Option<String>,
+    /// <p>The association version.</p>
+    #[serde(rename = "AssociationVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub association_version: Option<String>,
+    /// <p>The time the execution started.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<f64>,
+    /// <p>Detailed status information about the execution.</p>
+    #[serde(rename = "DetailedStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub detailed_status: Option<String>,
+    /// <p>The execution ID for the association. If the association does not run at intervals or according to a schedule, then the ExecutionID is the same as the AssociationID.</p>
+    #[serde(rename = "ExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_id: Option<String>,
+    /// <p>The date of the last execution.</p>
+    #[serde(rename = "LastExecutionDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_execution_date: Option<f64>,
+    /// <p>An aggregate status of the resources in the execution based on the status type.</p>
+    #[serde(rename = "ResourceCountByStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_count_by_status: Option<String>,
+    /// <p>The status of the association execution.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Filters used in the request.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AssociationExecutionFilter {
+    /// <p>The key value used in the request.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>The filter type specified in the request.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+    /// <p>The value specified for the key.</p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
+/// <p>Includes information about the specified association execution.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct AssociationExecutionTarget {
+    /// <p>The association ID.</p>
+    #[serde(rename = "AssociationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub association_id: Option<String>,
+    /// <p>The association version.</p>
+    #[serde(rename = "AssociationVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub association_version: Option<String>,
+    /// <p>Detailed information about the execution status.</p>
+    #[serde(rename = "DetailedStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub detailed_status: Option<String>,
+    /// <p>The execution ID. If the association does not run at intervals or according to a schedule, then the ExecutionID is the same as the AssociationID.</p>
+    #[serde(rename = "ExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_id: Option<String>,
+    /// <p>The date of the last execution.</p>
+    #[serde(rename = "LastExecutionDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_execution_date: Option<f64>,
+    /// <p>The location where the association details are saved.</p>
+    #[serde(rename = "OutputSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_source: Option<OutputSource>,
+    /// <p>The resource ID, for example, the instance ID where the association ran.</p>
+    #[serde(rename = "ResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id: Option<String>,
+    /// <p>The resource type, for example, instance.</p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+    /// <p>The association execution status.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Filters for the association execution.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AssociationExecutionTargetsFilter {
+    /// <p>The key value used in the request.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>The value specified for the key.</p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
 /// <p>Describes a filter.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociationFilter {
@@ -495,9 +598,26 @@ pub struct CancelCommandRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CancelCommandResult {}
 
+/// <p>Configuration options for sending command output to CloudWatch Logs.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CloudWatchOutputConfig {
+    /// <p>The name of the CloudWatch log group where you want to send command output. If you don't specify a group name, Systems Manager automatically creates a log group for you. The log group uses the following naming format: aws/ssm/<i>SystemsManagerDocumentName</i>.</p>
+    #[serde(rename = "CloudWatchLogGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_log_group_name: Option<String>,
+    /// <p>Enables Systems Manager to send command output to CloudWatch Logs.</p>
+    #[serde(rename = "CloudWatchOutputEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_output_enabled: Option<bool>,
+}
+
 /// <p>Describes a command request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Command {
+    /// <p>CloudWatch Logs information where you want Systems Manager to send the command output.</p>
+    #[serde(rename = "CloudWatchOutputConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_output_config: Option<CloudWatchOutputConfig>,
     /// <p>A unique identifier for this command.</p>
     #[serde(rename = "CommandId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -510,10 +630,18 @@ pub struct Command {
     #[serde(rename = "CompletedCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completed_count: Option<i64>,
+    /// <p>The number of targets for which the status is Delivery Timed Out.</p>
+    #[serde(rename = "DeliveryTimedOutCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delivery_timed_out_count: Option<i64>,
     /// <p>The name of the document requested for execution.</p>
     #[serde(rename = "DocumentName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_name: Option<String>,
+    /// <p>The SSM document version.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_version: Option<String>,
     /// <p>The number of targets for which the status is Failed or Execution Timed Out.</p>
     #[serde(rename = "ErrorCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -526,11 +654,11 @@ pub struct Command {
     #[serde(rename = "InstanceIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_ids: Option<Vec<String>>,
-    /// <p>The maximum number of instances that are allowed to execute the command at the same time. You can specify a number of instances, such as 10, or a percentage of instances, such as 10%. The default value is 50. For more information about how to use MaxConcurrency, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html">Executing a Command Using Systems Manager Run Command</a>.</p>
+    /// <p>The maximum number of instances that are allowed to execute the command at the same time. You can specify a number of instances, such as 10, or a percentage of instances, such as 10%. The default value is 50. For more information about how to use MaxConcurrency, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html">Executing Commands Using Systems Manager Run Command</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "MaxConcurrency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrency: Option<String>,
-    /// <p>The maximum number of errors allowed before the system stops sending the command to additional targets. You can specify a number of errors, such as 10, or a percentage or errors, such as 10%. The default value is 0. For more information about how to use MaxErrors, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html">Executing a Command Using Systems Manager Run Command</a>.</p>
+    /// <p>The maximum number of errors allowed before the system stops sending the command to additional targets. You can specify a number of errors, such as 10, or a percentage or errors, such as 10%. The default value is 0. For more information about how to use MaxErrors, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html">Executing Commands Using Systems Manager Run Command</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "MaxErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_errors: Option<String>,
@@ -566,7 +694,7 @@ pub struct Command {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p><p>A detailed status of the command execution. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to any instances.</p> </li> <li> <p>In Progress: The command has been sent to at least one instance but has not reached a final state on all instances.</p> </li> <li> <p>Success: The command successfully executed on all invocations. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The value of MaxErrors or more command invocations shows a status of Delivery Timed Out. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: The value of MaxErrors or more command invocations shows a status of Execution Timed Out. This is a terminal state.</p> </li> <li> <p>Failed: The value of MaxErrors or more command invocations shows a status of Failed. This is a terminal state.</p> </li> <li> <p>Incomplete: The command was attempted on all instances and one or more invocations does not have a value of Success but not enough invocations failed for the status to be Failed. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Rate Exceeded: The number of instances targeted by the command exceeded the account limit for pending invocations. The system has canceled the command before executing it on any instance. This is a terminal state.</p> </li> </ul></p>
+    /// <p><p>A detailed status of the command execution. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-commands.html">Understanding Command Statuses</a> in the <i>AWS Systems Manager User Guide</i>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to any instances.</p> </li> <li> <p>In Progress: The command has been sent to at least one instance but has not reached a final state on all instances.</p> </li> <li> <p>Success: The command successfully executed on all invocations. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The value of MaxErrors or more command invocations shows a status of Delivery Timed Out. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: The value of MaxErrors or more command invocations shows a status of Execution Timed Out. This is a terminal state.</p> </li> <li> <p>Failed: The value of MaxErrors or more command invocations shows a status of Failed. This is a terminal state.</p> </li> <li> <p>Incomplete: The command was attempted on all instances and one or more invocations does not have a value of Success but not enough invocations failed for the status to be Failed. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Rate Exceeded: The number of instances targeted by the command exceeded the account limit for pending invocations. The system has canceled the command before executing it on any instance. This is a terminal state.</p> </li> </ul></p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
@@ -594,6 +722,10 @@ pub struct CommandFilter {
 /// <p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user executes SendCommand against three instances, then a command invocation is created for each requested instance ID. A command invocation returns status and detail information about a command you executed. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CommandInvocation {
+    /// <p>CloudWatch Logs information where you want Systems Manager to send the command output.</p>
+    #[serde(rename = "CloudWatchOutputConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_output_config: Option<CloudWatchOutputConfig>,
     /// <p>The command against which this invocation was requested.</p>
     #[serde(rename = "CommandId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -609,6 +741,10 @@ pub struct CommandInvocation {
     #[serde(rename = "DocumentName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_name: Option<String>,
+    /// <p>The SSM document version.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_version: Option<String>,
     /// <p>The instance ID in which this invocation was requested.</p>
     #[serde(rename = "InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -641,7 +777,7 @@ pub struct CommandInvocation {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p><p>A detailed status of the command execution for each invocation (each instance targeted by the command). StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success: The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command&#39;s MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can&#39;t be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don&#39;t count against the parent command&#39;s MaxErrors limit and don&#39;t contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul></p>
+    /// <p><p>A detailed status of the command execution for each invocation (each instance targeted by the command). StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-commands.html">Understanding Command Statuses</a> in the <i>AWS Systems Manager User Guide</i>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success: The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command&#39;s MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can&#39;t be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don&#39;t count against the parent command&#39;s MaxErrors limit and don&#39;t contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul></p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
@@ -698,7 +834,7 @@ pub struct CommandPlugin {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p><p>A detailed status of the plugin execution. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success: The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command&#39;s MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can&#39;t be delivered to the instance. The instance might not exist, or it might not be responding. Undeliverable invocations don&#39;t count against the parent command&#39;s MaxErrors limit, and they don&#39;t contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul></p>
+    /// <p><p>A detailed status of the plugin execution. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-commands.html">Understanding Command Statuses</a> in the <i>AWS Systems Manager User Guide</i>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success: The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command&#39;s MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can&#39;t be delivered to the instance. The instance might not exist, or it might not be responding. Undeliverable invocations don&#39;t count against the parent command&#39;s MaxErrors limit, and they don&#39;t contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul></p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
@@ -1137,6 +1273,41 @@ pub struct DeleteDocumentRequest {
 pub struct DeleteDocumentResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteInventoryRequest {
+    /// <p>User-provided idempotency token.</p>
+    #[serde(rename = "ClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_token: Option<String>,
+    /// <p>Use this option to view a summary of the deletion request without deleting any data or the data type. This option is useful when you only want to understand what will be deleted. Once you validate that the data to be deleted is what you intend to delete, you can run the same command without specifying the <code>DryRun</code> option.</p>
+    #[serde(rename = "DryRun")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dry_run: Option<bool>,
+    /// <p>Use the <code>SchemaDeleteOption</code> to delete a custom inventory type (schema). If you don't choose this option, the system only deletes existing inventory data associated with the custom inventory type. Choose one of the following options:</p> <p>DisableSchema: If you choose this option, the system ignores all inventory data for the specified version, and any earlier versions. To enable this schema again, you must call the <code>PutInventory</code> action for a version greater than the disbled version.</p> <p>DeleteSchema: This option deletes the specified custom type from the Inventory service. You can recreate the schema later, if you want.</p>
+    #[serde(rename = "SchemaDeleteOption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_delete_option: Option<String>,
+    /// <p>The name of the custom inventory type for which you want to delete either all previously collected data, or the inventory type itself. </p>
+    #[serde(rename = "TypeName")]
+    pub type_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DeleteInventoryResult {
+    /// <p>Every <code>DeleteInventory</code> action is assigned a unique ID. This option returns a unique ID. You can use this ID to query the status of a delete operation. This option is useful for ensuring that a delete operation has completed before you begin other actions. </p>
+    #[serde(rename = "DeletionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deletion_id: Option<String>,
+    /// <p>A summary of the delete operation. For more information about this summary, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-delete.html#sysman-inventory-delete-summary">Understanding the Delete Inventory Summary</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    #[serde(rename = "DeletionSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deletion_summary: Option<InventoryDeletionSummary>,
+    /// <p>The name of the inventory data type specified in the request.</p>
+    #[serde(rename = "TypeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteMaintenanceWindowRequest {
     /// <p>The ID of the Maintenance Window to delete.</p>
     #[serde(rename = "WindowId")]
@@ -1321,6 +1492,71 @@ pub struct DescribeActivationsResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub activation_list: Option<Vec<Activation>>,
     /// <p>The token for the next set of items to return. Use this token to get the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeAssociationExecutionTargetsRequest {
+    /// <p>The association ID that includes the execution for which you want to view details.</p>
+    #[serde(rename = "AssociationId")]
+    pub association_id: String,
+    /// <p>The execution ID for which you want to view details.</p>
+    #[serde(rename = "ExecutionId")]
+    pub execution_id: String,
+    /// <p>Filters for the request. You can specify the following filters and values.</p> <p>Status (EQUAL)</p> <p>ResourceId (EQUAL)</p> <p>ResourceType (EQUAL)</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<AssociationExecutionTargetsFilter>>,
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token to start the list. Use this token to get the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DescribeAssociationExecutionTargetsResult {
+    /// <p>Information about the execution.</p>
+    #[serde(rename = "AssociationExecutionTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub association_execution_targets: Option<Vec<AssociationExecutionTarget>>,
+    /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeAssociationExecutionsRequest {
+    /// <p>The association ID for which you want to view execution history details.</p>
+    #[serde(rename = "AssociationId")]
+    pub association_id: String,
+    /// <p>Filters for the request. You can specify the following filters and values.</p> <p>ExecutionId (EQUAL)</p> <p>Status (EQUAL)</p> <p>CreatedTime (EQUAL, GREATER_THAN, LESS_THAN)</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<AssociationExecutionFilter>>,
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token to start the list. Use this token to get the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DescribeAssociationExecutionsResult {
+    /// <p>A list of the executions for the specified association ID.</p>
+    #[serde(rename = "AssociationExecutions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub association_executions: Option<Vec<AssociationExecution>>,
+    /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1682,6 +1918,34 @@ pub struct DescribeInstancePatchesResult {
     #[serde(rename = "Patches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patches: Option<Vec<PatchComplianceData>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeInventoryDeletionsRequest {
+    /// <p>Specify the delete inventory ID for which you want information. This ID was returned by the <code>DeleteInventory</code> action.</p>
+    #[serde(rename = "DeletionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deletion_id: Option<String>,
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token to start the list. Use this token to get the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DescribeInventoryDeletionsResult {
+    /// <p>A list of status items for deleted inventory.</p>
+    #[serde(rename = "InventoryDeletions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inventory_deletions: Option<Vec<InventoryDeletionStatusItem>>,
+    /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2273,6 +2537,10 @@ pub struct GetCommandInvocationRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetCommandInvocationResult {
+    /// <p>CloudWatch Logs information where Systems Manager sent the command output.</p>
+    #[serde(rename = "CloudWatchOutputConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_output_config: Option<CloudWatchOutputConfig>,
     /// <p>The parent command ID of the invocation plugin.</p>
     #[serde(rename = "CommandId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2285,6 +2553,10 @@ pub struct GetCommandInvocationResult {
     #[serde(rename = "DocumentName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_name: Option<String>,
+    /// <p>The SSM document version used in the request.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_version: Option<String>,
     /// <p>Duration since ExecutionStartDateTime.</p>
     #[serde(rename = "ExecutionElapsedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2329,7 +2601,7 @@ pub struct GetCommandInvocationResult {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p><p>A detailed status of the command execution for an invocation. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Delayed: The system attempted to send the command to the target, but the target was not available. The instance might not be available because of network issues, the instance was stopped, etc. The system will try to deliver the command again.</p> </li> <li> <p>Success: The command or plugin was executed successfully. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command&#39;s MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: The command started to execute on the instance, but the execution was not complete before the timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command wasn&#39;t executed successfully on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can&#39;t be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don&#39;t count against the parent command&#39;s MaxErrors limit and don&#39;t contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul></p>
+    /// <p><p>A detailed status of the command execution for an invocation. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-commands.html">Understanding Command Statuses</a> in the <i>AWS Systems Manager User Guide</i>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Delayed: The system attempted to send the command to the target, but the target was not available. The instance might not be available because of network issues, the instance was stopped, etc. The system will try to deliver the command again.</p> </li> <li> <p>Success: The command or plugin was executed successfully. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command&#39;s MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: The command started to execute on the instance, but the execution was not complete before the timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command wasn&#39;t executed successfully on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can&#39;t be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don&#39;t count against the parent command&#39;s MaxErrors limit and don&#39;t contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul></p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
@@ -2846,14 +3118,14 @@ pub struct GetParametersByPathRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Filters to limit the request results.</p>
+    /// <p><p>Filters to limit the request results.</p> <note> <p>You can&#39;t filter using the parameter name.</p> </note></p>
     #[serde(rename = "ParameterFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_filters: Option<Vec<ParameterStringFilter>>,
-    /// <p>The hierarchy for the parameter. Hierarchies start with a forward slash (/) and end with the parameter name. A hierarchy can have a maximum of 15 levels. Here is an example of a hierarchy: <code>/Finance/Prod/IAD/WinServ2016/license33</code> </p>
+    /// <p>The hierarchy for the parameter. Hierarchies start with a forward slash (/) and end with the parameter name. A parameter name hierarchy can have a maximum of 15 levels. Here is an example of a hierarchy: <code>/Finance/Prod/IAD/WinServ2016/license33</code> </p>
     #[serde(rename = "Path")]
     pub path: String,
-    /// <p>Retrieve all parameters within a hierarchy.</p>
+    /// <p><p>Retrieve all parameters within a hierarchy.</p> <important> <p>If a user has access to a path, then the user can access all levels of that path. For example, if a user has permission to access path /a, then the user can also access /a/b. Even if a user has explicitly been denied access in IAM for parameter /a, they can still call the GetParametersByPath API action recursively and view /a/b.</p> </important></p>
     #[serde(rename = "Recursive")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recursive: Option<bool>,
@@ -3105,7 +3377,7 @@ pub struct InstanceInformation {
     #[serde(rename = "ActivationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub activation_id: Option<String>,
-    /// <p>The version of the SSM Agent running on your Linux instance. </p>
+    /// <p>The version of SSM Agent running on your Linux instance. </p>
     #[serde(rename = "AgentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub agent_version: Option<String>,
@@ -3125,7 +3397,7 @@ pub struct InstanceInformation {
     #[serde(rename = "IPAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
-    /// <p>The Amazon Identity and Access Management (IAM) role assigned to EC2 instances or managed instances. </p>
+    /// <p>The Amazon Identity and Access Management (IAM) role assigned to the on-premises Systems Manager managed instances. This call does not return the IAM role for Amazon EC2 instances. </p>
     #[serde(rename = "IamRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role: Option<String>,
@@ -3133,7 +3405,7 @@ pub struct InstanceInformation {
     #[serde(rename = "InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    /// <p>Indicates whether latest version of the SSM Agent is running on your instance. Some older versions of Windows Server use the EC2Config service to process SSM requests. For this reason, this field does not indicate whether or not the latest version is installed on Windows managed instances.</p>
+    /// <p>Indicates whether latest version of SSM Agent is running on your instance. Some older versions of Windows Server use the EC2Config service to process SSM requests. For this reason, this field does not indicate whether or not the latest version is installed on Windows managed instances.</p>
     #[serde(rename = "IsLatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_latest_version: Option<bool>,
@@ -3153,7 +3425,7 @@ pub struct InstanceInformation {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Connection status of the SSM Agent. </p>
+    /// <p>Connection status of SSM Agent. </p>
     #[serde(rename = "PingStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ping_status: Option<String>,
@@ -3279,6 +3551,73 @@ pub struct InventoryAggregator {
     pub expression: Option<String>,
 }
 
+/// <p>Status information returned by the <code>DeleteInventory</code> action.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct InventoryDeletionStatusItem {
+    /// <p>The deletion ID returned by the <code>DeleteInventory</code> action.</p>
+    #[serde(rename = "DeletionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deletion_id: Option<String>,
+    /// <p>The UTC timestamp when the delete operation started.</p>
+    #[serde(rename = "DeletionStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deletion_start_time: Option<f64>,
+    /// <p>Information about the delete operation. For more information about this summary, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-delete.html#sysman-inventory-delete-summary">Understanding the Delete Inventory Summary</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    #[serde(rename = "DeletionSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deletion_summary: Option<InventoryDeletionSummary>,
+    /// <p>The status of the operation. Possible values are InProgress and Complete.</p>
+    #[serde(rename = "LastStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_status: Option<String>,
+    /// <p>Information about the status.</p>
+    #[serde(rename = "LastStatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_status_message: Option<String>,
+    /// <p>The UTC timestamp of when the last status report.</p>
+    #[serde(rename = "LastStatusUpdateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_status_update_time: Option<f64>,
+    /// <p>The name of the inventory data type.</p>
+    #[serde(rename = "TypeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_name: Option<String>,
+}
+
+/// <p>Information about the delete operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct InventoryDeletionSummary {
+    /// <p>Remaining number of items to delete.</p>
+    #[serde(rename = "RemainingCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remaining_count: Option<i64>,
+    /// <p>A list of counts and versions for deleted items.</p>
+    #[serde(rename = "SummaryItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub summary_items: Option<Vec<InventoryDeletionSummaryItem>>,
+    /// <p>The total number of items to delete. This count does not change during the delete operation.</p>
+    #[serde(rename = "TotalCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_count: Option<i64>,
+}
+
+/// <p>Either a count, remaining count, or a version number in a delete inventory summary.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct InventoryDeletionSummaryItem {
+    /// <p>A count of the number of deleted items.</p>
+    #[serde(rename = "Count")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub count: Option<i64>,
+    /// <p>The remaining number of items to delete.</p>
+    #[serde(rename = "RemainingCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remaining_count: Option<i64>,
+    /// <p>The inventory type version.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+}
+
 /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct InventoryFilter {
@@ -3383,6 +3722,24 @@ pub struct InventoryResultItem {
     /// <p>The name of the inventory result item type.</p>
     #[serde(rename = "TypeName")]
     pub type_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct LabelParameterVersionRequest {
+    #[serde(rename = "Labels")]
+    pub labels: Vec<String>,
+    #[serde(rename = "Name")]
+    pub name: String,
+    #[serde(rename = "ParameterVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameter_version: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct LabelParameterVersionResult {
+    #[serde(rename = "InvalidLabels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invalid_labels: Option<Vec<String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -4185,7 +4542,7 @@ pub struct NotificationConfig {
     #[serde(rename = "NotificationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_arn: Option<String>,
-    /// <p>The different events for which you can receive notifications. These events include the following: All (events), InProgress, Success, TimedOut, Cancelled, Failed. To learn more about these events, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-commands.html">Setting Up Events and Notifications</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>The different events for which you can receive notifications. These events include the following: All (events), InProgress, Success, TimedOut, Cancelled, Failed. To learn more about these events, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/rc-sns-notifications.html">Configuring Amazon SNS Notifications for Run Command</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "NotificationEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_events: Option<Vec<String>>,
@@ -4195,13 +4552,42 @@ pub struct NotificationConfig {
     pub notification_type: Option<String>,
 }
 
+/// <p>Information about the source where the association execution details are stored.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct OutputSource {
+    /// <p>The ID of the output source, for example the URL of an Amazon S3 bucket.</p>
+    #[serde(rename = "OutputSourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_source_id: Option<String>,
+    /// <p>The type of source where the association execution details are stored, for example, Amazon S3.</p>
+    #[serde(rename = "OutputSourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_source_type: Option<String>,
+}
+
 /// <p>An Amazon EC2 Systems Manager parameter in Parameter Store.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Parameter {
+    /// <p>The Amazon Resource Name (ARN) of the parameter.</p>
+    #[serde(rename = "ARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>Date the parameter was last changed or updated and the parameter version was created.</p>
+    #[serde(rename = "LastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
     /// <p>The name of the parameter.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>Either the version number or the label used to retrieve the parameter value. Specify selectors by using one of the following formats:</p> <p>parameter_name:version</p> <p>parameter_name:label</p>
+    #[serde(rename = "Selector")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub selector: Option<String>,
+    /// <p>Applies to parameters that reference information in other AWS services. SourceResult is the raw result or response from the source.</p>
+    #[serde(rename = "SourceResult")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_result: Option<String>,
     /// <p>The type of parameter. Valid values include the following: String, String list, Secure string.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4231,6 +4617,10 @@ pub struct ParameterHistory {
     #[serde(rename = "KeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_id: Option<String>,
+    /// <p>Labels assigned to the parameter version.</p>
+    #[serde(rename = "Labels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub labels: Option<Vec<String>>,
     /// <p>Date the parameter was last changed or updated.</p>
     #[serde(rename = "LastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4294,7 +4684,7 @@ pub struct ParameterMetadata {
     pub version: Option<i64>,
 }
 
-/// <p>One or more filters. Use a filter to return a more specific list of results.</p>
+/// <p><p>One or more filters. Use a filter to return a more specific list of results.</p> <note> <p>The <code>Name</code> field can&#39;t be used with the <a>GetParametersByPath</a> API action.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ParameterStringFilter {
     /// <p>The name of the filter.</p>
@@ -4426,7 +4816,7 @@ pub struct PatchComplianceData {
     pub title: String,
 }
 
-/// <p><p>Defines a patch filter.</p> <p>A patch filter consists of key/value pairs, but not all keys are valid for all operating system types. For example, the key <code>PRODUCT</code> is valid for all supported operating system types. The key <code>MSRC<em>SEVERITY</code>, however, is valid only for Windows operating systems, and the key <code>SECTION</code> is valid only for Ubuntu operating systems.</p> <p>Refer to the following sections for information about which keys may be used with each major operating system, and which values are valid for each key.</p> <p> <b>Windows Operating Systems</b> </p> <p>The supported keys for Windows operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>MSRC</em>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Windows7</code> </p> </li> <li> <p> <code>Windows8</code> </p> </li> <li> <p> <code>Windows8.1</code> </p> </li> <li> <p> <code>Windows8Embedded</code> </p> </li> <li> <p> <code>Windows10</code> </p> </li> <li> <p> <code>Windows10LTSB</code> </p> </li> <li> <p> <code>WindowsServer2008</code> </p> </li> <li> <p> <code>WindowsServer2008R2</code> </p> </li> <li> <p> <code>WindowsServer2012</code> </p> </li> <li> <p> <code>WindowsServer2012R2</code> </p> </li> <li> <p> <code>WindowsServer2016</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>CriticalUpdates</code> </p> </li> <li> <p> <code>DefinitionUpdates</code> </p> </li> <li> <p> <code>Drivers</code> </p> </li> <li> <p> <code>FeaturePacks</code> </p> </li> <li> <p> <code>SecurityUpdates</code> </p> </li> <li> <p> <code>ServicePacks</code> </p> </li> <li> <p> <code>Tools</code> </p> </li> <li> <p> <code>UpdateRollups</code> </p> </li> <li> <p> <code>Updates</code> </p> </li> <li> <p> <code>Upgrades</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>MSRC_SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Moderate</code> </p> </li> <li> <p> <code>Low</code> </p> </li> <li> <p> <code>Unspecified</code> </p> </li> </ul> <p> <b>Ubuntu Operating Systems</b> </p> <p>The supported keys for Ubuntu operating systems are <code>PRODUCT</code>, <code>PRIORITY</code>, and <code>SECTION</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Ubuntu14.04</code> </p> </li> <li> <p> <code>Ubuntu16.04</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>PRIORITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Required</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Standard</code> </p> </li> <li> <p> <code>Optional</code> </p> </li> <li> <p> <code>Extra</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SECTION</code> </p> <p>Only the length of the key value is validated. Minimum length is 1. Maximum length is 64.</p> <p> <b>Amazon Linux Operating Systems</b> </p> <p>The supported keys for Amazon Linux operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>AmazonLinux2012.03</code> </p> </li> <li> <p> <code>AmazonLinux2012.09</code> </p> </li> <li> <p> <code>AmazonLinux2013.03</code> </p> </li> <li> <p> <code>AmazonLinux2013.09</code> </p> </li> <li> <p> <code>AmazonLinux2014.03</code> </p> </li> <li> <p> <code>AmazonLinux2014.09</code> </p> </li> <li> <p> <code>AmazonLinux2015.03</code> </p> </li> <li> <p> <code>AmazonLinux2015.09</code> </p> </li> <li> <p> <code>AmazonLinux2016.03</code> </p> </li> <li> <p> <code>AmazonLinux2016.09</code> </p> </li> <li> <p> <code>AmazonLinux2017.03</code> </p> </li> <li> <p> <code>AmazonLinux2017.09</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul> <p> <b>RedHat Enterprise Linux (RHEL) Operating Systems</b> </p> <p>The supported keys for RedHat Enterprise Linux operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>RedhatEnterpriseLinux6.5</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.6</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.7</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.8</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.9</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.0</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.1</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.2</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.3</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.4</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul> <p> <b>SUSE Linux Enterprise Server (SUSE) Operating Systems</b> </p> <p>The supported keys for SUSE operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Suse12.0</code> </p> </li> <li> <p> <code>Suse12.1</code> </p> </li> <li> <p> <code>Suse12.2</code> </p> </li> <li> <p> <code>Suse12.3</code> </p> </li> <li> <p> <code>Suse12.4</code> </p> </li> <li> <p> <code>Suse12.5</code> </p> </li> <li> <p> <code>Suse12.6</code> </p> </li> <li> <p> <code>Suse12.7</code> </p> </li> <li> <p> <code>Suse12.8</code> </p> </li> <li> <p> <code>Suse12.9</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Optional</code> </p> </li> <li> <p> <code>Feature</code> </p> </li> <li> <p> <code>Document</code> </p> </li> <li> <p> <code>Yast</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Moderate</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul></p>
+/// <p><p>Defines a patch filter.</p> <p>A patch filter consists of key/value pairs, but not all keys are valid for all operating system types. For example, the key <code>PRODUCT</code> is valid for all supported operating system types. The key <code>MSRC<em>SEVERITY</code>, however, is valid only for Windows operating systems, and the key <code>SECTION</code> is valid only for Ubuntu operating systems.</p> <p>Refer to the following sections for information about which keys may be used with each major operating system, and which values are valid for each key.</p> <p> <b>Windows Operating Systems</b> </p> <p>The supported keys for Windows operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>MSRC</em>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Windows7</code> </p> </li> <li> <p> <code>Windows8</code> </p> </li> <li> <p> <code>Windows8.1</code> </p> </li> <li> <p> <code>Windows8Embedded</code> </p> </li> <li> <p> <code>Windows10</code> </p> </li> <li> <p> <code>Windows10LTSB</code> </p> </li> <li> <p> <code>WindowsServer2008</code> </p> </li> <li> <p> <code>WindowsServer2008R2</code> </p> </li> <li> <p> <code>WindowsServer2012</code> </p> </li> <li> <p> <code>WindowsServer2012R2</code> </p> </li> <li> <p> <code>WindowsServer2016</code> </p> </li> <li> <p> <code><em></code> </p> <p> <i>Use a wildcard character (</em>) to target all supported operating system versions.</i> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>CriticalUpdates</code> </p> </li> <li> <p> <code>DefinitionUpdates</code> </p> </li> <li> <p> <code>Drivers</code> </p> </li> <li> <p> <code>FeaturePacks</code> </p> </li> <li> <p> <code>SecurityUpdates</code> </p> </li> <li> <p> <code>ServicePacks</code> </p> </li> <li> <p> <code>Tools</code> </p> </li> <li> <p> <code>UpdateRollups</code> </p> </li> <li> <p> <code>Updates</code> </p> </li> <li> <p> <code>Upgrades</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>MSRC_SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Moderate</code> </p> </li> <li> <p> <code>Low</code> </p> </li> <li> <p> <code>Unspecified</code> </p> </li> </ul> <p> <b>Ubuntu Operating Systems</b> </p> <p>The supported keys for Ubuntu operating systems are <code>PRODUCT</code>, <code>PRIORITY</code>, and <code>SECTION</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Ubuntu14.04</code> </p> </li> <li> <p> <code>Ubuntu16.04</code> </p> </li> <li> <p> <code><em></code> </p> <p> <i>Use a wildcard character (</em>) to target all supported operating system versions.</i> </p> </li> </ul> <p> <i>Supported key:</i> <code>PRIORITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Required</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Standard</code> </p> </li> <li> <p> <code>Optional</code> </p> </li> <li> <p> <code>Extra</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SECTION</code> </p> <p>Only the length of the key value is validated. Minimum length is 1. Maximum length is 64.</p> <p> <b>Amazon Linux Operating Systems</b> </p> <p>The supported keys for Amazon Linux operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>AmazonLinux2012.03</code> </p> </li> <li> <p> <code>AmazonLinux2012.09</code> </p> </li> <li> <p> <code>AmazonLinux2013.03</code> </p> </li> <li> <p> <code>AmazonLinux2013.09</code> </p> </li> <li> <p> <code>AmazonLinux2014.03</code> </p> </li> <li> <p> <code>AmazonLinux2014.09</code> </p> </li> <li> <p> <code>AmazonLinux2015.03</code> </p> </li> <li> <p> <code>AmazonLinux2015.09</code> </p> </li> <li> <p> <code>AmazonLinux2016.03</code> </p> </li> <li> <p> <code>AmazonLinux2016.09</code> </p> </li> <li> <p> <code>AmazonLinux2017.03</code> </p> </li> <li> <p> <code>AmazonLinux2017.09</code> </p> </li> <li> <p> <code><em></code> </p> <p> <i>Use a wildcard character (</em>) to target all supported operating system versions.</i> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul> <p> <b>Amazon Linux 2 Operating Systems</b> </p> <p>The supported keys for Amazon Linux 2 operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>AmazonLinux2</code> </p> </li> <li> <p> <code>AmazonLinux2.0</code> </p> </li> <li> <p> <code><em></code> </p> <p> <i>Use a wildcard character (</em>) to target all supported operating system versions.</i> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul> <p> <b>RedHat Enterprise Linux (RHEL) Operating Systems</b> </p> <p>The supported keys for RedHat Enterprise Linux operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>RedhatEnterpriseLinux6.5</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.6</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.7</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.8</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.9</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.0</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.1</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.2</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.3</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.4</code> </p> </li> <li> <p> <code><em></code> </p> <p> <i>Use a wildcard character (</em>) to target all supported operating system versions.</i> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul> <p> <b>SUSE Linux Enterprise Server (SLES) Operating Systems</b> </p> <p>The supported keys for SLES operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Suse12.0</code> </p> </li> <li> <p> <code>Suse12.1</code> </p> </li> <li> <p> <code>Suse12.2</code> </p> </li> <li> <p> <code>Suse12.3</code> </p> </li> <li> <p> <code>Suse12.4</code> </p> </li> <li> <p> <code>Suse12.5</code> </p> </li> <li> <p> <code>Suse12.6</code> </p> </li> <li> <p> <code>Suse12.7</code> </p> </li> <li> <p> <code>Suse12.8</code> </p> </li> <li> <p> <code>Suse12.9</code> </p> </li> <li> <p> <code><em></code> </p> <p> <i>Use a wildcard character (</em>) to target all supported operating system versions.</i> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Optional</code> </p> </li> <li> <p> <code>Feature</code> </p> </li> <li> <p> <code>Document</code> </p> </li> <li> <p> <code>Yast</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Moderate</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul> <p> <b>CentOS Operating Systems</b> </p> <p>The supported keys for CentOS operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>CentOS6.5</code> </p> </li> <li> <p> <code>CentOS6.6</code> </p> </li> <li> <p> <code>CentOS6.7</code> </p> </li> <li> <p> <code>CentOS6.8</code> </p> </li> <li> <p> <code>CentOS6.9</code> </p> </li> <li> <p> <code>CentOS7.0</code> </p> </li> <li> <p> <code>CentOS7.1</code> </p> </li> <li> <p> <code>CentOS7.2</code> </p> </li> <li> <p> <code>CentOS7.3</code> </p> </li> <li> <p> <code>CentOS7.4</code> </p> </li> <li> <p> <code><em></code> </p> <p> <i>Use a wildcard character (</em>) to target all supported operating system versions.</i> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PatchFilter {
     /// <p>The key for the filter.</p> <p>See <a>PatchFilter</a> for lists of valid keys for each operating system type.</p>
@@ -4474,7 +4864,7 @@ pub struct PatchOrchestratorFilter {
 /// <p>Defines an approval rule for a patch baseline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PatchRule {
-    /// <p>The number of days after the release date of each patch matched by the rule the patch is marked as approved in the patch baseline.</p>
+    /// <p>The number of days after the release date of each patch matched by the rule that the patch is marked as approved in the patch baseline. For example, a value of <code>7</code> means that patches are approved seven days after they are released. </p>
     #[serde(rename = "ApproveAfterDays")]
     pub approve_after_days: i64,
     /// <p>A compliance severity level for all approved patches in a patch baseline. Valid compliance severity levels include the following: Unspecified, Critical, High, Medium, Low, and Informational.</p>
@@ -4501,7 +4891,7 @@ pub struct PatchRuleGroup {
 /// <p>Information about the patches to use to update the instances, including target operating systems and source repository. Applies to Linux instances only.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PatchSource {
-    /// <p>The value of the yum repo configuration. For example:</p> <p> <code>cachedir=/var/cache/yum/$basesearch</code> </p> <p> <code>$releasever</code> </p> <p> <code>keepcache=0</code> </p> <p> <code>debualevel=2</code> </p>
+    /// <p>The value of the yum repo configuration. For example:</p> <p> <code>cachedir=/var/cache/yum/$basesearch</code> </p> <p> <code>$releasever</code> </p> <p> <code>keepcache=0</code> </p> <p> <code>debuglevel=2</code> </p>
     #[serde(rename = "Configuration")]
     pub configuration: String,
     /// <p>The name specified to identify the patch source.</p>
@@ -4566,7 +4956,12 @@ pub struct PutInventoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-pub struct PutInventoryResult {}
+pub struct PutInventoryResult {
+    /// <p>Information about the request.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutParameterRequest {
@@ -4574,22 +4969,22 @@ pub struct PutParameterRequest {
     #[serde(rename = "AllowedPattern")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_pattern: Option<String>,
-    /// <p><p>Information about the parameter that you want to add to the system.</p> <important> <p>Do not enter personally identifiable information in this field.</p> </important></p>
+    /// <p><p>Information about the parameter that you want to add to the system. Optional but recommended.</p> <important> <p>Do not enter personally identifiable information in this field.</p> </important></p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The KMS Key ID that you want to use to encrypt a parameter when you choose the SecureString data type. If you don't specify a key ID, the system uses the default key associated with your AWS account.</p>
+    /// <p><p>The KMS Key ID that you want to use to encrypt a parameter. Either the default AWS Key Management Service (AWS KMS) key automatically assigned to your AWS account or a custom key. Required for parameters that use the <code>SecureString</code> data type.</p> <p>If you don&#39;t specify a key ID, the system uses the default key associated with your AWS account.</p> <ul> <li> <p>To use your default AWS KMS key, choose the <code>SecureString</code> data type, and do <i>not</i> specify the <code>Key ID</code> when you create the parameter. The system automatically populates <code>Key ID</code> with your default KMS key.</p> </li> <li> <p>To use a custom KMS key, choose the <code>SecureString</code> data type with the <code>Key ID</code> parameter.</p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_id: Option<String>,
-    /// <p><p>The fully qualified name of the parameter that you want to add to the system. The fully qualified name includes the complete hierarchy of the parameter path and name. For example: <code>/Dev/DBServer/MySQL/db-string13</code> </p> <p>For information about parameter name requirements and restrictions, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-su-create.html#sysman-paramstore-su-create-about">About Creating Systems Manager Parameters</a> in the <i>AWS Systems Manager User Guide</i>.</p> <note> <p>The maximum length constraint listed below includes capacity for additional system attributes that are not part of the name. The maximum length for the fully qualified parameter name is 1011 characters. </p> </note></p>
+    /// <p><p>The fully qualified name of the parameter that you want to add to the system. The fully qualified name includes the complete hierarchy of the parameter path and name. For example: <code>/Dev/DBServer/MySQL/db-string13</code> </p> <p>Naming Constraints:</p> <ul> <li> <p>Parameter names are case sensitive.</p> </li> <li> <p>A parameter name must be unique within an AWS Region</p> </li> <li> <p>A parameter name can&#39;t be prefixed with &quot;aws&quot; or &quot;ssm&quot; (case-insensitive).</p> </li> <li> <p>Parameter names can include only the following symbols and letters: <code>a-zA-Z0-9_.-/</code> </p> </li> <li> <p>A parameter name can&#39;t include spaces.</p> </li> <li> <p>Parameter hierarchies are limited to a maximum depth of fifteen levels.</p> </li> </ul> <p>For additional information about valid values for parameter names, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-parameter-name-constraints.html">Requirements and Constraints for Parameter Names</a> in the <i>AWS Systems Manager User Guide</i>.</p> <note> <p>The maximum length constraint listed below includes capacity for additional system attributes that are not part of the name. The maximum length for the fully qualified parameter name is 1011 characters. </p> </note></p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>Overwrite an existing parameter. If not specified, will default to "false".</p>
     #[serde(rename = "Overwrite")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub overwrite: Option<bool>,
-    /// <p>The type of parameter that you want to add to the system.</p>
+    /// <p><p>The type of parameter that you want to add to the system.</p> <p>Items in a <code>StringList</code> must be separated by a comma (,). You can&#39;t use other punctuation or special character to escape items in the list. If you have a parameter value that requires a comma, then use the <code>String</code> data type.</p> <note> <p> <code>SecureString</code> is not currently supported for AWS CloudFormation templates or in the China Regions.</p> </note></p>
     #[serde(rename = "Type")]
     pub type_: String,
     /// <p>The parameter value that you want to add to the system.</p>
@@ -4915,6 +5310,10 @@ pub struct SendAutomationSignalResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SendCommandRequest {
+    /// <p>Enables Systems Manager to send Run Command output to Amazon CloudWatch Logs. </p>
+    #[serde(rename = "CloudWatchOutputConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_output_config: Option<CloudWatchOutputConfig>,
     /// <p>User-specified information about the command, such as a brief description of what the command should do.</p>
     #[serde(rename = "Comment")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4930,15 +5329,19 @@ pub struct SendCommandRequest {
     /// <p>Required. The name of the Systems Manager document to execute. This can be a public document or a custom document.</p>
     #[serde(rename = "DocumentName")]
     pub document_name: String,
-    /// <p>The instance IDs where the command should execute. You can specify a maximum of 50 IDs. If you prefer not to list individual instance IDs, you can instead send commands to a fleet of instances using the Targets parameter, which accepts EC2 tags. For more information about how to use Targets, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Sending Commands to a Fleet</a>.</p>
+    /// <p>The SSM document version to use in the request. You can specify $DEFAULT, $LATEST, or a specific version number. If you execute commands by using the AWS CLI, then you must escape the first two options by using a backslash. If you specify a version number, then you don't need to use the backslash. For example:</p> <p>--document-version "\$DEFAULT"</p> <p>--document-version "\$LATEST"</p> <p>--document-version "3"</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_version: Option<String>,
+    /// <p>The instance IDs where the command should execute. You can specify a maximum of 50 IDs. If you prefer not to list individual instance IDs, you can instead send commands to a fleet of instances using the Targets parameter, which accepts EC2 tags. For more information about how to use Targets, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Sending Commands to a Fleet</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "InstanceIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_ids: Option<Vec<String>>,
-    /// <p>(Optional) The maximum number of instances that are allowed to execute the command at the same time. You can specify a number such as 10 or a percentage such as 10%. The default value is 50. For more information about how to use MaxConcurrency, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-velocity.html">Using Concurrency Controls</a>.</p>
+    /// <p>(Optional) The maximum number of instances that are allowed to execute the command at the same time. You can specify a number such as 10 or a percentage such as 10%. The default value is 50. For more information about how to use MaxConcurrency, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html#send-commands-velocity">Using Concurrency Controls</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "MaxConcurrency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrency: Option<String>,
-    /// <p>The maximum number of errors allowed without the command failing. When the command fails one more time beyond the value of MaxErrors, the systems stops sending the command to additional targets. You can specify a number like 10 or a percentage like 10%. The default value is 0. For more information about how to use MaxErrors, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-maxerrors.html">Using Error Controls</a>.</p>
+    /// <p>The maximum number of errors allowed without the command failing. When the command fails one more time beyond the value of MaxErrors, the systems stops sending the command to additional targets. You can specify a number like 10 or a percentage like 10%. The default value is 0. For more information about how to use MaxErrors, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html#send-commands-maxerrors">Using Error Controls</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "MaxErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_errors: Option<String>,
@@ -4966,7 +5369,7 @@ pub struct SendCommandRequest {
     #[serde(rename = "ServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    /// <p>(Optional) An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call. For more information about how to use Targets, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Sending Commands to a Fleet</a>.</p>
+    /// <p>(Optional) An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call. For more information about how to use Targets, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Sending Commands to a Fleet</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
@@ -5012,6 +5415,16 @@ pub struct SeveritySummary {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unspecified_count: Option<i64>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartAssociationsOnceRequest {
+    /// <p>The association IDs that you want to execute immediately and only one time.</p>
+    #[serde(rename = "AssociationIds")]
+    pub association_ids: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct StartAssociationsOnceResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartAutomationExecutionRequest {
@@ -5087,10 +5500,22 @@ pub struct StepExecution {
     #[serde(rename = "Inputs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inputs: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The flag which can be used to help decide whether the failure of current step leads to the Automation failure.</p>
+    #[serde(rename = "IsCritical")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_critical: Option<bool>,
+    /// <p>The flag which can be used to end automation no matter whether the step succeeds or fails.</p>
+    #[serde(rename = "IsEnd")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_end: Option<bool>,
     /// <p>The maximum number of tries to run the action of the step. The default value is 1.</p>
     #[serde(rename = "MaxAttempts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_attempts: Option<i64>,
+    /// <p>The next step after the step succeeds.</p>
+    #[serde(rename = "NextStep")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_step: Option<String>,
     /// <p>The action to take if the step fails. The default value is Abort.</p>
     #[serde(rename = "OnFailure")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5127,6 +5552,10 @@ pub struct StepExecution {
     #[serde(rename = "TimeoutSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_seconds: Option<i64>,
+    /// <p>Strategies used when step fails, we support Continue and Abort. Abort will fail the automation when the step fails. Continue will ignore the failure of current step and allow automation to execute the next step. With conditional branching, we add step:stepName to support the automation to go to another specific step.</p>
+    #[serde(rename = "ValidNextSteps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub valid_next_steps: Option<Vec<String>>,
 }
 
 /// <p>A filter to limit the amount of step execution information returned by the call.</p>
@@ -5168,11 +5597,11 @@ pub struct Tag {
 /// <p><p>An array of search criteria that targets instances using a Key,Value combination that you specify. <code>Targets</code> is required if you don&#39;t provide one or more instance IDs in the call.</p> <p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Target {
-    /// <p>User-defined criteria for sending commands that target instances that meet the criteria. Key can be tag:&lt;Amazon EC2 tag&gt; or InstanceIds. For more information about how to send commands that target instances using Key,Value parameters, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Executing a Command Using Systems Manager Run Command</a>.</p>
+    /// <p>User-defined criteria for sending commands that target instances that meet the criteria. Key can be tag:&lt;Amazon EC2 tag&gt; or InstanceIds. For more information about how to send commands that target instances using Key,Value parameters, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html#send-commands-targeting">Targeting Multiple Instances</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p>User-defined criteria that maps to Key. For example, if you specified tag:ServerRole, you could specify value:WebServer to execute a command on instances that include Amazon EC2 tags of ServerRole,WebServer. For more information about how to send commands that target instances using Key,Value parameters, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Executing a Command Using Systems Manager Run Command</a>.</p>
+    /// <p>User-defined criteria that maps to Key. For example, if you specified tag:ServerRole, you could specify value:WebServer to execute a command on instances that include Amazon EC2 tags of ServerRole,WebServer. For more information about how to send commands that target instances using Key,Value parameters, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Sending Commands to a Fleet</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
@@ -5670,6 +6099,8 @@ pub enum AddTagsToResourceError {
     InvalidResourceType(String),
     /// <p>The Targets parameter includes too many tags. Remove one or more tags and try the command again.</p>
     TooManyTagsError(String),
+    /// <p>There are concurrent updates for a resource that supports one update at a time.</p>
+    TooManyUpdates(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -5705,6 +6136,9 @@ impl AddTagsToResourceError {
                     }
                     "TooManyTagsError" => {
                         AddTagsToResourceError::TooManyTagsError(String::from(error_message))
+                    }
+                    "TooManyUpdates" => {
+                        AddTagsToResourceError::TooManyUpdates(String::from(error_message))
                     }
                     "ValidationException" => {
                         AddTagsToResourceError::Validation(error_message.to_string())
@@ -5749,6 +6183,7 @@ impl Error for AddTagsToResourceError {
             AddTagsToResourceError::InvalidResourceId(ref cause) => cause,
             AddTagsToResourceError::InvalidResourceType(ref cause) => cause,
             AddTagsToResourceError::TooManyTagsError(ref cause) => cause,
+            AddTagsToResourceError::TooManyUpdates(ref cause) => cause,
             AddTagsToResourceError::Validation(ref cause) => cause,
             AddTagsToResourceError::Credentials(ref err) => err.description(),
             AddTagsToResourceError::HttpDispatch(ref dispatch_error) => {
@@ -5767,7 +6202,7 @@ pub enum CancelCommandError {
     InternalServerError(String),
 
     InvalidCommandId(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5947,7 +6382,7 @@ pub enum CreateAssociationError {
     InvalidDocument(String),
     /// <p>The document version is not valid or does not exist.</p>
     InvalidDocumentVersion(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The output location is not valid or does not exist.</p>
     InvalidOutputLocation(String),
@@ -6088,7 +6523,7 @@ pub enum CreateAssociationBatchError {
     InvalidDocument(String),
     /// <p>The document version is not valid or does not exist.</p>
     InvalidDocumentVersion(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The output location is not valid or does not exist.</p>
     InvalidOutputLocation(String),
@@ -6736,7 +7171,7 @@ pub enum DeleteAssociationError {
     InternalServerError(String),
     /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>There are concurrent updates for a resource that supports one update at a time.</p>
     TooManyUpdates(String),
@@ -6926,6 +7361,111 @@ impl Error for DeleteDocumentError {
             DeleteDocumentError::Credentials(ref err) => err.description(),
             DeleteDocumentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteDocumentError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteInventory
+#[derive(Debug, PartialEq)]
+pub enum DeleteInventoryError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>One or more of the parameters specified for the delete operation is not valid. Verify all parameters and try again.</p>
+    InvalidDeleteInventoryParameters(String),
+    /// <p>The request is not valid.</p>
+    InvalidInventoryRequest(String),
+    /// <p>The delete inventory option specified is not valid. Verify the option and try again.</p>
+    InvalidOption(String),
+    /// <p>The parameter type name is not valid.</p>
+    InvalidTypeName(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteInventoryError {
+    pub fn from_body(body: &str) -> DeleteInventoryError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => {
+                        DeleteInventoryError::InternalServerError(String::from(error_message))
+                    }
+                    "InvalidDeleteInventoryParametersException" => {
+                        DeleteInventoryError::InvalidDeleteInventoryParameters(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidInventoryRequestException" => {
+                        DeleteInventoryError::InvalidInventoryRequest(String::from(error_message))
+                    }
+                    "InvalidOptionException" => {
+                        DeleteInventoryError::InvalidOption(String::from(error_message))
+                    }
+                    "InvalidTypeNameException" => {
+                        DeleteInventoryError::InvalidTypeName(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteInventoryError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteInventoryError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteInventoryError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteInventoryError {
+    fn from(err: serde_json::error::Error) -> DeleteInventoryError {
+        DeleteInventoryError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteInventoryError {
+    fn from(err: CredentialsError) -> DeleteInventoryError {
+        DeleteInventoryError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteInventoryError {
+    fn from(err: HttpDispatchError) -> DeleteInventoryError {
+        DeleteInventoryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteInventoryError {
+    fn from(err: io::Error) -> DeleteInventoryError {
+        DeleteInventoryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteInventoryError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteInventoryError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteInventoryError::InternalServerError(ref cause) => cause,
+            DeleteInventoryError::InvalidDeleteInventoryParameters(ref cause) => cause,
+            DeleteInventoryError::InvalidInventoryRequest(ref cause) => cause,
+            DeleteInventoryError::InvalidOption(ref cause) => cause,
+            DeleteInventoryError::InvalidTypeName(ref cause) => cause,
+            DeleteInventoryError::Validation(ref cause) => cause,
+            DeleteInventoryError::Credentials(ref err) => err.description(),
+            DeleteInventoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteInventoryError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -7355,7 +7895,7 @@ impl Error for DeleteResourceDataSyncError {
 pub enum DeregisterManagedInstanceError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7824,7 +8364,7 @@ pub enum DescribeAssociationError {
     InvalidAssociationVersion(String),
     /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7917,6 +8457,212 @@ impl Error for DescribeAssociationError {
                 dispatch_error.description()
             }
             DescribeAssociationError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeAssociationExecutionTargets
+#[derive(Debug, PartialEq)]
+pub enum DescribeAssociationExecutionTargetsError {
+    /// <p>The specified association does not exist.</p>
+    AssociationDoesNotExist(String),
+    /// <p>The specified execution ID does not exist. Verify the ID number and try again.</p>
+    AssociationExecutionDoesNotExist(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The specified token is not valid.</p>
+    InvalidNextToken(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeAssociationExecutionTargetsError {
+    pub fn from_body(body: &str) -> DescribeAssociationExecutionTargetsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AssociationDoesNotExist" => {
+                        DescribeAssociationExecutionTargetsError::AssociationDoesNotExist(
+                            String::from(error_message),
+                        )
+                    }
+                    "AssociationExecutionDoesNotExist" => {
+                        DescribeAssociationExecutionTargetsError::AssociationExecutionDoesNotExist(
+                            String::from(error_message),
+                        )
+                    }
+                    "InternalServerError" => {
+                        DescribeAssociationExecutionTargetsError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidNextToken" => {
+                        DescribeAssociationExecutionTargetsError::InvalidNextToken(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => DescribeAssociationExecutionTargetsError::Validation(
+                        error_message.to_string(),
+                    ),
+                    _ => DescribeAssociationExecutionTargetsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeAssociationExecutionTargetsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeAssociationExecutionTargetsError {
+    fn from(err: serde_json::error::Error) -> DescribeAssociationExecutionTargetsError {
+        DescribeAssociationExecutionTargetsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeAssociationExecutionTargetsError {
+    fn from(err: CredentialsError) -> DescribeAssociationExecutionTargetsError {
+        DescribeAssociationExecutionTargetsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeAssociationExecutionTargetsError {
+    fn from(err: HttpDispatchError) -> DescribeAssociationExecutionTargetsError {
+        DescribeAssociationExecutionTargetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAssociationExecutionTargetsError {
+    fn from(err: io::Error) -> DescribeAssociationExecutionTargetsError {
+        DescribeAssociationExecutionTargetsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeAssociationExecutionTargetsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeAssociationExecutionTargetsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeAssociationExecutionTargetsError::AssociationDoesNotExist(ref cause) => cause,
+            DescribeAssociationExecutionTargetsError::AssociationExecutionDoesNotExist(
+                ref cause,
+            ) => cause,
+            DescribeAssociationExecutionTargetsError::InternalServerError(ref cause) => cause,
+            DescribeAssociationExecutionTargetsError::InvalidNextToken(ref cause) => cause,
+            DescribeAssociationExecutionTargetsError::Validation(ref cause) => cause,
+            DescribeAssociationExecutionTargetsError::Credentials(ref err) => err.description(),
+            DescribeAssociationExecutionTargetsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeAssociationExecutionTargetsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeAssociationExecutions
+#[derive(Debug, PartialEq)]
+pub enum DescribeAssociationExecutionsError {
+    /// <p>The specified association does not exist.</p>
+    AssociationDoesNotExist(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The specified token is not valid.</p>
+    InvalidNextToken(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeAssociationExecutionsError {
+    pub fn from_body(body: &str) -> DescribeAssociationExecutionsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AssociationDoesNotExist" => {
+                        DescribeAssociationExecutionsError::AssociationDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InternalServerError" => {
+                        DescribeAssociationExecutionsError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidNextToken" => DescribeAssociationExecutionsError::InvalidNextToken(
+                        String::from(error_message),
+                    ),
+                    "ValidationException" => {
+                        DescribeAssociationExecutionsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeAssociationExecutionsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeAssociationExecutionsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeAssociationExecutionsError {
+    fn from(err: serde_json::error::Error) -> DescribeAssociationExecutionsError {
+        DescribeAssociationExecutionsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeAssociationExecutionsError {
+    fn from(err: CredentialsError) -> DescribeAssociationExecutionsError {
+        DescribeAssociationExecutionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeAssociationExecutionsError {
+    fn from(err: HttpDispatchError) -> DescribeAssociationExecutionsError {
+        DescribeAssociationExecutionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAssociationExecutionsError {
+    fn from(err: io::Error) -> DescribeAssociationExecutionsError {
+        DescribeAssociationExecutionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeAssociationExecutionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeAssociationExecutionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeAssociationExecutionsError::AssociationDoesNotExist(ref cause) => cause,
+            DescribeAssociationExecutionsError::InternalServerError(ref cause) => cause,
+            DescribeAssociationExecutionsError::InvalidNextToken(ref cause) => cause,
+            DescribeAssociationExecutionsError::Validation(ref cause) => cause,
+            DescribeAssociationExecutionsError::Credentials(ref err) => err.description(),
+            DescribeAssociationExecutionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeAssociationExecutionsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -8404,7 +9150,7 @@ impl Error for DescribeDocumentPermissionError {
 pub enum DescribeEffectiveInstanceAssociationsError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -8618,7 +9364,7 @@ impl Error for DescribeEffectivePatchesForPatchBaselineError {
 pub enum DescribeInstanceAssociationsStatusError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -8719,7 +9465,7 @@ pub enum DescribeInstanceInformationError {
     InternalServerError(String),
     /// <p>The specified key is not valid.</p>
     InvalidFilterKey(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The specified filter value is not valid.</p>
     InvalidInstanceInformationFilterValue(String),
@@ -9018,7 +9764,7 @@ pub enum DescribeInstancePatchesError {
     InternalServerError(String),
     /// <p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
     InvalidFilter(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -9107,6 +9853,101 @@ impl Error for DescribeInstancePatchesError {
                 dispatch_error.description()
             }
             DescribeInstancePatchesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeInventoryDeletions
+#[derive(Debug, PartialEq)]
+pub enum DescribeInventoryDeletionsError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The ID specified for the delete operation does not exist or is not valide. Verify the ID and try again.</p>
+    InvalidDeletionId(String),
+    /// <p>The specified token is not valid.</p>
+    InvalidNextToken(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeInventoryDeletionsError {
+    pub fn from_body(body: &str) -> DescribeInventoryDeletionsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => DescribeInventoryDeletionsError::InternalServerError(
+                        String::from(error_message),
+                    ),
+                    "InvalidDeletionIdException" => {
+                        DescribeInventoryDeletionsError::InvalidDeletionId(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidNextToken" => DescribeInventoryDeletionsError::InvalidNextToken(
+                        String::from(error_message),
+                    ),
+                    "ValidationException" => {
+                        DescribeInventoryDeletionsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeInventoryDeletionsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeInventoryDeletionsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeInventoryDeletionsError {
+    fn from(err: serde_json::error::Error) -> DescribeInventoryDeletionsError {
+        DescribeInventoryDeletionsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeInventoryDeletionsError {
+    fn from(err: CredentialsError) -> DescribeInventoryDeletionsError {
+        DescribeInventoryDeletionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeInventoryDeletionsError {
+    fn from(err: HttpDispatchError) -> DescribeInventoryDeletionsError {
+        DescribeInventoryDeletionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeInventoryDeletionsError {
+    fn from(err: io::Error) -> DescribeInventoryDeletionsError {
+        DescribeInventoryDeletionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeInventoryDeletionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeInventoryDeletionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeInventoryDeletionsError::InternalServerError(ref cause) => cause,
+            DescribeInventoryDeletionsError::InvalidDeletionId(ref cause) => cause,
+            DescribeInventoryDeletionsError::InvalidNextToken(ref cause) => cause,
+            DescribeInventoryDeletionsError::Validation(ref cause) => cause,
+            DescribeInventoryDeletionsError::Credentials(ref err) => err.description(),
+            DescribeInventoryDeletionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeInventoryDeletionsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -10104,7 +10945,7 @@ pub enum GetCommandInvocationError {
     InternalServerError(String),
 
     InvalidCommandId(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The plugin name is not valid.</p>
     InvalidPluginName(String),
@@ -11680,6 +12521,115 @@ impl Error for GetPatchBaselineForPatchGroupError {
         }
     }
 }
+/// Errors returned by LabelParameterVersion
+#[derive(Debug, PartialEq)]
+pub enum LabelParameterVersionError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The parameter could not be found. Verify the name and try again.</p>
+    ParameterNotFound(String),
+
+    ParameterVersionLabelLimitExceeded(String),
+    /// <p>The specified parameter version was not found. Verify the parameter name and version, and try again.</p>
+    ParameterVersionNotFound(String),
+    /// <p>There are concurrent updates for a resource that supports one update at a time.</p>
+    TooManyUpdates(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl LabelParameterVersionError {
+    pub fn from_body(body: &str) -> LabelParameterVersionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => {
+                        LabelParameterVersionError::InternalServerError(String::from(error_message))
+                    }
+                    "ParameterNotFound" => {
+                        LabelParameterVersionError::ParameterNotFound(String::from(error_message))
+                    }
+                    "ParameterVersionLabelLimitExceeded" => {
+                        LabelParameterVersionError::ParameterVersionLabelLimitExceeded(
+                            String::from(error_message),
+                        )
+                    }
+                    "ParameterVersionNotFound" => {
+                        LabelParameterVersionError::ParameterVersionNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TooManyUpdates" => {
+                        LabelParameterVersionError::TooManyUpdates(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        LabelParameterVersionError::Validation(error_message.to_string())
+                    }
+                    _ => LabelParameterVersionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => LabelParameterVersionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for LabelParameterVersionError {
+    fn from(err: serde_json::error::Error) -> LabelParameterVersionError {
+        LabelParameterVersionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for LabelParameterVersionError {
+    fn from(err: CredentialsError) -> LabelParameterVersionError {
+        LabelParameterVersionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for LabelParameterVersionError {
+    fn from(err: HttpDispatchError) -> LabelParameterVersionError {
+        LabelParameterVersionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for LabelParameterVersionError {
+    fn from(err: io::Error) -> LabelParameterVersionError {
+        LabelParameterVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for LabelParameterVersionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for LabelParameterVersionError {
+    fn description(&self) -> &str {
+        match *self {
+            LabelParameterVersionError::InternalServerError(ref cause) => cause,
+            LabelParameterVersionError::ParameterNotFound(ref cause) => cause,
+            LabelParameterVersionError::ParameterVersionLabelLimitExceeded(ref cause) => cause,
+            LabelParameterVersionError::ParameterVersionNotFound(ref cause) => cause,
+            LabelParameterVersionError::TooManyUpdates(ref cause) => cause,
+            LabelParameterVersionError::Validation(ref cause) => cause,
+            LabelParameterVersionError::Credentials(ref err) => err.description(),
+            LabelParameterVersionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            LabelParameterVersionError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListAssociationVersions
 #[derive(Debug, PartialEq)]
 pub enum ListAssociationVersionsError {
@@ -11869,7 +12819,7 @@ pub enum ListCommandInvocationsError {
     InvalidCommandId(String),
     /// <p>The specified key is not valid.</p>
     InvalidFilterKey(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -11974,7 +12924,7 @@ pub enum ListCommandsError {
     InvalidCommandId(String),
     /// <p>The specified key is not valid.</p>
     InvalidFilterKey(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -12457,7 +13407,7 @@ pub enum ListInventoryEntriesError {
     InternalServerError(String),
     /// <p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
     InvalidFilter(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -13067,7 +14017,7 @@ pub enum PutInventoryError {
     CustomSchemaCountLimitExceeded(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>You specified invalid keys or values in the <code>Context</code> attribute for <code>InventoryItem</code>. Verify the keys and values, and try again.</p>
     InvalidInventoryItemContext(String),
@@ -13214,7 +14164,7 @@ impl Error for PutInventoryError {
 /// Errors returned by PutParameter
 #[derive(Debug, PartialEq)]
 pub enum PutParameterError {
-    /// <p>A hierarchy can have a maximum of 15 levels. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html">Working with Systems Manager Parameters</a>. </p>
+    /// <p>A hierarchy can have a maximum of 15 levels. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-parameter-name-constraints.html">Requirements and Constraints for Parameter Names</a> in the <i>AWS Systems Manager User Guide</i>. </p>
     HierarchyLevelLimitExceeded(String),
     /// <p>Parameter Store does not support changing a parameter type in a hierarchy. For example, you can't change a parameter from a String type to a SecureString type. You must create a new, unique parameter.</p>
     HierarchyTypeMismatch(String),
@@ -13793,6 +14743,8 @@ pub enum RemoveTagsFromResourceError {
     InvalidResourceId(String),
     /// <p>The resource type is not valid. For example, if you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
     InvalidResourceType(String),
+    /// <p>There are concurrent updates for a resource that supports one update at a time.</p>
+    TooManyUpdates(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -13826,6 +14778,9 @@ impl RemoveTagsFromResourceError {
                     "InvalidResourceType" => RemoveTagsFromResourceError::InvalidResourceType(
                         String::from(error_message),
                     ),
+                    "TooManyUpdates" => {
+                        RemoveTagsFromResourceError::TooManyUpdates(String::from(error_message))
+                    }
                     "ValidationException" => {
                         RemoveTagsFromResourceError::Validation(error_message.to_string())
                     }
@@ -13868,6 +14823,7 @@ impl Error for RemoveTagsFromResourceError {
             RemoveTagsFromResourceError::InternalServerError(ref cause) => cause,
             RemoveTagsFromResourceError::InvalidResourceId(ref cause) => cause,
             RemoveTagsFromResourceError::InvalidResourceType(ref cause) => cause,
+            RemoveTagsFromResourceError::TooManyUpdates(ref cause) => cause,
             RemoveTagsFromResourceError::Validation(ref cause) => cause,
             RemoveTagsFromResourceError::Credentials(ref err) => err.description(),
             RemoveTagsFromResourceError::HttpDispatch(ref dispatch_error) => {
@@ -13991,7 +14947,9 @@ pub enum SendCommandError {
     InternalServerError(String),
     /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The document version is not valid or does not exist.</p>
+    InvalidDocumentVersion(String),
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>One or more configuration items is not valid. Verify that a valid Amazon Resource Name (ARN) was provided for an Amazon SNS topic.</p>
     InvalidNotificationConfig(String),
@@ -14037,6 +14995,9 @@ impl SendCommandError {
                     }
                     "InvalidDocument" => {
                         SendCommandError::InvalidDocument(String::from(error_message))
+                    }
+                    "InvalidDocumentVersion" => {
+                        SendCommandError::InvalidDocumentVersion(String::from(error_message))
                     }
                     "InvalidInstanceId" => {
                         SendCommandError::InvalidInstanceId(String::from(error_message))
@@ -14099,6 +15060,7 @@ impl Error for SendCommandError {
             SendCommandError::DuplicateInstanceId(ref cause) => cause,
             SendCommandError::InternalServerError(ref cause) => cause,
             SendCommandError::InvalidDocument(ref cause) => cause,
+            SendCommandError::InvalidDocumentVersion(ref cause) => cause,
             SendCommandError::InvalidInstanceId(ref cause) => cause,
             SendCommandError::InvalidNotificationConfig(ref cause) => cause,
             SendCommandError::InvalidOutputFolder(ref cause) => cause,
@@ -14110,6 +15072,95 @@ impl Error for SendCommandError {
             SendCommandError::Credentials(ref err) => err.description(),
             SendCommandError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             SendCommandError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by StartAssociationsOnce
+#[derive(Debug, PartialEq)]
+pub enum StartAssociationsOnceError {
+    /// <p>The specified association does not exist.</p>
+    AssociationDoesNotExist(String),
+    /// <p>The association is not valid or does not exist. </p>
+    InvalidAssociation(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl StartAssociationsOnceError {
+    pub fn from_body(body: &str) -> StartAssociationsOnceError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AssociationDoesNotExist" => {
+                        StartAssociationsOnceError::AssociationDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidAssociation" => {
+                        StartAssociationsOnceError::InvalidAssociation(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        StartAssociationsOnceError::Validation(error_message.to_string())
+                    }
+                    _ => StartAssociationsOnceError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => StartAssociationsOnceError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for StartAssociationsOnceError {
+    fn from(err: serde_json::error::Error) -> StartAssociationsOnceError {
+        StartAssociationsOnceError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StartAssociationsOnceError {
+    fn from(err: CredentialsError) -> StartAssociationsOnceError {
+        StartAssociationsOnceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StartAssociationsOnceError {
+    fn from(err: HttpDispatchError) -> StartAssociationsOnceError {
+        StartAssociationsOnceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartAssociationsOnceError {
+    fn from(err: io::Error) -> StartAssociationsOnceError {
+        StartAssociationsOnceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StartAssociationsOnceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartAssociationsOnceError {
+    fn description(&self) -> &str {
+        match *self {
+            StartAssociationsOnceError::AssociationDoesNotExist(ref cause) => cause,
+            StartAssociationsOnceError::InvalidAssociation(ref cause) => cause,
+            StartAssociationsOnceError::Validation(ref cause) => cause,
+            StartAssociationsOnceError::Credentials(ref err) => err.description(),
+            StartAssociationsOnceError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StartAssociationsOnceError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -14497,7 +15548,7 @@ pub enum UpdateAssociationStatusError {
     InternalServerError(String),
     /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The updated status is the same as the current status.</p>
     StatusUnchanged(String),
@@ -15099,7 +16150,7 @@ impl Error for UpdateMaintenanceWindowTaskError {
 pub enum UpdateManagedInstanceRoleError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -15318,7 +16369,7 @@ pub trait Ssm {
         input: CreatePatchBaselineRequest,
     ) -> RusotoFuture<CreatePatchBaselineResult, CreatePatchBaselineError>;
 
-    /// <p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a>ListResourceDataSync</a>.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. To view an example of a restrictive Amazon S3 bucket policy for Resource Data Sync, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-configuring.html#sysman-inventory-datasync">Configuring Resource Data Sync for Inventory</a>.</p>
+    /// <p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a>ListResourceDataSync</a>.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. To view an example of a restrictive Amazon S3 bucket policy for Resource Data Sync, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-datasync-create.html">Create a Resource Data Sync for Inventory</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     fn create_resource_data_sync(
         &self,
         input: CreateResourceDataSyncRequest,
@@ -15341,6 +16392,12 @@ pub trait Ssm {
         &self,
         input: DeleteDocumentRequest,
     ) -> RusotoFuture<DeleteDocumentResult, DeleteDocumentError>;
+
+    /// <p>Delete a custom inventory type, or the data associated with a custom Inventory type. Deleting a custom inventory type is also referred to as deleting a custom inventory schema.</p>
+    fn delete_inventory(
+        &self,
+        input: DeleteInventoryRequest,
+    ) -> RusotoFuture<DeleteInventoryResult, DeleteInventoryError>;
 
     /// <p>Deletes a Maintenance Window.</p>
     fn delete_maintenance_window(
@@ -15372,7 +16429,7 @@ pub trait Ssm {
         input: DeleteResourceDataSyncRequest,
     ) -> RusotoFuture<DeleteResourceDataSyncResult, DeleteResourceDataSyncError>;
 
-    /// <p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don't plan to use Run Command on the server, we suggest uninstalling the SSM Agent first.</p>
+    /// <p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don't plan to use Run Command on the server, we suggest uninstalling SSM Agent first.</p>
     fn deregister_managed_instance(
         &self,
         input: DeregisterManagedInstanceRequest,
@@ -15416,6 +16473,21 @@ pub trait Ssm {
         &self,
         input: DescribeAssociationRequest,
     ) -> RusotoFuture<DescribeAssociationResult, DescribeAssociationError>;
+
+    /// <p>Use this API action to view information about a specific execution of a specific association.</p>
+    fn describe_association_execution_targets(
+        &self,
+        input: DescribeAssociationExecutionTargetsRequest,
+    ) -> RusotoFuture<
+        DescribeAssociationExecutionTargetsResult,
+        DescribeAssociationExecutionTargetsError,
+    >;
+
+    /// <p>Use this API action to view all executions for a specific association ID. </p>
+    fn describe_association_executions(
+        &self,
+        input: DescribeAssociationExecutionsRequest,
+    ) -> RusotoFuture<DescribeAssociationExecutionsResult, DescribeAssociationExecutionsError>;
 
     /// <p>Provides details about all active and terminated Automation executions.</p>
     fn describe_automation_executions(
@@ -15474,7 +16546,7 @@ pub trait Ssm {
         DescribeInstanceAssociationsStatusError,
     >;
 
-    /// <p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM Agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p>
+    /// <p><p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM Agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p> <note> <p>The IamRole field for this API action is the Amazon Identity and Access Management (IAM) role assigned to on-premises instances. This call does not return the IAM role for Amazon EC2 instances.</p> </note></p>
     fn describe_instance_information(
         &self,
         input: DescribeInstanceInformationRequest,
@@ -15500,6 +16572,12 @@ pub trait Ssm {
         &self,
         input: DescribeInstancePatchesRequest,
     ) -> RusotoFuture<DescribeInstancePatchesResult, DescribeInstancePatchesError>;
+
+    /// <p>Describes a specific delete inventory operation.</p>
+    fn describe_inventory_deletions(
+        &self,
+        input: DescribeInventoryDeletionsRequest,
+    ) -> RusotoFuture<DescribeInventoryDeletionsResult, DescribeInventoryDeletionsError>;
 
     /// <p>Retrieves the individual task executions (one per target) for a particular task executed as part of a Maintenance Window execution.</p>
     fn describe_maintenance_window_execution_task_invocations(
@@ -15648,7 +16726,7 @@ pub trait Ssm {
         input: GetMaintenanceWindowTaskRequest,
     ) -> RusotoFuture<GetMaintenanceWindowTaskResult, GetMaintenanceWindowTaskError>;
 
-    /// <p>Get information about a parameter by using the parameter name. </p>
+    /// <p>Get information about a parameter by using the parameter name. Don't confuse this API action with the <a>GetParameters</a> API action.</p>
     fn get_parameter(
         &self,
         input: GetParameterRequest,
@@ -15660,13 +16738,13 @@ pub trait Ssm {
         input: GetParameterHistoryRequest,
     ) -> RusotoFuture<GetParameterHistoryResult, GetParameterHistoryError>;
 
-    /// <p>Get details of a parameter.</p>
+    /// <p>Get details of a parameter. Don't confuse this API action with the <a>GetParameter</a> API action.</p>
     fn get_parameters(
         &self,
         input: GetParametersRequest,
     ) -> RusotoFuture<GetParametersResult, GetParametersError>;
 
-    /// <p><p>Retrieve parameters in a specific hierarchy. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html">Working with Systems Manager Parameters</a>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> <note> <p>This API action doesn&#39;t support filtering by tags. </p> </note></p>
+    /// <p><p>Retrieve parameters in a specific hierarchy. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html">Working with Systems Manager Parameters</a> in the <i>AWS Systems Manager User Guide</i>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> <note> <p>This API action doesn&#39;t support filtering by tags. </p> </note></p>
     fn get_parameters_by_path(
         &self,
         input: GetParametersByPathRequest,
@@ -15683,6 +16761,11 @@ pub trait Ssm {
         &self,
         input: GetPatchBaselineForPatchGroupRequest,
     ) -> RusotoFuture<GetPatchBaselineForPatchGroupResult, GetPatchBaselineForPatchGroupError>;
+
+    fn label_parameter_version(
+        &self,
+        input: LabelParameterVersionRequest,
+    ) -> RusotoFuture<LabelParameterVersionResult, LabelParameterVersionError>;
 
     /// <p>Retrieves all versions of an association for a specific association ID.</p>
     fn list_association_versions(
@@ -15774,7 +16857,7 @@ pub trait Ssm {
         input: PutInventoryRequest,
     ) -> RusotoFuture<PutInventoryResult, PutInventoryError>;
 
-    /// <p>Add one or more parameters to the system.</p>
+    /// <p>Add a parameter to the system.</p>
     fn put_parameter(
         &self,
         input: PutParameterRequest,
@@ -15827,6 +16910,12 @@ pub trait Ssm {
         &self,
         input: SendCommandRequest,
     ) -> RusotoFuture<SendCommandResult, SendCommandError>;
+
+    /// <p>Use this API action to execute an association immediately and only one time. This action can be helpful when troubleshooting associations.</p>
+    fn start_associations_once(
+        &self,
+        input: StartAssociationsOnceRequest,
+    ) -> RusotoFuture<StartAssociationsOnceResult, StartAssociationsOnceError>;
 
     /// <p>Initiates execution of an Automation document.</p>
     fn start_automation_execution(
@@ -16210,7 +17299,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a>ListResourceDataSync</a>.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. To view an example of a restrictive Amazon S3 bucket policy for Resource Data Sync, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-configuring.html#sysman-inventory-datasync">Configuring Resource Data Sync for Inventory</a>.</p>
+    /// <p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a>ListResourceDataSync</a>.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. To view an example of a restrictive Amazon S3 bucket policy for Resource Data Sync, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-datasync-create.html">Create a Resource Data Sync for Inventory</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     fn create_resource_data_sync(
         &self,
         input: CreateResourceDataSyncRequest,
@@ -16343,6 +17432,41 @@ impl Ssm for SsmClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDocumentError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Delete a custom inventory type, or the data associated with a custom Inventory type. Deleting a custom inventory type is also referred to as deleting a custom inventory schema.</p>
+    fn delete_inventory(
+        &self,
+        input: DeleteInventoryRequest,
+    ) -> RusotoFuture<DeleteInventoryResult, DeleteInventoryError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.DeleteInventory");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteInventoryResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteInventoryError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -16525,7 +17649,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don't plan to use Run Command on the server, we suggest uninstalling the SSM Agent first.</p>
+    /// <p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don't plan to use Run Command on the server, we suggest uninstalling SSM Agent first.</p>
     fn deregister_managed_instance(
         &self,
         input: DeregisterManagedInstanceRequest,
@@ -16746,6 +17870,82 @@ impl Ssm for SsmClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAssociationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Use this API action to view information about a specific execution of a specific association.</p>
+    fn describe_association_execution_targets(
+        &self,
+        input: DescribeAssociationExecutionTargetsRequest,
+    ) -> RusotoFuture<
+        DescribeAssociationExecutionTargetsResult,
+        DescribeAssociationExecutionTargetsError,
+    > {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonSSM.DescribeAssociationExecutionTargets",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeAssociationExecutionTargetsResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeAssociationExecutionTargetsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Use this API action to view all executions for a specific association ID. </p>
+    fn describe_association_executions(
+        &self,
+        input: DescribeAssociationExecutionsRequest,
+    ) -> RusotoFuture<DescribeAssociationExecutionsResult, DescribeAssociationExecutionsError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.DescribeAssociationExecutions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeAssociationExecutionsResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeAssociationExecutionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -17052,7 +18252,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM Agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p>
+    /// <p><p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM Agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p> <note> <p>The IamRole field for this API action is the Amazon Identity and Access Management (IAM) role assigned to on-premises instances. This call does not return the IAM role for Amazon EC2 instances.</p> </note></p>
     fn describe_instance_information(
         &self,
         input: DescribeInstanceInformationRequest,
@@ -17191,6 +18391,41 @@ impl Ssm for SsmClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeInstancePatchesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Describes a specific delete inventory operation.</p>
+    fn describe_inventory_deletions(
+        &self,
+        input: DescribeInventoryDeletionsRequest,
+    ) -> RusotoFuture<DescribeInventoryDeletionsResult, DescribeInventoryDeletionsError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.DescribeInventoryDeletions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeInventoryDeletionsResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeInventoryDeletionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -18006,7 +19241,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Get information about a parameter by using the parameter name. </p>
+    /// <p>Get information about a parameter by using the parameter name. Don't confuse this API action with the <a>GetParameters</a> API action.</p>
     fn get_parameter(
         &self,
         input: GetParameterRequest,
@@ -18076,7 +19311,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Get details of a parameter.</p>
+    /// <p>Get details of a parameter. Don't confuse this API action with the <a>GetParameter</a> API action.</p>
     fn get_parameters(
         &self,
         input: GetParametersRequest,
@@ -18111,7 +19346,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p><p>Retrieve parameters in a specific hierarchy. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html">Working with Systems Manager Parameters</a>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> <note> <p>This API action doesn&#39;t support filtering by tags. </p> </note></p>
+    /// <p><p>Retrieve parameters in a specific hierarchy. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html">Working with Systems Manager Parameters</a> in the <i>AWS Systems Manager User Guide</i>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> <note> <p>This API action doesn&#39;t support filtering by tags. </p> </note></p>
     fn get_parameters_by_path(
         &self,
         input: GetParametersByPathRequest,
@@ -18209,6 +19444,40 @@ impl Ssm for SsmClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetPatchBaselineForPatchGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    fn label_parameter_version(
+        &self,
+        input: LabelParameterVersionRequest,
+    ) -> RusotoFuture<LabelParameterVersionResult, LabelParameterVersionError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.LabelParameterVersion");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<LabelParameterVersionResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(LabelParameterVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -18742,7 +20011,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Add one or more parameters to the system.</p>
+    /// <p>Add a parameter to the system.</p>
     fn put_parameter(
         &self,
         input: PutParameterRequest,
@@ -19031,6 +20300,41 @@ impl Ssm for SsmClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SendCommandError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Use this API action to execute an association immediately and only one time. This action can be helpful when troubleshooting associations.</p>
+    fn start_associations_once(
+        &self,
+        input: StartAssociationsOnceRequest,
+    ) -> RusotoFuture<StartAssociationsOnceResult, StartAssociationsOnceError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.StartAssociationsOnce");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<StartAssociationsOnceResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(StartAssociationsOnceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

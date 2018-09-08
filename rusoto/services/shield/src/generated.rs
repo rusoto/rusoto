@@ -28,6 +28,26 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AssociateDRTLogBucketRequest {
+    /// <p>The Amazon S3 bucket that contains your flow logs.</p>
+    #[serde(rename = "LogBucket")]
+    pub log_bucket: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct AssociateDRTLogBucketResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AssociateDRTRoleRequest {
+    /// <p>The Amazon Resource Name (ARN) of the role the DRT will use to access your AWS account.</p> <p>Prior to making the <code>AssociateDRTRole</code> request, you must attach the <a href="https://console.aws.amazon.com/iam/home?#/policies/arn:aws:iam::aws:policy/service-role/AWSShieldDRTAccessPolicy">AWSShieldDRTAccessPolicy</a> managed policy to this role. For more information see <a href=" https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html">Attaching and Detaching IAM Policies</a>.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct AssociateDRTRoleResponse {}
+
 /// <p>The details of a DDoS attack.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AttackDetail {
@@ -192,6 +212,32 @@ pub struct DescribeAttackResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeDRTAccessRequest {}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DescribeDRTAccessResponse {
+    /// <p>The list of Amazon S3 buckets accessed by the DRT.</p>
+    #[serde(rename = "LogBucketList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_bucket_list: Option<Vec<String>>,
+    /// <p>The Amazon Resource Name (ARN) of the role the DRT used to access your AWS account.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeEmergencyContactSettingsRequest {}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DescribeEmergencyContactSettingsResponse {
+    /// <p>A list of email addresses that the DRT can use to contact you during a suspected attack.</p>
+    #[serde(rename = "EmergencyContactList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub emergency_contact_list: Option<Vec<EmergencyContact>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeProtectionRequest {
     /// <p>The unique identifier (ID) for the <a>Protection</a> object that is described.</p>
     #[serde(rename = "ProtectionId")]
@@ -218,6 +264,30 @@ pub struct DescribeSubscriptionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DisassociateDRTLogBucketRequest {
+    /// <p>The Amazon S3 bucket that contains your flow logs.</p>
+    #[serde(rename = "LogBucket")]
+    pub log_bucket: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DisassociateDRTLogBucketResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DisassociateDRTRoleRequest {}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DisassociateDRTRoleResponse {}
+
+/// <p>Contact information that the DRT can use to contact you during a suspected attack.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EmergencyContact {
+    /// <p>An email address that the DRT can use to contact you during a suspected attack.</p>
+    #[serde(rename = "EmailAddress")]
+    pub email_address: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetSubscriptionStateRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -225,6 +295,19 @@ pub struct GetSubscriptionStateResponse {
     /// <p>The status of the subscription.</p>
     #[serde(rename = "SubscriptionState")]
     pub subscription_state: String,
+}
+
+/// <p>Specifies how many protections of a given type you can create.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct Limit {
+    /// <p>The maximum number of protections that can be created for the specified <code>Type</code>.</p>
+    #[serde(rename = "Max")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max: Option<i64>,
+    /// <p>The type of protection.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -337,6 +420,18 @@ pub struct SubResourceSummary {
 /// <p>Information about the AWS Shield Advanced subscription for an account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Subscription {
+    /// <p>If <code>ENABLED</code>, the subscription will be automatically renewed at the end of the existing subscription period.</p> <p>When you initally create a subscription, <code>AutoRenew</code> is set to <code>ENABLED</code>. You can change this by submitting an <code>UpdateSubscription</code> request. If the <code>UpdateSubscription</code> request does not included a value for <code>AutoRenew</code>, the existing value for <code>AutoRenew</code> remains unchanged.</p>
+    #[serde(rename = "AutoRenew")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_renew: Option<String>,
+    /// <p>The date and time your subscription will end.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>Specifies how many protections of a given type you can create.</p>
+    #[serde(rename = "Limits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limits: Option<Vec<Limit>>,
     /// <p>The start time of the subscription, in Unix time in seconds. For more information see <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#parameter-types">timestamp</a>.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -401,6 +496,264 @@ pub struct TimeRange {
     pub to_exclusive: Option<f64>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateEmergencyContactSettingsRequest {
+    /// <p>A list of email addresses that the DRT can use to contact you during a suspected attack.</p>
+    #[serde(rename = "EmergencyContactList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub emergency_contact_list: Option<Vec<EmergencyContact>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct UpdateEmergencyContactSettingsResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateSubscriptionRequest {
+    /// <p>When you initally create a subscription, <code>AutoRenew</code> is set to <code>ENABLED</code>. If <code>ENABLED</code>, the subscription will be automatically renewed at the end of the existing subscription period. You can change this by submitting an <code>UpdateSubscription</code> request. If the <code>UpdateSubscription</code> request does not included a value for <code>AutoRenew</code>, the existing value for <code>AutoRenew</code> remains unchanged.</p>
+    #[serde(rename = "AutoRenew")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_renew: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct UpdateSubscriptionResponse {}
+
+/// Errors returned by AssociateDRTLogBucket
+#[derive(Debug, PartialEq)]
+pub enum AssociateDRTLogBucketError {
+    /// <p>In order to grant the necessary access to the DDoS Response Team, the user submitting <code>AssociateDRTRole</code> must have the <code>iam:PassRole</code> permission. This error indicates the user did not have the appropriate permissions. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p>
+    AccessDeniedForDependency(String),
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception that indicates that the operation would not cause any change to occur.</p>
+    InvalidOperation(String),
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    InvalidParameter(String),
+    /// <p>Exception that indicates that the operation would exceed a limit.</p> <p> <code>Type</code> is the type of limit that would be exceeded.</p> <p> <code>Limit</code> is the threshold that would be exceeded.</p>
+    LimitsExceeded(String),
+    /// <p>The ARN of the role that you specifed does not exist.</p>
+    NoAssociatedRole(String),
+    /// <p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
+    OptimisticLock(String),
+    /// <p>Exception indicating the specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl AssociateDRTLogBucketError {
+    pub fn from_body(body: &str) -> AssociateDRTLogBucketError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedForDependencyException" => {
+                        AssociateDRTLogBucketError::AccessDeniedForDependency(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InternalErrorException" => {
+                        AssociateDRTLogBucketError::InternalError(String::from(error_message))
+                    }
+                    "InvalidOperationException" => {
+                        AssociateDRTLogBucketError::InvalidOperation(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        AssociateDRTLogBucketError::InvalidParameter(String::from(error_message))
+                    }
+                    "LimitsExceededException" => {
+                        AssociateDRTLogBucketError::LimitsExceeded(String::from(error_message))
+                    }
+                    "NoAssociatedRoleException" => {
+                        AssociateDRTLogBucketError::NoAssociatedRole(String::from(error_message))
+                    }
+                    "OptimisticLockException" => {
+                        AssociateDRTLogBucketError::OptimisticLock(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        AssociateDRTLogBucketError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        AssociateDRTLogBucketError::Validation(error_message.to_string())
+                    }
+                    _ => AssociateDRTLogBucketError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AssociateDRTLogBucketError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AssociateDRTLogBucketError {
+    fn from(err: serde_json::error::Error) -> AssociateDRTLogBucketError {
+        AssociateDRTLogBucketError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AssociateDRTLogBucketError {
+    fn from(err: CredentialsError) -> AssociateDRTLogBucketError {
+        AssociateDRTLogBucketError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AssociateDRTLogBucketError {
+    fn from(err: HttpDispatchError) -> AssociateDRTLogBucketError {
+        AssociateDRTLogBucketError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AssociateDRTLogBucketError {
+    fn from(err: io::Error) -> AssociateDRTLogBucketError {
+        AssociateDRTLogBucketError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AssociateDRTLogBucketError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssociateDRTLogBucketError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateDRTLogBucketError::AccessDeniedForDependency(ref cause) => cause,
+            AssociateDRTLogBucketError::InternalError(ref cause) => cause,
+            AssociateDRTLogBucketError::InvalidOperation(ref cause) => cause,
+            AssociateDRTLogBucketError::InvalidParameter(ref cause) => cause,
+            AssociateDRTLogBucketError::LimitsExceeded(ref cause) => cause,
+            AssociateDRTLogBucketError::NoAssociatedRole(ref cause) => cause,
+            AssociateDRTLogBucketError::OptimisticLock(ref cause) => cause,
+            AssociateDRTLogBucketError::ResourceNotFound(ref cause) => cause,
+            AssociateDRTLogBucketError::Validation(ref cause) => cause,
+            AssociateDRTLogBucketError::Credentials(ref err) => err.description(),
+            AssociateDRTLogBucketError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AssociateDRTLogBucketError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by AssociateDRTRole
+#[derive(Debug, PartialEq)]
+pub enum AssociateDRTRoleError {
+    /// <p>In order to grant the necessary access to the DDoS Response Team, the user submitting <code>AssociateDRTRole</code> must have the <code>iam:PassRole</code> permission. This error indicates the user did not have the appropriate permissions. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p>
+    AccessDeniedForDependency(String),
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception that indicates that the operation would not cause any change to occur.</p>
+    InvalidOperation(String),
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    InvalidParameter(String),
+    /// <p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
+    OptimisticLock(String),
+    /// <p>Exception indicating the specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl AssociateDRTRoleError {
+    pub fn from_body(body: &str) -> AssociateDRTRoleError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedForDependencyException" => {
+                        AssociateDRTRoleError::AccessDeniedForDependency(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InternalErrorException" => {
+                        AssociateDRTRoleError::InternalError(String::from(error_message))
+                    }
+                    "InvalidOperationException" => {
+                        AssociateDRTRoleError::InvalidOperation(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        AssociateDRTRoleError::InvalidParameter(String::from(error_message))
+                    }
+                    "OptimisticLockException" => {
+                        AssociateDRTRoleError::OptimisticLock(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        AssociateDRTRoleError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        AssociateDRTRoleError::Validation(error_message.to_string())
+                    }
+                    _ => AssociateDRTRoleError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AssociateDRTRoleError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AssociateDRTRoleError {
+    fn from(err: serde_json::error::Error) -> AssociateDRTRoleError {
+        AssociateDRTRoleError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AssociateDRTRoleError {
+    fn from(err: CredentialsError) -> AssociateDRTRoleError {
+        AssociateDRTRoleError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AssociateDRTRoleError {
+    fn from(err: HttpDispatchError) -> AssociateDRTRoleError {
+        AssociateDRTRoleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AssociateDRTRoleError {
+    fn from(err: io::Error) -> AssociateDRTRoleError {
+        AssociateDRTRoleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AssociateDRTRoleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssociateDRTRoleError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateDRTRoleError::AccessDeniedForDependency(ref cause) => cause,
+            AssociateDRTRoleError::InternalError(ref cause) => cause,
+            AssociateDRTRoleError::InvalidOperation(ref cause) => cause,
+            AssociateDRTRoleError::InvalidParameter(ref cause) => cause,
+            AssociateDRTRoleError::OptimisticLock(ref cause) => cause,
+            AssociateDRTRoleError::ResourceNotFound(ref cause) => cause,
+            AssociateDRTRoleError::Validation(ref cause) => cause,
+            AssociateDRTRoleError::Credentials(ref err) => err.description(),
+            AssociateDRTRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            AssociateDRTRoleError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateProtection
 #[derive(Debug, PartialEq)]
 pub enum CreateProtectionError {
@@ -699,7 +1052,7 @@ impl Error for DeleteProtectionError {
 pub enum DeleteSubscriptionError {
     /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    /// <p>Exception that indicates that the subscription you are trying to delete has not yet completed the 1-year commitment. You cannot delete this subscription.</p>
+    /// <p>You are trying to update a subscription that has not yet completed the 1-year commitment. You can change the <code>AutoRenew</code> parameter during the last 30 days of your subscription. This exception indicates that you are attempting to change <code>AutoRenew</code> prior to that period.</p>
     LockedSubscription(String),
     /// <p>Exception indicating the specified resource does not exist.</p>
     ResourceNotFound(String),
@@ -869,6 +1222,184 @@ impl Error for DescribeAttackError {
             DescribeAttackError::Credentials(ref err) => err.description(),
             DescribeAttackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DescribeAttackError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeDRTAccess
+#[derive(Debug, PartialEq)]
+pub enum DescribeDRTAccessError {
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception indicating the specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeDRTAccessError {
+    pub fn from_body(body: &str) -> DescribeDRTAccessError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        DescribeDRTAccessError::InternalError(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeDRTAccessError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeDRTAccessError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeDRTAccessError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeDRTAccessError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeDRTAccessError {
+    fn from(err: serde_json::error::Error) -> DescribeDRTAccessError {
+        DescribeDRTAccessError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeDRTAccessError {
+    fn from(err: CredentialsError) -> DescribeDRTAccessError {
+        DescribeDRTAccessError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeDRTAccessError {
+    fn from(err: HttpDispatchError) -> DescribeDRTAccessError {
+        DescribeDRTAccessError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeDRTAccessError {
+    fn from(err: io::Error) -> DescribeDRTAccessError {
+        DescribeDRTAccessError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeDRTAccessError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeDRTAccessError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeDRTAccessError::InternalError(ref cause) => cause,
+            DescribeDRTAccessError::ResourceNotFound(ref cause) => cause,
+            DescribeDRTAccessError::Validation(ref cause) => cause,
+            DescribeDRTAccessError::Credentials(ref err) => err.description(),
+            DescribeDRTAccessError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeDRTAccessError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeEmergencyContactSettings
+#[derive(Debug, PartialEq)]
+pub enum DescribeEmergencyContactSettingsError {
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception indicating the specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeEmergencyContactSettingsError {
+    pub fn from_body(body: &str) -> DescribeEmergencyContactSettingsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        DescribeEmergencyContactSettingsError::InternalError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeEmergencyContactSettingsError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        DescribeEmergencyContactSettingsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeEmergencyContactSettingsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeEmergencyContactSettingsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeEmergencyContactSettingsError {
+    fn from(err: serde_json::error::Error) -> DescribeEmergencyContactSettingsError {
+        DescribeEmergencyContactSettingsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeEmergencyContactSettingsError {
+    fn from(err: CredentialsError) -> DescribeEmergencyContactSettingsError {
+        DescribeEmergencyContactSettingsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeEmergencyContactSettingsError {
+    fn from(err: HttpDispatchError) -> DescribeEmergencyContactSettingsError {
+        DescribeEmergencyContactSettingsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEmergencyContactSettingsError {
+    fn from(err: io::Error) -> DescribeEmergencyContactSettingsError {
+        DescribeEmergencyContactSettingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeEmergencyContactSettingsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeEmergencyContactSettingsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeEmergencyContactSettingsError::InternalError(ref cause) => cause,
+            DescribeEmergencyContactSettingsError::ResourceNotFound(ref cause) => cause,
+            DescribeEmergencyContactSettingsError::Validation(ref cause) => cause,
+            DescribeEmergencyContactSettingsError::Credentials(ref err) => err.description(),
+            DescribeEmergencyContactSettingsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeEmergencyContactSettingsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -1043,6 +1574,218 @@ impl Error for DescribeSubscriptionError {
                 dispatch_error.description()
             }
             DescribeSubscriptionError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DisassociateDRTLogBucket
+#[derive(Debug, PartialEq)]
+pub enum DisassociateDRTLogBucketError {
+    /// <p>In order to grant the necessary access to the DDoS Response Team, the user submitting <code>AssociateDRTRole</code> must have the <code>iam:PassRole</code> permission. This error indicates the user did not have the appropriate permissions. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p>
+    AccessDeniedForDependency(String),
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception that indicates that the operation would not cause any change to occur.</p>
+    InvalidOperation(String),
+    /// <p>The ARN of the role that you specifed does not exist.</p>
+    NoAssociatedRole(String),
+    /// <p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
+    OptimisticLock(String),
+    /// <p>Exception indicating the specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DisassociateDRTLogBucketError {
+    pub fn from_body(body: &str) -> DisassociateDRTLogBucketError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedForDependencyException" => {
+                        DisassociateDRTLogBucketError::AccessDeniedForDependency(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InternalErrorException" => {
+                        DisassociateDRTLogBucketError::InternalError(String::from(error_message))
+                    }
+                    "InvalidOperationException" => {
+                        DisassociateDRTLogBucketError::InvalidOperation(String::from(error_message))
+                    }
+                    "NoAssociatedRoleException" => {
+                        DisassociateDRTLogBucketError::NoAssociatedRole(String::from(error_message))
+                    }
+                    "OptimisticLockException" => {
+                        DisassociateDRTLogBucketError::OptimisticLock(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DisassociateDRTLogBucketError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DisassociateDRTLogBucketError::Validation(error_message.to_string())
+                    }
+                    _ => DisassociateDRTLogBucketError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DisassociateDRTLogBucketError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DisassociateDRTLogBucketError {
+    fn from(err: serde_json::error::Error) -> DisassociateDRTLogBucketError {
+        DisassociateDRTLogBucketError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DisassociateDRTLogBucketError {
+    fn from(err: CredentialsError) -> DisassociateDRTLogBucketError {
+        DisassociateDRTLogBucketError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DisassociateDRTLogBucketError {
+    fn from(err: HttpDispatchError) -> DisassociateDRTLogBucketError {
+        DisassociateDRTLogBucketError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisassociateDRTLogBucketError {
+    fn from(err: io::Error) -> DisassociateDRTLogBucketError {
+        DisassociateDRTLogBucketError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DisassociateDRTLogBucketError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisassociateDRTLogBucketError {
+    fn description(&self) -> &str {
+        match *self {
+            DisassociateDRTLogBucketError::AccessDeniedForDependency(ref cause) => cause,
+            DisassociateDRTLogBucketError::InternalError(ref cause) => cause,
+            DisassociateDRTLogBucketError::InvalidOperation(ref cause) => cause,
+            DisassociateDRTLogBucketError::NoAssociatedRole(ref cause) => cause,
+            DisassociateDRTLogBucketError::OptimisticLock(ref cause) => cause,
+            DisassociateDRTLogBucketError::ResourceNotFound(ref cause) => cause,
+            DisassociateDRTLogBucketError::Validation(ref cause) => cause,
+            DisassociateDRTLogBucketError::Credentials(ref err) => err.description(),
+            DisassociateDRTLogBucketError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DisassociateDRTLogBucketError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DisassociateDRTRole
+#[derive(Debug, PartialEq)]
+pub enum DisassociateDRTRoleError {
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception that indicates that the operation would not cause any change to occur.</p>
+    InvalidOperation(String),
+    /// <p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
+    OptimisticLock(String),
+    /// <p>Exception indicating the specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DisassociateDRTRoleError {
+    pub fn from_body(body: &str) -> DisassociateDRTRoleError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        DisassociateDRTRoleError::InternalError(String::from(error_message))
+                    }
+                    "InvalidOperationException" => {
+                        DisassociateDRTRoleError::InvalidOperation(String::from(error_message))
+                    }
+                    "OptimisticLockException" => {
+                        DisassociateDRTRoleError::OptimisticLock(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DisassociateDRTRoleError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DisassociateDRTRoleError::Validation(error_message.to_string())
+                    }
+                    _ => DisassociateDRTRoleError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DisassociateDRTRoleError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DisassociateDRTRoleError {
+    fn from(err: serde_json::error::Error) -> DisassociateDRTRoleError {
+        DisassociateDRTRoleError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DisassociateDRTRoleError {
+    fn from(err: CredentialsError) -> DisassociateDRTRoleError {
+        DisassociateDRTRoleError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DisassociateDRTRoleError {
+    fn from(err: HttpDispatchError) -> DisassociateDRTRoleError {
+        DisassociateDRTRoleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisassociateDRTRoleError {
+    fn from(err: io::Error) -> DisassociateDRTRoleError {
+        DisassociateDRTRoleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DisassociateDRTRoleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisassociateDRTRoleError {
+    fn description(&self) -> &str {
+        match *self {
+            DisassociateDRTRoleError::InternalError(ref cause) => cause,
+            DisassociateDRTRoleError::InvalidOperation(ref cause) => cause,
+            DisassociateDRTRoleError::OptimisticLock(ref cause) => cause,
+            DisassociateDRTRoleError::ResourceNotFound(ref cause) => cause,
+            DisassociateDRTRoleError::Validation(ref cause) => cause,
+            DisassociateDRTRoleError::Credentials(ref err) => err.description(),
+            DisassociateDRTRoleError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DisassociateDRTRoleError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -1223,6 +1966,8 @@ impl Error for ListAttacksError {
 pub enum ListProtectionsError {
     /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
+    /// <p>Exception that indicates that the NextToken specified in the request is invalid. Submit the request using the NextToken value that was returned in the response.</p>
+    InvalidPaginationToken(String),
     /// <p>Exception indicating the specified resource does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -1251,6 +1996,9 @@ impl ListProtectionsError {
                 match *error_type {
                     "InternalErrorException" => {
                         ListProtectionsError::InternalError(String::from(error_message))
+                    }
+                    "InvalidPaginationTokenException" => {
+                        ListProtectionsError::InvalidPaginationToken(String::from(error_message))
                     }
                     "ResourceNotFoundException" => {
                         ListProtectionsError::ResourceNotFound(String::from(error_message))
@@ -1295,6 +2043,7 @@ impl Error for ListProtectionsError {
     fn description(&self) -> &str {
         match *self {
             ListProtectionsError::InternalError(ref cause) => cause,
+            ListProtectionsError::InvalidPaginationToken(ref cause) => cause,
             ListProtectionsError::ResourceNotFound(ref cause) => cause,
             ListProtectionsError::Validation(ref cause) => cause,
             ListProtectionsError::Credentials(ref err) => err.description(),
@@ -1303,15 +2052,237 @@ impl Error for ListProtectionsError {
         }
     }
 }
+/// Errors returned by UpdateEmergencyContactSettings
+#[derive(Debug, PartialEq)]
+pub enum UpdateEmergencyContactSettingsError {
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    InvalidParameter(String),
+    /// <p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
+    OptimisticLock(String),
+    /// <p>Exception indicating the specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateEmergencyContactSettingsError {
+    pub fn from_body(body: &str) -> UpdateEmergencyContactSettingsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => UpdateEmergencyContactSettingsError::InternalError(
+                        String::from(error_message),
+                    ),
+                    "InvalidParameterException" => {
+                        UpdateEmergencyContactSettingsError::InvalidParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "OptimisticLockException" => {
+                        UpdateEmergencyContactSettingsError::OptimisticLock(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpdateEmergencyContactSettingsError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        UpdateEmergencyContactSettingsError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateEmergencyContactSettingsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateEmergencyContactSettingsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateEmergencyContactSettingsError {
+    fn from(err: serde_json::error::Error) -> UpdateEmergencyContactSettingsError {
+        UpdateEmergencyContactSettingsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateEmergencyContactSettingsError {
+    fn from(err: CredentialsError) -> UpdateEmergencyContactSettingsError {
+        UpdateEmergencyContactSettingsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateEmergencyContactSettingsError {
+    fn from(err: HttpDispatchError) -> UpdateEmergencyContactSettingsError {
+        UpdateEmergencyContactSettingsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateEmergencyContactSettingsError {
+    fn from(err: io::Error) -> UpdateEmergencyContactSettingsError {
+        UpdateEmergencyContactSettingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateEmergencyContactSettingsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateEmergencyContactSettingsError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateEmergencyContactSettingsError::InternalError(ref cause) => cause,
+            UpdateEmergencyContactSettingsError::InvalidParameter(ref cause) => cause,
+            UpdateEmergencyContactSettingsError::OptimisticLock(ref cause) => cause,
+            UpdateEmergencyContactSettingsError::ResourceNotFound(ref cause) => cause,
+            UpdateEmergencyContactSettingsError::Validation(ref cause) => cause,
+            UpdateEmergencyContactSettingsError::Credentials(ref err) => err.description(),
+            UpdateEmergencyContactSettingsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateEmergencyContactSettingsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateSubscription
+#[derive(Debug, PartialEq)]
+pub enum UpdateSubscriptionError {
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    InvalidParameter(String),
+    /// <p>You are trying to update a subscription that has not yet completed the 1-year commitment. You can change the <code>AutoRenew</code> parameter during the last 30 days of your subscription. This exception indicates that you are attempting to change <code>AutoRenew</code> prior to that period.</p>
+    LockedSubscription(String),
+    /// <p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
+    OptimisticLock(String),
+    /// <p>Exception indicating the specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateSubscriptionError {
+    pub fn from_body(body: &str) -> UpdateSubscriptionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        UpdateSubscriptionError::InternalError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        UpdateSubscriptionError::InvalidParameter(String::from(error_message))
+                    }
+                    "LockedSubscriptionException" => {
+                        UpdateSubscriptionError::LockedSubscription(String::from(error_message))
+                    }
+                    "OptimisticLockException" => {
+                        UpdateSubscriptionError::OptimisticLock(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpdateSubscriptionError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateSubscriptionError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateSubscriptionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateSubscriptionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateSubscriptionError {
+    fn from(err: serde_json::error::Error) -> UpdateSubscriptionError {
+        UpdateSubscriptionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateSubscriptionError {
+    fn from(err: CredentialsError) -> UpdateSubscriptionError {
+        UpdateSubscriptionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateSubscriptionError {
+    fn from(err: HttpDispatchError) -> UpdateSubscriptionError {
+        UpdateSubscriptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateSubscriptionError {
+    fn from(err: io::Error) -> UpdateSubscriptionError {
+        UpdateSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateSubscriptionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateSubscriptionError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateSubscriptionError::InternalError(ref cause) => cause,
+            UpdateSubscriptionError::InvalidParameter(ref cause) => cause,
+            UpdateSubscriptionError::LockedSubscription(ref cause) => cause,
+            UpdateSubscriptionError::OptimisticLock(ref cause) => cause,
+            UpdateSubscriptionError::ResourceNotFound(ref cause) => cause,
+            UpdateSubscriptionError::Validation(ref cause) => cause,
+            UpdateSubscriptionError::Credentials(ref err) => err.description(),
+            UpdateSubscriptionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateSubscriptionError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the AWS Shield API. AWS Shield clients implement this trait.
 pub trait Shield {
-    /// <p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, Elastic IP Address, or an Amazon Route 53 hosted zone.</p>
+    /// <p>Authorizes the DDoS Response team (DRT) to access the specified Amazon S3 bucket containing your flow logs. You can associate up to 10 Amazon S3 buckets with your subscription.</p> <p>To use the services of the DRT and make an <code>AssociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p>
+    fn associate_drt_log_bucket(
+        &self,
+        input: AssociateDRTLogBucketRequest,
+    ) -> RusotoFuture<AssociateDRTLogBucketResponse, AssociateDRTLogBucketError>;
+
+    /// <p>Authorizes the DDoS Response team (DRT), using the specified role, to access your AWS account to assist with DDoS attack mitigation during potential attacks. This enables the DRT to inspect your AWS WAF configuration and create or update AWS WAF rules and web ACLs.</p> <p>You can associate only one <code>RoleArn</code> with your subscription. If you submit an <code>AssociateDRTRole</code> request for an account that already has an associated role, the new <code>RoleArn</code> will replace the existing <code>RoleArn</code>. </p> <p>Prior to making the <code>AssociateDRTRole</code> request, you must attach the <a href="https://console.aws.amazon.com/iam/home?#/policies/arn:aws:iam::aws:policy/service-role/AWSShieldDRTAccessPolicy">AWSShieldDRTAccessPolicy</a> managed policy to the role you will specify in the request. For more information see <a href=" https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html">Attaching and Detaching IAM Policies</a>. The role must also trust the service principal <code> drt.shield.amazonaws.com</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html">IAM JSON Policy Elements: Principal</a>.</p> <p>The DRT will have access only to your AWS WAF and Shield resources. By submitting this request, you authorize the DRT to inspect your AWS WAF and Shield configuration and create and update AWS WAF rules and web ACLs on your behalf. The DRT takes these actions only if explicitly authorized by you.</p> <p>You must have the <code>iam:PassRole</code> permission to make an <code>AssociateDRTRole</code> request. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p> <p>To use the services of the DRT and make an <code>AssociateDRTRole</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p>
+    fn associate_drt_role(
+        &self,
+        input: AssociateDRTRoleRequest,
+    ) -> RusotoFuture<AssociateDRTRoleResponse, AssociateDRTRoleError>;
+
+    /// <p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, Elastic IP Address, or an Amazon Route 53 hosted zone.</p> <p>You can add protection to only a single resource with each CreateProtection request. If you want to add protection to multiple resources at once, use the <a href="https://console.aws.amazon.com/waf/">AWS WAF console</a>. For more information see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/getting-started-ddos.html">Getting Started with AWS Shield Advanced</a> and <a href="https://docs.aws.amazon.com/waf/latest/developerguide/configure-new-protection.html">Add AWS Shield Advanced Protection to more AWS Resources</a>.</p>
     fn create_protection(
         &self,
         input: CreateProtectionRequest,
     ) -> RusotoFuture<CreateProtectionResponse, CreateProtectionError>;
 
-    /// <p>Activates AWS Shield Advanced for an account.</p>
+    /// <p>Activates AWS Shield Advanced for an account.</p> <p>As part of this request you can specify <code>EmergencySettings</code> that automaticaly grant the DDoS response team (DRT) needed permissions to assist you during a suspected DDoS attack. For more information see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/authorize-DRT.html">Authorize the DDoS Response Team to Create Rules and Web ACLs on Your Behalf</a>.</p> <p>When you initally create a subscription, your subscription is set to be automatically renewed at the end of the existing subscription period. You can change this by submitting an <code>UpdateSubscription</code> request. </p>
     fn create_subscription(
         &self,
     ) -> RusotoFuture<CreateSubscriptionResponse, CreateSubscriptionError>;
@@ -1333,6 +2304,16 @@ pub trait Shield {
         input: DescribeAttackRequest,
     ) -> RusotoFuture<DescribeAttackResponse, DescribeAttackError>;
 
+    /// <p>Returns the current role and list of Amazon S3 log buckets used by the DDoS Response team (DRT) to access your AWS account while assisting with attack mitigation.</p>
+    fn describe_drt_access(
+        &self,
+    ) -> RusotoFuture<DescribeDRTAccessResponse, DescribeDRTAccessError>;
+
+    /// <p>Lists the email addresses that the DRT can use to contact you during a suspected attack.</p>
+    fn describe_emergency_contact_settings(
+        &self,
+    ) -> RusotoFuture<DescribeEmergencyContactSettingsResponse, DescribeEmergencyContactSettingsError>;
+
     /// <p>Lists the details of a <a>Protection</a> object.</p>
     fn describe_protection(
         &self,
@@ -1343,6 +2324,17 @@ pub trait Shield {
     fn describe_subscription(
         &self,
     ) -> RusotoFuture<DescribeSubscriptionResponse, DescribeSubscriptionError>;
+
+    /// <p>Removes the DDoS Response team's (DRT) access to the specified Amazon S3 bucket containing your flow logs.</p> <p>To make a <code>DisassociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>. However, if you are not subscribed to one of these support plans, but had been previously and had granted the DRT access to your account, you can submit a <code>DisassociateDRTLogBucket</code> request to remove this access.</p>
+    fn disassociate_drt_log_bucket(
+        &self,
+        input: DisassociateDRTLogBucketRequest,
+    ) -> RusotoFuture<DisassociateDRTLogBucketResponse, DisassociateDRTLogBucketError>;
+
+    /// <p>Removes the DDoS Response team's (DRT) access to your AWS account.</p> <p>To make a <code>DisassociateDRTRole</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>. However, if you are not subscribed to one of these support plans, but had been previously and had granted the DRT access to your account, you can submit a <code>DisassociateDRTRole</code> request to remove this access.</p>
+    fn disassociate_drt_role(
+        &self,
+    ) -> RusotoFuture<DisassociateDRTRoleResponse, DisassociateDRTRoleError>;
 
     /// <p>Returns the <code>SubscriptionState</code>, either <code>Active</code> or <code>Inactive</code>.</p>
     fn get_subscription_state(
@@ -1360,6 +2352,18 @@ pub trait Shield {
         &self,
         input: ListProtectionsRequest,
     ) -> RusotoFuture<ListProtectionsResponse, ListProtectionsError>;
+
+    /// <p>Updates the details of the list of email addresses that the DRT can use to contact you during a suspected attack.</p>
+    fn update_emergency_contact_settings(
+        &self,
+        input: UpdateEmergencyContactSettingsRequest,
+    ) -> RusotoFuture<UpdateEmergencyContactSettingsResponse, UpdateEmergencyContactSettingsError>;
+
+    /// <p>Updates the details of an existing subscription. Only enter values for parameters you want to change. Empty parameters are not updated.</p>
+    fn update_subscription(
+        &self,
+        input: UpdateSubscriptionRequest,
+    ) -> RusotoFuture<UpdateSubscriptionResponse, UpdateSubscriptionError>;
 }
 /// A client for the AWS Shield API.
 pub struct ShieldClient {
@@ -1397,7 +2401,77 @@ impl ShieldClient {
 }
 
 impl Shield for ShieldClient {
-    /// <p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, Elastic IP Address, or an Amazon Route 53 hosted zone.</p>
+    /// <p>Authorizes the DDoS Response team (DRT) to access the specified Amazon S3 bucket containing your flow logs. You can associate up to 10 Amazon S3 buckets with your subscription.</p> <p>To use the services of the DRT and make an <code>AssociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p>
+    fn associate_drt_log_bucket(
+        &self,
+        input: AssociateDRTLogBucketRequest,
+    ) -> RusotoFuture<AssociateDRTLogBucketResponse, AssociateDRTLogBucketError> {
+        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSShield_20160616.AssociateDRTLogBucket");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<AssociateDRTLogBucketResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(AssociateDRTLogBucketError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Authorizes the DDoS Response team (DRT), using the specified role, to access your AWS account to assist with DDoS attack mitigation during potential attacks. This enables the DRT to inspect your AWS WAF configuration and create or update AWS WAF rules and web ACLs.</p> <p>You can associate only one <code>RoleArn</code> with your subscription. If you submit an <code>AssociateDRTRole</code> request for an account that already has an associated role, the new <code>RoleArn</code> will replace the existing <code>RoleArn</code>. </p> <p>Prior to making the <code>AssociateDRTRole</code> request, you must attach the <a href="https://console.aws.amazon.com/iam/home?#/policies/arn:aws:iam::aws:policy/service-role/AWSShieldDRTAccessPolicy">AWSShieldDRTAccessPolicy</a> managed policy to the role you will specify in the request. For more information see <a href=" https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html">Attaching and Detaching IAM Policies</a>. The role must also trust the service principal <code> drt.shield.amazonaws.com</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html">IAM JSON Policy Elements: Principal</a>.</p> <p>The DRT will have access only to your AWS WAF and Shield resources. By submitting this request, you authorize the DRT to inspect your AWS WAF and Shield configuration and create and update AWS WAF rules and web ACLs on your behalf. The DRT takes these actions only if explicitly authorized by you.</p> <p>You must have the <code>iam:PassRole</code> permission to make an <code>AssociateDRTRole</code> request. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p> <p>To use the services of the DRT and make an <code>AssociateDRTRole</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p>
+    fn associate_drt_role(
+        &self,
+        input: AssociateDRTRoleRequest,
+    ) -> RusotoFuture<AssociateDRTRoleResponse, AssociateDRTRoleError> {
+        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSShield_20160616.AssociateDRTRole");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<AssociateDRTRoleResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(AssociateDRTRoleError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, Elastic IP Address, or an Amazon Route 53 hosted zone.</p> <p>You can add protection to only a single resource with each CreateProtection request. If you want to add protection to multiple resources at once, use the <a href="https://console.aws.amazon.com/waf/">AWS WAF console</a>. For more information see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/getting-started-ddos.html">Getting Started with AWS Shield Advanced</a> and <a href="https://docs.aws.amazon.com/waf/latest/developerguide/configure-new-protection.html">Add AWS Shield Advanced Protection to more AWS Resources</a>.</p>
     fn create_protection(
         &self,
         input: CreateProtectionRequest,
@@ -1432,7 +2506,7 @@ impl Shield for ShieldClient {
         })
     }
 
-    /// <p>Activates AWS Shield Advanced for an account.</p>
+    /// <p>Activates AWS Shield Advanced for an account.</p> <p>As part of this request you can specify <code>EmergencySettings</code> that automaticaly grant the DDoS response team (DRT) needed permissions to assist you during a suspected DDoS attack. For more information see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/authorize-DRT.html">Authorize the DDoS Response Team to Create Rules and Web ACLs on Your Behalf</a>.</p> <p>When you initally create a subscription, your subscription is set to be automatically renewed at the end of the existing subscription period. You can change this by submitting an <code>UpdateSubscription</code> request. </p>
     fn create_subscription(
         &self,
     ) -> RusotoFuture<CreateSubscriptionResponse, CreateSubscriptionError> {
@@ -1568,6 +2642,76 @@ impl Shield for ShieldClient {
         })
     }
 
+    /// <p>Returns the current role and list of Amazon S3 log buckets used by the DDoS Response team (DRT) to access your AWS account while assisting with attack mitigation.</p>
+    fn describe_drt_access(
+        &self,
+    ) -> RusotoFuture<DescribeDRTAccessResponse, DescribeDRTAccessError> {
+        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSShield_20160616.DescribeDRTAccess");
+        request.set_payload(Some(b"{}".to_vec()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeDRTAccessResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeDRTAccessError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Lists the email addresses that the DRT can use to contact you during a suspected attack.</p>
+    fn describe_emergency_contact_settings(
+        &self,
+    ) -> RusotoFuture<DescribeEmergencyContactSettingsResponse, DescribeEmergencyContactSettingsError>
+    {
+        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSShield_20160616.DescribeEmergencyContactSettings",
+        );
+        request.set_payload(Some(b"{}".to_vec()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeEmergencyContactSettingsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeEmergencyContactSettingsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Lists the details of a <a>Protection</a> object.</p>
     fn describe_protection(
         &self,
@@ -1629,6 +2773,77 @@ impl Shield for ShieldClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSubscriptionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Removes the DDoS Response team's (DRT) access to the specified Amazon S3 bucket containing your flow logs.</p> <p>To make a <code>DisassociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>. However, if you are not subscribed to one of these support plans, but had been previously and had granted the DRT access to your account, you can submit a <code>DisassociateDRTLogBucket</code> request to remove this access.</p>
+    fn disassociate_drt_log_bucket(
+        &self,
+        input: DisassociateDRTLogBucketRequest,
+    ) -> RusotoFuture<DisassociateDRTLogBucketResponse, DisassociateDRTLogBucketError> {
+        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSShield_20160616.DisassociateDRTLogBucket",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DisassociateDRTLogBucketResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DisassociateDRTLogBucketError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Removes the DDoS Response team's (DRT) access to your AWS account.</p> <p>To make a <code>DisassociateDRTRole</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>. However, if you are not subscribed to one of these support plans, but had been previously and had granted the DRT access to your account, you can submit a <code>DisassociateDRTRole</code> request to remove this access.</p>
+    fn disassociate_drt_role(
+        &self,
+    ) -> RusotoFuture<DisassociateDRTRoleResponse, DisassociateDRTRoleError> {
+        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSShield_20160616.DisassociateDRTRole");
+        request.set_payload(Some(b"{}".to_vec()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DisassociateDRTRoleResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DisassociateDRTRoleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -1732,6 +2947,80 @@ impl Shield for ShieldClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListProtectionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Updates the details of the list of email addresses that the DRT can use to contact you during a suspected attack.</p>
+    fn update_emergency_contact_settings(
+        &self,
+        input: UpdateEmergencyContactSettingsRequest,
+    ) -> RusotoFuture<UpdateEmergencyContactSettingsResponse, UpdateEmergencyContactSettingsError>
+    {
+        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSShield_20160616.UpdateEmergencyContactSettings",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateEmergencyContactSettingsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateEmergencyContactSettingsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Updates the details of an existing subscription. Only enter values for parameters you want to change. Empty parameters are not updated.</p>
+    fn update_subscription(
+        &self,
+        input: UpdateSubscriptionRequest,
+    ) -> RusotoFuture<UpdateSubscriptionResponse, UpdateSubscriptionError> {
+        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSShield_20160616.UpdateSubscription");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateSubscriptionResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateSubscriptionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

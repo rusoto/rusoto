@@ -82,6 +82,21 @@ pub struct GetLexiconOutput {
     pub lexicon_attributes: Option<LexiconAttributes>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetSpeechSynthesisTaskInput {
+    /// <p>The Amazon Polly generated identifier for a speech synthesis task.</p>
+    #[serde(rename = "TaskId")]
+    pub task_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct GetSpeechSynthesisTaskOutput {
+    /// <p>SynthesisTask object that provides information from the requested task, including output format, creation time, task status, and so on.</p>
+    #[serde(rename = "SynthesisTask")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub synthesis_task: Option<SynthesisTask>,
+}
+
 /// <p>Provides lexicon name and lexicon content in string format. For more information, see <a href="https://www.w3.org/TR/pronunciation-lexicon/">Pronunciation Lexicon Specification (PLS) Version 1.0</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Lexicon {
@@ -158,6 +173,34 @@ pub struct ListLexiconsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListSpeechSynthesisTasksInput {
+    /// <p>Maximum number of speech synthesis tasks returned in a List operation.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The pagination token to use in the next request to continue the listing of speech synthesis tasks. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Status of the speech synthesis tasks returned in a List operation</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ListSpeechSynthesisTasksOutput {
+    /// <p>An opaque pagination token returned from the previous List operation in this request. If present, this indicates where to continue the listing.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>SynthesisTask object that provides information from the specified task in the list request, including output format, creation time, task status, and so on.</p>
+    #[serde(rename = "SynthesisTasks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub synthesis_tasks: Option<Vec<SynthesisTask>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutLexiconInput {
     /// <p>Content of the PLS lexicon as string data.</p>
     #[serde(rename = "Content")]
@@ -169,6 +212,111 @@ pub struct PutLexiconInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutLexiconOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartSpeechSynthesisTaskInput {
+    /// <p>List of one or more pronunciation lexicon names you want the service to apply during synthesis. Lexicons are applied only if the language of the lexicon is the same as the language of the voice. </p>
+    #[serde(rename = "LexiconNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lexicon_names: Option<Vec<String>>,
+    /// <p>The format in which the returned output will be encoded. For audio stream, this will be mp3, ogg_vorbis, or pcm. For speech marks, this will be json. </p>
+    #[serde(rename = "OutputFormat")]
+    pub output_format: String,
+    /// <p>Amazon S3 bucket name to which the output file will be saved.</p>
+    #[serde(rename = "OutputS3BucketName")]
+    pub output_s3_bucket_name: String,
+    /// <p>The Amazon S3 Key prefix for the output speech file.</p>
+    #[serde(rename = "OutputS3KeyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_s3_key_prefix: Option<String>,
+    /// <p>The audio frequency specified in Hz.</p> <p>The valid values for mp3 and ogg_vorbis are "8000", "16000", and "22050". The default value is "22050".</p> <p>Valid values for pcm are "8000" and "16000" The default value is "16000". </p>
+    #[serde(rename = "SampleRate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sample_rate: Option<String>,
+    /// <p>ARN for the SNS topic optionally used for providing status notification for a speech synthesis task.</p>
+    #[serde(rename = "SnsTopicArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sns_topic_arn: Option<String>,
+    /// <p>The type of speech marks returned for the input text.</p>
+    #[serde(rename = "SpeechMarkTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub speech_mark_types: Option<Vec<String>>,
+    /// <p>The input text to synthesize. If you specify ssml as the TextType, follow the SSML format for the input text. </p>
+    #[serde(rename = "Text")]
+    pub text: String,
+    /// <p>Specifies whether the input text is plain text or SSML. The default value is plain text. </p>
+    #[serde(rename = "TextType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text_type: Option<String>,
+    /// <p>Voice ID to use for the synthesis. </p>
+    #[serde(rename = "VoiceId")]
+    pub voice_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct StartSpeechSynthesisTaskOutput {
+    /// <p>SynthesisTask object that provides information and attributes about a newly submitted speech synthesis task.</p>
+    #[serde(rename = "SynthesisTask")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub synthesis_task: Option<SynthesisTask>,
+}
+
+/// <p>SynthesisTask object that provides information about a speech synthesis task.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct SynthesisTask {
+    /// <p>Timestamp for the time the synthesis task was started.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>List of one or more pronunciation lexicon names you want the service to apply during synthesis. Lexicons are applied only if the language of the lexicon is the same as the language of the voice. </p>
+    #[serde(rename = "LexiconNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lexicon_names: Option<Vec<String>>,
+    /// <p>The format in which the returned output will be encoded. For audio stream, this will be mp3, ogg_vorbis, or pcm. For speech marks, this will be json. </p>
+    #[serde(rename = "OutputFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_format: Option<String>,
+    /// <p>Pathway for the output speech file.</p>
+    #[serde(rename = "OutputUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_uri: Option<String>,
+    /// <p>Number of billable characters synthesized.</p>
+    #[serde(rename = "RequestCharacters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_characters: Option<i64>,
+    /// <p>The audio frequency specified in Hz.</p> <p>The valid values for mp3 and ogg_vorbis are "8000", "16000", and "22050". The default value is "22050".</p> <p>Valid values for pcm are "8000" and "16000" The default value is "16000". </p>
+    #[serde(rename = "SampleRate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sample_rate: Option<String>,
+    /// <p>ARN for the SNS topic optionally used for providing status notification for a speech synthesis task.</p>
+    #[serde(rename = "SnsTopicArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sns_topic_arn: Option<String>,
+    /// <p>The type of speech marks returned for the input text.</p>
+    #[serde(rename = "SpeechMarkTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub speech_mark_types: Option<Vec<String>>,
+    /// <p>The Amazon Polly generated identifier for a speech synthesis task.</p>
+    #[serde(rename = "TaskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_id: Option<String>,
+    /// <p>Current status of the individual speech synthesis task.</p>
+    #[serde(rename = "TaskStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_status: Option<String>,
+    /// <p>Reason for the current status of a specific speech synthesis task, including errors if the task has failed.</p>
+    #[serde(rename = "TaskStatusReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_status_reason: Option<String>,
+    /// <p>Specifies whether the input text is plain text or SSML. The default value is plain text. </p>
+    #[serde(rename = "TextType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text_type: Option<String>,
+    /// <p>Voice ID to use for the synthesis. </p>
+    #[serde(rename = "VoiceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub voice_id: Option<String>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SynthesizeSpeechInput {
@@ -487,6 +635,101 @@ impl Error for GetLexiconError {
         }
     }
 }
+/// Errors returned by GetSpeechSynthesisTask
+#[derive(Debug, PartialEq)]
+pub enum GetSpeechSynthesisTaskError {
+    /// <p>The provided Task ID is not valid. Please provide a valid Task ID and try again.</p>
+    InvalidTaskId(String),
+    /// <p>An unknown condition has caused a service failure.</p>
+    ServiceFailure(String),
+    /// <p>The Speech Synthesis task with requested Task ID cannot be found.</p>
+    SynthesisTaskNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetSpeechSynthesisTaskError {
+    pub fn from_body(body: &str) -> GetSpeechSynthesisTaskError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidTaskIdException" => {
+                        GetSpeechSynthesisTaskError::InvalidTaskId(String::from(error_message))
+                    }
+                    "ServiceFailureException" => {
+                        GetSpeechSynthesisTaskError::ServiceFailure(String::from(error_message))
+                    }
+                    "SynthesisTaskNotFoundException" => {
+                        GetSpeechSynthesisTaskError::SynthesisTaskNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        GetSpeechSynthesisTaskError::Validation(error_message.to_string())
+                    }
+                    _ => GetSpeechSynthesisTaskError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetSpeechSynthesisTaskError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetSpeechSynthesisTaskError {
+    fn from(err: serde_json::error::Error) -> GetSpeechSynthesisTaskError {
+        GetSpeechSynthesisTaskError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetSpeechSynthesisTaskError {
+    fn from(err: CredentialsError) -> GetSpeechSynthesisTaskError {
+        GetSpeechSynthesisTaskError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetSpeechSynthesisTaskError {
+    fn from(err: HttpDispatchError) -> GetSpeechSynthesisTaskError {
+        GetSpeechSynthesisTaskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetSpeechSynthesisTaskError {
+    fn from(err: io::Error) -> GetSpeechSynthesisTaskError {
+        GetSpeechSynthesisTaskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetSpeechSynthesisTaskError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetSpeechSynthesisTaskError {
+    fn description(&self) -> &str {
+        match *self {
+            GetSpeechSynthesisTaskError::InvalidTaskId(ref cause) => cause,
+            GetSpeechSynthesisTaskError::ServiceFailure(ref cause) => cause,
+            GetSpeechSynthesisTaskError::SynthesisTaskNotFound(ref cause) => cause,
+            GetSpeechSynthesisTaskError::Validation(ref cause) => cause,
+            GetSpeechSynthesisTaskError::Credentials(ref err) => err.description(),
+            GetSpeechSynthesisTaskError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetSpeechSynthesisTaskError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListLexicons
 #[derive(Debug, PartialEq)]
 pub enum ListLexiconsError {
@@ -569,6 +812,93 @@ impl Error for ListLexiconsError {
             ListLexiconsError::Credentials(ref err) => err.description(),
             ListLexiconsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             ListLexiconsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListSpeechSynthesisTasks
+#[derive(Debug, PartialEq)]
+pub enum ListSpeechSynthesisTasksError {
+    /// <p>The NextToken is invalid. Verify that it's spelled correctly, and then try again.</p>
+    InvalidNextToken(String),
+    /// <p>An unknown condition has caused a service failure.</p>
+    ServiceFailure(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListSpeechSynthesisTasksError {
+    pub fn from_body(body: &str) -> ListSpeechSynthesisTasksError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidNextTokenException" => {
+                        ListSpeechSynthesisTasksError::InvalidNextToken(String::from(error_message))
+                    }
+                    "ServiceFailureException" => {
+                        ListSpeechSynthesisTasksError::ServiceFailure(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListSpeechSynthesisTasksError::Validation(error_message.to_string())
+                    }
+                    _ => ListSpeechSynthesisTasksError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListSpeechSynthesisTasksError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListSpeechSynthesisTasksError {
+    fn from(err: serde_json::error::Error) -> ListSpeechSynthesisTasksError {
+        ListSpeechSynthesisTasksError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListSpeechSynthesisTasksError {
+    fn from(err: CredentialsError) -> ListSpeechSynthesisTasksError {
+        ListSpeechSynthesisTasksError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListSpeechSynthesisTasksError {
+    fn from(err: HttpDispatchError) -> ListSpeechSynthesisTasksError {
+        ListSpeechSynthesisTasksError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListSpeechSynthesisTasksError {
+    fn from(err: io::Error) -> ListSpeechSynthesisTasksError {
+        ListSpeechSynthesisTasksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListSpeechSynthesisTasksError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListSpeechSynthesisTasksError {
+    fn description(&self) -> &str {
+        match *self {
+            ListSpeechSynthesisTasksError::InvalidNextToken(ref cause) => cause,
+            ListSpeechSynthesisTasksError::ServiceFailure(ref cause) => cause,
+            ListSpeechSynthesisTasksError::Validation(ref cause) => cause,
+            ListSpeechSynthesisTasksError::Credentials(ref err) => err.description(),
+            ListSpeechSynthesisTasksError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListSpeechSynthesisTasksError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -685,6 +1015,151 @@ impl Error for PutLexiconError {
         }
     }
 }
+/// Errors returned by StartSpeechSynthesisTask
+#[derive(Debug, PartialEq)]
+pub enum StartSpeechSynthesisTaskError {
+    /// <p>The provided Amazon S3 bucket name is invalid. Please check your input with S3 bucket naming requirements and try again.</p>
+    InvalidS3Bucket(String),
+    /// <p>The provided Amazon S3 key prefix is invalid. Please provide a valid S3 object key name.</p>
+    InvalidS3Key(String),
+    /// <p>The specified sample rate is not valid.</p>
+    InvalidSampleRate(String),
+    /// <p>The provided SNS topic ARN is invalid. Please provide a valid SNS topic ARN and try again.</p>
+    InvalidSnsTopicArn(String),
+    /// <p>The SSML you provided is invalid. Verify the SSML syntax, spelling of tags and values, and then try again.</p>
+    InvalidSsml(String),
+    /// <p>Amazon Polly can't find the specified lexicon. This could be caused by a lexicon that is missing, its name is misspelled or specifying a lexicon that is in a different region.</p> <p>Verify that the lexicon exists, is in the region (see <a>ListLexicons</a>) and that you spelled its name is spelled correctly. Then try again.</p>
+    LexiconNotFound(String),
+    /// <p>Speech marks are not supported for the <code>OutputFormat</code> selected. Speech marks are only available for content in <code>json</code> format.</p>
+    MarksNotSupportedForFormat(String),
+    /// <p>An unknown condition has caused a service failure.</p>
+    ServiceFailure(String),
+    /// <p>SSML speech marks are not supported for plain text-type input.</p>
+    SsmlMarksNotSupportedForTextType(String),
+    /// <p>The value of the "Text" parameter is longer than the accepted limits. For the <code>SynthesizeSpeech</code> API, the limit for input text is a maximum of 6000 characters total, of which no more than 3000 can be billed characters. For the <code>SetSpeechSynthesisTask</code> API, the maximum is 200,000 characters, of which no more than 100,000 can be billed characters. SSML tags are not counted as billed characters.</p>
+    TextLengthExceeded(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl StartSpeechSynthesisTaskError {
+    pub fn from_body(body: &str) -> StartSpeechSynthesisTaskError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidS3BucketException" => {
+                        StartSpeechSynthesisTaskError::InvalidS3Bucket(String::from(error_message))
+                    }
+                    "InvalidS3KeyException" => {
+                        StartSpeechSynthesisTaskError::InvalidS3Key(String::from(error_message))
+                    }
+                    "InvalidSampleRateException" => {
+                        StartSpeechSynthesisTaskError::InvalidSampleRate(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidSnsTopicArnException" => {
+                        StartSpeechSynthesisTaskError::InvalidSnsTopicArn(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidSsmlException" => {
+                        StartSpeechSynthesisTaskError::InvalidSsml(String::from(error_message))
+                    }
+                    "LexiconNotFoundException" => {
+                        StartSpeechSynthesisTaskError::LexiconNotFound(String::from(error_message))
+                    }
+                    "MarksNotSupportedForFormatException" => {
+                        StartSpeechSynthesisTaskError::MarksNotSupportedForFormat(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceFailureException" => {
+                        StartSpeechSynthesisTaskError::ServiceFailure(String::from(error_message))
+                    }
+                    "SsmlMarksNotSupportedForTextTypeException" => {
+                        StartSpeechSynthesisTaskError::SsmlMarksNotSupportedForTextType(
+                            String::from(error_message),
+                        )
+                    }
+                    "TextLengthExceededException" => {
+                        StartSpeechSynthesisTaskError::TextLengthExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        StartSpeechSynthesisTaskError::Validation(error_message.to_string())
+                    }
+                    _ => StartSpeechSynthesisTaskError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => StartSpeechSynthesisTaskError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for StartSpeechSynthesisTaskError {
+    fn from(err: serde_json::error::Error) -> StartSpeechSynthesisTaskError {
+        StartSpeechSynthesisTaskError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StartSpeechSynthesisTaskError {
+    fn from(err: CredentialsError) -> StartSpeechSynthesisTaskError {
+        StartSpeechSynthesisTaskError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StartSpeechSynthesisTaskError {
+    fn from(err: HttpDispatchError) -> StartSpeechSynthesisTaskError {
+        StartSpeechSynthesisTaskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartSpeechSynthesisTaskError {
+    fn from(err: io::Error) -> StartSpeechSynthesisTaskError {
+        StartSpeechSynthesisTaskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StartSpeechSynthesisTaskError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartSpeechSynthesisTaskError {
+    fn description(&self) -> &str {
+        match *self {
+            StartSpeechSynthesisTaskError::InvalidS3Bucket(ref cause) => cause,
+            StartSpeechSynthesisTaskError::InvalidS3Key(ref cause) => cause,
+            StartSpeechSynthesisTaskError::InvalidSampleRate(ref cause) => cause,
+            StartSpeechSynthesisTaskError::InvalidSnsTopicArn(ref cause) => cause,
+            StartSpeechSynthesisTaskError::InvalidSsml(ref cause) => cause,
+            StartSpeechSynthesisTaskError::LexiconNotFound(ref cause) => cause,
+            StartSpeechSynthesisTaskError::MarksNotSupportedForFormat(ref cause) => cause,
+            StartSpeechSynthesisTaskError::ServiceFailure(ref cause) => cause,
+            StartSpeechSynthesisTaskError::SsmlMarksNotSupportedForTextType(ref cause) => cause,
+            StartSpeechSynthesisTaskError::TextLengthExceeded(ref cause) => cause,
+            StartSpeechSynthesisTaskError::Validation(ref cause) => cause,
+            StartSpeechSynthesisTaskError::Credentials(ref err) => err.description(),
+            StartSpeechSynthesisTaskError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StartSpeechSynthesisTaskError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by SynthesizeSpeech
 #[derive(Debug, PartialEq)]
 pub enum SynthesizeSpeechError {
@@ -700,7 +1175,7 @@ pub enum SynthesizeSpeechError {
     ServiceFailure(String),
     /// <p>SSML speech marks are not supported for plain text-type input.</p>
     SsmlMarksNotSupportedForTextType(String),
-    /// <p>The value of the "Text" parameter is longer than the accepted limits. The limit for input text is a maximum of 3000 characters total, of which no more than 1500 can be billed characters. SSML tags are not counted as billed characters.</p>
+    /// <p>The value of the "Text" parameter is longer than the accepted limits. For the <code>SynthesizeSpeech</code> API, the limit for input text is a maximum of 6000 characters total, of which no more than 3000 can be billed characters. For the <code>SetSpeechSynthesisTask</code> API, the maximum is 200,000 characters, of which no more than 100,000 can be billed characters. SSML tags are not counted as billed characters.</p>
     TextLengthExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -824,17 +1299,35 @@ pub trait Polly {
         input: GetLexiconInput,
     ) -> RusotoFuture<GetLexiconOutput, GetLexiconError>;
 
+    /// <p>Retrieves a specific SpeechSynthesisTask object based on its TaskID. This object contains information about the given speech synthesis task, including the status of the task, and a link to the S3 bucket containing the output of the task.</p>
+    fn get_speech_synthesis_task(
+        &self,
+        input: GetSpeechSynthesisTaskInput,
+    ) -> RusotoFuture<GetSpeechSynthesisTaskOutput, GetSpeechSynthesisTaskError>;
+
     /// <p>Returns a list of pronunciation lexicons stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn list_lexicons(
         &self,
         input: ListLexiconsInput,
     ) -> RusotoFuture<ListLexiconsOutput, ListLexiconsError>;
 
+    /// <p>Returns a list of SpeechSynthesisTask objects ordered by their creation date. This operation can filter the tasks by their status, for example, allowing users to list only tasks that are completed.</p>
+    fn list_speech_synthesis_tasks(
+        &self,
+        input: ListSpeechSynthesisTasksInput,
+    ) -> RusotoFuture<ListSpeechSynthesisTasksOutput, ListSpeechSynthesisTasksError>;
+
     /// <p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn put_lexicon(
         &self,
         input: PutLexiconInput,
     ) -> RusotoFuture<PutLexiconOutput, PutLexiconError>;
+
+    /// <p>Allows the creation of an asynchronous synthesis task, by starting a new <code>SpeechSynthesisTask</code>. This operation requires all the standard information needed for speech synthesis, plus the name of an Amazon S3 bucket for the service to store the output of the synthesis task and two optional parameters (OutputS3KeyPrefix and SnsTopicArn). Once the synthesis task is created, this operation will return a SpeechSynthesisTask object, which will include an identifier of this task as well as the current status.</p>
+    fn start_speech_synthesis_task(
+        &self,
+        input: StartSpeechSynthesisTaskInput,
+    ) -> RusotoFuture<StartSpeechSynthesisTaskOutput, StartSpeechSynthesisTaskError>;
 
     /// <p>Synthesizes UTF-8 input, plain text or SSML, to a stream of bytes. SSML input must be valid, well-formed SSML. Some alphabets might not be available with all the voices (for example, Cyrillic might not be read at all by English voices) unless phoneme mapping is used. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/how-text-to-speech-works.html">How it Works</a>.</p>
     fn synthesize_speech(
@@ -992,6 +1485,42 @@ impl Polly for PollyClient {
         })
     }
 
+    /// <p>Retrieves a specific SpeechSynthesisTask object based on its TaskID. This object contains information about the given speech synthesis task, including the status of the task, and a link to the S3 bucket containing the output of the task.</p>
+    fn get_speech_synthesis_task(
+        &self,
+        input: GetSpeechSynthesisTaskInput,
+    ) -> RusotoFuture<GetSpeechSynthesisTaskOutput, GetSpeechSynthesisTaskError> {
+        let request_uri = format!("/v1/synthesisTasks/{task_id}", task_id = input.task_id);
+
+        let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetSpeechSynthesisTaskOutput>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetSpeechSynthesisTaskError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Returns a list of pronunciation lexicons stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn list_lexicons(
         &self,
@@ -1033,6 +1562,54 @@ impl Polly for PollyClient {
         })
     }
 
+    /// <p>Returns a list of SpeechSynthesisTask objects ordered by their creation date. This operation can filter the tasks by their status, for example, allowing users to list only tasks that are completed.</p>
+    fn list_speech_synthesis_tasks(
+        &self,
+        input: ListSpeechSynthesisTasksInput,
+    ) -> RusotoFuture<ListSpeechSynthesisTasksOutput, ListSpeechSynthesisTasksError> {
+        let request_uri = "/v1/synthesisTasks";
+
+        let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("MaxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        if let Some(ref x) = input.status {
+            params.put("Status", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListSpeechSynthesisTasksOutput>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListSpeechSynthesisTasksError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn put_lexicon(
         &self,
@@ -1064,6 +1641,45 @@ impl Polly for PollyClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutLexiconError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Allows the creation of an asynchronous synthesis task, by starting a new <code>SpeechSynthesisTask</code>. This operation requires all the standard information needed for speech synthesis, plus the name of an Amazon S3 bucket for the service to store the output of the synthesis task and two optional parameters (OutputS3KeyPrefix and SnsTopicArn). Once the synthesis task is created, this operation will return a SpeechSynthesisTask object, which will include an identifier of this task as well as the current status.</p>
+    fn start_speech_synthesis_task(
+        &self,
+        input: StartSpeechSynthesisTaskInput,
+    ) -> RusotoFuture<StartSpeechSynthesisTaskOutput, StartSpeechSynthesisTaskError> {
+        let request_uri = "/v1/synthesisTasks";
+
+        let mut request = SignedRequest::new("POST", "polly", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<StartSpeechSynthesisTaskOutput>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(StartSpeechSynthesisTaskError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

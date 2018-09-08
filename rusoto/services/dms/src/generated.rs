@@ -158,6 +158,10 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
+    /// <p> The settings in JSON format for the DMS Transfer type source endpoint. </p> <p>Attributes include:</p> <ul> <li> <p>serviceAccessRoleArn - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p>bucketName - The name of the S3 bucket to use.</p> </li> <li> <p>compressionType - An optional parameter to use GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed.</p> </li> </ul> <p>Shorthand syntax: ServiceAccessRoleArn=string ,BucketName=string,CompressionType=string</p> <p>JSON syntax:</p> <p> { "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </p>
+    #[serde(rename = "DmsTransferSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dms_transfer_settings: Option<DmsTransferSettings>,
     /// <p>Settings in JSON format for the target Amazon DynamoDB endpoint. For more information about the available settings, see the <b>Using Object Mapping to Migrate Data to DynamoDB</b> section at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html"> Using an Amazon DynamoDB Database as a Target for AWS Database Migration Service</a>. </p>
     #[serde(rename = "DynamoDbSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -168,9 +172,13 @@ pub struct CreateEndpointMessage {
     /// <p>The type of endpoint.</p>
     #[serde(rename = "EndpointType")]
     pub endpoint_type: String,
-    /// <p>The type of engine for the endpoint. Valid values, depending on the EndPointType, include mysql, oracle, postgres, mariadb, aurora, redshift, S3, sybase, dynamodb, mongodb, and sqlserver.</p>
+    /// <p>The type of engine for the endpoint. Valid values, depending on the EndPointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, dynamodb, mongodb, and sqlserver.</p>
     #[serde(rename = "EngineName")]
     pub engine_name: String,
+    /// <p>The external table definition. </p>
+    #[serde(rename = "ExternalTableDefinition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_table_definition: Option<String>,
     /// <p>Additional attributes associated with the connection.</p>
     #[serde(rename = "ExtraConnectionAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -179,7 +187,7 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p>Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see the <b>Configuration Properties When Using MongoDB as a Source for AWS Database Migration Service</b> section at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html"> Using Amazon S3 as a Target for AWS Database Migration Service</a>. </p>
+    /// <p>Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see the <b>Configuration Properties When Using MongoDB as a Source for AWS Database Migration Service</b> section at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html"> Using MongoDB as a Target for AWS Database Migration Service</a>. </p>
     #[serde(rename = "MongoDbSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mongo_db_settings: Option<MongoDbSettings>,
@@ -191,7 +199,7 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "Port")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    /// <p>Settings in JSON format for the target S3 endpoint. For more information about the available settings, see the <b>Extra Connection Attributes</b> section at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html"> Using Amazon S3 as a Target for AWS Database Migration Service</a>. </p>
+    /// <p>Settings in JSON format for the target Amazon S3 endpoint. For more information about the available settings, see the <b>Extra Connection Attributes</b> section at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html"> Using Amazon S3 as a Target for AWS Database Migration Service</a>. </p>
     #[serde(rename = "S3Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_settings: Option<S3Settings>,
@@ -199,6 +207,10 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "ServerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_name: Option<String>,
+    /// <p> The Amazon Resource Name (ARN) for the service access role you want to use to create the endpoint. </p>
+    #[serde(rename = "ServiceAccessRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_access_role_arn: Option<String>,
     /// <p>The SSL mode to use for the SSL connection.</p> <p>SSL mode can be one of four values: none, require, verify-ca, verify-full. </p> <p>The default value is none.</p>
     #[serde(rename = "SslMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -244,7 +256,7 @@ pub struct CreateEventSubscriptionMessage {
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
-    /// <p>The name of the DMS event notification subscription. </p> <p>Constraints: The name must be less than 255 characters. </p>
+    /// <p>The name of the AWS DMS event notification subscription. </p> <p>Constraints: The name must be less than 255 characters. </p>
     #[serde(rename = "SubscriptionName")]
     pub subscription_name: String,
     /// <p>A tag to be attached to the event subscription.</p>
@@ -356,10 +368,18 @@ pub struct CreateReplicationSubnetGroupResponse {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateReplicationTaskMessage {
-    /// <p>The start time for the Change Data Capture (CDC) operation.</p>
+    /// <p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position "checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93"</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p>
+    #[serde(rename = "CdcStartPosition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cdc_start_position: Option<String>,
+    /// <p>Indicates the start time for a change data capture (CDC) operation. Use either CdcStartTime or CdcStartPosition to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p>Timestamp Example: --cdc-start-time “2018-03-08T12:12:12”</p>
     #[serde(rename = "CdcStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_start_time: Option<f64>,
+    /// <p>Indicates when you want a change data capture (CDC) operation to stop. The value can be either server time or commit time.</p> <p>Server time example: --cdc-stop-position “server_time:3018-02-09T12:12:12”</p> <p>Commit time example: --cdc-stop-position “commit_time: 3018-02-09T12:12:12 “</p>
+    #[serde(rename = "CdcStopPosition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cdc_stop_position: Option<String>,
     /// <p>The migration type.</p>
     #[serde(rename = "MigrationType")]
     pub migration_type: String,
@@ -801,7 +821,7 @@ pub struct DescribeReplicationInstanceTaskLogsResponse {
     #[serde(rename = "ReplicationInstanceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_arn: Option<String>,
-    /// <p>An array of replication task log metadata. Each member of the array contains the replication task name, ARN, and task log size (in bytes).</p>
+    /// <p>An array of replication task log metadata. Each member of the array contains the replication task name, ARN, and task log size (in bytes). </p>
     #[serde(rename = "ReplicationInstanceTaskLogs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_task_logs: Option<Vec<ReplicationInstanceTaskLog>>,
@@ -997,6 +1017,19 @@ pub struct DescribeTableStatisticsResponse {
     pub table_statistics: Option<Vec<TableStatistics>>,
 }
 
+/// <p> The settings in JSON format for the DMS Transfer type source endpoint. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DmsTransferSettings {
+    /// <p> The name of the S3 bucket to use. </p>
+    #[serde(rename = "BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket_name: Option<String>,
+    /// <p> The IAM role that has permission to access the Amazon S3 bucket. </p>
+    #[serde(rename = "ServiceAccessRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_access_role_arn: Option<String>,
+}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DynamoDbSettings {
@@ -1016,6 +1049,10 @@ pub struct Endpoint {
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
+    /// <p> The settings in JSON format for the DMS Transfer type source endpoint. </p> <p>Attributes include:</p> <ul> <li> <p>serviceAccessRoleArn - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p>bucketName - The name of the S3 bucket to use.</p> </li> <li> <p>compressionType - An optional parameter to use GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed.</p> </li> </ul> <p>Shorthand syntax: ServiceAccessRoleArn=string ,BucketName=string,CompressionType=string</p> <p>JSON syntax:</p> <p> { "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </p>
+    #[serde(rename = "DmsTransferSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dms_transfer_settings: Option<DmsTransferSettings>,
     /// <p>The settings for the target DynamoDB database. For more information, see the <code>DynamoDBSettings</code> structure.</p>
     #[serde(rename = "DynamoDbSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1032,7 +1069,11 @@ pub struct Endpoint {
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
-    /// <p>The database engine name. Valid values, depending on the EndPointType, include mysql, oracle, postgres, mariadb, aurora, redshift, S3, sybase, dynamodb, mongodb, and sqlserver.</p>
+    /// <p>The expanded name for the engine name. For example, if the <code>EngineName</code> parameter is "aurora," this value would be "Amazon Aurora MySQL."</p>
+    #[serde(rename = "EngineDisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_display_name: Option<String>,
+    /// <p>The database engine name. Valid values, depending on the EndPointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, sybase, dynamodb, mongodb, and sqlserver.</p>
     #[serde(rename = "EngineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_name: Option<String>,
@@ -1040,6 +1081,10 @@ pub struct Endpoint {
     #[serde(rename = "ExternalId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_id: Option<String>,
+    /// <p>The external table definition.</p>
+    #[serde(rename = "ExternalTableDefinition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_table_definition: Option<String>,
     /// <p>Additional connection attributes used to connect to the endpoint.</p>
     #[serde(rename = "ExtraConnectionAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1064,6 +1109,10 @@ pub struct Endpoint {
     #[serde(rename = "ServerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) used by the service access IAM role.</p>
+    #[serde(rename = "ServiceAccessRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_access_role_arn: Option<String>,
     /// <p>The SSL mode used to connect to the endpoint.</p> <p>SSL mode can be one of four values: none, require, verify-ca, verify-full. </p> <p>The default value is none.</p>
     #[serde(rename = "SslMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1227,6 +1276,10 @@ pub struct ModifyEndpointMessage {
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
+    /// <p> The settings in JSON format for the DMS Transfer type source endpoint. </p> <p>Attributes include:</p> <ul> <li> <p>serviceAccessRoleArn - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p>BucketName - The name of the S3 bucket to use.</p> </li> <li> <p>compressionType - An optional parameter to use GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed.</p> </li> </ul> <p>Shorthand syntax: ServiceAccessRoleArn=string ,BucketName=string,CompressionType=string</p> <p>JSON syntax:</p> <p> { "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </p>
+    #[serde(rename = "DmsTransferSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dms_transfer_settings: Option<DmsTransferSettings>,
     /// <p>Settings in JSON format for the target Amazon DynamoDB endpoint. For more information about the available settings, see the <b>Using Object Mapping to Migrate Data to DynamoDB</b> section at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html"> Using an Amazon DynamoDB Database as a Target for AWS Database Migration Service</a>. </p>
     #[serde(rename = "DynamoDbSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1242,10 +1295,14 @@ pub struct ModifyEndpointMessage {
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
-    /// <p>The type of engine for the endpoint. Valid values, depending on the EndPointType, include mysql, oracle, postgres, mariadb, aurora, redshift, S3, sybase, dynamodb, mongodb, and sqlserver.</p>
+    /// <p>The type of engine for the endpoint. Valid values, depending on the EndPointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, sybase, dynamodb, mongodb, and sqlserver.</p>
     #[serde(rename = "EngineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_name: Option<String>,
+    /// <p>The external table definition.</p>
+    #[serde(rename = "ExternalTableDefinition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_table_definition: Option<String>,
     /// <p>Additional attributes associated with the connection. To reset this parameter, pass the empty string ("") as an argument.</p>
     #[serde(rename = "ExtraConnectionAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1270,6 +1327,10 @@ pub struct ModifyEndpointMessage {
     #[serde(rename = "ServerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_name: Option<String>,
+    /// <p> The Amazon Resource Name (ARN) for the service access role you want to use to modify the endpoint. </p>
+    #[serde(rename = "ServiceAccessRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_access_role_arn: Option<String>,
     /// <p>The SSL mode to be used.</p> <p>SSL mode can be one of four values: none, require, verify-ca, verify-full. </p> <p>The default value is none.</p>
     #[serde(rename = "SslMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1406,10 +1467,18 @@ pub struct ModifyReplicationSubnetGroupResponse {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ModifyReplicationTaskMessage {
-    /// <p>The start time for the Change Data Capture (CDC) operation.</p>
+    /// <p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position "checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93"</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p>
+    #[serde(rename = "CdcStartPosition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cdc_start_position: Option<String>,
+    /// <p>Indicates the start time for a change data capture (CDC) operation. Use either CdcStartTime or CdcStartPosition to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p>Timestamp Example: --cdc-start-time “2018-03-08T12:12:12”</p>
     #[serde(rename = "CdcStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_start_time: Option<f64>,
+    /// <p>Indicates when you want a change data capture (CDC) operation to stop. The value can be either server time or commit time.</p> <p>Server time example: --cdc-stop-position “server_time:3018-02-09T12:12:12”</p> <p>Commit time example: --cdc-stop-position “commit_time: 3018-02-09T12:12:12 “</p>
+    #[serde(rename = "CdcStopPosition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cdc_stop_position: Option<String>,
     /// <p>The migration type.</p> <p>Valid values: full-load | cdc | full-load-and-cdc</p>
     #[serde(rename = "MigrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1467,6 +1536,10 @@ pub struct MongoDbSettings {
     #[serde(rename = "ExtractDocId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extract_doc_id: Option<String>,
+    /// <p> The KMS key identifier that will be used to encrypt the connection parameters. If you do not specify a value for the KmsKeyId parameter, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region. </p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
     /// <p> Specifies either document or table mode. </p> <p>Valid values: NONE, ONE</p> <p>Default value is NONE. Specify NONE to use document mode. Specify ONE to use table mode.</p>
     #[serde(rename = "NestingLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1588,7 +1661,11 @@ pub struct RefreshSchemasStatus {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ReloadTablesMessage {
-    /// <p>The Amazon Resource Name (ARN) of the replication instance. </p>
+    /// <p>Options for reload. Specify <code>data-reload</code> to reload the data and re-validate it if validation is enabled. Specify <code>validate-only</code> to re-validate the table. This option applies only when validation is enabled for the task. </p> <p>Valid values: data-reload, validate-only</p> <p>Default value is data-reload.</p>
+    #[serde(rename = "ReloadOption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reload_option: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the replication task. </p>
     #[serde(rename = "ReplicationTaskArn")]
     pub replication_task_arn: String,
     /// <p>The name and schema of the table to be reloaded. </p>
@@ -1638,6 +1715,10 @@ pub struct ReplicationInstance {
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
+    /// <p> The expiration date of the free replication instance that is part of the Free DMS program. </p>
+    #[serde(rename = "FreeUntil")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub free_until: Option<f64>,
     /// <p>The time the replication instance was created.</p>
     #[serde(rename = "InstanceCreateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1766,6 +1847,14 @@ pub struct ReplicationSubnetGroup {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ReplicationTask {
+    /// <p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position "checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93"</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p>
+    #[serde(rename = "CdcStartPosition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cdc_start_position: Option<String>,
+    /// <p>Indicates when you want a change data capture (CDC) operation to stop. The value can be either server time or commit time.</p> <p>Server time example: --cdc-stop-position “server_time:3018-02-09T12:12:12”</p> <p>Commit time example: --cdc-stop-position “commit_time: 3018-02-09T12:12:12 “</p>
+    #[serde(rename = "CdcStopPosition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cdc_stop_position: Option<String>,
     /// <p>The last error (failure) message generated for the replication instance.</p>
     #[serde(rename = "LastFailureMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1774,6 +1863,10 @@ pub struct ReplicationTask {
     #[serde(rename = "MigrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub migration_type: Option<String>,
+    /// <p>Indicates the last checkpoint that occurred during a change data capture (CDC) operation. You can provide this value to the <code>CdcStartPosition</code> parameter to start a CDC operation that begins at that checkpoint.</p>
+    #[serde(rename = "RecoveryCheckpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recovery_checkpoint: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the replication instance.</p>
     #[serde(rename = "ReplicationInstanceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1786,7 +1879,7 @@ pub struct ReplicationTask {
     #[serde(rename = "ReplicationTaskCreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_creation_date: Option<f64>,
-    /// <p><p>The replication task identifier.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
+    /// <p><p>The user-assigned replication task identifier or name.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     #[serde(rename = "ReplicationTaskIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_identifier: Option<String>,
@@ -1909,7 +2002,7 @@ pub struct S3Settings {
     #[serde(rename = "CsvRowDelimiter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub csv_row_delimiter: Option<String>,
-    /// <p> </p>
+    /// <p> The external table definition. </p>
     #[serde(rename = "ExternalTableDefinition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_table_definition: Option<String>,
@@ -1939,10 +2032,18 @@ pub struct StartReplicationTaskAssessmentResponse {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartReplicationTaskMessage {
-    /// <p>The start time for the Change Data Capture (CDC) operation.</p>
+    /// <p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position "checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93"</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p>
+    #[serde(rename = "CdcStartPosition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cdc_start_position: Option<String>,
+    /// <p>Indicates the start time for a change data capture (CDC) operation. Use either CdcStartTime or CdcStartPosition to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p>Timestamp Example: --cdc-start-time “2018-03-08T12:12:12”</p>
     #[serde(rename = "CdcStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_start_time: Option<f64>,
+    /// <p>Indicates when you want a change data capture (CDC) operation to stop. The value can be either server time or commit time.</p> <p>Server time example: --cdc-stop-position “server_time:3018-02-09T12:12:12”</p> <p>Commit time example: --cdc-stop-position “commit_time: 3018-02-09T12:12:12 “</p>
+    #[serde(rename = "CdcStopPosition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cdc_stop_position: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the replication task to be started.</p>
     #[serde(rename = "ReplicationTaskArn")]
     pub replication_task_arn: String,
@@ -2001,7 +2102,11 @@ pub struct SupportedEndpointType {
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
-    /// <p>The database engine name. Valid values, depending on the EndPointType, include mysql, oracle, postgres, mariadb, aurora, redshift, S3, sybase, dynamodb, mongodb, and sqlserver.</p>
+    /// <p>The expanded name for the engine name. For example, if the <code>EngineName</code> parameter is "aurora," this value would be "Amazon Aurora MySQL."</p>
+    #[serde(rename = "EngineDisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_display_name: Option<String>,
+    /// <p>The database engine name. Valid values, depending on the EndPointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, sybase, dynamodb, mongodb, and sqlserver.</p>
     #[serde(rename = "EngineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_name: Option<String>,
@@ -2070,6 +2175,10 @@ pub struct TableStatistics {
     #[serde(rename = "ValidationState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub validation_state: Option<String>,
+    /// <p>Additional details about the state of validation.</p>
+    #[serde(rename = "ValidationStateDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation_state_details: Option<String>,
     /// <p>The number of records that could not be validated.</p>
     #[serde(rename = "ValidationSuspendedRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5804,6 +5913,8 @@ impl Error for RemoveTagsFromResourceError {
 /// Errors returned by StartReplicationTask
 #[derive(Debug, PartialEq)]
 pub enum StartReplicationTaskError {
+    /// <p>AWS DMS was denied access to the endpoint.</p>
+    AccessDeniedFault(String),
     /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
     /// <p>The resource could not be found.</p>
@@ -5832,6 +5943,9 @@ impl StartReplicationTaskError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "AccessDeniedFault" => {
+                        StartReplicationTaskError::AccessDeniedFault(String::from(error_message))
+                    }
                     "InvalidResourceStateFault" => {
                         StartReplicationTaskError::InvalidResourceStateFault(String::from(
                             error_message,
@@ -5879,6 +5993,7 @@ impl fmt::Display for StartReplicationTaskError {
 impl Error for StartReplicationTaskError {
     fn description(&self) -> &str {
         match *self {
+            StartReplicationTaskError::AccessDeniedFault(ref cause) => cause,
             StartReplicationTaskError::InvalidResourceStateFault(ref cause) => cause,
             StartReplicationTaskError::ResourceNotFoundFault(ref cause) => cause,
             StartReplicationTaskError::Validation(ref cause) => cause,
@@ -6169,7 +6284,7 @@ impl Error for TestConnectionError {
 }
 /// Trait representing the capabilities of the AWS Database Migration Service API. AWS Database Migration Service clients implement this trait.
 pub trait DatabaseMigrationService {
-    /// <p>Adds metadata tags to a DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>
+    /// <p>Adds metadata tags to an AWS DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>
     fn add_tags_to_resource(
         &self,
         input: AddTagsToResourceMessage,
@@ -6477,7 +6592,7 @@ impl DatabaseMigrationServiceClient {
 }
 
 impl DatabaseMigrationService for DatabaseMigrationServiceClient {
-    /// <p>Adds metadata tags to a DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>
+    /// <p>Adds metadata tags to an AWS DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>
     fn add_tags_to_resource(
         &self,
         input: AddTagsToResourceMessage,

@@ -310,6 +310,26 @@ impl AccountIdSerializer {
     }
 }
 
+pub struct AllowQuotedRecordDelimiterSerializer;
+impl AllowQuotedRecordDelimiterSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &bool,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
 struct AllowedHeaderDeserializer;
 impl AllowedHeaderDeserializer {
     #[allow(unused_variables)]
@@ -1492,6 +1512,20 @@ impl BytesProcessedDeserializer {
         Ok(obj)
     }
 }
+struct BytesReturnedDeserializer;
+impl BytesReturnedDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 struct BytesScannedDeserializer;
 impl BytesScannedDeserializer {
     #[allow(unused_variables)]
@@ -1687,6 +1721,8 @@ impl CORSRulesSerializer {
 /// <p>Describes how a CSV-formatted input object is formatted.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CSVInput {
+    /// <p>Specifies that CSV field values may contain quoted record delimiters and such records should be allowed. Default value is FALSE. Setting this value to TRUE may lower performance.</p>
+    pub allow_quoted_record_delimiter: Option<bool>,
     /// <p>Single character used to indicate a row should be ignored when present at the start of a row.</p>
     pub comments: Option<String>,
     /// <p>Value used to separate individual fields in a record.</p>
@@ -1713,6 +1749,16 @@ impl CSVInputSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.allow_quoted_record_delimiter {
+            writer.write(xml::writer::XmlEvent::start_element(
+                "AllowQuotedRecordDelimiter",
+            ))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
         if let Some(ref value) = obj.comments {
             writer.write(xml::writer::XmlEvent::start_element("Comments"))?;
             writer.write(xml::writer::XmlEvent::characters(&format!(
@@ -2489,7 +2535,7 @@ pub struct CopyObjectRequest {
     pub copy_source_if_modified_since: Option<String>,
     /// <p>Copies the object if its entity tag (ETag) is different than the specified ETag.</p>
     pub copy_source_if_none_match: Option<String>,
-    /// <p>Copies the object if it hasn&#39;t been modified since the specified time.</p>
+    /// <p>Copies the object if it hasn't been modified since the specified time.</p>
     pub copy_source_if_unmodified_since: Option<String>,
     /// <p>Specifies the algorithm to use when decrypting the source object (e.g., AES256).</p>
     pub copy_source_sse_customer_algorithm: Option<String>,
@@ -2499,7 +2545,7 @@ pub struct CopyObjectRequest {
     pub copy_source_sse_customer_key_md5: Option<String>,
     /// <p>The date and time at which the object is no longer cacheable.</p>
     pub expires: Option<String>,
-    /// <p>Gives the grantee READ, READ<em>ACP, and WRITE</em>ACP permissions on the object.</p>
+    /// <p>Gives the grantee READ, READ_ACP, and WRITE_ACP permissions on the object.</p>
     pub grant_full_control: Option<String>,
     /// <p>Allows grantee to read the object data and its metadata.</p>
     pub grant_read: Option<String>,
@@ -2523,7 +2569,7 @@ pub struct CopyObjectRequest {
     pub ssekms_key_id: Option<String>,
     /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
     pub server_side_encryption: Option<String>,
-    /// <p>The type of storage to use for the object. Defaults to &#39;STANDARD&#39;.</p>
+    /// <p>The type of storage to use for the object. Defaults to 'STANDARD'.</p>
     pub storage_class: Option<String>,
     /// <p>The tag-set for the object destination object this value must be used in conjunction with the TaggingDirective. The tag-set must be encoded as URL Query parameters</p>
     pub tagging: Option<String>,
@@ -2639,7 +2685,7 @@ impl CopyPartResultDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateBucketConfiguration {
-    /// <p>Specifies the region where the bucket will be created. If you don&#39;t specify a region, the bucket will be created in US Standard.</p>
+    /// <p>Specifies the region where the bucket will be created. If you don't specify a region, the bucket will be created in US Standard.</p>
     pub location_constraint: Option<String>,
 }
 
@@ -2794,7 +2840,7 @@ pub struct CreateMultipartUploadRequest {
     pub content_type: Option<String>,
     /// <p>The date and time at which the object is no longer cacheable.</p>
     pub expires: Option<String>,
-    /// <p>Gives the grantee READ, READ<em>ACP, and WRITE</em>ACP permissions on the object.</p>
+    /// <p>Gives the grantee READ, READ_ACP, and WRITE_ACP permissions on the object.</p>
     pub grant_full_control: Option<String>,
     /// <p>Allows grantee to read the object data and its metadata.</p>
     pub grant_read: Option<String>,
@@ -2816,7 +2862,7 @@ pub struct CreateMultipartUploadRequest {
     pub ssekms_key_id: Option<String>,
     /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
     pub server_side_encryption: Option<String>,
-    /// <p>The type of storage to use for the object. Defaults to &#39;STANDARD&#39;.</p>
+    /// <p>The type of storage to use for the object. Defaults to 'STANDARD'.</p>
     pub storage_class: Option<String>,
     /// <p>The tag-set for the object. The tag-set must be encoded as URL Query parameters</p>
     pub tagging: Option<String>,
@@ -3195,7 +3241,7 @@ impl DeleteObjectOutputDeserializer {
 pub struct DeleteObjectRequest {
     pub bucket: String,
     pub key: String,
-    /// <p>The concatenation of the authentication device&#39;s serial number, a space, and the value that is displayed on your authentication device.</p>
+    /// <p>The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device.</p>
     pub mfa: Option<String>,
     pub request_payer: Option<String>,
     /// <p>VersionId used to reference a specific version of the object.</p>
@@ -3287,7 +3333,7 @@ impl DeleteObjectsOutputDeserializer {
 pub struct DeleteObjectsRequest {
     pub bucket: String,
     pub delete: Delete,
-    /// <p>The concatenation of the authentication device&#39;s serial number, a space, and the value that is displayed on your authentication device.</p>
+    /// <p>The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device.</p>
     pub mfa: Option<String>,
     pub request_payer: Option<String>,
 }
@@ -5548,7 +5594,7 @@ pub struct GetObjectRequest {
     /// <p>Return the object only if it has not been modified since the specified time, otherwise return a 412 (precondition failed).</p>
     pub if_unmodified_since: Option<String>,
     pub key: String,
-    /// <p>Part number of the object being read. This is a positive integer between 1 and 10,000. Effectively performs a &#39;ranged&#39; GET request for the part specified. Useful for downloading just a part of an object.</p>
+    /// <p>Part number of the object being read. This is a positive integer between 1 and 10,000. Effectively performs a 'ranged' GET request for the part specified. Useful for downloading just a part of an object.</p>
     pub part_number: Option<i64>,
     /// <p>Downloads the specified range bytes of an object. For more information about the HTTP Range header, go to http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35.</p>
     pub range: Option<String>,
@@ -6019,7 +6065,7 @@ pub struct HeadObjectRequest {
     /// <p>Return the object only if it has not been modified since the specified time, otherwise return a 412 (precondition failed).</p>
     pub if_unmodified_since: Option<String>,
     pub key: String,
-    /// <p>Part number of the object being read. This is a positive integer between 1 and 10,000. Effectively performs a &#39;ranged&#39; HEAD request for the part specified. Useful querying about the size of the part and the number of parts in this object.</p>
+    /// <p>Part number of the object being read. This is a positive integer between 1 and 10,000. Effectively performs a 'ranged' HEAD request for the part specified. Useful querying about the size of the part and the number of parts in this object.</p>
     pub part_number: Option<i64>,
     /// <p>Downloads the specified range bytes of an object. For more information about the HTTP Range header, go to http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35.</p>
     pub range: Option<String>,
@@ -6314,9 +6360,9 @@ impl InitiatorDeserializer {
 pub struct InputSerialization {
     /// <p>Describes the serialization of a CSV-encoded object.</p>
     pub csv: Option<CSVInput>,
-    /// <p>Specifies object&#39;s compression format. Valid values: NONE, GZIP. Default Value: NONE.</p>
+    /// <p>Specifies object's compression format. Valid values: NONE, GZIP, BZIP2. Default Value: NONE.</p>
     pub compression_type: Option<String>,
-    /// <p>Specifies JSON as object&#39;s input serialization format.</p>
+    /// <p>Specifies JSON as object's input serialization format.</p>
     pub json: Option<JSONInput>,
 }
 
@@ -6354,7 +6400,7 @@ impl InputSerializationSerializer {
 pub struct InventoryConfiguration {
     /// <p>Contains information about where to publish the inventory results.</p>
     pub destination: InventoryDestination,
-    /// <p>Specifies an inventory filter. The inventory only includes objects that meet the filter&#39;s criteria.</p>
+    /// <p>Specifies an inventory filter. The inventory only includes objects that meet the filter's criteria.</p>
     pub filter: Option<InventoryFilter>,
     /// <p>The ID used to identify the inventory configuration.</p>
     pub id: String,
@@ -7728,7 +7774,7 @@ pub struct LifecycleRule {
     pub id: Option<String>,
     pub noncurrent_version_expiration: Option<NoncurrentVersionExpiration>,
     pub noncurrent_version_transitions: Option<Vec<NoncurrentVersionTransition>>,
-    /// <p>If &#39;Enabled&#39;, the rule is currently being applied. If &#39;Disabled&#39;, the rule is not currently being applied.</p>
+    /// <p>If 'Enabled', the rule is currently being applied. If 'Disabled', the rule is not currently being applied.</p>
     pub status: String,
     pub transitions: Option<Vec<Transition>>,
 }
@@ -7881,7 +7927,7 @@ impl LifecycleRuleSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LifecycleRuleAndOperator {
     pub prefix: Option<String>,
-    /// <p>All of these tags must exist in the object&#39;s tag set in order for the rule to apply.</p>
+    /// <p>All of these tags must exist in the object's tag set in order for the rule to apply.</p>
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -7961,7 +8007,7 @@ pub struct LifecycleRuleFilter {
     pub and: Option<LifecycleRuleAndOperator>,
     /// <p>Prefix identifying one or more objects to which the rule applies.</p>
     pub prefix: Option<String>,
-    /// <p>This tag must exist in the object&#39;s tag set in order for the rule to apply.</p>
+    /// <p>This tag must exist in the object's tag set in order for the rule to apply.</p>
     pub tag: Option<Tag>,
 }
 
@@ -8782,7 +8828,7 @@ pub struct ListObjectsV2Output {
     pub encoding_type: Option<String>,
     /// <p>A flag that indicates whether or not Amazon S3 returned all of the results that satisfied the search criteria.</p>
     pub is_truncated: Option<bool>,
-    /// <p>KeyCount is the number of keys returned with this request. KeyCount will always be less than equals to MaxKeys field. Say you ask for 50 keys, your result will include less than equals 50 keys</p>
+    /// <p>KeyCount is the number of keys returned with this request. KeyCount will always be less than equals to MaxKeys field. Say you ask for 50 keys, your result will include less than equals 50 keys </p>
     pub key_count: Option<i64>,
     /// <p>Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more.</p>
     pub max_keys: Option<i64>,
@@ -9547,7 +9593,7 @@ impl MetricsAndOperatorSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct MetricsConfiguration {
-    /// <p>Specifies a metrics configuration filter. The metrics configuration will only include objects that meet the filter&#39;s criteria. A filter must be a prefix, a tag, or a conjunction (MetricsAndOperator).</p>
+    /// <p>Specifies a metrics configuration filter. The metrics configuration will only include objects that meet the filter's criteria. A filter must be a prefix, a tag, or a conjunction (MetricsAndOperator).</p>
     pub filter: Option<MetricsFilter>,
     /// <p>The ID used to identify the metrics configuration.</p>
     pub id: String,
@@ -9995,7 +10041,7 @@ impl NextVersionIdMarkerDeserializer {
         Ok(obj)
     }
 }
-/// <p>Specifies when noncurrent object versions expire. Upon expiration, Amazon S3 permanently deletes the noncurrent object versions. You set this lifecycle configuration action on a bucket that has versioning enabled (or suspended) to request that Amazon S3 delete noncurrent object versions at a specific period in the object&#39;s lifetime.</p>
+/// <p>Specifies when noncurrent object versions expire. Upon expiration, Amazon S3 permanently deletes the noncurrent object versions. You set this lifecycle configuration action on a bucket that has versioning enabled (or suspended) to request that Amazon S3 delete noncurrent object versions at a specific period in the object's lifetime.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct NoncurrentVersionExpiration {
     /// <p>Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the Amazon Simple Storage Service Developer Guide.</p>
@@ -10067,7 +10113,7 @@ impl NoncurrentVersionExpirationSerializer {
     }
 }
 
-/// <p>Container for the transition rule that describes when noncurrent objects transition to the STANDARD<em>IA, ONEZONE</em>IA or GLACIER storage class. If your bucket is versioning-enabled (or versioning is suspended), you can set this action to request that Amazon S3 transition noncurrent object versions to the STANDARD<em>IA, ONEZONE</em>IA or GLACIER storage class at a specific period in the object&#39;s lifetime.</p>
+/// <p>Container for the transition rule that describes when noncurrent objects transition to the STANDARD_IA, ONEZONE_IA or GLACIER storage class. If your bucket is versioning-enabled (or versioning is suspended), you can set this action to request that Amazon S3 transition noncurrent object versions to the STANDARD_IA, ONEZONE_IA or GLACIER storage class at a specific period in the object's lifetime.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct NoncurrentVersionTransition {
     /// <p>Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the Amazon Simple Storage Service Developer Guide.</p>
@@ -10884,7 +10930,7 @@ impl ObjectVersionStorageClassDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes the location where the restore job&#39;s output is stored.</p>
+/// <p>Describes the location where the restore job's output is stored.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct OutputLocation {
     /// <p>Describes an S3 location that will receive the results of the restore request.</p>
@@ -10915,7 +10961,7 @@ impl OutputLocationSerializer {
 pub struct OutputSerialization {
     /// <p>Describes the serialization of CSV-encoded Select results.</p>
     pub csv: Option<CSVOutput>,
-    /// <p>Specifies JSON as request&#39;s output serialization format.</p>
+    /// <p>Specifies JSON as request's output serialization format.</p>
     pub json: Option<JSONOutput>,
 }
 
@@ -11350,6 +11396,8 @@ impl PrefixSerializer {
 pub struct Progress {
     /// <p>Current number of uncompressed object bytes processed.</p>
     pub bytes_processed: Option<i64>,
+    /// <p>Current number of bytes of records payload data returned.</p>
+    pub bytes_returned: Option<i64>,
     /// <p>Current number of object bytes scanned.</p>
     pub bytes_scanned: Option<i64>,
 }
@@ -11375,21 +11423,27 @@ impl ProgressDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "BytesProcessed" => {
-                        obj.bytes_processed = Some(try!(BytesProcessedDeserializer::deserialize(
-                            "BytesProcessed",
-                            stack
-                        )));
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "BytesProcessed" => {
+                            obj.bytes_processed = Some(try!(
+                                BytesProcessedDeserializer::deserialize("BytesProcessed", stack)
+                            ));
+                        }
+                        "BytesReturned" => {
+                            obj.bytes_returned = Some(try!(
+                                BytesReturnedDeserializer::deserialize("BytesReturned", stack)
+                            ));
+                        }
+                        "BytesScanned" => {
+                            obj.bytes_scanned = Some(try!(BytesScannedDeserializer::deserialize(
+                                "BytesScanned",
+                                stack
+                            )));
+                        }
+                        _ => skip_tree(stack),
                     }
-                    "BytesScanned" => {
-                        obj.bytes_scanned = Some(try!(BytesScannedDeserializer::deserialize(
-                            "BytesScanned",
-                            stack
-                        )));
-                    }
-                    _ => skip_tree(stack),
-                },
+                }
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -11624,7 +11678,7 @@ pub struct PutBucketTaggingRequest {
 pub struct PutBucketVersioningRequest {
     pub bucket: String,
     pub content_md5: Option<String>,
-    /// <p>The concatenation of the authentication device&#39;s serial number, a space, and the value that is displayed on your authentication device.</p>
+    /// <p>The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device.</p>
     pub mfa: Option<String>,
     pub versioning_configuration: VersioningConfiguration,
 }
@@ -11739,7 +11793,7 @@ pub struct PutObjectRequest {
     pub content_type: Option<String>,
     /// <p>The date and time at which the object is no longer cacheable.</p>
     pub expires: Option<String>,
-    /// <p>Gives the grantee READ, READ<em>ACP, and WRITE</em>ACP permissions on the object.</p>
+    /// <p>Gives the grantee READ, READ_ACP, and WRITE_ACP permissions on the object.</p>
     pub grant_full_control: Option<String>,
     /// <p>Allows grantee to read the object data and its metadata.</p>
     pub grant_read: Option<String>,
@@ -11762,7 +11816,7 @@ pub struct PutObjectRequest {
     pub ssekms_key_id: Option<String>,
     /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
     pub server_side_encryption: Option<String>,
-    /// <p>The type of storage to use for the object. Defaults to &#39;STANDARD&#39;.</p>
+    /// <p>The type of storage to use for the object. Defaults to 'STANDARD'.</p>
     pub storage_class: Option<String>,
     /// <p>The tag-set for the object. The tag-set must be encoded as URL Query parameters</p>
     pub tagging: Option<String>,
@@ -13024,7 +13078,7 @@ pub struct RestoreRequest {
     pub description: Option<String>,
     /// <p>Glacier related parameters pertaining to this job. Do not use with restores that specify OutputLocation.</p>
     pub glacier_job_parameters: Option<GlacierJobParameters>,
-    /// <p>Describes the location where the restore job&#39;s output is stored.</p>
+    /// <p>Describes the location where the restore job's output is stored.</p>
     pub output_location: Option<OutputLocation>,
     /// <p>Describes the parameters for Select job types.</p>
     pub select_parameters: Option<SelectParameters>,
@@ -13292,7 +13346,7 @@ pub struct Rule {
     pub noncurrent_version_transition: Option<NoncurrentVersionTransition>,
     /// <p>Prefix identifying one or more objects to which the rule applies.</p>
     pub prefix: String,
-    /// <p>If &#39;Enabled&#39;, the rule is currently being applied. If &#39;Disabled&#39;, the rule is not currently being applied.</p>
+    /// <p>If 'Enabled', the rule is currently being applied. If 'Disabled', the rule is not currently being applied.</p>
     pub status: String,
     pub transition: Option<Transition>,
 }
@@ -13889,7 +13943,7 @@ impl SelectObjectContentOutputDeserializer {
         Ok(obj)
     }
 }
-/// <p>Request to filter the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response. For more information, go to <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html">S3Select API Documentation</a>.</p>
+/// <p>Request to filter the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response. For more information, go to <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html">S3Select API Documentation</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SelectObjectContentRequest {
     /// <p>The S3 Bucket.</p>
@@ -13906,11 +13960,11 @@ pub struct SelectObjectContentRequest {
     pub output_serialization: OutputSerialization,
     /// <p>Specifies if periodic request progress information should be enabled.</p>
     pub request_progress: Option<RequestProgress>,
-    /// <p>The SSE Algorithm used to encrypt the object. For more information, go to <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html"> Server-Side Encryption (Using Customer-Provided Encryption Keys</a>.</p>
+    /// <p>The SSE Algorithm used to encrypt the object. For more information, go to <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html"> Server-Side Encryption (Using Customer-Provided Encryption Keys</a>. </p>
     pub sse_customer_algorithm: Option<String>,
-    /// <p>The SSE Customer Key. For more information, go to <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html"> Server-Side Encryption (Using Customer-Provided Encryption Keys</a>.</p>
+    /// <p>The SSE Customer Key. For more information, go to <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html"> Server-Side Encryption (Using Customer-Provided Encryption Keys</a>. </p>
     pub sse_customer_key: Option<String>,
-    /// <p>The SSE Customer Key MD5. For more information, go to <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html"> Server-Side Encryption (Using Customer-Provided Encryption Keys</a>.</p>
+    /// <p>The SSE Customer Key MD5. For more information, go to <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html"> Server-Side Encryption (Using Customer-Provided Encryption Keys</a>. </p>
     pub sse_customer_key_md5: Option<String>,
 }
 
@@ -14539,6 +14593,8 @@ impl StartAfterSerializer {
 pub struct Stats {
     /// <p>Total number of uncompressed object bytes processed.</p>
     pub bytes_processed: Option<i64>,
+    /// <p>Total number of bytes of records payload data returned.</p>
+    pub bytes_returned: Option<i64>,
     /// <p>Total number of object bytes scanned.</p>
     pub bytes_scanned: Option<i64>,
 }
@@ -14564,21 +14620,27 @@ impl StatsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "BytesProcessed" => {
-                        obj.bytes_processed = Some(try!(BytesProcessedDeserializer::deserialize(
-                            "BytesProcessed",
-                            stack
-                        )));
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "BytesProcessed" => {
+                            obj.bytes_processed = Some(try!(
+                                BytesProcessedDeserializer::deserialize("BytesProcessed", stack)
+                            ));
+                        }
+                        "BytesReturned" => {
+                            obj.bytes_returned = Some(try!(
+                                BytesReturnedDeserializer::deserialize("BytesReturned", stack)
+                            ));
+                        }
+                        "BytesScanned" => {
+                            obj.bytes_scanned = Some(try!(BytesScannedDeserializer::deserialize(
+                                "BytesScanned",
+                                stack
+                            )));
+                        }
+                        _ => skip_tree(stack),
                     }
-                    "BytesScanned" => {
-                        obj.bytes_scanned = Some(try!(BytesScannedDeserializer::deserialize(
-                            "BytesScanned",
-                            stack
-                        )));
-                    }
-                    _ => skip_tree(stack),
-                },
+                }
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -15944,7 +16006,7 @@ pub struct UploadPartCopyRequest {
     pub copy_source_if_modified_since: Option<String>,
     /// <p>Copies the object if its entity tag (ETag) is different than the specified ETag.</p>
     pub copy_source_if_none_match: Option<String>,
-    /// <p>Copies the object if it hasn&#39;t been modified since the specified time.</p>
+    /// <p>Copies the object if it hasn't been modified since the specified time.</p>
     pub copy_source_if_unmodified_since: Option<String>,
     /// <p>The range of bytes to copy from the source object. The range value must use the form bytes=first-last, where the first and last are the zero-based byte offsets to copy. For example, bytes=0-9 indicates that you want to copy the first ten bytes of the source. You can copy a range only if the source object is greater than 5 GB.</p>
     pub copy_source_range: Option<String>,
@@ -21808,7 +21870,7 @@ impl Error for UploadPartCopyError {
 }
 /// Trait representing the capabilities of the Amazon S3 API. Amazon S3 clients implement this trait.
 pub trait S3 {
-    /// <p>Aborts a multipart upload.</p><p>To verify that all parts have been removed, so you don't get charged for the part storage, you should call the List Parts operation and ensure the parts list is empty.</p>
+    /// <p>Aborts a multipart upload.</p> <p>To verify that all parts have been removed, so you don't get charged for the part storage, you should call the List Parts operation and ensure the parts list is empty.</p>
     fn abort_multipart_upload(
         &self,
         input: AbortMultipartUploadRequest,
@@ -21832,7 +21894,7 @@ pub trait S3 {
         input: CreateBucketRequest,
     ) -> RusotoFuture<CreateBucketOutput, CreateBucketError>;
 
-    /// <p>Initiates a multipart upload and returns an upload ID.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
+    /// <p>Initiates a multipart upload and returns an upload ID.</p> <p> <b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
     fn create_multipart_upload(
         &self,
         input: CreateMultipartUploadRequest,
@@ -21901,7 +21963,7 @@ pub trait S3 {
         input: DeleteBucketWebsiteRequest,
     ) -> RusotoFuture<(), DeleteBucketWebsiteError>;
 
-    /// <p>Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object. If there isn&#39;t a null version, Amazon S3 does not remove any objects.</p>
+    /// <p>Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object. If there isn't a null version, Amazon S3 does not remove any objects.</p>
     fn delete_object(
         &self,
         input: DeleteObjectRequest,
@@ -22057,7 +22119,7 @@ pub trait S3 {
     /// <p>This operation is useful to determine if a bucket exists and you have permission to access it.</p>
     fn head_bucket(&self, input: HeadBucketRequest) -> RusotoFuture<(), HeadBucketError>;
 
-    /// <p>The HEAD operation retrieves metadata from an object without returning the object itself. This operation is useful if you&#39;re only interested in an object&#39;s metadata. To use HEAD, you must have READ access to the object.</p>
+    /// <p>The HEAD operation retrieves metadata from an object without returning the object itself. This operation is useful if you're only interested in an object's metadata. To use HEAD, you must have READ access to the object.</p>
     fn head_object(
         &self,
         input: HeadObjectRequest,
@@ -22240,7 +22302,7 @@ pub trait S3 {
         input: SelectObjectContentRequest,
     ) -> RusotoFuture<SelectObjectContentOutput, SelectObjectContentError>;
 
-    /// <p>Uploads a part in a multipart upload.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
+    /// <p>Uploads a part in a multipart upload.</p> <p> <b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
     fn upload_part(
         &self,
         input: UploadPartRequest,
@@ -22288,7 +22350,7 @@ impl S3Client {
 }
 
 impl S3 for S3Client {
-    /// <p>Aborts a multipart upload.</p><p>To verify that all parts have been removed, so you don't get charged for the part storage, you should call the List Parts operation and ensure the parts list is empty.</p>
+    /// <p>Aborts a multipart upload.</p> <p>To verify that all parts have been removed, so you don't get charged for the part storage, you should call the List Parts operation and ensure the parts list is empty.</p>
     #[allow(unused_variables, warnings)]
     fn abort_multipart_upload(
         &self,
@@ -22764,7 +22826,7 @@ impl S3 for S3Client {
         })
     }
 
-    /// <p>Initiates a multipart upload and returns an upload ID.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
+    /// <p>Initiates a multipart upload and returns an upload ID.</p> <p> <b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
     #[allow(unused_variables, warnings)]
     fn create_multipart_upload(
         &self,
@@ -23247,7 +23309,7 @@ impl S3 for S3Client {
         })
     }
 
-    /// <p>Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object. If there isn&#39;t a null version, Amazon S3 does not remove any objects.</p>
+    /// <p>Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object. If there isn't a null version, Amazon S3 does not remove any objects.</p>
     #[allow(unused_variables, warnings)]
     fn delete_object(
         &self,
@@ -24718,7 +24780,7 @@ impl S3 for S3Client {
         })
     }
 
-    /// <p>The HEAD operation retrieves metadata from an object without returning the object itself. This operation is useful if you&#39;re only interested in an object&#39;s metadata. To use HEAD, you must have READ access to the object.</p>
+    /// <p>The HEAD operation retrieves metadata from an object without returning the object itself. This operation is useful if you're only interested in an object's metadata. To use HEAD, you must have READ access to the object.</p>
     #[allow(unused_variables, warnings)]
     fn head_object(
         &self,
@@ -26653,7 +26715,7 @@ impl S3 for S3Client {
         })
     }
 
-    /// <p>Uploads a part in a multipart upload.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
+    /// <p>Uploads a part in a multipart upload.</p> <p> <b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
     #[allow(unused_variables, warnings)]
     fn upload_part(
         &self,

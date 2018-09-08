@@ -265,7 +265,8 @@ pub struct AssessmentTarget {
     pub name: String,
     /// <p>The ARN that specifies the resource group that is associated with the assessment target.</p>
     #[serde(rename = "resourceGroupArn")]
-    pub resource_group_arn: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_group_arn: Option<String>,
     /// <p>The time at which <a>UpdateAssessmentTarget</a> is called.</p>
     #[serde(rename = "updatedAt")]
     pub updated_at: f64,
@@ -295,10 +296,10 @@ pub struct AssessmentTemplate {
     /// <p>The time at which the assessment template is created.</p>
     #[serde(rename = "createdAt")]
     pub created_at: f64,
-    /// <p>The duration in seconds specified for this assessment tempate. The default value is 3600 seconds (one hour). The maximum value is 86400 seconds (one day).</p>
+    /// <p>The duration in seconds specified for this assessment template. The default value is 3600 seconds (one hour). The maximum value is 86400 seconds (one day).</p>
     #[serde(rename = "durationInSeconds")]
     pub duration_in_seconds: i64,
-    /// <p>The Amazon Resource Name (ARN) of the most recent assessment run associated with this assessment template. This value exists only when the value of assessmentRunCount is greater than zero.</p>
+    /// <p>The Amazon Resource Name (ARN) of the most recent assessment run associated with this assessment template. This value exists only when the value of assessmentRunCount is greaterpa than zero.</p>
     #[serde(rename = "lastAssessmentRunArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_assessment_run_arn: Option<String>,
@@ -375,9 +376,10 @@ pub struct CreateAssessmentTargetRequest {
     /// <p>The user-defined name that identifies the assessment target that you want to create. The name must be unique within the AWS account.</p>
     #[serde(rename = "assessmentTargetName")]
     pub assessment_target_name: String,
-    /// <p>The ARN that specifies the resource group that is used to create the assessment target.</p>
+    /// <p>The ARN that specifies the resource group that is used to create the assessment target. If resourceGroupArn is not specified, all EC2 instances in the current AWS account and region are included in the assessment target.</p>
     #[serde(rename = "resourceGroupArn")]
-    pub resource_group_arn: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_group_arn: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -395,7 +397,7 @@ pub struct CreateAssessmentTemplateRequest {
     /// <p>The user-defined name that identifies the assessment template that you want to create. You can create several assessment templates for an assessment target. The names of the assessment templates that correspond to a particular assessment target must be unique.</p>
     #[serde(rename = "assessmentTemplateName")]
     pub assessment_template_name: String,
-    /// <p>The duration of the assessment run in seconds. The default value is 3600 seconds (one hour).</p>
+    /// <p>The duration of the assessment run in seconds.</p>
     #[serde(rename = "durationInSeconds")]
     pub duration_in_seconds: i64,
     /// <p>The ARNs that specify the rules packages that you want to attach to the assessment template.</p>
@@ -412,6 +414,20 @@ pub struct CreateAssessmentTemplateResponse {
     /// <p>The ARN that specifies the assessment template that is created.</p>
     #[serde(rename = "assessmentTemplateArn")]
     pub assessment_template_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateExclusionsPreviewRequest {
+    /// <p>The ARN that specifies the assessment template for which you want to create an exclusions preview.</p>
+    #[serde(rename = "assessmentTemplateArn")]
+    pub assessment_template_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct CreateExclusionsPreviewResponse {
+    /// <p>Specifies the unique identifier of the requested exclusions preview. You can use the unique identifier to retrieve the exclusions preview when running the GetExclusionsPreview API.</p>
+    #[serde(rename = "previewToken")]
+    pub preview_token: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -513,6 +529,27 @@ pub struct DescribeCrossAccountAccessRoleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeExclusionsRequest {
+    /// <p>The list of ARNs that specify the exclusions that you want to describe.</p>
+    #[serde(rename = "exclusionArns")]
+    pub exclusion_arns: Vec<String>,
+    /// <p>The locale into which you want to translate the exclusion's title, description, and recommendation.</p>
+    #[serde(rename = "locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub locale: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct DescribeExclusionsResponse {
+    /// <p>Information about the exclusions.</p>
+    #[serde(rename = "exclusions")]
+    pub exclusions: ::std::collections::HashMap<String, Exclusion>,
+    /// <p>Exclusion details that cannot be described. An error code is provided for each failed item.</p>
+    #[serde(rename = "failedItems")]
+    pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeFindingsRequest {
     /// <p>The ARN that specifies the finding that you want to describe.</p>
     #[serde(rename = "findingArns")]
@@ -593,6 +630,51 @@ pub struct EventSubscription {
     /// <p>The time at which <a>SubscribeToEvent</a> is called.</p>
     #[serde(rename = "subscribedAt")]
     pub subscribed_at: f64,
+}
+
+/// <p>Contains information about what was excluded from an assessment run.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct Exclusion {
+    /// <p>The ARN that specifies the exclusion.</p>
+    #[serde(rename = "arn")]
+    pub arn: String,
+    /// <p>The system-defined attributes for the exclusion.</p>
+    #[serde(rename = "attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<Vec<Attribute>>,
+    /// <p>The description of the exclusion.</p>
+    #[serde(rename = "description")]
+    pub description: String,
+    /// <p>The recommendation for the exclusion.</p>
+    #[serde(rename = "recommendation")]
+    pub recommendation: String,
+    /// <p>The AWS resources for which the exclusion pertains.</p>
+    #[serde(rename = "scopes")]
+    pub scopes: Vec<Scope>,
+    /// <p>The name of the exclusion.</p>
+    #[serde(rename = "title")]
+    pub title: String,
+}
+
+/// <p>Contains information about what is excluded from an assessment run given the current state of the assessment template.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ExclusionPreview {
+    /// <p>The system-defined attributes for the exclusion preview.</p>
+    #[serde(rename = "attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<Vec<Attribute>>,
+    /// <p>The description of the exclusion preview.</p>
+    #[serde(rename = "description")]
+    pub description: String,
+    /// <p>The recommendation for the exclusion preview.</p>
+    #[serde(rename = "recommendation")]
+    pub recommendation: String,
+    /// <p>The AWS resources for which the exclusion preview pertains.</p>
+    #[serde(rename = "scopes")]
+    pub scopes: Vec<Scope>,
+    /// <p>The name of the exclusion preview.</p>
+    #[serde(rename = "title")]
+    pub title: String,
 }
 
 /// <p>Includes details about the failed items.</p>
@@ -737,6 +819,43 @@ pub struct GetAssessmentReportResponse {
     #[serde(rename = "url")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetExclusionsPreviewRequest {
+    /// <p>The ARN that specifies the assessment template for which the exclusions preview was requested.</p>
+    #[serde(rename = "assessmentTemplateArn")]
+    pub assessment_template_arn: String,
+    /// <p>The locale into which you want to translate the exclusion's title, description, and recommendation.</p>
+    #[serde(rename = "locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub locale: Option<String>,
+    /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 100. The maximum value is 500.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the GetExclusionsPreviewRequest action. Subsequent calls to the action fill nextToken in the request with the value of nextToken from the previous response to continue listing data.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The unique identifier associated of the exclusions preview.</p>
+    #[serde(rename = "previewToken")]
+    pub preview_token: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct GetExclusionsPreviewResponse {
+    /// <p>Information about the exclusions included in the preview.</p>
+    #[serde(rename = "exclusionPreviews")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exclusion_previews: Option<Vec<ExclusionPreview>>,
+    /// <p>When a response is generated, if there is more data to be listed, this parameters is present in the response and contains the value to use for the nextToken parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Specifies the status of the request to generate an exclusions preview.</p>
+    #[serde(rename = "previewStatus")]
+    pub preview_status: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -916,6 +1035,32 @@ pub struct ListEventSubscriptionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListExclusionsRequest {
+    /// <p>The ARN of the assessment run that generated the exclusions that you want to list.</p>
+    #[serde(rename = "assessmentRunArn")]
+    pub assessment_run_arn: String,
+    /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 100. The maximum value is 500.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the ListExclusionsRequest action. Subsequent calls to the action fill nextToken in the request with the value of nextToken from the previous response to continue listing data.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct ListExclusionsResponse {
+    /// <p>A list of exclusions' ARNs returned by the action.</p>
+    #[serde(rename = "exclusionArns")]
+    pub exclusion_arns: Vec<String>,
+    /// <p>When a response is generated, if there is more data to be listed, this parameters is present in the response and contains the value to use for the nextToken parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListFindingsRequest {
     /// <p>The ARNs of the assessment runs that generate the findings that you want to list.</p>
     #[serde(rename = "assessmentRunArns")]
@@ -1080,6 +1225,19 @@ pub struct RulesPackage {
     pub version: String,
 }
 
+/// <p>This data type contains key-value pairs that identify various Amazon resources.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+pub struct Scope {
+    /// <p>The type of the scope.</p>
+    #[serde(rename = "key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// <p>The resource identifier for the specified scope type.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SetTagsForResourceRequest {
     /// <p>The ARN of the assessment template that you want to set tags to.</p>
@@ -1210,7 +1368,8 @@ pub struct UpdateAssessmentTargetRequest {
     pub assessment_target_name: String,
     /// <p>The ARN of the resource group that is used to specify the new resource group to associate with the assessment target.</p>
     #[serde(rename = "resourceGroupArn")]
-    pub resource_group_arn: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_group_arn: Option<String>,
 }
 
 /// Errors returned by AddAttributesToFindings
@@ -1224,6 +1383,8 @@ pub enum AddAttributesToFindingsError {
     InvalidInput(String),
     /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
+    /// <p>The serice is temporary unavailable.</p>
+    ServiceTemporarilyUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1259,6 +1420,11 @@ impl AddAttributesToFindingsError {
                     }
                     "NoSuchEntityException" => {
                         AddAttributesToFindingsError::NoSuchEntity(String::from(error_message))
+                    }
+                    "ServiceTemporarilyUnavailableException" => {
+                        AddAttributesToFindingsError::ServiceTemporarilyUnavailable(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         AddAttributesToFindingsError::Validation(error_message.to_string())
@@ -1303,6 +1469,7 @@ impl Error for AddAttributesToFindingsError {
             AddAttributesToFindingsError::Internal(ref cause) => cause,
             AddAttributesToFindingsError::InvalidInput(ref cause) => cause,
             AddAttributesToFindingsError::NoSuchEntity(ref cause) => cause,
+            AddAttributesToFindingsError::ServiceTemporarilyUnavailable(ref cause) => cause,
             AddAttributesToFindingsError::Validation(ref cause) => cause,
             AddAttributesToFindingsError::Credentials(ref err) => err.description(),
             AddAttributesToFindingsError::HttpDispatch(ref dispatch_error) => {
@@ -1319,12 +1486,16 @@ pub enum CreateAssessmentTargetError {
     AccessDenied(String),
     /// <p>Internal server error.</p>
     Internal(String),
+    /// <p>Amazon Inspector cannot assume the cross-account role that it needs to list your EC2 instances during the assessment run.</p>
+    InvalidCrossAccountRole(String),
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
+    /// <p>The serice is temporary unavailable.</p>
+    ServiceTemporarilyUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1355,6 +1526,11 @@ impl CreateAssessmentTargetError {
                     "InternalException" => {
                         CreateAssessmentTargetError::Internal(String::from(error_message))
                     }
+                    "InvalidCrossAccountRoleException" => {
+                        CreateAssessmentTargetError::InvalidCrossAccountRole(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidInputException" => {
                         CreateAssessmentTargetError::InvalidInput(String::from(error_message))
                     }
@@ -1363,6 +1539,11 @@ impl CreateAssessmentTargetError {
                     }
                     "NoSuchEntityException" => {
                         CreateAssessmentTargetError::NoSuchEntity(String::from(error_message))
+                    }
+                    "ServiceTemporarilyUnavailableException" => {
+                        CreateAssessmentTargetError::ServiceTemporarilyUnavailable(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         CreateAssessmentTargetError::Validation(error_message.to_string())
@@ -1405,9 +1586,11 @@ impl Error for CreateAssessmentTargetError {
         match *self {
             CreateAssessmentTargetError::AccessDenied(ref cause) => cause,
             CreateAssessmentTargetError::Internal(ref cause) => cause,
+            CreateAssessmentTargetError::InvalidCrossAccountRole(ref cause) => cause,
             CreateAssessmentTargetError::InvalidInput(ref cause) => cause,
             CreateAssessmentTargetError::LimitExceeded(ref cause) => cause,
             CreateAssessmentTargetError::NoSuchEntity(ref cause) => cause,
+            CreateAssessmentTargetError::ServiceTemporarilyUnavailable(ref cause) => cause,
             CreateAssessmentTargetError::Validation(ref cause) => cause,
             CreateAssessmentTargetError::Credentials(ref err) => err.description(),
             CreateAssessmentTargetError::HttpDispatch(ref dispatch_error) => {
@@ -1430,6 +1613,8 @@ pub enum CreateAssessmentTemplateError {
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
+    /// <p>The serice is temporary unavailable.</p>
+    ServiceTemporarilyUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1468,6 +1653,11 @@ impl CreateAssessmentTemplateError {
                     }
                     "NoSuchEntityException" => {
                         CreateAssessmentTemplateError::NoSuchEntity(String::from(error_message))
+                    }
+                    "ServiceTemporarilyUnavailableException" => {
+                        CreateAssessmentTemplateError::ServiceTemporarilyUnavailable(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         CreateAssessmentTemplateError::Validation(error_message.to_string())
@@ -1513,12 +1703,128 @@ impl Error for CreateAssessmentTemplateError {
             CreateAssessmentTemplateError::InvalidInput(ref cause) => cause,
             CreateAssessmentTemplateError::LimitExceeded(ref cause) => cause,
             CreateAssessmentTemplateError::NoSuchEntity(ref cause) => cause,
+            CreateAssessmentTemplateError::ServiceTemporarilyUnavailable(ref cause) => cause,
             CreateAssessmentTemplateError::Validation(ref cause) => cause,
             CreateAssessmentTemplateError::Credentials(ref err) => err.description(),
             CreateAssessmentTemplateError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
             CreateAssessmentTemplateError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateExclusionsPreview
+#[derive(Debug, PartialEq)]
+pub enum CreateExclusionsPreviewError {
+    /// <p>You do not have required permissions to access the requested resource.</p>
+    AccessDenied(String),
+    /// <p>Internal server error.</p>
+    Internal(String),
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    InvalidInput(String),
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    NoSuchEntity(String),
+    /// <p>The request is rejected. The specified assessment template is currently generating an exclusions preview.</p>
+    PreviewGenerationInProgress(String),
+    /// <p>The serice is temporary unavailable.</p>
+    ServiceTemporarilyUnavailable(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateExclusionsPreviewError {
+    pub fn from_body(body: &str) -> CreateExclusionsPreviewError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        CreateExclusionsPreviewError::AccessDenied(String::from(error_message))
+                    }
+                    "InternalException" => {
+                        CreateExclusionsPreviewError::Internal(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        CreateExclusionsPreviewError::InvalidInput(String::from(error_message))
+                    }
+                    "NoSuchEntityException" => {
+                        CreateExclusionsPreviewError::NoSuchEntity(String::from(error_message))
+                    }
+                    "PreviewGenerationInProgressException" => {
+                        CreateExclusionsPreviewError::PreviewGenerationInProgress(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceTemporarilyUnavailableException" => {
+                        CreateExclusionsPreviewError::ServiceTemporarilyUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        CreateExclusionsPreviewError::Validation(error_message.to_string())
+                    }
+                    _ => CreateExclusionsPreviewError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateExclusionsPreviewError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateExclusionsPreviewError {
+    fn from(err: serde_json::error::Error) -> CreateExclusionsPreviewError {
+        CreateExclusionsPreviewError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateExclusionsPreviewError {
+    fn from(err: CredentialsError) -> CreateExclusionsPreviewError {
+        CreateExclusionsPreviewError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateExclusionsPreviewError {
+    fn from(err: HttpDispatchError) -> CreateExclusionsPreviewError {
+        CreateExclusionsPreviewError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateExclusionsPreviewError {
+    fn from(err: io::Error) -> CreateExclusionsPreviewError {
+        CreateExclusionsPreviewError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateExclusionsPreviewError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateExclusionsPreviewError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateExclusionsPreviewError::AccessDenied(ref cause) => cause,
+            CreateExclusionsPreviewError::Internal(ref cause) => cause,
+            CreateExclusionsPreviewError::InvalidInput(ref cause) => cause,
+            CreateExclusionsPreviewError::NoSuchEntity(ref cause) => cause,
+            CreateExclusionsPreviewError::PreviewGenerationInProgress(ref cause) => cause,
+            CreateExclusionsPreviewError::ServiceTemporarilyUnavailable(ref cause) => cause,
+            CreateExclusionsPreviewError::Validation(ref cause) => cause,
+            CreateExclusionsPreviewError::Credentials(ref err) => err.description(),
+            CreateExclusionsPreviewError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateExclusionsPreviewError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -1533,6 +1839,8 @@ pub enum CreateResourceGroupError {
     InvalidInput(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
     LimitExceeded(String),
+    /// <p>The serice is temporary unavailable.</p>
+    ServiceTemporarilyUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1568,6 +1876,11 @@ impl CreateResourceGroupError {
                     }
                     "LimitExceededException" => {
                         CreateResourceGroupError::LimitExceeded(String::from(error_message))
+                    }
+                    "ServiceTemporarilyUnavailableException" => {
+                        CreateResourceGroupError::ServiceTemporarilyUnavailable(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         CreateResourceGroupError::Validation(error_message.to_string())
@@ -1612,6 +1925,7 @@ impl Error for CreateResourceGroupError {
             CreateResourceGroupError::Internal(ref cause) => cause,
             CreateResourceGroupError::InvalidInput(ref cause) => cause,
             CreateResourceGroupError::LimitExceeded(ref cause) => cause,
+            CreateResourceGroupError::ServiceTemporarilyUnavailable(ref cause) => cause,
             CreateResourceGroupError::Validation(ref cause) => cause,
             CreateResourceGroupError::Credentials(ref err) => err.description(),
             CreateResourceGroupError::HttpDispatch(ref dispatch_error) => {
@@ -1634,6 +1948,8 @@ pub enum DeleteAssessmentRunError {
     InvalidInput(String),
     /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
+    /// <p>The serice is temporary unavailable.</p>
+    ServiceTemporarilyUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1674,6 +1990,11 @@ impl DeleteAssessmentRunError {
                     }
                     "NoSuchEntityException" => {
                         DeleteAssessmentRunError::NoSuchEntity(String::from(error_message))
+                    }
+                    "ServiceTemporarilyUnavailableException" => {
+                        DeleteAssessmentRunError::ServiceTemporarilyUnavailable(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         DeleteAssessmentRunError::Validation(error_message.to_string())
@@ -1719,6 +2040,7 @@ impl Error for DeleteAssessmentRunError {
             DeleteAssessmentRunError::Internal(ref cause) => cause,
             DeleteAssessmentRunError::InvalidInput(ref cause) => cause,
             DeleteAssessmentRunError::NoSuchEntity(ref cause) => cause,
+            DeleteAssessmentRunError::ServiceTemporarilyUnavailable(ref cause) => cause,
             DeleteAssessmentRunError::Validation(ref cause) => cause,
             DeleteAssessmentRunError::Credentials(ref err) => err.description(),
             DeleteAssessmentRunError::HttpDispatch(ref dispatch_error) => {
@@ -1741,6 +2063,8 @@ pub enum DeleteAssessmentTargetError {
     InvalidInput(String),
     /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
+    /// <p>The serice is temporary unavailable.</p>
+    ServiceTemporarilyUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1781,6 +2105,11 @@ impl DeleteAssessmentTargetError {
                     }
                     "NoSuchEntityException" => {
                         DeleteAssessmentTargetError::NoSuchEntity(String::from(error_message))
+                    }
+                    "ServiceTemporarilyUnavailableException" => {
+                        DeleteAssessmentTargetError::ServiceTemporarilyUnavailable(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         DeleteAssessmentTargetError::Validation(error_message.to_string())
@@ -1826,6 +2155,7 @@ impl Error for DeleteAssessmentTargetError {
             DeleteAssessmentTargetError::Internal(ref cause) => cause,
             DeleteAssessmentTargetError::InvalidInput(ref cause) => cause,
             DeleteAssessmentTargetError::NoSuchEntity(ref cause) => cause,
+            DeleteAssessmentTargetError::ServiceTemporarilyUnavailable(ref cause) => cause,
             DeleteAssessmentTargetError::Validation(ref cause) => cause,
             DeleteAssessmentTargetError::Credentials(ref err) => err.description(),
             DeleteAssessmentTargetError::HttpDispatch(ref dispatch_error) => {
@@ -1848,6 +2178,8 @@ pub enum DeleteAssessmentTemplateError {
     InvalidInput(String),
     /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
+    /// <p>The serice is temporary unavailable.</p>
+    ServiceTemporarilyUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1888,6 +2220,11 @@ impl DeleteAssessmentTemplateError {
                     }
                     "NoSuchEntityException" => {
                         DeleteAssessmentTemplateError::NoSuchEntity(String::from(error_message))
+                    }
+                    "ServiceTemporarilyUnavailableException" => {
+                        DeleteAssessmentTemplateError::ServiceTemporarilyUnavailable(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         DeleteAssessmentTemplateError::Validation(error_message.to_string())
@@ -1933,6 +2270,7 @@ impl Error for DeleteAssessmentTemplateError {
             DeleteAssessmentTemplateError::Internal(ref cause) => cause,
             DeleteAssessmentTemplateError::InvalidInput(ref cause) => cause,
             DeleteAssessmentTemplateError::NoSuchEntity(ref cause) => cause,
+            DeleteAssessmentTemplateError::ServiceTemporarilyUnavailable(ref cause) => cause,
             DeleteAssessmentTemplateError::Validation(ref cause) => cause,
             DeleteAssessmentTemplateError::Credentials(ref err) => err.description(),
             DeleteAssessmentTemplateError::HttpDispatch(ref dispatch_error) => {
@@ -2284,6 +2622,93 @@ impl Error for DescribeCrossAccountAccessRoleError {
         }
     }
 }
+/// Errors returned by DescribeExclusions
+#[derive(Debug, PartialEq)]
+pub enum DescribeExclusionsError {
+    /// <p>Internal server error.</p>
+    Internal(String),
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    InvalidInput(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeExclusionsError {
+    pub fn from_body(body: &str) -> DescribeExclusionsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalException" => {
+                        DescribeExclusionsError::Internal(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        DescribeExclusionsError::InvalidInput(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeExclusionsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeExclusionsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeExclusionsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeExclusionsError {
+    fn from(err: serde_json::error::Error) -> DescribeExclusionsError {
+        DescribeExclusionsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeExclusionsError {
+    fn from(err: CredentialsError) -> DescribeExclusionsError {
+        DescribeExclusionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeExclusionsError {
+    fn from(err: HttpDispatchError) -> DescribeExclusionsError {
+        DescribeExclusionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeExclusionsError {
+    fn from(err: io::Error) -> DescribeExclusionsError {
+        DescribeExclusionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeExclusionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeExclusionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeExclusionsError::Internal(ref cause) => cause,
+            DescribeExclusionsError::InvalidInput(ref cause) => cause,
+            DescribeExclusionsError::Validation(ref cause) => cause,
+            DescribeExclusionsError::Credentials(ref err) => err.description(),
+            DescribeExclusionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeExclusionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeFindings
 #[derive(Debug, PartialEq)]
 pub enum DescribeFindingsError {
@@ -2556,6 +2981,8 @@ pub enum GetAssessmentReportError {
     InvalidInput(String),
     /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
+    /// <p>The serice is temporary unavailable.</p>
+    ServiceTemporarilyUnavailable(String),
     /// <p>Used by the <a>GetAssessmentReport</a> API. The request was rejected because you tried to generate a report for an assessment run that existed before reporting was supported in Amazon Inspector. You can only generate reports for assessment runs that took place or will take place after generating reports in Amazon Inspector became available.</p>
     UnsupportedFeature(String),
     /// An error occurred dispatching the HTTP request
@@ -2598,6 +3025,11 @@ impl GetAssessmentReportError {
                     }
                     "NoSuchEntityException" => {
                         GetAssessmentReportError::NoSuchEntity(String::from(error_message))
+                    }
+                    "ServiceTemporarilyUnavailableException" => {
+                        GetAssessmentReportError::ServiceTemporarilyUnavailable(String::from(
+                            error_message,
+                        ))
                     }
                     "UnsupportedFeatureException" => {
                         GetAssessmentReportError::UnsupportedFeature(String::from(error_message))
@@ -2646,6 +3078,7 @@ impl Error for GetAssessmentReportError {
             GetAssessmentReportError::Internal(ref cause) => cause,
             GetAssessmentReportError::InvalidInput(ref cause) => cause,
             GetAssessmentReportError::NoSuchEntity(ref cause) => cause,
+            GetAssessmentReportError::ServiceTemporarilyUnavailable(ref cause) => cause,
             GetAssessmentReportError::UnsupportedFeature(ref cause) => cause,
             GetAssessmentReportError::Validation(ref cause) => cause,
             GetAssessmentReportError::Credentials(ref err) => err.description(),
@@ -2653,6 +3086,105 @@ impl Error for GetAssessmentReportError {
                 dispatch_error.description()
             }
             GetAssessmentReportError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetExclusionsPreview
+#[derive(Debug, PartialEq)]
+pub enum GetExclusionsPreviewError {
+    /// <p>You do not have required permissions to access the requested resource.</p>
+    AccessDenied(String),
+    /// <p>Internal server error.</p>
+    Internal(String),
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    InvalidInput(String),
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    NoSuchEntity(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetExclusionsPreviewError {
+    pub fn from_body(body: &str) -> GetExclusionsPreviewError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        GetExclusionsPreviewError::AccessDenied(String::from(error_message))
+                    }
+                    "InternalException" => {
+                        GetExclusionsPreviewError::Internal(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        GetExclusionsPreviewError::InvalidInput(String::from(error_message))
+                    }
+                    "NoSuchEntityException" => {
+                        GetExclusionsPreviewError::NoSuchEntity(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetExclusionsPreviewError::Validation(error_message.to_string())
+                    }
+                    _ => GetExclusionsPreviewError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetExclusionsPreviewError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetExclusionsPreviewError {
+    fn from(err: serde_json::error::Error) -> GetExclusionsPreviewError {
+        GetExclusionsPreviewError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetExclusionsPreviewError {
+    fn from(err: CredentialsError) -> GetExclusionsPreviewError {
+        GetExclusionsPreviewError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetExclusionsPreviewError {
+    fn from(err: HttpDispatchError) -> GetExclusionsPreviewError {
+        GetExclusionsPreviewError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetExclusionsPreviewError {
+    fn from(err: io::Error) -> GetExclusionsPreviewError {
+        GetExclusionsPreviewError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetExclusionsPreviewError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetExclusionsPreviewError {
+    fn description(&self) -> &str {
+        match *self {
+            GetExclusionsPreviewError::AccessDenied(ref cause) => cause,
+            GetExclusionsPreviewError::Internal(ref cause) => cause,
+            GetExclusionsPreviewError::InvalidInput(ref cause) => cause,
+            GetExclusionsPreviewError::NoSuchEntity(ref cause) => cause,
+            GetExclusionsPreviewError::Validation(ref cause) => cause,
+            GetExclusionsPreviewError::Credentials(ref err) => err.description(),
+            GetExclusionsPreviewError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetExclusionsPreviewError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -3244,6 +3776,103 @@ impl Error for ListEventSubscriptionsError {
         }
     }
 }
+/// Errors returned by ListExclusions
+#[derive(Debug, PartialEq)]
+pub enum ListExclusionsError {
+    /// <p>You do not have required permissions to access the requested resource.</p>
+    AccessDenied(String),
+    /// <p>Internal server error.</p>
+    Internal(String),
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    InvalidInput(String),
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    NoSuchEntity(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListExclusionsError {
+    pub fn from_body(body: &str) -> ListExclusionsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json
+                    .get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        ListExclusionsError::AccessDenied(String::from(error_message))
+                    }
+                    "InternalException" => {
+                        ListExclusionsError::Internal(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        ListExclusionsError::InvalidInput(String::from(error_message))
+                    }
+                    "NoSuchEntityException" => {
+                        ListExclusionsError::NoSuchEntity(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListExclusionsError::Validation(error_message.to_string())
+                    }
+                    _ => ListExclusionsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListExclusionsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListExclusionsError {
+    fn from(err: serde_json::error::Error) -> ListExclusionsError {
+        ListExclusionsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListExclusionsError {
+    fn from(err: CredentialsError) -> ListExclusionsError {
+        ListExclusionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListExclusionsError {
+    fn from(err: HttpDispatchError) -> ListExclusionsError {
+        ListExclusionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListExclusionsError {
+    fn from(err: io::Error) -> ListExclusionsError {
+        ListExclusionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListExclusionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListExclusionsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListExclusionsError::AccessDenied(ref cause) => cause,
+            ListExclusionsError::Internal(ref cause) => cause,
+            ListExclusionsError::InvalidInput(ref cause) => cause,
+            ListExclusionsError::NoSuchEntity(ref cause) => cause,
+            ListExclusionsError::Validation(ref cause) => cause,
+            ListExclusionsError::Credentials(ref err) => err.description(),
+            ListExclusionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListExclusionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListFindings
 #[derive(Debug, PartialEq)]
 pub enum ListFindingsError {
@@ -3645,6 +4274,8 @@ pub enum RegisterCrossAccountAccessRoleError {
     InvalidCrossAccountRole(String),
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
+    /// <p>The serice is temporary unavailable.</p>
+    ServiceTemporarilyUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3683,6 +4314,11 @@ impl RegisterCrossAccountAccessRoleError {
                     "InvalidInputException" => RegisterCrossAccountAccessRoleError::InvalidInput(
                         String::from(error_message),
                     ),
+                    "ServiceTemporarilyUnavailableException" => {
+                        RegisterCrossAccountAccessRoleError::ServiceTemporarilyUnavailable(
+                            String::from(error_message),
+                        )
+                    }
                     "ValidationException" => {
                         RegisterCrossAccountAccessRoleError::Validation(error_message.to_string())
                     }
@@ -3726,6 +4362,7 @@ impl Error for RegisterCrossAccountAccessRoleError {
             RegisterCrossAccountAccessRoleError::Internal(ref cause) => cause,
             RegisterCrossAccountAccessRoleError::InvalidCrossAccountRole(ref cause) => cause,
             RegisterCrossAccountAccessRoleError::InvalidInput(ref cause) => cause,
+            RegisterCrossAccountAccessRoleError::ServiceTemporarilyUnavailable(ref cause) => cause,
             RegisterCrossAccountAccessRoleError::Validation(ref cause) => cause,
             RegisterCrossAccountAccessRoleError::Credentials(ref err) => err.description(),
             RegisterCrossAccountAccessRoleError::HttpDispatch(ref dispatch_error) => {
@@ -3746,6 +4383,8 @@ pub enum RemoveAttributesFromFindingsError {
     InvalidInput(String),
     /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
+    /// <p>The serice is temporary unavailable.</p>
+    ServiceTemporarilyUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3781,6 +4420,11 @@ impl RemoveAttributesFromFindingsError {
                     }
                     "NoSuchEntityException" => {
                         RemoveAttributesFromFindingsError::NoSuchEntity(String::from(error_message))
+                    }
+                    "ServiceTemporarilyUnavailableException" => {
+                        RemoveAttributesFromFindingsError::ServiceTemporarilyUnavailable(
+                            String::from(error_message),
+                        )
                     }
                     "ValidationException" => {
                         RemoveAttributesFromFindingsError::Validation(error_message.to_string())
@@ -3825,6 +4469,7 @@ impl Error for RemoveAttributesFromFindingsError {
             RemoveAttributesFromFindingsError::Internal(ref cause) => cause,
             RemoveAttributesFromFindingsError::InvalidInput(ref cause) => cause,
             RemoveAttributesFromFindingsError::NoSuchEntity(ref cause) => cause,
+            RemoveAttributesFromFindingsError::ServiceTemporarilyUnavailable(ref cause) => cause,
             RemoveAttributesFromFindingsError::Validation(ref cause) => cause,
             RemoveAttributesFromFindingsError::Credentials(ref err) => err.description(),
             RemoveAttributesFromFindingsError::HttpDispatch(ref dispatch_error) => {
@@ -3845,6 +4490,8 @@ pub enum SetTagsForResourceError {
     InvalidInput(String),
     /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
+    /// <p>The serice is temporary unavailable.</p>
+    ServiceTemporarilyUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3880,6 +4527,11 @@ impl SetTagsForResourceError {
                     }
                     "NoSuchEntityException" => {
                         SetTagsForResourceError::NoSuchEntity(String::from(error_message))
+                    }
+                    "ServiceTemporarilyUnavailableException" => {
+                        SetTagsForResourceError::ServiceTemporarilyUnavailable(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         SetTagsForResourceError::Validation(error_message.to_string())
@@ -3924,6 +4576,7 @@ impl Error for SetTagsForResourceError {
             SetTagsForResourceError::Internal(ref cause) => cause,
             SetTagsForResourceError::InvalidInput(ref cause) => cause,
             SetTagsForResourceError::NoSuchEntity(ref cause) => cause,
+            SetTagsForResourceError::ServiceTemporarilyUnavailable(ref cause) => cause,
             SetTagsForResourceError::Validation(ref cause) => cause,
             SetTagsForResourceError::Credentials(ref err) => err.description(),
             SetTagsForResourceError::HttpDispatch(ref dispatch_error) => {
@@ -3950,6 +4603,8 @@ pub enum StartAssessmentRunError {
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
+    /// <p>The serice is temporary unavailable.</p>
+    ServiceTemporarilyUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3999,6 +4654,11 @@ impl StartAssessmentRunError {
                     "NoSuchEntityException" => {
                         StartAssessmentRunError::NoSuchEntity(String::from(error_message))
                     }
+                    "ServiceTemporarilyUnavailableException" => {
+                        StartAssessmentRunError::ServiceTemporarilyUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         StartAssessmentRunError::Validation(error_message.to_string())
                     }
@@ -4045,6 +4705,7 @@ impl Error for StartAssessmentRunError {
             StartAssessmentRunError::InvalidInput(ref cause) => cause,
             StartAssessmentRunError::LimitExceeded(ref cause) => cause,
             StartAssessmentRunError::NoSuchEntity(ref cause) => cause,
+            StartAssessmentRunError::ServiceTemporarilyUnavailable(ref cause) => cause,
             StartAssessmentRunError::Validation(ref cause) => cause,
             StartAssessmentRunError::Credentials(ref err) => err.description(),
             StartAssessmentRunError::HttpDispatch(ref dispatch_error) => {
@@ -4065,6 +4726,8 @@ pub enum StopAssessmentRunError {
     InvalidInput(String),
     /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
+    /// <p>The serice is temporary unavailable.</p>
+    ServiceTemporarilyUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -4100,6 +4763,11 @@ impl StopAssessmentRunError {
                     }
                     "NoSuchEntityException" => {
                         StopAssessmentRunError::NoSuchEntity(String::from(error_message))
+                    }
+                    "ServiceTemporarilyUnavailableException" => {
+                        StopAssessmentRunError::ServiceTemporarilyUnavailable(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         StopAssessmentRunError::Validation(error_message.to_string())
@@ -4144,6 +4812,7 @@ impl Error for StopAssessmentRunError {
             StopAssessmentRunError::Internal(ref cause) => cause,
             StopAssessmentRunError::InvalidInput(ref cause) => cause,
             StopAssessmentRunError::NoSuchEntity(ref cause) => cause,
+            StopAssessmentRunError::ServiceTemporarilyUnavailable(ref cause) => cause,
             StopAssessmentRunError::Validation(ref cause) => cause,
             StopAssessmentRunError::Credentials(ref err) => err.description(),
             StopAssessmentRunError::HttpDispatch(ref dispatch_error) => {
@@ -4166,6 +4835,8 @@ pub enum SubscribeToEventError {
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
+    /// <p>The serice is temporary unavailable.</p>
+    ServiceTemporarilyUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -4204,6 +4875,11 @@ impl SubscribeToEventError {
                     }
                     "NoSuchEntityException" => {
                         SubscribeToEventError::NoSuchEntity(String::from(error_message))
+                    }
+                    "ServiceTemporarilyUnavailableException" => {
+                        SubscribeToEventError::ServiceTemporarilyUnavailable(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         SubscribeToEventError::Validation(error_message.to_string())
@@ -4249,6 +4925,7 @@ impl Error for SubscribeToEventError {
             SubscribeToEventError::InvalidInput(ref cause) => cause,
             SubscribeToEventError::LimitExceeded(ref cause) => cause,
             SubscribeToEventError::NoSuchEntity(ref cause) => cause,
+            SubscribeToEventError::ServiceTemporarilyUnavailable(ref cause) => cause,
             SubscribeToEventError::Validation(ref cause) => cause,
             SubscribeToEventError::Credentials(ref err) => err.description(),
             SubscribeToEventError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -4267,6 +4944,8 @@ pub enum UnsubscribeFromEventError {
     InvalidInput(String),
     /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
+    /// <p>The serice is temporary unavailable.</p>
+    ServiceTemporarilyUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -4302,6 +4981,11 @@ impl UnsubscribeFromEventError {
                     }
                     "NoSuchEntityException" => {
                         UnsubscribeFromEventError::NoSuchEntity(String::from(error_message))
+                    }
+                    "ServiceTemporarilyUnavailableException" => {
+                        UnsubscribeFromEventError::ServiceTemporarilyUnavailable(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         UnsubscribeFromEventError::Validation(error_message.to_string())
@@ -4346,6 +5030,7 @@ impl Error for UnsubscribeFromEventError {
             UnsubscribeFromEventError::Internal(ref cause) => cause,
             UnsubscribeFromEventError::InvalidInput(ref cause) => cause,
             UnsubscribeFromEventError::NoSuchEntity(ref cause) => cause,
+            UnsubscribeFromEventError::ServiceTemporarilyUnavailable(ref cause) => cause,
             UnsubscribeFromEventError::Validation(ref cause) => cause,
             UnsubscribeFromEventError::Credentials(ref err) => err.description(),
             UnsubscribeFromEventError::HttpDispatch(ref dispatch_error) => {
@@ -4366,6 +5051,8 @@ pub enum UpdateAssessmentTargetError {
     InvalidInput(String),
     /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
+    /// <p>The serice is temporary unavailable.</p>
+    ServiceTemporarilyUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -4401,6 +5088,11 @@ impl UpdateAssessmentTargetError {
                     }
                     "NoSuchEntityException" => {
                         UpdateAssessmentTargetError::NoSuchEntity(String::from(error_message))
+                    }
+                    "ServiceTemporarilyUnavailableException" => {
+                        UpdateAssessmentTargetError::ServiceTemporarilyUnavailable(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         UpdateAssessmentTargetError::Validation(error_message.to_string())
@@ -4445,6 +5137,7 @@ impl Error for UpdateAssessmentTargetError {
             UpdateAssessmentTargetError::Internal(ref cause) => cause,
             UpdateAssessmentTargetError::InvalidInput(ref cause) => cause,
             UpdateAssessmentTargetError::NoSuchEntity(ref cause) => cause,
+            UpdateAssessmentTargetError::ServiceTemporarilyUnavailable(ref cause) => cause,
             UpdateAssessmentTargetError::Validation(ref cause) => cause,
             UpdateAssessmentTargetError::Credentials(ref err) => err.description(),
             UpdateAssessmentTargetError::HttpDispatch(ref dispatch_error) => {
@@ -4462,17 +5155,23 @@ pub trait Inspector {
         input: AddAttributesToFindingsRequest,
     ) -> RusotoFuture<AddAttributesToFindingsResponse, AddAttributesToFindingsError>;
 
-    /// <p>Creates a new assessment target using the ARN of the resource group that is generated by <a>CreateResourceGroup</a>. If the <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_slr.html">service-linked role</a> isn’t already registered, also creates and registers a service-linked role to grant Amazon Inspector access to AWS Services needed to perform security assessments. You can create up to 50 assessment targets per AWS account. You can run up to 500 concurrent agents per AWS account. For more information, see <a href="http://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html"> Amazon Inspector Assessment Targets</a>.</p>
+    /// <p>Creates a new assessment target using the ARN of the resource group that is generated by <a>CreateResourceGroup</a>. If resourceGroupArn is not specified, all EC2 instances in the current AWS account and region are included in the assessment target. If the <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_slr.html">service-linked role</a> isn’t already registered, this action also creates and registers a service-linked role to grant Amazon Inspector access to AWS Services needed to perform security assessments. You can create up to 50 assessment targets per AWS account. You can run up to 500 concurrent agents per AWS account. For more information, see <a href="http://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html"> Amazon Inspector Assessment Targets</a>.</p>
     fn create_assessment_target(
         &self,
         input: CreateAssessmentTargetRequest,
     ) -> RusotoFuture<CreateAssessmentTargetResponse, CreateAssessmentTargetError>;
 
-    /// <p>Creates an assessment template for the assessment target that is specified by the ARN of the assessment target. If the <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_slr.html">service-linked role</a> isn’t already registered, also creates and registers a service-linked role to grant Amazon Inspector access to AWS Services needed to perform security assessments.</p>
+    /// <p>Creates an assessment template for the assessment target that is specified by the ARN of the assessment target. If the <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_slr.html">service-linked role</a> isn’t already registered, this action also creates and registers a service-linked role to grant Amazon Inspector access to AWS Services needed to perform security assessments.</p>
     fn create_assessment_template(
         &self,
         input: CreateAssessmentTemplateRequest,
     ) -> RusotoFuture<CreateAssessmentTemplateResponse, CreateAssessmentTemplateError>;
+
+    /// <p>Starts the generation of an exclusions preview for the specified assessment template. The exclusions preview lists the potential exclusions (ExclusionPreview) that Inspector can detect before it runs the assessment. </p>
+    fn create_exclusions_preview(
+        &self,
+        input: CreateExclusionsPreviewRequest,
+    ) -> RusotoFuture<CreateExclusionsPreviewResponse, CreateExclusionsPreviewError>;
 
     /// <p>Creates a resource group using the specified set of tags (key and value pairs) that are used to select the EC2 instances to be included in an Amazon Inspector assessment target. The created resource group is then used to create an Amazon Inspector assessment target. For more information, see <a>CreateAssessmentTarget</a>.</p>
     fn create_resource_group(
@@ -4521,6 +5220,12 @@ pub trait Inspector {
         &self,
     ) -> RusotoFuture<DescribeCrossAccountAccessRoleResponse, DescribeCrossAccountAccessRoleError>;
 
+    /// <p>Describes the exclusions that are specified by the exclusions' ARNs.</p>
+    fn describe_exclusions(
+        &self,
+        input: DescribeExclusionsRequest,
+    ) -> RusotoFuture<DescribeExclusionsResponse, DescribeExclusionsError>;
+
     /// <p>Describes the findings that are specified by the ARNs of the findings.</p>
     fn describe_findings(
         &self,
@@ -4544,6 +5249,12 @@ pub trait Inspector {
         &self,
         input: GetAssessmentReportRequest,
     ) -> RusotoFuture<GetAssessmentReportResponse, GetAssessmentReportError>;
+
+    /// <p>Retrieves the exclusions preview (a list of ExclusionPreview objects) specified by the preview token. You can obtain the preview token by running the CreateExclusionsPreview API.</p>
+    fn get_exclusions_preview(
+        &self,
+        input: GetExclusionsPreviewRequest,
+    ) -> RusotoFuture<GetExclusionsPreviewResponse, GetExclusionsPreviewError>;
 
     /// <p>Information about the data that is collected for the specified assessment run.</p>
     fn get_telemetry_metadata(
@@ -4580,6 +5291,12 @@ pub trait Inspector {
         &self,
         input: ListEventSubscriptionsRequest,
     ) -> RusotoFuture<ListEventSubscriptionsResponse, ListEventSubscriptionsError>;
+
+    /// <p>List exclusions that are generated by the assessment run.</p>
+    fn list_exclusions(
+        &self,
+        input: ListExclusionsRequest,
+    ) -> RusotoFuture<ListExclusionsResponse, ListExclusionsError>;
 
     /// <p>Lists findings that are generated by the assessment runs that are specified by the ARNs of the assessment runs.</p>
     fn list_findings(
@@ -4647,7 +5364,7 @@ pub trait Inspector {
         input: UnsubscribeFromEventRequest,
     ) -> RusotoFuture<(), UnsubscribeFromEventError>;
 
-    /// <p>Updates the assessment target that is specified by the ARN of the assessment target.</p>
+    /// <p>Updates the assessment target that is specified by the ARN of the assessment target.</p> <p>If resourceGroupArn is not specified, all EC2 instances in the current AWS account and region are included in the assessment target.</p>
     fn update_assessment_target(
         &self,
         input: UpdateAssessmentTargetRequest,
@@ -4724,7 +5441,7 @@ impl Inspector for InspectorClient {
         })
     }
 
-    /// <p>Creates a new assessment target using the ARN of the resource group that is generated by <a>CreateResourceGroup</a>. If the <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_slr.html">service-linked role</a> isn’t already registered, also creates and registers a service-linked role to grant Amazon Inspector access to AWS Services needed to perform security assessments. You can create up to 50 assessment targets per AWS account. You can run up to 500 concurrent agents per AWS account. For more information, see <a href="http://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html"> Amazon Inspector Assessment Targets</a>.</p>
+    /// <p>Creates a new assessment target using the ARN of the resource group that is generated by <a>CreateResourceGroup</a>. If resourceGroupArn is not specified, all EC2 instances in the current AWS account and region are included in the assessment target. If the <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_slr.html">service-linked role</a> isn’t already registered, this action also creates and registers a service-linked role to grant Amazon Inspector access to AWS Services needed to perform security assessments. You can create up to 50 assessment targets per AWS account. You can run up to 500 concurrent agents per AWS account. For more information, see <a href="http://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html"> Amazon Inspector Assessment Targets</a>.</p>
     fn create_assessment_target(
         &self,
         input: CreateAssessmentTargetRequest,
@@ -4759,7 +5476,7 @@ impl Inspector for InspectorClient {
         })
     }
 
-    /// <p>Creates an assessment template for the assessment target that is specified by the ARN of the assessment target. If the <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_slr.html">service-linked role</a> isn’t already registered, also creates and registers a service-linked role to grant Amazon Inspector access to AWS Services needed to perform security assessments.</p>
+    /// <p>Creates an assessment template for the assessment target that is specified by the ARN of the assessment target. If the <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_slr.html">service-linked role</a> isn’t already registered, this action also creates and registers a service-linked role to grant Amazon Inspector access to AWS Services needed to perform security assessments.</p>
     fn create_assessment_template(
         &self,
         input: CreateAssessmentTemplateRequest,
@@ -4787,6 +5504,41 @@ impl Inspector for InspectorClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateAssessmentTemplateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Starts the generation of an exclusions preview for the specified assessment template. The exclusions preview lists the potential exclusions (ExclusionPreview) that Inspector can detect before it runs the assessment. </p>
+    fn create_exclusions_preview(
+        &self,
+        input: CreateExclusionsPreviewRequest,
+    ) -> RusotoFuture<CreateExclusionsPreviewResponse, CreateExclusionsPreviewError> {
+        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "InspectorService.CreateExclusionsPreview");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateExclusionsPreviewResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateExclusionsPreviewError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -5049,6 +5801,41 @@ impl Inspector for InspectorClient {
         })
     }
 
+    /// <p>Describes the exclusions that are specified by the exclusions' ARNs.</p>
+    fn describe_exclusions(
+        &self,
+        input: DescribeExclusionsRequest,
+    ) -> RusotoFuture<DescribeExclusionsResponse, DescribeExclusionsError> {
+        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "InspectorService.DescribeExclusions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeExclusionsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeExclusionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Describes the findings that are specified by the ARNs of the findings.</p>
     fn describe_findings(
         &self,
@@ -5182,6 +5969,41 @@ impl Inspector for InspectorClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetAssessmentReportError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Retrieves the exclusions preview (a list of ExclusionPreview objects) specified by the preview token. You can obtain the preview token by running the CreateExclusionsPreview API.</p>
+    fn get_exclusions_preview(
+        &self,
+        input: GetExclusionsPreviewRequest,
+    ) -> RusotoFuture<GetExclusionsPreviewResponse, GetExclusionsPreviewError> {
+        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "InspectorService.GetExclusionsPreview");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetExclusionsPreviewResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetExclusionsPreviewError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -5392,6 +6214,41 @@ impl Inspector for InspectorClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListEventSubscriptionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>List exclusions that are generated by the assessment run.</p>
+    fn list_exclusions(
+        &self,
+        input: ListExclusionsRequest,
+    ) -> RusotoFuture<ListExclusionsResponse, ListExclusionsError> {
+        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "InspectorService.ListExclusions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListExclusionsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListExclusionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -5740,7 +6597,7 @@ impl Inspector for InspectorClient {
         })
     }
 
-    /// <p>Updates the assessment target that is specified by the ARN of the assessment target.</p>
+    /// <p>Updates the assessment target that is specified by the ARN of the assessment target.</p> <p>If resourceGroupArn is not specified, all EC2 instances in the current AWS account and region are included in the assessment target.</p>
     fn update_assessment_target(
         &self,
         input: UpdateAssessmentTargetRequest,
