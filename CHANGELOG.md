@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Added Neptune support
+- Add GuardDuty service
 
 ## [0.34.0] - 2018-09-05
 
