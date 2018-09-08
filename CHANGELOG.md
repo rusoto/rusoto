@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Added Neptune support
+- Add GuardDuty service
 
 ## [0.34.0] - 2018-09-05
 
@@ -16,8 +17,6 @@
 - Send parameters in request body instead of query string for query based services and EC2
 - Allow AWS credentials in environment variables to have a custom prefix
 - Fix bug in presigned URLs for S3
-
-- Add GuardDuty service
 
 ## [0.33.1] - 2018-08-07
 
