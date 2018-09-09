@@ -7,7 +7,7 @@ use rusoto_core::Region;
 use rusoto_pricing::{PricingClient, Pricing, DescribeServicesRequest};
 
 #[test]
-fn should_list_hits() {
+fn should_describe_services() {
     let client = PricingClient::new(Region::UsEast1);
     let request = DescribeServicesRequest::default();
 
