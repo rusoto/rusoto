@@ -335,6 +335,10 @@ path = "../rusoto/services/organizations"
 optional = true
 path = "../rusoto/services/polly"
 
+[dependencies.rusoto_pricing]
+optional = true
+path = "../rusoto/services/pricing"
+
 [dependencies.rusoto_redshift]
 optional = true
 path = "../rusoto/services/redshift"
@@ -536,6 +540,7 @@ all = [
 		"opsworkscm",
         "organizations",
 		"polly",
+		"pricing",
 	   	"redshift",
 		"rekognition",
 		"resourcegroupstaggingapi",
@@ -643,6 +648,7 @@ opsworks = ["rusoto_opsworks"]
 opsworkscm = ["rusoto_opsworkscm"]
 organizations = ["rusoto_organizations"]
 polly = ["rusoto_polly"]
+pricing = ["rusoto_pricing"]
 redshift = ["rusoto_redshift"]
 rekognition = ["rusoto_rekognition"]
 resourcegroupstaggingapi = ["rusoto_resourcegroupstaggingapi"]
