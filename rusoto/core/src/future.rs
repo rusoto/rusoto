@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use futures::{Future, Poll, Async};
+use futures::{Future, IntoFuture, Poll, Async};
 use futures::sync::oneshot::spawn;
 use tokio::runtime::Runtime;
 
@@ -13,6 +13,41 @@ lazy_static! {
 }
 
 /// Future that is returned from all rusoto service APIs.
+///
+/// ## Mocking
+///
+/// To mock service traits, you can use the `From` implementation to create `RusotoFuture`
+/// instance.
+///
+/// ```rust,ignore
+/// use rusoto_core::RusotoFuture;
+/// use rusoto_s3::*;
+///
+/// pub struct S3Mock;
+///
+/// impl S3 for S3Mock {
+///     fn abort_multipart_upload(
+///         &self,
+///         _input: AbortMultipartUploadRequest,
+///     ) -> RusotoFuture<AbortMultipartUploadOutput, AbortMultipartUploadError> {
+///         unimplemented!();
+///     }
+///
+///     ...
+///
+///     fn put_object(&self, input: PutObjectRequest) -> RusotoFuture<PutObjectOutput, PutObjectError> {
+///         if input.bucket == "foo" {
+///             Ok(PutObjectOutput {
+///                 ..Default::default()
+///             }).into()
+///         } else {
+///             Err(PutObjectError::Validation("Invalid bucket".to_string())).into()
+///         }
+///     }
+///
+///     ...
+/// }
+/// ```
 pub struct RusotoFuture<T, E> {
     state: Option<RusotoFutureState<T, E>>
 }
@@ -117,9 +152,33 @@ enum RusotoFutureState<T, E> {
     RunningResponseHandler(Box<Future<Item=T, Error=E> + Send>)
 }
 
+impl<T: Send + 'static, E: Send + 'static> From<Result<T, E>> for RusotoFuture<T, E> {
+    fn from(value: Result<T, E>) -> Self {
+        let fut = value.into_future();
+        RusotoFuture {
+            state: Some(RusotoFutureState::RunningResponseHandler(Box::new(fut))),
+        }
+    }
+}
+
 #[test]
 fn rusoto_future_is_send() {
     fn is_send<T: Send>() {}
 
     is_send::<RusotoFuture<(), ()>>();
+}
+
+#[test]
+fn rusuto_future_from_ok() {
+    use std::error::Error;
+    let fut: RusotoFuture<i32, Box<Error + Send + Sync>> = RusotoFuture::from(Ok(42));
+    assert_eq!(fut.sync().unwrap(), 42);
+}
+
+#[test]
+fn rusuto_future_from_err() {
+    use std::error::Error;
+    let fut: RusotoFuture<i32, Box<Error + Send + Sync>> =
+        RusotoFuture::from("ab".parse::<i32>().map_err(|e| e.into()));
+    assert!(fut.sync().is_err());
 }
