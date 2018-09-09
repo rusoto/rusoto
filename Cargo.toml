@@ -45,6 +45,7 @@ members = [
     "rusoto/services/elasticache",
     "rusoto/services/elasticbeanstalk",
     "rusoto/services/efs",
+    "rusoto/services/eks",
     "rusoto/services/elastictranscoder",
     "rusoto/services/elb",
     "rusoto/services/elbv2",
