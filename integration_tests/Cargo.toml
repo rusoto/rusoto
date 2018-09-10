@@ -431,6 +431,10 @@ path = "../rusoto/services/support"
 optional = true
 path = "../rusoto/services/swf"
 
+[dependencies.rusoto_translate]
+optional = true
+path = "../rusoto/services/translate"
+
 [dependencies.rusoto_waf]
 optional = true
 path = "../rusoto/services/waf"
@@ -563,7 +567,8 @@ all = [
 	   	"storagegateway",
         "sts",
 		"support",
-	   	"swf",
+		"swf",
+		"translate",
 	   	"waf",
 		"waf-regional",
 		"workdocs",
@@ -672,6 +677,7 @@ storagegateway = ["rusoto_storagegateway"]
 sts = ["rusoto_sts"]
 support = ["rusoto_support"]
 swf = ["rusoto_swf"]
+translate = ["rusoto_translate"]
 waf = ["rusoto_waf"]
 waf-regional = ["rusoto_waf_regional"]
 workspaces = ["rusoto_workspaces"]
