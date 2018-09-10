@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Add Sagemaker support
+- Add Transcribe service
 - Added Neptune support
 - Add GuardDuty service
 - Add AWS Macie

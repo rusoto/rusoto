@@ -106,6 +106,7 @@ members = [
     "rusoto/services/sts",
     "rusoto/services/support",
     "rusoto/services/swf",
+    "rusoto/services/transcribe",
     "rusoto/services/translate",
     "rusoto/services/waf",
     "rusoto/services/waf-regional",
