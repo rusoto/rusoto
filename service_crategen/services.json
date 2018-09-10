@@ -635,6 +635,12 @@
     "protocolVersion": "2012-01-25",
     "baseTypeName": "Swf"
   },
+  "translate": {
+    "version": "0.34.0",
+    "coreVersion": "0.34.0",
+    "protocolVersion": "2017-07-01",
+    "baseTypeName": "Translate"
+  },
   "waf": {
     "version": "0.34.0",
     "coreVersion": "0.34.0",

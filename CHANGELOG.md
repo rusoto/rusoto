@@ -8,6 +8,7 @@
 - Add AWS Macie
 - Adds EKS
 - Add AWS Pricing service
+- Add Translate service
 
 ## [0.34.0] - 2018-09-05
 
