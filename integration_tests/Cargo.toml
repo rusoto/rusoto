@@ -367,6 +367,10 @@ path = "../rusoto/services/route53domains"
 optional = true
 path = "../rusoto/services/s3"
 
+[dependencies.rusoto_sagemaker]
+optional = true
+path = "../rusoto/services/sagemaker"
+
 [dependencies.rusoto_sdb]
 optional = true
 path = "../rusoto/services/sdb"
@@ -548,6 +552,7 @@ all = [
 	   	"route53",
 	   	"route53domains",
 	   	"s3",
+			"sagemaker",
 	   	"sdb",
 	   	    "secretsmanager",
 	   	"serverlessrepo",
@@ -656,6 +661,7 @@ rds = ["rusoto_rds"]
 route53 = ["rusoto_route53"]
 route53domains = ["rusoto_route53domains"]
 s3 = ["rusoto_s3"]
+sagemaker = ["rusoto_sagemaker"]
 sdb = ["rusoto_sdb"]
 secretsmanager = ["rusoto_secretsmanager"]
 serverlessrepo = ["rusoto_serverlessrepo"]

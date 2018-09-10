@@ -530,6 +530,12 @@
     "protocolVersion": "2006-03-01",
     "baseTypeName": "S3"
   },
+  "sagemaker": {
+    "version": "0.34.0",
+    "coreVersion": "0.34.0",
+    "protocolVersion": "2017-07-24",
+    "baseTypeName": "SageMaker"
+  },
   "sdb": {
     "version": "0.34.0",
     "coreVersion": "0.34.0",
