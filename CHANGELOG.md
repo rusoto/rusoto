@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Add Sagemaker support
 - Added Neptune support
 - Add GuardDuty service
 - Add AWS Macie
