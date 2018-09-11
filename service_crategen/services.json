@@ -635,6 +635,12 @@
     "protocolVersion": "2012-01-25",
     "baseTypeName": "Swf"
   },
+  "transcribe": {
+    "version": "0.34.0",
+    "coreVersion": "0.34.0",
+    "protocolVersion": "2017-10-26",
+    "baseTypeName": "Transcribe"
+  },
   "translate": {
     "version": "0.34.0",
     "coreVersion": "0.34.0",
