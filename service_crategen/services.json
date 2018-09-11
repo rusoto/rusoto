@@ -299,6 +299,12 @@
     "protocolVersion": "2015-08-04",
     "baseTypeName": "KinesisFirehose"
   },
+  "fms": {
+    "version": "0.34.0",
+    "coreVersion": "0.34.0",
+    "protocolVersion": "2018-01-01",
+    "baseTypeName": "Fms"
+  },
   "gamelift": {
     "version": "0.34.0",
     "coreVersion": "0.34.0",
