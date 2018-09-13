@@ -10,6 +10,7 @@
 - Adds EKS
 - Add AWS Pricing service
 - Add Translate service
+- Add Firewall Management Service (FMS)
 
 ## [0.34.0] - 2018-09-05
 

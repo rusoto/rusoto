@@ -223,6 +223,10 @@ path = "../rusoto/services/events"
 optional = true
 path = "../rusoto/services/firehose"
 
+[dependencies.rusoto_fms]
+optional = true
+path = "../rusoto/services/fms"
+
 [dependencies.rusoto_gamelift]
 optional = true
 path = "../rusoto/services/gamelift"
@@ -524,6 +528,7 @@ all = [
 	   	"emr",
 	   	"events",
 	   	"firehose",
+		"fms",
 		"gamelift",
 		"glacier",
 		"glue",
@@ -635,6 +640,7 @@ elbv2 = ["rusoto_elbv2"]
 emr = ["rusoto_emr"]
 events = ["rusoto_events"]
 firehose = ["rusoto_firehose"]
+fms = ["rusoto_fms"]
 gamelift = ["rusoto_gamelift"]
 glacier = ["rusoto_glacier"]
 glue = ["rusoto_glue"]
