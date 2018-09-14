@@ -131,6 +131,10 @@ path = "../rusoto/services/cognito-idp"
 optional = true
 path = "../rusoto/services/cognito-sync"
 
+[dependencies.rusoto_comprehend]
+optional = true
+path = "../rusoto/services/comprehend"
+
 [dependencies.rusoto_config]
 optional = true
 path = "../rusoto/services/config"
@@ -509,6 +513,7 @@ all = [
 	   	"cognito-identity",
 		"cognito-idp",
 		"cognito-sync",
+		"comprehend",
 	   	"config",
 		"cur",
 	   	"datapipeline",
@@ -622,6 +627,7 @@ codestar = ["rusoto_codestar"]
 cognito-identity = ["rusoto_cognito_identity"]
 cognito-idp = ["rusoto_cognito_idp"]
 cognito-sync = ["rusoto_cognito_sync"]
+comprehend = ["rusoto_comprehend"]
 config = ["rusoto_config"]
 cur = ["rusoto_cur"]
 datapipeline = ["rusoto_datapipeline"]
