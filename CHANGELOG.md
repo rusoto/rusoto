@@ -11,6 +11,7 @@
 - Add AWS Pricing service
 - Add Translate service
 - Add Firewall Management Service (FMS)
+- Add Cloud9 support
 
 ## [0.34.0] - 2018-09-05
 

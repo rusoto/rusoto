@@ -11,6 +11,7 @@ members = [
     "rusoto/services/autoscaling",
     "rusoto/services/batch",
     "rusoto/services/budgets",
+    "rusoto/services/cloud9",
     "rusoto/services/clouddirectory",
     "rusoto/services/cloudformation",
     "rusoto/services/cloudfront",
