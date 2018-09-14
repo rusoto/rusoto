@@ -1,0 +1,32 @@
+[package]
+authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
+description = "AWS SDK for Rust - AWS Cost Explorer Service @ 2017-10-25"
+documentation = "https://rusoto.github.io/rusoto/rusoto_ce/index.html"
+keywords = ["AWS", "Amazon", "ce"]
+license = "MIT"
+name = "rusoto_ce"
+readme = "README.md"
+repository = "https://github.com/rusoto/rusoto"
+version = "0.34.0"
+homepage = "https://www.rusoto.org/"
+
+[build-dependencies]
+
+[dependencies]
+futures = "0.1.16"
+serde = "1.0.2"
+serde_derive = "1.0.2"
+serde_json = "1.0.1"
+
+[dependencies.rusoto_core]
+version = "0.34.0"
+path = "../../core"
+default-features = false
+[dev-dependencies.rusoto_mock]
+version = "0.28.0"
+path = "../../../mock"
+
+[features]
+default = ["native-tls"]
+native-tls = ["rusoto_core/native-tls"]
+rustls = ["rusoto_core/rustls"]

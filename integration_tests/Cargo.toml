@@ -63,6 +63,10 @@ path = "../rusoto/services/batch"
 optional = true
 path = "../rusoto/services/budgets"
 
+[dependencies.rusoto_ce]
+optional = true
+path = "../rusoto/services/ce"
+
 [dependencies.rusoto_cloud9]
 optional = true
 path = "../rusoto/services/cloud9"
@@ -508,6 +512,7 @@ all = [
 		"autoscaling-plans",
 		"batch",
 		"budgets",
+		"ce",
 		"cloud9",
 		"clouddirectory",
 	   	"cloudformation",
@@ -625,6 +630,7 @@ autoscaling = ["rusoto_autoscaling"]
 autoscaling-plans = ["rusoto_autoscaling_plans"]
 batch = ["rusoto_batch"]
 budgets = ["rusoto_budgets"]
+ce = ["rusoto_ce"]
 cloud9 = ["rusoto_cloud9"]
 clouddirectory = ["rusoto_clouddirectory"]
 cloudformation = ["rusoto_cloudformation"]
