@@ -155,6 +155,12 @@
     "protocolVersion": "2014-06-30",
     "baseTypeName": "CognitoSync"
   },
+  "comprehend": {
+    "version": "0.34.0",
+    "coreVersion": "0.34.0",
+    "protocolVersion": "2017-11-27",
+    "baseTypeName": "Comprehend"
+  },
   "config": {
     "version": "0.34.0",
     "coreVersion": "0.34.0",

@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Add Sentiment support
 - Add Sagemaker support
 - Add Transcribe service
 - Added Neptune support
