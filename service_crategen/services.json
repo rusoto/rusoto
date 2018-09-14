@@ -53,6 +53,12 @@
     "protocolVersion": "2016-10-20",
     "baseTypeName": "Budgets"
   },
+  "cloud9": {
+    "version": "0.34.0",
+    "coreVersion": "0.34.0",
+    "protocolVersion": "2017-09-23",
+    "baseTypeName": "Cloud9"
+  },
   "clouddirectory": {
     "version": "0.34.0",
     "coreVersion": "0.34.0",
