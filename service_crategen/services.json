@@ -470,6 +470,12 @@
     "protocolVersion": "2017-05-31",
     "baseTypeName": "MigrationHub"
   },
+  "mq": {
+    "version": "0.34.0",
+    "coreVersion": "0.34.0",
+    "protocolVersion": "2017-11-27",
+    "baseTypeName": "MQ"
+  },
   "mturk": {
     "version": "0.34.0",
     "coreVersion": "0.34.0",

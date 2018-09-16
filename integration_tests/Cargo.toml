@@ -331,6 +331,10 @@ path = "../rusoto/services/marketplace-entitlement"
 optional = true
 path = "../rusoto/services/mgh"
 
+[dependencies.rusoto_mq]
+optional = true
+path = "../rusoto/services/mq"
+
 [dependencies.rusoto_mturk]
 optional = true
 path = "../rusoto/services/mturk"
@@ -567,6 +571,7 @@ all = [
 	   	"marketplacecommerceanalytics",
 		"marketplace-entitlement",
 		"mgh",
+		"mq",
 		"mturk",
 	   	"opsworks",
 		"opsworkscm",
@@ -682,6 +687,7 @@ macie = ["rusoto_macie"]
 marketplacecommerceanalytics = ["rusoto_marketplacecommerceanalytics"]
 marketplace-entitlement = ["rusoto_marketplace_entitlement"]
 mgh = ["rusoto_mgh"]
+mq = ["rusoto_mq"]
 mturk = ["rusoto_mturk"]
 opsworks = ["rusoto_opsworks"]
 opsworkscm = ["rusoto_opsworkscm"]

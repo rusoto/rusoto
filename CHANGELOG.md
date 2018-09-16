@@ -14,6 +14,7 @@
 - Add Firewall Management Service (FMS)
 - Add Cloud9 support
 - Add Autoscaling Plans
+- Add MQ service
 
 ## [0.34.0] - 2018-09-05
 
