@@ -5343,7 +5343,7 @@ pub enum BuildSuggestersError {
 }
 
 impl BuildSuggestersError {
-    pub fn from_body(body: &str) -> BuildSuggestersError {
+    pub fn from_body(body: &str, status: u16) -> BuildSuggestersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -5358,7 +5358,7 @@ impl BuildSuggestersError {
                 }
                 _ => BuildSuggestersError::Unknown(String::from(body)),
             },
-            Err(_) => BuildSuggestersError::Unknown(body.to_string()),
+            Err(_) => BuildSuggestersError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -5430,7 +5430,7 @@ pub enum CreateDomainError {
 }
 
 impl CreateDomainError {
-    pub fn from_body(body: &str) -> CreateDomainError {
+    pub fn from_body(body: &str, status: u16) -> CreateDomainError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -5445,7 +5445,7 @@ impl CreateDomainError {
                 }
                 _ => CreateDomainError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDomainError::Unknown(body.to_string()),
+            Err(_) => CreateDomainError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -5521,7 +5521,7 @@ pub enum DefineAnalysisSchemeError {
 }
 
 impl DefineAnalysisSchemeError {
-    pub fn from_body(body: &str) -> DefineAnalysisSchemeError {
+    pub fn from_body(body: &str, status: u16) -> DefineAnalysisSchemeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -5544,7 +5544,9 @@ impl DefineAnalysisSchemeError {
                 }
                 _ => DefineAnalysisSchemeError::Unknown(String::from(body)),
             },
-            Err(_) => DefineAnalysisSchemeError::Unknown(body.to_string()),
+            Err(_) => {
+                DefineAnalysisSchemeError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -5624,7 +5626,7 @@ pub enum DefineExpressionError {
 }
 
 impl DefineExpressionError {
-    pub fn from_body(body: &str) -> DefineExpressionError {
+    pub fn from_body(body: &str, status: u16) -> DefineExpressionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -5645,7 +5647,7 @@ impl DefineExpressionError {
                 }
                 _ => DefineExpressionError::Unknown(String::from(body)),
             },
-            Err(_) => DefineExpressionError::Unknown(body.to_string()),
+            Err(_) => DefineExpressionError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -5723,7 +5725,7 @@ pub enum DefineIndexFieldError {
 }
 
 impl DefineIndexFieldError {
-    pub fn from_body(body: &str) -> DefineIndexFieldError {
+    pub fn from_body(body: &str, status: u16) -> DefineIndexFieldError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -5744,7 +5746,7 @@ impl DefineIndexFieldError {
                 }
                 _ => DefineIndexFieldError::Unknown(String::from(body)),
             },
-            Err(_) => DefineIndexFieldError::Unknown(body.to_string()),
+            Err(_) => DefineIndexFieldError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -5822,7 +5824,7 @@ pub enum DefineSuggesterError {
 }
 
 impl DefineSuggesterError {
-    pub fn from_body(body: &str) -> DefineSuggesterError {
+    pub fn from_body(body: &str, status: u16) -> DefineSuggesterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -5843,7 +5845,7 @@ impl DefineSuggesterError {
                 }
                 _ => DefineSuggesterError::Unknown(String::from(body)),
             },
-            Err(_) => DefineSuggesterError::Unknown(body.to_string()),
+            Err(_) => DefineSuggesterError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -5919,7 +5921,7 @@ pub enum DeleteAnalysisSchemeError {
 }
 
 impl DeleteAnalysisSchemeError {
-    pub fn from_body(body: &str) -> DeleteAnalysisSchemeError {
+    pub fn from_body(body: &str, status: u16) -> DeleteAnalysisSchemeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -5939,7 +5941,9 @@ impl DeleteAnalysisSchemeError {
                 }
                 _ => DeleteAnalysisSchemeError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteAnalysisSchemeError::Unknown(body.to_string()),
+            Err(_) => {
+                DeleteAnalysisSchemeError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -6012,7 +6016,7 @@ pub enum DeleteDomainError {
 }
 
 impl DeleteDomainError {
-    pub fn from_body(body: &str) -> DeleteDomainError {
+    pub fn from_body(body: &str, status: u16) -> DeleteDomainError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6024,7 +6028,7 @@ impl DeleteDomainError {
                 }
                 _ => DeleteDomainError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDomainError::Unknown(body.to_string()),
+            Err(_) => DeleteDomainError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -6097,7 +6101,7 @@ pub enum DeleteExpressionError {
 }
 
 impl DeleteExpressionError {
-    pub fn from_body(body: &str) -> DeleteExpressionError {
+    pub fn from_body(body: &str, status: u16) -> DeleteExpressionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6115,7 +6119,7 @@ impl DeleteExpressionError {
                 }
                 _ => DeleteExpressionError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteExpressionError::Unknown(body.to_string()),
+            Err(_) => DeleteExpressionError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -6190,7 +6194,7 @@ pub enum DeleteIndexFieldError {
 }
 
 impl DeleteIndexFieldError {
-    pub fn from_body(body: &str) -> DeleteIndexFieldError {
+    pub fn from_body(body: &str, status: u16) -> DeleteIndexFieldError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6208,7 +6212,7 @@ impl DeleteIndexFieldError {
                 }
                 _ => DeleteIndexFieldError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteIndexFieldError::Unknown(body.to_string()),
+            Err(_) => DeleteIndexFieldError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -6283,7 +6287,7 @@ pub enum DeleteSuggesterError {
 }
 
 impl DeleteSuggesterError {
-    pub fn from_body(body: &str) -> DeleteSuggesterError {
+    pub fn from_body(body: &str, status: u16) -> DeleteSuggesterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6301,7 +6305,7 @@ impl DeleteSuggesterError {
                 }
                 _ => DeleteSuggesterError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteSuggesterError::Unknown(body.to_string()),
+            Err(_) => DeleteSuggesterError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -6374,7 +6378,7 @@ pub enum DescribeAnalysisSchemesError {
 }
 
 impl DescribeAnalysisSchemesError {
-    pub fn from_body(body: &str) -> DescribeAnalysisSchemesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeAnalysisSchemesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6391,7 +6395,9 @@ impl DescribeAnalysisSchemesError {
                 )),
                 _ => DescribeAnalysisSchemesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeAnalysisSchemesError::Unknown(body.to_string()),
+            Err(_) => {
+                DescribeAnalysisSchemesError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -6471,7 +6477,7 @@ pub enum DescribeAvailabilityOptionsError {
 }
 
 impl DescribeAvailabilityOptionsError {
-    pub fn from_body(body: &str) -> DescribeAvailabilityOptionsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeAvailabilityOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6497,7 +6503,11 @@ impl DescribeAvailabilityOptionsError {
                 ),
                 _ => DescribeAvailabilityOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeAvailabilityOptionsError::Unknown(body.to_string()),
+            Err(_) => DescribeAvailabilityOptionsError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -6572,7 +6582,7 @@ pub enum DescribeDomainsError {
 }
 
 impl DescribeDomainsError {
-    pub fn from_body(body: &str) -> DescribeDomainsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeDomainsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6584,7 +6594,7 @@ impl DescribeDomainsError {
                 }
                 _ => DescribeDomainsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDomainsError::Unknown(body.to_string()),
+            Err(_) => DescribeDomainsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -6655,7 +6665,7 @@ pub enum DescribeExpressionsError {
 }
 
 impl DescribeExpressionsError {
-    pub fn from_body(body: &str) -> DescribeExpressionsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeExpressionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6672,7 +6682,7 @@ impl DescribeExpressionsError {
                 }
                 _ => DescribeExpressionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeExpressionsError::Unknown(body.to_string()),
+            Err(_) => DescribeExpressionsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -6746,7 +6756,7 @@ pub enum DescribeIndexFieldsError {
 }
 
 impl DescribeIndexFieldsError {
-    pub fn from_body(body: &str) -> DescribeIndexFieldsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeIndexFieldsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6763,7 +6773,7 @@ impl DescribeIndexFieldsError {
                 }
                 _ => DescribeIndexFieldsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeIndexFieldsError::Unknown(body.to_string()),
+            Err(_) => DescribeIndexFieldsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -6837,7 +6847,7 @@ pub enum DescribeScalingParametersError {
 }
 
 impl DescribeScalingParametersError {
-    pub fn from_body(body: &str) -> DescribeScalingParametersError {
+    pub fn from_body(body: &str, status: u16) -> DescribeScalingParametersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6854,7 +6864,9 @@ impl DescribeScalingParametersError {
                 ),
                 _ => DescribeScalingParametersError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeScalingParametersError::Unknown(body.to_string()),
+            Err(_) => {
+                DescribeScalingParametersError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -6928,7 +6940,7 @@ pub enum DescribeServiceAccessPoliciesError {
 }
 
 impl DescribeServiceAccessPoliciesError {
-    pub fn from_body(body: &str) -> DescribeServiceAccessPoliciesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeServiceAccessPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6945,7 +6957,11 @@ impl DescribeServiceAccessPoliciesError {
                 ),
                 _ => DescribeServiceAccessPoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeServiceAccessPoliciesError::Unknown(body.to_string()),
+            Err(_) => DescribeServiceAccessPoliciesError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -7019,7 +7035,7 @@ pub enum DescribeSuggestersError {
 }
 
 impl DescribeSuggestersError {
-    pub fn from_body(body: &str) -> DescribeSuggestersError {
+    pub fn from_body(body: &str, status: u16) -> DescribeSuggestersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -7036,7 +7052,7 @@ impl DescribeSuggestersError {
                 }
                 _ => DescribeSuggestersError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSuggestersError::Unknown(body.to_string()),
+            Err(_) => DescribeSuggestersError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -7110,7 +7126,7 @@ pub enum IndexDocumentsError {
 }
 
 impl IndexDocumentsError {
-    pub fn from_body(body: &str) -> IndexDocumentsError {
+    pub fn from_body(body: &str, status: u16) -> IndexDocumentsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -7125,7 +7141,7 @@ impl IndexDocumentsError {
                 }
                 _ => IndexDocumentsError::Unknown(String::from(body)),
             },
-            Err(_) => IndexDocumentsError::Unknown(body.to_string()),
+            Err(_) => IndexDocumentsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -7193,7 +7209,7 @@ pub enum ListDomainNamesError {
 }
 
 impl ListDomainNamesError {
-    pub fn from_body(body: &str) -> ListDomainNamesError {
+    pub fn from_body(body: &str, status: u16) -> ListDomainNamesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -7202,7 +7218,7 @@ impl ListDomainNamesError {
                 "BaseException" => ListDomainNamesError::Base(String::from(parsed_error.message)),
                 _ => ListDomainNamesError::Unknown(String::from(body)),
             },
-            Err(_) => ListDomainNamesError::Unknown(body.to_string()),
+            Err(_) => ListDomainNamesError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -7278,7 +7294,7 @@ pub enum UpdateAvailabilityOptionsError {
 }
 
 impl UpdateAvailabilityOptionsError {
-    pub fn from_body(body: &str) -> UpdateAvailabilityOptionsError {
+    pub fn from_body(body: &str, status: u16) -> UpdateAvailabilityOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -7304,7 +7320,9 @@ impl UpdateAvailabilityOptionsError {
                 ),
                 _ => UpdateAvailabilityOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateAvailabilityOptionsError::Unknown(body.to_string()),
+            Err(_) => {
+                UpdateAvailabilityOptionsError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -7385,7 +7403,7 @@ pub enum UpdateScalingParametersError {
 }
 
 impl UpdateScalingParametersError {
-    pub fn from_body(body: &str) -> UpdateScalingParametersError {
+    pub fn from_body(body: &str, status: u16) -> UpdateScalingParametersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -7408,7 +7426,9 @@ impl UpdateScalingParametersError {
                 )),
                 _ => UpdateScalingParametersError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateScalingParametersError::Unknown(body.to_string()),
+            Err(_) => {
+                UpdateScalingParametersError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -7488,7 +7508,7 @@ pub enum UpdateServiceAccessPoliciesError {
 }
 
 impl UpdateServiceAccessPoliciesError {
-    pub fn from_body(body: &str) -> UpdateServiceAccessPoliciesError {
+    pub fn from_body(body: &str, status: u16) -> UpdateServiceAccessPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -7511,7 +7531,11 @@ impl UpdateServiceAccessPoliciesError {
                 ),
                 _ => UpdateServiceAccessPoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateServiceAccessPoliciesError::Unknown(body.to_string()),
+            Err(_) => UpdateServiceAccessPoliciesError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 

@@ -9979,7 +9979,7 @@ pub enum AbortEnvironmentUpdateError {
 }
 
 impl AbortEnvironmentUpdateError {
-    pub fn from_body(body: &str) -> AbortEnvironmentUpdateError {
+    pub fn from_body(body: &str, status: u16) -> AbortEnvironmentUpdateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9992,7 +9992,9 @@ impl AbortEnvironmentUpdateError {
                 }
                 _ => AbortEnvironmentUpdateError::Unknown(String::from(body)),
             },
-            Err(_) => AbortEnvironmentUpdateError::Unknown(body.to_string()),
+            Err(_) => {
+                AbortEnvironmentUpdateError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -10062,7 +10064,7 @@ pub enum ApplyEnvironmentManagedActionError {
 }
 
 impl ApplyEnvironmentManagedActionError {
-    pub fn from_body(body: &str) -> ApplyEnvironmentManagedActionError {
+    pub fn from_body(body: &str, status: u16) -> ApplyEnvironmentManagedActionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10080,7 +10082,11 @@ impl ApplyEnvironmentManagedActionError {
                 }
                 _ => ApplyEnvironmentManagedActionError::Unknown(String::from(body)),
             },
-            Err(_) => ApplyEnvironmentManagedActionError::Unknown(body.to_string()),
+            Err(_) => ApplyEnvironmentManagedActionError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -10147,7 +10153,7 @@ pub enum CheckDNSAvailabilityError {
 }
 
 impl CheckDNSAvailabilityError {
-    pub fn from_body(body: &str) -> CheckDNSAvailabilityError {
+    pub fn from_body(body: &str, status: u16) -> CheckDNSAvailabilityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10155,7 +10161,9 @@ impl CheckDNSAvailabilityError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CheckDNSAvailabilityError::Unknown(String::from(body)),
             },
-            Err(_) => CheckDNSAvailabilityError::Unknown(body.to_string()),
+            Err(_) => {
+                CheckDNSAvailabilityError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -10224,7 +10232,7 @@ pub enum ComposeEnvironmentsError {
 }
 
 impl ComposeEnvironmentsError {
-    pub fn from_body(body: &str) -> ComposeEnvironmentsError {
+    pub fn from_body(body: &str, status: u16) -> ComposeEnvironmentsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10240,7 +10248,7 @@ impl ComposeEnvironmentsError {
                 ),
                 _ => ComposeEnvironmentsError::Unknown(String::from(body)),
             },
-            Err(_) => ComposeEnvironmentsError::Unknown(body.to_string()),
+            Err(_) => ComposeEnvironmentsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -10309,7 +10317,7 @@ pub enum CreateApplicationError {
 }
 
 impl CreateApplicationError {
-    pub fn from_body(body: &str) -> CreateApplicationError {
+    pub fn from_body(body: &str, status: u16) -> CreateApplicationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10320,7 +10328,7 @@ impl CreateApplicationError {
                 }
                 _ => CreateApplicationError::Unknown(String::from(body)),
             },
-            Err(_) => CreateApplicationError::Unknown(body.to_string()),
+            Err(_) => CreateApplicationError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -10396,7 +10404,7 @@ pub enum CreateApplicationVersionError {
 }
 
 impl CreateApplicationVersionError {
-    pub fn from_body(body: &str) -> CreateApplicationVersionError {
+    pub fn from_body(body: &str, status: u16) -> CreateApplicationVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10429,7 +10437,9 @@ impl CreateApplicationVersionError {
                 }
                 _ => CreateApplicationVersionError::Unknown(String::from(body)),
             },
-            Err(_) => CreateApplicationVersionError::Unknown(body.to_string()),
+            Err(_) => {
+                CreateApplicationVersionError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -10505,7 +10515,7 @@ pub enum CreateConfigurationTemplateError {
 }
 
 impl CreateConfigurationTemplateError {
-    pub fn from_body(body: &str) -> CreateConfigurationTemplateError {
+    pub fn from_body(body: &str, status: u16) -> CreateConfigurationTemplateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10526,7 +10536,11 @@ impl CreateConfigurationTemplateError {
                 }
                 _ => CreateConfigurationTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => CreateConfigurationTemplateError::Unknown(body.to_string()),
+            Err(_) => CreateConfigurationTemplateError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -10598,7 +10612,7 @@ pub enum CreateEnvironmentError {
 }
 
 impl CreateEnvironmentError {
-    pub fn from_body(body: &str) -> CreateEnvironmentError {
+    pub fn from_body(body: &str, status: u16) -> CreateEnvironmentError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10614,7 +10628,7 @@ impl CreateEnvironmentError {
                 }
                 _ => CreateEnvironmentError::Unknown(String::from(body)),
             },
-            Err(_) => CreateEnvironmentError::Unknown(body.to_string()),
+            Err(_) => CreateEnvironmentError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -10687,7 +10701,7 @@ pub enum CreatePlatformVersionError {
 }
 
 impl CreatePlatformVersionError {
-    pub fn from_body(body: &str) -> CreatePlatformVersionError {
+    pub fn from_body(body: &str, status: u16) -> CreatePlatformVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10708,7 +10722,9 @@ impl CreatePlatformVersionError {
                 }
                 _ => CreatePlatformVersionError::Unknown(String::from(body)),
             },
-            Err(_) => CreatePlatformVersionError::Unknown(body.to_string()),
+            Err(_) => {
+                CreatePlatformVersionError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -10782,7 +10798,7 @@ pub enum CreateStorageLocationError {
 }
 
 impl CreateStorageLocationError {
-    pub fn from_body(body: &str) -> CreateStorageLocationError {
+    pub fn from_body(body: &str, status: u16) -> CreateStorageLocationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10803,7 +10819,9 @@ impl CreateStorageLocationError {
                 }
                 _ => CreateStorageLocationError::Unknown(String::from(body)),
             },
-            Err(_) => CreateStorageLocationError::Unknown(body.to_string()),
+            Err(_) => {
+                CreateStorageLocationError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -10873,7 +10891,7 @@ pub enum DeleteApplicationError {
 }
 
 impl DeleteApplicationError {
-    pub fn from_body(body: &str) -> DeleteApplicationError {
+    pub fn from_body(body: &str, status: u16) -> DeleteApplicationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10884,7 +10902,7 @@ impl DeleteApplicationError {
                 }
                 _ => DeleteApplicationError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteApplicationError::Unknown(body.to_string()),
+            Err(_) => DeleteApplicationError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -10958,7 +10976,7 @@ pub enum DeleteApplicationVersionError {
 }
 
 impl DeleteApplicationVersionError {
-    pub fn from_body(body: &str) -> DeleteApplicationVersionError {
+    pub fn from_body(body: &str, status: u16) -> DeleteApplicationVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10984,7 +11002,9 @@ impl DeleteApplicationVersionError {
                 }
                 _ => DeleteApplicationVersionError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteApplicationVersionError::Unknown(body.to_string()),
+            Err(_) => {
+                DeleteApplicationVersionError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -11055,7 +11075,7 @@ pub enum DeleteConfigurationTemplateError {
 }
 
 impl DeleteConfigurationTemplateError {
-    pub fn from_body(body: &str) -> DeleteConfigurationTemplateError {
+    pub fn from_body(body: &str, status: u16) -> DeleteConfigurationTemplateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11068,7 +11088,11 @@ impl DeleteConfigurationTemplateError {
                 }
                 _ => DeleteConfigurationTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteConfigurationTemplateError::Unknown(body.to_string()),
+            Err(_) => DeleteConfigurationTemplateError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -11134,7 +11158,7 @@ pub enum DeleteEnvironmentConfigurationError {
 }
 
 impl DeleteEnvironmentConfigurationError {
-    pub fn from_body(body: &str) -> DeleteEnvironmentConfigurationError {
+    pub fn from_body(body: &str, status: u16) -> DeleteEnvironmentConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11142,7 +11166,11 @@ impl DeleteEnvironmentConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteEnvironmentConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteEnvironmentConfigurationError::Unknown(body.to_string()),
+            Err(_) => DeleteEnvironmentConfigurationError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -11215,7 +11243,7 @@ pub enum DeletePlatformVersionError {
 }
 
 impl DeletePlatformVersionError {
-    pub fn from_body(body: &str) -> DeletePlatformVersionError {
+    pub fn from_body(body: &str, status: u16) -> DeletePlatformVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11241,7 +11269,9 @@ impl DeletePlatformVersionError {
                 }
                 _ => DeletePlatformVersionError::Unknown(String::from(body)),
             },
-            Err(_) => DeletePlatformVersionError::Unknown(body.to_string()),
+            Err(_) => {
+                DeletePlatformVersionError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -11312,7 +11342,7 @@ pub enum DescribeAccountAttributesError {
 }
 
 impl DescribeAccountAttributesError {
-    pub fn from_body(body: &str) -> DescribeAccountAttributesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeAccountAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11325,7 +11355,9 @@ impl DescribeAccountAttributesError {
                 }
                 _ => DescribeAccountAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeAccountAttributesError::Unknown(body.to_string()),
+            Err(_) => {
+                DescribeAccountAttributesError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -11391,7 +11423,7 @@ pub enum DescribeApplicationVersionsError {
 }
 
 impl DescribeApplicationVersionsError {
-    pub fn from_body(body: &str) -> DescribeApplicationVersionsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeApplicationVersionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11399,7 +11431,11 @@ impl DescribeApplicationVersionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeApplicationVersionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeApplicationVersionsError::Unknown(body.to_string()),
+            Err(_) => DescribeApplicationVersionsError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -11464,7 +11500,7 @@ pub enum DescribeApplicationsError {
 }
 
 impl DescribeApplicationsError {
-    pub fn from_body(body: &str) -> DescribeApplicationsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeApplicationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11472,7 +11508,9 @@ impl DescribeApplicationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeApplicationsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeApplicationsError::Unknown(body.to_string()),
+            Err(_) => {
+                DescribeApplicationsError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -11539,7 +11577,7 @@ pub enum DescribeConfigurationOptionsError {
 }
 
 impl DescribeConfigurationOptionsError {
-    pub fn from_body(body: &str) -> DescribeConfigurationOptionsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeConfigurationOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11550,7 +11588,11 @@ impl DescribeConfigurationOptionsError {
                 ),
                 _ => DescribeConfigurationOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeConfigurationOptionsError::Unknown(body.to_string()),
+            Err(_) => DescribeConfigurationOptionsError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -11618,7 +11660,7 @@ pub enum DescribeConfigurationSettingsError {
 }
 
 impl DescribeConfigurationSettingsError {
-    pub fn from_body(body: &str) -> DescribeConfigurationSettingsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeConfigurationSettingsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11629,7 +11671,11 @@ impl DescribeConfigurationSettingsError {
                 ),
                 _ => DescribeConfigurationSettingsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeConfigurationSettingsError::Unknown(body.to_string()),
+            Err(_) => DescribeConfigurationSettingsError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -11699,7 +11745,7 @@ pub enum DescribeEnvironmentHealthError {
 }
 
 impl DescribeEnvironmentHealthError {
-    pub fn from_body(body: &str) -> DescribeEnvironmentHealthError {
+    pub fn from_body(body: &str, status: u16) -> DescribeEnvironmentHealthError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11715,7 +11761,9 @@ impl DescribeEnvironmentHealthError {
                 ),
                 _ => DescribeEnvironmentHealthError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEnvironmentHealthError::Unknown(body.to_string()),
+            Err(_) => {
+                DescribeEnvironmentHealthError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -11784,7 +11832,7 @@ pub enum DescribeEnvironmentManagedActionHistoryError {
 }
 
 impl DescribeEnvironmentManagedActionHistoryError {
-    pub fn from_body(body: &str) -> DescribeEnvironmentManagedActionHistoryError {
+    pub fn from_body(body: &str, status: u16) -> DescribeEnvironmentManagedActionHistoryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11797,7 +11845,11 @@ impl DescribeEnvironmentManagedActionHistoryError {
                 }
                 _ => DescribeEnvironmentManagedActionHistoryError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEnvironmentManagedActionHistoryError::Unknown(body.to_string()),
+            Err(_) => DescribeEnvironmentManagedActionHistoryError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -11867,7 +11919,7 @@ pub enum DescribeEnvironmentManagedActionsError {
 }
 
 impl DescribeEnvironmentManagedActionsError {
-    pub fn from_body(body: &str) -> DescribeEnvironmentManagedActionsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeEnvironmentManagedActionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11880,7 +11932,11 @@ impl DescribeEnvironmentManagedActionsError {
                 }
                 _ => DescribeEnvironmentManagedActionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEnvironmentManagedActionsError::Unknown(body.to_string()),
+            Err(_) => DescribeEnvironmentManagedActionsError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -11948,7 +12004,7 @@ pub enum DescribeEnvironmentResourcesError {
 }
 
 impl DescribeEnvironmentResourcesError {
-    pub fn from_body(body: &str) -> DescribeEnvironmentResourcesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeEnvironmentResourcesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11961,7 +12017,11 @@ impl DescribeEnvironmentResourcesError {
                 }
                 _ => DescribeEnvironmentResourcesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEnvironmentResourcesError::Unknown(body.to_string()),
+            Err(_) => DescribeEnvironmentResourcesError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -12027,7 +12087,7 @@ pub enum DescribeEnvironmentsError {
 }
 
 impl DescribeEnvironmentsError {
-    pub fn from_body(body: &str) -> DescribeEnvironmentsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeEnvironmentsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12035,7 +12095,9 @@ impl DescribeEnvironmentsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEnvironmentsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEnvironmentsError::Unknown(body.to_string()),
+            Err(_) => {
+                DescribeEnvironmentsError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -12100,7 +12162,7 @@ pub enum DescribeEventsError {
 }
 
 impl DescribeEventsError {
-    pub fn from_body(body: &str) -> DescribeEventsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeEventsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12108,7 +12170,7 @@ impl DescribeEventsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEventsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEventsError::Unknown(body.to_string()),
+            Err(_) => DescribeEventsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -12175,7 +12237,7 @@ pub enum DescribeInstancesHealthError {
 }
 
 impl DescribeInstancesHealthError {
-    pub fn from_body(body: &str) -> DescribeInstancesHealthError {
+    pub fn from_body(body: &str, status: u16) -> DescribeInstancesHealthError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12191,7 +12253,9 @@ impl DescribeInstancesHealthError {
                 }
                 _ => DescribeInstancesHealthError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeInstancesHealthError::Unknown(body.to_string()),
+            Err(_) => {
+                DescribeInstancesHealthError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -12262,7 +12326,7 @@ pub enum DescribePlatformVersionError {
 }
 
 impl DescribePlatformVersionError {
-    pub fn from_body(body: &str) -> DescribePlatformVersionError {
+    pub fn from_body(body: &str, status: u16) -> DescribePlatformVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12280,7 +12344,9 @@ impl DescribePlatformVersionError {
                 }
                 _ => DescribePlatformVersionError::Unknown(String::from(body)),
             },
-            Err(_) => DescribePlatformVersionError::Unknown(body.to_string()),
+            Err(_) => {
+                DescribePlatformVersionError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -12347,7 +12413,7 @@ pub enum ListAvailableSolutionStacksError {
 }
 
 impl ListAvailableSolutionStacksError {
-    pub fn from_body(body: &str) -> ListAvailableSolutionStacksError {
+    pub fn from_body(body: &str, status: u16) -> ListAvailableSolutionStacksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12355,7 +12421,11 @@ impl ListAvailableSolutionStacksError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListAvailableSolutionStacksError::Unknown(String::from(body)),
             },
-            Err(_) => ListAvailableSolutionStacksError::Unknown(body.to_string()),
+            Err(_) => ListAvailableSolutionStacksError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -12424,7 +12494,7 @@ pub enum ListPlatformVersionsError {
 }
 
 impl ListPlatformVersionsError {
-    pub fn from_body(body: &str) -> ListPlatformVersionsError {
+    pub fn from_body(body: &str, status: u16) -> ListPlatformVersionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12442,7 +12512,9 @@ impl ListPlatformVersionsError {
                 }
                 _ => ListPlatformVersionsError::Unknown(String::from(body)),
             },
-            Err(_) => ListPlatformVersionsError::Unknown(body.to_string()),
+            Err(_) => {
+                ListPlatformVersionsError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -12515,7 +12587,7 @@ pub enum ListTagsForResourceError {
 }
 
 impl ListTagsForResourceError {
-    pub fn from_body(body: &str) -> ListTagsForResourceError {
+    pub fn from_body(body: &str, status: u16) -> ListTagsForResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12536,7 +12608,7 @@ impl ListTagsForResourceError {
                 }
                 _ => ListTagsForResourceError::Unknown(String::from(body)),
             },
-            Err(_) => ListTagsForResourceError::Unknown(body.to_string()),
+            Err(_) => ListTagsForResourceError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -12606,7 +12678,7 @@ pub enum RebuildEnvironmentError {
 }
 
 impl RebuildEnvironmentError {
-    pub fn from_body(body: &str) -> RebuildEnvironmentError {
+    pub fn from_body(body: &str, status: u16) -> RebuildEnvironmentError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12619,7 +12691,7 @@ impl RebuildEnvironmentError {
                 }
                 _ => RebuildEnvironmentError::Unknown(String::from(body)),
             },
-            Err(_) => RebuildEnvironmentError::Unknown(body.to_string()),
+            Err(_) => RebuildEnvironmentError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -12685,7 +12757,7 @@ pub enum RequestEnvironmentInfoError {
 }
 
 impl RequestEnvironmentInfoError {
-    pub fn from_body(body: &str) -> RequestEnvironmentInfoError {
+    pub fn from_body(body: &str, status: u16) -> RequestEnvironmentInfoError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12693,7 +12765,9 @@ impl RequestEnvironmentInfoError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RequestEnvironmentInfoError::Unknown(String::from(body)),
             },
-            Err(_) => RequestEnvironmentInfoError::Unknown(body.to_string()),
+            Err(_) => {
+                RequestEnvironmentInfoError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -12758,7 +12832,7 @@ pub enum RestartAppServerError {
 }
 
 impl RestartAppServerError {
-    pub fn from_body(body: &str) -> RestartAppServerError {
+    pub fn from_body(body: &str, status: u16) -> RestartAppServerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12766,7 +12840,7 @@ impl RestartAppServerError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RestartAppServerError::Unknown(String::from(body)),
             },
-            Err(_) => RestartAppServerError::Unknown(body.to_string()),
+            Err(_) => RestartAppServerError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -12829,7 +12903,7 @@ pub enum RetrieveEnvironmentInfoError {
 }
 
 impl RetrieveEnvironmentInfoError {
-    pub fn from_body(body: &str) -> RetrieveEnvironmentInfoError {
+    pub fn from_body(body: &str, status: u16) -> RetrieveEnvironmentInfoError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12837,7 +12911,9 @@ impl RetrieveEnvironmentInfoError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RetrieveEnvironmentInfoError::Unknown(String::from(body)),
             },
-            Err(_) => RetrieveEnvironmentInfoError::Unknown(body.to_string()),
+            Err(_) => {
+                RetrieveEnvironmentInfoError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -12902,7 +12978,7 @@ pub enum SwapEnvironmentCNAMEsError {
 }
 
 impl SwapEnvironmentCNAMEsError {
-    pub fn from_body(body: &str) -> SwapEnvironmentCNAMEsError {
+    pub fn from_body(body: &str, status: u16) -> SwapEnvironmentCNAMEsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12910,7 +12986,9 @@ impl SwapEnvironmentCNAMEsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => SwapEnvironmentCNAMEsError::Unknown(String::from(body)),
             },
-            Err(_) => SwapEnvironmentCNAMEsError::Unknown(body.to_string()),
+            Err(_) => {
+                SwapEnvironmentCNAMEsError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -12977,7 +13055,7 @@ pub enum TerminateEnvironmentError {
 }
 
 impl TerminateEnvironmentError {
-    pub fn from_body(body: &str) -> TerminateEnvironmentError {
+    pub fn from_body(body: &str, status: u16) -> TerminateEnvironmentError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12990,7 +13068,9 @@ impl TerminateEnvironmentError {
                 }
                 _ => TerminateEnvironmentError::Unknown(String::from(body)),
             },
-            Err(_) => TerminateEnvironmentError::Unknown(body.to_string()),
+            Err(_) => {
+                TerminateEnvironmentError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -13056,7 +13136,7 @@ pub enum UpdateApplicationError {
 }
 
 impl UpdateApplicationError {
-    pub fn from_body(body: &str) -> UpdateApplicationError {
+    pub fn from_body(body: &str, status: u16) -> UpdateApplicationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13064,7 +13144,7 @@ impl UpdateApplicationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UpdateApplicationError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateApplicationError::Unknown(body.to_string()),
+            Err(_) => UpdateApplicationError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -13131,7 +13211,7 @@ pub enum UpdateApplicationResourceLifecycleError {
 }
 
 impl UpdateApplicationResourceLifecycleError {
-    pub fn from_body(body: &str) -> UpdateApplicationResourceLifecycleError {
+    pub fn from_body(body: &str, status: u16) -> UpdateApplicationResourceLifecycleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13144,7 +13224,11 @@ impl UpdateApplicationResourceLifecycleError {
                 }
                 _ => UpdateApplicationResourceLifecycleError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateApplicationResourceLifecycleError::Unknown(body.to_string()),
+            Err(_) => UpdateApplicationResourceLifecycleError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -13210,7 +13294,7 @@ pub enum UpdateApplicationVersionError {
 }
 
 impl UpdateApplicationVersionError {
-    pub fn from_body(body: &str) -> UpdateApplicationVersionError {
+    pub fn from_body(body: &str, status: u16) -> UpdateApplicationVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13218,7 +13302,9 @@ impl UpdateApplicationVersionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UpdateApplicationVersionError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateApplicationVersionError::Unknown(body.to_string()),
+            Err(_) => {
+                UpdateApplicationVersionError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -13287,7 +13373,7 @@ pub enum UpdateConfigurationTemplateError {
 }
 
 impl UpdateConfigurationTemplateError {
-    pub fn from_body(body: &str) -> UpdateConfigurationTemplateError {
+    pub fn from_body(body: &str, status: u16) -> UpdateConfigurationTemplateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13303,7 +13389,11 @@ impl UpdateConfigurationTemplateError {
                 ),
                 _ => UpdateConfigurationTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateConfigurationTemplateError::Unknown(body.to_string()),
+            Err(_) => UpdateConfigurationTemplateError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -13374,7 +13464,7 @@ pub enum UpdateEnvironmentError {
 }
 
 impl UpdateEnvironmentError {
-    pub fn from_body(body: &str) -> UpdateEnvironmentError {
+    pub fn from_body(body: &str, status: u16) -> UpdateEnvironmentError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13390,7 +13480,7 @@ impl UpdateEnvironmentError {
                 }
                 _ => UpdateEnvironmentError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateEnvironmentError::Unknown(body.to_string()),
+            Err(_) => UpdateEnvironmentError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -13467,7 +13557,7 @@ pub enum UpdateTagsForResourceError {
 }
 
 impl UpdateTagsForResourceError {
-    pub fn from_body(body: &str) -> UpdateTagsForResourceError {
+    pub fn from_body(body: &str, status: u16) -> UpdateTagsForResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13494,7 +13584,9 @@ impl UpdateTagsForResourceError {
                 }
                 _ => UpdateTagsForResourceError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateTagsForResourceError::Unknown(body.to_string()),
+            Err(_) => {
+                UpdateTagsForResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -13568,7 +13660,7 @@ pub enum ValidateConfigurationSettingsError {
 }
 
 impl ValidateConfigurationSettingsError {
-    pub fn from_body(body: &str) -> ValidateConfigurationSettingsError {
+    pub fn from_body(body: &str, status: u16) -> ValidateConfigurationSettingsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13584,7 +13676,11 @@ impl ValidateConfigurationSettingsError {
                 ),
                 _ => ValidateConfigurationSettingsError::Unknown(String::from(body)),
             },
-            Err(_) => ValidateConfigurationSettingsError::Unknown(body.to_string()),
+            Err(_) => ValidateConfigurationSettingsError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 

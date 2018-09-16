@@ -16272,7 +16272,7 @@ pub enum AbortMultipartUploadError {
 }
 
 impl AbortMultipartUploadError {
-    pub fn from_body(body: &str) -> AbortMultipartUploadError {
+    pub fn from_body(body: &str, status: u16) -> AbortMultipartUploadError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -16283,7 +16283,9 @@ impl AbortMultipartUploadError {
                 }
                 _ => AbortMultipartUploadError::Unknown(String::from(body)),
             },
-            Err(_) => AbortMultipartUploadError::Unknown(body.to_string()),
+            Err(_) => {
+                AbortMultipartUploadError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -16348,7 +16350,7 @@ pub enum CompleteMultipartUploadError {
 }
 
 impl CompleteMultipartUploadError {
-    pub fn from_body(body: &str) -> CompleteMultipartUploadError {
+    pub fn from_body(body: &str, status: u16) -> CompleteMultipartUploadError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -16356,7 +16358,9 @@ impl CompleteMultipartUploadError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CompleteMultipartUploadError::Unknown(String::from(body)),
             },
-            Err(_) => CompleteMultipartUploadError::Unknown(body.to_string()),
+            Err(_) => {
+                CompleteMultipartUploadError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -16422,7 +16426,7 @@ pub enum CopyObjectError {
 }
 
 impl CopyObjectError {
-    pub fn from_body(body: &str) -> CopyObjectError {
+    pub fn from_body(body: &str, status: u16) -> CopyObjectError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -16433,7 +16437,7 @@ impl CopyObjectError {
                 }
                 _ => CopyObjectError::Unknown(String::from(body)),
             },
-            Err(_) => CopyObjectError::Unknown(body.to_string()),
+            Err(_) => CopyObjectError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -16500,7 +16504,7 @@ pub enum CreateBucketError {
 }
 
 impl CreateBucketError {
-    pub fn from_body(body: &str) -> CreateBucketError {
+    pub fn from_body(body: &str, status: u16) -> CreateBucketError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -16514,7 +16518,7 @@ impl CreateBucketError {
                 }
                 _ => CreateBucketError::Unknown(String::from(body)),
             },
-            Err(_) => CreateBucketError::Unknown(body.to_string()),
+            Err(_) => CreateBucketError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -16578,7 +16582,7 @@ pub enum CreateMultipartUploadError {
 }
 
 impl CreateMultipartUploadError {
-    pub fn from_body(body: &str) -> CreateMultipartUploadError {
+    pub fn from_body(body: &str, status: u16) -> CreateMultipartUploadError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -16586,7 +16590,9 @@ impl CreateMultipartUploadError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateMultipartUploadError::Unknown(String::from(body)),
             },
-            Err(_) => CreateMultipartUploadError::Unknown(body.to_string()),
+            Err(_) => {
+                CreateMultipartUploadError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -16650,7 +16656,7 @@ pub enum DeleteBucketError {
 }
 
 impl DeleteBucketError {
-    pub fn from_body(body: &str) -> DeleteBucketError {
+    pub fn from_body(body: &str, status: u16) -> DeleteBucketError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -16658,7 +16664,7 @@ impl DeleteBucketError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteBucketError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteBucketError::Unknown(body.to_string()),
+            Err(_) => DeleteBucketError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -16720,7 +16726,7 @@ pub enum DeleteBucketAnalyticsConfigurationError {
 }
 
 impl DeleteBucketAnalyticsConfigurationError {
-    pub fn from_body(body: &str) -> DeleteBucketAnalyticsConfigurationError {
+    pub fn from_body(body: &str, status: u16) -> DeleteBucketAnalyticsConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -16728,7 +16734,11 @@ impl DeleteBucketAnalyticsConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteBucketAnalyticsConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteBucketAnalyticsConfigurationError::Unknown(body.to_string()),
+            Err(_) => DeleteBucketAnalyticsConfigurationError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -16792,7 +16802,7 @@ pub enum DeleteBucketCorsError {
 }
 
 impl DeleteBucketCorsError {
-    pub fn from_body(body: &str) -> DeleteBucketCorsError {
+    pub fn from_body(body: &str, status: u16) -> DeleteBucketCorsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -16800,7 +16810,7 @@ impl DeleteBucketCorsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteBucketCorsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteBucketCorsError::Unknown(body.to_string()),
+            Err(_) => DeleteBucketCorsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -16862,7 +16872,7 @@ pub enum DeleteBucketEncryptionError {
 }
 
 impl DeleteBucketEncryptionError {
-    pub fn from_body(body: &str) -> DeleteBucketEncryptionError {
+    pub fn from_body(body: &str, status: u16) -> DeleteBucketEncryptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -16870,7 +16880,9 @@ impl DeleteBucketEncryptionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteBucketEncryptionError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteBucketEncryptionError::Unknown(body.to_string()),
+            Err(_) => {
+                DeleteBucketEncryptionError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -16934,7 +16946,7 @@ pub enum DeleteBucketInventoryConfigurationError {
 }
 
 impl DeleteBucketInventoryConfigurationError {
-    pub fn from_body(body: &str) -> DeleteBucketInventoryConfigurationError {
+    pub fn from_body(body: &str, status: u16) -> DeleteBucketInventoryConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -16942,7 +16954,11 @@ impl DeleteBucketInventoryConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteBucketInventoryConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteBucketInventoryConfigurationError::Unknown(body.to_string()),
+            Err(_) => DeleteBucketInventoryConfigurationError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -17006,7 +17022,7 @@ pub enum DeleteBucketLifecycleError {
 }
 
 impl DeleteBucketLifecycleError {
-    pub fn from_body(body: &str) -> DeleteBucketLifecycleError {
+    pub fn from_body(body: &str, status: u16) -> DeleteBucketLifecycleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17014,7 +17030,9 @@ impl DeleteBucketLifecycleError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteBucketLifecycleError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteBucketLifecycleError::Unknown(body.to_string()),
+            Err(_) => {
+                DeleteBucketLifecycleError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -17078,7 +17096,7 @@ pub enum DeleteBucketMetricsConfigurationError {
 }
 
 impl DeleteBucketMetricsConfigurationError {
-    pub fn from_body(body: &str) -> DeleteBucketMetricsConfigurationError {
+    pub fn from_body(body: &str, status: u16) -> DeleteBucketMetricsConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17086,7 +17104,11 @@ impl DeleteBucketMetricsConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteBucketMetricsConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteBucketMetricsConfigurationError::Unknown(body.to_string()),
+            Err(_) => DeleteBucketMetricsConfigurationError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -17150,7 +17172,7 @@ pub enum DeleteBucketPolicyError {
 }
 
 impl DeleteBucketPolicyError {
-    pub fn from_body(body: &str) -> DeleteBucketPolicyError {
+    pub fn from_body(body: &str, status: u16) -> DeleteBucketPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17158,7 +17180,7 @@ impl DeleteBucketPolicyError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteBucketPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteBucketPolicyError::Unknown(body.to_string()),
+            Err(_) => DeleteBucketPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -17222,7 +17244,7 @@ pub enum DeleteBucketReplicationError {
 }
 
 impl DeleteBucketReplicationError {
-    pub fn from_body(body: &str) -> DeleteBucketReplicationError {
+    pub fn from_body(body: &str, status: u16) -> DeleteBucketReplicationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17230,7 +17252,9 @@ impl DeleteBucketReplicationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteBucketReplicationError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteBucketReplicationError::Unknown(body.to_string()),
+            Err(_) => {
+                DeleteBucketReplicationError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -17294,7 +17318,7 @@ pub enum DeleteBucketTaggingError {
 }
 
 impl DeleteBucketTaggingError {
-    pub fn from_body(body: &str) -> DeleteBucketTaggingError {
+    pub fn from_body(body: &str, status: u16) -> DeleteBucketTaggingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17302,7 +17326,7 @@ impl DeleteBucketTaggingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteBucketTaggingError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteBucketTaggingError::Unknown(body.to_string()),
+            Err(_) => DeleteBucketTaggingError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -17366,7 +17390,7 @@ pub enum DeleteBucketWebsiteError {
 }
 
 impl DeleteBucketWebsiteError {
-    pub fn from_body(body: &str) -> DeleteBucketWebsiteError {
+    pub fn from_body(body: &str, status: u16) -> DeleteBucketWebsiteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17374,7 +17398,7 @@ impl DeleteBucketWebsiteError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteBucketWebsiteError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteBucketWebsiteError::Unknown(body.to_string()),
+            Err(_) => DeleteBucketWebsiteError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -17438,7 +17462,7 @@ pub enum DeleteObjectError {
 }
 
 impl DeleteObjectError {
-    pub fn from_body(body: &str) -> DeleteObjectError {
+    pub fn from_body(body: &str, status: u16) -> DeleteObjectError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17446,7 +17470,7 @@ impl DeleteObjectError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteObjectError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteObjectError::Unknown(body.to_string()),
+            Err(_) => DeleteObjectError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -17508,7 +17532,7 @@ pub enum DeleteObjectTaggingError {
 }
 
 impl DeleteObjectTaggingError {
-    pub fn from_body(body: &str) -> DeleteObjectTaggingError {
+    pub fn from_body(body: &str, status: u16) -> DeleteObjectTaggingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17516,7 +17540,7 @@ impl DeleteObjectTaggingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteObjectTaggingError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteObjectTaggingError::Unknown(body.to_string()),
+            Err(_) => DeleteObjectTaggingError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -17580,7 +17604,7 @@ pub enum DeleteObjectsError {
 }
 
 impl DeleteObjectsError {
-    pub fn from_body(body: &str) -> DeleteObjectsError {
+    pub fn from_body(body: &str, status: u16) -> DeleteObjectsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17588,7 +17612,7 @@ impl DeleteObjectsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteObjectsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteObjectsError::Unknown(body.to_string()),
+            Err(_) => DeleteObjectsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -17650,7 +17674,7 @@ pub enum GetBucketAccelerateConfigurationError {
 }
 
 impl GetBucketAccelerateConfigurationError {
-    pub fn from_body(body: &str) -> GetBucketAccelerateConfigurationError {
+    pub fn from_body(body: &str, status: u16) -> GetBucketAccelerateConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17658,7 +17682,11 @@ impl GetBucketAccelerateConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketAccelerateConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketAccelerateConfigurationError::Unknown(body.to_string()),
+            Err(_) => GetBucketAccelerateConfigurationError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -17722,7 +17750,7 @@ pub enum GetBucketAclError {
 }
 
 impl GetBucketAclError {
-    pub fn from_body(body: &str) -> GetBucketAclError {
+    pub fn from_body(body: &str, status: u16) -> GetBucketAclError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17730,7 +17758,7 @@ impl GetBucketAclError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketAclError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketAclError::Unknown(body.to_string()),
+            Err(_) => GetBucketAclError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -17792,7 +17820,7 @@ pub enum GetBucketAnalyticsConfigurationError {
 }
 
 impl GetBucketAnalyticsConfigurationError {
-    pub fn from_body(body: &str) -> GetBucketAnalyticsConfigurationError {
+    pub fn from_body(body: &str, status: u16) -> GetBucketAnalyticsConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17800,7 +17828,11 @@ impl GetBucketAnalyticsConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketAnalyticsConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketAnalyticsConfigurationError::Unknown(body.to_string()),
+            Err(_) => GetBucketAnalyticsConfigurationError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -17864,7 +17896,7 @@ pub enum GetBucketCorsError {
 }
 
 impl GetBucketCorsError {
-    pub fn from_body(body: &str) -> GetBucketCorsError {
+    pub fn from_body(body: &str, status: u16) -> GetBucketCorsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17872,7 +17904,7 @@ impl GetBucketCorsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketCorsError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketCorsError::Unknown(body.to_string()),
+            Err(_) => GetBucketCorsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -17934,7 +17966,7 @@ pub enum GetBucketEncryptionError {
 }
 
 impl GetBucketEncryptionError {
-    pub fn from_body(body: &str) -> GetBucketEncryptionError {
+    pub fn from_body(body: &str, status: u16) -> GetBucketEncryptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17942,7 +17974,7 @@ impl GetBucketEncryptionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketEncryptionError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketEncryptionError::Unknown(body.to_string()),
+            Err(_) => GetBucketEncryptionError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -18006,7 +18038,7 @@ pub enum GetBucketInventoryConfigurationError {
 }
 
 impl GetBucketInventoryConfigurationError {
-    pub fn from_body(body: &str) -> GetBucketInventoryConfigurationError {
+    pub fn from_body(body: &str, status: u16) -> GetBucketInventoryConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18014,7 +18046,11 @@ impl GetBucketInventoryConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketInventoryConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketInventoryConfigurationError::Unknown(body.to_string()),
+            Err(_) => GetBucketInventoryConfigurationError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -18078,7 +18114,7 @@ pub enum GetBucketLifecycleError {
 }
 
 impl GetBucketLifecycleError {
-    pub fn from_body(body: &str) -> GetBucketLifecycleError {
+    pub fn from_body(body: &str, status: u16) -> GetBucketLifecycleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18086,7 +18122,7 @@ impl GetBucketLifecycleError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketLifecycleError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketLifecycleError::Unknown(body.to_string()),
+            Err(_) => GetBucketLifecycleError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -18150,7 +18186,7 @@ pub enum GetBucketLifecycleConfigurationError {
 }
 
 impl GetBucketLifecycleConfigurationError {
-    pub fn from_body(body: &str) -> GetBucketLifecycleConfigurationError {
+    pub fn from_body(body: &str, status: u16) -> GetBucketLifecycleConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18158,7 +18194,11 @@ impl GetBucketLifecycleConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketLifecycleConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketLifecycleConfigurationError::Unknown(body.to_string()),
+            Err(_) => GetBucketLifecycleConfigurationError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -18222,7 +18262,7 @@ pub enum GetBucketLocationError {
 }
 
 impl GetBucketLocationError {
-    pub fn from_body(body: &str) -> GetBucketLocationError {
+    pub fn from_body(body: &str, status: u16) -> GetBucketLocationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18230,7 +18270,7 @@ impl GetBucketLocationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketLocationError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketLocationError::Unknown(body.to_string()),
+            Err(_) => GetBucketLocationError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -18294,7 +18334,7 @@ pub enum GetBucketLoggingError {
 }
 
 impl GetBucketLoggingError {
-    pub fn from_body(body: &str) -> GetBucketLoggingError {
+    pub fn from_body(body: &str, status: u16) -> GetBucketLoggingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18302,7 +18342,7 @@ impl GetBucketLoggingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketLoggingError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketLoggingError::Unknown(body.to_string()),
+            Err(_) => GetBucketLoggingError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -18364,7 +18404,7 @@ pub enum GetBucketMetricsConfigurationError {
 }
 
 impl GetBucketMetricsConfigurationError {
-    pub fn from_body(body: &str) -> GetBucketMetricsConfigurationError {
+    pub fn from_body(body: &str, status: u16) -> GetBucketMetricsConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18372,7 +18412,11 @@ impl GetBucketMetricsConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketMetricsConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketMetricsConfigurationError::Unknown(body.to_string()),
+            Err(_) => GetBucketMetricsConfigurationError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -18436,7 +18480,7 @@ pub enum GetBucketNotificationError {
 }
 
 impl GetBucketNotificationError {
-    pub fn from_body(body: &str) -> GetBucketNotificationError {
+    pub fn from_body(body: &str, status: u16) -> GetBucketNotificationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18444,7 +18488,9 @@ impl GetBucketNotificationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketNotificationError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketNotificationError::Unknown(body.to_string()),
+            Err(_) => {
+                GetBucketNotificationError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -18508,7 +18554,7 @@ pub enum GetBucketNotificationConfigurationError {
 }
 
 impl GetBucketNotificationConfigurationError {
-    pub fn from_body(body: &str) -> GetBucketNotificationConfigurationError {
+    pub fn from_body(body: &str, status: u16) -> GetBucketNotificationConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18516,7 +18562,11 @@ impl GetBucketNotificationConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketNotificationConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketNotificationConfigurationError::Unknown(body.to_string()),
+            Err(_) => GetBucketNotificationConfigurationError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -18580,7 +18630,7 @@ pub enum GetBucketPolicyError {
 }
 
 impl GetBucketPolicyError {
-    pub fn from_body(body: &str) -> GetBucketPolicyError {
+    pub fn from_body(body: &str, status: u16) -> GetBucketPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18588,7 +18638,7 @@ impl GetBucketPolicyError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketPolicyError::Unknown(body.to_string()),
+            Err(_) => GetBucketPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -18650,7 +18700,7 @@ pub enum GetBucketReplicationError {
 }
 
 impl GetBucketReplicationError {
-    pub fn from_body(body: &str) -> GetBucketReplicationError {
+    pub fn from_body(body: &str, status: u16) -> GetBucketReplicationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18658,7 +18708,9 @@ impl GetBucketReplicationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketReplicationError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketReplicationError::Unknown(body.to_string()),
+            Err(_) => {
+                GetBucketReplicationError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -18722,7 +18774,7 @@ pub enum GetBucketRequestPaymentError {
 }
 
 impl GetBucketRequestPaymentError {
-    pub fn from_body(body: &str) -> GetBucketRequestPaymentError {
+    pub fn from_body(body: &str, status: u16) -> GetBucketRequestPaymentError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18730,7 +18782,9 @@ impl GetBucketRequestPaymentError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketRequestPaymentError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketRequestPaymentError::Unknown(body.to_string()),
+            Err(_) => {
+                GetBucketRequestPaymentError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -18794,7 +18848,7 @@ pub enum GetBucketTaggingError {
 }
 
 impl GetBucketTaggingError {
-    pub fn from_body(body: &str) -> GetBucketTaggingError {
+    pub fn from_body(body: &str, status: u16) -> GetBucketTaggingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18802,7 +18856,7 @@ impl GetBucketTaggingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketTaggingError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketTaggingError::Unknown(body.to_string()),
+            Err(_) => GetBucketTaggingError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -18864,7 +18918,7 @@ pub enum GetBucketVersioningError {
 }
 
 impl GetBucketVersioningError {
-    pub fn from_body(body: &str) -> GetBucketVersioningError {
+    pub fn from_body(body: &str, status: u16) -> GetBucketVersioningError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18872,7 +18926,7 @@ impl GetBucketVersioningError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketVersioningError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketVersioningError::Unknown(body.to_string()),
+            Err(_) => GetBucketVersioningError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -18936,7 +18990,7 @@ pub enum GetBucketWebsiteError {
 }
 
 impl GetBucketWebsiteError {
-    pub fn from_body(body: &str) -> GetBucketWebsiteError {
+    pub fn from_body(body: &str, status: u16) -> GetBucketWebsiteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18944,7 +18998,7 @@ impl GetBucketWebsiteError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketWebsiteError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketWebsiteError::Unknown(body.to_string()),
+            Err(_) => GetBucketWebsiteError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -19008,7 +19062,7 @@ pub enum GetObjectError {
 }
 
 impl GetObjectError {
-    pub fn from_body(body: &str) -> GetObjectError {
+    pub fn from_body(body: &str, status: u16) -> GetObjectError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19017,7 +19071,7 @@ impl GetObjectError {
                 "NoSuchKey" => GetObjectError::NoSuchKey(String::from(parsed_error.message)),
                 _ => GetObjectError::Unknown(String::from(body)),
             },
-            Err(_) => GetObjectError::Unknown(body.to_string()),
+            Err(_) => GetObjectError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -19082,7 +19136,7 @@ pub enum GetObjectAclError {
 }
 
 impl GetObjectAclError {
-    pub fn from_body(body: &str) -> GetObjectAclError {
+    pub fn from_body(body: &str, status: u16) -> GetObjectAclError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19091,7 +19145,7 @@ impl GetObjectAclError {
                 "NoSuchKey" => GetObjectAclError::NoSuchKey(String::from(parsed_error.message)),
                 _ => GetObjectAclError::Unknown(String::from(body)),
             },
-            Err(_) => GetObjectAclError::Unknown(body.to_string()),
+            Err(_) => GetObjectAclError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -19154,7 +19208,7 @@ pub enum GetObjectTaggingError {
 }
 
 impl GetObjectTaggingError {
-    pub fn from_body(body: &str) -> GetObjectTaggingError {
+    pub fn from_body(body: &str, status: u16) -> GetObjectTaggingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19162,7 +19216,7 @@ impl GetObjectTaggingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetObjectTaggingError::Unknown(String::from(body)),
             },
-            Err(_) => GetObjectTaggingError::Unknown(body.to_string()),
+            Err(_) => GetObjectTaggingError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -19224,7 +19278,7 @@ pub enum GetObjectTorrentError {
 }
 
 impl GetObjectTorrentError {
-    pub fn from_body(body: &str) -> GetObjectTorrentError {
+    pub fn from_body(body: &str, status: u16) -> GetObjectTorrentError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19232,7 +19286,7 @@ impl GetObjectTorrentError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetObjectTorrentError::Unknown(String::from(body)),
             },
-            Err(_) => GetObjectTorrentError::Unknown(body.to_string()),
+            Err(_) => GetObjectTorrentError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -19296,7 +19350,7 @@ pub enum HeadBucketError {
 }
 
 impl HeadBucketError {
-    pub fn from_body(body: &str) -> HeadBucketError {
+    pub fn from_body(body: &str, status: u16) -> HeadBucketError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19305,7 +19359,7 @@ impl HeadBucketError {
                 "NoSuchBucket" => HeadBucketError::NoSuchBucket(String::from(parsed_error.message)),
                 _ => HeadBucketError::Unknown(String::from(body)),
             },
-            Err(_) => HeadBucketError::Unknown(body.to_string()),
+            Err(_) => HeadBucketError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -19370,7 +19424,7 @@ pub enum HeadObjectError {
 }
 
 impl HeadObjectError {
-    pub fn from_body(body: &str) -> HeadObjectError {
+    pub fn from_body(body: &str, status: u16) -> HeadObjectError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19379,7 +19433,7 @@ impl HeadObjectError {
                 "NoSuchKey" => HeadObjectError::NoSuchKey(String::from(parsed_error.message)),
                 _ => HeadObjectError::Unknown(String::from(body)),
             },
-            Err(_) => HeadObjectError::Unknown(body.to_string()),
+            Err(_) => HeadObjectError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -19442,7 +19496,7 @@ pub enum ListBucketAnalyticsConfigurationsError {
 }
 
 impl ListBucketAnalyticsConfigurationsError {
-    pub fn from_body(body: &str) -> ListBucketAnalyticsConfigurationsError {
+    pub fn from_body(body: &str, status: u16) -> ListBucketAnalyticsConfigurationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19450,7 +19504,11 @@ impl ListBucketAnalyticsConfigurationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListBucketAnalyticsConfigurationsError::Unknown(String::from(body)),
             },
-            Err(_) => ListBucketAnalyticsConfigurationsError::Unknown(body.to_string()),
+            Err(_) => ListBucketAnalyticsConfigurationsError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -19514,7 +19572,7 @@ pub enum ListBucketInventoryConfigurationsError {
 }
 
 impl ListBucketInventoryConfigurationsError {
-    pub fn from_body(body: &str) -> ListBucketInventoryConfigurationsError {
+    pub fn from_body(body: &str, status: u16) -> ListBucketInventoryConfigurationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19522,7 +19580,11 @@ impl ListBucketInventoryConfigurationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListBucketInventoryConfigurationsError::Unknown(String::from(body)),
             },
-            Err(_) => ListBucketInventoryConfigurationsError::Unknown(body.to_string()),
+            Err(_) => ListBucketInventoryConfigurationsError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -19586,7 +19648,7 @@ pub enum ListBucketMetricsConfigurationsError {
 }
 
 impl ListBucketMetricsConfigurationsError {
-    pub fn from_body(body: &str) -> ListBucketMetricsConfigurationsError {
+    pub fn from_body(body: &str, status: u16) -> ListBucketMetricsConfigurationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19594,7 +19656,11 @@ impl ListBucketMetricsConfigurationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListBucketMetricsConfigurationsError::Unknown(String::from(body)),
             },
-            Err(_) => ListBucketMetricsConfigurationsError::Unknown(body.to_string()),
+            Err(_) => ListBucketMetricsConfigurationsError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -19658,7 +19724,7 @@ pub enum ListBucketsError {
 }
 
 impl ListBucketsError {
-    pub fn from_body(body: &str) -> ListBucketsError {
+    pub fn from_body(body: &str, status: u16) -> ListBucketsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19666,7 +19732,7 @@ impl ListBucketsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListBucketsError::Unknown(String::from(body)),
             },
-            Err(_) => ListBucketsError::Unknown(body.to_string()),
+            Err(_) => ListBucketsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -19728,7 +19794,7 @@ pub enum ListMultipartUploadsError {
 }
 
 impl ListMultipartUploadsError {
-    pub fn from_body(body: &str) -> ListMultipartUploadsError {
+    pub fn from_body(body: &str, status: u16) -> ListMultipartUploadsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19736,7 +19802,9 @@ impl ListMultipartUploadsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListMultipartUploadsError::Unknown(String::from(body)),
             },
-            Err(_) => ListMultipartUploadsError::Unknown(body.to_string()),
+            Err(_) => {
+                ListMultipartUploadsError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -19800,7 +19868,7 @@ pub enum ListObjectVersionsError {
 }
 
 impl ListObjectVersionsError {
-    pub fn from_body(body: &str) -> ListObjectVersionsError {
+    pub fn from_body(body: &str, status: u16) -> ListObjectVersionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19808,7 +19876,7 @@ impl ListObjectVersionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListObjectVersionsError::Unknown(String::from(body)),
             },
-            Err(_) => ListObjectVersionsError::Unknown(body.to_string()),
+            Err(_) => ListObjectVersionsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -19874,7 +19942,7 @@ pub enum ListObjectsError {
 }
 
 impl ListObjectsError {
-    pub fn from_body(body: &str) -> ListObjectsError {
+    pub fn from_body(body: &str, status: u16) -> ListObjectsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19885,7 +19953,7 @@ impl ListObjectsError {
                 }
                 _ => ListObjectsError::Unknown(String::from(body)),
             },
-            Err(_) => ListObjectsError::Unknown(body.to_string()),
+            Err(_) => ListObjectsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -19950,7 +20018,7 @@ pub enum ListObjectsV2Error {
 }
 
 impl ListObjectsV2Error {
-    pub fn from_body(body: &str) -> ListObjectsV2Error {
+    pub fn from_body(body: &str, status: u16) -> ListObjectsV2Error {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19961,7 +20029,7 @@ impl ListObjectsV2Error {
                 }
                 _ => ListObjectsV2Error::Unknown(String::from(body)),
             },
-            Err(_) => ListObjectsV2Error::Unknown(body.to_string()),
+            Err(_) => ListObjectsV2Error::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -20024,7 +20092,7 @@ pub enum ListPartsError {
 }
 
 impl ListPartsError {
-    pub fn from_body(body: &str) -> ListPartsError {
+    pub fn from_body(body: &str, status: u16) -> ListPartsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20032,7 +20100,7 @@ impl ListPartsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListPartsError::Unknown(String::from(body)),
             },
-            Err(_) => ListPartsError::Unknown(body.to_string()),
+            Err(_) => ListPartsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -20094,7 +20162,7 @@ pub enum PutBucketAccelerateConfigurationError {
 }
 
 impl PutBucketAccelerateConfigurationError {
-    pub fn from_body(body: &str) -> PutBucketAccelerateConfigurationError {
+    pub fn from_body(body: &str, status: u16) -> PutBucketAccelerateConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20102,7 +20170,11 @@ impl PutBucketAccelerateConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketAccelerateConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketAccelerateConfigurationError::Unknown(body.to_string()),
+            Err(_) => PutBucketAccelerateConfigurationError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -20166,7 +20238,7 @@ pub enum PutBucketAclError {
 }
 
 impl PutBucketAclError {
-    pub fn from_body(body: &str) -> PutBucketAclError {
+    pub fn from_body(body: &str, status: u16) -> PutBucketAclError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20174,7 +20246,7 @@ impl PutBucketAclError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketAclError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketAclError::Unknown(body.to_string()),
+            Err(_) => PutBucketAclError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -20236,7 +20308,7 @@ pub enum PutBucketAnalyticsConfigurationError {
 }
 
 impl PutBucketAnalyticsConfigurationError {
-    pub fn from_body(body: &str) -> PutBucketAnalyticsConfigurationError {
+    pub fn from_body(body: &str, status: u16) -> PutBucketAnalyticsConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20244,7 +20316,11 @@ impl PutBucketAnalyticsConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketAnalyticsConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketAnalyticsConfigurationError::Unknown(body.to_string()),
+            Err(_) => PutBucketAnalyticsConfigurationError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -20308,7 +20384,7 @@ pub enum PutBucketCorsError {
 }
 
 impl PutBucketCorsError {
-    pub fn from_body(body: &str) -> PutBucketCorsError {
+    pub fn from_body(body: &str, status: u16) -> PutBucketCorsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20316,7 +20392,7 @@ impl PutBucketCorsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketCorsError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketCorsError::Unknown(body.to_string()),
+            Err(_) => PutBucketCorsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -20378,7 +20454,7 @@ pub enum PutBucketEncryptionError {
 }
 
 impl PutBucketEncryptionError {
-    pub fn from_body(body: &str) -> PutBucketEncryptionError {
+    pub fn from_body(body: &str, status: u16) -> PutBucketEncryptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20386,7 +20462,7 @@ impl PutBucketEncryptionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketEncryptionError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketEncryptionError::Unknown(body.to_string()),
+            Err(_) => PutBucketEncryptionError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -20450,7 +20526,7 @@ pub enum PutBucketInventoryConfigurationError {
 }
 
 impl PutBucketInventoryConfigurationError {
-    pub fn from_body(body: &str) -> PutBucketInventoryConfigurationError {
+    pub fn from_body(body: &str, status: u16) -> PutBucketInventoryConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20458,7 +20534,11 @@ impl PutBucketInventoryConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketInventoryConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketInventoryConfigurationError::Unknown(body.to_string()),
+            Err(_) => PutBucketInventoryConfigurationError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -20522,7 +20602,7 @@ pub enum PutBucketLifecycleError {
 }
 
 impl PutBucketLifecycleError {
-    pub fn from_body(body: &str) -> PutBucketLifecycleError {
+    pub fn from_body(body: &str, status: u16) -> PutBucketLifecycleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20530,7 +20610,7 @@ impl PutBucketLifecycleError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketLifecycleError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketLifecycleError::Unknown(body.to_string()),
+            Err(_) => PutBucketLifecycleError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -20594,7 +20674,7 @@ pub enum PutBucketLifecycleConfigurationError {
 }
 
 impl PutBucketLifecycleConfigurationError {
-    pub fn from_body(body: &str) -> PutBucketLifecycleConfigurationError {
+    pub fn from_body(body: &str, status: u16) -> PutBucketLifecycleConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20602,7 +20682,11 @@ impl PutBucketLifecycleConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketLifecycleConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketLifecycleConfigurationError::Unknown(body.to_string()),
+            Err(_) => PutBucketLifecycleConfigurationError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -20666,7 +20750,7 @@ pub enum PutBucketLoggingError {
 }
 
 impl PutBucketLoggingError {
-    pub fn from_body(body: &str) -> PutBucketLoggingError {
+    pub fn from_body(body: &str, status: u16) -> PutBucketLoggingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20674,7 +20758,7 @@ impl PutBucketLoggingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketLoggingError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketLoggingError::Unknown(body.to_string()),
+            Err(_) => PutBucketLoggingError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -20736,7 +20820,7 @@ pub enum PutBucketMetricsConfigurationError {
 }
 
 impl PutBucketMetricsConfigurationError {
-    pub fn from_body(body: &str) -> PutBucketMetricsConfigurationError {
+    pub fn from_body(body: &str, status: u16) -> PutBucketMetricsConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20744,7 +20828,11 @@ impl PutBucketMetricsConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketMetricsConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketMetricsConfigurationError::Unknown(body.to_string()),
+            Err(_) => PutBucketMetricsConfigurationError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -20808,7 +20896,7 @@ pub enum PutBucketNotificationError {
 }
 
 impl PutBucketNotificationError {
-    pub fn from_body(body: &str) -> PutBucketNotificationError {
+    pub fn from_body(body: &str, status: u16) -> PutBucketNotificationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20816,7 +20904,9 @@ impl PutBucketNotificationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketNotificationError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketNotificationError::Unknown(body.to_string()),
+            Err(_) => {
+                PutBucketNotificationError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -20880,7 +20970,7 @@ pub enum PutBucketNotificationConfigurationError {
 }
 
 impl PutBucketNotificationConfigurationError {
-    pub fn from_body(body: &str) -> PutBucketNotificationConfigurationError {
+    pub fn from_body(body: &str, status: u16) -> PutBucketNotificationConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20888,7 +20978,11 @@ impl PutBucketNotificationConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketNotificationConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketNotificationConfigurationError::Unknown(body.to_string()),
+            Err(_) => PutBucketNotificationConfigurationError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -20952,7 +21046,7 @@ pub enum PutBucketPolicyError {
 }
 
 impl PutBucketPolicyError {
-    pub fn from_body(body: &str) -> PutBucketPolicyError {
+    pub fn from_body(body: &str, status: u16) -> PutBucketPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20960,7 +21054,7 @@ impl PutBucketPolicyError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketPolicyError::Unknown(body.to_string()),
+            Err(_) => PutBucketPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -21022,7 +21116,7 @@ pub enum PutBucketReplicationError {
 }
 
 impl PutBucketReplicationError {
-    pub fn from_body(body: &str) -> PutBucketReplicationError {
+    pub fn from_body(body: &str, status: u16) -> PutBucketReplicationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21030,7 +21124,9 @@ impl PutBucketReplicationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketReplicationError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketReplicationError::Unknown(body.to_string()),
+            Err(_) => {
+                PutBucketReplicationError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -21094,7 +21190,7 @@ pub enum PutBucketRequestPaymentError {
 }
 
 impl PutBucketRequestPaymentError {
-    pub fn from_body(body: &str) -> PutBucketRequestPaymentError {
+    pub fn from_body(body: &str, status: u16) -> PutBucketRequestPaymentError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21102,7 +21198,9 @@ impl PutBucketRequestPaymentError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketRequestPaymentError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketRequestPaymentError::Unknown(body.to_string()),
+            Err(_) => {
+                PutBucketRequestPaymentError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -21166,7 +21264,7 @@ pub enum PutBucketTaggingError {
 }
 
 impl PutBucketTaggingError {
-    pub fn from_body(body: &str) -> PutBucketTaggingError {
+    pub fn from_body(body: &str, status: u16) -> PutBucketTaggingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21174,7 +21272,7 @@ impl PutBucketTaggingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketTaggingError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketTaggingError::Unknown(body.to_string()),
+            Err(_) => PutBucketTaggingError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -21236,7 +21334,7 @@ pub enum PutBucketVersioningError {
 }
 
 impl PutBucketVersioningError {
-    pub fn from_body(body: &str) -> PutBucketVersioningError {
+    pub fn from_body(body: &str, status: u16) -> PutBucketVersioningError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21244,7 +21342,7 @@ impl PutBucketVersioningError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketVersioningError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketVersioningError::Unknown(body.to_string()),
+            Err(_) => PutBucketVersioningError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -21308,7 +21406,7 @@ pub enum PutBucketWebsiteError {
 }
 
 impl PutBucketWebsiteError {
-    pub fn from_body(body: &str) -> PutBucketWebsiteError {
+    pub fn from_body(body: &str, status: u16) -> PutBucketWebsiteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21316,7 +21414,7 @@ impl PutBucketWebsiteError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketWebsiteError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketWebsiteError::Unknown(body.to_string()),
+            Err(_) => PutBucketWebsiteError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -21378,7 +21476,7 @@ pub enum PutObjectError {
 }
 
 impl PutObjectError {
-    pub fn from_body(body: &str) -> PutObjectError {
+    pub fn from_body(body: &str, status: u16) -> PutObjectError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21386,7 +21484,7 @@ impl PutObjectError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutObjectError::Unknown(String::from(body)),
             },
-            Err(_) => PutObjectError::Unknown(body.to_string()),
+            Err(_) => PutObjectError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -21450,7 +21548,7 @@ pub enum PutObjectAclError {
 }
 
 impl PutObjectAclError {
-    pub fn from_body(body: &str) -> PutObjectAclError {
+    pub fn from_body(body: &str, status: u16) -> PutObjectAclError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21459,7 +21557,7 @@ impl PutObjectAclError {
                 "NoSuchKey" => PutObjectAclError::NoSuchKey(String::from(parsed_error.message)),
                 _ => PutObjectAclError::Unknown(String::from(body)),
             },
-            Err(_) => PutObjectAclError::Unknown(body.to_string()),
+            Err(_) => PutObjectAclError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -21522,7 +21620,7 @@ pub enum PutObjectTaggingError {
 }
 
 impl PutObjectTaggingError {
-    pub fn from_body(body: &str) -> PutObjectTaggingError {
+    pub fn from_body(body: &str, status: u16) -> PutObjectTaggingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21530,7 +21628,7 @@ impl PutObjectTaggingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutObjectTaggingError::Unknown(String::from(body)),
             },
-            Err(_) => PutObjectTaggingError::Unknown(body.to_string()),
+            Err(_) => PutObjectTaggingError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -21594,7 +21692,7 @@ pub enum RestoreObjectError {
 }
 
 impl RestoreObjectError {
-    pub fn from_body(body: &str) -> RestoreObjectError {
+    pub fn from_body(body: &str, status: u16) -> RestoreObjectError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21607,7 +21705,7 @@ impl RestoreObjectError {
                 }
                 _ => RestoreObjectError::Unknown(String::from(body)),
             },
-            Err(_) => RestoreObjectError::Unknown(body.to_string()),
+            Err(_) => RestoreObjectError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -21670,7 +21768,7 @@ pub enum SelectObjectContentError {
 }
 
 impl SelectObjectContentError {
-    pub fn from_body(body: &str) -> SelectObjectContentError {
+    pub fn from_body(body: &str, status: u16) -> SelectObjectContentError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21678,7 +21776,7 @@ impl SelectObjectContentError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => SelectObjectContentError::Unknown(String::from(body)),
             },
-            Err(_) => SelectObjectContentError::Unknown(body.to_string()),
+            Err(_) => SelectObjectContentError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -21742,7 +21840,7 @@ pub enum UploadPartError {
 }
 
 impl UploadPartError {
-    pub fn from_body(body: &str) -> UploadPartError {
+    pub fn from_body(body: &str, status: u16) -> UploadPartError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21750,7 +21848,7 @@ impl UploadPartError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UploadPartError::Unknown(String::from(body)),
             },
-            Err(_) => UploadPartError::Unknown(body.to_string()),
+            Err(_) => UploadPartError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -21812,7 +21910,7 @@ pub enum UploadPartCopyError {
 }
 
 impl UploadPartCopyError {
-    pub fn from_body(body: &str) -> UploadPartCopyError {
+    pub fn from_body(body: &str, status: u16) -> UploadPartCopyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21820,7 +21918,7 @@ impl UploadPartCopyError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UploadPartCopyError::Unknown(String::from(body)),
             },
-            Err(_) => UploadPartCopyError::Unknown(body.to_string()),
+            Err(_) => UploadPartCopyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -22372,6 +22470,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AbortMultipartUploadError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -22437,6 +22536,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CompleteMultipartUploadError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -22670,6 +22770,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CopyObjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -22794,6 +22895,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateBucketError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -22949,6 +23051,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateMultipartUploadError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23028,6 +23131,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23056,6 +23160,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketAnalyticsConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23083,6 +23188,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketCorsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23110,6 +23216,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketEncryptionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23138,6 +23245,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketInventoryConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23165,6 +23273,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketLifecycleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23193,6 +23302,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketMetricsConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23220,6 +23330,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23247,6 +23358,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketReplicationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23274,6 +23386,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketTaggingError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23301,6 +23414,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteBucketWebsiteError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23337,6 +23451,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteObjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23399,6 +23514,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteObjectTaggingError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23461,6 +23577,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteObjectsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23513,6 +23630,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketAccelerateConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23562,6 +23680,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketAclError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23611,6 +23730,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketAnalyticsConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23660,6 +23780,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketCorsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23707,6 +23828,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketEncryptionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23756,6 +23878,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketInventoryConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23805,6 +23928,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketLifecycleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23853,6 +23977,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketLifecycleConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23902,6 +24027,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketLocationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23949,6 +24075,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketLoggingError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -23997,6 +24124,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketMetricsConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -24046,6 +24174,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketNotificationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -24095,6 +24224,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketNotificationConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -24142,6 +24272,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -24174,6 +24305,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketReplicationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -24221,6 +24353,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketRequestPaymentError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -24268,6 +24401,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketTaggingError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -24315,6 +24449,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketVersioningError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -24362,6 +24497,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetBucketWebsiteError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -24473,6 +24609,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetObjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -24635,6 +24772,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetObjectAclError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -24689,6 +24827,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetObjectTaggingError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -24743,6 +24882,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetObjectTorrentError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -24772,6 +24912,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(HeadBucketError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -24848,6 +24989,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(HeadObjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -25015,6 +25157,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListBucketAnalyticsConfigurationsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -25068,6 +25211,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListBucketInventoryConfigurationsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -25121,6 +25265,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListBucketMetricsConfigurationsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -25163,6 +25308,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListBucketsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -25228,6 +25374,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListMultipartUploadsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -25293,6 +25440,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListObjectVersionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -25357,6 +25505,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListObjectsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -25428,6 +25577,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListObjectsV2Error::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -25481,6 +25631,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListPartsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -25547,6 +25698,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketAccelerateConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -25609,6 +25761,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketAclError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -25644,6 +25797,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketAnalyticsConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -25679,6 +25833,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketCorsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -25716,6 +25871,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketEncryptionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -25751,6 +25907,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketInventoryConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -25793,6 +25950,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketLifecycleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -25832,6 +25990,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketLifecycleConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -25869,6 +26028,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketLoggingError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -25904,6 +26064,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketMetricsConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -25941,6 +26102,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketNotificationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -25975,6 +26137,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketNotificationConfigurationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -26016,6 +26179,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -26054,6 +26218,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketReplicationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -26091,6 +26256,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketRequestPaymentError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -26125,6 +26291,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketTaggingError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -26166,6 +26333,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketVersioningError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -26203,6 +26371,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutBucketWebsiteError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -26340,6 +26509,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutObjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -26475,6 +26645,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutObjectAclError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -26535,6 +26706,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutObjectTaggingError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -26603,6 +26775,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RestoreObjectError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -26687,6 +26860,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SelectObjectContentError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -26770,6 +26944,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UploadPartError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -26934,6 +27109,7 @@ impl S3 for S3Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UploadPartCopyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }

@@ -12780,7 +12780,7 @@ pub enum AddClientIDToOpenIDConnectProviderError {
 }
 
 impl AddClientIDToOpenIDConnectProviderError {
-    pub fn from_body(body: &str) -> AddClientIDToOpenIDConnectProviderError {
+    pub fn from_body(body: &str, status: u16) -> AddClientIDToOpenIDConnectProviderError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12800,7 +12800,11 @@ impl AddClientIDToOpenIDConnectProviderError {
                 ),
                 _ => AddClientIDToOpenIDConnectProviderError::Unknown(String::from(body)),
             },
-            Err(_) => AddClientIDToOpenIDConnectProviderError::Unknown(body.to_string()),
+            Err(_) => AddClientIDToOpenIDConnectProviderError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -12879,7 +12883,7 @@ pub enum AddRoleToInstanceProfileError {
 }
 
 impl AddRoleToInstanceProfileError {
-    pub fn from_body(body: &str) -> AddRoleToInstanceProfileError {
+    pub fn from_body(body: &str, status: u16) -> AddRoleToInstanceProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12902,7 +12906,9 @@ impl AddRoleToInstanceProfileError {
                 ),
                 _ => AddRoleToInstanceProfileError::Unknown(String::from(body)),
             },
-            Err(_) => AddRoleToInstanceProfileError::Unknown(body.to_string()),
+            Err(_) => {
+                AddRoleToInstanceProfileError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -12978,7 +12984,7 @@ pub enum AddUserToGroupError {
 }
 
 impl AddUserToGroupError {
-    pub fn from_body(body: &str) -> AddUserToGroupError {
+    pub fn from_body(body: &str, status: u16) -> AddUserToGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12995,7 +13001,7 @@ impl AddUserToGroupError {
                 }
                 _ => AddUserToGroupError::Unknown(String::from(body)),
             },
-            Err(_) => AddUserToGroupError::Unknown(body.to_string()),
+            Err(_) => AddUserToGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -13071,7 +13077,7 @@ pub enum AttachGroupPolicyError {
 }
 
 impl AttachGroupPolicyError {
-    pub fn from_body(body: &str) -> AttachGroupPolicyError {
+    pub fn from_body(body: &str, status: u16) -> AttachGroupPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13094,7 +13100,7 @@ impl AttachGroupPolicyError {
                 }
                 _ => AttachGroupPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => AttachGroupPolicyError::Unknown(body.to_string()),
+            Err(_) => AttachGroupPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -13176,7 +13182,7 @@ pub enum AttachRolePolicyError {
 }
 
 impl AttachRolePolicyError {
-    pub fn from_body(body: &str) -> AttachRolePolicyError {
+    pub fn from_body(body: &str, status: u16) -> AttachRolePolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13202,7 +13208,7 @@ impl AttachRolePolicyError {
                 }
                 _ => AttachRolePolicyError::Unknown(String::from(body)),
             },
-            Err(_) => AttachRolePolicyError::Unknown(body.to_string()),
+            Err(_) => AttachRolePolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -13281,7 +13287,7 @@ pub enum AttachUserPolicyError {
 }
 
 impl AttachUserPolicyError {
-    pub fn from_body(body: &str) -> AttachUserPolicyError {
+    pub fn from_body(body: &str, status: u16) -> AttachUserPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13304,7 +13310,7 @@ impl AttachUserPolicyError {
                 }
                 _ => AttachUserPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => AttachUserPolicyError::Unknown(body.to_string()),
+            Err(_) => AttachUserPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -13384,7 +13390,7 @@ pub enum ChangePasswordError {
 }
 
 impl ChangePasswordError {
-    pub fn from_body(body: &str) -> ChangePasswordError {
+    pub fn from_body(body: &str, status: u16) -> ChangePasswordError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13412,7 +13418,7 @@ impl ChangePasswordError {
                 }
                 _ => ChangePasswordError::Unknown(String::from(body)),
             },
-            Err(_) => ChangePasswordError::Unknown(body.to_string()),
+            Err(_) => ChangePasswordError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -13487,7 +13493,7 @@ pub enum CreateAccessKeyError {
 }
 
 impl CreateAccessKeyError {
-    pub fn from_body(body: &str) -> CreateAccessKeyError {
+    pub fn from_body(body: &str, status: u16) -> CreateAccessKeyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13504,7 +13510,7 @@ impl CreateAccessKeyError {
                 }
                 _ => CreateAccessKeyError::Unknown(String::from(body)),
             },
-            Err(_) => CreateAccessKeyError::Unknown(body.to_string()),
+            Err(_) => CreateAccessKeyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -13576,7 +13582,7 @@ pub enum CreateAccountAliasError {
 }
 
 impl CreateAccountAliasError {
-    pub fn from_body(body: &str) -> CreateAccountAliasError {
+    pub fn from_body(body: &str, status: u16) -> CreateAccountAliasError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13593,7 +13599,7 @@ impl CreateAccountAliasError {
                 }
                 _ => CreateAccountAliasError::Unknown(String::from(body)),
             },
-            Err(_) => CreateAccountAliasError::Unknown(body.to_string()),
+            Err(_) => CreateAccountAliasError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -13669,7 +13675,7 @@ pub enum CreateGroupError {
 }
 
 impl CreateGroupError {
-    pub fn from_body(body: &str) -> CreateGroupError {
+    pub fn from_body(body: &str, status: u16) -> CreateGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13689,7 +13695,7 @@ impl CreateGroupError {
                 }
                 _ => CreateGroupError::Unknown(String::from(body)),
             },
-            Err(_) => CreateGroupError::Unknown(body.to_string()),
+            Err(_) => CreateGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -13762,7 +13768,7 @@ pub enum CreateInstanceProfileError {
 }
 
 impl CreateInstanceProfileError {
-    pub fn from_body(body: &str) -> CreateInstanceProfileError {
+    pub fn from_body(body: &str, status: u16) -> CreateInstanceProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13779,7 +13785,9 @@ impl CreateInstanceProfileError {
                 }
                 _ => CreateInstanceProfileError::Unknown(String::from(body)),
             },
-            Err(_) => CreateInstanceProfileError::Unknown(body.to_string()),
+            Err(_) => {
+                CreateInstanceProfileError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -13857,7 +13865,7 @@ pub enum CreateLoginProfileError {
 }
 
 impl CreateLoginProfileError {
-    pub fn from_body(body: &str) -> CreateLoginProfileError {
+    pub fn from_body(body: &str, status: u16) -> CreateLoginProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13880,7 +13888,7 @@ impl CreateLoginProfileError {
                 }
                 _ => CreateLoginProfileError::Unknown(String::from(body)),
             },
-            Err(_) => CreateLoginProfileError::Unknown(body.to_string()),
+            Err(_) => CreateLoginProfileError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -13958,7 +13966,7 @@ pub enum CreateOpenIDConnectProviderError {
 }
 
 impl CreateOpenIDConnectProviderError {
-    pub fn from_body(body: &str) -> CreateOpenIDConnectProviderError {
+    pub fn from_body(body: &str, status: u16) -> CreateOpenIDConnectProviderError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13978,7 +13986,11 @@ impl CreateOpenIDConnectProviderError {
                 )),
                 _ => CreateOpenIDConnectProviderError::Unknown(String::from(body)),
             },
-            Err(_) => CreateOpenIDConnectProviderError::Unknown(body.to_string()),
+            Err(_) => CreateOpenIDConnectProviderError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -14057,7 +14069,7 @@ pub enum CreatePolicyError {
 }
 
 impl CreatePolicyError {
-    pub fn from_body(body: &str) -> CreatePolicyError {
+    pub fn from_body(body: &str, status: u16) -> CreatePolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14080,7 +14092,7 @@ impl CreatePolicyError {
                 }
                 _ => CreatePolicyError::Unknown(String::from(body)),
             },
-            Err(_) => CreatePolicyError::Unknown(body.to_string()),
+            Err(_) => CreatePolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -14158,7 +14170,7 @@ pub enum CreatePolicyVersionError {
 }
 
 impl CreatePolicyVersionError {
-    pub fn from_body(body: &str) -> CreatePolicyVersionError {
+    pub fn from_body(body: &str, status: u16) -> CreatePolicyVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14181,7 +14193,7 @@ impl CreatePolicyVersionError {
                 }
                 _ => CreatePolicyVersionError::Unknown(String::from(body)),
             },
-            Err(_) => CreatePolicyVersionError::Unknown(body.to_string()),
+            Err(_) => CreatePolicyVersionError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -14261,7 +14273,7 @@ pub enum CreateRoleError {
 }
 
 impl CreateRoleError {
-    pub fn from_body(body: &str) -> CreateRoleError {
+    pub fn from_body(body: &str, status: u16) -> CreateRoleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14282,7 +14294,7 @@ impl CreateRoleError {
                 }
                 _ => CreateRoleError::Unknown(String::from(body)),
             },
-            Err(_) => CreateRoleError::Unknown(body.to_string()),
+            Err(_) => CreateRoleError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -14358,7 +14370,7 @@ pub enum CreateSAMLProviderError {
 }
 
 impl CreateSAMLProviderError {
-    pub fn from_body(body: &str) -> CreateSAMLProviderError {
+    pub fn from_body(body: &str, status: u16) -> CreateSAMLProviderError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14378,7 +14390,7 @@ impl CreateSAMLProviderError {
                 }
                 _ => CreateSAMLProviderError::Unknown(String::from(body)),
             },
-            Err(_) => CreateSAMLProviderError::Unknown(body.to_string()),
+            Err(_) => CreateSAMLProviderError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -14455,7 +14467,7 @@ pub enum CreateServiceLinkedRoleError {
 }
 
 impl CreateServiceLinkedRoleError {
-    pub fn from_body(body: &str) -> CreateServiceLinkedRoleError {
+    pub fn from_body(body: &str, status: u16) -> CreateServiceLinkedRoleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14475,7 +14487,9 @@ impl CreateServiceLinkedRoleError {
                 }
                 _ => CreateServiceLinkedRoleError::Unknown(String::from(body)),
             },
-            Err(_) => CreateServiceLinkedRoleError::Unknown(body.to_string()),
+            Err(_) => {
+                CreateServiceLinkedRoleError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -14550,7 +14564,7 @@ pub enum CreateServiceSpecificCredentialError {
 }
 
 impl CreateServiceSpecificCredentialError {
-    pub fn from_body(body: &str) -> CreateServiceSpecificCredentialError {
+    pub fn from_body(body: &str, status: u16) -> CreateServiceSpecificCredentialError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14567,7 +14581,11 @@ impl CreateServiceSpecificCredentialError {
                 ),
                 _ => CreateServiceSpecificCredentialError::Unknown(String::from(body)),
             },
-            Err(_) => CreateServiceSpecificCredentialError::Unknown(body.to_string()),
+            Err(_) => CreateServiceSpecificCredentialError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -14643,7 +14661,7 @@ pub enum CreateUserError {
 }
 
 impl CreateUserError {
-    pub fn from_body(body: &str) -> CreateUserError {
+    pub fn from_body(body: &str, status: u16) -> CreateUserError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14661,7 +14679,7 @@ impl CreateUserError {
                 }
                 _ => CreateUserError::Unknown(String::from(body)),
             },
-            Err(_) => CreateUserError::Unknown(body.to_string()),
+            Err(_) => CreateUserError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -14734,7 +14752,7 @@ pub enum CreateVirtualMFADeviceError {
 }
 
 impl CreateVirtualMFADeviceError {
-    pub fn from_body(body: &str) -> CreateVirtualMFADeviceError {
+    pub fn from_body(body: &str, status: u16) -> CreateVirtualMFADeviceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14751,7 +14769,9 @@ impl CreateVirtualMFADeviceError {
                 }
                 _ => CreateVirtualMFADeviceError::Unknown(String::from(body)),
             },
-            Err(_) => CreateVirtualMFADeviceError::Unknown(body.to_string()),
+            Err(_) => {
+                CreateVirtualMFADeviceError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -14827,7 +14847,7 @@ pub enum DeactivateMFADeviceError {
 }
 
 impl DeactivateMFADeviceError {
-    pub fn from_body(body: &str) -> DeactivateMFADeviceError {
+    pub fn from_body(body: &str, status: u16) -> DeactivateMFADeviceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14849,7 +14869,7 @@ impl DeactivateMFADeviceError {
                 }
                 _ => DeactivateMFADeviceError::Unknown(String::from(body)),
             },
-            Err(_) => DeactivateMFADeviceError::Unknown(body.to_string()),
+            Err(_) => DeactivateMFADeviceError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -14924,7 +14944,7 @@ pub enum DeleteAccessKeyError {
 }
 
 impl DeleteAccessKeyError {
-    pub fn from_body(body: &str) -> DeleteAccessKeyError {
+    pub fn from_body(body: &str, status: u16) -> DeleteAccessKeyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14941,7 +14961,7 @@ impl DeleteAccessKeyError {
                 }
                 _ => DeleteAccessKeyError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteAccessKeyError::Unknown(body.to_string()),
+            Err(_) => DeleteAccessKeyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -15013,7 +15033,7 @@ pub enum DeleteAccountAliasError {
 }
 
 impl DeleteAccountAliasError {
-    pub fn from_body(body: &str) -> DeleteAccountAliasError {
+    pub fn from_body(body: &str, status: u16) -> DeleteAccountAliasError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -15030,7 +15050,7 @@ impl DeleteAccountAliasError {
                 }
                 _ => DeleteAccountAliasError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteAccountAliasError::Unknown(body.to_string()),
+            Err(_) => DeleteAccountAliasError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -15104,7 +15124,7 @@ pub enum DeleteAccountPasswordPolicyError {
 }
 
 impl DeleteAccountPasswordPolicyError {
-    pub fn from_body(body: &str) -> DeleteAccountPasswordPolicyError {
+    pub fn from_body(body: &str, status: u16) -> DeleteAccountPasswordPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -15121,7 +15141,11 @@ impl DeleteAccountPasswordPolicyError {
                 )),
                 _ => DeleteAccountPasswordPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteAccountPasswordPolicyError::Unknown(body.to_string()),
+            Err(_) => DeleteAccountPasswordPolicyError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -15197,7 +15221,7 @@ pub enum DeleteGroupError {
 }
 
 impl DeleteGroupError {
-    pub fn from_body(body: &str) -> DeleteGroupError {
+    pub fn from_body(body: &str, status: u16) -> DeleteGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -15217,7 +15241,7 @@ impl DeleteGroupError {
                 }
                 _ => DeleteGroupError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteGroupError::Unknown(body.to_string()),
+            Err(_) => DeleteGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -15290,7 +15314,7 @@ pub enum DeleteGroupPolicyError {
 }
 
 impl DeleteGroupPolicyError {
-    pub fn from_body(body: &str) -> DeleteGroupPolicyError {
+    pub fn from_body(body: &str, status: u16) -> DeleteGroupPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -15307,7 +15331,7 @@ impl DeleteGroupPolicyError {
                 }
                 _ => DeleteGroupPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteGroupPolicyError::Unknown(body.to_string()),
+            Err(_) => DeleteGroupPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -15383,7 +15407,7 @@ pub enum DeleteInstanceProfileError {
 }
 
 impl DeleteInstanceProfileError {
-    pub fn from_body(body: &str) -> DeleteInstanceProfileError {
+    pub fn from_body(body: &str, status: u16) -> DeleteInstanceProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -15403,7 +15427,9 @@ impl DeleteInstanceProfileError {
                 }
                 _ => DeleteInstanceProfileError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteInstanceProfileError::Unknown(body.to_string()),
+            Err(_) => {
+                DeleteInstanceProfileError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -15480,7 +15506,7 @@ pub enum DeleteLoginProfileError {
 }
 
 impl DeleteLoginProfileError {
-    pub fn from_body(body: &str) -> DeleteLoginProfileError {
+    pub fn from_body(body: &str, status: u16) -> DeleteLoginProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -15502,7 +15528,7 @@ impl DeleteLoginProfileError {
                 }
                 _ => DeleteLoginProfileError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteLoginProfileError::Unknown(body.to_string()),
+            Err(_) => DeleteLoginProfileError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -15577,7 +15603,7 @@ pub enum DeleteOpenIDConnectProviderError {
 }
 
 impl DeleteOpenIDConnectProviderError {
-    pub fn from_body(body: &str) -> DeleteOpenIDConnectProviderError {
+    pub fn from_body(body: &str, status: u16) -> DeleteOpenIDConnectProviderError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -15594,7 +15620,11 @@ impl DeleteOpenIDConnectProviderError {
                 )),
                 _ => DeleteOpenIDConnectProviderError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteOpenIDConnectProviderError::Unknown(body.to_string()),
+            Err(_) => DeleteOpenIDConnectProviderError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -15672,7 +15702,7 @@ pub enum DeletePolicyError {
 }
 
 impl DeletePolicyError {
-    pub fn from_body(body: &str) -> DeletePolicyError {
+    pub fn from_body(body: &str, status: u16) -> DeletePolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -15695,7 +15725,7 @@ impl DeletePolicyError {
                 }
                 _ => DeletePolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DeletePolicyError::Unknown(body.to_string()),
+            Err(_) => DeletePolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -15773,7 +15803,7 @@ pub enum DeletePolicyVersionError {
 }
 
 impl DeletePolicyVersionError {
-    pub fn from_body(body: &str) -> DeletePolicyVersionError {
+    pub fn from_body(body: &str, status: u16) -> DeletePolicyVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -15796,7 +15826,7 @@ impl DeletePolicyVersionError {
                 }
                 _ => DeletePolicyVersionError::Unknown(String::from(body)),
             },
-            Err(_) => DeletePolicyVersionError::Unknown(body.to_string()),
+            Err(_) => DeletePolicyVersionError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -15876,7 +15906,7 @@ pub enum DeleteRoleError {
 }
 
 impl DeleteRoleError {
-    pub fn from_body(body: &str) -> DeleteRoleError {
+    pub fn from_body(body: &str, status: u16) -> DeleteRoleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -15897,7 +15927,7 @@ impl DeleteRoleError {
                 }
                 _ => DeleteRoleError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteRoleError::Unknown(body.to_string()),
+            Err(_) => DeleteRoleError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -15971,7 +16001,7 @@ pub enum DeleteRolePermissionsBoundaryError {
 }
 
 impl DeleteRolePermissionsBoundaryError {
-    pub fn from_body(body: &str) -> DeleteRolePermissionsBoundaryError {
+    pub fn from_body(body: &str, status: u16) -> DeleteRolePermissionsBoundaryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -15988,7 +16018,11 @@ impl DeleteRolePermissionsBoundaryError {
                 ),
                 _ => DeleteRolePermissionsBoundaryError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteRolePermissionsBoundaryError::Unknown(body.to_string()),
+            Err(_) => DeleteRolePermissionsBoundaryError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -16064,7 +16098,7 @@ pub enum DeleteRolePolicyError {
 }
 
 impl DeleteRolePolicyError {
-    pub fn from_body(body: &str) -> DeleteRolePolicyError {
+    pub fn from_body(body: &str, status: u16) -> DeleteRolePolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -16084,7 +16118,7 @@ impl DeleteRolePolicyError {
                 }
                 _ => DeleteRolePolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteRolePolicyError::Unknown(body.to_string()),
+            Err(_) => DeleteRolePolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -16159,7 +16193,7 @@ pub enum DeleteSAMLProviderError {
 }
 
 impl DeleteSAMLProviderError {
-    pub fn from_body(body: &str) -> DeleteSAMLProviderError {
+    pub fn from_body(body: &str, status: u16) -> DeleteSAMLProviderError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -16179,7 +16213,7 @@ impl DeleteSAMLProviderError {
                 }
                 _ => DeleteSAMLProviderError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteSAMLProviderError::Unknown(body.to_string()),
+            Err(_) => DeleteSAMLProviderError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -16250,7 +16284,7 @@ pub enum DeleteSSHPublicKeyError {
 }
 
 impl DeleteSSHPublicKeyError {
-    pub fn from_body(body: &str) -> DeleteSSHPublicKeyError {
+    pub fn from_body(body: &str, status: u16) -> DeleteSSHPublicKeyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -16261,7 +16295,7 @@ impl DeleteSSHPublicKeyError {
                 }
                 _ => DeleteSSHPublicKeyError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteSSHPublicKeyError::Unknown(body.to_string()),
+            Err(_) => DeleteSSHPublicKeyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -16335,7 +16369,7 @@ pub enum DeleteServerCertificateError {
 }
 
 impl DeleteServerCertificateError {
-    pub fn from_body(body: &str) -> DeleteServerCertificateError {
+    pub fn from_body(body: &str, status: u16) -> DeleteServerCertificateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -16355,7 +16389,9 @@ impl DeleteServerCertificateError {
                 }
                 _ => DeleteServerCertificateError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteServerCertificateError::Unknown(body.to_string()),
+            Err(_) => {
+                DeleteServerCertificateError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -16430,7 +16466,7 @@ pub enum DeleteServiceLinkedRoleError {
 }
 
 impl DeleteServiceLinkedRoleError {
-    pub fn from_body(body: &str) -> DeleteServiceLinkedRoleError {
+    pub fn from_body(body: &str, status: u16) -> DeleteServiceLinkedRoleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -16447,7 +16483,9 @@ impl DeleteServiceLinkedRoleError {
                 }
                 _ => DeleteServiceLinkedRoleError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteServiceLinkedRoleError::Unknown(body.to_string()),
+            Err(_) => {
+                DeleteServiceLinkedRoleError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -16517,7 +16555,7 @@ pub enum DeleteServiceSpecificCredentialError {
 }
 
 impl DeleteServiceSpecificCredentialError {
-    pub fn from_body(body: &str) -> DeleteServiceSpecificCredentialError {
+    pub fn from_body(body: &str, status: u16) -> DeleteServiceSpecificCredentialError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -16528,7 +16566,11 @@ impl DeleteServiceSpecificCredentialError {
                 )),
                 _ => DeleteServiceSpecificCredentialError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteServiceSpecificCredentialError::Unknown(body.to_string()),
+            Err(_) => DeleteServiceSpecificCredentialError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -16600,7 +16642,7 @@ pub enum DeleteSigningCertificateError {
 }
 
 impl DeleteSigningCertificateError {
-    pub fn from_body(body: &str) -> DeleteSigningCertificateError {
+    pub fn from_body(body: &str, status: u16) -> DeleteSigningCertificateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -16617,7 +16659,9 @@ impl DeleteSigningCertificateError {
                 )),
                 _ => DeleteSigningCertificateError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteSigningCertificateError::Unknown(body.to_string()),
+            Err(_) => {
+                DeleteSigningCertificateError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -16693,7 +16737,7 @@ pub enum DeleteUserError {
 }
 
 impl DeleteUserError {
-    pub fn from_body(body: &str) -> DeleteUserError {
+    pub fn from_body(body: &str, status: u16) -> DeleteUserError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -16711,7 +16755,7 @@ impl DeleteUserError {
                 }
                 _ => DeleteUserError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteUserError::Unknown(body.to_string()),
+            Err(_) => DeleteUserError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -16782,7 +16826,7 @@ pub enum DeleteUserPermissionsBoundaryError {
 }
 
 impl DeleteUserPermissionsBoundaryError {
-    pub fn from_body(body: &str) -> DeleteUserPermissionsBoundaryError {
+    pub fn from_body(body: &str, status: u16) -> DeleteUserPermissionsBoundaryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -16796,7 +16840,11 @@ impl DeleteUserPermissionsBoundaryError {
                 ),
                 _ => DeleteUserPermissionsBoundaryError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteUserPermissionsBoundaryError::Unknown(body.to_string()),
+            Err(_) => DeleteUserPermissionsBoundaryError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -16869,7 +16917,7 @@ pub enum DeleteUserPolicyError {
 }
 
 impl DeleteUserPolicyError {
-    pub fn from_body(body: &str) -> DeleteUserPolicyError {
+    pub fn from_body(body: &str, status: u16) -> DeleteUserPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -16886,7 +16934,7 @@ impl DeleteUserPolicyError {
                 }
                 _ => DeleteUserPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteUserPolicyError::Unknown(body.to_string()),
+            Err(_) => DeleteUserPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -16960,7 +17008,7 @@ pub enum DeleteVirtualMFADeviceError {
 }
 
 impl DeleteVirtualMFADeviceError {
-    pub fn from_body(body: &str) -> DeleteVirtualMFADeviceError {
+    pub fn from_body(body: &str, status: u16) -> DeleteVirtualMFADeviceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -16980,7 +17028,9 @@ impl DeleteVirtualMFADeviceError {
                 }
                 _ => DeleteVirtualMFADeviceError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteVirtualMFADeviceError::Unknown(body.to_string()),
+            Err(_) => {
+                DeleteVirtualMFADeviceError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -17057,7 +17107,7 @@ pub enum DetachGroupPolicyError {
 }
 
 impl DetachGroupPolicyError {
-    pub fn from_body(body: &str) -> DetachGroupPolicyError {
+    pub fn from_body(body: &str, status: u16) -> DetachGroupPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17077,7 +17127,7 @@ impl DetachGroupPolicyError {
                 }
                 _ => DetachGroupPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DetachGroupPolicyError::Unknown(body.to_string()),
+            Err(_) => DetachGroupPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -17156,7 +17206,7 @@ pub enum DetachRolePolicyError {
 }
 
 impl DetachRolePolicyError {
-    pub fn from_body(body: &str) -> DetachRolePolicyError {
+    pub fn from_body(body: &str, status: u16) -> DetachRolePolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17179,7 +17229,7 @@ impl DetachRolePolicyError {
                 }
                 _ => DetachRolePolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DetachRolePolicyError::Unknown(body.to_string()),
+            Err(_) => DetachRolePolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -17255,7 +17305,7 @@ pub enum DetachUserPolicyError {
 }
 
 impl DetachUserPolicyError {
-    pub fn from_body(body: &str) -> DetachUserPolicyError {
+    pub fn from_body(body: &str, status: u16) -> DetachUserPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17275,7 +17325,7 @@ impl DetachUserPolicyError {
                 }
                 _ => DetachUserPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DetachUserPolicyError::Unknown(body.to_string()),
+            Err(_) => DetachUserPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -17354,7 +17404,7 @@ pub enum EnableMFADeviceError {
 }
 
 impl EnableMFADeviceError {
-    pub fn from_body(body: &str) -> EnableMFADeviceError {
+    pub fn from_body(body: &str, status: u16) -> EnableMFADeviceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17382,7 +17432,7 @@ impl EnableMFADeviceError {
                 }
                 _ => EnableMFADeviceError::Unknown(String::from(body)),
             },
-            Err(_) => EnableMFADeviceError::Unknown(body.to_string()),
+            Err(_) => EnableMFADeviceError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -17455,7 +17505,7 @@ pub enum GenerateCredentialReportError {
 }
 
 impl GenerateCredentialReportError {
-    pub fn from_body(body: &str) -> GenerateCredentialReportError {
+    pub fn from_body(body: &str, status: u16) -> GenerateCredentialReportError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17469,7 +17519,9 @@ impl GenerateCredentialReportError {
                 )),
                 _ => GenerateCredentialReportError::Unknown(String::from(body)),
             },
-            Err(_) => GenerateCredentialReportError::Unknown(body.to_string()),
+            Err(_) => {
+                GenerateCredentialReportError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -17538,7 +17590,7 @@ pub enum GetAccessKeyLastUsedError {
 }
 
 impl GetAccessKeyLastUsedError {
-    pub fn from_body(body: &str) -> GetAccessKeyLastUsedError {
+    pub fn from_body(body: &str, status: u16) -> GetAccessKeyLastUsedError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17549,7 +17601,9 @@ impl GetAccessKeyLastUsedError {
                 }
                 _ => GetAccessKeyLastUsedError::Unknown(String::from(body)),
             },
-            Err(_) => GetAccessKeyLastUsedError::Unknown(body.to_string()),
+            Err(_) => {
+                GetAccessKeyLastUsedError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -17617,7 +17671,7 @@ pub enum GetAccountAuthorizationDetailsError {
 }
 
 impl GetAccountAuthorizationDetailsError {
-    pub fn from_body(body: &str) -> GetAccountAuthorizationDetailsError {
+    pub fn from_body(body: &str, status: u16) -> GetAccountAuthorizationDetailsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17628,7 +17682,11 @@ impl GetAccountAuthorizationDetailsError {
                 ),
                 _ => GetAccountAuthorizationDetailsError::Unknown(String::from(body)),
             },
-            Err(_) => GetAccountAuthorizationDetailsError::Unknown(body.to_string()),
+            Err(_) => GetAccountAuthorizationDetailsError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -17698,7 +17756,7 @@ pub enum GetAccountPasswordPolicyError {
 }
 
 impl GetAccountPasswordPolicyError {
-    pub fn from_body(body: &str) -> GetAccountPasswordPolicyError {
+    pub fn from_body(body: &str, status: u16) -> GetAccountPasswordPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17712,7 +17770,9 @@ impl GetAccountPasswordPolicyError {
                 )),
                 _ => GetAccountPasswordPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => GetAccountPasswordPolicyError::Unknown(body.to_string()),
+            Err(_) => {
+                GetAccountPasswordPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -17781,7 +17841,7 @@ pub enum GetAccountSummaryError {
 }
 
 impl GetAccountSummaryError {
-    pub fn from_body(body: &str) -> GetAccountSummaryError {
+    pub fn from_body(body: &str, status: u16) -> GetAccountSummaryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17792,7 +17852,7 @@ impl GetAccountSummaryError {
                 }
                 _ => GetAccountSummaryError::Unknown(String::from(body)),
             },
-            Err(_) => GetAccountSummaryError::Unknown(body.to_string()),
+            Err(_) => GetAccountSummaryError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -17860,7 +17920,7 @@ pub enum GetContextKeysForCustomPolicyError {
 }
 
 impl GetContextKeysForCustomPolicyError {
-    pub fn from_body(body: &str) -> GetContextKeysForCustomPolicyError {
+    pub fn from_body(body: &str, status: u16) -> GetContextKeysForCustomPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17871,7 +17931,11 @@ impl GetContextKeysForCustomPolicyError {
                 )),
                 _ => GetContextKeysForCustomPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => GetContextKeysForCustomPolicyError::Unknown(body.to_string()),
+            Err(_) => GetContextKeysForCustomPolicyError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -17941,7 +18005,7 @@ pub enum GetContextKeysForPrincipalPolicyError {
 }
 
 impl GetContextKeysForPrincipalPolicyError {
-    pub fn from_body(body: &str) -> GetContextKeysForPrincipalPolicyError {
+    pub fn from_body(body: &str, status: u16) -> GetContextKeysForPrincipalPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -17955,7 +18019,11 @@ impl GetContextKeysForPrincipalPolicyError {
                 ),
                 _ => GetContextKeysForPrincipalPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => GetContextKeysForPrincipalPolicyError::Unknown(body.to_string()),
+            Err(_) => GetContextKeysForPrincipalPolicyError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -18030,7 +18098,7 @@ pub enum GetCredentialReportError {
 }
 
 impl GetCredentialReportError {
-    pub fn from_body(body: &str) -> GetCredentialReportError {
+    pub fn from_body(body: &str, status: u16) -> GetCredentialReportError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18050,7 +18118,7 @@ impl GetCredentialReportError {
                 }
                 _ => GetCredentialReportError::Unknown(String::from(body)),
             },
-            Err(_) => GetCredentialReportError::Unknown(body.to_string()),
+            Err(_) => GetCredentialReportError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -18123,7 +18191,7 @@ pub enum GetGroupError {
 }
 
 impl GetGroupError {
-    pub fn from_body(body: &str) -> GetGroupError {
+    pub fn from_body(body: &str, status: u16) -> GetGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18135,7 +18203,7 @@ impl GetGroupError {
                 }
                 _ => GetGroupError::Unknown(String::from(body)),
             },
-            Err(_) => GetGroupError::Unknown(body.to_string()),
+            Err(_) => GetGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -18204,7 +18272,7 @@ pub enum GetGroupPolicyError {
 }
 
 impl GetGroupPolicyError {
-    pub fn from_body(body: &str) -> GetGroupPolicyError {
+    pub fn from_body(body: &str, status: u16) -> GetGroupPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18218,7 +18286,7 @@ impl GetGroupPolicyError {
                 }
                 _ => GetGroupPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => GetGroupPolicyError::Unknown(body.to_string()),
+            Err(_) => GetGroupPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -18287,7 +18355,7 @@ pub enum GetInstanceProfileError {
 }
 
 impl GetInstanceProfileError {
-    pub fn from_body(body: &str) -> GetInstanceProfileError {
+    pub fn from_body(body: &str, status: u16) -> GetInstanceProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18301,7 +18369,7 @@ impl GetInstanceProfileError {
                 }
                 _ => GetInstanceProfileError::Unknown(String::from(body)),
             },
-            Err(_) => GetInstanceProfileError::Unknown(body.to_string()),
+            Err(_) => GetInstanceProfileError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -18372,7 +18440,7 @@ pub enum GetLoginProfileError {
 }
 
 impl GetLoginProfileError {
-    pub fn from_body(body: &str) -> GetLoginProfileError {
+    pub fn from_body(body: &str, status: u16) -> GetLoginProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18386,7 +18454,7 @@ impl GetLoginProfileError {
                 }
                 _ => GetLoginProfileError::Unknown(String::from(body)),
             },
-            Err(_) => GetLoginProfileError::Unknown(body.to_string()),
+            Err(_) => GetLoginProfileError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -18457,7 +18525,7 @@ pub enum GetOpenIDConnectProviderError {
 }
 
 impl GetOpenIDConnectProviderError {
-    pub fn from_body(body: &str) -> GetOpenIDConnectProviderError {
+    pub fn from_body(body: &str, status: u16) -> GetOpenIDConnectProviderError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18474,7 +18542,9 @@ impl GetOpenIDConnectProviderError {
                 )),
                 _ => GetOpenIDConnectProviderError::Unknown(String::from(body)),
             },
-            Err(_) => GetOpenIDConnectProviderError::Unknown(body.to_string()),
+            Err(_) => {
+                GetOpenIDConnectProviderError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -18548,7 +18618,7 @@ pub enum GetPolicyError {
 }
 
 impl GetPolicyError {
-    pub fn from_body(body: &str) -> GetPolicyError {
+    pub fn from_body(body: &str, status: u16) -> GetPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18561,7 +18631,7 @@ impl GetPolicyError {
                 }
                 _ => GetPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => GetPolicyError::Unknown(body.to_string()),
+            Err(_) => GetPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -18633,7 +18703,7 @@ pub enum GetPolicyVersionError {
 }
 
 impl GetPolicyVersionError {
-    pub fn from_body(body: &str) -> GetPolicyVersionError {
+    pub fn from_body(body: &str, status: u16) -> GetPolicyVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18650,7 +18720,7 @@ impl GetPolicyVersionError {
                 }
                 _ => GetPolicyVersionError::Unknown(String::from(body)),
             },
-            Err(_) => GetPolicyVersionError::Unknown(body.to_string()),
+            Err(_) => GetPolicyVersionError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -18720,7 +18790,7 @@ pub enum GetRoleError {
 }
 
 impl GetRoleError {
-    pub fn from_body(body: &str) -> GetRoleError {
+    pub fn from_body(body: &str, status: u16) -> GetRoleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18732,7 +18802,7 @@ impl GetRoleError {
                 }
                 _ => GetRoleError::Unknown(String::from(body)),
             },
-            Err(_) => GetRoleError::Unknown(body.to_string()),
+            Err(_) => GetRoleError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -18801,7 +18871,7 @@ pub enum GetRolePolicyError {
 }
 
 impl GetRolePolicyError {
-    pub fn from_body(body: &str) -> GetRolePolicyError {
+    pub fn from_body(body: &str, status: u16) -> GetRolePolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18815,7 +18885,7 @@ impl GetRolePolicyError {
                 }
                 _ => GetRolePolicyError::Unknown(String::from(body)),
             },
-            Err(_) => GetRolePolicyError::Unknown(body.to_string()),
+            Err(_) => GetRolePolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -18886,7 +18956,7 @@ pub enum GetSAMLProviderError {
 }
 
 impl GetSAMLProviderError {
-    pub fn from_body(body: &str) -> GetSAMLProviderError {
+    pub fn from_body(body: &str, status: u16) -> GetSAMLProviderError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18903,7 +18973,7 @@ impl GetSAMLProviderError {
                 }
                 _ => GetSAMLProviderError::Unknown(String::from(body)),
             },
-            Err(_) => GetSAMLProviderError::Unknown(body.to_string()),
+            Err(_) => GetSAMLProviderError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -18973,7 +19043,7 @@ pub enum GetSSHPublicKeyError {
 }
 
 impl GetSSHPublicKeyError {
-    pub fn from_body(body: &str) -> GetSSHPublicKeyError {
+    pub fn from_body(body: &str, status: u16) -> GetSSHPublicKeyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18989,7 +19059,7 @@ impl GetSSHPublicKeyError {
                 }
                 _ => GetSSHPublicKeyError::Unknown(String::from(body)),
             },
-            Err(_) => GetSSHPublicKeyError::Unknown(body.to_string()),
+            Err(_) => GetSSHPublicKeyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -19058,7 +19128,7 @@ pub enum GetServerCertificateError {
 }
 
 impl GetServerCertificateError {
-    pub fn from_body(body: &str) -> GetServerCertificateError {
+    pub fn from_body(body: &str, status: u16) -> GetServerCertificateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19072,7 +19142,9 @@ impl GetServerCertificateError {
                 }
                 _ => GetServerCertificateError::Unknown(String::from(body)),
             },
-            Err(_) => GetServerCertificateError::Unknown(body.to_string()),
+            Err(_) => {
+                GetServerCertificateError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -19145,7 +19217,7 @@ pub enum GetServiceLinkedRoleDeletionStatusError {
 }
 
 impl GetServiceLinkedRoleDeletionStatusError {
-    pub fn from_body(body: &str) -> GetServiceLinkedRoleDeletionStatusError {
+    pub fn from_body(body: &str, status: u16) -> GetServiceLinkedRoleDeletionStatusError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19162,7 +19234,11 @@ impl GetServiceLinkedRoleDeletionStatusError {
                 ),
                 _ => GetServiceLinkedRoleDeletionStatusError::Unknown(String::from(body)),
             },
-            Err(_) => GetServiceLinkedRoleDeletionStatusError::Unknown(body.to_string()),
+            Err(_) => GetServiceLinkedRoleDeletionStatusError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -19234,7 +19310,7 @@ pub enum GetUserError {
 }
 
 impl GetUserError {
-    pub fn from_body(body: &str) -> GetUserError {
+    pub fn from_body(body: &str, status: u16) -> GetUserError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19246,7 +19322,7 @@ impl GetUserError {
                 }
                 _ => GetUserError::Unknown(String::from(body)),
             },
-            Err(_) => GetUserError::Unknown(body.to_string()),
+            Err(_) => GetUserError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -19315,7 +19391,7 @@ pub enum GetUserPolicyError {
 }
 
 impl GetUserPolicyError {
-    pub fn from_body(body: &str) -> GetUserPolicyError {
+    pub fn from_body(body: &str, status: u16) -> GetUserPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19329,7 +19405,7 @@ impl GetUserPolicyError {
                 }
                 _ => GetUserPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => GetUserPolicyError::Unknown(body.to_string()),
+            Err(_) => GetUserPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -19398,7 +19474,7 @@ pub enum ListAccessKeysError {
 }
 
 impl ListAccessKeysError {
-    pub fn from_body(body: &str) -> ListAccessKeysError {
+    pub fn from_body(body: &str, status: u16) -> ListAccessKeysError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19412,7 +19488,7 @@ impl ListAccessKeysError {
                 }
                 _ => ListAccessKeysError::Unknown(String::from(body)),
             },
-            Err(_) => ListAccessKeysError::Unknown(body.to_string()),
+            Err(_) => ListAccessKeysError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -19479,7 +19555,7 @@ pub enum ListAccountAliasesError {
 }
 
 impl ListAccountAliasesError {
-    pub fn from_body(body: &str) -> ListAccountAliasesError {
+    pub fn from_body(body: &str, status: u16) -> ListAccountAliasesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19490,7 +19566,7 @@ impl ListAccountAliasesError {
                 }
                 _ => ListAccountAliasesError::Unknown(String::from(body)),
             },
-            Err(_) => ListAccountAliasesError::Unknown(body.to_string()),
+            Err(_) => ListAccountAliasesError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -19562,7 +19638,7 @@ pub enum ListAttachedGroupPoliciesError {
 }
 
 impl ListAttachedGroupPoliciesError {
-    pub fn from_body(body: &str) -> ListAttachedGroupPoliciesError {
+    pub fn from_body(body: &str, status: u16) -> ListAttachedGroupPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19579,7 +19655,9 @@ impl ListAttachedGroupPoliciesError {
                 )),
                 _ => ListAttachedGroupPoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => ListAttachedGroupPoliciesError::Unknown(body.to_string()),
+            Err(_) => {
+                ListAttachedGroupPoliciesError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -19653,7 +19731,7 @@ pub enum ListAttachedRolePoliciesError {
 }
 
 impl ListAttachedRolePoliciesError {
-    pub fn from_body(body: &str) -> ListAttachedRolePoliciesError {
+    pub fn from_body(body: &str, status: u16) -> ListAttachedRolePoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19670,7 +19748,9 @@ impl ListAttachedRolePoliciesError {
                 )),
                 _ => ListAttachedRolePoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => ListAttachedRolePoliciesError::Unknown(body.to_string()),
+            Err(_) => {
+                ListAttachedRolePoliciesError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -19744,7 +19824,7 @@ pub enum ListAttachedUserPoliciesError {
 }
 
 impl ListAttachedUserPoliciesError {
-    pub fn from_body(body: &str) -> ListAttachedUserPoliciesError {
+    pub fn from_body(body: &str, status: u16) -> ListAttachedUserPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19761,7 +19841,9 @@ impl ListAttachedUserPoliciesError {
                 )),
                 _ => ListAttachedUserPoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => ListAttachedUserPoliciesError::Unknown(body.to_string()),
+            Err(_) => {
+                ListAttachedUserPoliciesError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -19835,7 +19917,7 @@ pub enum ListEntitiesForPolicyError {
 }
 
 impl ListEntitiesForPolicyError {
-    pub fn from_body(body: &str) -> ListEntitiesForPolicyError {
+    pub fn from_body(body: &str, status: u16) -> ListEntitiesForPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19852,7 +19934,9 @@ impl ListEntitiesForPolicyError {
                 }
                 _ => ListEntitiesForPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => ListEntitiesForPolicyError::Unknown(body.to_string()),
+            Err(_) => {
+                ListEntitiesForPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -19924,7 +20008,7 @@ pub enum ListGroupPoliciesError {
 }
 
 impl ListGroupPoliciesError {
-    pub fn from_body(body: &str) -> ListGroupPoliciesError {
+    pub fn from_body(body: &str, status: u16) -> ListGroupPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19938,7 +20022,7 @@ impl ListGroupPoliciesError {
                 }
                 _ => ListGroupPoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => ListGroupPoliciesError::Unknown(body.to_string()),
+            Err(_) => ListGroupPoliciesError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -20007,7 +20091,7 @@ pub enum ListGroupsError {
 }
 
 impl ListGroupsError {
-    pub fn from_body(body: &str) -> ListGroupsError {
+    pub fn from_body(body: &str, status: u16) -> ListGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20018,7 +20102,7 @@ impl ListGroupsError {
                 }
                 _ => ListGroupsError::Unknown(String::from(body)),
             },
-            Err(_) => ListGroupsError::Unknown(body.to_string()),
+            Err(_) => ListGroupsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -20086,7 +20170,7 @@ pub enum ListGroupsForUserError {
 }
 
 impl ListGroupsForUserError {
-    pub fn from_body(body: &str) -> ListGroupsForUserError {
+    pub fn from_body(body: &str, status: u16) -> ListGroupsForUserError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20100,7 +20184,7 @@ impl ListGroupsForUserError {
                 }
                 _ => ListGroupsForUserError::Unknown(String::from(body)),
             },
-            Err(_) => ListGroupsForUserError::Unknown(body.to_string()),
+            Err(_) => ListGroupsForUserError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -20169,7 +20253,7 @@ pub enum ListInstanceProfilesError {
 }
 
 impl ListInstanceProfilesError {
-    pub fn from_body(body: &str) -> ListInstanceProfilesError {
+    pub fn from_body(body: &str, status: u16) -> ListInstanceProfilesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20180,7 +20264,9 @@ impl ListInstanceProfilesError {
                 }
                 _ => ListInstanceProfilesError::Unknown(String::from(body)),
             },
-            Err(_) => ListInstanceProfilesError::Unknown(body.to_string()),
+            Err(_) => {
+                ListInstanceProfilesError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -20250,7 +20336,7 @@ pub enum ListInstanceProfilesForRoleError {
 }
 
 impl ListInstanceProfilesForRoleError {
-    pub fn from_body(body: &str) -> ListInstanceProfilesForRoleError {
+    pub fn from_body(body: &str, status: u16) -> ListInstanceProfilesForRoleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20264,7 +20350,11 @@ impl ListInstanceProfilesForRoleError {
                 )),
                 _ => ListInstanceProfilesForRoleError::Unknown(String::from(body)),
             },
-            Err(_) => ListInstanceProfilesForRoleError::Unknown(body.to_string()),
+            Err(_) => ListInstanceProfilesForRoleError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -20335,7 +20425,7 @@ pub enum ListMFADevicesError {
 }
 
 impl ListMFADevicesError {
-    pub fn from_body(body: &str) -> ListMFADevicesError {
+    pub fn from_body(body: &str, status: u16) -> ListMFADevicesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20349,7 +20439,7 @@ impl ListMFADevicesError {
                 }
                 _ => ListMFADevicesError::Unknown(String::from(body)),
             },
-            Err(_) => ListMFADevicesError::Unknown(body.to_string()),
+            Err(_) => ListMFADevicesError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -20416,7 +20506,7 @@ pub enum ListOpenIDConnectProvidersError {
 }
 
 impl ListOpenIDConnectProvidersError {
-    pub fn from_body(body: &str) -> ListOpenIDConnectProvidersError {
+    pub fn from_body(body: &str, status: u16) -> ListOpenIDConnectProvidersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20427,7 +20517,9 @@ impl ListOpenIDConnectProvidersError {
                 )),
                 _ => ListOpenIDConnectProvidersError::Unknown(String::from(body)),
             },
-            Err(_) => ListOpenIDConnectProvidersError::Unknown(body.to_string()),
+            Err(_) => {
+                ListOpenIDConnectProvidersError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -20495,7 +20587,7 @@ pub enum ListPoliciesError {
 }
 
 impl ListPoliciesError {
-    pub fn from_body(body: &str) -> ListPoliciesError {
+    pub fn from_body(body: &str, status: u16) -> ListPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20506,7 +20598,7 @@ impl ListPoliciesError {
                 }
                 _ => ListPoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => ListPoliciesError::Unknown(body.to_string()),
+            Err(_) => ListPoliciesError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -20576,7 +20668,7 @@ pub enum ListPolicyVersionsError {
 }
 
 impl ListPolicyVersionsError {
-    pub fn from_body(body: &str) -> ListPolicyVersionsError {
+    pub fn from_body(body: &str, status: u16) -> ListPolicyVersionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20593,7 +20685,7 @@ impl ListPolicyVersionsError {
                 }
                 _ => ListPolicyVersionsError::Unknown(String::from(body)),
             },
-            Err(_) => ListPolicyVersionsError::Unknown(body.to_string()),
+            Err(_) => ListPolicyVersionsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -20665,7 +20757,7 @@ pub enum ListRolePoliciesError {
 }
 
 impl ListRolePoliciesError {
-    pub fn from_body(body: &str) -> ListRolePoliciesError {
+    pub fn from_body(body: &str, status: u16) -> ListRolePoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20679,7 +20771,7 @@ impl ListRolePoliciesError {
                 }
                 _ => ListRolePoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => ListRolePoliciesError::Unknown(body.to_string()),
+            Err(_) => ListRolePoliciesError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -20746,7 +20838,7 @@ pub enum ListRolesError {
 }
 
 impl ListRolesError {
-    pub fn from_body(body: &str) -> ListRolesError {
+    pub fn from_body(body: &str, status: u16) -> ListRolesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20757,7 +20849,7 @@ impl ListRolesError {
                 }
                 _ => ListRolesError::Unknown(String::from(body)),
             },
-            Err(_) => ListRolesError::Unknown(body.to_string()),
+            Err(_) => ListRolesError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -20823,7 +20915,7 @@ pub enum ListSAMLProvidersError {
 }
 
 impl ListSAMLProvidersError {
-    pub fn from_body(body: &str) -> ListSAMLProvidersError {
+    pub fn from_body(body: &str, status: u16) -> ListSAMLProvidersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20834,7 +20926,7 @@ impl ListSAMLProvidersError {
                 }
                 _ => ListSAMLProvidersError::Unknown(String::from(body)),
             },
-            Err(_) => ListSAMLProvidersError::Unknown(body.to_string()),
+            Err(_) => ListSAMLProvidersError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -20902,7 +20994,7 @@ pub enum ListSSHPublicKeysError {
 }
 
 impl ListSSHPublicKeysError {
-    pub fn from_body(body: &str) -> ListSSHPublicKeysError {
+    pub fn from_body(body: &str, status: u16) -> ListSSHPublicKeysError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20913,7 +21005,7 @@ impl ListSSHPublicKeysError {
                 }
                 _ => ListSSHPublicKeysError::Unknown(String::from(body)),
             },
-            Err(_) => ListSSHPublicKeysError::Unknown(body.to_string()),
+            Err(_) => ListSSHPublicKeysError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -20981,7 +21073,7 @@ pub enum ListServerCertificatesError {
 }
 
 impl ListServerCertificatesError {
-    pub fn from_body(body: &str) -> ListServerCertificatesError {
+    pub fn from_body(body: &str, status: u16) -> ListServerCertificatesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20992,7 +21084,9 @@ impl ListServerCertificatesError {
                 }
                 _ => ListServerCertificatesError::Unknown(String::from(body)),
             },
-            Err(_) => ListServerCertificatesError::Unknown(body.to_string()),
+            Err(_) => {
+                ListServerCertificatesError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -21062,7 +21156,7 @@ pub enum ListServiceSpecificCredentialsError {
 }
 
 impl ListServiceSpecificCredentialsError {
-    pub fn from_body(body: &str) -> ListServiceSpecificCredentialsError {
+    pub fn from_body(body: &str, status: u16) -> ListServiceSpecificCredentialsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21076,7 +21170,11 @@ impl ListServiceSpecificCredentialsError {
                 ),
                 _ => ListServiceSpecificCredentialsError::Unknown(String::from(body)),
             },
-            Err(_) => ListServiceSpecificCredentialsError::Unknown(body.to_string()),
+            Err(_) => ListServiceSpecificCredentialsError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -21147,7 +21245,7 @@ pub enum ListSigningCertificatesError {
 }
 
 impl ListSigningCertificatesError {
-    pub fn from_body(body: &str) -> ListSigningCertificatesError {
+    pub fn from_body(body: &str, status: u16) -> ListSigningCertificatesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21161,7 +21259,9 @@ impl ListSigningCertificatesError {
                 }
                 _ => ListSigningCertificatesError::Unknown(String::from(body)),
             },
-            Err(_) => ListSigningCertificatesError::Unknown(body.to_string()),
+            Err(_) => {
+                ListSigningCertificatesError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -21232,7 +21332,7 @@ pub enum ListUserPoliciesError {
 }
 
 impl ListUserPoliciesError {
-    pub fn from_body(body: &str) -> ListUserPoliciesError {
+    pub fn from_body(body: &str, status: u16) -> ListUserPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21246,7 +21346,7 @@ impl ListUserPoliciesError {
                 }
                 _ => ListUserPoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => ListUserPoliciesError::Unknown(body.to_string()),
+            Err(_) => ListUserPoliciesError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -21313,7 +21413,7 @@ pub enum ListUsersError {
 }
 
 impl ListUsersError {
-    pub fn from_body(body: &str) -> ListUsersError {
+    pub fn from_body(body: &str, status: u16) -> ListUsersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21324,7 +21424,7 @@ impl ListUsersError {
                 }
                 _ => ListUsersError::Unknown(String::from(body)),
             },
-            Err(_) => ListUsersError::Unknown(body.to_string()),
+            Err(_) => ListUsersError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -21388,7 +21488,7 @@ pub enum ListVirtualMFADevicesError {
 }
 
 impl ListVirtualMFADevicesError {
-    pub fn from_body(body: &str) -> ListVirtualMFADevicesError {
+    pub fn from_body(body: &str, status: u16) -> ListVirtualMFADevicesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21396,7 +21496,9 @@ impl ListVirtualMFADevicesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListVirtualMFADevicesError::Unknown(String::from(body)),
             },
-            Err(_) => ListVirtualMFADevicesError::Unknown(body.to_string()),
+            Err(_) => {
+                ListVirtualMFADevicesError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -21469,7 +21571,7 @@ pub enum PutGroupPolicyError {
 }
 
 impl PutGroupPolicyError {
-    pub fn from_body(body: &str) -> PutGroupPolicyError {
+    pub fn from_body(body: &str, status: u16) -> PutGroupPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21489,7 +21591,7 @@ impl PutGroupPolicyError {
                 }
                 _ => PutGroupPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => PutGroupPolicyError::Unknown(body.to_string()),
+            Err(_) => PutGroupPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -21566,7 +21668,7 @@ pub enum PutRolePermissionsBoundaryError {
 }
 
 impl PutRolePermissionsBoundaryError {
-    pub fn from_body(body: &str) -> PutRolePermissionsBoundaryError {
+    pub fn from_body(body: &str, status: u16) -> PutRolePermissionsBoundaryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21589,7 +21691,9 @@ impl PutRolePermissionsBoundaryError {
                 ),
                 _ => PutRolePermissionsBoundaryError::Unknown(String::from(body)),
             },
-            Err(_) => PutRolePermissionsBoundaryError::Unknown(body.to_string()),
+            Err(_) => {
+                PutRolePermissionsBoundaryError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -21669,7 +21773,7 @@ pub enum PutRolePolicyError {
 }
 
 impl PutRolePolicyError {
-    pub fn from_body(body: &str) -> PutRolePolicyError {
+    pub fn from_body(body: &str, status: u16) -> PutRolePolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21692,7 +21796,7 @@ impl PutRolePolicyError {
                 }
                 _ => PutRolePolicyError::Unknown(String::from(body)),
             },
-            Err(_) => PutRolePolicyError::Unknown(body.to_string()),
+            Err(_) => PutRolePolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -21768,7 +21872,7 @@ pub enum PutUserPermissionsBoundaryError {
 }
 
 impl PutUserPermissionsBoundaryError {
-    pub fn from_body(body: &str) -> PutUserPermissionsBoundaryError {
+    pub fn from_body(body: &str, status: u16) -> PutUserPermissionsBoundaryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21788,7 +21892,9 @@ impl PutUserPermissionsBoundaryError {
                 )),
                 _ => PutUserPermissionsBoundaryError::Unknown(String::from(body)),
             },
-            Err(_) => PutUserPermissionsBoundaryError::Unknown(body.to_string()),
+            Err(_) => {
+                PutUserPermissionsBoundaryError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -21865,7 +21971,7 @@ pub enum PutUserPolicyError {
 }
 
 impl PutUserPolicyError {
-    pub fn from_body(body: &str) -> PutUserPolicyError {
+    pub fn from_body(body: &str, status: u16) -> PutUserPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21885,7 +21991,7 @@ impl PutUserPolicyError {
                 }
                 _ => PutUserPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => PutUserPolicyError::Unknown(body.to_string()),
+            Err(_) => PutUserPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -21958,7 +22064,7 @@ pub enum RemoveClientIDFromOpenIDConnectProviderError {
 }
 
 impl RemoveClientIDFromOpenIDConnectProviderError {
-    pub fn from_body(body: &str) -> RemoveClientIDFromOpenIDConnectProviderError {
+    pub fn from_body(body: &str, status: u16) -> RemoveClientIDFromOpenIDConnectProviderError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21975,7 +22081,11 @@ impl RemoveClientIDFromOpenIDConnectProviderError {
                 ),
                 _ => RemoveClientIDFromOpenIDConnectProviderError::Unknown(String::from(body)),
             },
-            Err(_) => RemoveClientIDFromOpenIDConnectProviderError::Unknown(body.to_string()),
+            Err(_) => RemoveClientIDFromOpenIDConnectProviderError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -22051,7 +22161,7 @@ pub enum RemoveRoleFromInstanceProfileError {
 }
 
 impl RemoveRoleFromInstanceProfileError {
-    pub fn from_body(body: &str) -> RemoveRoleFromInstanceProfileError {
+    pub fn from_body(body: &str, status: u16) -> RemoveRoleFromInstanceProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22071,7 +22181,11 @@ impl RemoveRoleFromInstanceProfileError {
                 ),
                 _ => RemoveRoleFromInstanceProfileError::Unknown(String::from(body)),
             },
-            Err(_) => RemoveRoleFromInstanceProfileError::Unknown(body.to_string()),
+            Err(_) => RemoveRoleFromInstanceProfileError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -22146,7 +22260,7 @@ pub enum RemoveUserFromGroupError {
 }
 
 impl RemoveUserFromGroupError {
-    pub fn from_body(body: &str) -> RemoveUserFromGroupError {
+    pub fn from_body(body: &str, status: u16) -> RemoveUserFromGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22163,7 +22277,7 @@ impl RemoveUserFromGroupError {
                 }
                 _ => RemoveUserFromGroupError::Unknown(String::from(body)),
             },
-            Err(_) => RemoveUserFromGroupError::Unknown(body.to_string()),
+            Err(_) => RemoveUserFromGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -22233,7 +22347,7 @@ pub enum ResetServiceSpecificCredentialError {
 }
 
 impl ResetServiceSpecificCredentialError {
-    pub fn from_body(body: &str) -> ResetServiceSpecificCredentialError {
+    pub fn from_body(body: &str, status: u16) -> ResetServiceSpecificCredentialError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22244,7 +22358,11 @@ impl ResetServiceSpecificCredentialError {
                 )),
                 _ => ResetServiceSpecificCredentialError::Unknown(String::from(body)),
             },
-            Err(_) => ResetServiceSpecificCredentialError::Unknown(body.to_string()),
+            Err(_) => ResetServiceSpecificCredentialError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -22318,7 +22436,7 @@ pub enum ResyncMFADeviceError {
 }
 
 impl ResyncMFADeviceError {
-    pub fn from_body(body: &str) -> ResyncMFADeviceError {
+    pub fn from_body(body: &str, status: u16) -> ResyncMFADeviceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22338,7 +22456,7 @@ impl ResyncMFADeviceError {
                 }
                 _ => ResyncMFADeviceError::Unknown(String::from(body)),
             },
-            Err(_) => ResyncMFADeviceError::Unknown(body.to_string()),
+            Err(_) => ResyncMFADeviceError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -22413,7 +22531,7 @@ pub enum SetDefaultPolicyVersionError {
 }
 
 impl SetDefaultPolicyVersionError {
-    pub fn from_body(body: &str) -> SetDefaultPolicyVersionError {
+    pub fn from_body(body: &str, status: u16) -> SetDefaultPolicyVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22433,7 +22551,9 @@ impl SetDefaultPolicyVersionError {
                 }
                 _ => SetDefaultPolicyVersionError::Unknown(String::from(body)),
             },
-            Err(_) => SetDefaultPolicyVersionError::Unknown(body.to_string()),
+            Err(_) => {
+                SetDefaultPolicyVersionError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -22506,7 +22626,7 @@ pub enum SimulateCustomPolicyError {
 }
 
 impl SimulateCustomPolicyError {
-    pub fn from_body(body: &str) -> SimulateCustomPolicyError {
+    pub fn from_body(body: &str, status: u16) -> SimulateCustomPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22520,7 +22640,9 @@ impl SimulateCustomPolicyError {
                 }
                 _ => SimulateCustomPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => SimulateCustomPolicyError::Unknown(body.to_string()),
+            Err(_) => {
+                SimulateCustomPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -22593,7 +22715,7 @@ pub enum SimulatePrincipalPolicyError {
 }
 
 impl SimulatePrincipalPolicyError {
-    pub fn from_body(body: &str) -> SimulatePrincipalPolicyError {
+    pub fn from_body(body: &str, status: u16) -> SimulatePrincipalPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22610,7 +22732,9 @@ impl SimulatePrincipalPolicyError {
                 )),
                 _ => SimulatePrincipalPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => SimulatePrincipalPolicyError::Unknown(body.to_string()),
+            Err(_) => {
+                SimulatePrincipalPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -22684,7 +22808,7 @@ pub enum UpdateAccessKeyError {
 }
 
 impl UpdateAccessKeyError {
-    pub fn from_body(body: &str) -> UpdateAccessKeyError {
+    pub fn from_body(body: &str, status: u16) -> UpdateAccessKeyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22701,7 +22825,7 @@ impl UpdateAccessKeyError {
                 }
                 _ => UpdateAccessKeyError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateAccessKeyError::Unknown(body.to_string()),
+            Err(_) => UpdateAccessKeyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -22775,7 +22899,7 @@ pub enum UpdateAccountPasswordPolicyError {
 }
 
 impl UpdateAccountPasswordPolicyError {
-    pub fn from_body(body: &str) -> UpdateAccountPasswordPolicyError {
+    pub fn from_body(body: &str, status: u16) -> UpdateAccountPasswordPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22797,7 +22921,11 @@ impl UpdateAccountPasswordPolicyError {
                 )),
                 _ => UpdateAccountPasswordPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateAccountPasswordPolicyError::Unknown(body.to_string()),
+            Err(_) => UpdateAccountPasswordPolicyError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -22876,7 +23004,7 @@ pub enum UpdateAssumeRolePolicyError {
 }
 
 impl UpdateAssumeRolePolicyError {
-    pub fn from_body(body: &str) -> UpdateAssumeRolePolicyError {
+    pub fn from_body(body: &str, status: u16) -> UpdateAssumeRolePolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22899,7 +23027,9 @@ impl UpdateAssumeRolePolicyError {
                 ),
                 _ => UpdateAssumeRolePolicyError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateAssumeRolePolicyError::Unknown(body.to_string()),
+            Err(_) => {
+                UpdateAssumeRolePolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -22977,7 +23107,7 @@ pub enum UpdateGroupError {
 }
 
 impl UpdateGroupError {
-    pub fn from_body(body: &str) -> UpdateGroupError {
+    pub fn from_body(body: &str, status: u16) -> UpdateGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22997,7 +23127,7 @@ impl UpdateGroupError {
                 }
                 _ => UpdateGroupError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateGroupError::Unknown(body.to_string()),
+            Err(_) => UpdateGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -23074,7 +23204,7 @@ pub enum UpdateLoginProfileError {
 }
 
 impl UpdateLoginProfileError {
-    pub fn from_body(body: &str) -> UpdateLoginProfileError {
+    pub fn from_body(body: &str, status: u16) -> UpdateLoginProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23099,7 +23229,7 @@ impl UpdateLoginProfileError {
                 }
                 _ => UpdateLoginProfileError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateLoginProfileError::Unknown(body.to_string()),
+            Err(_) => UpdateLoginProfileError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -23175,7 +23305,7 @@ pub enum UpdateOpenIDConnectProviderThumbprintError {
 }
 
 impl UpdateOpenIDConnectProviderThumbprintError {
-    pub fn from_body(body: &str) -> UpdateOpenIDConnectProviderThumbprintError {
+    pub fn from_body(body: &str, status: u16) -> UpdateOpenIDConnectProviderThumbprintError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23192,7 +23322,11 @@ impl UpdateOpenIDConnectProviderThumbprintError {
                 ),
                 _ => UpdateOpenIDConnectProviderThumbprintError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateOpenIDConnectProviderThumbprintError::Unknown(body.to_string()),
+            Err(_) => UpdateOpenIDConnectProviderThumbprintError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -23266,7 +23400,7 @@ pub enum UpdateRoleError {
 }
 
 impl UpdateRoleError {
-    pub fn from_body(body: &str) -> UpdateRoleError {
+    pub fn from_body(body: &str, status: u16) -> UpdateRoleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23281,7 +23415,7 @@ impl UpdateRoleError {
                 }
                 _ => UpdateRoleError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateRoleError::Unknown(body.to_string()),
+            Err(_) => UpdateRoleError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -23353,7 +23487,7 @@ pub enum UpdateRoleDescriptionError {
 }
 
 impl UpdateRoleDescriptionError {
-    pub fn from_body(body: &str) -> UpdateRoleDescriptionError {
+    pub fn from_body(body: &str, status: u16) -> UpdateRoleDescriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23370,7 +23504,9 @@ impl UpdateRoleDescriptionError {
                 ),
                 _ => UpdateRoleDescriptionError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateRoleDescriptionError::Unknown(body.to_string()),
+            Err(_) => {
+                UpdateRoleDescriptionError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -23446,7 +23582,7 @@ pub enum UpdateSAMLProviderError {
 }
 
 impl UpdateSAMLProviderError {
-    pub fn from_body(body: &str) -> UpdateSAMLProviderError {
+    pub fn from_body(body: &str, status: u16) -> UpdateSAMLProviderError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23466,7 +23602,7 @@ impl UpdateSAMLProviderError {
                 }
                 _ => UpdateSAMLProviderError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateSAMLProviderError::Unknown(body.to_string()),
+            Err(_) => UpdateSAMLProviderError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -23537,7 +23673,7 @@ pub enum UpdateSSHPublicKeyError {
 }
 
 impl UpdateSSHPublicKeyError {
-    pub fn from_body(body: &str) -> UpdateSSHPublicKeyError {
+    pub fn from_body(body: &str, status: u16) -> UpdateSSHPublicKeyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23548,7 +23684,7 @@ impl UpdateSSHPublicKeyError {
                 }
                 _ => UpdateSSHPublicKeyError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateSSHPublicKeyError::Unknown(body.to_string()),
+            Err(_) => UpdateSSHPublicKeyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -23622,7 +23758,7 @@ pub enum UpdateServerCertificateError {
 }
 
 impl UpdateServerCertificateError {
-    pub fn from_body(body: &str) -> UpdateServerCertificateError {
+    pub fn from_body(body: &str, status: u16) -> UpdateServerCertificateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23642,7 +23778,9 @@ impl UpdateServerCertificateError {
                 }
                 _ => UpdateServerCertificateError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateServerCertificateError::Unknown(body.to_string()),
+            Err(_) => {
+                UpdateServerCertificateError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -23713,7 +23851,7 @@ pub enum UpdateServiceSpecificCredentialError {
 }
 
 impl UpdateServiceSpecificCredentialError {
-    pub fn from_body(body: &str) -> UpdateServiceSpecificCredentialError {
+    pub fn from_body(body: &str, status: u16) -> UpdateServiceSpecificCredentialError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23724,7 +23862,11 @@ impl UpdateServiceSpecificCredentialError {
                 )),
                 _ => UpdateServiceSpecificCredentialError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateServiceSpecificCredentialError::Unknown(body.to_string()),
+            Err(_) => UpdateServiceSpecificCredentialError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -23796,7 +23938,7 @@ pub enum UpdateSigningCertificateError {
 }
 
 impl UpdateSigningCertificateError {
-    pub fn from_body(body: &str) -> UpdateSigningCertificateError {
+    pub fn from_body(body: &str, status: u16) -> UpdateSigningCertificateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23813,7 +23955,9 @@ impl UpdateSigningCertificateError {
                 )),
                 _ => UpdateSigningCertificateError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateSigningCertificateError::Unknown(body.to_string()),
+            Err(_) => {
+                UpdateSigningCertificateError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -23891,7 +24035,7 @@ pub enum UpdateUserError {
 }
 
 impl UpdateUserError {
-    pub fn from_body(body: &str) -> UpdateUserError {
+    pub fn from_body(body: &str, status: u16) -> UpdateUserError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23912,7 +24056,7 @@ impl UpdateUserError {
                 }
                 _ => UpdateUserError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateUserError::Unknown(body.to_string()),
+            Err(_) => UpdateUserError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -23990,7 +24134,7 @@ pub enum UploadSSHPublicKeyError {
 }
 
 impl UploadSSHPublicKeyError {
-    pub fn from_body(body: &str) -> UploadSSHPublicKeyError {
+    pub fn from_body(body: &str, status: u16) -> UploadSSHPublicKeyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -24015,7 +24159,7 @@ impl UploadSSHPublicKeyError {
                 }
                 _ => UploadSSHPublicKeyError::Unknown(String::from(body)),
             },
-            Err(_) => UploadSSHPublicKeyError::Unknown(body.to_string()),
+            Err(_) => UploadSSHPublicKeyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -24095,7 +24239,7 @@ pub enum UploadServerCertificateError {
 }
 
 impl UploadServerCertificateError {
-    pub fn from_body(body: &str) -> UploadServerCertificateError {
+    pub fn from_body(body: &str, status: u16) -> UploadServerCertificateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -24118,7 +24262,9 @@ impl UploadServerCertificateError {
                 }
                 _ => UploadServerCertificateError::Unknown(String::from(body)),
             },
-            Err(_) => UploadServerCertificateError::Unknown(body.to_string()),
+            Err(_) => {
+                UploadServerCertificateError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -24202,7 +24348,7 @@ pub enum UploadSigningCertificateError {
 }
 
 impl UploadSigningCertificateError {
-    pub fn from_body(body: &str) -> UploadSigningCertificateError {
+    pub fn from_body(body: &str, status: u16) -> UploadSigningCertificateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -24231,7 +24377,9 @@ impl UploadSigningCertificateError {
                 )),
                 _ => UploadSigningCertificateError::Unknown(String::from(body)),
             },
-            Err(_) => UploadSigningCertificateError::Unknown(body.to_string()),
+            Err(_) => {
+                UploadSigningCertificateError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 

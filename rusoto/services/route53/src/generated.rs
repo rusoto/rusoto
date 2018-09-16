@@ -9985,7 +9985,7 @@ pub enum AssociateVPCWithHostedZoneError {
 }
 
 impl AssociateVPCWithHostedZoneError {
-    pub fn from_body(body: &str) -> AssociateVPCWithHostedZoneError {
+    pub fn from_body(body: &str, status: u16) -> AssociateVPCWithHostedZoneError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10018,7 +10018,9 @@ impl AssociateVPCWithHostedZoneError {
                 }
                 _ => AssociateVPCWithHostedZoneError::Unknown(String::from(body)),
             },
-            Err(_) => AssociateVPCWithHostedZoneError::Unknown(body.to_string()),
+            Err(_) => {
+                AssociateVPCWithHostedZoneError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -10100,7 +10102,7 @@ pub enum ChangeResourceRecordSetsError {
 }
 
 impl ChangeResourceRecordSetsError {
-    pub fn from_body(body: &str) -> ChangeResourceRecordSetsError {
+    pub fn from_body(body: &str, status: u16) -> ChangeResourceRecordSetsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10125,7 +10127,9 @@ impl ChangeResourceRecordSetsError {
                 }
                 _ => ChangeResourceRecordSetsError::Unknown(String::from(body)),
             },
-            Err(_) => ChangeResourceRecordSetsError::Unknown(body.to_string()),
+            Err(_) => {
+                ChangeResourceRecordSetsError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -10205,7 +10209,7 @@ pub enum ChangeTagsForResourceError {
 }
 
 impl ChangeTagsForResourceError {
-    pub fn from_body(body: &str) -> ChangeTagsForResourceError {
+    pub fn from_body(body: &str, status: u16) -> ChangeTagsForResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10228,7 +10232,9 @@ impl ChangeTagsForResourceError {
                 }
                 _ => ChangeTagsForResourceError::Unknown(String::from(body)),
             },
-            Err(_) => ChangeTagsForResourceError::Unknown(body.to_string()),
+            Err(_) => {
+                ChangeTagsForResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -10304,7 +10310,7 @@ pub enum CreateHealthCheckError {
 }
 
 impl CreateHealthCheckError {
-    pub fn from_body(body: &str) -> CreateHealthCheckError {
+    pub fn from_body(body: &str, status: u16) -> CreateHealthCheckError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10321,7 +10327,7 @@ impl CreateHealthCheckError {
                 }
                 _ => CreateHealthCheckError::Unknown(String::from(body)),
             },
-            Err(_) => CreateHealthCheckError::Unknown(body.to_string()),
+            Err(_) => CreateHealthCheckError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -10407,7 +10413,7 @@ pub enum CreateHostedZoneError {
 }
 
 impl CreateHostedZoneError {
-    pub fn from_body(body: &str) -> CreateHostedZoneError {
+    pub fn from_body(body: &str, status: u16) -> CreateHostedZoneError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10442,7 +10448,7 @@ impl CreateHostedZoneError {
                 }
                 _ => CreateHostedZoneError::Unknown(String::from(body)),
             },
-            Err(_) => CreateHostedZoneError::Unknown(body.to_string()),
+            Err(_) => CreateHostedZoneError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -10526,7 +10532,7 @@ pub enum CreateQueryLoggingConfigError {
 }
 
 impl CreateQueryLoggingConfigError {
-    pub fn from_body(body: &str) -> CreateQueryLoggingConfigError {
+    pub fn from_body(body: &str, status: u16) -> CreateQueryLoggingConfigError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10558,7 +10564,9 @@ impl CreateQueryLoggingConfigError {
                 }
                 _ => CreateQueryLoggingConfigError::Unknown(String::from(body)),
             },
-            Err(_) => CreateQueryLoggingConfigError::Unknown(body.to_string()),
+            Err(_) => {
+                CreateQueryLoggingConfigError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -10645,7 +10653,7 @@ pub enum CreateReusableDelegationSetError {
 }
 
 impl CreateReusableDelegationSetError {
-    pub fn from_body(body: &str) -> CreateReusableDelegationSetError {
+    pub fn from_body(body: &str, status: u16) -> CreateReusableDelegationSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10680,7 +10688,11 @@ impl CreateReusableDelegationSetError {
                 )),
                 _ => CreateReusableDelegationSetError::Unknown(String::from(body)),
             },
-            Err(_) => CreateReusableDelegationSetError::Unknown(body.to_string()),
+            Err(_) => CreateReusableDelegationSetError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -10760,7 +10772,7 @@ pub enum CreateTrafficPolicyError {
 }
 
 impl CreateTrafficPolicyError {
-    pub fn from_body(body: &str) -> CreateTrafficPolicyError {
+    pub fn from_body(body: &str, status: u16) -> CreateTrafficPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10784,7 +10796,7 @@ impl CreateTrafficPolicyError {
                 }
                 _ => CreateTrafficPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => CreateTrafficPolicyError::Unknown(body.to_string()),
+            Err(_) => CreateTrafficPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -10863,7 +10875,7 @@ pub enum CreateTrafficPolicyInstanceError {
 }
 
 impl CreateTrafficPolicyInstanceError {
-    pub fn from_body(body: &str) -> CreateTrafficPolicyInstanceError {
+    pub fn from_body(body: &str, status: u16) -> CreateTrafficPolicyInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10890,7 +10902,11 @@ impl CreateTrafficPolicyInstanceError {
                 }
                 _ => CreateTrafficPolicyInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => CreateTrafficPolicyInstanceError::Unknown(body.to_string()),
+            Err(_) => CreateTrafficPolicyInstanceError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -10972,7 +10988,7 @@ pub enum CreateTrafficPolicyVersionError {
 }
 
 impl CreateTrafficPolicyVersionError {
-    pub fn from_body(body: &str) -> CreateTrafficPolicyVersionError {
+    pub fn from_body(body: &str, status: u16) -> CreateTrafficPolicyVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11001,7 +11017,9 @@ impl CreateTrafficPolicyVersionError {
                 }
                 _ => CreateTrafficPolicyVersionError::Unknown(String::from(body)),
             },
-            Err(_) => CreateTrafficPolicyVersionError::Unknown(body.to_string()),
+            Err(_) => {
+                CreateTrafficPolicyVersionError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -11083,7 +11101,7 @@ pub enum CreateVPCAssociationAuthorizationError {
 }
 
 impl CreateVPCAssociationAuthorizationError {
-    pub fn from_body(body: &str) -> CreateVPCAssociationAuthorizationError {
+    pub fn from_body(body: &str, status: u16) -> CreateVPCAssociationAuthorizationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11110,7 +11128,11 @@ impl CreateVPCAssociationAuthorizationError {
                 }
                 _ => CreateVPCAssociationAuthorizationError::Unknown(String::from(body)),
             },
-            Err(_) => CreateVPCAssociationAuthorizationError::Unknown(body.to_string()),
+            Err(_) => CreateVPCAssociationAuthorizationError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -11188,7 +11210,7 @@ pub enum DeleteHealthCheckError {
 }
 
 impl DeleteHealthCheckError {
-    pub fn from_body(body: &str) -> DeleteHealthCheckError {
+    pub fn from_body(body: &str, status: u16) -> DeleteHealthCheckError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11205,7 +11227,7 @@ impl DeleteHealthCheckError {
                 }
                 _ => DeleteHealthCheckError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteHealthCheckError::Unknown(body.to_string()),
+            Err(_) => DeleteHealthCheckError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -11283,7 +11305,7 @@ pub enum DeleteHostedZoneError {
 }
 
 impl DeleteHostedZoneError {
-    pub fn from_body(body: &str) -> DeleteHostedZoneError {
+    pub fn from_body(body: &str, status: u16) -> DeleteHostedZoneError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11306,7 +11328,7 @@ impl DeleteHostedZoneError {
                 ),
                 _ => DeleteHostedZoneError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteHostedZoneError::Unknown(body.to_string()),
+            Err(_) => DeleteHostedZoneError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -11380,7 +11402,7 @@ pub enum DeleteQueryLoggingConfigError {
 }
 
 impl DeleteQueryLoggingConfigError {
-    pub fn from_body(body: &str) -> DeleteQueryLoggingConfigError {
+    pub fn from_body(body: &str, status: u16) -> DeleteQueryLoggingConfigError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11399,7 +11421,9 @@ impl DeleteQueryLoggingConfigError {
                 }
                 _ => DeleteQueryLoggingConfigError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteQueryLoggingConfigError::Unknown(body.to_string()),
+            Err(_) => {
+                DeleteQueryLoggingConfigError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -11475,7 +11499,7 @@ pub enum DeleteReusableDelegationSetError {
 }
 
 impl DeleteReusableDelegationSetError {
-    pub fn from_body(body: &str) -> DeleteReusableDelegationSetError {
+    pub fn from_body(body: &str, status: u16) -> DeleteReusableDelegationSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11497,7 +11521,11 @@ impl DeleteReusableDelegationSetError {
                 ),
                 _ => DeleteReusableDelegationSetError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteReusableDelegationSetError::Unknown(body.to_string()),
+            Err(_) => DeleteReusableDelegationSetError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -11574,7 +11602,7 @@ pub enum DeleteTrafficPolicyError {
 }
 
 impl DeleteTrafficPolicyError {
-    pub fn from_body(body: &str) -> DeleteTrafficPolicyError {
+    pub fn from_body(body: &str, status: u16) -> DeleteTrafficPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11594,7 +11622,7 @@ impl DeleteTrafficPolicyError {
                 }
                 _ => DeleteTrafficPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteTrafficPolicyError::Unknown(body.to_string()),
+            Err(_) => DeleteTrafficPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -11669,7 +11697,7 @@ pub enum DeleteTrafficPolicyInstanceError {
 }
 
 impl DeleteTrafficPolicyInstanceError {
-    pub fn from_body(body: &str) -> DeleteTrafficPolicyInstanceError {
+    pub fn from_body(body: &str, status: u16) -> DeleteTrafficPolicyInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11690,7 +11718,11 @@ impl DeleteTrafficPolicyInstanceError {
                 }
                 _ => DeleteTrafficPolicyInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteTrafficPolicyInstanceError::Unknown(body.to_string()),
+            Err(_) => DeleteTrafficPolicyInstanceError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -11768,7 +11800,7 @@ pub enum DeleteVPCAssociationAuthorizationError {
 }
 
 impl DeleteVPCAssociationAuthorizationError {
-    pub fn from_body(body: &str) -> DeleteVPCAssociationAuthorizationError {
+    pub fn from_body(body: &str, status: u16) -> DeleteVPCAssociationAuthorizationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11795,7 +11827,11 @@ impl DeleteVPCAssociationAuthorizationError {
                 }
                 _ => DeleteVPCAssociationAuthorizationError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteVPCAssociationAuthorizationError::Unknown(body.to_string()),
+            Err(_) => DeleteVPCAssociationAuthorizationError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -11877,7 +11913,7 @@ pub enum DisassociateVPCFromHostedZoneError {
 }
 
 impl DisassociateVPCFromHostedZoneError {
-    pub fn from_body(body: &str) -> DisassociateVPCFromHostedZoneError {
+    pub fn from_body(body: &str, status: u16) -> DisassociateVPCFromHostedZoneError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11902,7 +11938,11 @@ impl DisassociateVPCFromHostedZoneError {
                 }
                 _ => DisassociateVPCFromHostedZoneError::Unknown(String::from(body)),
             },
-            Err(_) => DisassociateVPCFromHostedZoneError::Unknown(body.to_string()),
+            Err(_) => DisassociateVPCFromHostedZoneError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -11974,7 +12014,7 @@ pub enum GetAccountLimitError {
 }
 
 impl GetAccountLimitError {
-    pub fn from_body(body: &str) -> GetAccountLimitError {
+    pub fn from_body(body: &str, status: u16) -> GetAccountLimitError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11985,7 +12025,7 @@ impl GetAccountLimitError {
                 }
                 _ => GetAccountLimitError::Unknown(String::from(body)),
             },
-            Err(_) => GetAccountLimitError::Unknown(body.to_string()),
+            Err(_) => GetAccountLimitError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -12053,7 +12093,7 @@ pub enum GetChangeError {
 }
 
 impl GetChangeError {
-    pub fn from_body(body: &str) -> GetChangeError {
+    pub fn from_body(body: &str, status: u16) -> GetChangeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12063,7 +12103,7 @@ impl GetChangeError {
                 "NoSuchChange" => GetChangeError::NoSuchChange(String::from(parsed_error.message)),
                 _ => GetChangeError::Unknown(String::from(body)),
             },
-            Err(_) => GetChangeError::Unknown(body.to_string()),
+            Err(_) => GetChangeError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -12128,7 +12168,7 @@ pub enum GetCheckerIpRangesError {
 }
 
 impl GetCheckerIpRangesError {
-    pub fn from_body(body: &str) -> GetCheckerIpRangesError {
+    pub fn from_body(body: &str, status: u16) -> GetCheckerIpRangesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12136,7 +12176,7 @@ impl GetCheckerIpRangesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetCheckerIpRangesError::Unknown(String::from(body)),
             },
-            Err(_) => GetCheckerIpRangesError::Unknown(body.to_string()),
+            Err(_) => GetCheckerIpRangesError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -12205,7 +12245,7 @@ pub enum GetGeoLocationError {
 }
 
 impl GetGeoLocationError {
-    pub fn from_body(body: &str) -> GetGeoLocationError {
+    pub fn from_body(body: &str, status: u16) -> GetGeoLocationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12219,7 +12259,7 @@ impl GetGeoLocationError {
                 }
                 _ => GetGeoLocationError::Unknown(String::from(body)),
             },
-            Err(_) => GetGeoLocationError::Unknown(body.to_string()),
+            Err(_) => GetGeoLocationError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -12290,7 +12330,7 @@ pub enum GetHealthCheckError {
 }
 
 impl GetHealthCheckError {
-    pub fn from_body(body: &str) -> GetHealthCheckError {
+    pub fn from_body(body: &str, status: u16) -> GetHealthCheckError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12307,7 +12347,7 @@ impl GetHealthCheckError {
                 }
                 _ => GetHealthCheckError::Unknown(String::from(body)),
             },
-            Err(_) => GetHealthCheckError::Unknown(body.to_string()),
+            Err(_) => GetHealthCheckError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -12373,7 +12413,7 @@ pub enum GetHealthCheckCountError {
 }
 
 impl GetHealthCheckCountError {
-    pub fn from_body(body: &str) -> GetHealthCheckCountError {
+    pub fn from_body(body: &str, status: u16) -> GetHealthCheckCountError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12381,7 +12421,7 @@ impl GetHealthCheckCountError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetHealthCheckCountError::Unknown(String::from(body)),
             },
-            Err(_) => GetHealthCheckCountError::Unknown(body.to_string()),
+            Err(_) => GetHealthCheckCountError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -12450,7 +12490,7 @@ pub enum GetHealthCheckLastFailureReasonError {
 }
 
 impl GetHealthCheckLastFailureReasonError {
-    pub fn from_body(body: &str) -> GetHealthCheckLastFailureReasonError {
+    pub fn from_body(body: &str, status: u16) -> GetHealthCheckLastFailureReasonError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12464,7 +12504,11 @@ impl GetHealthCheckLastFailureReasonError {
                 ),
                 _ => GetHealthCheckLastFailureReasonError::Unknown(String::from(body)),
             },
-            Err(_) => GetHealthCheckLastFailureReasonError::Unknown(body.to_string()),
+            Err(_) => GetHealthCheckLastFailureReasonError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -12535,7 +12579,7 @@ pub enum GetHealthCheckStatusError {
 }
 
 impl GetHealthCheckStatusError {
-    pub fn from_body(body: &str) -> GetHealthCheckStatusError {
+    pub fn from_body(body: &str, status: u16) -> GetHealthCheckStatusError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12549,7 +12593,9 @@ impl GetHealthCheckStatusError {
                 }
                 _ => GetHealthCheckStatusError::Unknown(String::from(body)),
             },
-            Err(_) => GetHealthCheckStatusError::Unknown(body.to_string()),
+            Err(_) => {
+                GetHealthCheckStatusError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -12620,7 +12666,7 @@ pub enum GetHostedZoneError {
 }
 
 impl GetHostedZoneError {
-    pub fn from_body(body: &str) -> GetHostedZoneError {
+    pub fn from_body(body: &str, status: u16) -> GetHostedZoneError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12634,7 +12680,7 @@ impl GetHostedZoneError {
                 }
                 _ => GetHostedZoneError::Unknown(String::from(body)),
             },
-            Err(_) => GetHostedZoneError::Unknown(body.to_string()),
+            Err(_) => GetHostedZoneError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -12701,7 +12747,7 @@ pub enum GetHostedZoneCountError {
 }
 
 impl GetHostedZoneCountError {
-    pub fn from_body(body: &str) -> GetHostedZoneCountError {
+    pub fn from_body(body: &str, status: u16) -> GetHostedZoneCountError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12712,7 +12758,7 @@ impl GetHostedZoneCountError {
                 }
                 _ => GetHostedZoneCountError::Unknown(String::from(body)),
             },
-            Err(_) => GetHostedZoneCountError::Unknown(body.to_string()),
+            Err(_) => GetHostedZoneCountError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -12784,7 +12830,7 @@ pub enum GetHostedZoneLimitError {
 }
 
 impl GetHostedZoneLimitError {
-    pub fn from_body(body: &str) -> GetHostedZoneLimitError {
+    pub fn from_body(body: &str, status: u16) -> GetHostedZoneLimitError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12801,7 +12847,7 @@ impl GetHostedZoneLimitError {
                 }
                 _ => GetHostedZoneLimitError::Unknown(String::from(body)),
             },
-            Err(_) => GetHostedZoneLimitError::Unknown(body.to_string()),
+            Err(_) => GetHostedZoneLimitError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -12873,7 +12919,7 @@ pub enum GetQueryLoggingConfigError {
 }
 
 impl GetQueryLoggingConfigError {
-    pub fn from_body(body: &str) -> GetQueryLoggingConfigError {
+    pub fn from_body(body: &str, status: u16) -> GetQueryLoggingConfigError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12887,7 +12933,9 @@ impl GetQueryLoggingConfigError {
                 ),
                 _ => GetQueryLoggingConfigError::Unknown(String::from(body)),
             },
-            Err(_) => GetQueryLoggingConfigError::Unknown(body.to_string()),
+            Err(_) => {
+                GetQueryLoggingConfigError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -12960,7 +13008,7 @@ pub enum GetReusableDelegationSetError {
 }
 
 impl GetReusableDelegationSetError {
-    pub fn from_body(body: &str) -> GetReusableDelegationSetError {
+    pub fn from_body(body: &str, status: u16) -> GetReusableDelegationSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12979,7 +13027,9 @@ impl GetReusableDelegationSetError {
                 ),
                 _ => GetReusableDelegationSetError::Unknown(String::from(body)),
             },
-            Err(_) => GetReusableDelegationSetError::Unknown(body.to_string()),
+            Err(_) => {
+                GetReusableDelegationSetError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -13051,7 +13101,7 @@ pub enum GetReusableDelegationSetLimitError {
 }
 
 impl GetReusableDelegationSetLimitError {
-    pub fn from_body(body: &str) -> GetReusableDelegationSetLimitError {
+    pub fn from_body(body: &str, status: u16) -> GetReusableDelegationSetLimitError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13065,7 +13115,11 @@ impl GetReusableDelegationSetLimitError {
                 ),
                 _ => GetReusableDelegationSetLimitError::Unknown(String::from(body)),
             },
-            Err(_) => GetReusableDelegationSetLimitError::Unknown(body.to_string()),
+            Err(_) => GetReusableDelegationSetLimitError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -13136,7 +13190,7 @@ pub enum GetTrafficPolicyError {
 }
 
 impl GetTrafficPolicyError {
-    pub fn from_body(body: &str) -> GetTrafficPolicyError {
+    pub fn from_body(body: &str, status: u16) -> GetTrafficPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13150,7 +13204,7 @@ impl GetTrafficPolicyError {
                 }
                 _ => GetTrafficPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => GetTrafficPolicyError::Unknown(body.to_string()),
+            Err(_) => GetTrafficPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -13219,7 +13273,7 @@ pub enum GetTrafficPolicyInstanceError {
 }
 
 impl GetTrafficPolicyInstanceError {
-    pub fn from_body(body: &str) -> GetTrafficPolicyInstanceError {
+    pub fn from_body(body: &str, status: u16) -> GetTrafficPolicyInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13235,7 +13289,9 @@ impl GetTrafficPolicyInstanceError {
                 }
                 _ => GetTrafficPolicyInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => GetTrafficPolicyInstanceError::Unknown(body.to_string()),
+            Err(_) => {
+                GetTrafficPolicyInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -13302,7 +13358,7 @@ pub enum GetTrafficPolicyInstanceCountError {
 }
 
 impl GetTrafficPolicyInstanceCountError {
-    pub fn from_body(body: &str) -> GetTrafficPolicyInstanceCountError {
+    pub fn from_body(body: &str, status: u16) -> GetTrafficPolicyInstanceCountError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13310,7 +13366,11 @@ impl GetTrafficPolicyInstanceCountError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetTrafficPolicyInstanceCountError::Unknown(String::from(body)),
             },
-            Err(_) => GetTrafficPolicyInstanceCountError::Unknown(body.to_string()),
+            Err(_) => GetTrafficPolicyInstanceCountError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -13377,7 +13437,7 @@ pub enum ListGeoLocationsError {
 }
 
 impl ListGeoLocationsError {
-    pub fn from_body(body: &str) -> ListGeoLocationsError {
+    pub fn from_body(body: &str, status: u16) -> ListGeoLocationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13388,7 +13448,7 @@ impl ListGeoLocationsError {
                 }
                 _ => ListGeoLocationsError::Unknown(String::from(body)),
             },
-            Err(_) => ListGeoLocationsError::Unknown(body.to_string()),
+            Err(_) => ListGeoLocationsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -13456,7 +13516,7 @@ pub enum ListHealthChecksError {
 }
 
 impl ListHealthChecksError {
-    pub fn from_body(body: &str) -> ListHealthChecksError {
+    pub fn from_body(body: &str, status: u16) -> ListHealthChecksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13470,7 +13530,7 @@ impl ListHealthChecksError {
                 }
                 _ => ListHealthChecksError::Unknown(String::from(body)),
             },
-            Err(_) => ListHealthChecksError::Unknown(body.to_string()),
+            Err(_) => ListHealthChecksError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -13541,7 +13601,7 @@ pub enum ListHostedZonesError {
 }
 
 impl ListHostedZonesError {
-    pub fn from_body(body: &str) -> ListHostedZonesError {
+    pub fn from_body(body: &str, status: u16) -> ListHostedZonesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13558,7 +13618,7 @@ impl ListHostedZonesError {
                 }
                 _ => ListHostedZonesError::Unknown(String::from(body)),
             },
-            Err(_) => ListHostedZonesError::Unknown(body.to_string()),
+            Err(_) => ListHostedZonesError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -13628,7 +13688,7 @@ pub enum ListHostedZonesByNameError {
 }
 
 impl ListHostedZonesByNameError {
-    pub fn from_body(body: &str) -> ListHostedZonesByNameError {
+    pub fn from_body(body: &str, status: u16) -> ListHostedZonesByNameError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13642,7 +13702,9 @@ impl ListHostedZonesByNameError {
                 }
                 _ => ListHostedZonesByNameError::Unknown(String::from(body)),
             },
-            Err(_) => ListHostedZonesByNameError::Unknown(body.to_string()),
+            Err(_) => {
+                ListHostedZonesByNameError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -13715,7 +13777,7 @@ pub enum ListQueryLoggingConfigsError {
 }
 
 impl ListQueryLoggingConfigsError {
-    pub fn from_body(body: &str) -> ListQueryLoggingConfigsError {
+    pub fn from_body(body: &str, status: u16) -> ListQueryLoggingConfigsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13732,7 +13794,9 @@ impl ListQueryLoggingConfigsError {
                 )),
                 _ => ListQueryLoggingConfigsError::Unknown(String::from(body)),
             },
-            Err(_) => ListQueryLoggingConfigsError::Unknown(body.to_string()),
+            Err(_) => {
+                ListQueryLoggingConfigsError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -13804,7 +13868,7 @@ pub enum ListResourceRecordSetsError {
 }
 
 impl ListResourceRecordSetsError {
-    pub fn from_body(body: &str) -> ListResourceRecordSetsError {
+    pub fn from_body(body: &str, status: u16) -> ListResourceRecordSetsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13818,7 +13882,9 @@ impl ListResourceRecordSetsError {
                 )),
                 _ => ListResourceRecordSetsError::Unknown(String::from(body)),
             },
-            Err(_) => ListResourceRecordSetsError::Unknown(body.to_string()),
+            Err(_) => {
+                ListResourceRecordSetsError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -13887,7 +13953,7 @@ pub enum ListReusableDelegationSetsError {
 }
 
 impl ListReusableDelegationSetsError {
-    pub fn from_body(body: &str) -> ListReusableDelegationSetsError {
+    pub fn from_body(body: &str, status: u16) -> ListReusableDelegationSetsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13898,7 +13964,9 @@ impl ListReusableDelegationSetsError {
                 )),
                 _ => ListReusableDelegationSetsError::Unknown(String::from(body)),
             },
-            Err(_) => ListReusableDelegationSetsError::Unknown(body.to_string()),
+            Err(_) => {
+                ListReusableDelegationSetsError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -13974,7 +14042,7 @@ pub enum ListTagsForResourceError {
 }
 
 impl ListTagsForResourceError {
-    pub fn from_body(body: &str) -> ListTagsForResourceError {
+    pub fn from_body(body: &str, status: u16) -> ListTagsForResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13997,7 +14065,7 @@ impl ListTagsForResourceError {
                 }
                 _ => ListTagsForResourceError::Unknown(String::from(body)),
             },
-            Err(_) => ListTagsForResourceError::Unknown(body.to_string()),
+            Err(_) => ListTagsForResourceError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -14077,7 +14145,7 @@ pub enum ListTagsForResourcesError {
 }
 
 impl ListTagsForResourcesError {
-    pub fn from_body(body: &str) -> ListTagsForResourcesError {
+    pub fn from_body(body: &str, status: u16) -> ListTagsForResourcesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14100,7 +14168,9 @@ impl ListTagsForResourcesError {
                 }
                 _ => ListTagsForResourcesError::Unknown(String::from(body)),
             },
-            Err(_) => ListTagsForResourcesError::Unknown(body.to_string()),
+            Err(_) => {
+                ListTagsForResourcesError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -14172,7 +14242,7 @@ pub enum ListTrafficPoliciesError {
 }
 
 impl ListTrafficPoliciesError {
-    pub fn from_body(body: &str) -> ListTrafficPoliciesError {
+    pub fn from_body(body: &str, status: u16) -> ListTrafficPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14183,7 +14253,7 @@ impl ListTrafficPoliciesError {
                 }
                 _ => ListTrafficPoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => ListTrafficPoliciesError::Unknown(body.to_string()),
+            Err(_) => ListTrafficPoliciesError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -14253,7 +14323,7 @@ pub enum ListTrafficPolicyInstancesError {
 }
 
 impl ListTrafficPolicyInstancesError {
-    pub fn from_body(body: &str) -> ListTrafficPolicyInstancesError {
+    pub fn from_body(body: &str, status: u16) -> ListTrafficPolicyInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14269,7 +14339,9 @@ impl ListTrafficPolicyInstancesError {
                 }
                 _ => ListTrafficPolicyInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => ListTrafficPolicyInstancesError::Unknown(body.to_string()),
+            Err(_) => {
+                ListTrafficPolicyInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -14342,7 +14414,7 @@ pub enum ListTrafficPolicyInstancesByHostedZoneError {
 }
 
 impl ListTrafficPolicyInstancesByHostedZoneError {
-    pub fn from_body(body: &str) -> ListTrafficPolicyInstancesByHostedZoneError {
+    pub fn from_body(body: &str, status: u16) -> ListTrafficPolicyInstancesByHostedZoneError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14363,7 +14435,11 @@ impl ListTrafficPolicyInstancesByHostedZoneError {
                 }
                 _ => ListTrafficPolicyInstancesByHostedZoneError::Unknown(String::from(body)),
             },
-            Err(_) => ListTrafficPolicyInstancesByHostedZoneError::Unknown(body.to_string()),
+            Err(_) => ListTrafficPolicyInstancesByHostedZoneError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -14439,7 +14515,7 @@ pub enum ListTrafficPolicyInstancesByPolicyError {
 }
 
 impl ListTrafficPolicyInstancesByPolicyError {
-    pub fn from_body(body: &str) -> ListTrafficPolicyInstancesByPolicyError {
+    pub fn from_body(body: &str, status: u16) -> ListTrafficPolicyInstancesByPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14460,7 +14536,11 @@ impl ListTrafficPolicyInstancesByPolicyError {
                 }
                 _ => ListTrafficPolicyInstancesByPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => ListTrafficPolicyInstancesByPolicyError::Unknown(body.to_string()),
+            Err(_) => ListTrafficPolicyInstancesByPolicyError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -14534,7 +14614,7 @@ pub enum ListTrafficPolicyVersionsError {
 }
 
 impl ListTrafficPolicyVersionsError {
-    pub fn from_body(body: &str) -> ListTrafficPolicyVersionsError {
+    pub fn from_body(body: &str, status: u16) -> ListTrafficPolicyVersionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14548,7 +14628,9 @@ impl ListTrafficPolicyVersionsError {
                 ),
                 _ => ListTrafficPolicyVersionsError::Unknown(String::from(body)),
             },
-            Err(_) => ListTrafficPolicyVersionsError::Unknown(body.to_string()),
+            Err(_) => {
+                ListTrafficPolicyVersionsError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -14621,7 +14703,7 @@ pub enum ListVPCAssociationAuthorizationsError {
 }
 
 impl ListVPCAssociationAuthorizationsError {
-    pub fn from_body(body: &str) -> ListVPCAssociationAuthorizationsError {
+    pub fn from_body(body: &str, status: u16) -> ListVPCAssociationAuthorizationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14640,7 +14722,11 @@ impl ListVPCAssociationAuthorizationsError {
                 ),
                 _ => ListVPCAssociationAuthorizationsError::Unknown(String::from(body)),
             },
-            Err(_) => ListVPCAssociationAuthorizationsError::Unknown(body.to_string()),
+            Err(_) => ListVPCAssociationAuthorizationsError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -14712,7 +14798,7 @@ pub enum TestDNSAnswerError {
 }
 
 impl TestDNSAnswerError {
-    pub fn from_body(body: &str) -> TestDNSAnswerError {
+    pub fn from_body(body: &str, status: u16) -> TestDNSAnswerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14726,7 +14812,7 @@ impl TestDNSAnswerError {
                 }
                 _ => TestDNSAnswerError::Unknown(String::from(body)),
             },
-            Err(_) => TestDNSAnswerError::Unknown(body.to_string()),
+            Err(_) => TestDNSAnswerError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -14797,7 +14883,7 @@ pub enum UpdateHealthCheckError {
 }
 
 impl UpdateHealthCheckError {
-    pub fn from_body(body: &str) -> UpdateHealthCheckError {
+    pub fn from_body(body: &str, status: u16) -> UpdateHealthCheckError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14814,7 +14900,7 @@ impl UpdateHealthCheckError {
                 }
                 _ => UpdateHealthCheckError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateHealthCheckError::Unknown(body.to_string()),
+            Err(_) => UpdateHealthCheckError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -14886,7 +14972,7 @@ pub enum UpdateHostedZoneCommentError {
 }
 
 impl UpdateHostedZoneCommentError {
-    pub fn from_body(body: &str) -> UpdateHostedZoneCommentError {
+    pub fn from_body(body: &str, status: u16) -> UpdateHostedZoneCommentError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14900,7 +14986,9 @@ impl UpdateHostedZoneCommentError {
                 )),
                 _ => UpdateHostedZoneCommentError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateHostedZoneCommentError::Unknown(body.to_string()),
+            Err(_) => {
+                UpdateHostedZoneCommentError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -14973,7 +15061,7 @@ pub enum UpdateTrafficPolicyCommentError {
 }
 
 impl UpdateTrafficPolicyCommentError {
-    pub fn from_body(body: &str) -> UpdateTrafficPolicyCommentError {
+    pub fn from_body(body: &str, status: u16) -> UpdateTrafficPolicyCommentError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14992,7 +15080,9 @@ impl UpdateTrafficPolicyCommentError {
                 ),
                 _ => UpdateTrafficPolicyCommentError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateTrafficPolicyCommentError::Unknown(body.to_string()),
+            Err(_) => {
+                UpdateTrafficPolicyCommentError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -15070,7 +15160,7 @@ pub enum UpdateTrafficPolicyInstanceError {
 }
 
 impl UpdateTrafficPolicyInstanceError {
-    pub fn from_body(body: &str) -> UpdateTrafficPolicyInstanceError {
+    pub fn from_body(body: &str, status: u16) -> UpdateTrafficPolicyInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -15097,7 +15187,11 @@ impl UpdateTrafficPolicyInstanceError {
                 }
                 _ => UpdateTrafficPolicyInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateTrafficPolicyInstanceError::Unknown(body.to_string()),
+            Err(_) => UpdateTrafficPolicyInstanceError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -15566,6 +15660,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AssociateVPCWithHostedZoneError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -15621,6 +15716,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ChangeResourceRecordSetsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -15677,6 +15773,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ChangeTagsForResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -15729,6 +15826,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateHealthCheckError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -15783,6 +15881,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateHostedZoneError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -15837,6 +15936,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateQueryLoggingConfigError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -15891,6 +15991,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateReusableDelegationSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -15947,6 +16048,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateTrafficPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -16001,6 +16103,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateTrafficPolicyInstanceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -16057,6 +16160,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateTrafficPolicyVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -16117,6 +16221,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateVPCAssociationAuthorizationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -16165,6 +16270,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteHealthCheckError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -16208,6 +16314,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteHostedZoneError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -16251,6 +16358,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteQueryLoggingConfigError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -16294,6 +16402,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteReusableDelegationSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -16343,6 +16452,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteTrafficPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -16386,6 +16496,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteTrafficPolicyInstanceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -16446,6 +16557,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteVPCAssociationAuthorizationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -16504,6 +16616,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DisassociateVPCFromHostedZoneError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -16549,6 +16662,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetAccountLimitError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -16592,6 +16706,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetChangeError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -16635,6 +16750,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetCheckerIpRangesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -16690,6 +16806,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetGeoLocationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -16736,6 +16853,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetHealthCheckError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -16779,6 +16897,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetHealthCheckCountError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -16826,6 +16945,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetHealthCheckLastFailureReasonError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -16874,6 +16994,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetHealthCheckStatusError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -16917,6 +17038,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetHostedZoneError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -16960,6 +17082,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetHostedZoneCountError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -17003,6 +17126,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetHostedZoneLimitError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -17046,6 +17170,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetQueryLoggingConfigError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -17089,6 +17214,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetReusableDelegationSetError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -17133,6 +17259,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetReusableDelegationSetLimitError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -17182,6 +17309,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetTrafficPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -17225,6 +17353,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetTrafficPolicyInstanceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -17269,6 +17398,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetTrafficPolicyInstanceCountError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -17329,6 +17459,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListGeoLocationsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -17381,6 +17512,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListHealthChecksError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -17436,6 +17568,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListHostedZonesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -17491,6 +17624,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListHostedZonesByNameError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -17546,6 +17680,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListQueryLoggingConfigsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -17607,6 +17742,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListResourceRecordSetsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -17659,6 +17795,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListReusableDelegationSetsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -17706,6 +17843,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListTagsForResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -17761,6 +17899,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListTagsForResourcesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -17813,6 +17952,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListTrafficPoliciesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -17871,6 +18011,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListTrafficPolicyInstancesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -17930,6 +18071,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListTrafficPolicyInstancesByHostedZoneError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -17995,6 +18137,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListTrafficPolicyInstancesByPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -18049,6 +18192,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListTrafficPolicyVersionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -18105,6 +18249,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListVPCAssociationAuthorizationsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -18165,6 +18310,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(TestDNSAnswerError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -18220,6 +18366,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateHealthCheckError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -18272,6 +18419,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateHostedZoneCommentError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -18328,6 +18476,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateTrafficPolicyCommentError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -18380,6 +18529,7 @@ impl Route53 for Route53Client {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateTrafficPolicyInstanceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }

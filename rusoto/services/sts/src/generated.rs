@@ -1192,7 +1192,7 @@ pub enum AssumeRoleError {
 }
 
 impl AssumeRoleError {
-    pub fn from_body(body: &str) -> AssumeRoleError {
+    pub fn from_body(body: &str, status: u16) -> AssumeRoleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1209,7 +1209,7 @@ impl AssumeRoleError {
                 }
                 _ => AssumeRoleError::Unknown(String::from(body)),
             },
-            Err(_) => AssumeRoleError::Unknown(body.to_string()),
+            Err(_) => AssumeRoleError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -1287,7 +1287,7 @@ pub enum AssumeRoleWithSAMLError {
 }
 
 impl AssumeRoleWithSAMLError {
-    pub fn from_body(body: &str) -> AssumeRoleWithSAMLError {
+    pub fn from_body(body: &str, status: u16) -> AssumeRoleWithSAMLError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1313,7 +1313,7 @@ impl AssumeRoleWithSAMLError {
                 }
                 _ => AssumeRoleWithSAMLError::Unknown(String::from(body)),
             },
-            Err(_) => AssumeRoleWithSAMLError::Unknown(body.to_string()),
+            Err(_) => AssumeRoleWithSAMLError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -1398,7 +1398,7 @@ pub enum AssumeRoleWithWebIdentityError {
 }
 
 impl AssumeRoleWithWebIdentityError {
-    pub fn from_body(body: &str) -> AssumeRoleWithWebIdentityError {
+    pub fn from_body(body: &str, status: u16) -> AssumeRoleWithWebIdentityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1429,7 +1429,9 @@ impl AssumeRoleWithWebIdentityError {
                 ),
                 _ => AssumeRoleWithWebIdentityError::Unknown(String::from(body)),
             },
-            Err(_) => AssumeRoleWithWebIdentityError::Unknown(body.to_string()),
+            Err(_) => {
+                AssumeRoleWithWebIdentityError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -1503,7 +1505,7 @@ pub enum DecodeAuthorizationMessageError {
 }
 
 impl DecodeAuthorizationMessageError {
-    pub fn from_body(body: &str) -> DecodeAuthorizationMessageError {
+    pub fn from_body(body: &str, status: u16) -> DecodeAuthorizationMessageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1516,7 +1518,9 @@ impl DecodeAuthorizationMessageError {
                 }
                 _ => DecodeAuthorizationMessageError::Unknown(String::from(body)),
             },
-            Err(_) => DecodeAuthorizationMessageError::Unknown(body.to_string()),
+            Err(_) => {
+                DecodeAuthorizationMessageError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -1582,7 +1586,7 @@ pub enum GetCallerIdentityError {
 }
 
 impl GetCallerIdentityError {
-    pub fn from_body(body: &str) -> GetCallerIdentityError {
+    pub fn from_body(body: &str, status: u16) -> GetCallerIdentityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1590,7 +1594,7 @@ impl GetCallerIdentityError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetCallerIdentityError::Unknown(String::from(body)),
             },
-            Err(_) => GetCallerIdentityError::Unknown(body.to_string()),
+            Err(_) => GetCallerIdentityError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -1661,7 +1665,7 @@ pub enum GetFederationTokenError {
 }
 
 impl GetFederationTokenError {
-    pub fn from_body(body: &str) -> GetFederationTokenError {
+    pub fn from_body(body: &str, status: u16) -> GetFederationTokenError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1678,7 +1682,7 @@ impl GetFederationTokenError {
                 }
                 _ => GetFederationTokenError::Unknown(String::from(body)),
             },
-            Err(_) => GetFederationTokenError::Unknown(body.to_string()),
+            Err(_) => GetFederationTokenError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -1748,7 +1752,7 @@ pub enum GetSessionTokenError {
 }
 
 impl GetSessionTokenError {
-    pub fn from_body(body: &str) -> GetSessionTokenError {
+    pub fn from_body(body: &str, status: u16) -> GetSessionTokenError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1759,7 +1763,7 @@ impl GetSessionTokenError {
                 }
                 _ => GetSessionTokenError::Unknown(String::from(body)),
             },
-            Err(_) => GetSessionTokenError::Unknown(body.to_string()),
+            Err(_) => GetSessionTokenError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 

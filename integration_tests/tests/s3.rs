@@ -28,10 +28,39 @@ use rusoto_s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectErr
 
 type TestClient = S3Client;
 
+#[test]
+fn test_head_object_404() {
+    let _ = env_logger::try_init();
+    let client = S3Client::new(Region::UsEast1);
+
+    // rusototestbucket has `no_credentials` in it
+    let head_obj_req = HeadObjectRequest {
+        bucket: "rusototestbucket".to_owned(),
+        key: "no_credentials".to_owned(),
+        ..Default::default()
+    };
+    let ok_head = client.head_object(head_obj_req).sync().unwrap();
+    println!("ok_head is {:?}", ok_head);
+
+    let head_obj_req = HeadObjectRequest {
+        bucket: "rusototestbucket".to_owned(),
+        key: "doesntexist".to_owned(),
+        ..Default::default()
+    };
+
+    match client.head_object(head_obj_req).sync() {
+        Err(e) => {
+            panic!("Got this error: {:?}", e);
+        },
+        Ok(res) => println!("Got {:?}", res),
+    }
+}
+
 // Rust is in bad need of an integration test harness
 // This creates the S3 resources needed for a suite of tests,
 // executes those tests, and then destroys the resources
 #[test]
+#[ignore]
 fn test_all_the_things() {
     let _ = env_logger::try_init();
 

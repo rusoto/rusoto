@@ -1032,7 +1032,7 @@ pub enum BatchDeleteAttributesError {
 }
 
 impl BatchDeleteAttributesError {
-    pub fn from_body(body: &str) -> BatchDeleteAttributesError {
+    pub fn from_body(body: &str, status: u16) -> BatchDeleteAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1040,7 +1040,9 @@ impl BatchDeleteAttributesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => BatchDeleteAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => BatchDeleteAttributesError::Unknown(body.to_string()),
+            Err(_) => {
+                BatchDeleteAttributesError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -1123,7 +1125,7 @@ pub enum BatchPutAttributesError {
 }
 
 impl BatchPutAttributesError {
-    pub fn from_body(body: &str) -> BatchPutAttributesError {
+    pub fn from_body(body: &str, status: u16) -> BatchPutAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1166,7 +1168,7 @@ impl BatchPutAttributesError {
                 }
                 _ => BatchPutAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => BatchPutAttributesError::Unknown(body.to_string()),
+            Err(_) => BatchPutAttributesError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -1246,7 +1248,7 @@ pub enum CreateDomainError {
 }
 
 impl CreateDomainError {
-    pub fn from_body(body: &str) -> CreateDomainError {
+    pub fn from_body(body: &str, status: u16) -> CreateDomainError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1263,7 +1265,7 @@ impl CreateDomainError {
                 }
                 _ => CreateDomainError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDomainError::Unknown(body.to_string()),
+            Err(_) => CreateDomainError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -1337,7 +1339,7 @@ pub enum DeleteAttributesError {
 }
 
 impl DeleteAttributesError {
-    pub fn from_body(body: &str) -> DeleteAttributesError {
+    pub fn from_body(body: &str, status: u16) -> DeleteAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1357,7 +1359,7 @@ impl DeleteAttributesError {
                 }
                 _ => DeleteAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteAttributesError::Unknown(body.to_string()),
+            Err(_) => DeleteAttributesError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -1426,7 +1428,7 @@ pub enum DeleteDomainError {
 }
 
 impl DeleteDomainError {
-    pub fn from_body(body: &str) -> DeleteDomainError {
+    pub fn from_body(body: &str, status: u16) -> DeleteDomainError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1437,7 +1439,7 @@ impl DeleteDomainError {
                 }
                 _ => DeleteDomainError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDomainError::Unknown(body.to_string()),
+            Err(_) => DeleteDomainError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -1505,7 +1507,7 @@ pub enum DomainMetadataError {
 }
 
 impl DomainMetadataError {
-    pub fn from_body(body: &str) -> DomainMetadataError {
+    pub fn from_body(body: &str, status: u16) -> DomainMetadataError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1519,7 +1521,7 @@ impl DomainMetadataError {
                 }
                 _ => DomainMetadataError::Unknown(String::from(body)),
             },
-            Err(_) => DomainMetadataError::Unknown(body.to_string()),
+            Err(_) => DomainMetadataError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -1590,7 +1592,7 @@ pub enum GetAttributesError {
 }
 
 impl GetAttributesError {
-    pub fn from_body(body: &str) -> GetAttributesError {
+    pub fn from_body(body: &str, status: u16) -> GetAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1607,7 +1609,7 @@ impl GetAttributesError {
                 }
                 _ => GetAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => GetAttributesError::Unknown(body.to_string()),
+            Err(_) => GetAttributesError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -1677,7 +1679,7 @@ pub enum ListDomainsError {
 }
 
 impl ListDomainsError {
-    pub fn from_body(body: &str) -> ListDomainsError {
+    pub fn from_body(body: &str, status: u16) -> ListDomainsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1691,7 +1693,7 @@ impl ListDomainsError {
                 }
                 _ => ListDomainsError::Unknown(String::from(body)),
             },
-            Err(_) => ListDomainsError::Unknown(body.to_string()),
+            Err(_) => ListDomainsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -1770,7 +1772,7 @@ pub enum PutAttributesError {
 }
 
 impl PutAttributesError {
-    pub fn from_body(body: &str) -> PutAttributesError {
+    pub fn from_body(body: &str, status: u16) -> PutAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1801,7 +1803,7 @@ impl PutAttributesError {
                 ),
                 _ => PutAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => PutAttributesError::Unknown(body.to_string()),
+            Err(_) => PutAttributesError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -1889,7 +1891,7 @@ pub enum SelectError {
 }
 
 impl SelectError {
-    pub fn from_body(body: &str) -> SelectError {
+    pub fn from_body(body: &str, status: u16) -> SelectError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1920,7 +1922,7 @@ impl SelectError {
                 }
                 _ => SelectError::Unknown(String::from(body)),
             },
-            Err(_) => SelectError::Unknown(body.to_string()),
+            Err(_) => SelectError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 

@@ -8102,7 +8102,7 @@ pub enum CreateCloudFrontOriginAccessIdentityError {
 }
 
 impl CreateCloudFrontOriginAccessIdentityError {
-    pub fn from_body(body: &str) -> CreateCloudFrontOriginAccessIdentityError {
+    pub fn from_body(body: &str, status: u16) -> CreateCloudFrontOriginAccessIdentityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -8112,7 +8112,7 @@ impl CreateCloudFrontOriginAccessIdentityError {
                                     "CloudFrontOriginAccessIdentityAlreadyExists" => CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(String::from(parsed_error.message)),"InconsistentQuantities" => CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(String::from(parsed_error.message)),"InvalidArgument" => CreateCloudFrontOriginAccessIdentityError::InvalidArgument(String::from(parsed_error.message)),"MissingBody" => CreateCloudFrontOriginAccessIdentityError::MissingBody(String::from(parsed_error.message)),"TooManyCloudFrontOriginAccessIdentities" => CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(String::from(parsed_error.message)),_ => CreateCloudFrontOriginAccessIdentityError::Unknown(String::from(body))
                                 }
                            },
-                           Err(_) => CreateCloudFrontOriginAccessIdentityError::Unknown(body.to_string())
+                           Err(_) => CreateCloudFrontOriginAccessIdentityError::Unknown(format!("{}:{}", body.to_string(), status))
                        }
     }
 
@@ -8260,7 +8260,7 @@ pub enum CreateDistributionError {
 }
 
 impl CreateDistributionError {
-    pub fn from_body(body: &str) -> CreateDistributionError {
+    pub fn from_body(body: &str, status: u16) -> CreateDistributionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -8412,7 +8412,7 @@ impl CreateDistributionError {
                 ),
                 _ => CreateDistributionError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDistributionError::Unknown(body.to_string()),
+            Err(_) => CreateDistributionError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -8599,7 +8599,7 @@ pub enum CreateDistributionWithTagsError {
 }
 
 impl CreateDistributionWithTagsError {
-    pub fn from_body(body: &str) -> CreateDistributionWithTagsError {
+    pub fn from_body(body: &str, status: u16) -> CreateDistributionWithTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -8774,7 +8774,9 @@ impl CreateDistributionWithTagsError {
                 }
                 _ => CreateDistributionWithTagsError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDistributionWithTagsError::Unknown(body.to_string()),
+            Err(_) => {
+                CreateDistributionWithTagsError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -8896,7 +8898,7 @@ pub enum CreateInvalidationError {
 }
 
 impl CreateInvalidationError {
-    pub fn from_body(body: &str) -> CreateInvalidationError {
+    pub fn from_body(body: &str, status: u16) -> CreateInvalidationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -8927,7 +8929,7 @@ impl CreateInvalidationError {
                 }
                 _ => CreateInvalidationError::Unknown(String::from(body)),
             },
-            Err(_) => CreateInvalidationError::Unknown(body.to_string()),
+            Err(_) => CreateInvalidationError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -9023,7 +9025,7 @@ pub enum CreateStreamingDistributionError {
 }
 
 impl CreateStreamingDistributionError {
-    pub fn from_body(body: &str) -> CreateStreamingDistributionError {
+    pub fn from_body(body: &str, status: u16) -> CreateStreamingDistributionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9079,7 +9081,11 @@ impl CreateStreamingDistributionError {
                 }
                 _ => CreateStreamingDistributionError::Unknown(String::from(body)),
             },
-            Err(_) => CreateStreamingDistributionError::Unknown(body.to_string()),
+            Err(_) => CreateStreamingDistributionError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -9186,7 +9192,7 @@ pub enum CreateStreamingDistributionWithTagsError {
 }
 
 impl CreateStreamingDistributionWithTagsError {
-    pub fn from_body(body: &str) -> CreateStreamingDistributionWithTagsError {
+    pub fn from_body(body: &str, status: u16) -> CreateStreamingDistributionWithTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9249,7 +9255,11 @@ impl CreateStreamingDistributionWithTagsError {
                 }
                 _ => CreateStreamingDistributionWithTagsError::Unknown(String::from(body)),
             },
-            Err(_) => CreateStreamingDistributionWithTagsError::Unknown(body.to_string()),
+            Err(_) => CreateStreamingDistributionWithTagsError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -9345,7 +9355,7 @@ pub enum DeleteCloudFrontOriginAccessIdentityError {
 }
 
 impl DeleteCloudFrontOriginAccessIdentityError {
-    pub fn from_body(body: &str) -> DeleteCloudFrontOriginAccessIdentityError {
+    pub fn from_body(body: &str, status: u16) -> DeleteCloudFrontOriginAccessIdentityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9376,7 +9386,11 @@ impl DeleteCloudFrontOriginAccessIdentityError {
                 }
                 _ => DeleteCloudFrontOriginAccessIdentityError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteCloudFrontOriginAccessIdentityError::Unknown(body.to_string()),
+            Err(_) => DeleteCloudFrontOriginAccessIdentityError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -9460,7 +9474,7 @@ pub enum DeleteDistributionError {
 }
 
 impl DeleteDistributionError {
-    pub fn from_body(body: &str) -> DeleteDistributionError {
+    pub fn from_body(body: &str, status: u16) -> DeleteDistributionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9483,7 +9497,7 @@ impl DeleteDistributionError {
                 }
                 _ => DeleteDistributionError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDistributionError::Unknown(body.to_string()),
+            Err(_) => DeleteDistributionError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -9561,7 +9575,7 @@ pub enum DeleteServiceLinkedRoleError {
 }
 
 impl DeleteServiceLinkedRoleError {
-    pub fn from_body(body: &str) -> DeleteServiceLinkedRoleError {
+    pub fn from_body(body: &str, status: u16) -> DeleteServiceLinkedRoleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9581,7 +9595,9 @@ impl DeleteServiceLinkedRoleError {
                 }
                 _ => DeleteServiceLinkedRoleError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteServiceLinkedRoleError::Unknown(body.to_string()),
+            Err(_) => {
+                DeleteServiceLinkedRoleError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -9660,7 +9676,7 @@ pub enum DeleteStreamingDistributionError {
 }
 
 impl DeleteStreamingDistributionError {
-    pub fn from_body(body: &str) -> DeleteStreamingDistributionError {
+    pub fn from_body(body: &str, status: u16) -> DeleteStreamingDistributionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9687,7 +9703,11 @@ impl DeleteStreamingDistributionError {
                 }
                 _ => DeleteStreamingDistributionError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteStreamingDistributionError::Unknown(body.to_string()),
+            Err(_) => DeleteStreamingDistributionError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -9761,7 +9781,7 @@ pub enum GetCloudFrontOriginAccessIdentityError {
 }
 
 impl GetCloudFrontOriginAccessIdentityError {
-    pub fn from_body(body: &str) -> GetCloudFrontOriginAccessIdentityError {
+    pub fn from_body(body: &str, status: u16) -> GetCloudFrontOriginAccessIdentityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9777,7 +9797,11 @@ impl GetCloudFrontOriginAccessIdentityError {
                 }
                 _ => GetCloudFrontOriginAccessIdentityError::Unknown(String::from(body)),
             },
-            Err(_) => GetCloudFrontOriginAccessIdentityError::Unknown(body.to_string()),
+            Err(_) => GetCloudFrontOriginAccessIdentityError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -9850,7 +9874,7 @@ pub enum GetCloudFrontOriginAccessIdentityConfigError {
 }
 
 impl GetCloudFrontOriginAccessIdentityConfigError {
-    pub fn from_body(body: &str) -> GetCloudFrontOriginAccessIdentityConfigError {
+    pub fn from_body(body: &str, status: u16) -> GetCloudFrontOriginAccessIdentityConfigError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9860,7 +9884,7 @@ impl GetCloudFrontOriginAccessIdentityConfigError {
                                     "AccessDenied" => GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(String::from(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => GetCloudFrontOriginAccessIdentityConfigError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),_ => GetCloudFrontOriginAccessIdentityConfigError::Unknown(String::from(body))
                                 }
                            },
-                           Err(_) => GetCloudFrontOriginAccessIdentityConfigError::Unknown(body.to_string())
+                           Err(_) => GetCloudFrontOriginAccessIdentityConfigError::Unknown(format!("{}:{}", body.to_string(), status))
                        }
     }
 
@@ -9933,7 +9957,7 @@ pub enum GetDistributionError {
 }
 
 impl GetDistributionError {
-    pub fn from_body(body: &str) -> GetDistributionError {
+    pub fn from_body(body: &str, status: u16) -> GetDistributionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9947,7 +9971,7 @@ impl GetDistributionError {
                 }
                 _ => GetDistributionError::Unknown(String::from(body)),
             },
-            Err(_) => GetDistributionError::Unknown(body.to_string()),
+            Err(_) => GetDistributionError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -10016,7 +10040,7 @@ pub enum GetDistributionConfigError {
 }
 
 impl GetDistributionConfigError {
-    pub fn from_body(body: &str) -> GetDistributionConfigError {
+    pub fn from_body(body: &str, status: u16) -> GetDistributionConfigError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10030,7 +10054,9 @@ impl GetDistributionConfigError {
                 ),
                 _ => GetDistributionConfigError::Unknown(String::from(body)),
             },
-            Err(_) => GetDistributionConfigError::Unknown(body.to_string()),
+            Err(_) => {
+                GetDistributionConfigError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -10103,7 +10129,7 @@ pub enum GetInvalidationError {
 }
 
 impl GetInvalidationError {
-    pub fn from_body(body: &str) -> GetInvalidationError {
+    pub fn from_body(body: &str, status: u16) -> GetInvalidationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10120,7 +10146,7 @@ impl GetInvalidationError {
                 }
                 _ => GetInvalidationError::Unknown(String::from(body)),
             },
-            Err(_) => GetInvalidationError::Unknown(body.to_string()),
+            Err(_) => GetInvalidationError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -10190,7 +10216,7 @@ pub enum GetStreamingDistributionError {
 }
 
 impl GetStreamingDistributionError {
-    pub fn from_body(body: &str) -> GetStreamingDistributionError {
+    pub fn from_body(body: &str, status: u16) -> GetStreamingDistributionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10206,7 +10232,9 @@ impl GetStreamingDistributionError {
                 }
                 _ => GetStreamingDistributionError::Unknown(String::from(body)),
             },
-            Err(_) => GetStreamingDistributionError::Unknown(body.to_string()),
+            Err(_) => {
+                GetStreamingDistributionError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -10277,7 +10305,7 @@ pub enum GetStreamingDistributionConfigError {
 }
 
 impl GetStreamingDistributionConfigError {
-    pub fn from_body(body: &str) -> GetStreamingDistributionConfigError {
+    pub fn from_body(body: &str, status: u16) -> GetStreamingDistributionConfigError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10293,7 +10321,11 @@ impl GetStreamingDistributionConfigError {
                 }
                 _ => GetStreamingDistributionConfigError::Unknown(String::from(body)),
             },
-            Err(_) => GetStreamingDistributionConfigError::Unknown(body.to_string()),
+            Err(_) => GetStreamingDistributionConfigError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -10362,7 +10394,7 @@ pub enum ListCloudFrontOriginAccessIdentitiesError {
 }
 
 impl ListCloudFrontOriginAccessIdentitiesError {
-    pub fn from_body(body: &str) -> ListCloudFrontOriginAccessIdentitiesError {
+    pub fn from_body(body: &str, status: u16) -> ListCloudFrontOriginAccessIdentitiesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10373,7 +10405,11 @@ impl ListCloudFrontOriginAccessIdentitiesError {
                 ),
                 _ => ListCloudFrontOriginAccessIdentitiesError::Unknown(String::from(body)),
             },
-            Err(_) => ListCloudFrontOriginAccessIdentitiesError::Unknown(body.to_string()),
+            Err(_) => ListCloudFrontOriginAccessIdentitiesError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -10441,7 +10477,7 @@ pub enum ListDistributionsError {
 }
 
 impl ListDistributionsError {
-    pub fn from_body(body: &str) -> ListDistributionsError {
+    pub fn from_body(body: &str, status: u16) -> ListDistributionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10452,7 +10488,7 @@ impl ListDistributionsError {
                 }
                 _ => ListDistributionsError::Unknown(String::from(body)),
             },
-            Err(_) => ListDistributionsError::Unknown(body.to_string()),
+            Err(_) => ListDistributionsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -10522,7 +10558,7 @@ pub enum ListDistributionsByWebACLIdError {
 }
 
 impl ListDistributionsByWebACLIdError {
-    pub fn from_body(body: &str) -> ListDistributionsByWebACLIdError {
+    pub fn from_body(body: &str, status: u16) -> ListDistributionsByWebACLIdError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10536,7 +10572,11 @@ impl ListDistributionsByWebACLIdError {
                 ),
                 _ => ListDistributionsByWebACLIdError::Unknown(String::from(body)),
             },
-            Err(_) => ListDistributionsByWebACLIdError::Unknown(body.to_string()),
+            Err(_) => ListDistributionsByWebACLIdError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -10609,7 +10649,7 @@ pub enum ListInvalidationsError {
 }
 
 impl ListInvalidationsError {
-    pub fn from_body(body: &str) -> ListInvalidationsError {
+    pub fn from_body(body: &str, status: u16) -> ListInvalidationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10626,7 +10666,7 @@ impl ListInvalidationsError {
                 }
                 _ => ListInvalidationsError::Unknown(String::from(body)),
             },
-            Err(_) => ListInvalidationsError::Unknown(body.to_string()),
+            Err(_) => ListInvalidationsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -10696,7 +10736,7 @@ pub enum ListStreamingDistributionsError {
 }
 
 impl ListStreamingDistributionsError {
-    pub fn from_body(body: &str) -> ListStreamingDistributionsError {
+    pub fn from_body(body: &str, status: u16) -> ListStreamingDistributionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10707,7 +10747,9 @@ impl ListStreamingDistributionsError {
                 ),
                 _ => ListStreamingDistributionsError::Unknown(String::from(body)),
             },
-            Err(_) => ListStreamingDistributionsError::Unknown(body.to_string()),
+            Err(_) => {
+                ListStreamingDistributionsError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -10781,7 +10823,7 @@ pub enum ListTagsForResourceError {
 }
 
 impl ListTagsForResourceError {
-    pub fn from_body(body: &str) -> ListTagsForResourceError {
+    pub fn from_body(body: &str, status: u16) -> ListTagsForResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10801,7 +10843,7 @@ impl ListTagsForResourceError {
                 }
                 _ => ListTagsForResourceError::Unknown(String::from(body)),
             },
-            Err(_) => ListTagsForResourceError::Unknown(body.to_string()),
+            Err(_) => ListTagsForResourceError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -10878,7 +10920,7 @@ pub enum TagResourceError {
 }
 
 impl TagResourceError {
-    pub fn from_body(body: &str) -> TagResourceError {
+    pub fn from_body(body: &str, status: u16) -> TagResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10898,7 +10940,7 @@ impl TagResourceError {
                 }
                 _ => TagResourceError::Unknown(String::from(body)),
             },
-            Err(_) => TagResourceError::Unknown(body.to_string()),
+            Err(_) => TagResourceError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -10973,7 +11015,7 @@ pub enum UntagResourceError {
 }
 
 impl UntagResourceError {
-    pub fn from_body(body: &str) -> UntagResourceError {
+    pub fn from_body(body: &str, status: u16) -> UntagResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10993,7 +11035,7 @@ impl UntagResourceError {
                 }
                 _ => UntagResourceError::Unknown(String::from(body)),
             },
-            Err(_) => UntagResourceError::Unknown(body.to_string()),
+            Err(_) => UntagResourceError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -11076,7 +11118,7 @@ pub enum UpdateCloudFrontOriginAccessIdentityError {
 }
 
 impl UpdateCloudFrontOriginAccessIdentityError {
-    pub fn from_body(body: &str) -> UpdateCloudFrontOriginAccessIdentityError {
+    pub fn from_body(body: &str, status: u16) -> UpdateCloudFrontOriginAccessIdentityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11116,7 +11158,11 @@ impl UpdateCloudFrontOriginAccessIdentityError {
                 }
                 _ => UpdateCloudFrontOriginAccessIdentityError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateCloudFrontOriginAccessIdentityError::Unknown(body.to_string()),
+            Err(_) => UpdateCloudFrontOriginAccessIdentityError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -11271,7 +11317,7 @@ pub enum UpdateDistributionError {
 }
 
 impl UpdateDistributionError {
-    pub fn from_body(body: &str) -> UpdateDistributionError {
+    pub fn from_body(body: &str, status: u16) -> UpdateDistributionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11423,7 +11469,7 @@ impl UpdateDistributionError {
                 ),
                 _ => UpdateDistributionError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateDistributionError::Unknown(body.to_string()),
+            Err(_) => UpdateDistributionError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -11554,7 +11600,7 @@ pub enum UpdateStreamingDistributionError {
 }
 
 impl UpdateStreamingDistributionError {
-    pub fn from_body(body: &str) -> UpdateStreamingDistributionError {
+    pub fn from_body(body: &str, status: u16) -> UpdateStreamingDistributionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11611,7 +11657,11 @@ impl UpdateStreamingDistributionError {
                 }
                 _ => UpdateStreamingDistributionError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateStreamingDistributionError::Unknown(body.to_string()),
+            Err(_) => UpdateStreamingDistributionError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -11917,6 +11967,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateCloudFrontOriginAccessIdentityError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -11978,6 +12029,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateDistributionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -12040,6 +12092,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateDistributionWithTagsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -12102,6 +12155,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateInvalidationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -12157,6 +12211,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateStreamingDistributionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -12222,6 +12277,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateStreamingDistributionWithTagsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -12282,6 +12338,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteCloudFrontOriginAccessIdentityError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -12309,6 +12366,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDistributionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -12334,6 +12392,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteServiceLinkedRoleError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -12361,6 +12420,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteStreamingDistributionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -12388,6 +12448,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetCloudFrontOriginAccessIdentityError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -12443,6 +12504,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetCloudFrontOriginAccessIdentityConfigError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -12492,6 +12554,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetDistributionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -12539,6 +12602,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetDistributionConfigError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -12590,6 +12654,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetInvalidationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -12633,6 +12698,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetStreamingDistributionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -12684,6 +12750,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetStreamingDistributionConfigError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -12745,6 +12812,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListCloudFrontOriginAccessIdentitiesError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -12799,6 +12867,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListDistributionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -12854,6 +12923,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListDistributionsByWebACLIdError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -12909,6 +12979,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListInvalidationsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -12961,6 +13032,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListStreamingDistributionsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -13008,6 +13080,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListTagsForResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -13056,6 +13129,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(TagResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -13084,6 +13158,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UntagResourceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -13125,6 +13200,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateCloudFrontOriginAccessIdentityError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -13186,6 +13262,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateDistributionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }
@@ -13248,6 +13325,7 @@ impl CloudFront for CloudFrontClient {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateStreamingDistributionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        response.status.as_u16(),
                     ))
                 }));
             }

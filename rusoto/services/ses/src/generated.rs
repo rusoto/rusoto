@@ -8666,7 +8666,7 @@ pub enum CloneReceiptRuleSetError {
 }
 
 impl CloneReceiptRuleSetError {
-    pub fn from_body(body: &str) -> CloneReceiptRuleSetError {
+    pub fn from_body(body: &str, status: u16) -> CloneReceiptRuleSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -8683,7 +8683,7 @@ impl CloneReceiptRuleSetError {
                 ),
                 _ => CloneReceiptRuleSetError::Unknown(String::from(body)),
             },
-            Err(_) => CloneReceiptRuleSetError::Unknown(body.to_string()),
+            Err(_) => CloneReceiptRuleSetError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -8757,7 +8757,7 @@ pub enum CreateConfigurationSetError {
 }
 
 impl CreateConfigurationSetError {
-    pub fn from_body(body: &str) -> CreateConfigurationSetError {
+    pub fn from_body(body: &str, status: u16) -> CreateConfigurationSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -8776,7 +8776,9 @@ impl CreateConfigurationSetError {
                 }
                 _ => CreateConfigurationSetError::Unknown(String::from(body)),
             },
-            Err(_) => CreateConfigurationSetError::Unknown(body.to_string()),
+            Err(_) => {
+                CreateConfigurationSetError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -8856,7 +8858,7 @@ pub enum CreateConfigurationSetEventDestinationError {
 }
 
 impl CreateConfigurationSetEventDestinationError {
-    pub fn from_body(body: &str) -> CreateConfigurationSetEventDestinationError {
+    pub fn from_body(body: &str, status: u16) -> CreateConfigurationSetEventDestinationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -8892,7 +8894,11 @@ impl CreateConfigurationSetEventDestinationError {
                 ),
                 _ => CreateConfigurationSetEventDestinationError::Unknown(String::from(body)),
             },
-            Err(_) => CreateConfigurationSetEventDestinationError::Unknown(body.to_string()),
+            Err(_) => CreateConfigurationSetEventDestinationError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -8977,7 +8983,7 @@ pub enum CreateConfigurationSetTrackingOptionsError {
 }
 
 impl CreateConfigurationSetTrackingOptionsError {
-    pub fn from_body(body: &str) -> CreateConfigurationSetTrackingOptionsError {
+    pub fn from_body(body: &str, status: u16) -> CreateConfigurationSetTrackingOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9000,7 +9006,11 @@ impl CreateConfigurationSetTrackingOptionsError {
                 }
                 _ => CreateConfigurationSetTrackingOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => CreateConfigurationSetTrackingOptionsError::Unknown(body.to_string()),
+            Err(_) => CreateConfigurationSetTrackingOptionsError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -9080,7 +9090,7 @@ pub enum CreateCustomVerificationEmailTemplateError {
 }
 
 impl CreateCustomVerificationEmailTemplateError {
-    pub fn from_body(body: &str) -> CreateCustomVerificationEmailTemplateError {
+    pub fn from_body(body: &str, status: u16) -> CreateCustomVerificationEmailTemplateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9090,7 +9100,7 @@ impl CreateCustomVerificationEmailTemplateError {
                                     "CustomVerificationEmailInvalidContent" => CreateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(String::from(parsed_error.message)),"CustomVerificationEmailTemplateAlreadyExists" => CreateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateAlreadyExists(String::from(parsed_error.message)),"FromEmailAddressNotVerified" => CreateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(String::from(parsed_error.message)),"LimitExceeded" => CreateCustomVerificationEmailTemplateError::LimitExceeded(String::from(parsed_error.message)),_ => CreateCustomVerificationEmailTemplateError::Unknown(String::from(body))
                                 }
                            },
-                           Err(_) => CreateCustomVerificationEmailTemplateError::Unknown(body.to_string())
+                           Err(_) => CreateCustomVerificationEmailTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
                        }
     }
 
@@ -9161,7 +9171,7 @@ pub enum CreateReceiptFilterError {
 }
 
 impl CreateReceiptFilterError {
-    pub fn from_body(body: &str) -> CreateReceiptFilterError {
+    pub fn from_body(body: &str, status: u16) -> CreateReceiptFilterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9175,7 +9185,7 @@ impl CreateReceiptFilterError {
                 }
                 _ => CreateReceiptFilterError::Unknown(String::from(body)),
             },
-            Err(_) => CreateReceiptFilterError::Unknown(body.to_string()),
+            Err(_) => CreateReceiptFilterError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -9256,7 +9266,7 @@ pub enum CreateReceiptRuleError {
 }
 
 impl CreateReceiptRuleError {
-    pub fn from_body(body: &str) -> CreateReceiptRuleError {
+    pub fn from_body(body: &str, status: u16) -> CreateReceiptRuleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9285,7 +9295,7 @@ impl CreateReceiptRuleError {
                 }
                 _ => CreateReceiptRuleError::Unknown(String::from(body)),
             },
-            Err(_) => CreateReceiptRuleError::Unknown(body.to_string()),
+            Err(_) => CreateReceiptRuleError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -9361,7 +9371,7 @@ pub enum CreateReceiptRuleSetError {
 }
 
 impl CreateReceiptRuleSetError {
-    pub fn from_body(body: &str) -> CreateReceiptRuleSetError {
+    pub fn from_body(body: &str, status: u16) -> CreateReceiptRuleSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9375,7 +9385,9 @@ impl CreateReceiptRuleSetError {
                 }
                 _ => CreateReceiptRuleSetError::Unknown(String::from(body)),
             },
-            Err(_) => CreateReceiptRuleSetError::Unknown(body.to_string()),
+            Err(_) => {
+                CreateReceiptRuleSetError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -9448,7 +9460,7 @@ pub enum CreateTemplateError {
 }
 
 impl CreateTemplateError {
-    pub fn from_body(body: &str) -> CreateTemplateError {
+    pub fn from_body(body: &str, status: u16) -> CreateTemplateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9465,7 +9477,7 @@ impl CreateTemplateError {
                 }
                 _ => CreateTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => CreateTemplateError::Unknown(body.to_string()),
+            Err(_) => CreateTemplateError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -9533,7 +9545,7 @@ pub enum DeleteConfigurationSetError {
 }
 
 impl DeleteConfigurationSetError {
-    pub fn from_body(body: &str) -> DeleteConfigurationSetError {
+    pub fn from_body(body: &str, status: u16) -> DeleteConfigurationSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9546,7 +9558,9 @@ impl DeleteConfigurationSetError {
                 }
                 _ => DeleteConfigurationSetError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteConfigurationSetError::Unknown(body.to_string()),
+            Err(_) => {
+                DeleteConfigurationSetError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -9616,7 +9630,7 @@ pub enum DeleteConfigurationSetEventDestinationError {
 }
 
 impl DeleteConfigurationSetEventDestinationError {
-    pub fn from_body(body: &str) -> DeleteConfigurationSetEventDestinationError {
+    pub fn from_body(body: &str, status: u16) -> DeleteConfigurationSetEventDestinationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9634,7 +9648,11 @@ impl DeleteConfigurationSetEventDestinationError {
                 }
                 _ => DeleteConfigurationSetEventDestinationError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteConfigurationSetEventDestinationError::Unknown(body.to_string()),
+            Err(_) => DeleteConfigurationSetEventDestinationError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -9709,7 +9727,7 @@ pub enum DeleteConfigurationSetTrackingOptionsError {
 }
 
 impl DeleteConfigurationSetTrackingOptionsError {
-    pub fn from_body(body: &str) -> DeleteConfigurationSetTrackingOptionsError {
+    pub fn from_body(body: &str, status: u16) -> DeleteConfigurationSetTrackingOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9727,7 +9745,11 @@ impl DeleteConfigurationSetTrackingOptionsError {
                 }
                 _ => DeleteConfigurationSetTrackingOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteConfigurationSetTrackingOptionsError::Unknown(body.to_string()),
+            Err(_) => DeleteConfigurationSetTrackingOptionsError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -9798,7 +9820,7 @@ pub enum DeleteCustomVerificationEmailTemplateError {
 }
 
 impl DeleteCustomVerificationEmailTemplateError {
-    pub fn from_body(body: &str) -> DeleteCustomVerificationEmailTemplateError {
+    pub fn from_body(body: &str, status: u16) -> DeleteCustomVerificationEmailTemplateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9806,7 +9828,11 @@ impl DeleteCustomVerificationEmailTemplateError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteCustomVerificationEmailTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteCustomVerificationEmailTemplateError::Unknown(body.to_string()),
+            Err(_) => DeleteCustomVerificationEmailTemplateError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -9871,7 +9897,7 @@ pub enum DeleteIdentityError {
 }
 
 impl DeleteIdentityError {
-    pub fn from_body(body: &str) -> DeleteIdentityError {
+    pub fn from_body(body: &str, status: u16) -> DeleteIdentityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9879,7 +9905,7 @@ impl DeleteIdentityError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteIdentityError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteIdentityError::Unknown(body.to_string()),
+            Err(_) => DeleteIdentityError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -9942,7 +9968,7 @@ pub enum DeleteIdentityPolicyError {
 }
 
 impl DeleteIdentityPolicyError {
-    pub fn from_body(body: &str) -> DeleteIdentityPolicyError {
+    pub fn from_body(body: &str, status: u16) -> DeleteIdentityPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -9950,7 +9976,9 @@ impl DeleteIdentityPolicyError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteIdentityPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteIdentityPolicyError::Unknown(body.to_string()),
+            Err(_) => {
+                DeleteIdentityPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -10015,7 +10043,7 @@ pub enum DeleteReceiptFilterError {
 }
 
 impl DeleteReceiptFilterError {
-    pub fn from_body(body: &str) -> DeleteReceiptFilterError {
+    pub fn from_body(body: &str, status: u16) -> DeleteReceiptFilterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10023,7 +10051,7 @@ impl DeleteReceiptFilterError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteReceiptFilterError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteReceiptFilterError::Unknown(body.to_string()),
+            Err(_) => DeleteReceiptFilterError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -10090,7 +10118,7 @@ pub enum DeleteReceiptRuleError {
 }
 
 impl DeleteReceiptRuleError {
-    pub fn from_body(body: &str) -> DeleteReceiptRuleError {
+    pub fn from_body(body: &str, status: u16) -> DeleteReceiptRuleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10101,7 +10129,7 @@ impl DeleteReceiptRuleError {
                 }
                 _ => DeleteReceiptRuleError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteReceiptRuleError::Unknown(body.to_string()),
+            Err(_) => DeleteReceiptRuleError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -10169,7 +10197,7 @@ pub enum DeleteReceiptRuleSetError {
 }
 
 impl DeleteReceiptRuleSetError {
-    pub fn from_body(body: &str) -> DeleteReceiptRuleSetError {
+    pub fn from_body(body: &str, status: u16) -> DeleteReceiptRuleSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10180,7 +10208,9 @@ impl DeleteReceiptRuleSetError {
                 }
                 _ => DeleteReceiptRuleSetError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteReceiptRuleSetError::Unknown(body.to_string()),
+            Err(_) => {
+                DeleteReceiptRuleSetError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -10246,7 +10276,7 @@ pub enum DeleteTemplateError {
 }
 
 impl DeleteTemplateError {
-    pub fn from_body(body: &str) -> DeleteTemplateError {
+    pub fn from_body(body: &str, status: u16) -> DeleteTemplateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10254,7 +10284,7 @@ impl DeleteTemplateError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteTemplateError::Unknown(body.to_string()),
+            Err(_) => DeleteTemplateError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -10317,7 +10347,7 @@ pub enum DeleteVerifiedEmailAddressError {
 }
 
 impl DeleteVerifiedEmailAddressError {
-    pub fn from_body(body: &str) -> DeleteVerifiedEmailAddressError {
+    pub fn from_body(body: &str, status: u16) -> DeleteVerifiedEmailAddressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10325,7 +10355,9 @@ impl DeleteVerifiedEmailAddressError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVerifiedEmailAddressError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteVerifiedEmailAddressError::Unknown(body.to_string()),
+            Err(_) => {
+                DeleteVerifiedEmailAddressError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -10390,7 +10422,7 @@ pub enum DescribeActiveReceiptRuleSetError {
 }
 
 impl DescribeActiveReceiptRuleSetError {
-    pub fn from_body(body: &str) -> DescribeActiveReceiptRuleSetError {
+    pub fn from_body(body: &str, status: u16) -> DescribeActiveReceiptRuleSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10398,7 +10430,11 @@ impl DescribeActiveReceiptRuleSetError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeActiveReceiptRuleSetError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeActiveReceiptRuleSetError::Unknown(body.to_string()),
+            Err(_) => DescribeActiveReceiptRuleSetError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -10465,7 +10501,7 @@ pub enum DescribeConfigurationSetError {
 }
 
 impl DescribeConfigurationSetError {
-    pub fn from_body(body: &str) -> DescribeConfigurationSetError {
+    pub fn from_body(body: &str, status: u16) -> DescribeConfigurationSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10478,7 +10514,9 @@ impl DescribeConfigurationSetError {
                 }
                 _ => DescribeConfigurationSetError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeConfigurationSetError::Unknown(body.to_string()),
+            Err(_) => {
+                DescribeConfigurationSetError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -10548,7 +10586,7 @@ pub enum DescribeReceiptRuleError {
 }
 
 impl DescribeReceiptRuleError {
-    pub fn from_body(body: &str) -> DescribeReceiptRuleError {
+    pub fn from_body(body: &str, status: u16) -> DescribeReceiptRuleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10562,7 +10600,7 @@ impl DescribeReceiptRuleError {
                 ),
                 _ => DescribeReceiptRuleError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeReceiptRuleError::Unknown(body.to_string()),
+            Err(_) => DescribeReceiptRuleError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -10631,7 +10669,7 @@ pub enum DescribeReceiptRuleSetError {
 }
 
 impl DescribeReceiptRuleSetError {
-    pub fn from_body(body: &str) -> DescribeReceiptRuleSetError {
+    pub fn from_body(body: &str, status: u16) -> DescribeReceiptRuleSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10642,7 +10680,9 @@ impl DescribeReceiptRuleSetError {
                 ),
                 _ => DescribeReceiptRuleSetError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeReceiptRuleSetError::Unknown(body.to_string()),
+            Err(_) => {
+                DescribeReceiptRuleSetError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -10708,7 +10748,7 @@ pub enum GetAccountSendingEnabledError {
 }
 
 impl GetAccountSendingEnabledError {
-    pub fn from_body(body: &str) -> GetAccountSendingEnabledError {
+    pub fn from_body(body: &str, status: u16) -> GetAccountSendingEnabledError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10716,7 +10756,9 @@ impl GetAccountSendingEnabledError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetAccountSendingEnabledError::Unknown(String::from(body)),
             },
-            Err(_) => GetAccountSendingEnabledError::Unknown(body.to_string()),
+            Err(_) => {
+                GetAccountSendingEnabledError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -10783,7 +10825,7 @@ pub enum GetCustomVerificationEmailTemplateError {
 }
 
 impl GetCustomVerificationEmailTemplateError {
-    pub fn from_body(body: &str) -> GetCustomVerificationEmailTemplateError {
+    pub fn from_body(body: &str, status: u16) -> GetCustomVerificationEmailTemplateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10793,7 +10835,7 @@ impl GetCustomVerificationEmailTemplateError {
                                     "CustomVerificationEmailTemplateDoesNotExist" => GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message)),_ => GetCustomVerificationEmailTemplateError::Unknown(String::from(body))
                                 }
                            },
-                           Err(_) => GetCustomVerificationEmailTemplateError::Unknown(body.to_string())
+                           Err(_) => GetCustomVerificationEmailTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
                        }
     }
 
@@ -10857,7 +10899,7 @@ pub enum GetIdentityDkimAttributesError {
 }
 
 impl GetIdentityDkimAttributesError {
-    pub fn from_body(body: &str) -> GetIdentityDkimAttributesError {
+    pub fn from_body(body: &str, status: u16) -> GetIdentityDkimAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10865,7 +10907,9 @@ impl GetIdentityDkimAttributesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetIdentityDkimAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => GetIdentityDkimAttributesError::Unknown(body.to_string()),
+            Err(_) => {
+                GetIdentityDkimAttributesError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -10930,7 +10974,7 @@ pub enum GetIdentityMailFromDomainAttributesError {
 }
 
 impl GetIdentityMailFromDomainAttributesError {
-    pub fn from_body(body: &str) -> GetIdentityMailFromDomainAttributesError {
+    pub fn from_body(body: &str, status: u16) -> GetIdentityMailFromDomainAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -10938,7 +10982,11 @@ impl GetIdentityMailFromDomainAttributesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetIdentityMailFromDomainAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => GetIdentityMailFromDomainAttributesError::Unknown(body.to_string()),
+            Err(_) => GetIdentityMailFromDomainAttributesError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -11003,7 +11051,7 @@ pub enum GetIdentityNotificationAttributesError {
 }
 
 impl GetIdentityNotificationAttributesError {
-    pub fn from_body(body: &str) -> GetIdentityNotificationAttributesError {
+    pub fn from_body(body: &str, status: u16) -> GetIdentityNotificationAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11011,7 +11059,11 @@ impl GetIdentityNotificationAttributesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetIdentityNotificationAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => GetIdentityNotificationAttributesError::Unknown(body.to_string()),
+            Err(_) => GetIdentityNotificationAttributesError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -11076,7 +11128,7 @@ pub enum GetIdentityPoliciesError {
 }
 
 impl GetIdentityPoliciesError {
-    pub fn from_body(body: &str) -> GetIdentityPoliciesError {
+    pub fn from_body(body: &str, status: u16) -> GetIdentityPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11084,7 +11136,7 @@ impl GetIdentityPoliciesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetIdentityPoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => GetIdentityPoliciesError::Unknown(body.to_string()),
+            Err(_) => GetIdentityPoliciesError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -11149,7 +11201,7 @@ pub enum GetIdentityVerificationAttributesError {
 }
 
 impl GetIdentityVerificationAttributesError {
-    pub fn from_body(body: &str) -> GetIdentityVerificationAttributesError {
+    pub fn from_body(body: &str, status: u16) -> GetIdentityVerificationAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11157,7 +11209,11 @@ impl GetIdentityVerificationAttributesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetIdentityVerificationAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => GetIdentityVerificationAttributesError::Unknown(body.to_string()),
+            Err(_) => GetIdentityVerificationAttributesError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -11222,7 +11278,7 @@ pub enum GetSendQuotaError {
 }
 
 impl GetSendQuotaError {
-    pub fn from_body(body: &str) -> GetSendQuotaError {
+    pub fn from_body(body: &str, status: u16) -> GetSendQuotaError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11230,7 +11286,7 @@ impl GetSendQuotaError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetSendQuotaError::Unknown(String::from(body)),
             },
-            Err(_) => GetSendQuotaError::Unknown(body.to_string()),
+            Err(_) => GetSendQuotaError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -11293,7 +11349,7 @@ pub enum GetSendStatisticsError {
 }
 
 impl GetSendStatisticsError {
-    pub fn from_body(body: &str) -> GetSendStatisticsError {
+    pub fn from_body(body: &str, status: u16) -> GetSendStatisticsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11301,7 +11357,7 @@ impl GetSendStatisticsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetSendStatisticsError::Unknown(String::from(body)),
             },
-            Err(_) => GetSendStatisticsError::Unknown(body.to_string()),
+            Err(_) => GetSendStatisticsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -11368,7 +11424,7 @@ pub enum GetTemplateError {
 }
 
 impl GetTemplateError {
-    pub fn from_body(body: &str) -> GetTemplateError {
+    pub fn from_body(body: &str, status: u16) -> GetTemplateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11379,7 +11435,7 @@ impl GetTemplateError {
                 }
                 _ => GetTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => GetTemplateError::Unknown(body.to_string()),
+            Err(_) => GetTemplateError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -11443,7 +11499,7 @@ pub enum ListConfigurationSetsError {
 }
 
 impl ListConfigurationSetsError {
-    pub fn from_body(body: &str) -> ListConfigurationSetsError {
+    pub fn from_body(body: &str, status: u16) -> ListConfigurationSetsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11451,7 +11507,9 @@ impl ListConfigurationSetsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListConfigurationSetsError::Unknown(String::from(body)),
             },
-            Err(_) => ListConfigurationSetsError::Unknown(body.to_string()),
+            Err(_) => {
+                ListConfigurationSetsError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -11516,7 +11574,7 @@ pub enum ListCustomVerificationEmailTemplatesError {
 }
 
 impl ListCustomVerificationEmailTemplatesError {
-    pub fn from_body(body: &str) -> ListCustomVerificationEmailTemplatesError {
+    pub fn from_body(body: &str, status: u16) -> ListCustomVerificationEmailTemplatesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11524,7 +11582,11 @@ impl ListCustomVerificationEmailTemplatesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListCustomVerificationEmailTemplatesError::Unknown(String::from(body)),
             },
-            Err(_) => ListCustomVerificationEmailTemplatesError::Unknown(body.to_string()),
+            Err(_) => ListCustomVerificationEmailTemplatesError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -11589,7 +11651,7 @@ pub enum ListIdentitiesError {
 }
 
 impl ListIdentitiesError {
-    pub fn from_body(body: &str) -> ListIdentitiesError {
+    pub fn from_body(body: &str, status: u16) -> ListIdentitiesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11597,7 +11659,7 @@ impl ListIdentitiesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListIdentitiesError::Unknown(String::from(body)),
             },
-            Err(_) => ListIdentitiesError::Unknown(body.to_string()),
+            Err(_) => ListIdentitiesError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -11660,7 +11722,7 @@ pub enum ListIdentityPoliciesError {
 }
 
 impl ListIdentityPoliciesError {
-    pub fn from_body(body: &str) -> ListIdentityPoliciesError {
+    pub fn from_body(body: &str, status: u16) -> ListIdentityPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11668,7 +11730,9 @@ impl ListIdentityPoliciesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListIdentityPoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => ListIdentityPoliciesError::Unknown(body.to_string()),
+            Err(_) => {
+                ListIdentityPoliciesError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -11733,7 +11797,7 @@ pub enum ListReceiptFiltersError {
 }
 
 impl ListReceiptFiltersError {
-    pub fn from_body(body: &str) -> ListReceiptFiltersError {
+    pub fn from_body(body: &str, status: u16) -> ListReceiptFiltersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11741,7 +11805,7 @@ impl ListReceiptFiltersError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListReceiptFiltersError::Unknown(String::from(body)),
             },
-            Err(_) => ListReceiptFiltersError::Unknown(body.to_string()),
+            Err(_) => ListReceiptFiltersError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -11806,7 +11870,7 @@ pub enum ListReceiptRuleSetsError {
 }
 
 impl ListReceiptRuleSetsError {
-    pub fn from_body(body: &str) -> ListReceiptRuleSetsError {
+    pub fn from_body(body: &str, status: u16) -> ListReceiptRuleSetsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11814,7 +11878,7 @@ impl ListReceiptRuleSetsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListReceiptRuleSetsError::Unknown(String::from(body)),
             },
-            Err(_) => ListReceiptRuleSetsError::Unknown(body.to_string()),
+            Err(_) => ListReceiptRuleSetsError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -11879,7 +11943,7 @@ pub enum ListTemplatesError {
 }
 
 impl ListTemplatesError {
-    pub fn from_body(body: &str) -> ListTemplatesError {
+    pub fn from_body(body: &str, status: u16) -> ListTemplatesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11887,7 +11951,7 @@ impl ListTemplatesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListTemplatesError::Unknown(String::from(body)),
             },
-            Err(_) => ListTemplatesError::Unknown(body.to_string()),
+            Err(_) => ListTemplatesError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -11950,7 +12014,7 @@ pub enum ListVerifiedEmailAddressesError {
 }
 
 impl ListVerifiedEmailAddressesError {
-    pub fn from_body(body: &str) -> ListVerifiedEmailAddressesError {
+    pub fn from_body(body: &str, status: u16) -> ListVerifiedEmailAddressesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -11958,7 +12022,9 @@ impl ListVerifiedEmailAddressesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListVerifiedEmailAddressesError::Unknown(String::from(body)),
             },
-            Err(_) => ListVerifiedEmailAddressesError::Unknown(body.to_string()),
+            Err(_) => {
+                ListVerifiedEmailAddressesError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -12025,7 +12091,7 @@ pub enum PutIdentityPolicyError {
 }
 
 impl PutIdentityPolicyError {
-    pub fn from_body(body: &str) -> PutIdentityPolicyError {
+    pub fn from_body(body: &str, status: u16) -> PutIdentityPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12036,7 +12102,7 @@ impl PutIdentityPolicyError {
                 }
                 _ => PutIdentityPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => PutIdentityPolicyError::Unknown(body.to_string()),
+            Err(_) => PutIdentityPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -12106,7 +12172,7 @@ pub enum ReorderReceiptRuleSetError {
 }
 
 impl ReorderReceiptRuleSetError {
-    pub fn from_body(body: &str) -> ReorderReceiptRuleSetError {
+    pub fn from_body(body: &str, status: u16) -> ReorderReceiptRuleSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12120,7 +12186,9 @@ impl ReorderReceiptRuleSetError {
                 ),
                 _ => ReorderReceiptRuleSetError::Unknown(String::from(body)),
             },
-            Err(_) => ReorderReceiptRuleSetError::Unknown(body.to_string()),
+            Err(_) => {
+                ReorderReceiptRuleSetError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -12189,7 +12257,7 @@ pub enum SendBounceError {
 }
 
 impl SendBounceError {
-    pub fn from_body(body: &str) -> SendBounceError {
+    pub fn from_body(body: &str, status: u16) -> SendBounceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12200,7 +12268,7 @@ impl SendBounceError {
                 }
                 _ => SendBounceError::Unknown(String::from(body)),
             },
-            Err(_) => SendBounceError::Unknown(body.to_string()),
+            Err(_) => SendBounceError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -12276,7 +12344,7 @@ pub enum SendBulkTemplatedEmailError {
 }
 
 impl SendBulkTemplatedEmailError {
-    pub fn from_body(body: &str) -> SendBulkTemplatedEmailError {
+    pub fn from_body(body: &str, status: u16) -> SendBulkTemplatedEmailError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12310,7 +12378,9 @@ impl SendBulkTemplatedEmailError {
                 ),
                 _ => SendBulkTemplatedEmailError::Unknown(String::from(body)),
             },
-            Err(_) => SendBulkTemplatedEmailError::Unknown(body.to_string()),
+            Err(_) => {
+                SendBulkTemplatedEmailError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -12391,7 +12461,7 @@ pub enum SendCustomVerificationEmailError {
 }
 
 impl SendCustomVerificationEmailError {
-    pub fn from_body(body: &str) -> SendCustomVerificationEmailError {
+    pub fn from_body(body: &str, status: u16) -> SendCustomVerificationEmailError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12422,7 +12492,11 @@ impl SendCustomVerificationEmailError {
                 }
                 _ => SendCustomVerificationEmailError::Unknown(String::from(body)),
             },
-            Err(_) => SendCustomVerificationEmailError::Unknown(body.to_string()),
+            Err(_) => SendCustomVerificationEmailError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -12504,7 +12578,7 @@ pub enum SendEmailError {
 }
 
 impl SendEmailError {
-    pub fn from_body(body: &str) -> SendEmailError {
+    pub fn from_body(body: &str, status: u16) -> SendEmailError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12529,7 +12603,7 @@ impl SendEmailError {
                 }
                 _ => SendEmailError::Unknown(String::from(body)),
             },
-            Err(_) => SendEmailError::Unknown(body.to_string()),
+            Err(_) => SendEmailError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -12607,7 +12681,7 @@ pub enum SendRawEmailError {
 }
 
 impl SendRawEmailError {
-    pub fn from_body(body: &str) -> SendRawEmailError {
+    pub fn from_body(body: &str, status: u16) -> SendRawEmailError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12632,7 +12706,7 @@ impl SendRawEmailError {
                 }
                 _ => SendRawEmailError::Unknown(String::from(body)),
             },
-            Err(_) => SendRawEmailError::Unknown(body.to_string()),
+            Err(_) => SendRawEmailError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -12712,7 +12786,7 @@ pub enum SendTemplatedEmailError {
 }
 
 impl SendTemplatedEmailError {
-    pub fn from_body(body: &str) -> SendTemplatedEmailError {
+    pub fn from_body(body: &str, status: u16) -> SendTemplatedEmailError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12744,7 +12818,7 @@ impl SendTemplatedEmailError {
                 ),
                 _ => SendTemplatedEmailError::Unknown(String::from(body)),
             },
-            Err(_) => SendTemplatedEmailError::Unknown(body.to_string()),
+            Err(_) => SendTemplatedEmailError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -12817,7 +12891,7 @@ pub enum SetActiveReceiptRuleSetError {
 }
 
 impl SetActiveReceiptRuleSetError {
-    pub fn from_body(body: &str) -> SetActiveReceiptRuleSetError {
+    pub fn from_body(body: &str, status: u16) -> SetActiveReceiptRuleSetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12828,7 +12902,9 @@ impl SetActiveReceiptRuleSetError {
                 ),
                 _ => SetActiveReceiptRuleSetError::Unknown(String::from(body)),
             },
-            Err(_) => SetActiveReceiptRuleSetError::Unknown(body.to_string()),
+            Err(_) => {
+                SetActiveReceiptRuleSetError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -12894,7 +12970,7 @@ pub enum SetIdentityDkimEnabledError {
 }
 
 impl SetIdentityDkimEnabledError {
-    pub fn from_body(body: &str) -> SetIdentityDkimEnabledError {
+    pub fn from_body(body: &str, status: u16) -> SetIdentityDkimEnabledError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12902,7 +12978,9 @@ impl SetIdentityDkimEnabledError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => SetIdentityDkimEnabledError::Unknown(String::from(body)),
             },
-            Err(_) => SetIdentityDkimEnabledError::Unknown(body.to_string()),
+            Err(_) => {
+                SetIdentityDkimEnabledError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -12967,7 +13045,7 @@ pub enum SetIdentityFeedbackForwardingEnabledError {
 }
 
 impl SetIdentityFeedbackForwardingEnabledError {
-    pub fn from_body(body: &str) -> SetIdentityFeedbackForwardingEnabledError {
+    pub fn from_body(body: &str, status: u16) -> SetIdentityFeedbackForwardingEnabledError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -12975,7 +13053,11 @@ impl SetIdentityFeedbackForwardingEnabledError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => SetIdentityFeedbackForwardingEnabledError::Unknown(String::from(body)),
             },
-            Err(_) => SetIdentityFeedbackForwardingEnabledError::Unknown(body.to_string()),
+            Err(_) => SetIdentityFeedbackForwardingEnabledError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -13040,7 +13122,7 @@ pub enum SetIdentityHeadersInNotificationsEnabledError {
 }
 
 impl SetIdentityHeadersInNotificationsEnabledError {
-    pub fn from_body(body: &str) -> SetIdentityHeadersInNotificationsEnabledError {
+    pub fn from_body(body: &str, status: u16) -> SetIdentityHeadersInNotificationsEnabledError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13048,7 +13130,11 @@ impl SetIdentityHeadersInNotificationsEnabledError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => SetIdentityHeadersInNotificationsEnabledError::Unknown(String::from(body)),
             },
-            Err(_) => SetIdentityHeadersInNotificationsEnabledError::Unknown(body.to_string()),
+            Err(_) => SetIdentityHeadersInNotificationsEnabledError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -13115,7 +13201,7 @@ pub enum SetIdentityMailFromDomainError {
 }
 
 impl SetIdentityMailFromDomainError {
-    pub fn from_body(body: &str) -> SetIdentityMailFromDomainError {
+    pub fn from_body(body: &str, status: u16) -> SetIdentityMailFromDomainError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13123,7 +13209,9 @@ impl SetIdentityMailFromDomainError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => SetIdentityMailFromDomainError::Unknown(String::from(body)),
             },
-            Err(_) => SetIdentityMailFromDomainError::Unknown(body.to_string()),
+            Err(_) => {
+                SetIdentityMailFromDomainError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -13188,7 +13276,7 @@ pub enum SetIdentityNotificationTopicError {
 }
 
 impl SetIdentityNotificationTopicError {
-    pub fn from_body(body: &str) -> SetIdentityNotificationTopicError {
+    pub fn from_body(body: &str, status: u16) -> SetIdentityNotificationTopicError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13196,7 +13284,11 @@ impl SetIdentityNotificationTopicError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => SetIdentityNotificationTopicError::Unknown(String::from(body)),
             },
-            Err(_) => SetIdentityNotificationTopicError::Unknown(body.to_string()),
+            Err(_) => SetIdentityNotificationTopicError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -13265,7 +13357,7 @@ pub enum SetReceiptRulePositionError {
 }
 
 impl SetReceiptRulePositionError {
-    pub fn from_body(body: &str) -> SetReceiptRulePositionError {
+    pub fn from_body(body: &str, status: u16) -> SetReceiptRulePositionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13279,7 +13371,9 @@ impl SetReceiptRulePositionError {
                 ),
                 _ => SetReceiptRulePositionError::Unknown(String::from(body)),
             },
-            Err(_) => SetReceiptRulePositionError::Unknown(body.to_string()),
+            Err(_) => {
+                SetReceiptRulePositionError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -13352,7 +13446,7 @@ pub enum TestRenderTemplateError {
 }
 
 impl TestRenderTemplateError {
-    pub fn from_body(body: &str) -> TestRenderTemplateError {
+    pub fn from_body(body: &str, status: u16) -> TestRenderTemplateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13369,7 +13463,7 @@ impl TestRenderTemplateError {
                 ),
                 _ => TestRenderTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => TestRenderTemplateError::Unknown(body.to_string()),
+            Err(_) => TestRenderTemplateError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -13437,7 +13531,7 @@ pub enum UpdateAccountSendingEnabledError {
 }
 
 impl UpdateAccountSendingEnabledError {
-    pub fn from_body(body: &str) -> UpdateAccountSendingEnabledError {
+    pub fn from_body(body: &str, status: u16) -> UpdateAccountSendingEnabledError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13445,7 +13539,11 @@ impl UpdateAccountSendingEnabledError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UpdateAccountSendingEnabledError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateAccountSendingEnabledError::Unknown(body.to_string()),
+            Err(_) => UpdateAccountSendingEnabledError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -13520,7 +13618,7 @@ pub enum UpdateConfigurationSetEventDestinationError {
 }
 
 impl UpdateConfigurationSetEventDestinationError {
-    pub fn from_body(body: &str) -> UpdateConfigurationSetEventDestinationError {
+    pub fn from_body(body: &str, status: u16) -> UpdateConfigurationSetEventDestinationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13553,7 +13651,11 @@ impl UpdateConfigurationSetEventDestinationError {
                 }
                 _ => UpdateConfigurationSetEventDestinationError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateConfigurationSetEventDestinationError::Unknown(body.to_string()),
+            Err(_) => UpdateConfigurationSetEventDestinationError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -13633,7 +13735,10 @@ pub enum UpdateConfigurationSetReputationMetricsEnabledError {
 }
 
 impl UpdateConfigurationSetReputationMetricsEnabledError {
-    pub fn from_body(body: &str) -> UpdateConfigurationSetReputationMetricsEnabledError {
+    pub fn from_body(
+        body: &str,
+        status: u16,
+    ) -> UpdateConfigurationSetReputationMetricsEnabledError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13643,7 +13748,7 @@ impl UpdateConfigurationSetReputationMetricsEnabledError {
                                     "ConfigurationSetDoesNotExist" => UpdateConfigurationSetReputationMetricsEnabledError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),_ => UpdateConfigurationSetReputationMetricsEnabledError::Unknown(String::from(body))
                                 }
                            },
-                           Err(_) => UpdateConfigurationSetReputationMetricsEnabledError::Unknown(body.to_string())
+                           Err(_) => UpdateConfigurationSetReputationMetricsEnabledError::Unknown(format!("{}:{}", body.to_string(), status))
                        }
     }
 
@@ -13717,7 +13822,7 @@ pub enum UpdateConfigurationSetSendingEnabledError {
 }
 
 impl UpdateConfigurationSetSendingEnabledError {
-    pub fn from_body(body: &str) -> UpdateConfigurationSetSendingEnabledError {
+    pub fn from_body(body: &str, status: u16) -> UpdateConfigurationSetSendingEnabledError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13730,7 +13835,11 @@ impl UpdateConfigurationSetSendingEnabledError {
                 }
                 _ => UpdateConfigurationSetSendingEnabledError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateConfigurationSetSendingEnabledError::Unknown(body.to_string()),
+            Err(_) => UpdateConfigurationSetSendingEnabledError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -13804,7 +13913,7 @@ pub enum UpdateConfigurationSetTrackingOptionsError {
 }
 
 impl UpdateConfigurationSetTrackingOptionsError {
-    pub fn from_body(body: &str) -> UpdateConfigurationSetTrackingOptionsError {
+    pub fn from_body(body: &str, status: u16) -> UpdateConfigurationSetTrackingOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13827,7 +13936,11 @@ impl UpdateConfigurationSetTrackingOptionsError {
                 }
                 _ => UpdateConfigurationSetTrackingOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateConfigurationSetTrackingOptionsError::Unknown(body.to_string()),
+            Err(_) => UpdateConfigurationSetTrackingOptionsError::Unknown(format!(
+                "{}:{}",
+                body.to_string(),
+                status
+            )),
         }
     }
 
@@ -13905,7 +14018,7 @@ pub enum UpdateCustomVerificationEmailTemplateError {
 }
 
 impl UpdateCustomVerificationEmailTemplateError {
-    pub fn from_body(body: &str) -> UpdateCustomVerificationEmailTemplateError {
+    pub fn from_body(body: &str, status: u16) -> UpdateCustomVerificationEmailTemplateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -13915,7 +14028,7 @@ impl UpdateCustomVerificationEmailTemplateError {
                                     "CustomVerificationEmailInvalidContent" => UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(String::from(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message)),"FromEmailAddressNotVerified" => UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(String::from(parsed_error.message)),_ => UpdateCustomVerificationEmailTemplateError::Unknown(String::from(body))
                                 }
                            },
-                           Err(_) => UpdateCustomVerificationEmailTemplateError::Unknown(body.to_string())
+                           Err(_) => UpdateCustomVerificationEmailTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
                        }
     }
 
@@ -13993,7 +14106,7 @@ pub enum UpdateReceiptRuleError {
 }
 
 impl UpdateReceiptRuleError {
-    pub fn from_body(body: &str) -> UpdateReceiptRuleError {
+    pub fn from_body(body: &str, status: u16) -> UpdateReceiptRuleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14019,7 +14132,7 @@ impl UpdateReceiptRuleError {
                 }
                 _ => UpdateReceiptRuleError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateReceiptRuleError::Unknown(body.to_string()),
+            Err(_) => UpdateReceiptRuleError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -14094,7 +14207,7 @@ pub enum UpdateTemplateError {
 }
 
 impl UpdateTemplateError {
-    pub fn from_body(body: &str) -> UpdateTemplateError {
+    pub fn from_body(body: &str, status: u16) -> UpdateTemplateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14108,7 +14221,7 @@ impl UpdateTemplateError {
                 }
                 _ => UpdateTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateTemplateError::Unknown(body.to_string()),
+            Err(_) => UpdateTemplateError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -14173,7 +14286,7 @@ pub enum VerifyDomainDkimError {
 }
 
 impl VerifyDomainDkimError {
-    pub fn from_body(body: &str) -> VerifyDomainDkimError {
+    pub fn from_body(body: &str, status: u16) -> VerifyDomainDkimError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14181,7 +14294,7 @@ impl VerifyDomainDkimError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => VerifyDomainDkimError::Unknown(String::from(body)),
             },
-            Err(_) => VerifyDomainDkimError::Unknown(body.to_string()),
+            Err(_) => VerifyDomainDkimError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -14244,7 +14357,7 @@ pub enum VerifyDomainIdentityError {
 }
 
 impl VerifyDomainIdentityError {
-    pub fn from_body(body: &str) -> VerifyDomainIdentityError {
+    pub fn from_body(body: &str, status: u16) -> VerifyDomainIdentityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14252,7 +14365,9 @@ impl VerifyDomainIdentityError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => VerifyDomainIdentityError::Unknown(String::from(body)),
             },
-            Err(_) => VerifyDomainIdentityError::Unknown(body.to_string()),
+            Err(_) => {
+                VerifyDomainIdentityError::Unknown(format!("{}:{}", body.to_string(), status))
+            }
         }
     }
 
@@ -14317,7 +14432,7 @@ pub enum VerifyEmailAddressError {
 }
 
 impl VerifyEmailAddressError {
-    pub fn from_body(body: &str) -> VerifyEmailAddressError {
+    pub fn from_body(body: &str, status: u16) -> VerifyEmailAddressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14325,7 +14440,7 @@ impl VerifyEmailAddressError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => VerifyEmailAddressError::Unknown(String::from(body)),
             },
-            Err(_) => VerifyEmailAddressError::Unknown(body.to_string()),
+            Err(_) => VerifyEmailAddressError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
@@ -14390,7 +14505,7 @@ pub enum VerifyEmailIdentityError {
 }
 
 impl VerifyEmailIdentityError {
-    pub fn from_body(body: &str) -> VerifyEmailIdentityError {
+    pub fn from_body(body: &str, status: u16) -> VerifyEmailIdentityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -14398,7 +14513,7 @@ impl VerifyEmailIdentityError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => VerifyEmailIdentityError::Unknown(String::from(body)),
             },
-            Err(_) => VerifyEmailIdentityError::Unknown(body.to_string()),
+            Err(_) => VerifyEmailIdentityError::Unknown(format!("{}:{}", body.to_string(), status)),
         }
     }
 
