@@ -98,6 +98,7 @@ members = [
     "rusoto/services/secretsmanager",
     "rusoto/services/serverlessrepo",
     "rusoto/services/servicecatalog",
+    "rusoto/services/servicediscovery",
     "rusoto/services/ses",
     "rusoto/services/shield",
     "rusoto/services/sms",

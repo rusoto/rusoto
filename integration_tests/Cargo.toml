@@ -403,6 +403,10 @@ path = "../rusoto/services/serverlessrepo"
 optional = true
 path = "../rusoto/services/servicecatalog"
 
+[dependencies.rusoto_servicediscovery]
+optional = true
+path = "../rusoto/services/servicediscovery"
+
 [dependencies.rusoto_ses]
 optional = true
 path = "../rusoto/services/ses"
@@ -585,6 +589,7 @@ all = [
 	   	    "secretsmanager",
 	   	"serverlessrepo",
 		"servicecatalog",
+		"servicediscovery",
 	   	"ses",
 		"shield",
 		"sms",
@@ -700,6 +705,7 @@ sdb = ["rusoto_sdb"]
 secretsmanager = ["rusoto_secretsmanager"]
 serverlessrepo = ["rusoto_serverlessrepo"]
 servicecatalog = ["rusoto_servicecatalog"]
+servicediscovery = ["rusoto_servicediscovery"]
 shield = ["rusoto_shield"]
 ses = ["rusoto_ses"]
 sms = ["rusoto_sms"]

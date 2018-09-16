@@ -584,6 +584,12 @@
     "protocolVersion": "2015-12-10",
     "baseTypeName": "ServiceCatalog"
   },
+  "servicediscovery": {
+    "version": "0.34.0",
+    "coreVersion": "0.34.0",
+    "protocolVersion": "2017-03-14",
+    "baseTypeName": "ServiceDiscovery"
+  },
   "ses": {
     "version": "0.34.0",
     "coreVersion": "0.34.0",

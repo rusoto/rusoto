@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Add ServiceDiscovery support
 - Add Sentiment support
 - Add Sagemaker support
 - Add Transcribe service
