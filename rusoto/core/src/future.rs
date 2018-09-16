@@ -16,8 +16,9 @@ lazy_static! {
 ///
 /// ## Mocking
 ///
-/// To mock service traits, you can use the `From` implementation to create `RusotoFuture`
-/// instance.
+/// To mock service traits, you can use [`RusotoFuture::from_future`] to create
+/// [`RusotoFuture`] instance. You can also use the [`From`] implementation on
+/// the [`Result`] value.
 ///
 /// ```rust,ignore
 /// use rusoto_core::RusotoFuture;
@@ -107,6 +108,22 @@ impl<T, E> RusotoFuture<T, E> {
     {
         spawn(self, &FALLBACK_RUNTIME.executor()).wait()
     }
+
+    /// Wraps the provided future, mainly to mock the service response.
+    ///
+    /// ## Caution
+    ///
+    /// This is not intended to be used outside of the test case.
+    /// In production, [`Box`] is recommended.
+    pub fn from_future<F>(fut: F) -> Self
+        where F: IntoFuture<Item = T, Error = E>,
+              F::Future: Send + 'static,
+    {
+        let fut = fut.into_future();
+        RusotoFuture {
+            state: Some(RusotoFutureState::RunningResponseHandler(Box::new(fut))),
+        }
+    }
 }
 
 impl<T, E> Future for RusotoFuture<T, E>
@@ -154,10 +171,7 @@ enum RusotoFutureState<T, E> {
 
 impl<T: Send + 'static, E: Send + 'static> From<Result<T, E>> for RusotoFuture<T, E> {
     fn from(value: Result<T, E>) -> Self {
-        let fut = value.into_future();
-        RusotoFuture {
-            state: Some(RusotoFutureState::RunningResponseHandler(Box::new(fut))),
-        }
+        RusotoFuture::from_future(value)
     }
 }
 
@@ -181,4 +195,17 @@ fn rusuto_future_from_err() {
     let fut: RusotoFuture<i32, Box<Error + Send + Sync>> =
         RusotoFuture::from("ab".parse::<i32>().map_err(|e| e.into()));
     assert!(fut.sync().is_err());
+}
+
+#[test]
+fn rusoto_future_from_delay() {
+    use std::error::Error;
+    use std::time::{Duration, Instant};
+    use tokio_timer::Delay;
+    let deadline = Instant::now() + Duration::from_millis(500);
+    let delay = Delay::new(deadline);
+    let fut: RusotoFuture<i32, Box<Error + Send + Sync>> =
+        RusotoFuture::from_future(delay.map_err(From::from).map(|_| 42));
+    assert_eq!(fut.sync().unwrap(), 42);
+    assert!(deadline <= Instant::now());
 }
