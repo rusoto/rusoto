@@ -183,14 +183,14 @@ fn rusoto_future_is_send() {
 }
 
 #[test]
-fn rusuto_future_from_ok() {
+fn rusoto_future_from_ok() {
     use std::error::Error;
     let fut: RusotoFuture<i32, Box<Error + Send + Sync>> = RusotoFuture::from(Ok(42));
     assert_eq!(fut.sync().unwrap(), 42);
 }
 
 #[test]
-fn rusuto_future_from_err() {
+fn rusoto_future_from_err() {
     use std::error::Error;
     let fut: RusotoFuture<i32, Box<Error + Send + Sync>> =
         RusotoFuture::from("ab".parse::<i32>().map_err(|e| e.into()));
