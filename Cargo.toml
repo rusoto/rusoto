@@ -81,6 +81,7 @@ members = [
     "rusoto/services/marketplace-entitlement",
     "rusoto/services/meteringmarketplace",
     "rusoto/services/mgh",
+    "rusoto/services/mq",
     "rusoto/services/mturk",
     "rusoto/services/opsworks",
     "rusoto/services/opsworkscm",
