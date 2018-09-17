@@ -20,7 +20,9 @@ lazy_static! {
 /// [`RusotoFuture`] instance. You can also use the [`From`] implementation on
 /// the [`Result`] value.
 ///
-/// ```rust
+/// ```rust,ignore
+/// # // TODO: remove ignore when the cyclic dependency issue has been fixed
+/// # // https://github.com/rusoto/rusoto/pull/1141#issuecomment-421865362
 /// # extern crate futures;
 /// # extern crate rusoto_core;
 /// # extern crate rusoto_s3;
@@ -156,7 +158,9 @@ impl<T, E> RusotoFuture<T, E> {
     ///
     /// Unlike `set_timeout` this method can be easily chained:
     ///
-    /// ```rust
+    /// ```rust,ignore
+    /// # // TODO: remove ignore when the cyclic dependency issue has been fixed
+    /// # // https://github.com/rusoto/rusoto/pull/1141#issuecomment-421865362
     /// # extern crate rusoto_core;
     /// # extern crate rusoto_s3;
     /// #

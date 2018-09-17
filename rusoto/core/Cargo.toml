@@ -56,10 +56,6 @@ rand = "0.4.2"
 serde_json = "1.0.1"
 serde_test = "1.0.1"
 
-[dev-dependencies.rusoto_s3]
-path = "../services/s3"
-version = "0.34"
-
 [features]
 default = ["native-tls"]
 nightly-testing = ["clippy", "rusoto_credential/nightly-testing"]
