@@ -15,6 +15,8 @@ extern crate futures;
 extern crate hyper;
 extern crate regex;
 extern crate serde_json;
+#[macro_use]
+extern crate serde_derive;
 extern crate tokio_timer;
 
 pub use container::{ContainerProvider, ContainerProviderFuture};
@@ -46,16 +48,20 @@ use chrono::{DateTime, Duration as ChronoDuration, ParseError, Utc};
 use futures::future::{err, Either, Shared, SharedItem};
 use futures::{Async, Future, Poll};
 use hyper::Error as HyperError;
-use serde_json::{from_str as json_from_str, Value};
 
 /// AWS API access credentials, including access key, secret key, token (for IAM profiles),
 /// expiration timestamp, and claims from federated login.
-#[derive(Clone)]
+#[derive(Clone, Deserialize)]
 pub struct AwsCredentials {
+    #[serde(rename = "AccessKeyId")]
     key: String,
+    #[serde(rename = "SecretAccessKey")]
     secret: String,
+    #[serde(rename = "Token")]
     token: Option<String>,
+    #[serde(rename = "Expiration")]
     expires_at: Option<DateTime<Utc>>,
+    #[serde(skip)]
     claims: BTreeMap<String, String>,
 }
 
@@ -186,6 +192,12 @@ impl From<IoError> for CredentialsError {
 impl From<HyperError> for CredentialsError {
     fn from(err: HyperError) -> CredentialsError {
         CredentialsError::new(format!("Couldn't connect to credentials provider: {}", err))
+    }
+}
+
+impl From<serde_json::Error> for CredentialsError {
+    fn from(err: serde_json::Error) -> CredentialsError {
+        CredentialsError::new(err.description())
     }
 }
 
@@ -479,49 +491,9 @@ fn non_empty_env_var(name: &str) -> Option<String> {
     }
 }
 
-/// Reduces Boilerplate on getting json values. Wraps `serde_json::Value.get(key)`.
-fn extract_string_value_from_json(
-    json_object: &Value,
-    key: &str,
-) -> Result<String, CredentialsError> {
-    match json_object.get(key) {
-        Some(v) => Ok(v.as_str()
-            .expect(&format!("{} value was not a string", key))
-            .to_owned()),
-        None => Err(CredentialsError::new(format!(
-            "Couldn't find {} in response.",
-            key
-        ))),
-    }
-}
-
 /// Parses the response from an AWS Metadata Service, either from an IAM Role, or a Container.
 fn parse_credentials_from_aws_service(response: &str) -> Result<AwsCredentials, CredentialsError> {
-    let json_object: Value = match json_from_str(response) {
-        Ok(v) => v,
-        Err(_) => {
-            return Err(CredentialsError::new(
-                "Couldn't parse credentials response body.",
-            ))
-        }
-    };
-
-    let access_key_id = try!(extract_string_value_from_json(&json_object, "AccessKeyId"));
-    let secret_access_key = try!(extract_string_value_from_json(
-        &json_object,
-        "SecretAccessKey",
-    ));
-    let token = try!(extract_string_value_from_json(&json_object, "Token"));
-    let expiration = try!(extract_string_value_from_json(&json_object, "Expiration"));
-
-    let expiration = Some(try!(expiration.parse()));
-
-    Ok(AwsCredentials::new(
-        access_key_id,
-        secret_access_key,
-        Some(token),
-        expiration,
-    ))
+    Ok(serde_json::from_str::<AwsCredentials>(response)?)
 }
 
 #[cfg(test)]
@@ -608,6 +580,9 @@ mod tests {
             credentials.aws_secret_access_key(),
             "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
         );
+
+        assert_eq!(credentials.expires_at().expect(""),
+            DateTime::parse_from_rfc3339("2016-11-18T01:50:39Z").expect(""));
     }
 
     #[test]
