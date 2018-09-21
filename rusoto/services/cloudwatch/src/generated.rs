@@ -3414,7 +3414,13 @@ impl DeleteAlarmsError {
                 }
                 _ => DeleteAlarmsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteAlarmsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteAlarmsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteAlarmsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3501,7 +3507,13 @@ impl DeleteDashboardsError {
                 }
                 _ => DeleteDashboardsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDashboardsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteDashboardsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDashboardsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3581,7 +3593,11 @@ impl DescribeAlarmHistoryError {
                 _ => DescribeAlarmHistoryError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeAlarmHistoryError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeAlarmHistoryError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAlarmHistoryError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -3661,7 +3677,13 @@ impl DescribeAlarmsError {
                 }
                 _ => DescribeAlarmsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeAlarmsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeAlarmsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAlarmsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3734,7 +3756,15 @@ impl DescribeAlarmsForMetricError {
                 _ => DescribeAlarmsForMetricError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeAlarmsForMetricError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeAlarmsForMetricError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAlarmsForMetricError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -3808,7 +3838,13 @@ impl DisableAlarmActionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisableAlarmActionsError::Unknown(String::from(body)),
             },
-            Err(_) => DisableAlarmActionsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DisableAlarmActionsError::Unknown(format!("{}", status))
+                } else {
+                    DisableAlarmActionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3881,7 +3917,13 @@ impl EnableAlarmActionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => EnableAlarmActionsError::Unknown(String::from(body)),
             },
-            Err(_) => EnableAlarmActionsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    EnableAlarmActionsError::Unknown(format!("{}", status))
+                } else {
+                    EnableAlarmActionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3969,7 +4011,13 @@ impl GetDashboardError {
                 }
                 _ => GetDashboardError::Unknown(String::from(body)),
             },
-            Err(_) => GetDashboardError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetDashboardError::Unknown(format!("{}", status))
+                } else {
+                    GetDashboardError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -4048,7 +4096,13 @@ impl GetMetricDataError {
                 }
                 _ => GetMetricDataError::Unknown(String::from(body)),
             },
-            Err(_) => GetMetricDataError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetMetricDataError::Unknown(format!("{}", status))
+                } else {
+                    GetMetricDataError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -4142,7 +4196,13 @@ impl GetMetricStatisticsError {
                 ),
                 _ => GetMetricStatisticsError::Unknown(String::from(body)),
             },
-            Err(_) => GetMetricStatisticsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetMetricStatisticsError::Unknown(format!("{}", status))
+                } else {
+                    GetMetricStatisticsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -4229,7 +4289,13 @@ impl ListDashboardsError {
                 }
                 _ => ListDashboardsError::Unknown(String::from(body)),
             },
-            Err(_) => ListDashboardsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListDashboardsError::Unknown(format!("{}", status))
+                } else {
+                    ListDashboardsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -4312,7 +4378,13 @@ impl ListMetricsError {
                 }
                 _ => ListMetricsError::Unknown(String::from(body)),
             },
-            Err(_) => ListMetricsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListMetricsError::Unknown(format!("{}", status))
+                } else {
+                    ListMetricsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -4395,7 +4467,13 @@ impl PutDashboardError {
                 }
                 _ => PutDashboardError::Unknown(String::from(body)),
             },
-            Err(_) => PutDashboardError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutDashboardError::Unknown(format!("{}", status))
+                } else {
+                    PutDashboardError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -4473,7 +4551,13 @@ impl PutMetricAlarmError {
                 }
                 _ => PutMetricAlarmError::Unknown(String::from(body)),
             },
-            Err(_) => PutMetricAlarmError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutMetricAlarmError::Unknown(format!("{}", status))
+                } else {
+                    PutMetricAlarmError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -4565,7 +4649,13 @@ impl PutMetricDataError {
                 }
                 _ => PutMetricDataError::Unknown(String::from(body)),
             },
-            Err(_) => PutMetricDataError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutMetricDataError::Unknown(format!("{}", status))
+                } else {
+                    PutMetricDataError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -4650,7 +4740,13 @@ impl SetAlarmStateError {
                 }
                 _ => SetAlarmStateError::Unknown(String::from(body)),
             },
-            Err(_) => SetAlarmStateError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    SetAlarmStateError::Unknown(format!("{}", status))
+                } else {
+                    SetAlarmStateError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 

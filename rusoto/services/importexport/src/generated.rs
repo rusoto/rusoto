@@ -1238,7 +1238,13 @@ impl CancelJobError {
                 }
                 _ => CancelJobError::Unknown(String::from(body)),
             },
-            Err(_) => CancelJobError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CancelJobError::Unknown(format!("{}", status))
+                } else {
+                    CancelJobError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1395,7 +1401,13 @@ impl CreateJobError {
                 }
                 _ => CreateJobError::Unknown(String::from(body)),
             },
-            Err(_) => CreateJobError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateJobError::Unknown(format!("{}", status))
+                } else {
+                    CreateJobError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1517,7 +1529,13 @@ impl GetShippingLabelError {
                 }
                 _ => GetShippingLabelError::Unknown(String::from(body)),
             },
-            Err(_) => GetShippingLabelError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetShippingLabelError::Unknown(format!("{}", status))
+                } else {
+                    GetShippingLabelError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1620,7 +1638,13 @@ impl GetStatusError {
                 }
                 _ => GetStatusError::Unknown(String::from(body)),
             },
-            Err(_) => GetStatusError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetStatusError::Unknown(format!("{}", status))
+                } else {
+                    GetStatusError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1711,7 +1735,13 @@ impl ListJobsError {
                 }
                 _ => ListJobsError::Unknown(String::from(body)),
             },
-            Err(_) => ListJobsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListJobsError::Unknown(format!("{}", status))
+                } else {
+                    ListJobsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1875,7 +1905,13 @@ impl UpdateJobError {
                 }
                 _ => UpdateJobError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateJobError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateJobError::Unknown(format!("{}", status))
+                } else {
+                    UpdateJobError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 

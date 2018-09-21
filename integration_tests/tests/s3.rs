@@ -28,6 +28,8 @@ use rusoto_s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectErr
 
 type TestClient = S3Client;
 
+// A temporary test for iterating faster.
+// This will go away or change into something everyone can run.
 #[test]
 fn test_head_object_404() {
     let _ = env_logger::try_init();

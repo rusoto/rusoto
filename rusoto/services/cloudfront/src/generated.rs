@@ -8112,7 +8112,13 @@ impl CreateCloudFrontOriginAccessIdentityError {
                                     "CloudFrontOriginAccessIdentityAlreadyExists" => CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(String::from(parsed_error.message)),"InconsistentQuantities" => CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(String::from(parsed_error.message)),"InvalidArgument" => CreateCloudFrontOriginAccessIdentityError::InvalidArgument(String::from(parsed_error.message)),"MissingBody" => CreateCloudFrontOriginAccessIdentityError::MissingBody(String::from(parsed_error.message)),"TooManyCloudFrontOriginAccessIdentities" => CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(String::from(parsed_error.message)),_ => CreateCloudFrontOriginAccessIdentityError::Unknown(String::from(body))
                                 }
                            },
-                           Err(_) => CreateCloudFrontOriginAccessIdentityError::Unknown(format!("{}:{}", body.to_string(), status))
+                           Err(_) => {
+                               if body.len() == 0 {
+                                   CreateCloudFrontOriginAccessIdentityError::Unknown(format!("{}", status))
+                               } else {
+                                   CreateCloudFrontOriginAccessIdentityError::Unknown(format!("{}:{}", body.to_string(), status))
+                               }
+                            }
                        }
     }
 
@@ -8412,7 +8418,13 @@ impl CreateDistributionError {
                 ),
                 _ => CreateDistributionError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDistributionError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDistributionError::Unknown(format!("{}", status))
+                } else {
+                    CreateDistributionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -8775,7 +8787,15 @@ impl CreateDistributionWithTagsError {
                 _ => CreateDistributionWithTagsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateDistributionWithTagsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateDistributionWithTagsError::Unknown(format!("{}", status))
+                } else {
+                    CreateDistributionWithTagsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -8929,7 +8949,13 @@ impl CreateInvalidationError {
                 }
                 _ => CreateInvalidationError::Unknown(String::from(body)),
             },
-            Err(_) => CreateInvalidationError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateInvalidationError::Unknown(format!("{}", status))
+                } else {
+                    CreateInvalidationError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9081,11 +9107,17 @@ impl CreateStreamingDistributionError {
                 }
                 _ => CreateStreamingDistributionError::Unknown(String::from(body)),
             },
-            Err(_) => CreateStreamingDistributionError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateStreamingDistributionError::Unknown(format!("{}", status))
+                } else {
+                    CreateStreamingDistributionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -9255,11 +9287,17 @@ impl CreateStreamingDistributionWithTagsError {
                 }
                 _ => CreateStreamingDistributionWithTagsError::Unknown(String::from(body)),
             },
-            Err(_) => CreateStreamingDistributionWithTagsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateStreamingDistributionWithTagsError::Unknown(format!("{}", status))
+                } else {
+                    CreateStreamingDistributionWithTagsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -9386,11 +9424,17 @@ impl DeleteCloudFrontOriginAccessIdentityError {
                 }
                 _ => DeleteCloudFrontOriginAccessIdentityError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteCloudFrontOriginAccessIdentityError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteCloudFrontOriginAccessIdentityError::Unknown(format!("{}", status))
+                } else {
+                    DeleteCloudFrontOriginAccessIdentityError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -9497,7 +9541,13 @@ impl DeleteDistributionError {
                 }
                 _ => DeleteDistributionError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDistributionError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteDistributionError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDistributionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9596,7 +9646,15 @@ impl DeleteServiceLinkedRoleError {
                 _ => DeleteServiceLinkedRoleError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteServiceLinkedRoleError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteServiceLinkedRoleError::Unknown(format!("{}", status))
+                } else {
+                    DeleteServiceLinkedRoleError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -9703,11 +9761,17 @@ impl DeleteStreamingDistributionError {
                 }
                 _ => DeleteStreamingDistributionError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteStreamingDistributionError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteStreamingDistributionError::Unknown(format!("{}", status))
+                } else {
+                    DeleteStreamingDistributionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -9797,11 +9861,17 @@ impl GetCloudFrontOriginAccessIdentityError {
                 }
                 _ => GetCloudFrontOriginAccessIdentityError::Unknown(String::from(body)),
             },
-            Err(_) => GetCloudFrontOriginAccessIdentityError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetCloudFrontOriginAccessIdentityError::Unknown(format!("{}", status))
+                } else {
+                    GetCloudFrontOriginAccessIdentityError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -9884,7 +9954,13 @@ impl GetCloudFrontOriginAccessIdentityConfigError {
                                     "AccessDenied" => GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(String::from(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => GetCloudFrontOriginAccessIdentityConfigError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),_ => GetCloudFrontOriginAccessIdentityConfigError::Unknown(String::from(body))
                                 }
                            },
-                           Err(_) => GetCloudFrontOriginAccessIdentityConfigError::Unknown(format!("{}:{}", body.to_string(), status))
+                           Err(_) => {
+                               if body.len() == 0 {
+                                   GetCloudFrontOriginAccessIdentityConfigError::Unknown(format!("{}", status))
+                               } else {
+                                   GetCloudFrontOriginAccessIdentityConfigError::Unknown(format!("{}:{}", body.to_string(), status))
+                               }
+                            }
                        }
     }
 
@@ -9971,7 +10047,13 @@ impl GetDistributionError {
                 }
                 _ => GetDistributionError::Unknown(String::from(body)),
             },
-            Err(_) => GetDistributionError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetDistributionError::Unknown(format!("{}", status))
+                } else {
+                    GetDistributionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10055,7 +10137,11 @@ impl GetDistributionConfigError {
                 _ => GetDistributionConfigError::Unknown(String::from(body)),
             },
             Err(_) => {
-                GetDistributionConfigError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    GetDistributionConfigError::Unknown(format!("{}", status))
+                } else {
+                    GetDistributionConfigError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -10146,7 +10232,13 @@ impl GetInvalidationError {
                 }
                 _ => GetInvalidationError::Unknown(String::from(body)),
             },
-            Err(_) => GetInvalidationError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetInvalidationError::Unknown(format!("{}", status))
+                } else {
+                    GetInvalidationError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10233,7 +10325,15 @@ impl GetStreamingDistributionError {
                 _ => GetStreamingDistributionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                GetStreamingDistributionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    GetStreamingDistributionError::Unknown(format!("{}", status))
+                } else {
+                    GetStreamingDistributionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -10321,11 +10421,17 @@ impl GetStreamingDistributionConfigError {
                 }
                 _ => GetStreamingDistributionConfigError::Unknown(String::from(body)),
             },
-            Err(_) => GetStreamingDistributionConfigError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetStreamingDistributionConfigError::Unknown(format!("{}", status))
+                } else {
+                    GetStreamingDistributionConfigError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -10405,11 +10511,17 @@ impl ListCloudFrontOriginAccessIdentitiesError {
                 ),
                 _ => ListCloudFrontOriginAccessIdentitiesError::Unknown(String::from(body)),
             },
-            Err(_) => ListCloudFrontOriginAccessIdentitiesError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListCloudFrontOriginAccessIdentitiesError::Unknown(format!("{}", status))
+                } else {
+                    ListCloudFrontOriginAccessIdentitiesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -10488,7 +10600,13 @@ impl ListDistributionsError {
                 }
                 _ => ListDistributionsError::Unknown(String::from(body)),
             },
-            Err(_) => ListDistributionsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListDistributionsError::Unknown(format!("{}", status))
+                } else {
+                    ListDistributionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10572,11 +10690,17 @@ impl ListDistributionsByWebACLIdError {
                 ),
                 _ => ListDistributionsByWebACLIdError::Unknown(String::from(body)),
             },
-            Err(_) => ListDistributionsByWebACLIdError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListDistributionsByWebACLIdError::Unknown(format!("{}", status))
+                } else {
+                    ListDistributionsByWebACLIdError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -10666,7 +10790,13 @@ impl ListInvalidationsError {
                 }
                 _ => ListInvalidationsError::Unknown(String::from(body)),
             },
-            Err(_) => ListInvalidationsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListInvalidationsError::Unknown(format!("{}", status))
+                } else {
+                    ListInvalidationsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10748,7 +10878,15 @@ impl ListStreamingDistributionsError {
                 _ => ListStreamingDistributionsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListStreamingDistributionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListStreamingDistributionsError::Unknown(format!("{}", status))
+                } else {
+                    ListStreamingDistributionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -10843,7 +10981,13 @@ impl ListTagsForResourceError {
                 }
                 _ => ListTagsForResourceError::Unknown(String::from(body)),
             },
-            Err(_) => ListTagsForResourceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListTagsForResourceError::Unknown(format!("{}", status))
+                } else {
+                    ListTagsForResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10940,7 +11084,13 @@ impl TagResourceError {
                 }
                 _ => TagResourceError::Unknown(String::from(body)),
             },
-            Err(_) => TagResourceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    TagResourceError::Unknown(format!("{}", status))
+                } else {
+                    TagResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11035,7 +11185,13 @@ impl UntagResourceError {
                 }
                 _ => UntagResourceError::Unknown(String::from(body)),
             },
-            Err(_) => UntagResourceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UntagResourceError::Unknown(format!("{}", status))
+                } else {
+                    UntagResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11158,11 +11314,17 @@ impl UpdateCloudFrontOriginAccessIdentityError {
                 }
                 _ => UpdateCloudFrontOriginAccessIdentityError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateCloudFrontOriginAccessIdentityError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateCloudFrontOriginAccessIdentityError::Unknown(format!("{}", status))
+                } else {
+                    UpdateCloudFrontOriginAccessIdentityError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -11469,7 +11631,13 @@ impl UpdateDistributionError {
                 ),
                 _ => UpdateDistributionError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateDistributionError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateDistributionError::Unknown(format!("{}", status))
+                } else {
+                    UpdateDistributionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11657,11 +11825,17 @@ impl UpdateStreamingDistributionError {
                 }
                 _ => UpdateStreamingDistributionError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateStreamingDistributionError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateStreamingDistributionError::Unknown(format!("{}", status))
+                } else {
+                    UpdateStreamingDistributionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 

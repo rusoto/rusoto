@@ -54349,11 +54349,17 @@ impl AcceptReservedInstancesExchangeQuoteError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AcceptReservedInstancesExchangeQuoteError::Unknown(String::from(body)),
             },
-            Err(_) => AcceptReservedInstancesExchangeQuoteError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    AcceptReservedInstancesExchangeQuoteError::Unknown(format!("{}", status))
+                } else {
+                    AcceptReservedInstancesExchangeQuoteError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -54427,11 +54433,17 @@ impl AcceptVpcEndpointConnectionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AcceptVpcEndpointConnectionsError::Unknown(String::from(body)),
             },
-            Err(_) => AcceptVpcEndpointConnectionsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    AcceptVpcEndpointConnectionsError::Unknown(format!("{}", status))
+                } else {
+                    AcceptVpcEndpointConnectionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -54506,7 +54518,15 @@ impl AcceptVpcPeeringConnectionError {
                 _ => AcceptVpcPeeringConnectionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                AcceptVpcPeeringConnectionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    AcceptVpcPeeringConnectionError::Unknown(format!("{}", status))
+                } else {
+                    AcceptVpcPeeringConnectionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -54581,7 +54601,13 @@ impl AllocateAddressError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AllocateAddressError::Unknown(String::from(body)),
             },
-            Err(_) => AllocateAddressError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    AllocateAddressError::Unknown(format!("{}", status))
+                } else {
+                    AllocateAddressError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -54653,7 +54679,13 @@ impl AllocateHostsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AllocateHostsError::Unknown(String::from(body)),
             },
-            Err(_) => AllocateHostsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    AllocateHostsError::Unknown(format!("{}", status))
+                } else {
+                    AllocateHostsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -54725,7 +54757,13 @@ impl AssignIpv6AddressesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssignIpv6AddressesError::Unknown(String::from(body)),
             },
-            Err(_) => AssignIpv6AddressesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    AssignIpv6AddressesError::Unknown(format!("{}", status))
+                } else {
+                    AssignIpv6AddressesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -54800,7 +54838,15 @@ impl AssignPrivateIpAddressesError {
                 _ => AssignPrivateIpAddressesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                AssignPrivateIpAddressesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    AssignPrivateIpAddressesError::Unknown(format!("{}", status))
+                } else {
+                    AssignPrivateIpAddressesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -54875,7 +54921,13 @@ impl AssociateAddressError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssociateAddressError::Unknown(String::from(body)),
             },
-            Err(_) => AssociateAddressError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    AssociateAddressError::Unknown(format!("{}", status))
+                } else {
+                    AssociateAddressError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -54948,7 +55000,11 @@ impl AssociateDhcpOptionsError {
                 _ => AssociateDhcpOptionsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                AssociateDhcpOptionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    AssociateDhcpOptionsError::Unknown(format!("{}", status))
+                } else {
+                    AssociateDhcpOptionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -55023,11 +55079,17 @@ impl AssociateIamInstanceProfileError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssociateIamInstanceProfileError::Unknown(String::from(body)),
             },
-            Err(_) => AssociateIamInstanceProfileError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    AssociateIamInstanceProfileError::Unknown(format!("{}", status))
+                } else {
+                    AssociateIamInstanceProfileError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -55101,7 +55163,13 @@ impl AssociateRouteTableError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssociateRouteTableError::Unknown(String::from(body)),
             },
-            Err(_) => AssociateRouteTableError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    AssociateRouteTableError::Unknown(format!("{}", status))
+                } else {
+                    AssociateRouteTableError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -55176,7 +55244,15 @@ impl AssociateSubnetCidrBlockError {
                 _ => AssociateSubnetCidrBlockError::Unknown(String::from(body)),
             },
             Err(_) => {
-                AssociateSubnetCidrBlockError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    AssociateSubnetCidrBlockError::Unknown(format!("{}", status))
+                } else {
+                    AssociateSubnetCidrBlockError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -55252,7 +55328,11 @@ impl AssociateVpcCidrBlockError {
                 _ => AssociateVpcCidrBlockError::Unknown(String::from(body)),
             },
             Err(_) => {
-                AssociateVpcCidrBlockError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    AssociateVpcCidrBlockError::Unknown(format!("{}", status))
+                } else {
+                    AssociateVpcCidrBlockError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -55328,7 +55408,11 @@ impl AttachClassicLinkVpcError {
                 _ => AttachClassicLinkVpcError::Unknown(String::from(body)),
             },
             Err(_) => {
-                AttachClassicLinkVpcError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    AttachClassicLinkVpcError::Unknown(format!("{}", status))
+                } else {
+                    AttachClassicLinkVpcError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -55404,7 +55488,11 @@ impl AttachInternetGatewayError {
                 _ => AttachInternetGatewayError::Unknown(String::from(body)),
             },
             Err(_) => {
-                AttachInternetGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    AttachInternetGatewayError::Unknown(format!("{}", status))
+                } else {
+                    AttachInternetGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -55480,7 +55568,11 @@ impl AttachNetworkInterfaceError {
                 _ => AttachNetworkInterfaceError::Unknown(String::from(body)),
             },
             Err(_) => {
-                AttachNetworkInterfaceError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    AttachNetworkInterfaceError::Unknown(format!("{}", status))
+                } else {
+                    AttachNetworkInterfaceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -55555,7 +55647,13 @@ impl AttachVolumeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AttachVolumeError::Unknown(String::from(body)),
             },
-            Err(_) => AttachVolumeError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    AttachVolumeError::Unknown(format!("{}", status))
+                } else {
+                    AttachVolumeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -55627,7 +55725,13 @@ impl AttachVpnGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AttachVpnGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => AttachVpnGatewayError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    AttachVpnGatewayError::Unknown(format!("{}", status))
+                } else {
+                    AttachVpnGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -55699,11 +55803,17 @@ impl AuthorizeSecurityGroupEgressError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AuthorizeSecurityGroupEgressError::Unknown(String::from(body)),
             },
-            Err(_) => AuthorizeSecurityGroupEgressError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    AuthorizeSecurityGroupEgressError::Unknown(format!("{}", status))
+                } else {
+                    AuthorizeSecurityGroupEgressError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -55777,11 +55887,17 @@ impl AuthorizeSecurityGroupIngressError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AuthorizeSecurityGroupIngressError::Unknown(String::from(body)),
             },
-            Err(_) => AuthorizeSecurityGroupIngressError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    AuthorizeSecurityGroupIngressError::Unknown(format!("{}", status))
+                } else {
+                    AuthorizeSecurityGroupIngressError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -55855,7 +55971,13 @@ impl BundleInstanceError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => BundleInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => BundleInstanceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    BundleInstanceError::Unknown(format!("{}", status))
+                } else {
+                    BundleInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -55927,7 +56049,13 @@ impl CancelBundleTaskError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelBundleTaskError::Unknown(String::from(body)),
             },
-            Err(_) => CancelBundleTaskError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CancelBundleTaskError::Unknown(format!("{}", status))
+                } else {
+                    CancelBundleTaskError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -56000,7 +56128,11 @@ impl CancelConversionTaskError {
                 _ => CancelConversionTaskError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CancelConversionTaskError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CancelConversionTaskError::Unknown(format!("{}", status))
+                } else {
+                    CancelConversionTaskError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -56075,7 +56207,13 @@ impl CancelExportTaskError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelExportTaskError::Unknown(String::from(body)),
             },
-            Err(_) => CancelExportTaskError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CancelExportTaskError::Unknown(format!("{}", status))
+                } else {
+                    CancelExportTaskError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -56147,7 +56285,13 @@ impl CancelImportTaskError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelImportTaskError::Unknown(String::from(body)),
             },
-            Err(_) => CancelImportTaskError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CancelImportTaskError::Unknown(format!("{}", status))
+                } else {
+                    CancelImportTaskError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -56219,11 +56363,17 @@ impl CancelReservedInstancesListingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelReservedInstancesListingError::Unknown(String::from(body)),
             },
-            Err(_) => CancelReservedInstancesListingError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CancelReservedInstancesListingError::Unknown(format!("{}", status))
+                } else {
+                    CancelReservedInstancesListingError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -56298,7 +56448,15 @@ impl EC2CancelSpotFleetRequestsError {
                 _ => EC2CancelSpotFleetRequestsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                EC2CancelSpotFleetRequestsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    EC2CancelSpotFleetRequestsError::Unknown(format!("{}", status))
+                } else {
+                    EC2CancelSpotFleetRequestsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -56374,7 +56532,15 @@ impl CancelSpotInstanceRequestsError {
                 _ => CancelSpotInstanceRequestsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CancelSpotInstanceRequestsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CancelSpotInstanceRequestsError::Unknown(format!("{}", status))
+                } else {
+                    CancelSpotInstanceRequestsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -56450,7 +56616,11 @@ impl ConfirmProductInstanceError {
                 _ => ConfirmProductInstanceError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ConfirmProductInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ConfirmProductInstanceError::Unknown(format!("{}", status))
+                } else {
+                    ConfirmProductInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -56525,7 +56695,13 @@ impl CopyFpgaImageError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CopyFpgaImageError::Unknown(String::from(body)),
             },
-            Err(_) => CopyFpgaImageError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CopyFpgaImageError::Unknown(format!("{}", status))
+                } else {
+                    CopyFpgaImageError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -56597,7 +56773,13 @@ impl CopyImageError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CopyImageError::Unknown(String::from(body)),
             },
-            Err(_) => CopyImageError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CopyImageError::Unknown(format!("{}", status))
+                } else {
+                    CopyImageError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -56669,7 +56851,13 @@ impl CopySnapshotError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CopySnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => CopySnapshotError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CopySnapshotError::Unknown(format!("{}", status))
+                } else {
+                    CopySnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -56742,7 +56930,11 @@ impl CreateCustomerGatewayError {
                 _ => CreateCustomerGatewayError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateCustomerGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateCustomerGatewayError::Unknown(format!("{}", status))
+                } else {
+                    CreateCustomerGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -56817,7 +57009,13 @@ impl CreateDefaultSubnetError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateDefaultSubnetError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDefaultSubnetError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDefaultSubnetError::Unknown(format!("{}", status))
+                } else {
+                    CreateDefaultSubnetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -56891,7 +57089,13 @@ impl CreateDefaultVpcError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateDefaultVpcError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDefaultVpcError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDefaultVpcError::Unknown(format!("{}", status))
+                } else {
+                    CreateDefaultVpcError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -56963,7 +57167,13 @@ impl CreateDhcpOptionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateDhcpOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDhcpOptionsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDhcpOptionsError::Unknown(format!("{}", status))
+                } else {
+                    CreateDhcpOptionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -57037,11 +57247,17 @@ impl CreateEgressOnlyInternetGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateEgressOnlyInternetGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => CreateEgressOnlyInternetGatewayError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateEgressOnlyInternetGatewayError::Unknown(format!("{}", status))
+                } else {
+                    CreateEgressOnlyInternetGatewayError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -57115,7 +57331,13 @@ impl CreateFleetError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateFleetError::Unknown(String::from(body)),
             },
-            Err(_) => CreateFleetError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateFleetError::Unknown(format!("{}", status))
+                } else {
+                    CreateFleetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -57187,7 +57409,13 @@ impl CreateFlowLogsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateFlowLogsError::Unknown(String::from(body)),
             },
-            Err(_) => CreateFlowLogsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateFlowLogsError::Unknown(format!("{}", status))
+                } else {
+                    CreateFlowLogsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -57259,7 +57487,13 @@ impl CreateFpgaImageError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateFpgaImageError::Unknown(String::from(body)),
             },
-            Err(_) => CreateFpgaImageError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateFpgaImageError::Unknown(format!("{}", status))
+                } else {
+                    CreateFpgaImageError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -57331,7 +57565,13 @@ impl CreateImageError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateImageError::Unknown(String::from(body)),
             },
-            Err(_) => CreateImageError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateImageError::Unknown(format!("{}", status))
+                } else {
+                    CreateImageError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -57404,7 +57644,15 @@ impl CreateInstanceExportTaskError {
                 _ => CreateInstanceExportTaskError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateInstanceExportTaskError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateInstanceExportTaskError::Unknown(format!("{}", status))
+                } else {
+                    CreateInstanceExportTaskError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -57480,7 +57728,11 @@ impl CreateInternetGatewayError {
                 _ => CreateInternetGatewayError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateInternetGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateInternetGatewayError::Unknown(format!("{}", status))
+                } else {
+                    CreateInternetGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -57555,7 +57807,13 @@ impl CreateKeyPairError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateKeyPairError::Unknown(String::from(body)),
             },
-            Err(_) => CreateKeyPairError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateKeyPairError::Unknown(format!("{}", status))
+                } else {
+                    CreateKeyPairError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -57628,7 +57886,11 @@ impl CreateLaunchTemplateError {
                 _ => CreateLaunchTemplateError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateLaunchTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateLaunchTemplateError::Unknown(format!("{}", status))
+                } else {
+                    CreateLaunchTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -57703,11 +57965,17 @@ impl CreateLaunchTemplateVersionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateLaunchTemplateVersionError::Unknown(String::from(body)),
             },
-            Err(_) => CreateLaunchTemplateVersionError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateLaunchTemplateVersionError::Unknown(format!("{}", status))
+                } else {
+                    CreateLaunchTemplateVersionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -57781,7 +58049,13 @@ impl CreateNatGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateNatGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => CreateNatGatewayError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateNatGatewayError::Unknown(format!("{}", status))
+                } else {
+                    CreateNatGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -57853,7 +58127,13 @@ impl CreateNetworkAclError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateNetworkAclError::Unknown(String::from(body)),
             },
-            Err(_) => CreateNetworkAclError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateNetworkAclError::Unknown(format!("{}", status))
+                } else {
+                    CreateNetworkAclError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -57926,7 +58206,11 @@ impl CreateNetworkAclEntryError {
                 _ => CreateNetworkAclEntryError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateNetworkAclEntryError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateNetworkAclEntryError::Unknown(format!("{}", status))
+                } else {
+                    CreateNetworkAclEntryError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -58002,7 +58286,11 @@ impl CreateNetworkInterfaceError {
                 _ => CreateNetworkInterfaceError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateNetworkInterfaceError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateNetworkInterfaceError::Unknown(format!("{}", status))
+                } else {
+                    CreateNetworkInterfaceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -58077,11 +58365,17 @@ impl CreateNetworkInterfacePermissionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateNetworkInterfacePermissionError::Unknown(String::from(body)),
             },
-            Err(_) => CreateNetworkInterfacePermissionError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateNetworkInterfacePermissionError::Unknown(format!("{}", status))
+                } else {
+                    CreateNetworkInterfacePermissionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -58156,7 +58450,11 @@ impl CreatePlacementGroupError {
                 _ => CreatePlacementGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreatePlacementGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreatePlacementGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreatePlacementGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -58231,11 +58529,17 @@ impl CreateReservedInstancesListingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateReservedInstancesListingError::Unknown(String::from(body)),
             },
-            Err(_) => CreateReservedInstancesListingError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateReservedInstancesListingError::Unknown(format!("{}", status))
+                } else {
+                    CreateReservedInstancesListingError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -58309,7 +58613,13 @@ impl CreateRouteError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateRouteError::Unknown(String::from(body)),
             },
-            Err(_) => CreateRouteError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateRouteError::Unknown(format!("{}", status))
+                } else {
+                    CreateRouteError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -58381,7 +58691,13 @@ impl CreateRouteTableError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateRouteTableError::Unknown(String::from(body)),
             },
-            Err(_) => CreateRouteTableError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateRouteTableError::Unknown(format!("{}", status))
+                } else {
+                    CreateRouteTableError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -58453,7 +58769,13 @@ impl CreateSecurityGroupError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateSecurityGroupError::Unknown(String::from(body)),
             },
-            Err(_) => CreateSecurityGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateSecurityGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreateSecurityGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -58527,7 +58849,13 @@ impl CreateSnapshotError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => CreateSnapshotError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    CreateSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -58599,11 +58927,17 @@ impl CreateSpotDatafeedSubscriptionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateSpotDatafeedSubscriptionError::Unknown(String::from(body)),
             },
-            Err(_) => CreateSpotDatafeedSubscriptionError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateSpotDatafeedSubscriptionError::Unknown(format!("{}", status))
+                } else {
+                    CreateSpotDatafeedSubscriptionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -58677,7 +59011,13 @@ impl CreateSubnetError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateSubnetError::Unknown(String::from(body)),
             },
-            Err(_) => CreateSubnetError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateSubnetError::Unknown(format!("{}", status))
+                } else {
+                    CreateSubnetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -58749,7 +59089,13 @@ impl CreateTagsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateTagsError::Unknown(String::from(body)),
             },
-            Err(_) => CreateTagsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateTagsError::Unknown(format!("{}", status))
+                } else {
+                    CreateTagsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -58821,7 +59167,13 @@ impl CreateVolumeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVolumeError::Unknown(String::from(body)),
             },
-            Err(_) => CreateVolumeError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateVolumeError::Unknown(format!("{}", status))
+                } else {
+                    CreateVolumeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -58893,7 +59245,13 @@ impl CreateVpcError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpcError::Unknown(String::from(body)),
             },
-            Err(_) => CreateVpcError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateVpcError::Unknown(format!("{}", status))
+                } else {
+                    CreateVpcError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -58965,7 +59323,13 @@ impl CreateVpcEndpointError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpcEndpointError::Unknown(String::from(body)),
             },
-            Err(_) => CreateVpcEndpointError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateVpcEndpointError::Unknown(format!("{}", status))
+                } else {
+                    CreateVpcEndpointError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -59039,11 +59403,17 @@ impl CreateVpcEndpointConnectionNotificationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpcEndpointConnectionNotificationError::Unknown(String::from(body)),
             },
-            Err(_) => CreateVpcEndpointConnectionNotificationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateVpcEndpointConnectionNotificationError::Unknown(format!("{}", status))
+                } else {
+                    CreateVpcEndpointConnectionNotificationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -59117,11 +59487,17 @@ impl CreateVpcEndpointServiceConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpcEndpointServiceConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => CreateVpcEndpointServiceConfigurationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateVpcEndpointServiceConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    CreateVpcEndpointServiceConfigurationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -59196,7 +59572,15 @@ impl CreateVpcPeeringConnectionError {
                 _ => CreateVpcPeeringConnectionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateVpcPeeringConnectionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateVpcPeeringConnectionError::Unknown(format!("{}", status))
+                } else {
+                    CreateVpcPeeringConnectionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -59271,7 +59655,13 @@ impl CreateVpnConnectionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpnConnectionError::Unknown(String::from(body)),
             },
-            Err(_) => CreateVpnConnectionError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateVpnConnectionError::Unknown(format!("{}", status))
+                } else {
+                    CreateVpnConnectionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -59346,7 +59736,15 @@ impl CreateVpnConnectionRouteError {
                 _ => CreateVpnConnectionRouteError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateVpnConnectionRouteError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateVpnConnectionRouteError::Unknown(format!("{}", status))
+                } else {
+                    CreateVpnConnectionRouteError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -59421,7 +59819,13 @@ impl CreateVpnGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpnGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => CreateVpnGatewayError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateVpnGatewayError::Unknown(format!("{}", status))
+                } else {
+                    CreateVpnGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -59494,7 +59898,11 @@ impl DeleteCustomerGatewayError {
                 _ => DeleteCustomerGatewayError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteCustomerGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteCustomerGatewayError::Unknown(format!("{}", status))
+                } else {
+                    DeleteCustomerGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -59569,7 +59977,13 @@ impl DeleteDhcpOptionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteDhcpOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDhcpOptionsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteDhcpOptionsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDhcpOptionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -59643,11 +60057,17 @@ impl DeleteEgressOnlyInternetGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteEgressOnlyInternetGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteEgressOnlyInternetGatewayError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteEgressOnlyInternetGatewayError::Unknown(format!("{}", status))
+                } else {
+                    DeleteEgressOnlyInternetGatewayError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -59721,7 +60141,13 @@ impl DeleteFleetsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteFleetsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteFleetsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteFleetsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteFleetsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -59793,7 +60219,13 @@ impl DeleteFlowLogsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteFlowLogsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteFlowLogsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteFlowLogsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteFlowLogsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -59865,7 +60297,13 @@ impl DeleteFpgaImageError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteFpgaImageError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteFpgaImageError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteFpgaImageError::Unknown(format!("{}", status))
+                } else {
+                    DeleteFpgaImageError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -59938,7 +60376,11 @@ impl DeleteInternetGatewayError {
                 _ => DeleteInternetGatewayError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteInternetGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteInternetGatewayError::Unknown(format!("{}", status))
+                } else {
+                    DeleteInternetGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -60013,7 +60455,13 @@ impl DeleteKeyPairError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteKeyPairError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteKeyPairError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteKeyPairError::Unknown(format!("{}", status))
+                } else {
+                    DeleteKeyPairError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -60086,7 +60534,11 @@ impl DeleteLaunchTemplateError {
                 _ => DeleteLaunchTemplateError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteLaunchTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteLaunchTemplateError::Unknown(format!("{}", status))
+                } else {
+                    DeleteLaunchTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -60161,11 +60613,17 @@ impl DeleteLaunchTemplateVersionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteLaunchTemplateVersionsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteLaunchTemplateVersionsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteLaunchTemplateVersionsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteLaunchTemplateVersionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -60239,7 +60697,13 @@ impl DeleteNatGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteNatGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteNatGatewayError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteNatGatewayError::Unknown(format!("{}", status))
+                } else {
+                    DeleteNatGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -60311,7 +60775,13 @@ impl DeleteNetworkAclError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteNetworkAclError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteNetworkAclError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteNetworkAclError::Unknown(format!("{}", status))
+                } else {
+                    DeleteNetworkAclError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -60384,7 +60854,11 @@ impl DeleteNetworkAclEntryError {
                 _ => DeleteNetworkAclEntryError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteNetworkAclEntryError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteNetworkAclEntryError::Unknown(format!("{}", status))
+                } else {
+                    DeleteNetworkAclEntryError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -60460,7 +60934,11 @@ impl DeleteNetworkInterfaceError {
                 _ => DeleteNetworkInterfaceError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteNetworkInterfaceError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteNetworkInterfaceError::Unknown(format!("{}", status))
+                } else {
+                    DeleteNetworkInterfaceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -60535,11 +61013,17 @@ impl DeleteNetworkInterfacePermissionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteNetworkInterfacePermissionError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteNetworkInterfacePermissionError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteNetworkInterfacePermissionError::Unknown(format!("{}", status))
+                } else {
+                    DeleteNetworkInterfacePermissionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -60614,7 +61098,11 @@ impl DeletePlacementGroupError {
                 _ => DeletePlacementGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeletePlacementGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeletePlacementGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeletePlacementGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -60689,7 +61177,13 @@ impl DeleteRouteError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteRouteError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteRouteError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteRouteError::Unknown(format!("{}", status))
+                } else {
+                    DeleteRouteError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -60761,7 +61255,13 @@ impl DeleteRouteTableError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteRouteTableError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteRouteTableError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteRouteTableError::Unknown(format!("{}", status))
+                } else {
+                    DeleteRouteTableError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -60833,7 +61333,13 @@ impl DeleteSecurityGroupError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteSecurityGroupError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteSecurityGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteSecurityGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeleteSecurityGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -60907,7 +61413,13 @@ impl DeleteSnapshotError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteSnapshotError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    DeleteSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -60979,11 +61491,17 @@ impl DeleteSpotDatafeedSubscriptionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteSpotDatafeedSubscriptionError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteSpotDatafeedSubscriptionError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteSpotDatafeedSubscriptionError::Unknown(format!("{}", status))
+                } else {
+                    DeleteSpotDatafeedSubscriptionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -61057,7 +61575,13 @@ impl DeleteSubnetError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteSubnetError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteSubnetError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteSubnetError::Unknown(format!("{}", status))
+                } else {
+                    DeleteSubnetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -61129,7 +61653,13 @@ impl DeleteTagsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteTagsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteTagsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteTagsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteTagsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -61201,7 +61731,13 @@ impl DeleteVolumeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVolumeError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteVolumeError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteVolumeError::Unknown(format!("{}", status))
+                } else {
+                    DeleteVolumeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -61273,7 +61809,13 @@ impl DeleteVpcError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpcError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteVpcError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteVpcError::Unknown(format!("{}", status))
+                } else {
+                    DeleteVpcError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -61345,11 +61887,17 @@ impl DeleteVpcEndpointConnectionNotificationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpcEndpointConnectionNotificationsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteVpcEndpointConnectionNotificationsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteVpcEndpointConnectionNotificationsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteVpcEndpointConnectionNotificationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -61425,11 +61973,17 @@ impl DeleteVpcEndpointServiceConfigurationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpcEndpointServiceConfigurationsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteVpcEndpointServiceConfigurationsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteVpcEndpointServiceConfigurationsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteVpcEndpointServiceConfigurationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -61503,7 +62057,13 @@ impl DeleteVpcEndpointsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpcEndpointsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteVpcEndpointsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteVpcEndpointsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteVpcEndpointsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -61578,7 +62138,15 @@ impl DeleteVpcPeeringConnectionError {
                 _ => DeleteVpcPeeringConnectionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteVpcPeeringConnectionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteVpcPeeringConnectionError::Unknown(format!("{}", status))
+                } else {
+                    DeleteVpcPeeringConnectionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -61653,7 +62221,13 @@ impl DeleteVpnConnectionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpnConnectionError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteVpnConnectionError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteVpnConnectionError::Unknown(format!("{}", status))
+                } else {
+                    DeleteVpnConnectionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -61728,7 +62302,15 @@ impl DeleteVpnConnectionRouteError {
                 _ => DeleteVpnConnectionRouteError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteVpnConnectionRouteError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteVpnConnectionRouteError::Unknown(format!("{}", status))
+                } else {
+                    DeleteVpnConnectionRouteError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -61803,7 +62385,13 @@ impl DeleteVpnGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpnGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteVpnGatewayError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteVpnGatewayError::Unknown(format!("{}", status))
+                } else {
+                    DeleteVpnGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -61875,7 +62463,13 @@ impl DeregisterImageError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeregisterImageError::Unknown(String::from(body)),
             },
-            Err(_) => DeregisterImageError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeregisterImageError::Unknown(format!("{}", status))
+                } else {
+                    DeregisterImageError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -61948,7 +62542,15 @@ impl DescribeAccountAttributesError {
                 _ => DescribeAccountAttributesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeAccountAttributesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeAccountAttributesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAccountAttributesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -62023,7 +62625,13 @@ impl DescribeAddressesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeAddressesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeAddressesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeAddressesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAddressesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -62098,7 +62706,15 @@ impl DescribeAggregateIdFormatError {
                 _ => DescribeAggregateIdFormatError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeAggregateIdFormatError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeAggregateIdFormatError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAggregateIdFormatError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -62174,7 +62790,15 @@ impl DescribeAvailabilityZonesError {
                 _ => DescribeAvailabilityZonesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeAvailabilityZonesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeAvailabilityZonesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAvailabilityZonesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -62249,7 +62873,13 @@ impl DescribeBundleTasksError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeBundleTasksError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeBundleTasksError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeBundleTasksError::Unknown(format!("{}", status))
+                } else {
+                    DescribeBundleTasksError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -62323,11 +62953,17 @@ impl DescribeClassicLinkInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeClassicLinkInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeClassicLinkInstancesError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeClassicLinkInstancesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeClassicLinkInstancesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -62402,7 +63038,15 @@ impl DescribeConversionTasksError {
                 _ => DescribeConversionTasksError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeConversionTasksError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeConversionTasksError::Unknown(format!("{}", status))
+                } else {
+                    DescribeConversionTasksError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -62478,7 +63122,15 @@ impl DescribeCustomerGatewaysError {
                 _ => DescribeCustomerGatewaysError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeCustomerGatewaysError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeCustomerGatewaysError::Unknown(format!("{}", status))
+                } else {
+                    DescribeCustomerGatewaysError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -62553,7 +63205,13 @@ impl DescribeDhcpOptionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeDhcpOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDhcpOptionsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDhcpOptionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDhcpOptionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -62627,11 +63285,17 @@ impl DescribeEgressOnlyInternetGatewaysError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEgressOnlyInternetGatewaysError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEgressOnlyInternetGatewaysError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeEgressOnlyInternetGatewaysError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEgressOnlyInternetGatewaysError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -62705,7 +63369,13 @@ impl DescribeElasticGpusError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeElasticGpusError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeElasticGpusError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeElasticGpusError::Unknown(format!("{}", status))
+                } else {
+                    DescribeElasticGpusError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -62779,7 +63449,13 @@ impl DescribeExportTasksError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeExportTasksError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeExportTasksError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeExportTasksError::Unknown(format!("{}", status))
+                } else {
+                    DescribeExportTasksError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -62854,7 +63530,11 @@ impl DescribeFleetHistoryError {
                 _ => DescribeFleetHistoryError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeFleetHistoryError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeFleetHistoryError::Unknown(format!("{}", status))
+                } else {
+                    DescribeFleetHistoryError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -62930,7 +63610,11 @@ impl DescribeFleetInstancesError {
                 _ => DescribeFleetInstancesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeFleetInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeFleetInstancesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeFleetInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -63005,7 +63689,13 @@ impl DescribeFleetsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeFleetsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeFleetsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeFleetsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeFleetsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -63077,7 +63767,13 @@ impl DescribeFlowLogsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeFlowLogsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeFlowLogsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeFlowLogsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeFlowLogsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -63150,7 +63846,15 @@ impl DescribeFpgaImageAttributeError {
                 _ => DescribeFpgaImageAttributeError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeFpgaImageAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeFpgaImageAttributeError::Unknown(format!("{}", status))
+                } else {
+                    DescribeFpgaImageAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -63225,7 +63929,13 @@ impl DescribeFpgaImagesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeFpgaImagesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeFpgaImagesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeFpgaImagesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeFpgaImagesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -63299,11 +64009,17 @@ impl DescribeHostReservationOfferingsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeHostReservationOfferingsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeHostReservationOfferingsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeHostReservationOfferingsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeHostReservationOfferingsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -63378,7 +64094,15 @@ impl DescribeHostReservationsError {
                 _ => DescribeHostReservationsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeHostReservationsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeHostReservationsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeHostReservationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -63453,7 +64177,13 @@ impl DescribeHostsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeHostsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeHostsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeHostsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeHostsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -63525,11 +64255,17 @@ impl DescribeIamInstanceProfileAssociationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeIamInstanceProfileAssociationsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeIamInstanceProfileAssociationsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeIamInstanceProfileAssociationsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeIamInstanceProfileAssociationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -63603,7 +64339,13 @@ impl DescribeIdFormatError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeIdFormatError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeIdFormatError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeIdFormatError::Unknown(format!("{}", status))
+                } else {
+                    DescribeIdFormatError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -63676,7 +64418,15 @@ impl DescribeIdentityIdFormatError {
                 _ => DescribeIdentityIdFormatError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeIdentityIdFormatError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeIdentityIdFormatError::Unknown(format!("{}", status))
+                } else {
+                    DescribeIdentityIdFormatError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -63752,7 +64502,11 @@ impl DescribeImageAttributeError {
                 _ => DescribeImageAttributeError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeImageAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeImageAttributeError::Unknown(format!("{}", status))
+                } else {
+                    DescribeImageAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -63827,7 +64581,13 @@ impl DescribeImagesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeImagesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeImagesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeImagesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeImagesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -63900,7 +64660,15 @@ impl DescribeImportImageTasksError {
                 _ => DescribeImportImageTasksError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeImportImageTasksError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeImportImageTasksError::Unknown(format!("{}", status))
+                } else {
+                    DescribeImportImageTasksError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -63975,11 +64743,17 @@ impl DescribeImportSnapshotTasksError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeImportSnapshotTasksError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeImportSnapshotTasksError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeImportSnapshotTasksError::Unknown(format!("{}", status))
+                } else {
+                    DescribeImportSnapshotTasksError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -64054,7 +64828,15 @@ impl DescribeInstanceAttributeError {
                 _ => DescribeInstanceAttributeError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeInstanceAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeInstanceAttributeError::Unknown(format!("{}", status))
+                } else {
+                    DescribeInstanceAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -64129,11 +64911,17 @@ impl DescribeInstanceCreditSpecificationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeInstanceCreditSpecificationsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeInstanceCreditSpecificationsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeInstanceCreditSpecificationsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeInstanceCreditSpecificationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -64208,7 +64996,11 @@ impl DescribeInstanceStatusError {
                 _ => DescribeInstanceStatusError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeInstanceStatusError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeInstanceStatusError::Unknown(format!("{}", status))
+                } else {
+                    DescribeInstanceStatusError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -64283,7 +65075,13 @@ impl DescribeInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeInstancesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeInstancesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -64358,7 +65156,15 @@ impl DescribeInternetGatewaysError {
                 _ => DescribeInternetGatewaysError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeInternetGatewaysError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeInternetGatewaysError::Unknown(format!("{}", status))
+                } else {
+                    DescribeInternetGatewaysError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -64433,7 +65239,13 @@ impl DescribeKeyPairsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeKeyPairsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeKeyPairsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeKeyPairsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeKeyPairsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -64505,11 +65317,17 @@ impl DescribeLaunchTemplateVersionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeLaunchTemplateVersionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeLaunchTemplateVersionsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeLaunchTemplateVersionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeLaunchTemplateVersionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -64584,7 +65402,15 @@ impl DescribeLaunchTemplatesError {
                 _ => DescribeLaunchTemplatesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeLaunchTemplatesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeLaunchTemplatesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeLaunchTemplatesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -64660,7 +65486,15 @@ impl DescribeMovingAddressesError {
                 _ => DescribeMovingAddressesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeMovingAddressesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeMovingAddressesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeMovingAddressesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -64735,7 +65569,13 @@ impl DescribeNatGatewaysError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeNatGatewaysError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeNatGatewaysError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeNatGatewaysError::Unknown(format!("{}", status))
+                } else {
+                    DescribeNatGatewaysError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -64809,7 +65649,13 @@ impl DescribeNetworkAclsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeNetworkAclsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeNetworkAclsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeNetworkAclsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeNetworkAclsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -64883,11 +65729,17 @@ impl DescribeNetworkInterfaceAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeNetworkInterfaceAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeNetworkInterfaceAttributeError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeNetworkInterfaceAttributeError::Unknown(format!("{}", status))
+                } else {
+                    DescribeNetworkInterfaceAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -64961,11 +65813,17 @@ impl DescribeNetworkInterfacePermissionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeNetworkInterfacePermissionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeNetworkInterfacePermissionsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeNetworkInterfacePermissionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeNetworkInterfacePermissionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -65040,7 +65898,15 @@ impl DescribeNetworkInterfacesError {
                 _ => DescribeNetworkInterfacesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeNetworkInterfacesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeNetworkInterfacesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeNetworkInterfacesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -65116,7 +65982,15 @@ impl DescribePlacementGroupsError {
                 _ => DescribePlacementGroupsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribePlacementGroupsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribePlacementGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribePlacementGroupsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -65191,7 +66065,13 @@ impl DescribePrefixListsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribePrefixListsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribePrefixListsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribePrefixListsError::Unknown(format!("{}", status))
+                } else {
+                    DescribePrefixListsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -65266,7 +66146,15 @@ impl DescribePrincipalIdFormatError {
                 _ => DescribePrincipalIdFormatError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribePrincipalIdFormatError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribePrincipalIdFormatError::Unknown(format!("{}", status))
+                } else {
+                    DescribePrincipalIdFormatError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -65341,7 +66229,13 @@ impl DescribeRegionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeRegionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeRegionsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeRegionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeRegionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -65414,7 +66308,15 @@ impl DescribeReservedInstancesError {
                 _ => DescribeReservedInstancesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeReservedInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeReservedInstancesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeReservedInstancesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -65489,11 +66391,17 @@ impl DescribeReservedInstancesListingsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeReservedInstancesListingsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeReservedInstancesListingsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeReservedInstancesListingsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeReservedInstancesListingsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -65567,11 +66475,17 @@ impl DescribeReservedInstancesModificationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeReservedInstancesModificationsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeReservedInstancesModificationsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeReservedInstancesModificationsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeReservedInstancesModificationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -65645,11 +66559,17 @@ impl DescribeReservedInstancesOfferingsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeReservedInstancesOfferingsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeReservedInstancesOfferingsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeReservedInstancesOfferingsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeReservedInstancesOfferingsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -65723,7 +66643,13 @@ impl DescribeRouteTablesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeRouteTablesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeRouteTablesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeRouteTablesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeRouteTablesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -65797,11 +66723,17 @@ impl DescribeScheduledInstanceAvailabilityError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeScheduledInstanceAvailabilityError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeScheduledInstanceAvailabilityError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeScheduledInstanceAvailabilityError::Unknown(format!("{}", status))
+                } else {
+                    DescribeScheduledInstanceAvailabilityError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -65876,7 +66808,15 @@ impl DescribeScheduledInstancesError {
                 _ => DescribeScheduledInstancesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeScheduledInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeScheduledInstancesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeScheduledInstancesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -65951,11 +66891,17 @@ impl DescribeSecurityGroupReferencesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSecurityGroupReferencesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSecurityGroupReferencesError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeSecurityGroupReferencesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSecurityGroupReferencesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -66030,7 +66976,11 @@ impl DescribeSecurityGroupsError {
                 _ => DescribeSecurityGroupsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeSecurityGroupsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeSecurityGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSecurityGroupsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -66106,7 +67056,15 @@ impl DescribeSnapshotAttributeError {
                 _ => DescribeSnapshotAttributeError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeSnapshotAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeSnapshotAttributeError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSnapshotAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -66181,7 +67139,13 @@ impl DescribeSnapshotsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSnapshotsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSnapshotsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeSnapshotsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSnapshotsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -66255,11 +67219,17 @@ impl DescribeSpotDatafeedSubscriptionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSpotDatafeedSubscriptionError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSpotDatafeedSubscriptionError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeSpotDatafeedSubscriptionError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSpotDatafeedSubscriptionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -66334,7 +67304,15 @@ impl DescribeSpotFleetInstancesError {
                 _ => DescribeSpotFleetInstancesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeSpotFleetInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeSpotFleetInstancesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSpotFleetInstancesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -66409,11 +67387,17 @@ impl DescribeSpotFleetRequestHistoryError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSpotFleetRequestHistoryError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSpotFleetRequestHistoryError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeSpotFleetRequestHistoryError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSpotFleetRequestHistoryError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -66488,7 +67472,15 @@ impl DescribeSpotFleetRequestsError {
                 _ => DescribeSpotFleetRequestsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeSpotFleetRequestsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeSpotFleetRequestsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSpotFleetRequestsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -66563,11 +67555,17 @@ impl DescribeSpotInstanceRequestsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSpotInstanceRequestsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSpotInstanceRequestsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeSpotInstanceRequestsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSpotInstanceRequestsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -66642,7 +67640,15 @@ impl DescribeSpotPriceHistoryError {
                 _ => DescribeSpotPriceHistoryError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeSpotPriceHistoryError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeSpotPriceHistoryError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSpotPriceHistoryError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -66717,11 +67723,17 @@ impl DescribeStaleSecurityGroupsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeStaleSecurityGroupsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeStaleSecurityGroupsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeStaleSecurityGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeStaleSecurityGroupsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -66795,7 +67807,13 @@ impl DescribeSubnetsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSubnetsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSubnetsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeSubnetsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSubnetsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -66867,7 +67885,13 @@ impl DescribeTagsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeTagsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeTagsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeTagsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeTagsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -66940,7 +67964,15 @@ impl DescribeVolumeAttributeError {
                 _ => DescribeVolumeAttributeError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeVolumeAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeVolumeAttributeError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVolumeAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -67016,7 +68048,11 @@ impl DescribeVolumeStatusError {
                 _ => DescribeVolumeStatusError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeVolumeStatusError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeVolumeStatusError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVolumeStatusError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -67091,7 +68127,13 @@ impl DescribeVolumesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVolumesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVolumesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVolumesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVolumesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -67163,11 +68205,17 @@ impl DescribeVolumesModificationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVolumesModificationsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVolumesModificationsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVolumesModificationsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVolumesModificationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -67242,7 +68290,11 @@ impl DescribeVpcAttributeError {
                 _ => DescribeVpcAttributeError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeVpcAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeVpcAttributeError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -67318,7 +68370,11 @@ impl DescribeVpcClassicLinkError {
                 _ => DescribeVpcClassicLinkError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeVpcClassicLinkError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeVpcClassicLinkError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcClassicLinkError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -67393,11 +68449,17 @@ impl DescribeVpcClassicLinkDnsSupportError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcClassicLinkDnsSupportError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpcClassicLinkDnsSupportError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpcClassicLinkDnsSupportError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcClassicLinkDnsSupportError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -67471,11 +68533,17 @@ impl DescribeVpcEndpointConnectionNotificationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcEndpointConnectionNotificationsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpcEndpointConnectionNotificationsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpcEndpointConnectionNotificationsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcEndpointConnectionNotificationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -67551,11 +68619,17 @@ impl DescribeVpcEndpointConnectionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcEndpointConnectionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpcEndpointConnectionsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpcEndpointConnectionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcEndpointConnectionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -67629,11 +68703,17 @@ impl DescribeVpcEndpointServiceConfigurationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcEndpointServiceConfigurationsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpcEndpointServiceConfigurationsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpcEndpointServiceConfigurationsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcEndpointServiceConfigurationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -67709,11 +68789,17 @@ impl DescribeVpcEndpointServicePermissionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcEndpointServicePermissionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpcEndpointServicePermissionsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpcEndpointServicePermissionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcEndpointServicePermissionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -67787,11 +68873,17 @@ impl DescribeVpcEndpointServicesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcEndpointServicesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpcEndpointServicesError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpcEndpointServicesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcEndpointServicesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -67866,7 +68958,11 @@ impl DescribeVpcEndpointsError {
                 _ => DescribeVpcEndpointsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeVpcEndpointsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeVpcEndpointsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcEndpointsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -67941,11 +69037,17 @@ impl DescribeVpcPeeringConnectionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcPeeringConnectionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpcPeeringConnectionsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpcPeeringConnectionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcPeeringConnectionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -68019,7 +69121,13 @@ impl DescribeVpcsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpcsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpcsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -68092,7 +69200,11 @@ impl DescribeVpnConnectionsError {
                 _ => DescribeVpnConnectionsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeVpnConnectionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeVpnConnectionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpnConnectionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -68167,7 +69279,13 @@ impl DescribeVpnGatewaysError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpnGatewaysError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpnGatewaysError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpnGatewaysError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpnGatewaysError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -68242,7 +69360,11 @@ impl DetachClassicLinkVpcError {
                 _ => DetachClassicLinkVpcError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DetachClassicLinkVpcError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DetachClassicLinkVpcError::Unknown(format!("{}", status))
+                } else {
+                    DetachClassicLinkVpcError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -68318,7 +69440,11 @@ impl DetachInternetGatewayError {
                 _ => DetachInternetGatewayError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DetachInternetGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DetachInternetGatewayError::Unknown(format!("{}", status))
+                } else {
+                    DetachInternetGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -68394,7 +69520,11 @@ impl DetachNetworkInterfaceError {
                 _ => DetachNetworkInterfaceError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DetachNetworkInterfaceError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DetachNetworkInterfaceError::Unknown(format!("{}", status))
+                } else {
+                    DetachNetworkInterfaceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -68469,7 +69599,13 @@ impl DetachVolumeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DetachVolumeError::Unknown(String::from(body)),
             },
-            Err(_) => DetachVolumeError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DetachVolumeError::Unknown(format!("{}", status))
+                } else {
+                    DetachVolumeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -68541,7 +69677,13 @@ impl DetachVpnGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DetachVpnGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => DetachVpnGatewayError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DetachVpnGatewayError::Unknown(format!("{}", status))
+                } else {
+                    DetachVpnGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -68614,7 +69756,15 @@ impl DisableVgwRoutePropagationError {
                 _ => DisableVgwRoutePropagationError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DisableVgwRoutePropagationError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DisableVgwRoutePropagationError::Unknown(format!("{}", status))
+                } else {
+                    DisableVgwRoutePropagationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -68690,7 +69840,11 @@ impl DisableVpcClassicLinkError {
                 _ => DisableVpcClassicLinkError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DisableVpcClassicLinkError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DisableVpcClassicLinkError::Unknown(format!("{}", status))
+                } else {
+                    DisableVpcClassicLinkError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -68765,11 +69919,17 @@ impl DisableVpcClassicLinkDnsSupportError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisableVpcClassicLinkDnsSupportError::Unknown(String::from(body)),
             },
-            Err(_) => DisableVpcClassicLinkDnsSupportError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DisableVpcClassicLinkDnsSupportError::Unknown(format!("{}", status))
+                } else {
+                    DisableVpcClassicLinkDnsSupportError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -68843,7 +70003,13 @@ impl DisassociateAddressError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisassociateAddressError::Unknown(String::from(body)),
             },
-            Err(_) => DisassociateAddressError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DisassociateAddressError::Unknown(format!("{}", status))
+                } else {
+                    DisassociateAddressError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -68917,11 +70083,17 @@ impl DisassociateIamInstanceProfileError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisassociateIamInstanceProfileError::Unknown(String::from(body)),
             },
-            Err(_) => DisassociateIamInstanceProfileError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DisassociateIamInstanceProfileError::Unknown(format!("{}", status))
+                } else {
+                    DisassociateIamInstanceProfileError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -68996,7 +70168,11 @@ impl DisassociateRouteTableError {
                 _ => DisassociateRouteTableError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DisassociateRouteTableError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DisassociateRouteTableError::Unknown(format!("{}", status))
+                } else {
+                    DisassociateRouteTableError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -69071,11 +70247,17 @@ impl DisassociateSubnetCidrBlockError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisassociateSubnetCidrBlockError::Unknown(String::from(body)),
             },
-            Err(_) => DisassociateSubnetCidrBlockError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DisassociateSubnetCidrBlockError::Unknown(format!("{}", status))
+                } else {
+                    DisassociateSubnetCidrBlockError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -69150,7 +70332,15 @@ impl DisassociateVpcCidrBlockError {
                 _ => DisassociateVpcCidrBlockError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DisassociateVpcCidrBlockError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DisassociateVpcCidrBlockError::Unknown(format!("{}", status))
+                } else {
+                    DisassociateVpcCidrBlockError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -69226,7 +70416,15 @@ impl EnableVgwRoutePropagationError {
                 _ => EnableVgwRoutePropagationError::Unknown(String::from(body)),
             },
             Err(_) => {
-                EnableVgwRoutePropagationError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    EnableVgwRoutePropagationError::Unknown(format!("{}", status))
+                } else {
+                    EnableVgwRoutePropagationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -69301,7 +70499,13 @@ impl EnableVolumeIOError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => EnableVolumeIOError::Unknown(String::from(body)),
             },
-            Err(_) => EnableVolumeIOError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    EnableVolumeIOError::Unknown(format!("{}", status))
+                } else {
+                    EnableVolumeIOError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -69374,7 +70578,11 @@ impl EnableVpcClassicLinkError {
                 _ => EnableVpcClassicLinkError::Unknown(String::from(body)),
             },
             Err(_) => {
-                EnableVpcClassicLinkError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    EnableVpcClassicLinkError::Unknown(format!("{}", status))
+                } else {
+                    EnableVpcClassicLinkError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -69449,11 +70657,17 @@ impl EnableVpcClassicLinkDnsSupportError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => EnableVpcClassicLinkDnsSupportError::Unknown(String::from(body)),
             },
-            Err(_) => EnableVpcClassicLinkDnsSupportError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    EnableVpcClassicLinkDnsSupportError::Unknown(format!("{}", status))
+                } else {
+                    EnableVpcClassicLinkDnsSupportError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -69527,7 +70741,13 @@ impl GetConsoleOutputError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetConsoleOutputError::Unknown(String::from(body)),
             },
-            Err(_) => GetConsoleOutputError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetConsoleOutputError::Unknown(format!("{}", status))
+                } else {
+                    GetConsoleOutputError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -69600,7 +70820,11 @@ impl GetConsoleScreenshotError {
                 _ => GetConsoleScreenshotError::Unknown(String::from(body)),
             },
             Err(_) => {
-                GetConsoleScreenshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    GetConsoleScreenshotError::Unknown(format!("{}", status))
+                } else {
+                    GetConsoleScreenshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -69675,11 +70899,17 @@ impl GetHostReservationPurchasePreviewError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetHostReservationPurchasePreviewError::Unknown(String::from(body)),
             },
-            Err(_) => GetHostReservationPurchasePreviewError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetHostReservationPurchasePreviewError::Unknown(format!("{}", status))
+                } else {
+                    GetHostReservationPurchasePreviewError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -69754,7 +70984,11 @@ impl GetLaunchTemplateDataError {
                 _ => GetLaunchTemplateDataError::Unknown(String::from(body)),
             },
             Err(_) => {
-                GetLaunchTemplateDataError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    GetLaunchTemplateDataError::Unknown(format!("{}", status))
+                } else {
+                    GetLaunchTemplateDataError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -69829,7 +71063,13 @@ impl GetPasswordDataError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetPasswordDataError::Unknown(String::from(body)),
             },
-            Err(_) => GetPasswordDataError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetPasswordDataError::Unknown(format!("{}", status))
+                } else {
+                    GetPasswordDataError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -69901,11 +71141,17 @@ impl GetReservedInstancesExchangeQuoteError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetReservedInstancesExchangeQuoteError::Unknown(String::from(body)),
             },
-            Err(_) => GetReservedInstancesExchangeQuoteError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetReservedInstancesExchangeQuoteError::Unknown(format!("{}", status))
+                } else {
+                    GetReservedInstancesExchangeQuoteError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -69979,7 +71225,13 @@ impl ImportImageError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ImportImageError::Unknown(String::from(body)),
             },
-            Err(_) => ImportImageError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ImportImageError::Unknown(format!("{}", status))
+                } else {
+                    ImportImageError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -70051,7 +71303,13 @@ impl ImportInstanceError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ImportInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => ImportInstanceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ImportInstanceError::Unknown(format!("{}", status))
+                } else {
+                    ImportInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -70123,7 +71381,13 @@ impl ImportKeyPairError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ImportKeyPairError::Unknown(String::from(body)),
             },
-            Err(_) => ImportKeyPairError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ImportKeyPairError::Unknown(format!("{}", status))
+                } else {
+                    ImportKeyPairError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -70195,7 +71459,13 @@ impl ImportSnapshotError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ImportSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => ImportSnapshotError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ImportSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    ImportSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -70267,7 +71537,13 @@ impl ImportVolumeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ImportVolumeError::Unknown(String::from(body)),
             },
-            Err(_) => ImportVolumeError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ImportVolumeError::Unknown(format!("{}", status))
+                } else {
+                    ImportVolumeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -70339,7 +71615,13 @@ impl ModifyFleetError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyFleetError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyFleetError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyFleetError::Unknown(format!("{}", status))
+                } else {
+                    ModifyFleetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -70412,7 +71694,15 @@ impl ModifyFpgaImageAttributeError {
                 _ => ModifyFpgaImageAttributeError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ModifyFpgaImageAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ModifyFpgaImageAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ModifyFpgaImageAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -70487,7 +71777,13 @@ impl ModifyHostsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyHostsError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyHostsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyHostsError::Unknown(format!("{}", status))
+                } else {
+                    ModifyHostsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -70559,7 +71855,13 @@ impl ModifyIdFormatError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyIdFormatError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyIdFormatError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyIdFormatError::Unknown(format!("{}", status))
+                } else {
+                    ModifyIdFormatError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -70632,7 +71934,11 @@ impl ModifyIdentityIdFormatError {
                 _ => ModifyIdentityIdFormatError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ModifyIdentityIdFormatError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ModifyIdentityIdFormatError::Unknown(format!("{}", status))
+                } else {
+                    ModifyIdentityIdFormatError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -70708,7 +72014,11 @@ impl ModifyImageAttributeError {
                 _ => ModifyImageAttributeError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ModifyImageAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ModifyImageAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ModifyImageAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -70784,7 +72094,15 @@ impl ModifyInstanceAttributeError {
                 _ => ModifyInstanceAttributeError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ModifyInstanceAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ModifyInstanceAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ModifyInstanceAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -70859,11 +72177,17 @@ impl ModifyInstanceCreditSpecificationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyInstanceCreditSpecificationError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyInstanceCreditSpecificationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyInstanceCreditSpecificationError::Unknown(format!("{}", status))
+                } else {
+                    ModifyInstanceCreditSpecificationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -70938,7 +72262,15 @@ impl ModifyInstancePlacementError {
                 _ => ModifyInstancePlacementError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ModifyInstancePlacementError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ModifyInstancePlacementError::Unknown(format!("{}", status))
+                } else {
+                    ModifyInstancePlacementError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -71014,7 +72346,11 @@ impl ModifyLaunchTemplateError {
                 _ => ModifyLaunchTemplateError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ModifyLaunchTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ModifyLaunchTemplateError::Unknown(format!("{}", status))
+                } else {
+                    ModifyLaunchTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -71089,11 +72425,17 @@ impl ModifyNetworkInterfaceAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyNetworkInterfaceAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyNetworkInterfaceAttributeError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyNetworkInterfaceAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ModifyNetworkInterfaceAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -71168,7 +72510,15 @@ impl ModifyReservedInstancesError {
                 _ => ModifyReservedInstancesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ModifyReservedInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ModifyReservedInstancesError::Unknown(format!("{}", status))
+                } else {
+                    ModifyReservedInstancesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -71244,7 +72594,15 @@ impl ModifySnapshotAttributeError {
                 _ => ModifySnapshotAttributeError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ModifySnapshotAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ModifySnapshotAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ModifySnapshotAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -71320,7 +72678,11 @@ impl ModifySpotFleetRequestError {
                 _ => ModifySpotFleetRequestError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ModifySpotFleetRequestError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ModifySpotFleetRequestError::Unknown(format!("{}", status))
+                } else {
+                    ModifySpotFleetRequestError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -71396,7 +72758,11 @@ impl ModifySubnetAttributeError {
                 _ => ModifySubnetAttributeError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ModifySubnetAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ModifySubnetAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ModifySubnetAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -71471,7 +72837,13 @@ impl ModifyVolumeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVolumeError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyVolumeError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyVolumeError::Unknown(format!("{}", status))
+                } else {
+                    ModifyVolumeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -71544,7 +72916,11 @@ impl ModifyVolumeAttributeError {
                 _ => ModifyVolumeAttributeError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ModifyVolumeAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ModifyVolumeAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ModifyVolumeAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -71619,7 +72995,13 @@ impl ModifyVpcAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyVpcAttributeError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyVpcAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ModifyVpcAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -71693,7 +73075,13 @@ impl ModifyVpcEndpointError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcEndpointError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyVpcEndpointError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyVpcEndpointError::Unknown(format!("{}", status))
+                } else {
+                    ModifyVpcEndpointError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -71767,11 +73155,17 @@ impl ModifyVpcEndpointConnectionNotificationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcEndpointConnectionNotificationError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyVpcEndpointConnectionNotificationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyVpcEndpointConnectionNotificationError::Unknown(format!("{}", status))
+                } else {
+                    ModifyVpcEndpointConnectionNotificationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -71845,11 +73239,17 @@ impl ModifyVpcEndpointServiceConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcEndpointServiceConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyVpcEndpointServiceConfigurationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyVpcEndpointServiceConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    ModifyVpcEndpointServiceConfigurationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -71923,11 +73323,17 @@ impl ModifyVpcEndpointServicePermissionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcEndpointServicePermissionsError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyVpcEndpointServicePermissionsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyVpcEndpointServicePermissionsError::Unknown(format!("{}", status))
+                } else {
+                    ModifyVpcEndpointServicePermissionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -72001,11 +73407,17 @@ impl ModifyVpcPeeringConnectionOptionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcPeeringConnectionOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyVpcPeeringConnectionOptionsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyVpcPeeringConnectionOptionsError::Unknown(format!("{}", status))
+                } else {
+                    ModifyVpcPeeringConnectionOptionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -72079,7 +73491,13 @@ impl ModifyVpcTenancyError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcTenancyError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyVpcTenancyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyVpcTenancyError::Unknown(format!("{}", status))
+                } else {
+                    ModifyVpcTenancyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -72151,7 +73569,13 @@ impl MonitorInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => MonitorInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => MonitorInstancesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    MonitorInstancesError::Unknown(format!("{}", status))
+                } else {
+                    MonitorInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -72223,7 +73647,13 @@ impl MoveAddressToVpcError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => MoveAddressToVpcError::Unknown(String::from(body)),
             },
-            Err(_) => MoveAddressToVpcError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    MoveAddressToVpcError::Unknown(format!("{}", status))
+                } else {
+                    MoveAddressToVpcError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -72296,7 +73726,15 @@ impl PurchaseHostReservationError {
                 _ => PurchaseHostReservationError::Unknown(String::from(body)),
             },
             Err(_) => {
-                PurchaseHostReservationError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    PurchaseHostReservationError::Unknown(format!("{}", status))
+                } else {
+                    PurchaseHostReservationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -72371,11 +73809,17 @@ impl PurchaseReservedInstancesOfferingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PurchaseReservedInstancesOfferingError::Unknown(String::from(body)),
             },
-            Err(_) => PurchaseReservedInstancesOfferingError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    PurchaseReservedInstancesOfferingError::Unknown(format!("{}", status))
+                } else {
+                    PurchaseReservedInstancesOfferingError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -72450,7 +73894,15 @@ impl PurchaseScheduledInstancesError {
                 _ => PurchaseScheduledInstancesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                PurchaseScheduledInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    PurchaseScheduledInstancesError::Unknown(format!("{}", status))
+                } else {
+                    PurchaseScheduledInstancesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -72525,7 +73977,13 @@ impl RebootInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RebootInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => RebootInstancesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    RebootInstancesError::Unknown(format!("{}", status))
+                } else {
+                    RebootInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -72597,7 +74055,13 @@ impl RegisterImageError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RegisterImageError::Unknown(String::from(body)),
             },
-            Err(_) => RegisterImageError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    RegisterImageError::Unknown(format!("{}", status))
+                } else {
+                    RegisterImageError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -72669,11 +74133,17 @@ impl RejectVpcEndpointConnectionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RejectVpcEndpointConnectionsError::Unknown(String::from(body)),
             },
-            Err(_) => RejectVpcEndpointConnectionsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    RejectVpcEndpointConnectionsError::Unknown(format!("{}", status))
+                } else {
+                    RejectVpcEndpointConnectionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -72748,7 +74218,15 @@ impl RejectVpcPeeringConnectionError {
                 _ => RejectVpcPeeringConnectionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                RejectVpcPeeringConnectionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    RejectVpcPeeringConnectionError::Unknown(format!("{}", status))
+                } else {
+                    RejectVpcPeeringConnectionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -72823,7 +74301,13 @@ impl ReleaseAddressError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReleaseAddressError::Unknown(String::from(body)),
             },
-            Err(_) => ReleaseAddressError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ReleaseAddressError::Unknown(format!("{}", status))
+                } else {
+                    ReleaseAddressError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -72895,7 +74379,13 @@ impl ReleaseHostsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReleaseHostsError::Unknown(String::from(body)),
             },
-            Err(_) => ReleaseHostsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ReleaseHostsError::Unknown(format!("{}", status))
+                } else {
+                    ReleaseHostsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -72967,11 +74457,17 @@ impl ReplaceIamInstanceProfileAssociationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReplaceIamInstanceProfileAssociationError::Unknown(String::from(body)),
             },
-            Err(_) => ReplaceIamInstanceProfileAssociationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ReplaceIamInstanceProfileAssociationError::Unknown(format!("{}", status))
+                } else {
+                    ReplaceIamInstanceProfileAssociationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -73045,11 +74541,17 @@ impl ReplaceNetworkAclAssociationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReplaceNetworkAclAssociationError::Unknown(String::from(body)),
             },
-            Err(_) => ReplaceNetworkAclAssociationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ReplaceNetworkAclAssociationError::Unknown(format!("{}", status))
+                } else {
+                    ReplaceNetworkAclAssociationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -73124,7 +74626,11 @@ impl ReplaceNetworkAclEntryError {
                 _ => ReplaceNetworkAclEntryError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ReplaceNetworkAclEntryError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ReplaceNetworkAclEntryError::Unknown(format!("{}", status))
+                } else {
+                    ReplaceNetworkAclEntryError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -73199,7 +74705,13 @@ impl ReplaceRouteError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReplaceRouteError::Unknown(String::from(body)),
             },
-            Err(_) => ReplaceRouteError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ReplaceRouteError::Unknown(format!("{}", status))
+                } else {
+                    ReplaceRouteError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -73271,11 +74783,17 @@ impl ReplaceRouteTableAssociationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReplaceRouteTableAssociationError::Unknown(String::from(body)),
             },
-            Err(_) => ReplaceRouteTableAssociationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ReplaceRouteTableAssociationError::Unknown(format!("{}", status))
+                } else {
+                    ReplaceRouteTableAssociationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -73350,7 +74868,11 @@ impl ReportInstanceStatusError {
                 _ => ReportInstanceStatusError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ReportInstanceStatusError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ReportInstanceStatusError::Unknown(format!("{}", status))
+                } else {
+                    ReportInstanceStatusError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -73425,7 +74947,13 @@ impl RequestSpotFleetError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RequestSpotFleetError::Unknown(String::from(body)),
             },
-            Err(_) => RequestSpotFleetError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    RequestSpotFleetError::Unknown(format!("{}", status))
+                } else {
+                    RequestSpotFleetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -73498,7 +75026,11 @@ impl RequestSpotInstancesError {
                 _ => RequestSpotInstancesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                RequestSpotInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    RequestSpotInstancesError::Unknown(format!("{}", status))
+                } else {
+                    RequestSpotInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -73574,7 +75106,15 @@ impl ResetFpgaImageAttributeError {
                 _ => ResetFpgaImageAttributeError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ResetFpgaImageAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ResetFpgaImageAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ResetFpgaImageAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -73649,7 +75189,13 @@ impl ResetImageAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ResetImageAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => ResetImageAttributeError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ResetImageAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ResetImageAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -73724,7 +75270,11 @@ impl ResetInstanceAttributeError {
                 _ => ResetInstanceAttributeError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ResetInstanceAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ResetInstanceAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ResetInstanceAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -73799,11 +75349,17 @@ impl ResetNetworkInterfaceAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ResetNetworkInterfaceAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => ResetNetworkInterfaceAttributeError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ResetNetworkInterfaceAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ResetNetworkInterfaceAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -73878,7 +75434,11 @@ impl ResetSnapshotAttributeError {
                 _ => ResetSnapshotAttributeError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ResetSnapshotAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ResetSnapshotAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ResetSnapshotAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -73954,7 +75514,15 @@ impl RestoreAddressToClassicError {
                 _ => RestoreAddressToClassicError::Unknown(String::from(body)),
             },
             Err(_) => {
-                RestoreAddressToClassicError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    RestoreAddressToClassicError::Unknown(format!("{}", status))
+                } else {
+                    RestoreAddressToClassicError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -74030,7 +75598,15 @@ impl RevokeSecurityGroupEgressError {
                 _ => RevokeSecurityGroupEgressError::Unknown(String::from(body)),
             },
             Err(_) => {
-                RevokeSecurityGroupEgressError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    RevokeSecurityGroupEgressError::Unknown(format!("{}", status))
+                } else {
+                    RevokeSecurityGroupEgressError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -74106,7 +75682,15 @@ impl RevokeSecurityGroupIngressError {
                 _ => RevokeSecurityGroupIngressError::Unknown(String::from(body)),
             },
             Err(_) => {
-                RevokeSecurityGroupIngressError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    RevokeSecurityGroupIngressError::Unknown(format!("{}", status))
+                } else {
+                    RevokeSecurityGroupIngressError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -74181,7 +75765,13 @@ impl RunInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RunInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => RunInstancesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    RunInstancesError::Unknown(format!("{}", status))
+                } else {
+                    RunInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -74254,7 +75844,11 @@ impl RunScheduledInstancesError {
                 _ => RunScheduledInstancesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                RunScheduledInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    RunScheduledInstancesError::Unknown(format!("{}", status))
+                } else {
+                    RunScheduledInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -74329,7 +75923,13 @@ impl StartInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => StartInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => StartInstancesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    StartInstancesError::Unknown(format!("{}", status))
+                } else {
+                    StartInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -74401,7 +76001,13 @@ impl StopInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => StopInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => StopInstancesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    StopInstancesError::Unknown(format!("{}", status))
+                } else {
+                    StopInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -74473,7 +76079,13 @@ impl TerminateInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => TerminateInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => TerminateInstancesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    TerminateInstancesError::Unknown(format!("{}", status))
+                } else {
+                    TerminateInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -74548,7 +76160,11 @@ impl UnassignIpv6AddressesError {
                 _ => UnassignIpv6AddressesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                UnassignIpv6AddressesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    UnassignIpv6AddressesError::Unknown(format!("{}", status))
+                } else {
+                    UnassignIpv6AddressesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -74624,7 +76240,15 @@ impl UnassignPrivateIpAddressesError {
                 _ => UnassignPrivateIpAddressesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                UnassignPrivateIpAddressesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    UnassignPrivateIpAddressesError::Unknown(format!("{}", status))
+                } else {
+                    UnassignPrivateIpAddressesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -74699,7 +76323,13 @@ impl UnmonitorInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UnmonitorInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => UnmonitorInstancesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UnmonitorInstancesError::Unknown(format!("{}", status))
+                } else {
+                    UnmonitorInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -74773,11 +76403,17 @@ impl UpdateSecurityGroupRuleDescriptionsEgressError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UpdateSecurityGroupRuleDescriptionsEgressError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateSecurityGroupRuleDescriptionsEgressError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateSecurityGroupRuleDescriptionsEgressError::Unknown(format!("{}", status))
+                } else {
+                    UpdateSecurityGroupRuleDescriptionsEgressError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -74853,11 +76489,17 @@ impl UpdateSecurityGroupRuleDescriptionsIngressError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UpdateSecurityGroupRuleDescriptionsIngressError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateSecurityGroupRuleDescriptionsIngressError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateSecurityGroupRuleDescriptionsIngressError::Unknown(format!("{}", status))
+                } else {
+                    UpdateSecurityGroupRuleDescriptionsIngressError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 

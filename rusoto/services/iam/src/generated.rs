@@ -12800,11 +12800,17 @@ impl AddClientIDToOpenIDConnectProviderError {
                 ),
                 _ => AddClientIDToOpenIDConnectProviderError::Unknown(String::from(body)),
             },
-            Err(_) => AddClientIDToOpenIDConnectProviderError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    AddClientIDToOpenIDConnectProviderError::Unknown(format!("{}", status))
+                } else {
+                    AddClientIDToOpenIDConnectProviderError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -12907,7 +12913,15 @@ impl AddRoleToInstanceProfileError {
                 _ => AddRoleToInstanceProfileError::Unknown(String::from(body)),
             },
             Err(_) => {
-                AddRoleToInstanceProfileError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    AddRoleToInstanceProfileError::Unknown(format!("{}", status))
+                } else {
+                    AddRoleToInstanceProfileError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -13001,7 +13015,13 @@ impl AddUserToGroupError {
                 }
                 _ => AddUserToGroupError::Unknown(String::from(body)),
             },
-            Err(_) => AddUserToGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    AddUserToGroupError::Unknown(format!("{}", status))
+                } else {
+                    AddUserToGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -13100,7 +13120,13 @@ impl AttachGroupPolicyError {
                 }
                 _ => AttachGroupPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => AttachGroupPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    AttachGroupPolicyError::Unknown(format!("{}", status))
+                } else {
+                    AttachGroupPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -13208,7 +13234,13 @@ impl AttachRolePolicyError {
                 }
                 _ => AttachRolePolicyError::Unknown(String::from(body)),
             },
-            Err(_) => AttachRolePolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    AttachRolePolicyError::Unknown(format!("{}", status))
+                } else {
+                    AttachRolePolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -13310,7 +13342,13 @@ impl AttachUserPolicyError {
                 }
                 _ => AttachUserPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => AttachUserPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    AttachUserPolicyError::Unknown(format!("{}", status))
+                } else {
+                    AttachUserPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -13418,7 +13456,13 @@ impl ChangePasswordError {
                 }
                 _ => ChangePasswordError::Unknown(String::from(body)),
             },
-            Err(_) => ChangePasswordError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ChangePasswordError::Unknown(format!("{}", status))
+                } else {
+                    ChangePasswordError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -13510,7 +13554,13 @@ impl CreateAccessKeyError {
                 }
                 _ => CreateAccessKeyError::Unknown(String::from(body)),
             },
-            Err(_) => CreateAccessKeyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateAccessKeyError::Unknown(format!("{}", status))
+                } else {
+                    CreateAccessKeyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -13599,7 +13649,13 @@ impl CreateAccountAliasError {
                 }
                 _ => CreateAccountAliasError::Unknown(String::from(body)),
             },
-            Err(_) => CreateAccountAliasError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateAccountAliasError::Unknown(format!("{}", status))
+                } else {
+                    CreateAccountAliasError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -13695,7 +13751,13 @@ impl CreateGroupError {
                 }
                 _ => CreateGroupError::Unknown(String::from(body)),
             },
-            Err(_) => CreateGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreateGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -13786,7 +13848,11 @@ impl CreateInstanceProfileError {
                 _ => CreateInstanceProfileError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateInstanceProfileError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateInstanceProfileError::Unknown(format!("{}", status))
+                } else {
+                    CreateInstanceProfileError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -13888,7 +13954,13 @@ impl CreateLoginProfileError {
                 }
                 _ => CreateLoginProfileError::Unknown(String::from(body)),
             },
-            Err(_) => CreateLoginProfileError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateLoginProfileError::Unknown(format!("{}", status))
+                } else {
+                    CreateLoginProfileError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -13986,11 +14058,17 @@ impl CreateOpenIDConnectProviderError {
                 )),
                 _ => CreateOpenIDConnectProviderError::Unknown(String::from(body)),
             },
-            Err(_) => CreateOpenIDConnectProviderError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateOpenIDConnectProviderError::Unknown(format!("{}", status))
+                } else {
+                    CreateOpenIDConnectProviderError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -14092,7 +14170,13 @@ impl CreatePolicyError {
                 }
                 _ => CreatePolicyError::Unknown(String::from(body)),
             },
-            Err(_) => CreatePolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreatePolicyError::Unknown(format!("{}", status))
+                } else {
+                    CreatePolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -14193,7 +14277,13 @@ impl CreatePolicyVersionError {
                 }
                 _ => CreatePolicyVersionError::Unknown(String::from(body)),
             },
-            Err(_) => CreatePolicyVersionError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreatePolicyVersionError::Unknown(format!("{}", status))
+                } else {
+                    CreatePolicyVersionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -14294,7 +14384,13 @@ impl CreateRoleError {
                 }
                 _ => CreateRoleError::Unknown(String::from(body)),
             },
-            Err(_) => CreateRoleError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateRoleError::Unknown(format!("{}", status))
+                } else {
+                    CreateRoleError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -14390,7 +14486,13 @@ impl CreateSAMLProviderError {
                 }
                 _ => CreateSAMLProviderError::Unknown(String::from(body)),
             },
-            Err(_) => CreateSAMLProviderError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateSAMLProviderError::Unknown(format!("{}", status))
+                } else {
+                    CreateSAMLProviderError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -14488,7 +14590,15 @@ impl CreateServiceLinkedRoleError {
                 _ => CreateServiceLinkedRoleError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateServiceLinkedRoleError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateServiceLinkedRoleError::Unknown(format!("{}", status))
+                } else {
+                    CreateServiceLinkedRoleError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -14581,11 +14691,17 @@ impl CreateServiceSpecificCredentialError {
                 ),
                 _ => CreateServiceSpecificCredentialError::Unknown(String::from(body)),
             },
-            Err(_) => CreateServiceSpecificCredentialError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateServiceSpecificCredentialError::Unknown(format!("{}", status))
+                } else {
+                    CreateServiceSpecificCredentialError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -14679,7 +14795,13 @@ impl CreateUserError {
                 }
                 _ => CreateUserError::Unknown(String::from(body)),
             },
-            Err(_) => CreateUserError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateUserError::Unknown(format!("{}", status))
+                } else {
+                    CreateUserError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -14770,7 +14892,11 @@ impl CreateVirtualMFADeviceError {
                 _ => CreateVirtualMFADeviceError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateVirtualMFADeviceError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateVirtualMFADeviceError::Unknown(format!("{}", status))
+                } else {
+                    CreateVirtualMFADeviceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -14869,7 +14995,13 @@ impl DeactivateMFADeviceError {
                 }
                 _ => DeactivateMFADeviceError::Unknown(String::from(body)),
             },
-            Err(_) => DeactivateMFADeviceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeactivateMFADeviceError::Unknown(format!("{}", status))
+                } else {
+                    DeactivateMFADeviceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -14961,7 +15093,13 @@ impl DeleteAccessKeyError {
                 }
                 _ => DeleteAccessKeyError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteAccessKeyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteAccessKeyError::Unknown(format!("{}", status))
+                } else {
+                    DeleteAccessKeyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -15050,7 +15188,13 @@ impl DeleteAccountAliasError {
                 }
                 _ => DeleteAccountAliasError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteAccountAliasError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteAccountAliasError::Unknown(format!("{}", status))
+                } else {
+                    DeleteAccountAliasError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -15141,11 +15285,17 @@ impl DeleteAccountPasswordPolicyError {
                 )),
                 _ => DeleteAccountPasswordPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteAccountPasswordPolicyError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteAccountPasswordPolicyError::Unknown(format!("{}", status))
+                } else {
+                    DeleteAccountPasswordPolicyError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -15241,7 +15391,13 @@ impl DeleteGroupError {
                 }
                 _ => DeleteGroupError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeleteGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -15331,7 +15487,13 @@ impl DeleteGroupPolicyError {
                 }
                 _ => DeleteGroupPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteGroupPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteGroupPolicyError::Unknown(format!("{}", status))
+                } else {
+                    DeleteGroupPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -15428,7 +15590,11 @@ impl DeleteInstanceProfileError {
                 _ => DeleteInstanceProfileError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteInstanceProfileError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteInstanceProfileError::Unknown(format!("{}", status))
+                } else {
+                    DeleteInstanceProfileError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -15528,7 +15694,13 @@ impl DeleteLoginProfileError {
                 }
                 _ => DeleteLoginProfileError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteLoginProfileError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteLoginProfileError::Unknown(format!("{}", status))
+                } else {
+                    DeleteLoginProfileError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -15620,11 +15792,17 @@ impl DeleteOpenIDConnectProviderError {
                 )),
                 _ => DeleteOpenIDConnectProviderError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteOpenIDConnectProviderError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteOpenIDConnectProviderError::Unknown(format!("{}", status))
+                } else {
+                    DeleteOpenIDConnectProviderError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -15725,7 +15903,13 @@ impl DeletePolicyError {
                 }
                 _ => DeletePolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DeletePolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeletePolicyError::Unknown(format!("{}", status))
+                } else {
+                    DeletePolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -15826,7 +16010,13 @@ impl DeletePolicyVersionError {
                 }
                 _ => DeletePolicyVersionError::Unknown(String::from(body)),
             },
-            Err(_) => DeletePolicyVersionError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeletePolicyVersionError::Unknown(format!("{}", status))
+                } else {
+                    DeletePolicyVersionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -15927,7 +16117,13 @@ impl DeleteRoleError {
                 }
                 _ => DeleteRoleError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteRoleError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteRoleError::Unknown(format!("{}", status))
+                } else {
+                    DeleteRoleError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -16018,11 +16214,17 @@ impl DeleteRolePermissionsBoundaryError {
                 ),
                 _ => DeleteRolePermissionsBoundaryError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteRolePermissionsBoundaryError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteRolePermissionsBoundaryError::Unknown(format!("{}", status))
+                } else {
+                    DeleteRolePermissionsBoundaryError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -16118,7 +16320,13 @@ impl DeleteRolePolicyError {
                 }
                 _ => DeleteRolePolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteRolePolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteRolePolicyError::Unknown(format!("{}", status))
+                } else {
+                    DeleteRolePolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -16213,7 +16421,13 @@ impl DeleteSAMLProviderError {
                 }
                 _ => DeleteSAMLProviderError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteSAMLProviderError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteSAMLProviderError::Unknown(format!("{}", status))
+                } else {
+                    DeleteSAMLProviderError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -16295,7 +16509,13 @@ impl DeleteSSHPublicKeyError {
                 }
                 _ => DeleteSSHPublicKeyError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteSSHPublicKeyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteSSHPublicKeyError::Unknown(format!("{}", status))
+                } else {
+                    DeleteSSHPublicKeyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -16390,7 +16610,15 @@ impl DeleteServerCertificateError {
                 _ => DeleteServerCertificateError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteServerCertificateError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteServerCertificateError::Unknown(format!("{}", status))
+                } else {
+                    DeleteServerCertificateError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -16484,7 +16712,15 @@ impl DeleteServiceLinkedRoleError {
                 _ => DeleteServiceLinkedRoleError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteServiceLinkedRoleError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteServiceLinkedRoleError::Unknown(format!("{}", status))
+                } else {
+                    DeleteServiceLinkedRoleError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -16566,11 +16802,17 @@ impl DeleteServiceSpecificCredentialError {
                 )),
                 _ => DeleteServiceSpecificCredentialError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteServiceSpecificCredentialError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteServiceSpecificCredentialError::Unknown(format!("{}", status))
+                } else {
+                    DeleteServiceSpecificCredentialError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -16660,7 +16902,15 @@ impl DeleteSigningCertificateError {
                 _ => DeleteSigningCertificateError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteSigningCertificateError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteSigningCertificateError::Unknown(format!("{}", status))
+                } else {
+                    DeleteSigningCertificateError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -16755,7 +17005,13 @@ impl DeleteUserError {
                 }
                 _ => DeleteUserError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteUserError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteUserError::Unknown(format!("{}", status))
+                } else {
+                    DeleteUserError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -16840,11 +17096,17 @@ impl DeleteUserPermissionsBoundaryError {
                 ),
                 _ => DeleteUserPermissionsBoundaryError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteUserPermissionsBoundaryError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteUserPermissionsBoundaryError::Unknown(format!("{}", status))
+                } else {
+                    DeleteUserPermissionsBoundaryError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -16934,7 +17196,13 @@ impl DeleteUserPolicyError {
                 }
                 _ => DeleteUserPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteUserPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteUserPolicyError::Unknown(format!("{}", status))
+                } else {
+                    DeleteUserPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -17029,7 +17297,11 @@ impl DeleteVirtualMFADeviceError {
                 _ => DeleteVirtualMFADeviceError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteVirtualMFADeviceError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteVirtualMFADeviceError::Unknown(format!("{}", status))
+                } else {
+                    DeleteVirtualMFADeviceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -17127,7 +17399,13 @@ impl DetachGroupPolicyError {
                 }
                 _ => DetachGroupPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DetachGroupPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DetachGroupPolicyError::Unknown(format!("{}", status))
+                } else {
+                    DetachGroupPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -17229,7 +17507,13 @@ impl DetachRolePolicyError {
                 }
                 _ => DetachRolePolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DetachRolePolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DetachRolePolicyError::Unknown(format!("{}", status))
+                } else {
+                    DetachRolePolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -17325,7 +17609,13 @@ impl DetachUserPolicyError {
                 }
                 _ => DetachUserPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DetachUserPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DetachUserPolicyError::Unknown(format!("{}", status))
+                } else {
+                    DetachUserPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -17432,7 +17722,13 @@ impl EnableMFADeviceError {
                 }
                 _ => EnableMFADeviceError::Unknown(String::from(body)),
             },
-            Err(_) => EnableMFADeviceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    EnableMFADeviceError::Unknown(format!("{}", status))
+                } else {
+                    EnableMFADeviceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -17520,7 +17816,15 @@ impl GenerateCredentialReportError {
                 _ => GenerateCredentialReportError::Unknown(String::from(body)),
             },
             Err(_) => {
-                GenerateCredentialReportError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    GenerateCredentialReportError::Unknown(format!("{}", status))
+                } else {
+                    GenerateCredentialReportError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -17602,7 +17906,11 @@ impl GetAccessKeyLastUsedError {
                 _ => GetAccessKeyLastUsedError::Unknown(String::from(body)),
             },
             Err(_) => {
-                GetAccessKeyLastUsedError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    GetAccessKeyLastUsedError::Unknown(format!("{}", status))
+                } else {
+                    GetAccessKeyLastUsedError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -17682,11 +17990,17 @@ impl GetAccountAuthorizationDetailsError {
                 ),
                 _ => GetAccountAuthorizationDetailsError::Unknown(String::from(body)),
             },
-            Err(_) => GetAccountAuthorizationDetailsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetAccountAuthorizationDetailsError::Unknown(format!("{}", status))
+                } else {
+                    GetAccountAuthorizationDetailsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -17771,7 +18085,15 @@ impl GetAccountPasswordPolicyError {
                 _ => GetAccountPasswordPolicyError::Unknown(String::from(body)),
             },
             Err(_) => {
-                GetAccountPasswordPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    GetAccountPasswordPolicyError::Unknown(format!("{}", status))
+                } else {
+                    GetAccountPasswordPolicyError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -17852,7 +18174,13 @@ impl GetAccountSummaryError {
                 }
                 _ => GetAccountSummaryError::Unknown(String::from(body)),
             },
-            Err(_) => GetAccountSummaryError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetAccountSummaryError::Unknown(format!("{}", status))
+                } else {
+                    GetAccountSummaryError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -17931,11 +18259,17 @@ impl GetContextKeysForCustomPolicyError {
                 )),
                 _ => GetContextKeysForCustomPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => GetContextKeysForCustomPolicyError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetContextKeysForCustomPolicyError::Unknown(format!("{}", status))
+                } else {
+                    GetContextKeysForCustomPolicyError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -18019,11 +18353,17 @@ impl GetContextKeysForPrincipalPolicyError {
                 ),
                 _ => GetContextKeysForPrincipalPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => GetContextKeysForPrincipalPolicyError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetContextKeysForPrincipalPolicyError::Unknown(format!("{}", status))
+                } else {
+                    GetContextKeysForPrincipalPolicyError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -18118,7 +18458,13 @@ impl GetCredentialReportError {
                 }
                 _ => GetCredentialReportError::Unknown(String::from(body)),
             },
-            Err(_) => GetCredentialReportError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetCredentialReportError::Unknown(format!("{}", status))
+                } else {
+                    GetCredentialReportError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18203,7 +18549,13 @@ impl GetGroupError {
                 }
                 _ => GetGroupError::Unknown(String::from(body)),
             },
-            Err(_) => GetGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetGroupError::Unknown(format!("{}", status))
+                } else {
+                    GetGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18286,7 +18638,13 @@ impl GetGroupPolicyError {
                 }
                 _ => GetGroupPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => GetGroupPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetGroupPolicyError::Unknown(format!("{}", status))
+                } else {
+                    GetGroupPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18369,7 +18727,13 @@ impl GetInstanceProfileError {
                 }
                 _ => GetInstanceProfileError::Unknown(String::from(body)),
             },
-            Err(_) => GetInstanceProfileError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetInstanceProfileError::Unknown(format!("{}", status))
+                } else {
+                    GetInstanceProfileError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18454,7 +18818,13 @@ impl GetLoginProfileError {
                 }
                 _ => GetLoginProfileError::Unknown(String::from(body)),
             },
-            Err(_) => GetLoginProfileError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetLoginProfileError::Unknown(format!("{}", status))
+                } else {
+                    GetLoginProfileError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18543,7 +18913,15 @@ impl GetOpenIDConnectProviderError {
                 _ => GetOpenIDConnectProviderError::Unknown(String::from(body)),
             },
             Err(_) => {
-                GetOpenIDConnectProviderError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    GetOpenIDConnectProviderError::Unknown(format!("{}", status))
+                } else {
+                    GetOpenIDConnectProviderError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -18631,7 +19009,13 @@ impl GetPolicyError {
                 }
                 _ => GetPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => GetPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetPolicyError::Unknown(format!("{}", status))
+                } else {
+                    GetPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18720,7 +19104,13 @@ impl GetPolicyVersionError {
                 }
                 _ => GetPolicyVersionError::Unknown(String::from(body)),
             },
-            Err(_) => GetPolicyVersionError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetPolicyVersionError::Unknown(format!("{}", status))
+                } else {
+                    GetPolicyVersionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18802,7 +19192,13 @@ impl GetRoleError {
                 }
                 _ => GetRoleError::Unknown(String::from(body)),
             },
-            Err(_) => GetRoleError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetRoleError::Unknown(format!("{}", status))
+                } else {
+                    GetRoleError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18885,7 +19281,13 @@ impl GetRolePolicyError {
                 }
                 _ => GetRolePolicyError::Unknown(String::from(body)),
             },
-            Err(_) => GetRolePolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetRolePolicyError::Unknown(format!("{}", status))
+                } else {
+                    GetRolePolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18973,7 +19375,13 @@ impl GetSAMLProviderError {
                 }
                 _ => GetSAMLProviderError::Unknown(String::from(body)),
             },
-            Err(_) => GetSAMLProviderError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetSAMLProviderError::Unknown(format!("{}", status))
+                } else {
+                    GetSAMLProviderError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19059,7 +19467,13 @@ impl GetSSHPublicKeyError {
                 }
                 _ => GetSSHPublicKeyError::Unknown(String::from(body)),
             },
-            Err(_) => GetSSHPublicKeyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetSSHPublicKeyError::Unknown(format!("{}", status))
+                } else {
+                    GetSSHPublicKeyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19143,7 +19557,11 @@ impl GetServerCertificateError {
                 _ => GetServerCertificateError::Unknown(String::from(body)),
             },
             Err(_) => {
-                GetServerCertificateError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    GetServerCertificateError::Unknown(format!("{}", status))
+                } else {
+                    GetServerCertificateError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -19234,11 +19652,17 @@ impl GetServiceLinkedRoleDeletionStatusError {
                 ),
                 _ => GetServiceLinkedRoleDeletionStatusError::Unknown(String::from(body)),
             },
-            Err(_) => GetServiceLinkedRoleDeletionStatusError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetServiceLinkedRoleDeletionStatusError::Unknown(format!("{}", status))
+                } else {
+                    GetServiceLinkedRoleDeletionStatusError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -19322,7 +19746,13 @@ impl GetUserError {
                 }
                 _ => GetUserError::Unknown(String::from(body)),
             },
-            Err(_) => GetUserError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetUserError::Unknown(format!("{}", status))
+                } else {
+                    GetUserError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19405,7 +19835,13 @@ impl GetUserPolicyError {
                 }
                 _ => GetUserPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => GetUserPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetUserPolicyError::Unknown(format!("{}", status))
+                } else {
+                    GetUserPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19488,7 +19924,13 @@ impl ListAccessKeysError {
                 }
                 _ => ListAccessKeysError::Unknown(String::from(body)),
             },
-            Err(_) => ListAccessKeysError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListAccessKeysError::Unknown(format!("{}", status))
+                } else {
+                    ListAccessKeysError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19566,7 +20008,13 @@ impl ListAccountAliasesError {
                 }
                 _ => ListAccountAliasesError::Unknown(String::from(body)),
             },
-            Err(_) => ListAccountAliasesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListAccountAliasesError::Unknown(format!("{}", status))
+                } else {
+                    ListAccountAliasesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19656,7 +20104,15 @@ impl ListAttachedGroupPoliciesError {
                 _ => ListAttachedGroupPoliciesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListAttachedGroupPoliciesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListAttachedGroupPoliciesError::Unknown(format!("{}", status))
+                } else {
+                    ListAttachedGroupPoliciesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -19749,7 +20205,15 @@ impl ListAttachedRolePoliciesError {
                 _ => ListAttachedRolePoliciesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListAttachedRolePoliciesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListAttachedRolePoliciesError::Unknown(format!("{}", status))
+                } else {
+                    ListAttachedRolePoliciesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -19842,7 +20306,15 @@ impl ListAttachedUserPoliciesError {
                 _ => ListAttachedUserPoliciesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListAttachedUserPoliciesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListAttachedUserPoliciesError::Unknown(format!("{}", status))
+                } else {
+                    ListAttachedUserPoliciesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -19935,7 +20407,11 @@ impl ListEntitiesForPolicyError {
                 _ => ListEntitiesForPolicyError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListEntitiesForPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListEntitiesForPolicyError::Unknown(format!("{}", status))
+                } else {
+                    ListEntitiesForPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -20022,7 +20498,13 @@ impl ListGroupPoliciesError {
                 }
                 _ => ListGroupPoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => ListGroupPoliciesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListGroupPoliciesError::Unknown(format!("{}", status))
+                } else {
+                    ListGroupPoliciesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20102,7 +20584,13 @@ impl ListGroupsError {
                 }
                 _ => ListGroupsError::Unknown(String::from(body)),
             },
-            Err(_) => ListGroupsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListGroupsError::Unknown(format!("{}", status))
+                } else {
+                    ListGroupsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20184,7 +20672,13 @@ impl ListGroupsForUserError {
                 }
                 _ => ListGroupsForUserError::Unknown(String::from(body)),
             },
-            Err(_) => ListGroupsForUserError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListGroupsForUserError::Unknown(format!("{}", status))
+                } else {
+                    ListGroupsForUserError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20265,7 +20759,11 @@ impl ListInstanceProfilesError {
                 _ => ListInstanceProfilesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListInstanceProfilesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListInstanceProfilesError::Unknown(format!("{}", status))
+                } else {
+                    ListInstanceProfilesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -20350,11 +20848,17 @@ impl ListInstanceProfilesForRoleError {
                 )),
                 _ => ListInstanceProfilesForRoleError::Unknown(String::from(body)),
             },
-            Err(_) => ListInstanceProfilesForRoleError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListInstanceProfilesForRoleError::Unknown(format!("{}", status))
+                } else {
+                    ListInstanceProfilesForRoleError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -20439,7 +20943,13 @@ impl ListMFADevicesError {
                 }
                 _ => ListMFADevicesError::Unknown(String::from(body)),
             },
-            Err(_) => ListMFADevicesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListMFADevicesError::Unknown(format!("{}", status))
+                } else {
+                    ListMFADevicesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20518,7 +21028,15 @@ impl ListOpenIDConnectProvidersError {
                 _ => ListOpenIDConnectProvidersError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListOpenIDConnectProvidersError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListOpenIDConnectProvidersError::Unknown(format!("{}", status))
+                } else {
+                    ListOpenIDConnectProvidersError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -20598,7 +21116,13 @@ impl ListPoliciesError {
                 }
                 _ => ListPoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => ListPoliciesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListPoliciesError::Unknown(format!("{}", status))
+                } else {
+                    ListPoliciesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20685,7 +21209,13 @@ impl ListPolicyVersionsError {
                 }
                 _ => ListPolicyVersionsError::Unknown(String::from(body)),
             },
-            Err(_) => ListPolicyVersionsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListPolicyVersionsError::Unknown(format!("{}", status))
+                } else {
+                    ListPolicyVersionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20771,7 +21301,13 @@ impl ListRolePoliciesError {
                 }
                 _ => ListRolePoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => ListRolePoliciesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListRolePoliciesError::Unknown(format!("{}", status))
+                } else {
+                    ListRolePoliciesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20849,7 +21385,13 @@ impl ListRolesError {
                 }
                 _ => ListRolesError::Unknown(String::from(body)),
             },
-            Err(_) => ListRolesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListRolesError::Unknown(format!("{}", status))
+                } else {
+                    ListRolesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20926,7 +21468,13 @@ impl ListSAMLProvidersError {
                 }
                 _ => ListSAMLProvidersError::Unknown(String::from(body)),
             },
-            Err(_) => ListSAMLProvidersError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListSAMLProvidersError::Unknown(format!("{}", status))
+                } else {
+                    ListSAMLProvidersError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21005,7 +21553,13 @@ impl ListSSHPublicKeysError {
                 }
                 _ => ListSSHPublicKeysError::Unknown(String::from(body)),
             },
-            Err(_) => ListSSHPublicKeysError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListSSHPublicKeysError::Unknown(format!("{}", status))
+                } else {
+                    ListSSHPublicKeysError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21085,7 +21639,11 @@ impl ListServerCertificatesError {
                 _ => ListServerCertificatesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListServerCertificatesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListServerCertificatesError::Unknown(format!("{}", status))
+                } else {
+                    ListServerCertificatesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -21170,11 +21728,17 @@ impl ListServiceSpecificCredentialsError {
                 ),
                 _ => ListServiceSpecificCredentialsError::Unknown(String::from(body)),
             },
-            Err(_) => ListServiceSpecificCredentialsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListServiceSpecificCredentialsError::Unknown(format!("{}", status))
+                } else {
+                    ListServiceSpecificCredentialsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -21260,7 +21824,15 @@ impl ListSigningCertificatesError {
                 _ => ListSigningCertificatesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListSigningCertificatesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListSigningCertificatesError::Unknown(format!("{}", status))
+                } else {
+                    ListSigningCertificatesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -21346,7 +21918,13 @@ impl ListUserPoliciesError {
                 }
                 _ => ListUserPoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => ListUserPoliciesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListUserPoliciesError::Unknown(format!("{}", status))
+                } else {
+                    ListUserPoliciesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21424,7 +22002,13 @@ impl ListUsersError {
                 }
                 _ => ListUsersError::Unknown(String::from(body)),
             },
-            Err(_) => ListUsersError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListUsersError::Unknown(format!("{}", status))
+                } else {
+                    ListUsersError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21497,7 +22081,11 @@ impl ListVirtualMFADevicesError {
                 _ => ListVirtualMFADevicesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListVirtualMFADevicesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListVirtualMFADevicesError::Unknown(format!("{}", status))
+                } else {
+                    ListVirtualMFADevicesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -21591,7 +22179,13 @@ impl PutGroupPolicyError {
                 }
                 _ => PutGroupPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => PutGroupPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutGroupPolicyError::Unknown(format!("{}", status))
+                } else {
+                    PutGroupPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21692,7 +22286,15 @@ impl PutRolePermissionsBoundaryError {
                 _ => PutRolePermissionsBoundaryError::Unknown(String::from(body)),
             },
             Err(_) => {
-                PutRolePermissionsBoundaryError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    PutRolePermissionsBoundaryError::Unknown(format!("{}", status))
+                } else {
+                    PutRolePermissionsBoundaryError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -21796,7 +22398,13 @@ impl PutRolePolicyError {
                 }
                 _ => PutRolePolicyError::Unknown(String::from(body)),
             },
-            Err(_) => PutRolePolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutRolePolicyError::Unknown(format!("{}", status))
+                } else {
+                    PutRolePolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21893,7 +22501,15 @@ impl PutUserPermissionsBoundaryError {
                 _ => PutUserPermissionsBoundaryError::Unknown(String::from(body)),
             },
             Err(_) => {
-                PutUserPermissionsBoundaryError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    PutUserPermissionsBoundaryError::Unknown(format!("{}", status))
+                } else {
+                    PutUserPermissionsBoundaryError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -21991,7 +22607,13 @@ impl PutUserPolicyError {
                 }
                 _ => PutUserPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => PutUserPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutUserPolicyError::Unknown(format!("{}", status))
+                } else {
+                    PutUserPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -22081,11 +22703,17 @@ impl RemoveClientIDFromOpenIDConnectProviderError {
                 ),
                 _ => RemoveClientIDFromOpenIDConnectProviderError::Unknown(String::from(body)),
             },
-            Err(_) => RemoveClientIDFromOpenIDConnectProviderError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    RemoveClientIDFromOpenIDConnectProviderError::Unknown(format!("{}", status))
+                } else {
+                    RemoveClientIDFromOpenIDConnectProviderError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -22181,11 +22809,17 @@ impl RemoveRoleFromInstanceProfileError {
                 ),
                 _ => RemoveRoleFromInstanceProfileError::Unknown(String::from(body)),
             },
-            Err(_) => RemoveRoleFromInstanceProfileError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    RemoveRoleFromInstanceProfileError::Unknown(format!("{}", status))
+                } else {
+                    RemoveRoleFromInstanceProfileError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -22277,7 +22911,13 @@ impl RemoveUserFromGroupError {
                 }
                 _ => RemoveUserFromGroupError::Unknown(String::from(body)),
             },
-            Err(_) => RemoveUserFromGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    RemoveUserFromGroupError::Unknown(format!("{}", status))
+                } else {
+                    RemoveUserFromGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -22358,11 +22998,17 @@ impl ResetServiceSpecificCredentialError {
                 )),
                 _ => ResetServiceSpecificCredentialError::Unknown(String::from(body)),
             },
-            Err(_) => ResetServiceSpecificCredentialError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ResetServiceSpecificCredentialError::Unknown(format!("{}", status))
+                } else {
+                    ResetServiceSpecificCredentialError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -22456,7 +23102,13 @@ impl ResyncMFADeviceError {
                 }
                 _ => ResyncMFADeviceError::Unknown(String::from(body)),
             },
-            Err(_) => ResyncMFADeviceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ResyncMFADeviceError::Unknown(format!("{}", status))
+                } else {
+                    ResyncMFADeviceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -22552,7 +23204,15 @@ impl SetDefaultPolicyVersionError {
                 _ => SetDefaultPolicyVersionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                SetDefaultPolicyVersionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    SetDefaultPolicyVersionError::Unknown(format!("{}", status))
+                } else {
+                    SetDefaultPolicyVersionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -22641,7 +23301,11 @@ impl SimulateCustomPolicyError {
                 _ => SimulateCustomPolicyError::Unknown(String::from(body)),
             },
             Err(_) => {
-                SimulateCustomPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    SimulateCustomPolicyError::Unknown(format!("{}", status))
+                } else {
+                    SimulateCustomPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -22733,7 +23397,15 @@ impl SimulatePrincipalPolicyError {
                 _ => SimulatePrincipalPolicyError::Unknown(String::from(body)),
             },
             Err(_) => {
-                SimulatePrincipalPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    SimulatePrincipalPolicyError::Unknown(format!("{}", status))
+                } else {
+                    SimulatePrincipalPolicyError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -22825,7 +23497,13 @@ impl UpdateAccessKeyError {
                 }
                 _ => UpdateAccessKeyError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateAccessKeyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateAccessKeyError::Unknown(format!("{}", status))
+                } else {
+                    UpdateAccessKeyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -22921,11 +23599,17 @@ impl UpdateAccountPasswordPolicyError {
                 )),
                 _ => UpdateAccountPasswordPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateAccountPasswordPolicyError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateAccountPasswordPolicyError::Unknown(format!("{}", status))
+                } else {
+                    UpdateAccountPasswordPolicyError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -23028,7 +23712,11 @@ impl UpdateAssumeRolePolicyError {
                 _ => UpdateAssumeRolePolicyError::Unknown(String::from(body)),
             },
             Err(_) => {
-                UpdateAssumeRolePolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    UpdateAssumeRolePolicyError::Unknown(format!("{}", status))
+                } else {
+                    UpdateAssumeRolePolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -23127,7 +23815,13 @@ impl UpdateGroupError {
                 }
                 _ => UpdateGroupError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateGroupError::Unknown(format!("{}", status))
+                } else {
+                    UpdateGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -23229,7 +23923,13 @@ impl UpdateLoginProfileError {
                 }
                 _ => UpdateLoginProfileError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateLoginProfileError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateLoginProfileError::Unknown(format!("{}", status))
+                } else {
+                    UpdateLoginProfileError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -23322,11 +24022,17 @@ impl UpdateOpenIDConnectProviderThumbprintError {
                 ),
                 _ => UpdateOpenIDConnectProviderThumbprintError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateOpenIDConnectProviderThumbprintError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateOpenIDConnectProviderThumbprintError::Unknown(format!("{}", status))
+                } else {
+                    UpdateOpenIDConnectProviderThumbprintError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -23415,7 +24121,13 @@ impl UpdateRoleError {
                 }
                 _ => UpdateRoleError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateRoleError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateRoleError::Unknown(format!("{}", status))
+                } else {
+                    UpdateRoleError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -23505,7 +24217,11 @@ impl UpdateRoleDescriptionError {
                 _ => UpdateRoleDescriptionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                UpdateRoleDescriptionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    UpdateRoleDescriptionError::Unknown(format!("{}", status))
+                } else {
+                    UpdateRoleDescriptionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -23602,7 +24318,13 @@ impl UpdateSAMLProviderError {
                 }
                 _ => UpdateSAMLProviderError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateSAMLProviderError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateSAMLProviderError::Unknown(format!("{}", status))
+                } else {
+                    UpdateSAMLProviderError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -23684,7 +24406,13 @@ impl UpdateSSHPublicKeyError {
                 }
                 _ => UpdateSSHPublicKeyError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateSSHPublicKeyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateSSHPublicKeyError::Unknown(format!("{}", status))
+                } else {
+                    UpdateSSHPublicKeyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -23779,7 +24507,15 @@ impl UpdateServerCertificateError {
                 _ => UpdateServerCertificateError::Unknown(String::from(body)),
             },
             Err(_) => {
-                UpdateServerCertificateError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    UpdateServerCertificateError::Unknown(format!("{}", status))
+                } else {
+                    UpdateServerCertificateError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -23862,11 +24598,17 @@ impl UpdateServiceSpecificCredentialError {
                 )),
                 _ => UpdateServiceSpecificCredentialError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateServiceSpecificCredentialError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateServiceSpecificCredentialError::Unknown(format!("{}", status))
+                } else {
+                    UpdateServiceSpecificCredentialError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -23956,7 +24698,15 @@ impl UpdateSigningCertificateError {
                 _ => UpdateSigningCertificateError::Unknown(String::from(body)),
             },
             Err(_) => {
-                UpdateSigningCertificateError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    UpdateSigningCertificateError::Unknown(format!("{}", status))
+                } else {
+                    UpdateSigningCertificateError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -24056,7 +24806,13 @@ impl UpdateUserError {
                 }
                 _ => UpdateUserError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateUserError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateUserError::Unknown(format!("{}", status))
+                } else {
+                    UpdateUserError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -24159,7 +24915,13 @@ impl UploadSSHPublicKeyError {
                 }
                 _ => UploadSSHPublicKeyError::Unknown(String::from(body)),
             },
-            Err(_) => UploadSSHPublicKeyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UploadSSHPublicKeyError::Unknown(format!("{}", status))
+                } else {
+                    UploadSSHPublicKeyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -24263,7 +25025,15 @@ impl UploadServerCertificateError {
                 _ => UploadServerCertificateError::Unknown(String::from(body)),
             },
             Err(_) => {
-                UploadServerCertificateError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    UploadServerCertificateError::Unknown(format!("{}", status))
+                } else {
+                    UploadServerCertificateError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -24378,7 +25148,15 @@ impl UploadSigningCertificateError {
                 _ => UploadSigningCertificateError::Unknown(String::from(body)),
             },
             Err(_) => {
-                UploadSigningCertificateError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    UploadSigningCertificateError::Unknown(format!("{}", status))
+                } else {
+                    UploadSigningCertificateError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }

@@ -9993,7 +9993,11 @@ impl AbortEnvironmentUpdateError {
                 _ => AbortEnvironmentUpdateError::Unknown(String::from(body)),
             },
             Err(_) => {
-                AbortEnvironmentUpdateError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    AbortEnvironmentUpdateError::Unknown(format!("{}", status))
+                } else {
+                    AbortEnvironmentUpdateError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -10082,11 +10086,17 @@ impl ApplyEnvironmentManagedActionError {
                 }
                 _ => ApplyEnvironmentManagedActionError::Unknown(String::from(body)),
             },
-            Err(_) => ApplyEnvironmentManagedActionError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ApplyEnvironmentManagedActionError::Unknown(format!("{}", status))
+                } else {
+                    ApplyEnvironmentManagedActionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -10162,7 +10172,11 @@ impl CheckDNSAvailabilityError {
                 _ => CheckDNSAvailabilityError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CheckDNSAvailabilityError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CheckDNSAvailabilityError::Unknown(format!("{}", status))
+                } else {
+                    CheckDNSAvailabilityError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -10248,7 +10262,13 @@ impl ComposeEnvironmentsError {
                 ),
                 _ => ComposeEnvironmentsError::Unknown(String::from(body)),
             },
-            Err(_) => ComposeEnvironmentsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ComposeEnvironmentsError::Unknown(format!("{}", status))
+                } else {
+                    ComposeEnvironmentsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10328,7 +10348,13 @@ impl CreateApplicationError {
                 }
                 _ => CreateApplicationError::Unknown(String::from(body)),
             },
-            Err(_) => CreateApplicationError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateApplicationError::Unknown(format!("{}", status))
+                } else {
+                    CreateApplicationError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10438,7 +10464,15 @@ impl CreateApplicationVersionError {
                 _ => CreateApplicationVersionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateApplicationVersionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateApplicationVersionError::Unknown(format!("{}", status))
+                } else {
+                    CreateApplicationVersionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -10536,11 +10570,17 @@ impl CreateConfigurationTemplateError {
                 }
                 _ => CreateConfigurationTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => CreateConfigurationTemplateError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateConfigurationTemplateError::Unknown(format!("{}", status))
+                } else {
+                    CreateConfigurationTemplateError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -10628,7 +10668,13 @@ impl CreateEnvironmentError {
                 }
                 _ => CreateEnvironmentError::Unknown(String::from(body)),
             },
-            Err(_) => CreateEnvironmentError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateEnvironmentError::Unknown(format!("{}", status))
+                } else {
+                    CreateEnvironmentError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10723,7 +10769,11 @@ impl CreatePlatformVersionError {
                 _ => CreatePlatformVersionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreatePlatformVersionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreatePlatformVersionError::Unknown(format!("{}", status))
+                } else {
+                    CreatePlatformVersionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -10820,7 +10870,11 @@ impl CreateStorageLocationError {
                 _ => CreateStorageLocationError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateStorageLocationError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateStorageLocationError::Unknown(format!("{}", status))
+                } else {
+                    CreateStorageLocationError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -10902,7 +10956,13 @@ impl DeleteApplicationError {
                 }
                 _ => DeleteApplicationError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteApplicationError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteApplicationError::Unknown(format!("{}", status))
+                } else {
+                    DeleteApplicationError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11003,7 +11063,15 @@ impl DeleteApplicationVersionError {
                 _ => DeleteApplicationVersionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteApplicationVersionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteApplicationVersionError::Unknown(format!("{}", status))
+                } else {
+                    DeleteApplicationVersionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -11088,11 +11156,17 @@ impl DeleteConfigurationTemplateError {
                 }
                 _ => DeleteConfigurationTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteConfigurationTemplateError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteConfigurationTemplateError::Unknown(format!("{}", status))
+                } else {
+                    DeleteConfigurationTemplateError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -11166,11 +11240,17 @@ impl DeleteEnvironmentConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteEnvironmentConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteEnvironmentConfigurationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteEnvironmentConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    DeleteEnvironmentConfigurationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -11270,7 +11350,11 @@ impl DeletePlatformVersionError {
                 _ => DeletePlatformVersionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeletePlatformVersionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeletePlatformVersionError::Unknown(format!("{}", status))
+                } else {
+                    DeletePlatformVersionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -11356,7 +11440,15 @@ impl DescribeAccountAttributesError {
                 _ => DescribeAccountAttributesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeAccountAttributesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeAccountAttributesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAccountAttributesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -11431,11 +11523,17 @@ impl DescribeApplicationVersionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeApplicationVersionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeApplicationVersionsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeApplicationVersionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeApplicationVersionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -11509,7 +11607,11 @@ impl DescribeApplicationsError {
                 _ => DescribeApplicationsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeApplicationsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeApplicationsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeApplicationsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -11588,11 +11690,17 @@ impl DescribeConfigurationOptionsError {
                 ),
                 _ => DescribeConfigurationOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeConfigurationOptionsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeConfigurationOptionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeConfigurationOptionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -11671,11 +11779,17 @@ impl DescribeConfigurationSettingsError {
                 ),
                 _ => DescribeConfigurationSettingsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeConfigurationSettingsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeConfigurationSettingsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeConfigurationSettingsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -11762,7 +11876,15 @@ impl DescribeEnvironmentHealthError {
                 _ => DescribeEnvironmentHealthError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeEnvironmentHealthError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeEnvironmentHealthError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEnvironmentHealthError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -11845,11 +11967,17 @@ impl DescribeEnvironmentManagedActionHistoryError {
                 }
                 _ => DescribeEnvironmentManagedActionHistoryError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEnvironmentManagedActionHistoryError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeEnvironmentManagedActionHistoryError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEnvironmentManagedActionHistoryError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -11932,11 +12060,17 @@ impl DescribeEnvironmentManagedActionsError {
                 }
                 _ => DescribeEnvironmentManagedActionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEnvironmentManagedActionsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeEnvironmentManagedActionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEnvironmentManagedActionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -12017,11 +12151,17 @@ impl DescribeEnvironmentResourcesError {
                 }
                 _ => DescribeEnvironmentResourcesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEnvironmentResourcesError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeEnvironmentResourcesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEnvironmentResourcesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -12096,7 +12236,11 @@ impl DescribeEnvironmentsError {
                 _ => DescribeEnvironmentsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeEnvironmentsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeEnvironmentsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEnvironmentsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -12170,7 +12314,13 @@ impl DescribeEventsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEventsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEventsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeEventsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEventsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -12254,7 +12404,15 @@ impl DescribeInstancesHealthError {
                 _ => DescribeInstancesHealthError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeInstancesHealthError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeInstancesHealthError::Unknown(format!("{}", status))
+                } else {
+                    DescribeInstancesHealthError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -12345,7 +12503,15 @@ impl DescribePlatformVersionError {
                 _ => DescribePlatformVersionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribePlatformVersionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribePlatformVersionError::Unknown(format!("{}", status))
+                } else {
+                    DescribePlatformVersionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -12421,11 +12587,17 @@ impl ListAvailableSolutionStacksError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListAvailableSolutionStacksError::Unknown(String::from(body)),
             },
-            Err(_) => ListAvailableSolutionStacksError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListAvailableSolutionStacksError::Unknown(format!("{}", status))
+                } else {
+                    ListAvailableSolutionStacksError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -12513,7 +12685,11 @@ impl ListPlatformVersionsError {
                 _ => ListPlatformVersionsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListPlatformVersionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListPlatformVersionsError::Unknown(format!("{}", status))
+                } else {
+                    ListPlatformVersionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -12608,7 +12784,13 @@ impl ListTagsForResourceError {
                 }
                 _ => ListTagsForResourceError::Unknown(String::from(body)),
             },
-            Err(_) => ListTagsForResourceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListTagsForResourceError::Unknown(format!("{}", status))
+                } else {
+                    ListTagsForResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -12691,7 +12873,13 @@ impl RebuildEnvironmentError {
                 }
                 _ => RebuildEnvironmentError::Unknown(String::from(body)),
             },
-            Err(_) => RebuildEnvironmentError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    RebuildEnvironmentError::Unknown(format!("{}", status))
+                } else {
+                    RebuildEnvironmentError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -12766,7 +12954,11 @@ impl RequestEnvironmentInfoError {
                 _ => RequestEnvironmentInfoError::Unknown(String::from(body)),
             },
             Err(_) => {
-                RequestEnvironmentInfoError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    RequestEnvironmentInfoError::Unknown(format!("{}", status))
+                } else {
+                    RequestEnvironmentInfoError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -12840,7 +13032,13 @@ impl RestartAppServerError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RestartAppServerError::Unknown(String::from(body)),
             },
-            Err(_) => RestartAppServerError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    RestartAppServerError::Unknown(format!("{}", status))
+                } else {
+                    RestartAppServerError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -12912,7 +13110,15 @@ impl RetrieveEnvironmentInfoError {
                 _ => RetrieveEnvironmentInfoError::Unknown(String::from(body)),
             },
             Err(_) => {
-                RetrieveEnvironmentInfoError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    RetrieveEnvironmentInfoError::Unknown(format!("{}", status))
+                } else {
+                    RetrieveEnvironmentInfoError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -12987,7 +13193,11 @@ impl SwapEnvironmentCNAMEsError {
                 _ => SwapEnvironmentCNAMEsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                SwapEnvironmentCNAMEsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    SwapEnvironmentCNAMEsError::Unknown(format!("{}", status))
+                } else {
+                    SwapEnvironmentCNAMEsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -13069,7 +13279,11 @@ impl TerminateEnvironmentError {
                 _ => TerminateEnvironmentError::Unknown(String::from(body)),
             },
             Err(_) => {
-                TerminateEnvironmentError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    TerminateEnvironmentError::Unknown(format!("{}", status))
+                } else {
+                    TerminateEnvironmentError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -13144,7 +13358,13 @@ impl UpdateApplicationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UpdateApplicationError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateApplicationError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateApplicationError::Unknown(format!("{}", status))
+                } else {
+                    UpdateApplicationError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -13224,11 +13444,17 @@ impl UpdateApplicationResourceLifecycleError {
                 }
                 _ => UpdateApplicationResourceLifecycleError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateApplicationResourceLifecycleError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateApplicationResourceLifecycleError::Unknown(format!("{}", status))
+                } else {
+                    UpdateApplicationResourceLifecycleError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -13303,7 +13529,15 @@ impl UpdateApplicationVersionError {
                 _ => UpdateApplicationVersionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                UpdateApplicationVersionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    UpdateApplicationVersionError::Unknown(format!("{}", status))
+                } else {
+                    UpdateApplicationVersionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -13389,11 +13623,17 @@ impl UpdateConfigurationTemplateError {
                 ),
                 _ => UpdateConfigurationTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateConfigurationTemplateError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateConfigurationTemplateError::Unknown(format!("{}", status))
+                } else {
+                    UpdateConfigurationTemplateError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -13480,7 +13720,13 @@ impl UpdateEnvironmentError {
                 }
                 _ => UpdateEnvironmentError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateEnvironmentError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateEnvironmentError::Unknown(format!("{}", status))
+                } else {
+                    UpdateEnvironmentError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -13585,7 +13831,11 @@ impl UpdateTagsForResourceError {
                 _ => UpdateTagsForResourceError::Unknown(String::from(body)),
             },
             Err(_) => {
-                UpdateTagsForResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    UpdateTagsForResourceError::Unknown(format!("{}", status))
+                } else {
+                    UpdateTagsForResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -13676,11 +13926,17 @@ impl ValidateConfigurationSettingsError {
                 ),
                 _ => ValidateConfigurationSettingsError::Unknown(String::from(body)),
             },
-            Err(_) => ValidateConfigurationSettingsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ValidateConfigurationSettingsError::Unknown(format!("{}", status))
+                } else {
+                    ValidateConfigurationSettingsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 

@@ -8683,7 +8683,13 @@ impl CloneReceiptRuleSetError {
                 ),
                 _ => CloneReceiptRuleSetError::Unknown(String::from(body)),
             },
-            Err(_) => CloneReceiptRuleSetError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CloneReceiptRuleSetError::Unknown(format!("{}", status))
+                } else {
+                    CloneReceiptRuleSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -8777,7 +8783,11 @@ impl CreateConfigurationSetError {
                 _ => CreateConfigurationSetError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateConfigurationSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateConfigurationSetError::Unknown(format!("{}", status))
+                } else {
+                    CreateConfigurationSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -8894,11 +8904,17 @@ impl CreateConfigurationSetEventDestinationError {
                 ),
                 _ => CreateConfigurationSetEventDestinationError::Unknown(String::from(body)),
             },
-            Err(_) => CreateConfigurationSetEventDestinationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateConfigurationSetEventDestinationError::Unknown(format!("{}", status))
+                } else {
+                    CreateConfigurationSetEventDestinationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -9006,11 +9022,17 @@ impl CreateConfigurationSetTrackingOptionsError {
                 }
                 _ => CreateConfigurationSetTrackingOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => CreateConfigurationSetTrackingOptionsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateConfigurationSetTrackingOptionsError::Unknown(format!("{}", status))
+                } else {
+                    CreateConfigurationSetTrackingOptionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -9100,7 +9122,13 @@ impl CreateCustomVerificationEmailTemplateError {
                                     "CustomVerificationEmailInvalidContent" => CreateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(String::from(parsed_error.message)),"CustomVerificationEmailTemplateAlreadyExists" => CreateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateAlreadyExists(String::from(parsed_error.message)),"FromEmailAddressNotVerified" => CreateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(String::from(parsed_error.message)),"LimitExceeded" => CreateCustomVerificationEmailTemplateError::LimitExceeded(String::from(parsed_error.message)),_ => CreateCustomVerificationEmailTemplateError::Unknown(String::from(body))
                                 }
                            },
-                           Err(_) => CreateCustomVerificationEmailTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                           Err(_) => {
+                               if body.len() == 0 {
+                                   CreateCustomVerificationEmailTemplateError::Unknown(format!("{}", status))
+                               } else {
+                                   CreateCustomVerificationEmailTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                               }
+                            }
                        }
     }
 
@@ -9185,7 +9213,13 @@ impl CreateReceiptFilterError {
                 }
                 _ => CreateReceiptFilterError::Unknown(String::from(body)),
             },
-            Err(_) => CreateReceiptFilterError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateReceiptFilterError::Unknown(format!("{}", status))
+                } else {
+                    CreateReceiptFilterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9295,7 +9329,13 @@ impl CreateReceiptRuleError {
                 }
                 _ => CreateReceiptRuleError::Unknown(String::from(body)),
             },
-            Err(_) => CreateReceiptRuleError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateReceiptRuleError::Unknown(format!("{}", status))
+                } else {
+                    CreateReceiptRuleError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9386,7 +9426,11 @@ impl CreateReceiptRuleSetError {
                 _ => CreateReceiptRuleSetError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateReceiptRuleSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateReceiptRuleSetError::Unknown(format!("{}", status))
+                } else {
+                    CreateReceiptRuleSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -9477,7 +9521,13 @@ impl CreateTemplateError {
                 }
                 _ => CreateTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => CreateTemplateError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateTemplateError::Unknown(format!("{}", status))
+                } else {
+                    CreateTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9559,7 +9609,11 @@ impl DeleteConfigurationSetError {
                 _ => DeleteConfigurationSetError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteConfigurationSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteConfigurationSetError::Unknown(format!("{}", status))
+                } else {
+                    DeleteConfigurationSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -9648,11 +9702,17 @@ impl DeleteConfigurationSetEventDestinationError {
                 }
                 _ => DeleteConfigurationSetEventDestinationError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteConfigurationSetEventDestinationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteConfigurationSetEventDestinationError::Unknown(format!("{}", status))
+                } else {
+                    DeleteConfigurationSetEventDestinationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -9745,11 +9805,17 @@ impl DeleteConfigurationSetTrackingOptionsError {
                 }
                 _ => DeleteConfigurationSetTrackingOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteConfigurationSetTrackingOptionsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteConfigurationSetTrackingOptionsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteConfigurationSetTrackingOptionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -9828,11 +9894,17 @@ impl DeleteCustomVerificationEmailTemplateError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteCustomVerificationEmailTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteCustomVerificationEmailTemplateError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteCustomVerificationEmailTemplateError::Unknown(format!("{}", status))
+                } else {
+                    DeleteCustomVerificationEmailTemplateError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -9905,7 +9977,13 @@ impl DeleteIdentityError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteIdentityError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteIdentityError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteIdentityError::Unknown(format!("{}", status))
+                } else {
+                    DeleteIdentityError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9977,7 +10055,11 @@ impl DeleteIdentityPolicyError {
                 _ => DeleteIdentityPolicyError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteIdentityPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteIdentityPolicyError::Unknown(format!("{}", status))
+                } else {
+                    DeleteIdentityPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -10051,7 +10133,13 @@ impl DeleteReceiptFilterError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteReceiptFilterError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteReceiptFilterError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteReceiptFilterError::Unknown(format!("{}", status))
+                } else {
+                    DeleteReceiptFilterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10129,7 +10217,13 @@ impl DeleteReceiptRuleError {
                 }
                 _ => DeleteReceiptRuleError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteReceiptRuleError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteReceiptRuleError::Unknown(format!("{}", status))
+                } else {
+                    DeleteReceiptRuleError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10209,7 +10303,11 @@ impl DeleteReceiptRuleSetError {
                 _ => DeleteReceiptRuleSetError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteReceiptRuleSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteReceiptRuleSetError::Unknown(format!("{}", status))
+                } else {
+                    DeleteReceiptRuleSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -10284,7 +10382,13 @@ impl DeleteTemplateError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteTemplateError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteTemplateError::Unknown(format!("{}", status))
+                } else {
+                    DeleteTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10356,7 +10460,15 @@ impl DeleteVerifiedEmailAddressError {
                 _ => DeleteVerifiedEmailAddressError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteVerifiedEmailAddressError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteVerifiedEmailAddressError::Unknown(format!("{}", status))
+                } else {
+                    DeleteVerifiedEmailAddressError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -10430,11 +10542,17 @@ impl DescribeActiveReceiptRuleSetError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeActiveReceiptRuleSetError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeActiveReceiptRuleSetError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeActiveReceiptRuleSetError::Unknown(format!("{}", status))
+                } else {
+                    DescribeActiveReceiptRuleSetError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -10515,7 +10633,15 @@ impl DescribeConfigurationSetError {
                 _ => DescribeConfigurationSetError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeConfigurationSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeConfigurationSetError::Unknown(format!("{}", status))
+                } else {
+                    DescribeConfigurationSetError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -10600,7 +10726,13 @@ impl DescribeReceiptRuleError {
                 ),
                 _ => DescribeReceiptRuleError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeReceiptRuleError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeReceiptRuleError::Unknown(format!("{}", status))
+                } else {
+                    DescribeReceiptRuleError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10681,7 +10813,11 @@ impl DescribeReceiptRuleSetError {
                 _ => DescribeReceiptRuleSetError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeReceiptRuleSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeReceiptRuleSetError::Unknown(format!("{}", status))
+                } else {
+                    DescribeReceiptRuleSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -10757,7 +10893,15 @@ impl GetAccountSendingEnabledError {
                 _ => GetAccountSendingEnabledError::Unknown(String::from(body)),
             },
             Err(_) => {
-                GetAccountSendingEnabledError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    GetAccountSendingEnabledError::Unknown(format!("{}", status))
+                } else {
+                    GetAccountSendingEnabledError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -10835,7 +10979,13 @@ impl GetCustomVerificationEmailTemplateError {
                                     "CustomVerificationEmailTemplateDoesNotExist" => GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message)),_ => GetCustomVerificationEmailTemplateError::Unknown(String::from(body))
                                 }
                            },
-                           Err(_) => GetCustomVerificationEmailTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                           Err(_) => {
+                               if body.len() == 0 {
+                                   GetCustomVerificationEmailTemplateError::Unknown(format!("{}", status))
+                               } else {
+                                   GetCustomVerificationEmailTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                               }
+                            }
                        }
     }
 
@@ -10908,7 +11058,15 @@ impl GetIdentityDkimAttributesError {
                 _ => GetIdentityDkimAttributesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                GetIdentityDkimAttributesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    GetIdentityDkimAttributesError::Unknown(format!("{}", status))
+                } else {
+                    GetIdentityDkimAttributesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -10982,11 +11140,17 @@ impl GetIdentityMailFromDomainAttributesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetIdentityMailFromDomainAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => GetIdentityMailFromDomainAttributesError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetIdentityMailFromDomainAttributesError::Unknown(format!("{}", status))
+                } else {
+                    GetIdentityMailFromDomainAttributesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -11059,11 +11223,17 @@ impl GetIdentityNotificationAttributesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetIdentityNotificationAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => GetIdentityNotificationAttributesError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetIdentityNotificationAttributesError::Unknown(format!("{}", status))
+                } else {
+                    GetIdentityNotificationAttributesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -11136,7 +11306,13 @@ impl GetIdentityPoliciesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetIdentityPoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => GetIdentityPoliciesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetIdentityPoliciesError::Unknown(format!("{}", status))
+                } else {
+                    GetIdentityPoliciesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11209,11 +11385,17 @@ impl GetIdentityVerificationAttributesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetIdentityVerificationAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => GetIdentityVerificationAttributesError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetIdentityVerificationAttributesError::Unknown(format!("{}", status))
+                } else {
+                    GetIdentityVerificationAttributesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -11286,7 +11468,13 @@ impl GetSendQuotaError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetSendQuotaError::Unknown(String::from(body)),
             },
-            Err(_) => GetSendQuotaError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetSendQuotaError::Unknown(format!("{}", status))
+                } else {
+                    GetSendQuotaError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11357,7 +11545,13 @@ impl GetSendStatisticsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetSendStatisticsError::Unknown(String::from(body)),
             },
-            Err(_) => GetSendStatisticsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetSendStatisticsError::Unknown(format!("{}", status))
+                } else {
+                    GetSendStatisticsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11435,7 +11629,13 @@ impl GetTemplateError {
                 }
                 _ => GetTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => GetTemplateError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetTemplateError::Unknown(format!("{}", status))
+                } else {
+                    GetTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11508,7 +11708,11 @@ impl ListConfigurationSetsError {
                 _ => ListConfigurationSetsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListConfigurationSetsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListConfigurationSetsError::Unknown(format!("{}", status))
+                } else {
+                    ListConfigurationSetsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -11582,11 +11786,17 @@ impl ListCustomVerificationEmailTemplatesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListCustomVerificationEmailTemplatesError::Unknown(String::from(body)),
             },
-            Err(_) => ListCustomVerificationEmailTemplatesError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListCustomVerificationEmailTemplatesError::Unknown(format!("{}", status))
+                } else {
+                    ListCustomVerificationEmailTemplatesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -11659,7 +11869,13 @@ impl ListIdentitiesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListIdentitiesError::Unknown(String::from(body)),
             },
-            Err(_) => ListIdentitiesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListIdentitiesError::Unknown(format!("{}", status))
+                } else {
+                    ListIdentitiesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11731,7 +11947,11 @@ impl ListIdentityPoliciesError {
                 _ => ListIdentityPoliciesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListIdentityPoliciesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListIdentityPoliciesError::Unknown(format!("{}", status))
+                } else {
+                    ListIdentityPoliciesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -11805,7 +12025,13 @@ impl ListReceiptFiltersError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListReceiptFiltersError::Unknown(String::from(body)),
             },
-            Err(_) => ListReceiptFiltersError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListReceiptFiltersError::Unknown(format!("{}", status))
+                } else {
+                    ListReceiptFiltersError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11878,7 +12104,13 @@ impl ListReceiptRuleSetsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListReceiptRuleSetsError::Unknown(String::from(body)),
             },
-            Err(_) => ListReceiptRuleSetsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListReceiptRuleSetsError::Unknown(format!("{}", status))
+                } else {
+                    ListReceiptRuleSetsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11951,7 +12183,13 @@ impl ListTemplatesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListTemplatesError::Unknown(String::from(body)),
             },
-            Err(_) => ListTemplatesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListTemplatesError::Unknown(format!("{}", status))
+                } else {
+                    ListTemplatesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -12023,7 +12261,15 @@ impl ListVerifiedEmailAddressesError {
                 _ => ListVerifiedEmailAddressesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListVerifiedEmailAddressesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListVerifiedEmailAddressesError::Unknown(format!("{}", status))
+                } else {
+                    ListVerifiedEmailAddressesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -12102,7 +12348,13 @@ impl PutIdentityPolicyError {
                 }
                 _ => PutIdentityPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => PutIdentityPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutIdentityPolicyError::Unknown(format!("{}", status))
+                } else {
+                    PutIdentityPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -12187,7 +12439,11 @@ impl ReorderReceiptRuleSetError {
                 _ => ReorderReceiptRuleSetError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ReorderReceiptRuleSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ReorderReceiptRuleSetError::Unknown(format!("{}", status))
+                } else {
+                    ReorderReceiptRuleSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -12268,7 +12524,13 @@ impl SendBounceError {
                 }
                 _ => SendBounceError::Unknown(String::from(body)),
             },
-            Err(_) => SendBounceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    SendBounceError::Unknown(format!("{}", status))
+                } else {
+                    SendBounceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -12379,7 +12641,11 @@ impl SendBulkTemplatedEmailError {
                 _ => SendBulkTemplatedEmailError::Unknown(String::from(body)),
             },
             Err(_) => {
-                SendBulkTemplatedEmailError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    SendBulkTemplatedEmailError::Unknown(format!("{}", status))
+                } else {
+                    SendBulkTemplatedEmailError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -12492,11 +12758,17 @@ impl SendCustomVerificationEmailError {
                 }
                 _ => SendCustomVerificationEmailError::Unknown(String::from(body)),
             },
-            Err(_) => SendCustomVerificationEmailError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    SendCustomVerificationEmailError::Unknown(format!("{}", status))
+                } else {
+                    SendCustomVerificationEmailError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -12603,7 +12875,13 @@ impl SendEmailError {
                 }
                 _ => SendEmailError::Unknown(String::from(body)),
             },
-            Err(_) => SendEmailError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    SendEmailError::Unknown(format!("{}", status))
+                } else {
+                    SendEmailError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -12706,7 +12984,13 @@ impl SendRawEmailError {
                 }
                 _ => SendRawEmailError::Unknown(String::from(body)),
             },
-            Err(_) => SendRawEmailError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    SendRawEmailError::Unknown(format!("{}", status))
+                } else {
+                    SendRawEmailError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -12818,7 +13102,13 @@ impl SendTemplatedEmailError {
                 ),
                 _ => SendTemplatedEmailError::Unknown(String::from(body)),
             },
-            Err(_) => SendTemplatedEmailError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    SendTemplatedEmailError::Unknown(format!("{}", status))
+                } else {
+                    SendTemplatedEmailError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -12903,7 +13193,15 @@ impl SetActiveReceiptRuleSetError {
                 _ => SetActiveReceiptRuleSetError::Unknown(String::from(body)),
             },
             Err(_) => {
-                SetActiveReceiptRuleSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    SetActiveReceiptRuleSetError::Unknown(format!("{}", status))
+                } else {
+                    SetActiveReceiptRuleSetError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -12979,7 +13277,11 @@ impl SetIdentityDkimEnabledError {
                 _ => SetIdentityDkimEnabledError::Unknown(String::from(body)),
             },
             Err(_) => {
-                SetIdentityDkimEnabledError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    SetIdentityDkimEnabledError::Unknown(format!("{}", status))
+                } else {
+                    SetIdentityDkimEnabledError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -13053,11 +13355,17 @@ impl SetIdentityFeedbackForwardingEnabledError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => SetIdentityFeedbackForwardingEnabledError::Unknown(String::from(body)),
             },
-            Err(_) => SetIdentityFeedbackForwardingEnabledError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    SetIdentityFeedbackForwardingEnabledError::Unknown(format!("{}", status))
+                } else {
+                    SetIdentityFeedbackForwardingEnabledError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -13130,11 +13438,17 @@ impl SetIdentityHeadersInNotificationsEnabledError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => SetIdentityHeadersInNotificationsEnabledError::Unknown(String::from(body)),
             },
-            Err(_) => SetIdentityHeadersInNotificationsEnabledError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    SetIdentityHeadersInNotificationsEnabledError::Unknown(format!("{}", status))
+                } else {
+                    SetIdentityHeadersInNotificationsEnabledError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -13210,7 +13524,15 @@ impl SetIdentityMailFromDomainError {
                 _ => SetIdentityMailFromDomainError::Unknown(String::from(body)),
             },
             Err(_) => {
-                SetIdentityMailFromDomainError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    SetIdentityMailFromDomainError::Unknown(format!("{}", status))
+                } else {
+                    SetIdentityMailFromDomainError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -13284,11 +13606,17 @@ impl SetIdentityNotificationTopicError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => SetIdentityNotificationTopicError::Unknown(String::from(body)),
             },
-            Err(_) => SetIdentityNotificationTopicError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    SetIdentityNotificationTopicError::Unknown(format!("{}", status))
+                } else {
+                    SetIdentityNotificationTopicError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -13372,7 +13700,11 @@ impl SetReceiptRulePositionError {
                 _ => SetReceiptRulePositionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                SetReceiptRulePositionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    SetReceiptRulePositionError::Unknown(format!("{}", status))
+                } else {
+                    SetReceiptRulePositionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -13463,7 +13795,13 @@ impl TestRenderTemplateError {
                 ),
                 _ => TestRenderTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => TestRenderTemplateError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    TestRenderTemplateError::Unknown(format!("{}", status))
+                } else {
+                    TestRenderTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -13539,11 +13877,17 @@ impl UpdateAccountSendingEnabledError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UpdateAccountSendingEnabledError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateAccountSendingEnabledError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateAccountSendingEnabledError::Unknown(format!("{}", status))
+                } else {
+                    UpdateAccountSendingEnabledError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -13651,11 +13995,17 @@ impl UpdateConfigurationSetEventDestinationError {
                 }
                 _ => UpdateConfigurationSetEventDestinationError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateConfigurationSetEventDestinationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateConfigurationSetEventDestinationError::Unknown(format!("{}", status))
+                } else {
+                    UpdateConfigurationSetEventDestinationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -13748,7 +14098,13 @@ impl UpdateConfigurationSetReputationMetricsEnabledError {
                                     "ConfigurationSetDoesNotExist" => UpdateConfigurationSetReputationMetricsEnabledError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),_ => UpdateConfigurationSetReputationMetricsEnabledError::Unknown(String::from(body))
                                 }
                            },
-                           Err(_) => UpdateConfigurationSetReputationMetricsEnabledError::Unknown(format!("{}:{}", body.to_string(), status))
+                           Err(_) => {
+                               if body.len() == 0 {
+                                   UpdateConfigurationSetReputationMetricsEnabledError::Unknown(format!("{}", status))
+                               } else {
+                                   UpdateConfigurationSetReputationMetricsEnabledError::Unknown(format!("{}:{}", body.to_string(), status))
+                               }
+                            }
                        }
     }
 
@@ -13835,11 +14191,17 @@ impl UpdateConfigurationSetSendingEnabledError {
                 }
                 _ => UpdateConfigurationSetSendingEnabledError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateConfigurationSetSendingEnabledError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateConfigurationSetSendingEnabledError::Unknown(format!("{}", status))
+                } else {
+                    UpdateConfigurationSetSendingEnabledError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -13936,11 +14298,17 @@ impl UpdateConfigurationSetTrackingOptionsError {
                 }
                 _ => UpdateConfigurationSetTrackingOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateConfigurationSetTrackingOptionsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateConfigurationSetTrackingOptionsError::Unknown(format!("{}", status))
+                } else {
+                    UpdateConfigurationSetTrackingOptionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -14028,7 +14396,13 @@ impl UpdateCustomVerificationEmailTemplateError {
                                     "CustomVerificationEmailInvalidContent" => UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(String::from(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message)),"FromEmailAddressNotVerified" => UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(String::from(parsed_error.message)),_ => UpdateCustomVerificationEmailTemplateError::Unknown(String::from(body))
                                 }
                            },
-                           Err(_) => UpdateCustomVerificationEmailTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                           Err(_) => {
+                               if body.len() == 0 {
+                                   UpdateCustomVerificationEmailTemplateError::Unknown(format!("{}", status))
+                               } else {
+                                   UpdateCustomVerificationEmailTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                               }
+                            }
                        }
     }
 
@@ -14132,7 +14506,13 @@ impl UpdateReceiptRuleError {
                 }
                 _ => UpdateReceiptRuleError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateReceiptRuleError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateReceiptRuleError::Unknown(format!("{}", status))
+                } else {
+                    UpdateReceiptRuleError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -14221,7 +14601,13 @@ impl UpdateTemplateError {
                 }
                 _ => UpdateTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateTemplateError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateTemplateError::Unknown(format!("{}", status))
+                } else {
+                    UpdateTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -14294,7 +14680,13 @@ impl VerifyDomainDkimError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => VerifyDomainDkimError::Unknown(String::from(body)),
             },
-            Err(_) => VerifyDomainDkimError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    VerifyDomainDkimError::Unknown(format!("{}", status))
+                } else {
+                    VerifyDomainDkimError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -14366,7 +14758,11 @@ impl VerifyDomainIdentityError {
                 _ => VerifyDomainIdentityError::Unknown(String::from(body)),
             },
             Err(_) => {
-                VerifyDomainIdentityError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    VerifyDomainIdentityError::Unknown(format!("{}", status))
+                } else {
+                    VerifyDomainIdentityError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -14440,7 +14836,13 @@ impl VerifyEmailAddressError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => VerifyEmailAddressError::Unknown(String::from(body)),
             },
-            Err(_) => VerifyEmailAddressError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    VerifyEmailAddressError::Unknown(format!("{}", status))
+                } else {
+                    VerifyEmailAddressError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -14513,7 +14915,13 @@ impl VerifyEmailIdentityError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => VerifyEmailIdentityError::Unknown(String::from(body)),
             },
-            Err(_) => VerifyEmailIdentityError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    VerifyEmailIdentityError::Unknown(format!("{}", status))
+                } else {
+                    VerifyEmailIdentityError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 

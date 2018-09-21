@@ -8018,7 +8018,13 @@ impl AddTagsToResourceError {
                 }
                 _ => AddTagsToResourceError::Unknown(String::from(body)),
             },
-            Err(_) => AddTagsToResourceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    AddTagsToResourceError::Unknown(format!("{}", status))
+                } else {
+                    AddTagsToResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -8130,11 +8136,17 @@ impl AuthorizeCacheSecurityGroupIngressError {
                 }
                 _ => AuthorizeCacheSecurityGroupIngressError::Unknown(String::from(body)),
             },
-            Err(_) => AuthorizeCacheSecurityGroupIngressError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    AuthorizeCacheSecurityGroupIngressError::Unknown(format!("{}", status))
+                } else {
+                    AuthorizeCacheSecurityGroupIngressError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -8250,7 +8262,13 @@ impl CopySnapshotError {
                 ),
                 _ => CopySnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => CopySnapshotError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CopySnapshotError::Unknown(format!("{}", status))
+                } else {
+                    CopySnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -8423,7 +8441,13 @@ impl CreateCacheClusterError {
                 }
                 _ => CreateCacheClusterError::Unknown(String::from(body)),
             },
-            Err(_) => CreateCacheClusterError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateCacheClusterError::Unknown(format!("{}", status))
+                } else {
+                    CreateCacheClusterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -8544,7 +8568,15 @@ impl CreateCacheParameterGroupError {
                 _ => CreateCacheParameterGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateCacheParameterGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateCacheParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreateCacheParameterGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -8656,7 +8688,15 @@ impl CreateCacheSecurityGroupError {
                 _ => CreateCacheSecurityGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateCacheSecurityGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateCacheSecurityGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreateCacheSecurityGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -8761,7 +8801,11 @@ impl CreateCacheSubnetGroupError {
                 _ => CreateCacheSubnetGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateCacheSubnetGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateCacheSubnetGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreateCacheSubnetGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -8941,7 +8985,11 @@ impl CreateReplicationGroupError {
                 _ => CreateReplicationGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateReplicationGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateReplicationGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreateReplicationGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -9083,7 +9131,13 @@ impl CreateSnapshotError {
                 ),
                 _ => CreateSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => CreateSnapshotError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    CreateSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9208,7 +9262,13 @@ impl DeleteCacheClusterError {
                 }
                 _ => DeleteCacheClusterError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteCacheClusterError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteCacheClusterError::Unknown(format!("{}", status))
+                } else {
+                    DeleteCacheClusterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9315,7 +9375,15 @@ impl DeleteCacheParameterGroupError {
                 _ => DeleteCacheParameterGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteCacheParameterGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteCacheParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeleteCacheParameterGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -9422,7 +9490,15 @@ impl DeleteCacheSecurityGroupError {
                 _ => DeleteCacheSecurityGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteCacheSecurityGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteCacheSecurityGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeleteCacheSecurityGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -9513,7 +9589,11 @@ impl DeleteCacheSubnetGroupError {
                 _ => DeleteCacheSubnetGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteCacheSubnetGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteCacheSubnetGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeleteCacheSubnetGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -9637,7 +9717,11 @@ impl DeleteReplicationGroupError {
                 _ => DeleteReplicationGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteReplicationGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteReplicationGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeleteReplicationGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -9738,7 +9822,13 @@ impl DeleteSnapshotError {
                 }
                 _ => DeleteSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteSnapshotError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    DeleteSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9831,7 +9921,11 @@ impl DescribeCacheClustersError {
                 _ => DescribeCacheClustersError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeCacheClustersError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeCacheClustersError::Unknown(format!("{}", status))
+                } else {
+                    DescribeCacheClustersError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -9908,11 +10002,17 @@ impl DescribeCacheEngineVersionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeCacheEngineVersionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeCacheEngineVersionsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeCacheEngineVersionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeCacheEngineVersionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -10006,11 +10106,17 @@ impl DescribeCacheParameterGroupsError {
                 }
                 _ => DescribeCacheParameterGroupsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeCacheParameterGroupsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeCacheParameterGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeCacheParameterGroupsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -10106,7 +10212,15 @@ impl DescribeCacheParametersError {
                 _ => DescribeCacheParametersError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeCacheParametersError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeCacheParametersError::Unknown(format!("{}", status))
+                } else {
+                    DescribeCacheParametersError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -10202,11 +10316,17 @@ impl DescribeCacheSecurityGroupsError {
                 ),
                 _ => DescribeCacheSecurityGroupsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeCacheSecurityGroupsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeCacheSecurityGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeCacheSecurityGroupsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -10290,7 +10410,15 @@ impl DescribeCacheSubnetGroupsError {
                 _ => DescribeCacheSubnetGroupsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeCacheSubnetGroupsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeCacheSubnetGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeCacheSubnetGroupsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -10379,11 +10507,17 @@ impl DescribeEngineDefaultParametersError {
                 }
                 _ => DescribeEngineDefaultParametersError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEngineDefaultParametersError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeEngineDefaultParametersError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEngineDefaultParametersError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -10468,7 +10602,13 @@ impl DescribeEventsError {
                 }
                 _ => DescribeEventsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEventsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeEventsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEventsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10561,7 +10701,15 @@ impl DescribeReplicationGroupsError {
                 _ => DescribeReplicationGroupsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeReplicationGroupsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeReplicationGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeReplicationGroupsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -10658,7 +10806,15 @@ impl DescribeReservedCacheNodesError {
                 _ => DescribeReservedCacheNodesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeReservedCacheNodesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeReservedCacheNodesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeReservedCacheNodesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -10743,7 +10899,13 @@ impl DescribeReservedCacheNodesOfferingsError {
                                     "InvalidParameterCombination" => DescribeReservedCacheNodesOfferingsError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValue" => DescribeReservedCacheNodesOfferingsError::InvalidParameterValue(String::from(parsed_error.message)),"ReservedCacheNodesOfferingNotFound" => DescribeReservedCacheNodesOfferingsError::ReservedCacheNodesOfferingNotFoundFault(String::from(parsed_error.message)),_ => DescribeReservedCacheNodesOfferingsError::Unknown(String::from(body))
                                 }
                            },
-                           Err(_) => DescribeReservedCacheNodesOfferingsError::Unknown(format!("{}:{}", body.to_string(), status))
+                           Err(_) => {
+                               if body.len() == 0 {
+                                   DescribeReservedCacheNodesOfferingsError::Unknown(format!("{}", status))
+                               } else {
+                                   DescribeReservedCacheNodesOfferingsError::Unknown(format!("{}:{}", body.to_string(), status))
+                               }
+                            }
                        }
     }
 
@@ -10845,7 +11007,13 @@ impl DescribeSnapshotsError {
                 ),
                 _ => DescribeSnapshotsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSnapshotsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeSnapshotsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSnapshotsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10950,11 +11118,17 @@ impl ListAllowedNodeTypeModificationsError {
                 }
                 _ => ListAllowedNodeTypeModificationsError::Unknown(String::from(body)),
             },
-            Err(_) => ListAllowedNodeTypeModificationsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListAllowedNodeTypeModificationsError::Unknown(format!("{}", status))
+                } else {
+                    ListAllowedNodeTypeModificationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -11048,7 +11222,13 @@ impl ListTagsForResourceError {
                 ),
                 _ => ListTagsForResourceError::Unknown(String::from(body)),
             },
-            Err(_) => ListTagsForResourceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListTagsForResourceError::Unknown(format!("{}", status))
+                } else {
+                    ListTagsForResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11197,7 +11377,13 @@ impl ModifyCacheClusterError {
                 }
                 _ => ModifyCacheClusterError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyCacheClusterError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyCacheClusterError::Unknown(format!("{}", status))
+                } else {
+                    ModifyCacheClusterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11308,7 +11494,15 @@ impl ModifyCacheParameterGroupError {
                 _ => ModifyCacheParameterGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ModifyCacheParameterGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ModifyCacheParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    ModifyCacheParameterGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -11413,7 +11607,11 @@ impl ModifyCacheSubnetGroupError {
                 _ => ModifyCacheSubnetGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ModifyCacheSubnetGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ModifyCacheSubnetGroupError::Unknown(format!("{}", status))
+                } else {
+                    ModifyCacheSubnetGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -11579,7 +11777,11 @@ impl ModifyReplicationGroupError {
                 _ => ModifyReplicationGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ModifyReplicationGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ModifyReplicationGroupError::Unknown(format!("{}", status))
+                } else {
+                    ModifyReplicationGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -11686,7 +11888,13 @@ impl ModifyReplicationGroupShardConfigurationError {
                                     "InsufficientCacheClusterCapacity" => ModifyReplicationGroupShardConfigurationError::InsufficientCacheClusterCapacityFault(String::from(parsed_error.message)),"InvalidCacheClusterState" => ModifyReplicationGroupShardConfigurationError::InvalidCacheClusterStateFault(String::from(parsed_error.message)),"InvalidParameterCombination" => ModifyReplicationGroupShardConfigurationError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValue" => ModifyReplicationGroupShardConfigurationError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidReplicationGroupState" => ModifyReplicationGroupShardConfigurationError::InvalidReplicationGroupStateFault(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => ModifyReplicationGroupShardConfigurationError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceeded" => ModifyReplicationGroupShardConfigurationError::NodeGroupsPerReplicationGroupQuotaExceededFault(String::from(parsed_error.message)),"NodeQuotaForCustomerExceeded" => ModifyReplicationGroupShardConfigurationError::NodeQuotaForCustomerExceededFault(String::from(parsed_error.message)),"ReplicationGroupNotFoundFault" => ModifyReplicationGroupShardConfigurationError::ReplicationGroupNotFoundFault(String::from(parsed_error.message)),_ => ModifyReplicationGroupShardConfigurationError::Unknown(String::from(body))
                                 }
                            },
-                           Err(_) => ModifyReplicationGroupShardConfigurationError::Unknown(format!("{}:{}", body.to_string(), status))
+                           Err(_) => {
+                               if body.len() == 0 {
+                                   ModifyReplicationGroupShardConfigurationError::Unknown(format!("{}", status))
+                               } else {
+                                   ModifyReplicationGroupShardConfigurationError::Unknown(format!("{}:{}", body.to_string(), status))
+                               }
+                            }
                        }
     }
 
@@ -11801,11 +12009,17 @@ impl PurchaseReservedCacheNodesOfferingError {
                 }
                 _ => PurchaseReservedCacheNodesOfferingError::Unknown(String::from(body)),
             },
-            Err(_) => PurchaseReservedCacheNodesOfferingError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    PurchaseReservedCacheNodesOfferingError::Unknown(format!("{}", status))
+                } else {
+                    PurchaseReservedCacheNodesOfferingError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -11903,7 +12117,13 @@ impl RebootCacheClusterError {
                 }
                 _ => RebootCacheClusterError::Unknown(String::from(body)),
             },
-            Err(_) => RebootCacheClusterError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    RebootCacheClusterError::Unknown(format!("{}", status))
+                } else {
+                    RebootCacheClusterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11999,7 +12219,11 @@ impl RemoveTagsFromResourceError {
                 _ => RemoveTagsFromResourceError::Unknown(String::from(body)),
             },
             Err(_) => {
-                RemoveTagsFromResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    RemoveTagsFromResourceError::Unknown(format!("{}", status))
+                } else {
+                    RemoveTagsFromResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -12104,7 +12328,15 @@ impl ResetCacheParameterGroupError {
                 _ => ResetCacheParameterGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ResetCacheParameterGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ResetCacheParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    ResetCacheParameterGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -12217,11 +12449,17 @@ impl RevokeCacheSecurityGroupIngressError {
                 }
                 _ => RevokeCacheSecurityGroupIngressError::Unknown(String::from(body)),
             },
-            Err(_) => RevokeCacheSecurityGroupIngressError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    RevokeCacheSecurityGroupIngressError::Unknown(format!("{}", status))
+                } else {
+                    RevokeCacheSecurityGroupIngressError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -12351,7 +12589,13 @@ impl TestFailoverError {
                 }
                 _ => TestFailoverError::Unknown(String::from(body)),
             },
-            Err(_) => TestFailoverError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    TestFailoverError::Unknown(format!("{}", status))
+                } else {
+                    TestFailoverError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 

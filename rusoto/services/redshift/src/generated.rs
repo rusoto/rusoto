@@ -11828,7 +11828,15 @@ impl AcceptReservedNodeExchangeError {
                 _ => AcceptReservedNodeExchangeError::Unknown(String::from(body)),
             },
             Err(_) => {
-                AcceptReservedNodeExchangeError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    AcceptReservedNodeExchangeError::Unknown(format!("{}", status))
+                } else {
+                    AcceptReservedNodeExchangeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -11937,11 +11945,17 @@ impl AuthorizeClusterSecurityGroupIngressError {
                 }
                 _ => AuthorizeClusterSecurityGroupIngressError::Unknown(String::from(body)),
             },
-            Err(_) => AuthorizeClusterSecurityGroupIngressError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    AuthorizeClusterSecurityGroupIngressError::Unknown(format!("{}", status))
+                } else {
+                    AuthorizeClusterSecurityGroupIngressError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -12067,7 +12081,15 @@ impl AuthorizeSnapshotAccessError {
                 _ => AuthorizeSnapshotAccessError::Unknown(String::from(body)),
             },
             Err(_) => {
-                AuthorizeSnapshotAccessError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    AuthorizeSnapshotAccessError::Unknown(format!("{}", status))
+                } else {
+                    AuthorizeSnapshotAccessError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -12177,7 +12199,13 @@ impl CopyClusterSnapshotError {
                 }
                 _ => CopyClusterSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => CopyClusterSnapshotError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CopyClusterSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    CopyClusterSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -12374,7 +12402,13 @@ impl CreateClusterError {
                 }
                 _ => CreateClusterError::Unknown(String::from(body)),
             },
-            Err(_) => CreateClusterError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateClusterError::Unknown(format!("{}", status))
+                } else {
+                    CreateClusterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -12489,11 +12523,17 @@ impl CreateClusterParameterGroupError {
                 ),
                 _ => CreateClusterParameterGroupError::Unknown(String::from(body)),
             },
-            Err(_) => CreateClusterParameterGroupError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateClusterParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreateClusterParameterGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -12599,7 +12639,15 @@ impl CreateClusterSecurityGroupError {
                 _ => CreateClusterSecurityGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateClusterSecurityGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateClusterSecurityGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreateClusterSecurityGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -12716,7 +12764,11 @@ impl CreateClusterSnapshotError {
                 _ => CreateClusterSnapshotError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateClusterSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateClusterSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    CreateClusterSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -12845,7 +12897,15 @@ impl CreateClusterSubnetGroupError {
                 _ => CreateClusterSubnetGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateClusterSubnetGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateClusterSubnetGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreateClusterSubnetGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -12995,7 +13055,15 @@ impl CreateEventSubscriptionError {
                 _ => CreateEventSubscriptionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateEventSubscriptionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateEventSubscriptionError::Unknown(format!("{}", status))
+                } else {
+                    CreateEventSubscriptionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -13105,7 +13173,15 @@ impl CreateHsmClientCertificateError {
                 _ => CreateHsmClientCertificateError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateHsmClientCertificateError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateHsmClientCertificateError::Unknown(format!("{}", status))
+                } else {
+                    CreateHsmClientCertificateError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -13212,7 +13288,11 @@ impl CreateHsmConfigurationError {
                 _ => CreateHsmConfigurationError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateHsmConfigurationError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateHsmConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    CreateHsmConfigurationError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -13327,7 +13407,15 @@ impl CreateSnapshotCopyGrantError {
                 _ => CreateSnapshotCopyGrantError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateSnapshotCopyGrantError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateSnapshotCopyGrantError::Unknown(format!("{}", status))
+                } else {
+                    CreateSnapshotCopyGrantError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -13424,7 +13512,13 @@ impl CreateTagsError {
                 }
                 _ => CreateTagsError::Unknown(String::from(body)),
             },
-            Err(_) => CreateTagsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateTagsError::Unknown(format!("{}", status))
+                } else {
+                    CreateTagsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -13522,7 +13616,13 @@ impl DeleteClusterError {
                 }
                 _ => DeleteClusterError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteClusterError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteClusterError::Unknown(format!("{}", status))
+                } else {
+                    DeleteClusterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -13611,11 +13711,17 @@ impl DeleteClusterParameterGroupError {
                 }
                 _ => DeleteClusterParameterGroupError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteClusterParameterGroupError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteClusterParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeleteClusterParameterGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -13709,7 +13815,15 @@ impl DeleteClusterSecurityGroupError {
                 _ => DeleteClusterSecurityGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteClusterSecurityGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteClusterSecurityGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeleteClusterSecurityGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -13802,7 +13916,11 @@ impl DeleteClusterSnapshotError {
                 _ => DeleteClusterSnapshotError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteClusterSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteClusterSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    DeleteClusterSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -13900,7 +14018,15 @@ impl DeleteClusterSubnetGroupError {
                 _ => DeleteClusterSubnetGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteClusterSubnetGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteClusterSubnetGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeleteClusterSubnetGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -13990,7 +14116,15 @@ impl DeleteEventSubscriptionError {
                 _ => DeleteEventSubscriptionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteEventSubscriptionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteEventSubscriptionError::Unknown(format!("{}", status))
+                } else {
+                    DeleteEventSubscriptionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -14081,7 +14215,15 @@ impl DeleteHsmClientCertificateError {
                 _ => DeleteHsmClientCertificateError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteHsmClientCertificateError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteHsmClientCertificateError::Unknown(format!("{}", status))
+                } else {
+                    DeleteHsmClientCertificateError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -14174,7 +14316,11 @@ impl DeleteHsmConfigurationError {
                 _ => DeleteHsmConfigurationError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteHsmConfigurationError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteHsmConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    DeleteHsmConfigurationError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -14265,7 +14411,15 @@ impl DeleteSnapshotCopyGrantError {
                 _ => DeleteSnapshotCopyGrantError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteSnapshotCopyGrantError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteSnapshotCopyGrantError::Unknown(format!("{}", status))
+                } else {
+                    DeleteSnapshotCopyGrantError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -14351,7 +14505,13 @@ impl DeleteTagsError {
                 }
                 _ => DeleteTagsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteTagsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteTagsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteTagsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -14430,7 +14590,15 @@ impl DescribeClusterDbRevisionsError {
                 _ => DescribeClusterDbRevisionsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeClusterDbRevisionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeClusterDbRevisionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeClusterDbRevisionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -14517,11 +14685,17 @@ impl DescribeClusterParameterGroupsError {
                 ),
                 _ => DescribeClusterParameterGroupsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeClusterParameterGroupsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeClusterParameterGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeClusterParameterGroupsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -14606,7 +14780,15 @@ impl DescribeClusterParametersError {
                 _ => DescribeClusterParametersError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeClusterParametersError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeClusterParametersError::Unknown(format!("{}", status))
+                } else {
+                    DescribeClusterParametersError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -14693,11 +14875,17 @@ impl DescribeClusterSecurityGroupsError {
                 ),
                 _ => DescribeClusterSecurityGroupsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeClusterSecurityGroupsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeClusterSecurityGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeClusterSecurityGroupsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -14792,7 +14980,15 @@ impl DescribeClusterSnapshotsError {
                 _ => DescribeClusterSnapshotsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeClusterSnapshotsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeClusterSnapshotsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeClusterSnapshotsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -14881,11 +15077,17 @@ impl DescribeClusterSubnetGroupsError {
                 ),
                 _ => DescribeClusterSubnetGroupsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeClusterSubnetGroupsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeClusterSubnetGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeClusterSubnetGroupsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -14971,7 +15173,11 @@ impl DescribeClusterTracksError {
                 _ => DescribeClusterTracksError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeClusterTracksError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeClusterTracksError::Unknown(format!("{}", status))
+                } else {
+                    DescribeClusterTracksError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -15048,7 +15254,15 @@ impl DescribeClusterVersionsError {
                 _ => DescribeClusterVersionsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeClusterVersionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeClusterVersionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeClusterVersionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -15132,7 +15346,13 @@ impl DescribeClustersError {
                 }
                 _ => DescribeClustersError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeClustersError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeClustersError::Unknown(format!("{}", status))
+                } else {
+                    DescribeClustersError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -15205,11 +15425,17 @@ impl DescribeDefaultClusterParametersError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeDefaultClusterParametersError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDefaultClusterParametersError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDefaultClusterParametersError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDefaultClusterParametersError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -15283,7 +15509,15 @@ impl DescribeEventCategoriesError {
                 _ => DescribeEventCategoriesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeEventCategoriesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeEventCategoriesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEventCategoriesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -15370,7 +15604,15 @@ impl DescribeEventSubscriptionsError {
                 _ => DescribeEventSubscriptionsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeEventSubscriptionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeEventSubscriptionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEventSubscriptionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -15446,7 +15688,13 @@ impl DescribeEventsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEventsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEventsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeEventsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEventsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -15529,11 +15777,17 @@ impl DescribeHsmClientCertificatesError {
                 ),
                 _ => DescribeHsmClientCertificatesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeHsmClientCertificatesError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeHsmClientCertificatesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeHsmClientCertificatesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -15623,7 +15877,15 @@ impl DescribeHsmConfigurationsError {
                 _ => DescribeHsmConfigurationsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeHsmConfigurationsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeHsmConfigurationsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeHsmConfigurationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -15705,7 +15967,11 @@ impl DescribeLoggingStatusError {
                 _ => DescribeLoggingStatusError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeLoggingStatusError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeLoggingStatusError::Unknown(format!("{}", status))
+                } else {
+                    DescribeLoggingStatusError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -15780,11 +16046,17 @@ impl DescribeOrderableClusterOptionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeOrderableClusterOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeOrderableClusterOptionsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeOrderableClusterOptionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeOrderableClusterOptionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -15878,11 +16150,17 @@ impl DescribeReservedNodeOfferingsError {
                 }
                 _ => DescribeReservedNodeOfferingsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeReservedNodeOfferingsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeReservedNodeOfferingsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeReservedNodeOfferingsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -15975,7 +16253,11 @@ impl DescribeReservedNodesError {
                 _ => DescribeReservedNodesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeReservedNodesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeReservedNodesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeReservedNodesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -16061,7 +16343,13 @@ impl DescribeResizeError {
                 }
                 _ => DescribeResizeError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeResizeError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeResizeError::Unknown(format!("{}", status))
+                } else {
+                    DescribeResizeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -16147,7 +16435,15 @@ impl DescribeSnapshotCopyGrantsError {
                 _ => DescribeSnapshotCopyGrantsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeSnapshotCopyGrantsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeSnapshotCopyGrantsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSnapshotCopyGrantsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -16236,7 +16532,15 @@ impl DescribeTableRestoreStatusError {
                 _ => DescribeTableRestoreStatusError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeTableRestoreStatusError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeTableRestoreStatusError::Unknown(format!("{}", status))
+                } else {
+                    DescribeTableRestoreStatusError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -16322,7 +16626,13 @@ impl DescribeTagsError {
                 }
                 _ => DescribeTagsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeTagsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeTagsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeTagsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -16400,7 +16710,13 @@ impl DisableLoggingError {
                 }
                 _ => DisableLoggingError::Unknown(String::from(body)),
             },
-            Err(_) => DisableLoggingError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DisableLoggingError::Unknown(format!("{}", status))
+                } else {
+                    DisableLoggingError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -16494,7 +16810,13 @@ impl DisableSnapshotCopyError {
                 ),
                 _ => DisableSnapshotCopyError::Unknown(String::from(body)),
             },
-            Err(_) => DisableSnapshotCopyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DisableSnapshotCopyError::Unknown(format!("{}", status))
+                } else {
+                    DisableSnapshotCopyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -16598,7 +16920,13 @@ impl EnableLoggingError {
                 }
                 _ => EnableLoggingError::Unknown(String::from(body)),
             },
-            Err(_) => EnableLoggingError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    EnableLoggingError::Unknown(format!("{}", status))
+                } else {
+                    EnableLoggingError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -16734,7 +17062,13 @@ impl EnableSnapshotCopyError {
                 }
                 _ => EnableSnapshotCopyError::Unknown(String::from(body)),
             },
-            Err(_) => EnableSnapshotCopyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    EnableSnapshotCopyError::Unknown(format!("{}", status))
+                } else {
+                    EnableSnapshotCopyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -16828,7 +17162,11 @@ impl GetClusterCredentialsError {
                 _ => GetClusterCredentialsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                GetClusterCredentialsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    GetClusterCredentialsError::Unknown(format!("{}", status))
+                } else {
+                    GetClusterCredentialsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -16946,11 +17284,17 @@ impl GetReservedNodeExchangeOfferingsError {
                 }
                 _ => GetReservedNodeExchangeOfferingsError::Unknown(String::from(body)),
             },
-            Err(_) => GetReservedNodeExchangeOfferingsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetReservedNodeExchangeOfferingsError::Unknown(format!("{}", status))
+                } else {
+                    GetReservedNodeExchangeOfferingsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -17145,7 +17489,13 @@ impl ModifyClusterError {
                 }
                 _ => ModifyClusterError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyClusterError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyClusterError::Unknown(format!("{}", status))
+                } else {
+                    ModifyClusterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -17252,7 +17602,15 @@ impl ModifyClusterDbRevisionError {
                 _ => ModifyClusterDbRevisionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ModifyClusterDbRevisionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ModifyClusterDbRevisionError::Unknown(format!("{}", status))
+                } else {
+                    ModifyClusterDbRevisionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -17340,7 +17698,11 @@ impl ModifyClusterIamRolesError {
                 _ => ModifyClusterIamRolesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ModifyClusterIamRolesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ModifyClusterIamRolesError::Unknown(format!("{}", status))
+                } else {
+                    ModifyClusterIamRolesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -17430,11 +17792,17 @@ impl ModifyClusterParameterGroupError {
                 }
                 _ => ModifyClusterParameterGroupError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyClusterParameterGroupError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyClusterParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    ModifyClusterParameterGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -17550,7 +17918,15 @@ impl ModifyClusterSubnetGroupError {
                 _ => ModifyClusterSubnetGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ModifyClusterSubnetGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ModifyClusterSubnetGroupError::Unknown(format!("{}", status))
+                } else {
+                    ModifyClusterSubnetGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -17686,7 +18062,15 @@ impl ModifyEventSubscriptionError {
                 _ => ModifyEventSubscriptionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ModifyEventSubscriptionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ModifyEventSubscriptionError::Unknown(format!("{}", status))
+                } else {
+                    ModifyEventSubscriptionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -17795,11 +18179,17 @@ impl ModifySnapshotCopyRetentionPeriodError {
                 }
                 _ => ModifySnapshotCopyRetentionPeriodError::Unknown(String::from(body)),
             },
-            Err(_) => ModifySnapshotCopyRetentionPeriodError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifySnapshotCopyRetentionPeriodError::Unknown(format!("{}", status))
+                } else {
+                    ModifySnapshotCopyRetentionPeriodError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -17904,11 +18294,17 @@ impl PurchaseReservedNodeOfferingError {
                 }
                 _ => PurchaseReservedNodeOfferingError::Unknown(String::from(body)),
             },
-            Err(_) => PurchaseReservedNodeOfferingError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    PurchaseReservedNodeOfferingError::Unknown(format!("{}", status))
+                } else {
+                    PurchaseReservedNodeOfferingError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -17997,7 +18393,13 @@ impl RebootClusterError {
                 }
                 _ => RebootClusterError::Unknown(String::from(body)),
             },
-            Err(_) => RebootClusterError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    RebootClusterError::Unknown(format!("{}", status))
+                } else {
+                    RebootClusterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18085,7 +18487,15 @@ impl ResetClusterParameterGroupError {
                 _ => ResetClusterParameterGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ResetClusterParameterGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ResetClusterParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    ResetClusterParameterGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -18306,7 +18716,15 @@ impl RestoreFromClusterSnapshotError {
                 _ => RestoreFromClusterSnapshotError::Unknown(String::from(body)),
             },
             Err(_) => {
-                RestoreFromClusterSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    RestoreFromClusterSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    RestoreFromClusterSnapshotError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -18455,11 +18873,17 @@ impl RestoreTableFromClusterSnapshotError {
                 }
                 _ => RestoreTableFromClusterSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => RestoreTableFromClusterSnapshotError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    RestoreTableFromClusterSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    RestoreTableFromClusterSnapshotError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -18566,11 +18990,17 @@ impl RevokeClusterSecurityGroupIngressError {
                 }
                 _ => RevokeClusterSecurityGroupIngressError::Unknown(String::from(body)),
             },
-            Err(_) => RevokeClusterSecurityGroupIngressError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    RevokeClusterSecurityGroupIngressError::Unknown(format!("{}", status))
+                } else {
+                    RevokeClusterSecurityGroupIngressError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -18668,7 +19098,11 @@ impl RevokeSnapshotAccessError {
                 _ => RevokeSnapshotAccessError::Unknown(String::from(body)),
             },
             Err(_) => {
-                RevokeSnapshotAccessError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    RevokeSnapshotAccessError::Unknown(format!("{}", status))
+                } else {
+                    RevokeSnapshotAccessError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -18762,7 +19196,13 @@ impl RotateEncryptionKeyError {
                 ),
                 _ => RotateEncryptionKeyError::Unknown(String::from(body)),
             },
-            Err(_) => RotateEncryptionKeyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    RotateEncryptionKeyError::Unknown(format!("{}", status))
+                } else {
+                    RotateEncryptionKeyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 

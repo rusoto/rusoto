@@ -2359,7 +2359,13 @@ impl AddPermissionError {
                 "OverLimit" => AddPermissionError::OverLimit(String::from(parsed_error.message)),
                 _ => AddPermissionError::Unknown(String::from(body)),
             },
-            Err(_) => AddPermissionError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    AddPermissionError::Unknown(format!("{}", status))
+                } else {
+                    AddPermissionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -2444,7 +2450,15 @@ impl ChangeMessageVisibilityError {
                 _ => ChangeMessageVisibilityError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ChangeMessageVisibilityError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ChangeMessageVisibilityError::Unknown(format!("{}", status))
+                } else {
+                    ChangeMessageVisibilityError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -2548,11 +2562,17 @@ impl ChangeMessageVisibilityBatchError {
                 }
                 _ => ChangeMessageVisibilityBatchError::Unknown(String::from(body)),
             },
-            Err(_) => ChangeMessageVisibilityBatchError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ChangeMessageVisibilityBatchError::Unknown(format!("{}", status))
+                } else {
+                    ChangeMessageVisibilityBatchError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -2639,7 +2659,13 @@ impl CreateQueueError {
                 }
                 _ => CreateQueueError::Unknown(String::from(body)),
             },
-            Err(_) => CreateQueueError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateQueueError::Unknown(format!("{}", status))
+                } else {
+                    CreateQueueError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -2722,7 +2748,13 @@ impl DeleteMessageError {
                 }
                 _ => DeleteMessageError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteMessageError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteMessageError::Unknown(format!("{}", status))
+                } else {
+                    DeleteMessageError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -2819,7 +2851,13 @@ impl DeleteMessageBatchError {
                 }
                 _ => DeleteMessageBatchError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteMessageBatchError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteMessageBatchError::Unknown(format!("{}", status))
+                } else {
+                    DeleteMessageBatchError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -2896,7 +2934,13 @@ impl DeleteQueueError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteQueueError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteQueueError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteQueueError::Unknown(format!("{}", status))
+                } else {
+                    DeleteQueueError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -2972,7 +3016,13 @@ impl GetQueueAttributesError {
                 ),
                 _ => GetQueueAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => GetQueueAttributesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetQueueAttributesError::Unknown(format!("{}", status))
+                } else {
+                    GetQueueAttributesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3051,7 +3101,13 @@ impl GetQueueUrlError {
                 }
                 _ => GetQueueUrlError::Unknown(String::from(body)),
             },
-            Err(_) => GetQueueUrlError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetQueueUrlError::Unknown(format!("{}", status))
+                } else {
+                    GetQueueUrlError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3131,7 +3187,15 @@ impl ListDeadLetterSourceQueuesError {
                 _ => ListDeadLetterSourceQueuesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListDeadLetterSourceQueuesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListDeadLetterSourceQueuesError::Unknown(format!("{}", status))
+                } else {
+                    ListDeadLetterSourceQueuesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -3206,7 +3270,13 @@ impl ListQueueTagsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListQueueTagsError::Unknown(String::from(body)),
             },
-            Err(_) => ListQueueTagsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListQueueTagsError::Unknown(format!("{}", status))
+                } else {
+                    ListQueueTagsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3277,7 +3347,13 @@ impl ListQueuesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListQueuesError::Unknown(String::from(body)),
             },
-            Err(_) => ListQueuesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListQueuesError::Unknown(format!("{}", status))
+                } else {
+                    ListQueuesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3358,7 +3434,13 @@ impl PurgeQueueError {
                 }
                 _ => PurgeQueueError::Unknown(String::from(body)),
             },
-            Err(_) => PurgeQueueError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PurgeQueueError::Unknown(format!("{}", status))
+                } else {
+                    PurgeQueueError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3434,7 +3516,13 @@ impl ReceiveMessageError {
                 "OverLimit" => ReceiveMessageError::OverLimit(String::from(parsed_error.message)),
                 _ => ReceiveMessageError::Unknown(String::from(body)),
             },
-            Err(_) => ReceiveMessageError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ReceiveMessageError::Unknown(format!("{}", status))
+                } else {
+                    ReceiveMessageError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3506,7 +3594,13 @@ impl RemovePermissionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RemovePermissionError::Unknown(String::from(body)),
             },
-            Err(_) => RemovePermissionError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    RemovePermissionError::Unknown(format!("{}", status))
+                } else {
+                    RemovePermissionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3587,7 +3681,13 @@ impl SendMessageError {
                 }
                 _ => SendMessageError::Unknown(String::from(body)),
             },
-            Err(_) => SendMessageError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    SendMessageError::Unknown(format!("{}", status))
+                } else {
+                    SendMessageError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3694,7 +3794,13 @@ impl SendMessageBatchError {
                 }
                 _ => SendMessageBatchError::Unknown(String::from(body)),
             },
-            Err(_) => SendMessageBatchError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    SendMessageBatchError::Unknown(format!("{}", status))
+                } else {
+                    SendMessageBatchError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3776,7 +3882,13 @@ impl SetQueueAttributesError {
                 ),
                 _ => SetQueueAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => SetQueueAttributesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    SetQueueAttributesError::Unknown(format!("{}", status))
+                } else {
+                    SetQueueAttributesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3850,7 +3962,13 @@ impl TagQueueError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => TagQueueError::Unknown(String::from(body)),
             },
-            Err(_) => TagQueueError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    TagQueueError::Unknown(format!("{}", status))
+                } else {
+                    TagQueueError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3921,7 +4039,13 @@ impl UntagQueueError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UntagQueueError::Unknown(String::from(body)),
             },
-            Err(_) => UntagQueueError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UntagQueueError::Unknown(format!("{}", status))
+                } else {
+                    UntagQueueError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 

@@ -16284,7 +16284,11 @@ impl AbortMultipartUploadError {
                 _ => AbortMultipartUploadError::Unknown(String::from(body)),
             },
             Err(_) => {
-                AbortMultipartUploadError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    AbortMultipartUploadError::Unknown(format!("{}", status))
+                } else {
+                    AbortMultipartUploadError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -16359,7 +16363,15 @@ impl CompleteMultipartUploadError {
                 _ => CompleteMultipartUploadError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CompleteMultipartUploadError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CompleteMultipartUploadError::Unknown(format!("{}", status))
+                } else {
+                    CompleteMultipartUploadError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -16437,7 +16449,13 @@ impl CopyObjectError {
                 }
                 _ => CopyObjectError::Unknown(String::from(body)),
             },
-            Err(_) => CopyObjectError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CopyObjectError::Unknown(format!("{}", status))
+                } else {
+                    CopyObjectError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -16518,7 +16536,13 @@ impl CreateBucketError {
                 }
                 _ => CreateBucketError::Unknown(String::from(body)),
             },
-            Err(_) => CreateBucketError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateBucketError::Unknown(format!("{}", status))
+                } else {
+                    CreateBucketError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -16591,7 +16615,11 @@ impl CreateMultipartUploadError {
                 _ => CreateMultipartUploadError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateMultipartUploadError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateMultipartUploadError::Unknown(format!("{}", status))
+                } else {
+                    CreateMultipartUploadError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -16664,7 +16692,13 @@ impl DeleteBucketError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteBucketError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteBucketError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteBucketError::Unknown(format!("{}", status))
+                } else {
+                    DeleteBucketError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -16734,11 +16768,17 @@ impl DeleteBucketAnalyticsConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteBucketAnalyticsConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteBucketAnalyticsConfigurationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteBucketAnalyticsConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    DeleteBucketAnalyticsConfigurationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -16810,7 +16850,13 @@ impl DeleteBucketCorsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteBucketCorsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteBucketCorsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteBucketCorsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteBucketCorsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -16881,7 +16927,11 @@ impl DeleteBucketEncryptionError {
                 _ => DeleteBucketEncryptionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteBucketEncryptionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteBucketEncryptionError::Unknown(format!("{}", status))
+                } else {
+                    DeleteBucketEncryptionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -16954,11 +17004,17 @@ impl DeleteBucketInventoryConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteBucketInventoryConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteBucketInventoryConfigurationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteBucketInventoryConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    DeleteBucketInventoryConfigurationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -17031,7 +17087,11 @@ impl DeleteBucketLifecycleError {
                 _ => DeleteBucketLifecycleError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteBucketLifecycleError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteBucketLifecycleError::Unknown(format!("{}", status))
+                } else {
+                    DeleteBucketLifecycleError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -17104,11 +17164,17 @@ impl DeleteBucketMetricsConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteBucketMetricsConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteBucketMetricsConfigurationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteBucketMetricsConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    DeleteBucketMetricsConfigurationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -17180,7 +17246,13 @@ impl DeleteBucketPolicyError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteBucketPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteBucketPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteBucketPolicyError::Unknown(format!("{}", status))
+                } else {
+                    DeleteBucketPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -17253,7 +17325,15 @@ impl DeleteBucketReplicationError {
                 _ => DeleteBucketReplicationError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteBucketReplicationError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteBucketReplicationError::Unknown(format!("{}", status))
+                } else {
+                    DeleteBucketReplicationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -17326,7 +17406,13 @@ impl DeleteBucketTaggingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteBucketTaggingError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteBucketTaggingError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteBucketTaggingError::Unknown(format!("{}", status))
+                } else {
+                    DeleteBucketTaggingError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -17398,7 +17484,13 @@ impl DeleteBucketWebsiteError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteBucketWebsiteError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteBucketWebsiteError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteBucketWebsiteError::Unknown(format!("{}", status))
+                } else {
+                    DeleteBucketWebsiteError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -17470,7 +17562,13 @@ impl DeleteObjectError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteObjectError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteObjectError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteObjectError::Unknown(format!("{}", status))
+                } else {
+                    DeleteObjectError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -17540,7 +17638,13 @@ impl DeleteObjectTaggingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteObjectTaggingError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteObjectTaggingError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteObjectTaggingError::Unknown(format!("{}", status))
+                } else {
+                    DeleteObjectTaggingError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -17612,7 +17716,13 @@ impl DeleteObjectsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteObjectsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteObjectsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteObjectsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteObjectsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -17682,11 +17792,17 @@ impl GetBucketAccelerateConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketAccelerateConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketAccelerateConfigurationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetBucketAccelerateConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    GetBucketAccelerateConfigurationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -17758,7 +17874,13 @@ impl GetBucketAclError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketAclError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketAclError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetBucketAclError::Unknown(format!("{}", status))
+                } else {
+                    GetBucketAclError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -17828,11 +17950,17 @@ impl GetBucketAnalyticsConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketAnalyticsConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketAnalyticsConfigurationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetBucketAnalyticsConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    GetBucketAnalyticsConfigurationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -17904,7 +18032,13 @@ impl GetBucketCorsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketCorsError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketCorsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetBucketCorsError::Unknown(format!("{}", status))
+                } else {
+                    GetBucketCorsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -17974,7 +18108,13 @@ impl GetBucketEncryptionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketEncryptionError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketEncryptionError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetBucketEncryptionError::Unknown(format!("{}", status))
+                } else {
+                    GetBucketEncryptionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18046,11 +18186,17 @@ impl GetBucketInventoryConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketInventoryConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketInventoryConfigurationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetBucketInventoryConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    GetBucketInventoryConfigurationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -18122,7 +18268,13 @@ impl GetBucketLifecycleError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketLifecycleError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketLifecycleError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetBucketLifecycleError::Unknown(format!("{}", status))
+                } else {
+                    GetBucketLifecycleError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18194,11 +18346,17 @@ impl GetBucketLifecycleConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketLifecycleConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketLifecycleConfigurationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetBucketLifecycleConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    GetBucketLifecycleConfigurationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -18270,7 +18428,13 @@ impl GetBucketLocationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketLocationError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketLocationError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetBucketLocationError::Unknown(format!("{}", status))
+                } else {
+                    GetBucketLocationError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18342,7 +18506,13 @@ impl GetBucketLoggingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketLoggingError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketLoggingError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetBucketLoggingError::Unknown(format!("{}", status))
+                } else {
+                    GetBucketLoggingError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18412,11 +18582,17 @@ impl GetBucketMetricsConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketMetricsConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketMetricsConfigurationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetBucketMetricsConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    GetBucketMetricsConfigurationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -18489,7 +18665,11 @@ impl GetBucketNotificationError {
                 _ => GetBucketNotificationError::Unknown(String::from(body)),
             },
             Err(_) => {
-                GetBucketNotificationError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    GetBucketNotificationError::Unknown(format!("{}", status))
+                } else {
+                    GetBucketNotificationError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -18562,11 +18742,17 @@ impl GetBucketNotificationConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketNotificationConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketNotificationConfigurationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetBucketNotificationConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    GetBucketNotificationConfigurationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -18638,7 +18824,13 @@ impl GetBucketPolicyError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetBucketPolicyError::Unknown(format!("{}", status))
+                } else {
+                    GetBucketPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18709,7 +18901,11 @@ impl GetBucketReplicationError {
                 _ => GetBucketReplicationError::Unknown(String::from(body)),
             },
             Err(_) => {
-                GetBucketReplicationError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    GetBucketReplicationError::Unknown(format!("{}", status))
+                } else {
+                    GetBucketReplicationError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -18783,7 +18979,15 @@ impl GetBucketRequestPaymentError {
                 _ => GetBucketRequestPaymentError::Unknown(String::from(body)),
             },
             Err(_) => {
-                GetBucketRequestPaymentError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    GetBucketRequestPaymentError::Unknown(format!("{}", status))
+                } else {
+                    GetBucketRequestPaymentError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -18856,7 +19060,13 @@ impl GetBucketTaggingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketTaggingError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketTaggingError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetBucketTaggingError::Unknown(format!("{}", status))
+                } else {
+                    GetBucketTaggingError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18926,7 +19136,13 @@ impl GetBucketVersioningError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketVersioningError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketVersioningError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetBucketVersioningError::Unknown(format!("{}", status))
+                } else {
+                    GetBucketVersioningError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18998,7 +19214,13 @@ impl GetBucketWebsiteError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetBucketWebsiteError::Unknown(String::from(body)),
             },
-            Err(_) => GetBucketWebsiteError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetBucketWebsiteError::Unknown(format!("{}", status))
+                } else {
+                    GetBucketWebsiteError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19071,7 +19293,13 @@ impl GetObjectError {
                 "NoSuchKey" => GetObjectError::NoSuchKey(String::from(parsed_error.message)),
                 _ => GetObjectError::Unknown(String::from(body)),
             },
-            Err(_) => GetObjectError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetObjectError::Unknown(format!("{}", status))
+                } else {
+                    GetObjectError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19145,7 +19373,13 @@ impl GetObjectAclError {
                 "NoSuchKey" => GetObjectAclError::NoSuchKey(String::from(parsed_error.message)),
                 _ => GetObjectAclError::Unknown(String::from(body)),
             },
-            Err(_) => GetObjectAclError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetObjectAclError::Unknown(format!("{}", status))
+                } else {
+                    GetObjectAclError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19216,7 +19450,13 @@ impl GetObjectTaggingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetObjectTaggingError::Unknown(String::from(body)),
             },
-            Err(_) => GetObjectTaggingError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetObjectTaggingError::Unknown(format!("{}", status))
+                } else {
+                    GetObjectTaggingError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19286,7 +19526,13 @@ impl GetObjectTorrentError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetObjectTorrentError::Unknown(String::from(body)),
             },
-            Err(_) => GetObjectTorrentError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetObjectTorrentError::Unknown(format!("{}", status))
+                } else {
+                    GetObjectTorrentError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19359,7 +19605,13 @@ impl HeadBucketError {
                 "NoSuchBucket" => HeadBucketError::NoSuchBucket(String::from(parsed_error.message)),
                 _ => HeadBucketError::Unknown(String::from(body)),
             },
-            Err(_) => HeadBucketError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    HeadBucketError::Unknown(format!("{}", status))
+                } else {
+                    HeadBucketError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19433,7 +19685,13 @@ impl HeadObjectError {
                 "NoSuchKey" => HeadObjectError::NoSuchKey(String::from(parsed_error.message)),
                 _ => HeadObjectError::Unknown(String::from(body)),
             },
-            Err(_) => HeadObjectError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    HeadObjectError::Unknown(format!("{}", status))
+                } else {
+                    HeadObjectError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19504,11 +19762,17 @@ impl ListBucketAnalyticsConfigurationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListBucketAnalyticsConfigurationsError::Unknown(String::from(body)),
             },
-            Err(_) => ListBucketAnalyticsConfigurationsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListBucketAnalyticsConfigurationsError::Unknown(format!("{}", status))
+                } else {
+                    ListBucketAnalyticsConfigurationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -19580,11 +19844,17 @@ impl ListBucketInventoryConfigurationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListBucketInventoryConfigurationsError::Unknown(String::from(body)),
             },
-            Err(_) => ListBucketInventoryConfigurationsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListBucketInventoryConfigurationsError::Unknown(format!("{}", status))
+                } else {
+                    ListBucketInventoryConfigurationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -19656,11 +19926,17 @@ impl ListBucketMetricsConfigurationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListBucketMetricsConfigurationsError::Unknown(String::from(body)),
             },
-            Err(_) => ListBucketMetricsConfigurationsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListBucketMetricsConfigurationsError::Unknown(format!("{}", status))
+                } else {
+                    ListBucketMetricsConfigurationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -19732,7 +20008,13 @@ impl ListBucketsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListBucketsError::Unknown(String::from(body)),
             },
-            Err(_) => ListBucketsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListBucketsError::Unknown(format!("{}", status))
+                } else {
+                    ListBucketsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19803,7 +20085,11 @@ impl ListMultipartUploadsError {
                 _ => ListMultipartUploadsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListMultipartUploadsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListMultipartUploadsError::Unknown(format!("{}", status))
+                } else {
+                    ListMultipartUploadsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -19876,7 +20162,13 @@ impl ListObjectVersionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListObjectVersionsError::Unknown(String::from(body)),
             },
-            Err(_) => ListObjectVersionsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListObjectVersionsError::Unknown(format!("{}", status))
+                } else {
+                    ListObjectVersionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19953,7 +20245,13 @@ impl ListObjectsError {
                 }
                 _ => ListObjectsError::Unknown(String::from(body)),
             },
-            Err(_) => ListObjectsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListObjectsError::Unknown(format!("{}", status))
+                } else {
+                    ListObjectsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20029,7 +20327,13 @@ impl ListObjectsV2Error {
                 }
                 _ => ListObjectsV2Error::Unknown(String::from(body)),
             },
-            Err(_) => ListObjectsV2Error::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListObjectsV2Error::Unknown(format!("{}", status))
+                } else {
+                    ListObjectsV2Error::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20100,7 +20404,13 @@ impl ListPartsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListPartsError::Unknown(String::from(body)),
             },
-            Err(_) => ListPartsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListPartsError::Unknown(format!("{}", status))
+                } else {
+                    ListPartsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20170,11 +20480,17 @@ impl PutBucketAccelerateConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketAccelerateConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketAccelerateConfigurationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutBucketAccelerateConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    PutBucketAccelerateConfigurationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -20246,7 +20562,13 @@ impl PutBucketAclError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketAclError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketAclError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutBucketAclError::Unknown(format!("{}", status))
+                } else {
+                    PutBucketAclError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20316,11 +20638,17 @@ impl PutBucketAnalyticsConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketAnalyticsConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketAnalyticsConfigurationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutBucketAnalyticsConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    PutBucketAnalyticsConfigurationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -20392,7 +20720,13 @@ impl PutBucketCorsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketCorsError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketCorsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutBucketCorsError::Unknown(format!("{}", status))
+                } else {
+                    PutBucketCorsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20462,7 +20796,13 @@ impl PutBucketEncryptionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketEncryptionError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketEncryptionError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutBucketEncryptionError::Unknown(format!("{}", status))
+                } else {
+                    PutBucketEncryptionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20534,11 +20874,17 @@ impl PutBucketInventoryConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketInventoryConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketInventoryConfigurationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutBucketInventoryConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    PutBucketInventoryConfigurationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -20610,7 +20956,13 @@ impl PutBucketLifecycleError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketLifecycleError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketLifecycleError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutBucketLifecycleError::Unknown(format!("{}", status))
+                } else {
+                    PutBucketLifecycleError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20682,11 +21034,17 @@ impl PutBucketLifecycleConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketLifecycleConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketLifecycleConfigurationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutBucketLifecycleConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    PutBucketLifecycleConfigurationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -20758,7 +21116,13 @@ impl PutBucketLoggingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketLoggingError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketLoggingError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutBucketLoggingError::Unknown(format!("{}", status))
+                } else {
+                    PutBucketLoggingError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20828,11 +21192,17 @@ impl PutBucketMetricsConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketMetricsConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketMetricsConfigurationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutBucketMetricsConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    PutBucketMetricsConfigurationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -20905,7 +21275,11 @@ impl PutBucketNotificationError {
                 _ => PutBucketNotificationError::Unknown(String::from(body)),
             },
             Err(_) => {
-                PutBucketNotificationError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    PutBucketNotificationError::Unknown(format!("{}", status))
+                } else {
+                    PutBucketNotificationError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -20978,11 +21352,17 @@ impl PutBucketNotificationConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketNotificationConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketNotificationConfigurationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutBucketNotificationConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    PutBucketNotificationConfigurationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -21054,7 +21434,13 @@ impl PutBucketPolicyError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutBucketPolicyError::Unknown(format!("{}", status))
+                } else {
+                    PutBucketPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21125,7 +21511,11 @@ impl PutBucketReplicationError {
                 _ => PutBucketReplicationError::Unknown(String::from(body)),
             },
             Err(_) => {
-                PutBucketReplicationError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    PutBucketReplicationError::Unknown(format!("{}", status))
+                } else {
+                    PutBucketReplicationError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -21199,7 +21589,15 @@ impl PutBucketRequestPaymentError {
                 _ => PutBucketRequestPaymentError::Unknown(String::from(body)),
             },
             Err(_) => {
-                PutBucketRequestPaymentError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    PutBucketRequestPaymentError::Unknown(format!("{}", status))
+                } else {
+                    PutBucketRequestPaymentError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -21272,7 +21670,13 @@ impl PutBucketTaggingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketTaggingError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketTaggingError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutBucketTaggingError::Unknown(format!("{}", status))
+                } else {
+                    PutBucketTaggingError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21342,7 +21746,13 @@ impl PutBucketVersioningError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketVersioningError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketVersioningError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutBucketVersioningError::Unknown(format!("{}", status))
+                } else {
+                    PutBucketVersioningError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21414,7 +21824,13 @@ impl PutBucketWebsiteError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutBucketWebsiteError::Unknown(String::from(body)),
             },
-            Err(_) => PutBucketWebsiteError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutBucketWebsiteError::Unknown(format!("{}", status))
+                } else {
+                    PutBucketWebsiteError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21484,7 +21900,13 @@ impl PutObjectError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutObjectError::Unknown(String::from(body)),
             },
-            Err(_) => PutObjectError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutObjectError::Unknown(format!("{}", status))
+                } else {
+                    PutObjectError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21557,7 +21979,13 @@ impl PutObjectAclError {
                 "NoSuchKey" => PutObjectAclError::NoSuchKey(String::from(parsed_error.message)),
                 _ => PutObjectAclError::Unknown(String::from(body)),
             },
-            Err(_) => PutObjectAclError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutObjectAclError::Unknown(format!("{}", status))
+                } else {
+                    PutObjectAclError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21628,7 +22056,13 @@ impl PutObjectTaggingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PutObjectTaggingError::Unknown(String::from(body)),
             },
-            Err(_) => PutObjectTaggingError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutObjectTaggingError::Unknown(format!("{}", status))
+                } else {
+                    PutObjectTaggingError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21705,7 +22139,13 @@ impl RestoreObjectError {
                 }
                 _ => RestoreObjectError::Unknown(String::from(body)),
             },
-            Err(_) => RestoreObjectError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    RestoreObjectError::Unknown(format!("{}", status))
+                } else {
+                    RestoreObjectError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21776,7 +22216,13 @@ impl SelectObjectContentError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => SelectObjectContentError::Unknown(String::from(body)),
             },
-            Err(_) => SelectObjectContentError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    SelectObjectContentError::Unknown(format!("{}", status))
+                } else {
+                    SelectObjectContentError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21848,7 +22294,13 @@ impl UploadPartError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UploadPartError::Unknown(String::from(body)),
             },
-            Err(_) => UploadPartError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UploadPartError::Unknown(format!("{}", status))
+                } else {
+                    UploadPartError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21918,7 +22370,13 @@ impl UploadPartCopyError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UploadPartCopyError::Unknown(String::from(body)),
             },
-            Err(_) => UploadPartCopyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UploadPartCopyError::Unknown(format!("{}", status))
+                } else {
+                    UploadPartCopyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 

@@ -8790,7 +8790,13 @@ impl CancelUpdateStackError {
                 }
                 _ => CancelUpdateStackError::Unknown(String::from(body)),
             },
-            Err(_) => CancelUpdateStackError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CancelUpdateStackError::Unknown(format!("{}", status))
+                } else {
+                    CancelUpdateStackError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -8870,7 +8876,11 @@ impl ContinueUpdateRollbackError {
                 _ => ContinueUpdateRollbackError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ContinueUpdateRollbackError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ContinueUpdateRollbackError::Unknown(format!("{}", status))
+                } else {
+                    ContinueUpdateRollbackError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -8962,7 +8972,13 @@ impl CreateChangeSetError {
                 }
                 _ => CreateChangeSetError::Unknown(String::from(body)),
             },
-            Err(_) => CreateChangeSetError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateChangeSetError::Unknown(format!("{}", status))
+                } else {
+                    CreateChangeSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9056,7 +9072,13 @@ impl CreateStackError {
                 }
                 _ => CreateStackError::Unknown(String::from(body)),
             },
-            Err(_) => CreateStackError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateStackError::Unknown(format!("{}", status))
+                } else {
+                    CreateStackError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9164,7 +9186,11 @@ impl CreateStackInstancesError {
                 _ => CreateStackInstancesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateStackInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateStackInstancesError::Unknown(format!("{}", status))
+                } else {
+                    CreateStackInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -9259,7 +9285,13 @@ impl CreateStackSetError {
                 }
                 _ => CreateStackSetError::Unknown(String::from(body)),
             },
-            Err(_) => CreateStackSetError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateStackSetError::Unknown(format!("{}", status))
+                } else {
+                    CreateStackSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9338,7 +9370,13 @@ impl DeleteChangeSetError {
                 }
                 _ => DeleteChangeSetError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteChangeSetError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteChangeSetError::Unknown(format!("{}", status))
+                } else {
+                    DeleteChangeSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9415,7 +9453,13 @@ impl DeleteStackError {
                 }
                 _ => DeleteStackError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteStackError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteStackError::Unknown(format!("{}", status))
+                } else {
+                    DeleteStackError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9515,7 +9559,11 @@ impl DeleteStackInstancesError {
                 _ => DeleteStackInstancesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteStackInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteStackInstancesError::Unknown(format!("{}", status))
+                } else {
+                    DeleteStackInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -9604,7 +9652,13 @@ impl DeleteStackSetError {
                 }
                 _ => DeleteStackSetError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteStackSetError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteStackSetError::Unknown(format!("{}", status))
+                } else {
+                    DeleteStackSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9678,7 +9732,11 @@ impl DescribeAccountLimitsError {
                 _ => DescribeAccountLimitsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeAccountLimitsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeAccountLimitsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAccountLimitsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -9757,7 +9815,13 @@ impl DescribeChangeSetError {
                 }
                 _ => DescribeChangeSetError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeChangeSetError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeChangeSetError::Unknown(format!("{}", status))
+                } else {
+                    DescribeChangeSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9831,7 +9895,13 @@ impl DescribeStackEventsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeStackEventsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeStackEventsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeStackEventsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeStackEventsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9917,7 +9987,11 @@ impl DescribeStackInstanceError {
                 _ => DescribeStackInstanceError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeStackInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeStackInstanceError::Unknown(format!("{}", status))
+                } else {
+                    DescribeStackInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -9994,7 +10068,11 @@ impl DescribeStackResourceError {
                 _ => DescribeStackResourceError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeStackResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeStackResourceError::Unknown(format!("{}", status))
+                } else {
+                    DescribeStackResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -10069,7 +10147,11 @@ impl DescribeStackResourcesError {
                 _ => DescribeStackResourcesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeStackResourcesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeStackResourcesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeStackResourcesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -10148,7 +10230,13 @@ impl DescribeStackSetError {
                 }
                 _ => DescribeStackSetError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeStackSetError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeStackSetError::Unknown(format!("{}", status))
+                } else {
+                    DescribeStackSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10231,7 +10319,15 @@ impl DescribeStackSetOperationError {
                 _ => DescribeStackSetOperationError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeStackSetOperationError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeStackSetOperationError::Unknown(format!("{}", status))
+                } else {
+                    DescribeStackSetOperationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -10307,7 +10403,13 @@ impl DescribeStacksError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeStacksError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeStacksError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeStacksError::Unknown(format!("{}", status))
+                } else {
+                    DescribeStacksError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10379,7 +10481,11 @@ impl EstimateTemplateCostError {
                 _ => EstimateTemplateCostError::Unknown(String::from(body)),
             },
             Err(_) => {
-                EstimateTemplateCostError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    EstimateTemplateCostError::Unknown(format!("{}", status))
+                } else {
+                    EstimateTemplateCostError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -10475,7 +10581,13 @@ impl ExecuteChangeSetError {
                 }
                 _ => ExecuteChangeSetError::Unknown(String::from(body)),
             },
-            Err(_) => ExecuteChangeSetError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ExecuteChangeSetError::Unknown(format!("{}", status))
+                } else {
+                    ExecuteChangeSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10550,7 +10662,13 @@ impl GetStackPolicyError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetStackPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => GetStackPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetStackPolicyError::Unknown(format!("{}", status))
+                } else {
+                    GetStackPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10626,7 +10744,13 @@ impl GetTemplateError {
                 }
                 _ => GetTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => GetTemplateError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetTemplateError::Unknown(format!("{}", status))
+                } else {
+                    GetTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10703,7 +10827,13 @@ impl GetTemplateSummaryError {
                 }
                 _ => GetTemplateSummaryError::Unknown(String::from(body)),
             },
-            Err(_) => GetTemplateSummaryError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetTemplateSummaryError::Unknown(format!("{}", status))
+                } else {
+                    GetTemplateSummaryError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10777,7 +10907,13 @@ impl ListChangeSetsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListChangeSetsError::Unknown(String::from(body)),
             },
-            Err(_) => ListChangeSetsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListChangeSetsError::Unknown(format!("{}", status))
+                } else {
+                    ListChangeSetsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10848,7 +10984,13 @@ impl ListExportsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListExportsError::Unknown(String::from(body)),
             },
-            Err(_) => ListExportsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListExportsError::Unknown(format!("{}", status))
+                } else {
+                    ListExportsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10919,7 +11061,13 @@ impl ListImportsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListImportsError::Unknown(String::from(body)),
             },
-            Err(_) => ListImportsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListImportsError::Unknown(format!("{}", status))
+                } else {
+                    ListImportsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10995,7 +11143,13 @@ impl ListStackInstancesError {
                 }
                 _ => ListStackInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => ListStackInstancesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListStackInstancesError::Unknown(format!("{}", status))
+                } else {
+                    ListStackInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11069,7 +11223,13 @@ impl ListStackResourcesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListStackResourcesError::Unknown(String::from(body)),
             },
-            Err(_) => ListStackResourcesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListStackResourcesError::Unknown(format!("{}", status))
+                } else {
+                    ListStackResourcesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11154,11 +11314,17 @@ impl ListStackSetOperationResultsError {
                 ),
                 _ => ListStackSetOperationResultsError::Unknown(String::from(body)),
             },
-            Err(_) => ListStackSetOperationResultsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListStackSetOperationResultsError::Unknown(format!("{}", status))
+                } else {
+                    ListStackSetOperationResultsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -11239,7 +11405,11 @@ impl ListStackSetOperationsError {
                 _ => ListStackSetOperationsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListStackSetOperationsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListStackSetOperationsError::Unknown(format!("{}", status))
+                } else {
+                    ListStackSetOperationsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -11314,7 +11484,13 @@ impl ListStackSetsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListStackSetsError::Unknown(String::from(body)),
             },
-            Err(_) => ListStackSetsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListStackSetsError::Unknown(format!("{}", status))
+                } else {
+                    ListStackSetsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11385,7 +11561,13 @@ impl ListStacksError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListStacksError::Unknown(String::from(body)),
             },
-            Err(_) => ListStacksError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListStacksError::Unknown(format!("{}", status))
+                } else {
+                    ListStacksError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11456,7 +11638,13 @@ impl SetStackPolicyError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => SetStackPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => SetStackPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    SetStackPolicyError::Unknown(format!("{}", status))
+                } else {
+                    SetStackPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11527,7 +11715,13 @@ impl SignalResourceError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => SignalResourceError::Unknown(String::from(body)),
             },
-            Err(_) => SignalResourceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    SignalResourceError::Unknown(format!("{}", status))
+                } else {
+                    SignalResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11614,7 +11808,11 @@ impl StopStackSetOperationError {
                 _ => StopStackSetOperationError::Unknown(String::from(body)),
             },
             Err(_) => {
-                StopStackSetOperationError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    StopStackSetOperationError::Unknown(format!("{}", status))
+                } else {
+                    StopStackSetOperationError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -11701,7 +11899,13 @@ impl UpdateStackError {
                 }
                 _ => UpdateStackError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateStackError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateStackError::Unknown(format!("{}", status))
+                } else {
+                    UpdateStackError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11809,7 +12013,11 @@ impl UpdateStackInstancesError {
                 _ => UpdateStackInstancesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                UpdateStackInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    UpdateStackInstancesError::Unknown(format!("{}", status))
+                } else {
+                    UpdateStackInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -11921,7 +12129,13 @@ impl UpdateStackSetError {
                 }
                 _ => UpdateStackSetError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateStackSetError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateStackSetError::Unknown(format!("{}", status))
+                } else {
+                    UpdateStackSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11998,11 +12212,17 @@ impl UpdateTerminationProtectionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UpdateTerminationProtectionError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateTerminationProtectionError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateTerminationProtectionError::Unknown(format!("{}", status))
+                } else {
+                    UpdateTerminationProtectionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -12075,7 +12295,13 @@ impl ValidateTemplateError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ValidateTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => ValidateTemplateError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ValidateTemplateError::Unknown(format!("{}", status))
+                } else {
+                    ValidateTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 

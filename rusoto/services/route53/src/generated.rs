@@ -10019,7 +10019,15 @@ impl AssociateVPCWithHostedZoneError {
                 _ => AssociateVPCWithHostedZoneError::Unknown(String::from(body)),
             },
             Err(_) => {
-                AssociateVPCWithHostedZoneError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    AssociateVPCWithHostedZoneError::Unknown(format!("{}", status))
+                } else {
+                    AssociateVPCWithHostedZoneError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -10128,7 +10136,15 @@ impl ChangeResourceRecordSetsError {
                 _ => ChangeResourceRecordSetsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ChangeResourceRecordSetsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ChangeResourceRecordSetsError::Unknown(format!("{}", status))
+                } else {
+                    ChangeResourceRecordSetsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -10233,7 +10249,11 @@ impl ChangeTagsForResourceError {
                 _ => ChangeTagsForResourceError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ChangeTagsForResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ChangeTagsForResourceError::Unknown(format!("{}", status))
+                } else {
+                    ChangeTagsForResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -10327,7 +10347,13 @@ impl CreateHealthCheckError {
                 }
                 _ => CreateHealthCheckError::Unknown(String::from(body)),
             },
-            Err(_) => CreateHealthCheckError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateHealthCheckError::Unknown(format!("{}", status))
+                } else {
+                    CreateHealthCheckError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10448,7 +10474,13 @@ impl CreateHostedZoneError {
                 }
                 _ => CreateHostedZoneError::Unknown(String::from(body)),
             },
-            Err(_) => CreateHostedZoneError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateHostedZoneError::Unknown(format!("{}", status))
+                } else {
+                    CreateHostedZoneError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10565,7 +10597,15 @@ impl CreateQueryLoggingConfigError {
                 _ => CreateQueryLoggingConfigError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateQueryLoggingConfigError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateQueryLoggingConfigError::Unknown(format!("{}", status))
+                } else {
+                    CreateQueryLoggingConfigError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -10688,11 +10728,17 @@ impl CreateReusableDelegationSetError {
                 )),
                 _ => CreateReusableDelegationSetError::Unknown(String::from(body)),
             },
-            Err(_) => CreateReusableDelegationSetError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateReusableDelegationSetError::Unknown(format!("{}", status))
+                } else {
+                    CreateReusableDelegationSetError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -10796,7 +10842,13 @@ impl CreateTrafficPolicyError {
                 }
                 _ => CreateTrafficPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => CreateTrafficPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateTrafficPolicyError::Unknown(format!("{}", status))
+                } else {
+                    CreateTrafficPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10902,11 +10954,17 @@ impl CreateTrafficPolicyInstanceError {
                 }
                 _ => CreateTrafficPolicyInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => CreateTrafficPolicyInstanceError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateTrafficPolicyInstanceError::Unknown(format!("{}", status))
+                } else {
+                    CreateTrafficPolicyInstanceError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -11018,7 +11076,15 @@ impl CreateTrafficPolicyVersionError {
                 _ => CreateTrafficPolicyVersionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateTrafficPolicyVersionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateTrafficPolicyVersionError::Unknown(format!("{}", status))
+                } else {
+                    CreateTrafficPolicyVersionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -11128,11 +11194,17 @@ impl CreateVPCAssociationAuthorizationError {
                 }
                 _ => CreateVPCAssociationAuthorizationError::Unknown(String::from(body)),
             },
-            Err(_) => CreateVPCAssociationAuthorizationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateVPCAssociationAuthorizationError::Unknown(format!("{}", status))
+                } else {
+                    CreateVPCAssociationAuthorizationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -11227,7 +11299,13 @@ impl DeleteHealthCheckError {
                 }
                 _ => DeleteHealthCheckError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteHealthCheckError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteHealthCheckError::Unknown(format!("{}", status))
+                } else {
+                    DeleteHealthCheckError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11328,7 +11406,13 @@ impl DeleteHostedZoneError {
                 ),
                 _ => DeleteHostedZoneError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteHostedZoneError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteHostedZoneError::Unknown(format!("{}", status))
+                } else {
+                    DeleteHostedZoneError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11422,7 +11506,15 @@ impl DeleteQueryLoggingConfigError {
                 _ => DeleteQueryLoggingConfigError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteQueryLoggingConfigError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteQueryLoggingConfigError::Unknown(format!("{}", status))
+                } else {
+                    DeleteQueryLoggingConfigError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -11521,11 +11613,17 @@ impl DeleteReusableDelegationSetError {
                 ),
                 _ => DeleteReusableDelegationSetError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteReusableDelegationSetError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteReusableDelegationSetError::Unknown(format!("{}", status))
+                } else {
+                    DeleteReusableDelegationSetError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -11622,7 +11720,13 @@ impl DeleteTrafficPolicyError {
                 }
                 _ => DeleteTrafficPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteTrafficPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteTrafficPolicyError::Unknown(format!("{}", status))
+                } else {
+                    DeleteTrafficPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -11718,11 +11822,17 @@ impl DeleteTrafficPolicyInstanceError {
                 }
                 _ => DeleteTrafficPolicyInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteTrafficPolicyInstanceError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteTrafficPolicyInstanceError::Unknown(format!("{}", status))
+                } else {
+                    DeleteTrafficPolicyInstanceError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -11827,11 +11937,17 @@ impl DeleteVPCAssociationAuthorizationError {
                 }
                 _ => DeleteVPCAssociationAuthorizationError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteVPCAssociationAuthorizationError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteVPCAssociationAuthorizationError::Unknown(format!("{}", status))
+                } else {
+                    DeleteVPCAssociationAuthorizationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -11938,11 +12054,17 @@ impl DisassociateVPCFromHostedZoneError {
                 }
                 _ => DisassociateVPCFromHostedZoneError::Unknown(String::from(body)),
             },
-            Err(_) => DisassociateVPCFromHostedZoneError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DisassociateVPCFromHostedZoneError::Unknown(format!("{}", status))
+                } else {
+                    DisassociateVPCFromHostedZoneError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -12025,7 +12147,13 @@ impl GetAccountLimitError {
                 }
                 _ => GetAccountLimitError::Unknown(String::from(body)),
             },
-            Err(_) => GetAccountLimitError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetAccountLimitError::Unknown(format!("{}", status))
+                } else {
+                    GetAccountLimitError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -12103,7 +12231,13 @@ impl GetChangeError {
                 "NoSuchChange" => GetChangeError::NoSuchChange(String::from(parsed_error.message)),
                 _ => GetChangeError::Unknown(String::from(body)),
             },
-            Err(_) => GetChangeError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetChangeError::Unknown(format!("{}", status))
+                } else {
+                    GetChangeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -12176,7 +12310,13 @@ impl GetCheckerIpRangesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetCheckerIpRangesError::Unknown(String::from(body)),
             },
-            Err(_) => GetCheckerIpRangesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetCheckerIpRangesError::Unknown(format!("{}", status))
+                } else {
+                    GetCheckerIpRangesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -12259,7 +12399,13 @@ impl GetGeoLocationError {
                 }
                 _ => GetGeoLocationError::Unknown(String::from(body)),
             },
-            Err(_) => GetGeoLocationError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetGeoLocationError::Unknown(format!("{}", status))
+                } else {
+                    GetGeoLocationError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -12347,7 +12493,13 @@ impl GetHealthCheckError {
                 }
                 _ => GetHealthCheckError::Unknown(String::from(body)),
             },
-            Err(_) => GetHealthCheckError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetHealthCheckError::Unknown(format!("{}", status))
+                } else {
+                    GetHealthCheckError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -12421,7 +12573,13 @@ impl GetHealthCheckCountError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetHealthCheckCountError::Unknown(String::from(body)),
             },
-            Err(_) => GetHealthCheckCountError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetHealthCheckCountError::Unknown(format!("{}", status))
+                } else {
+                    GetHealthCheckCountError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -12504,11 +12662,17 @@ impl GetHealthCheckLastFailureReasonError {
                 ),
                 _ => GetHealthCheckLastFailureReasonError::Unknown(String::from(body)),
             },
-            Err(_) => GetHealthCheckLastFailureReasonError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetHealthCheckLastFailureReasonError::Unknown(format!("{}", status))
+                } else {
+                    GetHealthCheckLastFailureReasonError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -12594,7 +12758,11 @@ impl GetHealthCheckStatusError {
                 _ => GetHealthCheckStatusError::Unknown(String::from(body)),
             },
             Err(_) => {
-                GetHealthCheckStatusError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    GetHealthCheckStatusError::Unknown(format!("{}", status))
+                } else {
+                    GetHealthCheckStatusError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -12680,7 +12848,13 @@ impl GetHostedZoneError {
                 }
                 _ => GetHostedZoneError::Unknown(String::from(body)),
             },
-            Err(_) => GetHostedZoneError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetHostedZoneError::Unknown(format!("{}", status))
+                } else {
+                    GetHostedZoneError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -12758,7 +12932,13 @@ impl GetHostedZoneCountError {
                 }
                 _ => GetHostedZoneCountError::Unknown(String::from(body)),
             },
-            Err(_) => GetHostedZoneCountError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetHostedZoneCountError::Unknown(format!("{}", status))
+                } else {
+                    GetHostedZoneCountError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -12847,7 +13027,13 @@ impl GetHostedZoneLimitError {
                 }
                 _ => GetHostedZoneLimitError::Unknown(String::from(body)),
             },
-            Err(_) => GetHostedZoneLimitError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetHostedZoneLimitError::Unknown(format!("{}", status))
+                } else {
+                    GetHostedZoneLimitError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -12934,7 +13120,11 @@ impl GetQueryLoggingConfigError {
                 _ => GetQueryLoggingConfigError::Unknown(String::from(body)),
             },
             Err(_) => {
-                GetQueryLoggingConfigError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    GetQueryLoggingConfigError::Unknown(format!("{}", status))
+                } else {
+                    GetQueryLoggingConfigError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -13028,7 +13218,15 @@ impl GetReusableDelegationSetError {
                 _ => GetReusableDelegationSetError::Unknown(String::from(body)),
             },
             Err(_) => {
-                GetReusableDelegationSetError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    GetReusableDelegationSetError::Unknown(format!("{}", status))
+                } else {
+                    GetReusableDelegationSetError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -13115,11 +13313,17 @@ impl GetReusableDelegationSetLimitError {
                 ),
                 _ => GetReusableDelegationSetLimitError::Unknown(String::from(body)),
             },
-            Err(_) => GetReusableDelegationSetLimitError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetReusableDelegationSetLimitError::Unknown(format!("{}", status))
+                } else {
+                    GetReusableDelegationSetLimitError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -13204,7 +13408,13 @@ impl GetTrafficPolicyError {
                 }
                 _ => GetTrafficPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => GetTrafficPolicyError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetTrafficPolicyError::Unknown(format!("{}", status))
+                } else {
+                    GetTrafficPolicyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -13290,7 +13500,15 @@ impl GetTrafficPolicyInstanceError {
                 _ => GetTrafficPolicyInstanceError::Unknown(String::from(body)),
             },
             Err(_) => {
-                GetTrafficPolicyInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    GetTrafficPolicyInstanceError::Unknown(format!("{}", status))
+                } else {
+                    GetTrafficPolicyInstanceError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -13366,11 +13584,17 @@ impl GetTrafficPolicyInstanceCountError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetTrafficPolicyInstanceCountError::Unknown(String::from(body)),
             },
-            Err(_) => GetTrafficPolicyInstanceCountError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetTrafficPolicyInstanceCountError::Unknown(format!("{}", status))
+                } else {
+                    GetTrafficPolicyInstanceCountError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -13448,7 +13672,13 @@ impl ListGeoLocationsError {
                 }
                 _ => ListGeoLocationsError::Unknown(String::from(body)),
             },
-            Err(_) => ListGeoLocationsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListGeoLocationsError::Unknown(format!("{}", status))
+                } else {
+                    ListGeoLocationsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -13530,7 +13760,13 @@ impl ListHealthChecksError {
                 }
                 _ => ListHealthChecksError::Unknown(String::from(body)),
             },
-            Err(_) => ListHealthChecksError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListHealthChecksError::Unknown(format!("{}", status))
+                } else {
+                    ListHealthChecksError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -13618,7 +13854,13 @@ impl ListHostedZonesError {
                 }
                 _ => ListHostedZonesError::Unknown(String::from(body)),
             },
-            Err(_) => ListHostedZonesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListHostedZonesError::Unknown(format!("{}", status))
+                } else {
+                    ListHostedZonesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -13703,7 +13945,11 @@ impl ListHostedZonesByNameError {
                 _ => ListHostedZonesByNameError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListHostedZonesByNameError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListHostedZonesByNameError::Unknown(format!("{}", status))
+                } else {
+                    ListHostedZonesByNameError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -13795,7 +14041,15 @@ impl ListQueryLoggingConfigsError {
                 _ => ListQueryLoggingConfigsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListQueryLoggingConfigsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListQueryLoggingConfigsError::Unknown(format!("{}", status))
+                } else {
+                    ListQueryLoggingConfigsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -13883,7 +14137,11 @@ impl ListResourceRecordSetsError {
                 _ => ListResourceRecordSetsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListResourceRecordSetsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListResourceRecordSetsError::Unknown(format!("{}", status))
+                } else {
+                    ListResourceRecordSetsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -13965,7 +14223,15 @@ impl ListReusableDelegationSetsError {
                 _ => ListReusableDelegationSetsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListReusableDelegationSetsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListReusableDelegationSetsError::Unknown(format!("{}", status))
+                } else {
+                    ListReusableDelegationSetsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -14065,7 +14331,13 @@ impl ListTagsForResourceError {
                 }
                 _ => ListTagsForResourceError::Unknown(String::from(body)),
             },
-            Err(_) => ListTagsForResourceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListTagsForResourceError::Unknown(format!("{}", status))
+                } else {
+                    ListTagsForResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -14169,7 +14441,11 @@ impl ListTagsForResourcesError {
                 _ => ListTagsForResourcesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListTagsForResourcesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListTagsForResourcesError::Unknown(format!("{}", status))
+                } else {
+                    ListTagsForResourcesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -14253,7 +14529,13 @@ impl ListTrafficPoliciesError {
                 }
                 _ => ListTrafficPoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => ListTrafficPoliciesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListTrafficPoliciesError::Unknown(format!("{}", status))
+                } else {
+                    ListTrafficPoliciesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -14340,7 +14622,15 @@ impl ListTrafficPolicyInstancesError {
                 _ => ListTrafficPolicyInstancesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListTrafficPolicyInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListTrafficPolicyInstancesError::Unknown(format!("{}", status))
+                } else {
+                    ListTrafficPolicyInstancesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -14435,11 +14725,17 @@ impl ListTrafficPolicyInstancesByHostedZoneError {
                 }
                 _ => ListTrafficPolicyInstancesByHostedZoneError::Unknown(String::from(body)),
             },
-            Err(_) => ListTrafficPolicyInstancesByHostedZoneError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListTrafficPolicyInstancesByHostedZoneError::Unknown(format!("{}", status))
+                } else {
+                    ListTrafficPolicyInstancesByHostedZoneError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -14536,11 +14832,17 @@ impl ListTrafficPolicyInstancesByPolicyError {
                 }
                 _ => ListTrafficPolicyInstancesByPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => ListTrafficPolicyInstancesByPolicyError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListTrafficPolicyInstancesByPolicyError::Unknown(format!("{}", status))
+                } else {
+                    ListTrafficPolicyInstancesByPolicyError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -14629,7 +14931,15 @@ impl ListTrafficPolicyVersionsError {
                 _ => ListTrafficPolicyVersionsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ListTrafficPolicyVersionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ListTrafficPolicyVersionsError::Unknown(format!("{}", status))
+                } else {
+                    ListTrafficPolicyVersionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -14722,11 +15032,17 @@ impl ListVPCAssociationAuthorizationsError {
                 ),
                 _ => ListVPCAssociationAuthorizationsError::Unknown(String::from(body)),
             },
-            Err(_) => ListVPCAssociationAuthorizationsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListVPCAssociationAuthorizationsError::Unknown(format!("{}", status))
+                } else {
+                    ListVPCAssociationAuthorizationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -14812,7 +15128,13 @@ impl TestDNSAnswerError {
                 }
                 _ => TestDNSAnswerError::Unknown(String::from(body)),
             },
-            Err(_) => TestDNSAnswerError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    TestDNSAnswerError::Unknown(format!("{}", status))
+                } else {
+                    TestDNSAnswerError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -14900,7 +15222,13 @@ impl UpdateHealthCheckError {
                 }
                 _ => UpdateHealthCheckError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateHealthCheckError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateHealthCheckError::Unknown(format!("{}", status))
+                } else {
+                    UpdateHealthCheckError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -14987,7 +15315,15 @@ impl UpdateHostedZoneCommentError {
                 _ => UpdateHostedZoneCommentError::Unknown(String::from(body)),
             },
             Err(_) => {
-                UpdateHostedZoneCommentError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    UpdateHostedZoneCommentError::Unknown(format!("{}", status))
+                } else {
+                    UpdateHostedZoneCommentError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -15081,7 +15417,15 @@ impl UpdateTrafficPolicyCommentError {
                 _ => UpdateTrafficPolicyCommentError::Unknown(String::from(body)),
             },
             Err(_) => {
-                UpdateTrafficPolicyCommentError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    UpdateTrafficPolicyCommentError::Unknown(format!("{}", status))
+                } else {
+                    UpdateTrafficPolicyCommentError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -15187,11 +15531,17 @@ impl UpdateTrafficPolicyInstanceError {
                 }
                 _ => UpdateTrafficPolicyInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateTrafficPolicyInstanceError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateTrafficPolicyInstanceError::Unknown(format!("{}", status))
+                } else {
+                    UpdateTrafficPolicyInstanceError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 

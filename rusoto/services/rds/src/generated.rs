@@ -18366,7 +18366,13 @@ impl AddRoleToDBClusterError {
                 }
                 _ => AddRoleToDBClusterError::Unknown(String::from(body)),
             },
-            Err(_) => AddRoleToDBClusterError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    AddRoleToDBClusterError::Unknown(format!("{}", status))
+                } else {
+                    AddRoleToDBClusterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18455,11 +18461,17 @@ impl AddSourceIdentifierToSubscriptionError {
                 }
                 _ => AddSourceIdentifierToSubscriptionError::Unknown(String::from(body)),
             },
-            Err(_) => AddSourceIdentifierToSubscriptionError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    AddSourceIdentifierToSubscriptionError::Unknown(format!("{}", status))
+                } else {
+                    AddSourceIdentifierToSubscriptionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -18549,7 +18561,13 @@ impl AddTagsToResourceError {
                 ),
                 _ => AddTagsToResourceError::Unknown(String::from(body)),
             },
-            Err(_) => AddTagsToResourceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    AddTagsToResourceError::Unknown(format!("{}", status))
+                } else {
+                    AddTagsToResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18632,11 +18650,17 @@ impl ApplyPendingMaintenanceActionError {
                 }
                 _ => ApplyPendingMaintenanceActionError::Unknown(String::from(body)),
             },
-            Err(_) => ApplyPendingMaintenanceActionError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ApplyPendingMaintenanceActionError::Unknown(format!("{}", status))
+                } else {
+                    ApplyPendingMaintenanceActionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -18738,11 +18762,17 @@ impl AuthorizeDBSecurityGroupIngressError {
                 }
                 _ => AuthorizeDBSecurityGroupIngressError::Unknown(String::from(body)),
             },
-            Err(_) => AuthorizeDBSecurityGroupIngressError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    AuthorizeDBSecurityGroupIngressError::Unknown(format!("{}", status))
+                } else {
+                    AuthorizeDBSecurityGroupIngressError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -18837,7 +18867,13 @@ impl BacktrackDBClusterError {
                 }
                 _ => BacktrackDBClusterError::Unknown(String::from(body)),
             },
-            Err(_) => BacktrackDBClusterError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    BacktrackDBClusterError::Unknown(format!("{}", status))
+                } else {
+                    BacktrackDBClusterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18933,11 +18969,17 @@ impl CopyDBClusterParameterGroupError {
                 }
                 _ => CopyDBClusterParameterGroupError::Unknown(String::from(body)),
             },
-            Err(_) => CopyDBClusterParameterGroupError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CopyDBClusterParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    CopyDBClusterParameterGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -19056,7 +19098,11 @@ impl CopyDBClusterSnapshotError {
                 _ => CopyDBClusterSnapshotError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CopyDBClusterSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CopyDBClusterSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    CopyDBClusterSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -19158,7 +19204,11 @@ impl CopyDBParameterGroupError {
                 _ => CopyDBParameterGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CopyDBParameterGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CopyDBParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    CopyDBParameterGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -19260,7 +19310,13 @@ impl CopyDBSnapshotError {
                 ),
                 _ => CopyDBSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => CopyDBSnapshotError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CopyDBSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    CopyDBSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19355,7 +19411,13 @@ impl CopyOptionGroupError {
                 }
                 _ => CopyOptionGroupError::Unknown(String::from(body)),
             },
-            Err(_) => CopyOptionGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CopyOptionGroupError::Unknown(format!("{}", status))
+                } else {
+                    CopyOptionGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19512,7 +19574,13 @@ impl CreateDBClusterError {
                 ),
                 _ => CreateDBClusterError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDBClusterError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDBClusterError::Unknown(format!("{}", status))
+                } else {
+                    CreateDBClusterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19612,11 +19680,17 @@ impl CreateDBClusterParameterGroupError {
                 }
                 _ => CreateDBClusterParameterGroupError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDBClusterParameterGroupError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDBClusterParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreateDBClusterParameterGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -19729,7 +19803,15 @@ impl CreateDBClusterSnapshotError {
                 _ => CreateDBClusterSnapshotError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateDBClusterSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateDBClusterSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    CreateDBClusterSnapshotError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -19906,7 +19988,13 @@ impl CreateDBInstanceError {
                 ),
                 _ => CreateDBInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDBInstanceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDBInstanceError::Unknown(format!("{}", status))
+                } else {
+                    CreateDBInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20117,11 +20205,17 @@ impl CreateDBInstanceReadReplicaError {
                 }
                 _ => CreateDBInstanceReadReplicaError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDBInstanceReadReplicaError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDBInstanceReadReplicaError::Unknown(format!("{}", status))
+                } else {
+                    CreateDBInstanceReadReplicaError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -20233,7 +20327,11 @@ impl CreateDBParameterGroupError {
                 _ => CreateDBParameterGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateDBParameterGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateDBParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreateDBParameterGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -20331,7 +20429,11 @@ impl CreateDBSecurityGroupError {
                 _ => CreateDBSecurityGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateDBSecurityGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateDBSecurityGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreateDBSecurityGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -20428,7 +20530,13 @@ impl CreateDBSnapshotError {
                 ),
                 _ => CreateDBSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDBSnapshotError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDBSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    CreateDBSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20536,7 +20644,13 @@ impl CreateDBSubnetGroupError {
                 }
                 _ => CreateDBSubnetGroupError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDBSubnetGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDBSubnetGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreateDBSubnetGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20656,7 +20770,15 @@ impl CreateEventSubscriptionError {
                 _ => CreateEventSubscriptionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                CreateEventSubscriptionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    CreateEventSubscriptionError::Unknown(format!("{}", status))
+                } else {
+                    CreateEventSubscriptionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -20751,7 +20873,13 @@ impl CreateOptionGroupError {
                 }
                 _ => CreateOptionGroupError::Unknown(String::from(body)),
             },
-            Err(_) => CreateOptionGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateOptionGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreateOptionGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20855,7 +20983,13 @@ impl DeleteDBClusterError {
                 ),
                 _ => DeleteDBClusterError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDBClusterError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteDBClusterError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDBClusterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20945,11 +21079,17 @@ impl DeleteDBClusterParameterGroupError {
                 }
                 _ => DeleteDBClusterParameterGroupError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDBClusterParameterGroupError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteDBClusterParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDBClusterParameterGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -21041,7 +21181,15 @@ impl DeleteDBClusterSnapshotError {
                 _ => DeleteDBClusterSnapshotError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteDBClusterSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteDBClusterSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDBClusterSnapshotError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -21142,7 +21290,13 @@ impl DeleteDBInstanceError {
                 ),
                 _ => DeleteDBInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDBInstanceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteDBInstanceError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDBInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21233,7 +21387,11 @@ impl DeleteDBParameterGroupError {
                 _ => DeleteDBParameterGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteDBParameterGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteDBParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDBParameterGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -21324,7 +21482,11 @@ impl DeleteDBSecurityGroupError {
                 _ => DeleteDBSecurityGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteDBSecurityGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteDBSecurityGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDBSecurityGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -21410,7 +21572,13 @@ impl DeleteDBSnapshotError {
                 ),
                 _ => DeleteDBSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDBSnapshotError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteDBSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDBSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21502,7 +21670,13 @@ impl DeleteDBSubnetGroupError {
                 ),
                 _ => DeleteDBSubnetGroupError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDBSubnetGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteDBSubnetGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDBSubnetGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21591,7 +21765,15 @@ impl DeleteEventSubscriptionError {
                 _ => DeleteEventSubscriptionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteEventSubscriptionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteEventSubscriptionError::Unknown(format!("{}", status))
+                } else {
+                    DeleteEventSubscriptionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -21679,7 +21861,13 @@ impl DeleteOptionGroupError {
                 ),
                 _ => DeleteOptionGroupError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteOptionGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteOptionGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeleteOptionGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21755,7 +21943,15 @@ impl DescribeAccountAttributesError {
                 _ => DescribeAccountAttributesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeAccountAttributesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeAccountAttributesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAccountAttributesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -21835,7 +22031,11 @@ impl DescribeCertificatesError {
                 _ => DescribeCertificatesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeCertificatesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeCertificatesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeCertificatesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -21924,11 +22124,17 @@ impl DescribeDBClusterBacktracksError {
                 }
                 _ => DescribeDBClusterBacktracksError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBClusterBacktracksError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBClusterBacktracksError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBClusterBacktracksError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -22010,11 +22216,17 @@ impl DescribeDBClusterParameterGroupsError {
                 }
                 _ => DescribeDBClusterParameterGroupsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBClusterParameterGroupsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBClusterParameterGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBClusterParameterGroupsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -22097,11 +22309,17 @@ impl DescribeDBClusterParametersError {
                 }
                 _ => DescribeDBClusterParametersError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBClusterParametersError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBClusterParametersError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBClusterParametersError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -22182,11 +22400,17 @@ impl DescribeDBClusterSnapshotAttributesError {
                 }
                 _ => DescribeDBClusterSnapshotAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBClusterSnapshotAttributesError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBClusterSnapshotAttributesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBClusterSnapshotAttributesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -22270,7 +22494,15 @@ impl DescribeDBClusterSnapshotsError {
                 _ => DescribeDBClusterSnapshotsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeDBClusterSnapshotsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeDBClusterSnapshotsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBClusterSnapshotsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -22350,7 +22582,13 @@ impl DescribeDBClustersError {
                 ),
                 _ => DescribeDBClustersError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBClustersError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBClustersError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBClustersError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -22425,7 +22663,15 @@ impl DescribeDBEngineVersionsError {
                 _ => DescribeDBEngineVersionsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeDBEngineVersionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeDBEngineVersionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBEngineVersionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -22504,7 +22750,13 @@ impl DescribeDBInstancesError {
                 ),
                 _ => DescribeDBInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBInstancesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBInstancesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -22583,7 +22835,13 @@ impl DescribeDBLogFilesError {
                 ),
                 _ => DescribeDBLogFilesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBLogFilesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBLogFilesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBLogFilesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -22665,7 +22923,15 @@ impl DescribeDBParameterGroupsError {
                 _ => DescribeDBParameterGroupsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeDBParameterGroupsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeDBParameterGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBParameterGroupsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -22748,7 +23014,11 @@ impl DescribeDBParametersError {
                 _ => DescribeDBParametersError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeDBParametersError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeDBParametersError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBParametersError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -22831,7 +23101,15 @@ impl DescribeDBSecurityGroupsError {
                 _ => DescribeDBSecurityGroupsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeDBSecurityGroupsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeDBSecurityGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBSecurityGroupsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -22911,11 +23189,17 @@ impl DescribeDBSnapshotAttributesError {
                 ),
                 _ => DescribeDBSnapshotAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBSnapshotAttributesError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBSnapshotAttributesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBSnapshotAttributesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -22994,7 +23278,13 @@ impl DescribeDBSnapshotsError {
                 ),
                 _ => DescribeDBSnapshotsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBSnapshotsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBSnapshotsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBSnapshotsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -23076,7 +23366,11 @@ impl DescribeDBSubnetGroupsError {
                 _ => DescribeDBSubnetGroupsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeDBSubnetGroupsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeDBSubnetGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBSubnetGroupsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -23151,11 +23445,17 @@ impl DescribeEngineDefaultClusterParametersError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEngineDefaultClusterParametersError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEngineDefaultClusterParametersError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeEngineDefaultClusterParametersError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEngineDefaultClusterParametersError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -23228,11 +23528,17 @@ impl DescribeEngineDefaultParametersError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEngineDefaultParametersError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEngineDefaultParametersError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeEngineDefaultParametersError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEngineDefaultParametersError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -23306,7 +23612,15 @@ impl DescribeEventCategoriesError {
                 _ => DescribeEventCategoriesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeEventCategoriesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeEventCategoriesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEventCategoriesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -23388,7 +23702,15 @@ impl DescribeEventSubscriptionsError {
                 _ => DescribeEventSubscriptionsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeEventSubscriptionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeEventSubscriptionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEventSubscriptionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -23463,7 +23785,13 @@ impl DescribeEventsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEventsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEventsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeEventsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEventsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -23535,7 +23863,15 @@ impl DescribeOptionGroupOptionsError {
                 _ => DescribeOptionGroupOptionsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeOptionGroupOptionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeOptionGroupOptionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeOptionGroupOptionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -23615,7 +23951,11 @@ impl DescribeOptionGroupsError {
                 _ => DescribeOptionGroupsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeOptionGroupsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeOptionGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeOptionGroupsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -23690,11 +24030,17 @@ impl DescribeOrderableDBInstanceOptionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeOrderableDBInstanceOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeOrderableDBInstanceOptionsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeOrderableDBInstanceOptionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeOrderableDBInstanceOptionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -23774,11 +24120,17 @@ impl DescribePendingMaintenanceActionsError {
                 }
                 _ => DescribePendingMaintenanceActionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribePendingMaintenanceActionsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribePendingMaintenanceActionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribePendingMaintenanceActionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -23859,11 +24211,17 @@ impl DescribeReservedDBInstancesError {
                 }
                 _ => DescribeReservedDBInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeReservedDBInstancesError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeReservedDBInstancesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeReservedDBInstancesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -23941,7 +24299,13 @@ impl DescribeReservedDBInstancesOfferingsError {
                                     "ReservedDBInstancesOfferingNotFound" => DescribeReservedDBInstancesOfferingsError::ReservedDBInstancesOfferingNotFoundFault(String::from(parsed_error.message)),_ => DescribeReservedDBInstancesOfferingsError::Unknown(String::from(body))
                                 }
                            },
-                           Err(_) => DescribeReservedDBInstancesOfferingsError::Unknown(format!("{}:{}", body.to_string(), status))
+                           Err(_) => {
+                               if body.len() == 0 {
+                                   DescribeReservedDBInstancesOfferingsError::Unknown(format!("{}", status))
+                               } else {
+                                   DescribeReservedDBInstancesOfferingsError::Unknown(format!("{}:{}", body.to_string(), status))
+                               }
+                            }
                        }
     }
 
@@ -24018,7 +24382,11 @@ impl DescribeSourceRegionsError {
                 _ => DescribeSourceRegionsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeSourceRegionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeSourceRegionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSourceRegionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -24106,11 +24474,17 @@ impl DescribeValidDBInstanceModificationsError {
                 }
                 _ => DescribeValidDBInstanceModificationsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeValidDBInstanceModificationsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeValidDBInstanceModificationsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeValidDBInstanceModificationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -24198,7 +24572,15 @@ impl DownloadDBLogFilePortionError {
                 _ => DownloadDBLogFilePortionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DownloadDBLogFilePortionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DownloadDBLogFilePortionError::Unknown(format!("{}", status))
+                } else {
+                    DownloadDBLogFilePortionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -24289,7 +24671,13 @@ impl FailoverDBClusterError {
                 ),
                 _ => FailoverDBClusterError::Unknown(String::from(body)),
             },
-            Err(_) => FailoverDBClusterError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    FailoverDBClusterError::Unknown(format!("{}", status))
+                } else {
+                    FailoverDBClusterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -24380,7 +24768,13 @@ impl ListTagsForResourceError {
                 ),
                 _ => ListTagsForResourceError::Unknown(String::from(body)),
             },
-            Err(_) => ListTagsForResourceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListTagsForResourceError::Unknown(format!("{}", status))
+                } else {
+                    ListTagsForResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -24517,7 +24911,13 @@ impl ModifyDBClusterError {
                 ),
                 _ => ModifyDBClusterError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyDBClusterError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyDBClusterError::Unknown(format!("{}", status))
+                } else {
+                    ModifyDBClusterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -24613,11 +25013,17 @@ impl ModifyDBClusterParameterGroupError {
                 }
                 _ => ModifyDBClusterParameterGroupError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyDBClusterParameterGroupError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyDBClusterParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    ModifyDBClusterParameterGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -24715,11 +25121,17 @@ impl ModifyDBClusterSnapshotAttributeError {
                 }
                 _ => ModifyDBClusterSnapshotAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyDBClusterSnapshotAttributeError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyDBClusterSnapshotAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ModifyDBClusterSnapshotAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -24891,7 +25303,13 @@ impl ModifyDBInstanceError {
                 ),
                 _ => ModifyDBInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyDBInstanceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyDBInstanceError::Unknown(format!("{}", status))
+                } else {
+                    ModifyDBInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -24993,7 +25411,11 @@ impl ModifyDBParameterGroupError {
                 _ => ModifyDBParameterGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ModifyDBParameterGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ModifyDBParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    ModifyDBParameterGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -25074,7 +25496,13 @@ impl ModifyDBSnapshotError {
                 ),
                 _ => ModifyDBSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyDBSnapshotError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyDBSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    ModifyDBSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -25166,7 +25594,15 @@ impl ModifyDBSnapshotAttributeError {
                 _ => ModifyDBSnapshotAttributeError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ModifyDBSnapshotAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ModifyDBSnapshotAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ModifyDBSnapshotAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -25274,7 +25710,13 @@ impl ModifyDBSubnetGroupError {
                 }
                 _ => ModifyDBSubnetGroupError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyDBSubnetGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyDBSubnetGroupError::Unknown(format!("{}", status))
+                } else {
+                    ModifyDBSubnetGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -25387,7 +25829,15 @@ impl ModifyEventSubscriptionError {
                 _ => ModifyEventSubscriptionError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ModifyEventSubscriptionError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ModifyEventSubscriptionError::Unknown(format!("{}", status))
+                } else {
+                    ModifyEventSubscriptionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -25479,7 +25929,13 @@ impl ModifyOptionGroupError {
                 ),
                 _ => ModifyOptionGroupError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyOptionGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyOptionGroupError::Unknown(format!("{}", status))
+                } else {
+                    ModifyOptionGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -25564,7 +26020,13 @@ impl PromoteReadReplicaError {
                 ),
                 _ => PromoteReadReplicaError::Unknown(String::from(body)),
             },
-            Err(_) => PromoteReadReplicaError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PromoteReadReplicaError::Unknown(format!("{}", status))
+                } else {
+                    PromoteReadReplicaError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -25653,11 +26115,17 @@ impl PromoteReadReplicaDBClusterError {
                 }
                 _ => PromoteReadReplicaDBClusterError::Unknown(String::from(body)),
             },
-            Err(_) => PromoteReadReplicaDBClusterError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    PromoteReadReplicaDBClusterError::Unknown(format!("{}", status))
+                } else {
+                    PromoteReadReplicaDBClusterError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -25740,7 +26208,13 @@ impl PurchaseReservedDBInstancesOfferingError {
                                     "ReservedDBInstanceAlreadyExists" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"ReservedDBInstanceQuotaExceeded" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceQuotaExceededFault(String::from(parsed_error.message)),"ReservedDBInstancesOfferingNotFound" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstancesOfferingNotFoundFault(String::from(parsed_error.message)),_ => PurchaseReservedDBInstancesOfferingError::Unknown(String::from(body))
                                 }
                            },
-                           Err(_) => PurchaseReservedDBInstancesOfferingError::Unknown(format!("{}:{}", body.to_string(), status))
+                           Err(_) => {
+                               if body.len() == 0 {
+                                   PurchaseReservedDBInstancesOfferingError::Unknown(format!("{}", status))
+                               } else {
+                                   PurchaseReservedDBInstancesOfferingError::Unknown(format!("{}:{}", body.to_string(), status))
+                               }
+                            }
                        }
     }
 
@@ -25832,7 +26306,13 @@ impl RebootDBInstanceError {
                 ),
                 _ => RebootDBInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => RebootDBInstanceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    RebootDBInstanceError::Unknown(format!("{}", status))
+                } else {
+                    RebootDBInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -25925,7 +26405,15 @@ impl RemoveRoleFromDBClusterError {
                 _ => RemoveRoleFromDBClusterError::Unknown(String::from(body)),
             },
             Err(_) => {
-                RemoveRoleFromDBClusterError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    RemoveRoleFromDBClusterError::Unknown(format!("{}", status))
+                } else {
+                    RemoveRoleFromDBClusterError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -26016,11 +26504,17 @@ impl RemoveSourceIdentifierFromSubscriptionError {
                 }
                 _ => RemoveSourceIdentifierFromSubscriptionError::Unknown(String::from(body)),
             },
-            Err(_) => RemoveSourceIdentifierFromSubscriptionError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    RemoveSourceIdentifierFromSubscriptionError::Unknown(format!("{}", status))
+                } else {
+                    RemoveSourceIdentifierFromSubscriptionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -26113,7 +26607,11 @@ impl RemoveTagsFromResourceError {
                 _ => RemoveTagsFromResourceError::Unknown(String::from(body)),
             },
             Err(_) => {
-                RemoveTagsFromResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    RemoveTagsFromResourceError::Unknown(format!("{}", status))
+                } else {
+                    RemoveTagsFromResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -26204,11 +26702,17 @@ impl ResetDBClusterParameterGroupError {
                 }
                 _ => ResetDBClusterParameterGroupError::Unknown(String::from(body)),
             },
-            Err(_) => ResetDBClusterParameterGroupError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ResetDBClusterParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    ResetDBClusterParameterGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -26300,7 +26804,11 @@ impl ResetDBParameterGroupError {
                 _ => ResetDBParameterGroupError::Unknown(String::from(body)),
             },
             Err(_) => {
-                ResetDBParameterGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    ResetDBParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    ResetDBParameterGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -26460,7 +26968,11 @@ impl RestoreDBClusterFromS3Error {
                 _ => RestoreDBClusterFromS3Error::Unknown(String::from(body)),
             },
             Err(_) => {
-                RestoreDBClusterFromS3Error::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    RestoreDBClusterFromS3Error::Unknown(format!("{}", status))
+                } else {
+                    RestoreDBClusterFromS3Error::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -26655,11 +27167,17 @@ impl RestoreDBClusterFromSnapshotError {
                 }
                 _ => RestoreDBClusterFromSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => RestoreDBClusterFromSnapshotError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    RestoreDBClusterFromSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    RestoreDBClusterFromSnapshotError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -26871,11 +27389,17 @@ impl RestoreDBClusterToPointInTimeError {
                 }
                 _ => RestoreDBClusterToPointInTimeError::Unknown(String::from(body)),
             },
-            Err(_) => RestoreDBClusterToPointInTimeError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    RestoreDBClusterToPointInTimeError::Unknown(format!("{}", status))
+                } else {
+                    RestoreDBClusterToPointInTimeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -27100,11 +27624,17 @@ impl RestoreDBInstanceFromDBSnapshotError {
                 }
                 _ => RestoreDBInstanceFromDBSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => RestoreDBInstanceFromDBSnapshotError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    RestoreDBInstanceFromDBSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    RestoreDBInstanceFromDBSnapshotError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -27309,7 +27839,15 @@ impl RestoreDBInstanceFromS3Error {
                 _ => RestoreDBInstanceFromS3Error::Unknown(String::from(body)),
             },
             Err(_) => {
-                RestoreDBInstanceFromS3Error::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    RestoreDBInstanceFromS3Error::Unknown(format!("{}", status))
+                } else {
+                    RestoreDBInstanceFromS3Error::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -27533,11 +28071,17 @@ impl RestoreDBInstanceToPointInTimeError {
                 }
                 _ => RestoreDBInstanceToPointInTimeError::Unknown(String::from(body)),
             },
-            Err(_) => RestoreDBInstanceToPointInTimeError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    RestoreDBInstanceToPointInTimeError::Unknown(format!("{}", status))
+                } else {
+                    RestoreDBInstanceToPointInTimeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -27659,11 +28203,17 @@ impl RevokeDBSecurityGroupIngressError {
                 }
                 _ => RevokeDBSecurityGroupIngressError::Unknown(String::from(body)),
             },
-            Err(_) => RevokeDBSecurityGroupIngressError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    RevokeDBSecurityGroupIngressError::Unknown(format!("{}", status))
+                } else {
+                    RevokeDBSecurityGroupIngressError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -27798,7 +28348,13 @@ impl StartDBInstanceError {
                 ),
                 _ => StartDBInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => StartDBInstanceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    StartDBInstanceError::Unknown(format!("{}", status))
+                } else {
+                    StartDBInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -27905,7 +28461,13 @@ impl StopDBInstanceError {
                 ),
                 _ => StopDBInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => StopDBInstanceError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    StopDBInstanceError::Unknown(format!("{}", status))
+                } else {
+                    StopDBInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 

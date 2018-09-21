@@ -1209,7 +1209,13 @@ impl AssumeRoleError {
                 }
                 _ => AssumeRoleError::Unknown(String::from(body)),
             },
-            Err(_) => AssumeRoleError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    AssumeRoleError::Unknown(format!("{}", status))
+                } else {
+                    AssumeRoleError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1313,7 +1319,13 @@ impl AssumeRoleWithSAMLError {
                 }
                 _ => AssumeRoleWithSAMLError::Unknown(String::from(body)),
             },
-            Err(_) => AssumeRoleWithSAMLError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    AssumeRoleWithSAMLError::Unknown(format!("{}", status))
+                } else {
+                    AssumeRoleWithSAMLError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1430,7 +1442,15 @@ impl AssumeRoleWithWebIdentityError {
                 _ => AssumeRoleWithWebIdentityError::Unknown(String::from(body)),
             },
             Err(_) => {
-                AssumeRoleWithWebIdentityError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    AssumeRoleWithWebIdentityError::Unknown(format!("{}", status))
+                } else {
+                    AssumeRoleWithWebIdentityError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -1519,7 +1539,15 @@ impl DecodeAuthorizationMessageError {
                 _ => DecodeAuthorizationMessageError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DecodeAuthorizationMessageError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DecodeAuthorizationMessageError::Unknown(format!("{}", status))
+                } else {
+                    DecodeAuthorizationMessageError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -1594,7 +1622,13 @@ impl GetCallerIdentityError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetCallerIdentityError::Unknown(String::from(body)),
             },
-            Err(_) => GetCallerIdentityError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetCallerIdentityError::Unknown(format!("{}", status))
+                } else {
+                    GetCallerIdentityError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1682,7 +1716,13 @@ impl GetFederationTokenError {
                 }
                 _ => GetFederationTokenError::Unknown(String::from(body)),
             },
-            Err(_) => GetFederationTokenError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetFederationTokenError::Unknown(format!("{}", status))
+                } else {
+                    GetFederationTokenError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1763,7 +1803,13 @@ impl GetSessionTokenError {
                 }
                 _ => GetSessionTokenError::Unknown(String::from(body)),
             },
-            Err(_) => GetSessionTokenError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetSessionTokenError::Unknown(format!("{}", status))
+                } else {
+                    GetSessionTokenError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 

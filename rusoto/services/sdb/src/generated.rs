@@ -1041,7 +1041,11 @@ impl BatchDeleteAttributesError {
                 _ => BatchDeleteAttributesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                BatchDeleteAttributesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    BatchDeleteAttributesError::Unknown(format!("{}", status))
+                } else {
+                    BatchDeleteAttributesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -1168,7 +1172,13 @@ impl BatchPutAttributesError {
                 }
                 _ => BatchPutAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => BatchPutAttributesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    BatchPutAttributesError::Unknown(format!("{}", status))
+                } else {
+                    BatchPutAttributesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1265,7 +1275,13 @@ impl CreateDomainError {
                 }
                 _ => CreateDomainError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDomainError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDomainError::Unknown(format!("{}", status))
+                } else {
+                    CreateDomainError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1359,7 +1375,13 @@ impl DeleteAttributesError {
                 }
                 _ => DeleteAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteAttributesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteAttributesError::Unknown(format!("{}", status))
+                } else {
+                    DeleteAttributesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1439,7 +1461,13 @@ impl DeleteDomainError {
                 }
                 _ => DeleteDomainError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDomainError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteDomainError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDomainError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1521,7 +1549,13 @@ impl DomainMetadataError {
                 }
                 _ => DomainMetadataError::Unknown(String::from(body)),
             },
-            Err(_) => DomainMetadataError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DomainMetadataError::Unknown(format!("{}", status))
+                } else {
+                    DomainMetadataError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1609,7 +1643,13 @@ impl GetAttributesError {
                 }
                 _ => GetAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => GetAttributesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetAttributesError::Unknown(format!("{}", status))
+                } else {
+                    GetAttributesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1693,7 +1733,13 @@ impl ListDomainsError {
                 }
                 _ => ListDomainsError::Unknown(String::from(body)),
             },
-            Err(_) => ListDomainsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListDomainsError::Unknown(format!("{}", status))
+                } else {
+                    ListDomainsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1803,7 +1849,13 @@ impl PutAttributesError {
                 ),
                 _ => PutAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => PutAttributesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutAttributesError::Unknown(format!("{}", status))
+                } else {
+                    PutAttributesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1922,7 +1974,13 @@ impl SelectError {
                 }
                 _ => SelectError::Unknown(String::from(body)),
             },
-            Err(_) => SelectError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    SelectError::Unknown(format!("{}", status))
+                } else {
+                    SelectError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 

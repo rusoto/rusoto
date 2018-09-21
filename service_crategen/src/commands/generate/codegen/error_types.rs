@@ -165,8 +165,13 @@ impl GenerateErrorTypes for XmlErrorTypes {
                                     {type_matchers}
                                 }}
                            }},
-                           // In here let's see if we have *anything* in the body: if not, return just the status code
-                           Err(_) => {type_name}::Unknown(format!(\"{{}}:{{}}\", body.to_string(), status))
+                           Err(_) => {{
+                               if body.len() == 0 {{
+                                   {type_name}::Unknown(format!(\"{{}}\", status))
+                               }} else {{
+                                   {type_name}::Unknown(format!(\"{{}}:{{}}\", body.to_string(), status))
+                               }}
+                            }}
                        }}
                     }}
 

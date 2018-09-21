@@ -5358,7 +5358,13 @@ impl BuildSuggestersError {
                 }
                 _ => BuildSuggestersError::Unknown(String::from(body)),
             },
-            Err(_) => BuildSuggestersError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    BuildSuggestersError::Unknown(format!("{}", status))
+                } else {
+                    BuildSuggestersError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -5445,7 +5451,13 @@ impl CreateDomainError {
                 }
                 _ => CreateDomainError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDomainError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDomainError::Unknown(format!("{}", status))
+                } else {
+                    CreateDomainError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -5545,7 +5557,11 @@ impl DefineAnalysisSchemeError {
                 _ => DefineAnalysisSchemeError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DefineAnalysisSchemeError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DefineAnalysisSchemeError::Unknown(format!("{}", status))
+                } else {
+                    DefineAnalysisSchemeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -5647,7 +5663,13 @@ impl DefineExpressionError {
                 }
                 _ => DefineExpressionError::Unknown(String::from(body)),
             },
-            Err(_) => DefineExpressionError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DefineExpressionError::Unknown(format!("{}", status))
+                } else {
+                    DefineExpressionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -5746,7 +5768,13 @@ impl DefineIndexFieldError {
                 }
                 _ => DefineIndexFieldError::Unknown(String::from(body)),
             },
-            Err(_) => DefineIndexFieldError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DefineIndexFieldError::Unknown(format!("{}", status))
+                } else {
+                    DefineIndexFieldError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -5845,7 +5873,13 @@ impl DefineSuggesterError {
                 }
                 _ => DefineSuggesterError::Unknown(String::from(body)),
             },
-            Err(_) => DefineSuggesterError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DefineSuggesterError::Unknown(format!("{}", status))
+                } else {
+                    DefineSuggesterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -5942,7 +5976,11 @@ impl DeleteAnalysisSchemeError {
                 _ => DeleteAnalysisSchemeError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DeleteAnalysisSchemeError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DeleteAnalysisSchemeError::Unknown(format!("{}", status))
+                } else {
+                    DeleteAnalysisSchemeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -6028,7 +6066,13 @@ impl DeleteDomainError {
                 }
                 _ => DeleteDomainError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDomainError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteDomainError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDomainError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -6119,7 +6163,13 @@ impl DeleteExpressionError {
                 }
                 _ => DeleteExpressionError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteExpressionError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteExpressionError::Unknown(format!("{}", status))
+                } else {
+                    DeleteExpressionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -6212,7 +6262,13 @@ impl DeleteIndexFieldError {
                 }
                 _ => DeleteIndexFieldError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteIndexFieldError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteIndexFieldError::Unknown(format!("{}", status))
+                } else {
+                    DeleteIndexFieldError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -6305,7 +6361,13 @@ impl DeleteSuggesterError {
                 }
                 _ => DeleteSuggesterError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteSuggesterError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteSuggesterError::Unknown(format!("{}", status))
+                } else {
+                    DeleteSuggesterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -6396,7 +6458,15 @@ impl DescribeAnalysisSchemesError {
                 _ => DescribeAnalysisSchemesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeAnalysisSchemesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeAnalysisSchemesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAnalysisSchemesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -6503,11 +6573,17 @@ impl DescribeAvailabilityOptionsError {
                 ),
                 _ => DescribeAvailabilityOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeAvailabilityOptionsError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeAvailabilityOptionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAvailabilityOptionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -6594,7 +6670,13 @@ impl DescribeDomainsError {
                 }
                 _ => DescribeDomainsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDomainsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDomainsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDomainsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -6682,7 +6764,13 @@ impl DescribeExpressionsError {
                 }
                 _ => DescribeExpressionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeExpressionsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeExpressionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeExpressionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -6773,7 +6861,13 @@ impl DescribeIndexFieldsError {
                 }
                 _ => DescribeIndexFieldsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeIndexFieldsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeIndexFieldsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeIndexFieldsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -6865,7 +6959,15 @@ impl DescribeScalingParametersError {
                 _ => DescribeScalingParametersError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeScalingParametersError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeScalingParametersError::Unknown(format!("{}", status))
+                } else {
+                    DescribeScalingParametersError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -6957,11 +7059,17 @@ impl DescribeServiceAccessPoliciesError {
                 ),
                 _ => DescribeServiceAccessPoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeServiceAccessPoliciesError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeServiceAccessPoliciesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeServiceAccessPoliciesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -7052,7 +7160,13 @@ impl DescribeSuggestersError {
                 }
                 _ => DescribeSuggestersError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSuggestersError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeSuggestersError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSuggestersError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -7141,7 +7255,13 @@ impl IndexDocumentsError {
                 }
                 _ => IndexDocumentsError::Unknown(String::from(body)),
             },
-            Err(_) => IndexDocumentsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    IndexDocumentsError::Unknown(format!("{}", status))
+                } else {
+                    IndexDocumentsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -7218,7 +7338,13 @@ impl ListDomainNamesError {
                 "BaseException" => ListDomainNamesError::Base(String::from(parsed_error.message)),
                 _ => ListDomainNamesError::Unknown(String::from(body)),
             },
-            Err(_) => ListDomainNamesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListDomainNamesError::Unknown(format!("{}", status))
+                } else {
+                    ListDomainNamesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -7321,7 +7447,15 @@ impl UpdateAvailabilityOptionsError {
                 _ => UpdateAvailabilityOptionsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                UpdateAvailabilityOptionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    UpdateAvailabilityOptionsError::Unknown(format!("{}", status))
+                } else {
+                    UpdateAvailabilityOptionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -7427,7 +7561,15 @@ impl UpdateScalingParametersError {
                 _ => UpdateScalingParametersError::Unknown(String::from(body)),
             },
             Err(_) => {
-                UpdateScalingParametersError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    UpdateScalingParametersError::Unknown(format!("{}", status))
+                } else {
+                    UpdateScalingParametersError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -7531,11 +7673,17 @@ impl UpdateServiceAccessPoliciesError {
                 ),
                 _ => UpdateServiceAccessPoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateServiceAccessPoliciesError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateServiceAccessPoliciesError::Unknown(format!("{}", status))
+                } else {
+                    UpdateServiceAccessPoliciesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 

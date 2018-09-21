@@ -7265,7 +7265,15 @@ impl AddListenerCertificatesError {
                 _ => AddListenerCertificatesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                AddListenerCertificatesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    AddListenerCertificatesError::Unknown(format!("{}", status))
+                } else {
+                    AddListenerCertificatesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -7360,7 +7368,13 @@ impl AddTagsError {
                 "TooManyTags" => AddTagsError::TooManyTags(String::from(parsed_error.message)),
                 _ => AddTagsError::Unknown(String::from(body)),
             },
-            Err(_) => AddTagsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    AddTagsError::Unknown(format!("{}", status))
+                } else {
+                    AddTagsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -7512,7 +7526,13 @@ impl CreateListenerError {
                 }
                 _ => CreateListenerError::Unknown(String::from(body)),
             },
-            Err(_) => CreateListenerError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateListenerError::Unknown(format!("{}", status))
+                } else {
+                    CreateListenerError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -7667,7 +7687,13 @@ impl CreateLoadBalancerError {
                 }
                 _ => CreateLoadBalancerError::Unknown(String::from(body)),
             },
-            Err(_) => CreateLoadBalancerError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateLoadBalancerError::Unknown(format!("{}", status))
+                } else {
+                    CreateLoadBalancerError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -7818,7 +7844,13 @@ impl CreateRuleError {
                 }
                 _ => CreateRuleError::Unknown(String::from(body)),
             },
-            Err(_) => CreateRuleError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateRuleError::Unknown(format!("{}", status))
+                } else {
+                    CreateRuleError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -7919,7 +7951,13 @@ impl CreateTargetGroupError {
                 }
                 _ => CreateTargetGroupError::Unknown(String::from(body)),
             },
-            Err(_) => CreateTargetGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateTargetGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreateTargetGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -8000,7 +8038,13 @@ impl DeleteListenerError {
                 }
                 _ => DeleteListenerError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteListenerError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteListenerError::Unknown(format!("{}", status))
+                } else {
+                    DeleteListenerError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -8087,7 +8131,13 @@ impl DeleteLoadBalancerError {
                 }
                 _ => DeleteLoadBalancerError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteLoadBalancerError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteLoadBalancerError::Unknown(format!("{}", status))
+                } else {
+                    DeleteLoadBalancerError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -8171,7 +8221,13 @@ impl DeleteRuleError {
                 "RuleNotFound" => DeleteRuleError::RuleNotFound(String::from(parsed_error.message)),
                 _ => DeleteRuleError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteRuleError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteRuleError::Unknown(format!("{}", status))
+                } else {
+                    DeleteRuleError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -8249,7 +8305,13 @@ impl DeleteTargetGroupError {
                 }
                 _ => DeleteTargetGroupError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteTargetGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteTargetGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeleteTargetGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -8333,7 +8395,13 @@ impl DeregisterTargetsError {
                 }
                 _ => DeregisterTargetsError::Unknown(String::from(body)),
             },
-            Err(_) => DeregisterTargetsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeregisterTargetsError::Unknown(format!("{}", status))
+                } else {
+                    DeregisterTargetsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -8409,7 +8477,11 @@ impl DescribeAccountLimitsError {
                 _ => DescribeAccountLimitsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeAccountLimitsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeAccountLimitsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAccountLimitsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -8488,11 +8560,17 @@ impl DescribeListenerCertificatesError {
                 ),
                 _ => DescribeListenerCertificatesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeListenerCertificatesError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeListenerCertificatesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeListenerCertificatesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -8581,7 +8659,13 @@ impl DescribeListenersError {
                 }
                 _ => DescribeListenersError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeListenersError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeListenersError::Unknown(format!("{}", status))
+                } else {
+                    DescribeListenersError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -8664,11 +8748,17 @@ impl DescribeLoadBalancerAttributesError {
                 }
                 _ => DescribeLoadBalancerAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeLoadBalancerAttributesError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeLoadBalancerAttributesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeLoadBalancerAttributesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -8748,7 +8838,11 @@ impl DescribeLoadBalancersError {
                 _ => DescribeLoadBalancersError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeLoadBalancersError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeLoadBalancersError::Unknown(format!("{}", status))
+                } else {
+                    DescribeLoadBalancersError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -8838,7 +8932,13 @@ impl DescribeRulesError {
                 }
                 _ => DescribeRulesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeRulesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeRulesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeRulesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -8917,7 +9017,13 @@ impl DescribeSSLPoliciesError {
                 }
                 _ => DescribeSSLPoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSSLPoliciesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeSSLPoliciesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSSLPoliciesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9011,7 +9117,13 @@ impl DescribeTagsError {
                 }
                 _ => DescribeTagsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeTagsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeTagsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeTagsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9091,11 +9203,17 @@ impl DescribeTargetGroupAttributesError {
                 ),
                 _ => DescribeTargetGroupAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeTargetGroupAttributesError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeTargetGroupAttributesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeTargetGroupAttributesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -9180,7 +9298,11 @@ impl DescribeTargetGroupsError {
                 _ => DescribeTargetGroupsError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeTargetGroupsError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeTargetGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeTargetGroupsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -9272,7 +9394,11 @@ impl DescribeTargetHealthError {
                 _ => DescribeTargetHealthError::Unknown(String::from(body)),
             },
             Err(_) => {
-                DescribeTargetHealthError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    DescribeTargetHealthError::Unknown(format!("{}", status))
+                } else {
+                    DescribeTargetHealthError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
             }
         }
     }
@@ -9426,7 +9552,13 @@ impl ModifyListenerError {
                 }
                 _ => ModifyListenerError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyListenerError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyListenerError::Unknown(format!("{}", status))
+                } else {
+                    ModifyListenerError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9524,11 +9656,17 @@ impl ModifyLoadBalancerAttributesError {
                 ),
                 _ => ModifyLoadBalancerAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyLoadBalancerAttributesError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyLoadBalancerAttributesError::Unknown(format!("{}", status))
+                } else {
+                    ModifyLoadBalancerAttributesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -9653,7 +9791,13 @@ impl ModifyRuleError {
                 }
                 _ => ModifyRuleError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyRuleError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyRuleError::Unknown(format!("{}", status))
+                } else {
+                    ModifyRuleError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9746,7 +9890,13 @@ impl ModifyTargetGroupError {
                 }
                 _ => ModifyTargetGroupError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyTargetGroupError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyTargetGroupError::Unknown(format!("{}", status))
+                } else {
+                    ModifyTargetGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -9833,11 +9983,17 @@ impl ModifyTargetGroupAttributesError {
                 ),
                 _ => ModifyTargetGroupAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyTargetGroupAttributesError::Unknown(format!(
-                "{}:{}",
-                body.to_string(),
-                status
-            )),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyTargetGroupAttributesError::Unknown(format!("{}", status))
+                } else {
+                    ModifyTargetGroupAttributesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -9934,7 +10090,13 @@ impl RegisterTargetsError {
                 }
                 _ => RegisterTargetsError::Unknown(String::from(body)),
             },
-            Err(_) => RegisterTargetsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    RegisterTargetsError::Unknown(format!("{}", status))
+                } else {
+                    RegisterTargetsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10020,7 +10182,15 @@ impl RemoveListenerCertificatesError {
                 _ => RemoveListenerCertificatesError::Unknown(String::from(body)),
             },
             Err(_) => {
-                RemoveListenerCertificatesError::Unknown(format!("{}:{}", body.to_string(), status))
+                if body.len() == 0 {
+                    RemoveListenerCertificatesError::Unknown(format!("{}", status))
+                } else {
+                    RemoveListenerCertificatesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
             }
         }
     }
@@ -10117,7 +10287,13 @@ impl RemoveTagsError {
                 "TooManyTags" => RemoveTagsError::TooManyTags(String::from(parsed_error.message)),
                 _ => RemoveTagsError::Unknown(String::from(body)),
             },
-            Err(_) => RemoveTagsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    RemoveTagsError::Unknown(format!("{}", status))
+                } else {
+                    RemoveTagsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10210,7 +10386,13 @@ impl SetIpAddressTypeError {
                 }
                 _ => SetIpAddressTypeError::Unknown(String::from(body)),
             },
-            Err(_) => SetIpAddressTypeError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    SetIpAddressTypeError::Unknown(format!("{}", status))
+                } else {
+                    SetIpAddressTypeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10299,7 +10481,13 @@ impl SetRulePrioritiesError {
                 }
                 _ => SetRulePrioritiesError::Unknown(String::from(body)),
             },
-            Err(_) => SetRulePrioritiesError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    SetRulePrioritiesError::Unknown(format!("{}", status))
+                } else {
+                    SetRulePrioritiesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10392,7 +10580,13 @@ impl SetSecurityGroupsError {
                 }
                 _ => SetSecurityGroupsError::Unknown(String::from(body)),
             },
-            Err(_) => SetSecurityGroupsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    SetSecurityGroupsError::Unknown(format!("{}", status))
+                } else {
+                    SetSecurityGroupsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -10498,7 +10692,13 @@ impl SetSubnetsError {
                 }
                 _ => SetSubnetsError::Unknown(String::from(body)),
             },
-            Err(_) => SetSubnetsError::Unknown(format!("{}:{}", body.to_string(), status)),
+            Err(_) => {
+                if body.len() == 0 {
+                    SetSubnetsError::Unknown(format!("{}", status))
+                } else {
+                    SetSubnetsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
