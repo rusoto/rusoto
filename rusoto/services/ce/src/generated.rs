@@ -226,7 +226,7 @@ pub struct Expression {
     /// <p>Return results that don't match a <code>Dimension</code> object.</p>
     #[serde(rename = "Not")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub not: Option<Expression>,
+    pub not: Box<Option<Expression>>,
     /// <p>Return results that match either <code>Dimension</code> object.</p>
     #[serde(rename = "Or")]
     #[serde(skip_serializing_if = "Option::is_none")]

@@ -455,7 +455,7 @@ fn generate_struct<P>(service: &Service,
 
 fn generate_struct_fields<P: GenerateProtocol>(service: &Service,
                                                shape: &Shape,
-                                               _shape_name: &str,
+                                               shape_name: &str,
                                                serde_attrs: bool,
                                                protocol_generator: &P)
                                                -> String {
@@ -496,12 +496,23 @@ fn generate_struct_fields<P: GenerateProtocol>(service: &Service,
                                     protocol_generator.timestamp_type());
         let name = generate_field_name(member_name);
 
-        if shape.required(member_name) {
-            lines.push(format!("pub {}: {},", name, rs_type))
-        } else if name == "type" {
-            lines.push(format!("pub aws_{}: Option<{}>,", name,rs_type))
+        // For structs that can contain another of themselves, we need to box them.
+        if shape_name == rs_type {
+            if shape.required(member_name) {
+                lines.push(format!("pub {}: Box<{}>,", name, rs_type))
+            } else if name == "type" {
+                lines.push(format!("pub aws_{}: Box<Option<{}>>,", name,rs_type))
+            } else {
+                lines.push(format!("pub {}: Box<Option<{}>>,", name, rs_type))
+            }
         } else {
-            lines.push(format!("pub {}: Option<{}>,", name, rs_type))
+            if shape.required(member_name) {
+                lines.push(format!("pub {}: {},", name, rs_type))
+            } else if name == "type" {
+                lines.push(format!("pub aws_{}: Option<{}>,", name,rs_type))
+            } else {
+                lines.push(format!("pub {}: Option<{}>,", name, rs_type))
+            }
         }
 
         Some(lines.join("\n"))

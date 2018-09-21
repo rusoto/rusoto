@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Add Cost Explorer
 - Add ServiceDiscovery support
 - Add Sentiment support
 - Add Sagemaker support
