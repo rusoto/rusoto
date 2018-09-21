@@ -27,6 +27,10 @@ path = "../rusoto/core"
 optional = true
 path = "../rusoto/services/acm"
 
+[dependencies.rusoto_acm_pca]
+optional = true
+path = "../rusoto/services/acm-pca"
+
 [dependencies.rusoto_alexaforbusiness]
 optional = true
 path = "../rusoto/services/alexaforbusiness"
@@ -499,6 +503,7 @@ reqwest = "0.8.5"
 [features]
 all = [
 		"acm",
+		"acm-pca",
 		"alexaforbusiness",
         "apigateway",
 		"application-autoscaling",
@@ -616,6 +621,7 @@ all = [
 		"xray"
 	]
 acm = ["rusoto_acm"]
+acm-pca = ["rusoto_acm_pca"]
 alexaforbusiness = ["rusoto_alexaforbusiness"]
 apigateway = ["rusoto_apigateway"]
 application-autoscaling = ["rusoto_application_autoscaling"]

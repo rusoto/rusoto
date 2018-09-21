@@ -5,6 +5,12 @@
     "protocolVersion": "2015-12-08",
     "baseTypeName": "Acm"
   },
+  "acm-pca": {
+    "version": "0.34.0",
+    "coreVersion": "0.34.0",
+    "protocolVersion": "2017-08-22",
+    "baseTypeName": "AcmPca"
+  },
   "alexaforbusiness": {
     "version": "0.34.0",
     "coreVersion": "0.34.0",
