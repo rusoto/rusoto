@@ -696,6 +696,14 @@ fn build_hostname(service: &str, region: &Region) -> String {
                 _ => format!("sdb.{}.amazonaws.com", region.name()),
             }
         }
+         "cloudfront" => {
+            match *region {
+                Region::Custom { ref endpoint, .. } => {
+                    remove_scheme_from_custom_hostname(endpoint).to_owned()
+                }
+                _ => "cloudfront.amazonaws.com".to_owned(),
+            }
+        }       
         _ => {
             match *region {
                 Region::Custom { ref endpoint, .. } => {
