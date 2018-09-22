@@ -650,7 +650,7 @@ fn remove_scheme_from_custom_hostname(hostname: &str) -> String {
 /// Takes a `Region` enum and a service and formas a vaild DNS name.
 /// E.g. `Region::ApNortheast1` and `s3` produces `s3.ap-northeast-1.amazonaws.com.cn`
 fn build_hostname(service: &str, region: &Region) -> String {
-    //iam has only 1 endpoint, other services have region-based endpoints
+    //iam & cloudfront have only 1 endpoint, other services have region-based endpoints
     match service {
         "iam" => {
             match *region {
@@ -658,6 +658,14 @@ fn build_hostname(service: &str, region: &Region) -> String {
                     remove_scheme_from_custom_hostname(endpoint)
                 }
                 Region::CnNorth1 | Region::CnNorthwest1 => format!("{}.{}.amazonaws.com.cn", service, region.name()),
+                _ => format!("{}.amazonaws.com", service),
+            }
+        }
+        "cloudfront" => {
+            match *region {
+                Region::Custom { ref endpoint, .. } => {
+                    remove_scheme_from_custom_hostname(endpoint).to_owned()
+                }
                 _ => format!("{}.amazonaws.com", service),
             }
         }
