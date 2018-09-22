@@ -80,6 +80,7 @@ members = [
     "rusoto/services/macie",
     "rusoto/services/marketplacecommerceanalytics",
     "rusoto/services/marketplace-entitlement",
+    "rusoto/services/mediastore",
     "rusoto/services/meteringmarketplace",
     "rusoto/services/mgh",
     "rusoto/services/mq",
