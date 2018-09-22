@@ -3,9 +3,9 @@
 1. Rusoto [has a CHANGELOG](CHANGELOG.md) to track what's in releases.
 2. Releases are tracked [in GitHub](https://github.com/rusoto/rusoto/releases).
 
-Before hitting 1.0, the API has no backwards compatible guaranteed.
+Before hitting 1.0, the public API has no backwards compatibility guaranteed.
 
-After 1.0, the API will be stable for the 1.0 releases. If we need to break the API, Rusoto 2.0 will be started. Patches will be back ported to the 1.x branch.
+After 1.0, the public API will be stable for the 1.0 releases. If we need to break the public API, Rusoto 2.0 will be started. Patches will be back ported to the 1.x branch.
 
 ## Release trains
 
