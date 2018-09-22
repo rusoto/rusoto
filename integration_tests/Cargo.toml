@@ -363,6 +363,10 @@ path = "../rusoto/services/opsworkscm"
 optional = true
 path = "../rusoto/services/organizations"
 
+[dependencies.rusoto_pi]
+optional = true
+path = "../rusoto/services/pi"
+
 [dependencies.rusoto_polly]
 optional = true
 path = "../rusoto/services/polly"
@@ -594,7 +598,8 @@ all = [
 		"mturk",
 	   	"opsworks",
 		"opsworkscm",
-        "organizations",
+		"organizations",
+		"pi",
 		"polly",
 		"pricing",
 	   	"redshift",
@@ -715,6 +720,7 @@ mturk = ["rusoto_mturk"]
 opsworks = ["rusoto_opsworks"]
 opsworkscm = ["rusoto_opsworkscm"]
 organizations = ["rusoto_organizations"]
+pi = ["rusoto_pi"]
 polly = ["rusoto_polly"]
 pricing = ["rusoto_pricing"]
 redshift = ["rusoto_redshift"]
