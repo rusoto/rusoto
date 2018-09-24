@@ -470,6 +470,12 @@
     "protocolVersion": "2017-01-11",
     "baseTypeName": "MarketplaceEntitlement"
   },
+  "mediastore": {
+    "version": "0.34.0",
+    "coreVersion": "0.34.0",
+    "protocolVersion": "2017-09-01",
+    "baseTypeName": "MediaStore"
+  },
   "meteringmarketplace": {
     "version": "0.34.0",
     "coreVersion": "0.34.0",

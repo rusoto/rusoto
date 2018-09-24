@@ -335,6 +335,10 @@ path = "../rusoto/services/marketplacecommerceanalytics"
 optional = true
 path = "../rusoto/services/marketplace-entitlement"
 
+[dependencies.rusoto_mediastore]
+optional = true
+path = "../rusoto/services/mediastore"
+
 [dependencies.rusoto_mgh]
 optional = true
 path = "../rusoto/services/mgh"
@@ -584,6 +588,7 @@ all = [
 		"macie",
 	   	"marketplacecommerceanalytics",
 		"marketplace-entitlement",
+		"mediastore",
 		"mgh",
 		"mq",
 		"mturk",
@@ -703,6 +708,7 @@ machinelearning = ["rusoto_machinelearning"]
 macie = ["rusoto_macie"]
 marketplacecommerceanalytics = ["rusoto_marketplacecommerceanalytics"]
 marketplace-entitlement = ["rusoto_marketplace_entitlement"]
+mediastore = ["rusoto_mediastore"]
 mgh = ["rusoto_mgh"]
 mq = ["rusoto_mq"]
 mturk = ["rusoto_mturk"]

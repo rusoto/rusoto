@@ -20,6 +20,7 @@
 - Add `From<Result<T, E>> for RusotoFuture<T, E>` implementation for mocking.
 - Add ACM PCA support
 - rusoto_credential uses Serde derives for credentials instead of hand written code
+- Add MediaStore support
 
 ## [0.34.0] - 2018-09-05
 
