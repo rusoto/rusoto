@@ -65,6 +65,12 @@
     "protocolVersion": "2016-10-20",
     "baseTypeName": "Budgets"
   },
+  "ce": {
+    "version": "0.34.0",
+    "coreVersion": "0.34.0",
+    "protocolVersion": "2017-10-25",
+    "baseTypeName": "CostExplorer"
+  },
   "cloud9": {
     "version": "0.34.0",
     "coreVersion": "0.34.0",
