@@ -89,6 +89,7 @@ members = [
     "rusoto/services/opsworks",
     "rusoto/services/opsworkscm",
     "rusoto/services/organizations",
+    "rusoto/services/pi",
     "rusoto/services/polly",
     "rusoto/services/rds",
     "rusoto/services/redshift",
