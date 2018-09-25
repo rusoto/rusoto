@@ -54341,7 +54341,7 @@ pub enum AcceptReservedInstancesExchangeQuoteError {
 }
 
 impl AcceptReservedInstancesExchangeQuoteError {
-    pub fn from_body(body: &str) -> AcceptReservedInstancesExchangeQuoteError {
+    pub fn from_body(body: &str, status: u16) -> AcceptReservedInstancesExchangeQuoteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -54349,7 +54349,17 @@ impl AcceptReservedInstancesExchangeQuoteError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AcceptReservedInstancesExchangeQuoteError::Unknown(String::from(body)),
             },
-            Err(_) => AcceptReservedInstancesExchangeQuoteError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AcceptReservedInstancesExchangeQuoteError::Unknown(format!("{}", status))
+                } else {
+                    AcceptReservedInstancesExchangeQuoteError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -54415,7 +54425,7 @@ pub enum AcceptVpcEndpointConnectionsError {
 }
 
 impl AcceptVpcEndpointConnectionsError {
-    pub fn from_body(body: &str) -> AcceptVpcEndpointConnectionsError {
+    pub fn from_body(body: &str, status: u16) -> AcceptVpcEndpointConnectionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -54423,7 +54433,17 @@ impl AcceptVpcEndpointConnectionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AcceptVpcEndpointConnectionsError::Unknown(String::from(body)),
             },
-            Err(_) => AcceptVpcEndpointConnectionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AcceptVpcEndpointConnectionsError::Unknown(format!("{}", status))
+                } else {
+                    AcceptVpcEndpointConnectionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -54489,7 +54509,7 @@ pub enum AcceptVpcPeeringConnectionError {
 }
 
 impl AcceptVpcPeeringConnectionError {
-    pub fn from_body(body: &str) -> AcceptVpcPeeringConnectionError {
+    pub fn from_body(body: &str, status: u16) -> AcceptVpcPeeringConnectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -54497,7 +54517,17 @@ impl AcceptVpcPeeringConnectionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AcceptVpcPeeringConnectionError::Unknown(String::from(body)),
             },
-            Err(_) => AcceptVpcPeeringConnectionError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AcceptVpcPeeringConnectionError::Unknown(format!("{}", status))
+                } else {
+                    AcceptVpcPeeringConnectionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -54563,7 +54593,7 @@ pub enum AllocateAddressError {
 }
 
 impl AllocateAddressError {
-    pub fn from_body(body: &str) -> AllocateAddressError {
+    pub fn from_body(body: &str, status: u16) -> AllocateAddressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -54571,7 +54601,13 @@ impl AllocateAddressError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AllocateAddressError::Unknown(String::from(body)),
             },
-            Err(_) => AllocateAddressError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AllocateAddressError::Unknown(format!("{}", status))
+                } else {
+                    AllocateAddressError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -54635,7 +54671,7 @@ pub enum AllocateHostsError {
 }
 
 impl AllocateHostsError {
-    pub fn from_body(body: &str) -> AllocateHostsError {
+    pub fn from_body(body: &str, status: u16) -> AllocateHostsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -54643,7 +54679,13 @@ impl AllocateHostsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AllocateHostsError::Unknown(String::from(body)),
             },
-            Err(_) => AllocateHostsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AllocateHostsError::Unknown(format!("{}", status))
+                } else {
+                    AllocateHostsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -54707,7 +54749,7 @@ pub enum AssignIpv6AddressesError {
 }
 
 impl AssignIpv6AddressesError {
-    pub fn from_body(body: &str) -> AssignIpv6AddressesError {
+    pub fn from_body(body: &str, status: u16) -> AssignIpv6AddressesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -54715,7 +54757,13 @@ impl AssignIpv6AddressesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssignIpv6AddressesError::Unknown(String::from(body)),
             },
-            Err(_) => AssignIpv6AddressesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AssignIpv6AddressesError::Unknown(format!("{}", status))
+                } else {
+                    AssignIpv6AddressesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -54781,7 +54829,7 @@ pub enum AssignPrivateIpAddressesError {
 }
 
 impl AssignPrivateIpAddressesError {
-    pub fn from_body(body: &str) -> AssignPrivateIpAddressesError {
+    pub fn from_body(body: &str, status: u16) -> AssignPrivateIpAddressesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -54789,7 +54837,17 @@ impl AssignPrivateIpAddressesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssignPrivateIpAddressesError::Unknown(String::from(body)),
             },
-            Err(_) => AssignPrivateIpAddressesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AssignPrivateIpAddressesError::Unknown(format!("{}", status))
+                } else {
+                    AssignPrivateIpAddressesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -54855,7 +54913,7 @@ pub enum AssociateAddressError {
 }
 
 impl AssociateAddressError {
-    pub fn from_body(body: &str) -> AssociateAddressError {
+    pub fn from_body(body: &str, status: u16) -> AssociateAddressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -54863,7 +54921,13 @@ impl AssociateAddressError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssociateAddressError::Unknown(String::from(body)),
             },
-            Err(_) => AssociateAddressError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AssociateAddressError::Unknown(format!("{}", status))
+                } else {
+                    AssociateAddressError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -54927,7 +54991,7 @@ pub enum AssociateDhcpOptionsError {
 }
 
 impl AssociateDhcpOptionsError {
-    pub fn from_body(body: &str) -> AssociateDhcpOptionsError {
+    pub fn from_body(body: &str, status: u16) -> AssociateDhcpOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -54935,7 +54999,13 @@ impl AssociateDhcpOptionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssociateDhcpOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => AssociateDhcpOptionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AssociateDhcpOptionsError::Unknown(format!("{}", status))
+                } else {
+                    AssociateDhcpOptionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -55001,7 +55071,7 @@ pub enum AssociateIamInstanceProfileError {
 }
 
 impl AssociateIamInstanceProfileError {
-    pub fn from_body(body: &str) -> AssociateIamInstanceProfileError {
+    pub fn from_body(body: &str, status: u16) -> AssociateIamInstanceProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -55009,7 +55079,17 @@ impl AssociateIamInstanceProfileError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssociateIamInstanceProfileError::Unknown(String::from(body)),
             },
-            Err(_) => AssociateIamInstanceProfileError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AssociateIamInstanceProfileError::Unknown(format!("{}", status))
+                } else {
+                    AssociateIamInstanceProfileError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -55075,7 +55155,7 @@ pub enum AssociateRouteTableError {
 }
 
 impl AssociateRouteTableError {
-    pub fn from_body(body: &str) -> AssociateRouteTableError {
+    pub fn from_body(body: &str, status: u16) -> AssociateRouteTableError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -55083,7 +55163,13 @@ impl AssociateRouteTableError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssociateRouteTableError::Unknown(String::from(body)),
             },
-            Err(_) => AssociateRouteTableError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AssociateRouteTableError::Unknown(format!("{}", status))
+                } else {
+                    AssociateRouteTableError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -55149,7 +55235,7 @@ pub enum AssociateSubnetCidrBlockError {
 }
 
 impl AssociateSubnetCidrBlockError {
-    pub fn from_body(body: &str) -> AssociateSubnetCidrBlockError {
+    pub fn from_body(body: &str, status: u16) -> AssociateSubnetCidrBlockError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -55157,7 +55243,17 @@ impl AssociateSubnetCidrBlockError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssociateSubnetCidrBlockError::Unknown(String::from(body)),
             },
-            Err(_) => AssociateSubnetCidrBlockError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AssociateSubnetCidrBlockError::Unknown(format!("{}", status))
+                } else {
+                    AssociateSubnetCidrBlockError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -55223,7 +55319,7 @@ pub enum AssociateVpcCidrBlockError {
 }
 
 impl AssociateVpcCidrBlockError {
-    pub fn from_body(body: &str) -> AssociateVpcCidrBlockError {
+    pub fn from_body(body: &str, status: u16) -> AssociateVpcCidrBlockError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -55231,7 +55327,13 @@ impl AssociateVpcCidrBlockError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssociateVpcCidrBlockError::Unknown(String::from(body)),
             },
-            Err(_) => AssociateVpcCidrBlockError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AssociateVpcCidrBlockError::Unknown(format!("{}", status))
+                } else {
+                    AssociateVpcCidrBlockError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -55297,7 +55399,7 @@ pub enum AttachClassicLinkVpcError {
 }
 
 impl AttachClassicLinkVpcError {
-    pub fn from_body(body: &str) -> AttachClassicLinkVpcError {
+    pub fn from_body(body: &str, status: u16) -> AttachClassicLinkVpcError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -55305,7 +55407,13 @@ impl AttachClassicLinkVpcError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AttachClassicLinkVpcError::Unknown(String::from(body)),
             },
-            Err(_) => AttachClassicLinkVpcError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AttachClassicLinkVpcError::Unknown(format!("{}", status))
+                } else {
+                    AttachClassicLinkVpcError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -55371,7 +55479,7 @@ pub enum AttachInternetGatewayError {
 }
 
 impl AttachInternetGatewayError {
-    pub fn from_body(body: &str) -> AttachInternetGatewayError {
+    pub fn from_body(body: &str, status: u16) -> AttachInternetGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -55379,7 +55487,13 @@ impl AttachInternetGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AttachInternetGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => AttachInternetGatewayError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AttachInternetGatewayError::Unknown(format!("{}", status))
+                } else {
+                    AttachInternetGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -55445,7 +55559,7 @@ pub enum AttachNetworkInterfaceError {
 }
 
 impl AttachNetworkInterfaceError {
-    pub fn from_body(body: &str) -> AttachNetworkInterfaceError {
+    pub fn from_body(body: &str, status: u16) -> AttachNetworkInterfaceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -55453,7 +55567,13 @@ impl AttachNetworkInterfaceError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AttachNetworkInterfaceError::Unknown(String::from(body)),
             },
-            Err(_) => AttachNetworkInterfaceError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AttachNetworkInterfaceError::Unknown(format!("{}", status))
+                } else {
+                    AttachNetworkInterfaceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -55519,7 +55639,7 @@ pub enum AttachVolumeError {
 }
 
 impl AttachVolumeError {
-    pub fn from_body(body: &str) -> AttachVolumeError {
+    pub fn from_body(body: &str, status: u16) -> AttachVolumeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -55527,7 +55647,13 @@ impl AttachVolumeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AttachVolumeError::Unknown(String::from(body)),
             },
-            Err(_) => AttachVolumeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AttachVolumeError::Unknown(format!("{}", status))
+                } else {
+                    AttachVolumeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -55591,7 +55717,7 @@ pub enum AttachVpnGatewayError {
 }
 
 impl AttachVpnGatewayError {
-    pub fn from_body(body: &str) -> AttachVpnGatewayError {
+    pub fn from_body(body: &str, status: u16) -> AttachVpnGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -55599,7 +55725,13 @@ impl AttachVpnGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AttachVpnGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => AttachVpnGatewayError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AttachVpnGatewayError::Unknown(format!("{}", status))
+                } else {
+                    AttachVpnGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -55663,7 +55795,7 @@ pub enum AuthorizeSecurityGroupEgressError {
 }
 
 impl AuthorizeSecurityGroupEgressError {
-    pub fn from_body(body: &str) -> AuthorizeSecurityGroupEgressError {
+    pub fn from_body(body: &str, status: u16) -> AuthorizeSecurityGroupEgressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -55671,7 +55803,17 @@ impl AuthorizeSecurityGroupEgressError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AuthorizeSecurityGroupEgressError::Unknown(String::from(body)),
             },
-            Err(_) => AuthorizeSecurityGroupEgressError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AuthorizeSecurityGroupEgressError::Unknown(format!("{}", status))
+                } else {
+                    AuthorizeSecurityGroupEgressError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -55737,7 +55879,7 @@ pub enum AuthorizeSecurityGroupIngressError {
 }
 
 impl AuthorizeSecurityGroupIngressError {
-    pub fn from_body(body: &str) -> AuthorizeSecurityGroupIngressError {
+    pub fn from_body(body: &str, status: u16) -> AuthorizeSecurityGroupIngressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -55745,7 +55887,17 @@ impl AuthorizeSecurityGroupIngressError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AuthorizeSecurityGroupIngressError::Unknown(String::from(body)),
             },
-            Err(_) => AuthorizeSecurityGroupIngressError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AuthorizeSecurityGroupIngressError::Unknown(format!("{}", status))
+                } else {
+                    AuthorizeSecurityGroupIngressError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -55811,7 +55963,7 @@ pub enum BundleInstanceError {
 }
 
 impl BundleInstanceError {
-    pub fn from_body(body: &str) -> BundleInstanceError {
+    pub fn from_body(body: &str, status: u16) -> BundleInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -55819,7 +55971,13 @@ impl BundleInstanceError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => BundleInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => BundleInstanceError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    BundleInstanceError::Unknown(format!("{}", status))
+                } else {
+                    BundleInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -55883,7 +56041,7 @@ pub enum CancelBundleTaskError {
 }
 
 impl CancelBundleTaskError {
-    pub fn from_body(body: &str) -> CancelBundleTaskError {
+    pub fn from_body(body: &str, status: u16) -> CancelBundleTaskError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -55891,7 +56049,13 @@ impl CancelBundleTaskError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelBundleTaskError::Unknown(String::from(body)),
             },
-            Err(_) => CancelBundleTaskError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CancelBundleTaskError::Unknown(format!("{}", status))
+                } else {
+                    CancelBundleTaskError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -55955,7 +56119,7 @@ pub enum CancelConversionTaskError {
 }
 
 impl CancelConversionTaskError {
-    pub fn from_body(body: &str) -> CancelConversionTaskError {
+    pub fn from_body(body: &str, status: u16) -> CancelConversionTaskError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -55963,7 +56127,13 @@ impl CancelConversionTaskError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelConversionTaskError::Unknown(String::from(body)),
             },
-            Err(_) => CancelConversionTaskError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CancelConversionTaskError::Unknown(format!("{}", status))
+                } else {
+                    CancelConversionTaskError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -56029,7 +56199,7 @@ pub enum CancelExportTaskError {
 }
 
 impl CancelExportTaskError {
-    pub fn from_body(body: &str) -> CancelExportTaskError {
+    pub fn from_body(body: &str, status: u16) -> CancelExportTaskError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -56037,7 +56207,13 @@ impl CancelExportTaskError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelExportTaskError::Unknown(String::from(body)),
             },
-            Err(_) => CancelExportTaskError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CancelExportTaskError::Unknown(format!("{}", status))
+                } else {
+                    CancelExportTaskError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -56101,7 +56277,7 @@ pub enum CancelImportTaskError {
 }
 
 impl CancelImportTaskError {
-    pub fn from_body(body: &str) -> CancelImportTaskError {
+    pub fn from_body(body: &str, status: u16) -> CancelImportTaskError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -56109,7 +56285,13 @@ impl CancelImportTaskError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelImportTaskError::Unknown(String::from(body)),
             },
-            Err(_) => CancelImportTaskError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CancelImportTaskError::Unknown(format!("{}", status))
+                } else {
+                    CancelImportTaskError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -56173,7 +56355,7 @@ pub enum CancelReservedInstancesListingError {
 }
 
 impl CancelReservedInstancesListingError {
-    pub fn from_body(body: &str) -> CancelReservedInstancesListingError {
+    pub fn from_body(body: &str, status: u16) -> CancelReservedInstancesListingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -56181,7 +56363,17 @@ impl CancelReservedInstancesListingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelReservedInstancesListingError::Unknown(String::from(body)),
             },
-            Err(_) => CancelReservedInstancesListingError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CancelReservedInstancesListingError::Unknown(format!("{}", status))
+                } else {
+                    CancelReservedInstancesListingError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -56247,7 +56439,7 @@ pub enum EC2CancelSpotFleetRequestsError {
 }
 
 impl EC2CancelSpotFleetRequestsError {
-    pub fn from_body(body: &str) -> EC2CancelSpotFleetRequestsError {
+    pub fn from_body(body: &str, status: u16) -> EC2CancelSpotFleetRequestsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -56255,7 +56447,17 @@ impl EC2CancelSpotFleetRequestsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => EC2CancelSpotFleetRequestsError::Unknown(String::from(body)),
             },
-            Err(_) => EC2CancelSpotFleetRequestsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    EC2CancelSpotFleetRequestsError::Unknown(format!("{}", status))
+                } else {
+                    EC2CancelSpotFleetRequestsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -56321,7 +56523,7 @@ pub enum CancelSpotInstanceRequestsError {
 }
 
 impl CancelSpotInstanceRequestsError {
-    pub fn from_body(body: &str) -> CancelSpotInstanceRequestsError {
+    pub fn from_body(body: &str, status: u16) -> CancelSpotInstanceRequestsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -56329,7 +56531,17 @@ impl CancelSpotInstanceRequestsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelSpotInstanceRequestsError::Unknown(String::from(body)),
             },
-            Err(_) => CancelSpotInstanceRequestsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CancelSpotInstanceRequestsError::Unknown(format!("{}", status))
+                } else {
+                    CancelSpotInstanceRequestsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -56395,7 +56607,7 @@ pub enum ConfirmProductInstanceError {
 }
 
 impl ConfirmProductInstanceError {
-    pub fn from_body(body: &str) -> ConfirmProductInstanceError {
+    pub fn from_body(body: &str, status: u16) -> ConfirmProductInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -56403,7 +56615,13 @@ impl ConfirmProductInstanceError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ConfirmProductInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => ConfirmProductInstanceError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ConfirmProductInstanceError::Unknown(format!("{}", status))
+                } else {
+                    ConfirmProductInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -56469,7 +56687,7 @@ pub enum CopyFpgaImageError {
 }
 
 impl CopyFpgaImageError {
-    pub fn from_body(body: &str) -> CopyFpgaImageError {
+    pub fn from_body(body: &str, status: u16) -> CopyFpgaImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -56477,7 +56695,13 @@ impl CopyFpgaImageError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CopyFpgaImageError::Unknown(String::from(body)),
             },
-            Err(_) => CopyFpgaImageError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CopyFpgaImageError::Unknown(format!("{}", status))
+                } else {
+                    CopyFpgaImageError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -56541,7 +56765,7 @@ pub enum CopyImageError {
 }
 
 impl CopyImageError {
-    pub fn from_body(body: &str) -> CopyImageError {
+    pub fn from_body(body: &str, status: u16) -> CopyImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -56549,7 +56773,13 @@ impl CopyImageError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CopyImageError::Unknown(String::from(body)),
             },
-            Err(_) => CopyImageError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CopyImageError::Unknown(format!("{}", status))
+                } else {
+                    CopyImageError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -56613,7 +56843,7 @@ pub enum CopySnapshotError {
 }
 
 impl CopySnapshotError {
-    pub fn from_body(body: &str) -> CopySnapshotError {
+    pub fn from_body(body: &str, status: u16) -> CopySnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -56621,7 +56851,13 @@ impl CopySnapshotError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CopySnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => CopySnapshotError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CopySnapshotError::Unknown(format!("{}", status))
+                } else {
+                    CopySnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -56685,7 +56921,7 @@ pub enum CreateCustomerGatewayError {
 }
 
 impl CreateCustomerGatewayError {
-    pub fn from_body(body: &str) -> CreateCustomerGatewayError {
+    pub fn from_body(body: &str, status: u16) -> CreateCustomerGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -56693,7 +56929,13 @@ impl CreateCustomerGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateCustomerGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => CreateCustomerGatewayError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateCustomerGatewayError::Unknown(format!("{}", status))
+                } else {
+                    CreateCustomerGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -56759,7 +57001,7 @@ pub enum CreateDefaultSubnetError {
 }
 
 impl CreateDefaultSubnetError {
-    pub fn from_body(body: &str) -> CreateDefaultSubnetError {
+    pub fn from_body(body: &str, status: u16) -> CreateDefaultSubnetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -56767,7 +57009,13 @@ impl CreateDefaultSubnetError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateDefaultSubnetError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDefaultSubnetError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDefaultSubnetError::Unknown(format!("{}", status))
+                } else {
+                    CreateDefaultSubnetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -56833,7 +57081,7 @@ pub enum CreateDefaultVpcError {
 }
 
 impl CreateDefaultVpcError {
-    pub fn from_body(body: &str) -> CreateDefaultVpcError {
+    pub fn from_body(body: &str, status: u16) -> CreateDefaultVpcError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -56841,7 +57089,13 @@ impl CreateDefaultVpcError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateDefaultVpcError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDefaultVpcError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDefaultVpcError::Unknown(format!("{}", status))
+                } else {
+                    CreateDefaultVpcError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -56905,7 +57159,7 @@ pub enum CreateDhcpOptionsError {
 }
 
 impl CreateDhcpOptionsError {
-    pub fn from_body(body: &str) -> CreateDhcpOptionsError {
+    pub fn from_body(body: &str, status: u16) -> CreateDhcpOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -56913,7 +57167,13 @@ impl CreateDhcpOptionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateDhcpOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDhcpOptionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDhcpOptionsError::Unknown(format!("{}", status))
+                } else {
+                    CreateDhcpOptionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -56979,7 +57239,7 @@ pub enum CreateEgressOnlyInternetGatewayError {
 }
 
 impl CreateEgressOnlyInternetGatewayError {
-    pub fn from_body(body: &str) -> CreateEgressOnlyInternetGatewayError {
+    pub fn from_body(body: &str, status: u16) -> CreateEgressOnlyInternetGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -56987,7 +57247,17 @@ impl CreateEgressOnlyInternetGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateEgressOnlyInternetGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => CreateEgressOnlyInternetGatewayError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateEgressOnlyInternetGatewayError::Unknown(format!("{}", status))
+                } else {
+                    CreateEgressOnlyInternetGatewayError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -57053,7 +57323,7 @@ pub enum CreateFleetError {
 }
 
 impl CreateFleetError {
-    pub fn from_body(body: &str) -> CreateFleetError {
+    pub fn from_body(body: &str, status: u16) -> CreateFleetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -57061,7 +57331,13 @@ impl CreateFleetError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateFleetError::Unknown(String::from(body)),
             },
-            Err(_) => CreateFleetError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateFleetError::Unknown(format!("{}", status))
+                } else {
+                    CreateFleetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -57125,7 +57401,7 @@ pub enum CreateFlowLogsError {
 }
 
 impl CreateFlowLogsError {
-    pub fn from_body(body: &str) -> CreateFlowLogsError {
+    pub fn from_body(body: &str, status: u16) -> CreateFlowLogsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -57133,7 +57409,13 @@ impl CreateFlowLogsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateFlowLogsError::Unknown(String::from(body)),
             },
-            Err(_) => CreateFlowLogsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateFlowLogsError::Unknown(format!("{}", status))
+                } else {
+                    CreateFlowLogsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -57197,7 +57479,7 @@ pub enum CreateFpgaImageError {
 }
 
 impl CreateFpgaImageError {
-    pub fn from_body(body: &str) -> CreateFpgaImageError {
+    pub fn from_body(body: &str, status: u16) -> CreateFpgaImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -57205,7 +57487,13 @@ impl CreateFpgaImageError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateFpgaImageError::Unknown(String::from(body)),
             },
-            Err(_) => CreateFpgaImageError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateFpgaImageError::Unknown(format!("{}", status))
+                } else {
+                    CreateFpgaImageError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -57269,7 +57557,7 @@ pub enum CreateImageError {
 }
 
 impl CreateImageError {
-    pub fn from_body(body: &str) -> CreateImageError {
+    pub fn from_body(body: &str, status: u16) -> CreateImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -57277,7 +57565,13 @@ impl CreateImageError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateImageError::Unknown(String::from(body)),
             },
-            Err(_) => CreateImageError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateImageError::Unknown(format!("{}", status))
+                } else {
+                    CreateImageError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -57341,7 +57635,7 @@ pub enum CreateInstanceExportTaskError {
 }
 
 impl CreateInstanceExportTaskError {
-    pub fn from_body(body: &str) -> CreateInstanceExportTaskError {
+    pub fn from_body(body: &str, status: u16) -> CreateInstanceExportTaskError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -57349,7 +57643,17 @@ impl CreateInstanceExportTaskError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateInstanceExportTaskError::Unknown(String::from(body)),
             },
-            Err(_) => CreateInstanceExportTaskError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateInstanceExportTaskError::Unknown(format!("{}", status))
+                } else {
+                    CreateInstanceExportTaskError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -57415,7 +57719,7 @@ pub enum CreateInternetGatewayError {
 }
 
 impl CreateInternetGatewayError {
-    pub fn from_body(body: &str) -> CreateInternetGatewayError {
+    pub fn from_body(body: &str, status: u16) -> CreateInternetGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -57423,7 +57727,13 @@ impl CreateInternetGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateInternetGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => CreateInternetGatewayError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateInternetGatewayError::Unknown(format!("{}", status))
+                } else {
+                    CreateInternetGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -57489,7 +57799,7 @@ pub enum CreateKeyPairError {
 }
 
 impl CreateKeyPairError {
-    pub fn from_body(body: &str) -> CreateKeyPairError {
+    pub fn from_body(body: &str, status: u16) -> CreateKeyPairError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -57497,7 +57807,13 @@ impl CreateKeyPairError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateKeyPairError::Unknown(String::from(body)),
             },
-            Err(_) => CreateKeyPairError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateKeyPairError::Unknown(format!("{}", status))
+                } else {
+                    CreateKeyPairError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -57561,7 +57877,7 @@ pub enum CreateLaunchTemplateError {
 }
 
 impl CreateLaunchTemplateError {
-    pub fn from_body(body: &str) -> CreateLaunchTemplateError {
+    pub fn from_body(body: &str, status: u16) -> CreateLaunchTemplateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -57569,7 +57885,13 @@ impl CreateLaunchTemplateError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateLaunchTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => CreateLaunchTemplateError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateLaunchTemplateError::Unknown(format!("{}", status))
+                } else {
+                    CreateLaunchTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -57635,7 +57957,7 @@ pub enum CreateLaunchTemplateVersionError {
 }
 
 impl CreateLaunchTemplateVersionError {
-    pub fn from_body(body: &str) -> CreateLaunchTemplateVersionError {
+    pub fn from_body(body: &str, status: u16) -> CreateLaunchTemplateVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -57643,7 +57965,17 @@ impl CreateLaunchTemplateVersionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateLaunchTemplateVersionError::Unknown(String::from(body)),
             },
-            Err(_) => CreateLaunchTemplateVersionError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateLaunchTemplateVersionError::Unknown(format!("{}", status))
+                } else {
+                    CreateLaunchTemplateVersionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -57709,7 +58041,7 @@ pub enum CreateNatGatewayError {
 }
 
 impl CreateNatGatewayError {
-    pub fn from_body(body: &str) -> CreateNatGatewayError {
+    pub fn from_body(body: &str, status: u16) -> CreateNatGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -57717,7 +58049,13 @@ impl CreateNatGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateNatGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => CreateNatGatewayError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateNatGatewayError::Unknown(format!("{}", status))
+                } else {
+                    CreateNatGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -57781,7 +58119,7 @@ pub enum CreateNetworkAclError {
 }
 
 impl CreateNetworkAclError {
-    pub fn from_body(body: &str) -> CreateNetworkAclError {
+    pub fn from_body(body: &str, status: u16) -> CreateNetworkAclError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -57789,7 +58127,13 @@ impl CreateNetworkAclError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateNetworkAclError::Unknown(String::from(body)),
             },
-            Err(_) => CreateNetworkAclError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateNetworkAclError::Unknown(format!("{}", status))
+                } else {
+                    CreateNetworkAclError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -57853,7 +58197,7 @@ pub enum CreateNetworkAclEntryError {
 }
 
 impl CreateNetworkAclEntryError {
-    pub fn from_body(body: &str) -> CreateNetworkAclEntryError {
+    pub fn from_body(body: &str, status: u16) -> CreateNetworkAclEntryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -57861,7 +58205,13 @@ impl CreateNetworkAclEntryError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateNetworkAclEntryError::Unknown(String::from(body)),
             },
-            Err(_) => CreateNetworkAclEntryError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateNetworkAclEntryError::Unknown(format!("{}", status))
+                } else {
+                    CreateNetworkAclEntryError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -57927,7 +58277,7 @@ pub enum CreateNetworkInterfaceError {
 }
 
 impl CreateNetworkInterfaceError {
-    pub fn from_body(body: &str) -> CreateNetworkInterfaceError {
+    pub fn from_body(body: &str, status: u16) -> CreateNetworkInterfaceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -57935,7 +58285,13 @@ impl CreateNetworkInterfaceError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateNetworkInterfaceError::Unknown(String::from(body)),
             },
-            Err(_) => CreateNetworkInterfaceError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateNetworkInterfaceError::Unknown(format!("{}", status))
+                } else {
+                    CreateNetworkInterfaceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -58001,7 +58357,7 @@ pub enum CreateNetworkInterfacePermissionError {
 }
 
 impl CreateNetworkInterfacePermissionError {
-    pub fn from_body(body: &str) -> CreateNetworkInterfacePermissionError {
+    pub fn from_body(body: &str, status: u16) -> CreateNetworkInterfacePermissionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -58009,7 +58365,17 @@ impl CreateNetworkInterfacePermissionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateNetworkInterfacePermissionError::Unknown(String::from(body)),
             },
-            Err(_) => CreateNetworkInterfacePermissionError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateNetworkInterfacePermissionError::Unknown(format!("{}", status))
+                } else {
+                    CreateNetworkInterfacePermissionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -58075,7 +58441,7 @@ pub enum CreatePlacementGroupError {
 }
 
 impl CreatePlacementGroupError {
-    pub fn from_body(body: &str) -> CreatePlacementGroupError {
+    pub fn from_body(body: &str, status: u16) -> CreatePlacementGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -58083,7 +58449,13 @@ impl CreatePlacementGroupError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreatePlacementGroupError::Unknown(String::from(body)),
             },
-            Err(_) => CreatePlacementGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreatePlacementGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreatePlacementGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -58149,7 +58521,7 @@ pub enum CreateReservedInstancesListingError {
 }
 
 impl CreateReservedInstancesListingError {
-    pub fn from_body(body: &str) -> CreateReservedInstancesListingError {
+    pub fn from_body(body: &str, status: u16) -> CreateReservedInstancesListingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -58157,7 +58529,17 @@ impl CreateReservedInstancesListingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateReservedInstancesListingError::Unknown(String::from(body)),
             },
-            Err(_) => CreateReservedInstancesListingError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateReservedInstancesListingError::Unknown(format!("{}", status))
+                } else {
+                    CreateReservedInstancesListingError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -58223,7 +58605,7 @@ pub enum CreateRouteError {
 }
 
 impl CreateRouteError {
-    pub fn from_body(body: &str) -> CreateRouteError {
+    pub fn from_body(body: &str, status: u16) -> CreateRouteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -58231,7 +58613,13 @@ impl CreateRouteError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateRouteError::Unknown(String::from(body)),
             },
-            Err(_) => CreateRouteError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateRouteError::Unknown(format!("{}", status))
+                } else {
+                    CreateRouteError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -58295,7 +58683,7 @@ pub enum CreateRouteTableError {
 }
 
 impl CreateRouteTableError {
-    pub fn from_body(body: &str) -> CreateRouteTableError {
+    pub fn from_body(body: &str, status: u16) -> CreateRouteTableError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -58303,7 +58691,13 @@ impl CreateRouteTableError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateRouteTableError::Unknown(String::from(body)),
             },
-            Err(_) => CreateRouteTableError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateRouteTableError::Unknown(format!("{}", status))
+                } else {
+                    CreateRouteTableError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -58367,7 +58761,7 @@ pub enum CreateSecurityGroupError {
 }
 
 impl CreateSecurityGroupError {
-    pub fn from_body(body: &str) -> CreateSecurityGroupError {
+    pub fn from_body(body: &str, status: u16) -> CreateSecurityGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -58375,7 +58769,13 @@ impl CreateSecurityGroupError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateSecurityGroupError::Unknown(String::from(body)),
             },
-            Err(_) => CreateSecurityGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateSecurityGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreateSecurityGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -58441,7 +58841,7 @@ pub enum CreateSnapshotError {
 }
 
 impl CreateSnapshotError {
-    pub fn from_body(body: &str) -> CreateSnapshotError {
+    pub fn from_body(body: &str, status: u16) -> CreateSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -58449,7 +58849,13 @@ impl CreateSnapshotError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => CreateSnapshotError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    CreateSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -58513,7 +58919,7 @@ pub enum CreateSpotDatafeedSubscriptionError {
 }
 
 impl CreateSpotDatafeedSubscriptionError {
-    pub fn from_body(body: &str) -> CreateSpotDatafeedSubscriptionError {
+    pub fn from_body(body: &str, status: u16) -> CreateSpotDatafeedSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -58521,7 +58927,17 @@ impl CreateSpotDatafeedSubscriptionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateSpotDatafeedSubscriptionError::Unknown(String::from(body)),
             },
-            Err(_) => CreateSpotDatafeedSubscriptionError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateSpotDatafeedSubscriptionError::Unknown(format!("{}", status))
+                } else {
+                    CreateSpotDatafeedSubscriptionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -58587,7 +59003,7 @@ pub enum CreateSubnetError {
 }
 
 impl CreateSubnetError {
-    pub fn from_body(body: &str) -> CreateSubnetError {
+    pub fn from_body(body: &str, status: u16) -> CreateSubnetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -58595,7 +59011,13 @@ impl CreateSubnetError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateSubnetError::Unknown(String::from(body)),
             },
-            Err(_) => CreateSubnetError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateSubnetError::Unknown(format!("{}", status))
+                } else {
+                    CreateSubnetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -58659,7 +59081,7 @@ pub enum CreateTagsError {
 }
 
 impl CreateTagsError {
-    pub fn from_body(body: &str) -> CreateTagsError {
+    pub fn from_body(body: &str, status: u16) -> CreateTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -58667,7 +59089,13 @@ impl CreateTagsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateTagsError::Unknown(String::from(body)),
             },
-            Err(_) => CreateTagsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateTagsError::Unknown(format!("{}", status))
+                } else {
+                    CreateTagsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -58731,7 +59159,7 @@ pub enum CreateVolumeError {
 }
 
 impl CreateVolumeError {
-    pub fn from_body(body: &str) -> CreateVolumeError {
+    pub fn from_body(body: &str, status: u16) -> CreateVolumeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -58739,7 +59167,13 @@ impl CreateVolumeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVolumeError::Unknown(String::from(body)),
             },
-            Err(_) => CreateVolumeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateVolumeError::Unknown(format!("{}", status))
+                } else {
+                    CreateVolumeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -58803,7 +59237,7 @@ pub enum CreateVpcError {
 }
 
 impl CreateVpcError {
-    pub fn from_body(body: &str) -> CreateVpcError {
+    pub fn from_body(body: &str, status: u16) -> CreateVpcError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -58811,7 +59245,13 @@ impl CreateVpcError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpcError::Unknown(String::from(body)),
             },
-            Err(_) => CreateVpcError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateVpcError::Unknown(format!("{}", status))
+                } else {
+                    CreateVpcError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -58875,7 +59315,7 @@ pub enum CreateVpcEndpointError {
 }
 
 impl CreateVpcEndpointError {
-    pub fn from_body(body: &str) -> CreateVpcEndpointError {
+    pub fn from_body(body: &str, status: u16) -> CreateVpcEndpointError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -58883,7 +59323,13 @@ impl CreateVpcEndpointError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpcEndpointError::Unknown(String::from(body)),
             },
-            Err(_) => CreateVpcEndpointError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateVpcEndpointError::Unknown(format!("{}", status))
+                } else {
+                    CreateVpcEndpointError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -58949,7 +59395,7 @@ pub enum CreateVpcEndpointConnectionNotificationError {
 }
 
 impl CreateVpcEndpointConnectionNotificationError {
-    pub fn from_body(body: &str) -> CreateVpcEndpointConnectionNotificationError {
+    pub fn from_body(body: &str, status: u16) -> CreateVpcEndpointConnectionNotificationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -58957,7 +59403,17 @@ impl CreateVpcEndpointConnectionNotificationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpcEndpointConnectionNotificationError::Unknown(String::from(body)),
             },
-            Err(_) => CreateVpcEndpointConnectionNotificationError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateVpcEndpointConnectionNotificationError::Unknown(format!("{}", status))
+                } else {
+                    CreateVpcEndpointConnectionNotificationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -59023,7 +59479,7 @@ pub enum CreateVpcEndpointServiceConfigurationError {
 }
 
 impl CreateVpcEndpointServiceConfigurationError {
-    pub fn from_body(body: &str) -> CreateVpcEndpointServiceConfigurationError {
+    pub fn from_body(body: &str, status: u16) -> CreateVpcEndpointServiceConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -59031,7 +59487,17 @@ impl CreateVpcEndpointServiceConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpcEndpointServiceConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => CreateVpcEndpointServiceConfigurationError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateVpcEndpointServiceConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    CreateVpcEndpointServiceConfigurationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -59097,7 +59563,7 @@ pub enum CreateVpcPeeringConnectionError {
 }
 
 impl CreateVpcPeeringConnectionError {
-    pub fn from_body(body: &str) -> CreateVpcPeeringConnectionError {
+    pub fn from_body(body: &str, status: u16) -> CreateVpcPeeringConnectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -59105,7 +59571,17 @@ impl CreateVpcPeeringConnectionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpcPeeringConnectionError::Unknown(String::from(body)),
             },
-            Err(_) => CreateVpcPeeringConnectionError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateVpcPeeringConnectionError::Unknown(format!("{}", status))
+                } else {
+                    CreateVpcPeeringConnectionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -59171,7 +59647,7 @@ pub enum CreateVpnConnectionError {
 }
 
 impl CreateVpnConnectionError {
-    pub fn from_body(body: &str) -> CreateVpnConnectionError {
+    pub fn from_body(body: &str, status: u16) -> CreateVpnConnectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -59179,7 +59655,13 @@ impl CreateVpnConnectionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpnConnectionError::Unknown(String::from(body)),
             },
-            Err(_) => CreateVpnConnectionError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateVpnConnectionError::Unknown(format!("{}", status))
+                } else {
+                    CreateVpnConnectionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -59245,7 +59727,7 @@ pub enum CreateVpnConnectionRouteError {
 }
 
 impl CreateVpnConnectionRouteError {
-    pub fn from_body(body: &str) -> CreateVpnConnectionRouteError {
+    pub fn from_body(body: &str, status: u16) -> CreateVpnConnectionRouteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -59253,7 +59735,17 @@ impl CreateVpnConnectionRouteError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpnConnectionRouteError::Unknown(String::from(body)),
             },
-            Err(_) => CreateVpnConnectionRouteError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateVpnConnectionRouteError::Unknown(format!("{}", status))
+                } else {
+                    CreateVpnConnectionRouteError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -59319,7 +59811,7 @@ pub enum CreateVpnGatewayError {
 }
 
 impl CreateVpnGatewayError {
-    pub fn from_body(body: &str) -> CreateVpnGatewayError {
+    pub fn from_body(body: &str, status: u16) -> CreateVpnGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -59327,7 +59819,13 @@ impl CreateVpnGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpnGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => CreateVpnGatewayError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateVpnGatewayError::Unknown(format!("{}", status))
+                } else {
+                    CreateVpnGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -59391,7 +59889,7 @@ pub enum DeleteCustomerGatewayError {
 }
 
 impl DeleteCustomerGatewayError {
-    pub fn from_body(body: &str) -> DeleteCustomerGatewayError {
+    pub fn from_body(body: &str, status: u16) -> DeleteCustomerGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -59399,7 +59897,13 @@ impl DeleteCustomerGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteCustomerGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteCustomerGatewayError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteCustomerGatewayError::Unknown(format!("{}", status))
+                } else {
+                    DeleteCustomerGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -59465,7 +59969,7 @@ pub enum DeleteDhcpOptionsError {
 }
 
 impl DeleteDhcpOptionsError {
-    pub fn from_body(body: &str) -> DeleteDhcpOptionsError {
+    pub fn from_body(body: &str, status: u16) -> DeleteDhcpOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -59473,7 +59977,13 @@ impl DeleteDhcpOptionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteDhcpOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDhcpOptionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteDhcpOptionsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDhcpOptionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -59539,7 +60049,7 @@ pub enum DeleteEgressOnlyInternetGatewayError {
 }
 
 impl DeleteEgressOnlyInternetGatewayError {
-    pub fn from_body(body: &str) -> DeleteEgressOnlyInternetGatewayError {
+    pub fn from_body(body: &str, status: u16) -> DeleteEgressOnlyInternetGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -59547,7 +60057,17 @@ impl DeleteEgressOnlyInternetGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteEgressOnlyInternetGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteEgressOnlyInternetGatewayError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteEgressOnlyInternetGatewayError::Unknown(format!("{}", status))
+                } else {
+                    DeleteEgressOnlyInternetGatewayError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -59613,7 +60133,7 @@ pub enum DeleteFleetsError {
 }
 
 impl DeleteFleetsError {
-    pub fn from_body(body: &str) -> DeleteFleetsError {
+    pub fn from_body(body: &str, status: u16) -> DeleteFleetsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -59621,7 +60141,13 @@ impl DeleteFleetsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteFleetsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteFleetsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteFleetsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteFleetsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -59685,7 +60211,7 @@ pub enum DeleteFlowLogsError {
 }
 
 impl DeleteFlowLogsError {
-    pub fn from_body(body: &str) -> DeleteFlowLogsError {
+    pub fn from_body(body: &str, status: u16) -> DeleteFlowLogsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -59693,7 +60219,13 @@ impl DeleteFlowLogsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteFlowLogsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteFlowLogsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteFlowLogsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteFlowLogsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -59757,7 +60289,7 @@ pub enum DeleteFpgaImageError {
 }
 
 impl DeleteFpgaImageError {
-    pub fn from_body(body: &str) -> DeleteFpgaImageError {
+    pub fn from_body(body: &str, status: u16) -> DeleteFpgaImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -59765,7 +60297,13 @@ impl DeleteFpgaImageError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteFpgaImageError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteFpgaImageError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteFpgaImageError::Unknown(format!("{}", status))
+                } else {
+                    DeleteFpgaImageError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -59829,7 +60367,7 @@ pub enum DeleteInternetGatewayError {
 }
 
 impl DeleteInternetGatewayError {
-    pub fn from_body(body: &str) -> DeleteInternetGatewayError {
+    pub fn from_body(body: &str, status: u16) -> DeleteInternetGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -59837,7 +60375,13 @@ impl DeleteInternetGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteInternetGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteInternetGatewayError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteInternetGatewayError::Unknown(format!("{}", status))
+                } else {
+                    DeleteInternetGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -59903,7 +60447,7 @@ pub enum DeleteKeyPairError {
 }
 
 impl DeleteKeyPairError {
-    pub fn from_body(body: &str) -> DeleteKeyPairError {
+    pub fn from_body(body: &str, status: u16) -> DeleteKeyPairError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -59911,7 +60455,13 @@ impl DeleteKeyPairError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteKeyPairError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteKeyPairError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteKeyPairError::Unknown(format!("{}", status))
+                } else {
+                    DeleteKeyPairError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -59975,7 +60525,7 @@ pub enum DeleteLaunchTemplateError {
 }
 
 impl DeleteLaunchTemplateError {
-    pub fn from_body(body: &str) -> DeleteLaunchTemplateError {
+    pub fn from_body(body: &str, status: u16) -> DeleteLaunchTemplateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -59983,7 +60533,13 @@ impl DeleteLaunchTemplateError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteLaunchTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteLaunchTemplateError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteLaunchTemplateError::Unknown(format!("{}", status))
+                } else {
+                    DeleteLaunchTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -60049,7 +60605,7 @@ pub enum DeleteLaunchTemplateVersionsError {
 }
 
 impl DeleteLaunchTemplateVersionsError {
-    pub fn from_body(body: &str) -> DeleteLaunchTemplateVersionsError {
+    pub fn from_body(body: &str, status: u16) -> DeleteLaunchTemplateVersionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -60057,7 +60613,17 @@ impl DeleteLaunchTemplateVersionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteLaunchTemplateVersionsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteLaunchTemplateVersionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteLaunchTemplateVersionsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteLaunchTemplateVersionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -60123,7 +60689,7 @@ pub enum DeleteNatGatewayError {
 }
 
 impl DeleteNatGatewayError {
-    pub fn from_body(body: &str) -> DeleteNatGatewayError {
+    pub fn from_body(body: &str, status: u16) -> DeleteNatGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -60131,7 +60697,13 @@ impl DeleteNatGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteNatGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteNatGatewayError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteNatGatewayError::Unknown(format!("{}", status))
+                } else {
+                    DeleteNatGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -60195,7 +60767,7 @@ pub enum DeleteNetworkAclError {
 }
 
 impl DeleteNetworkAclError {
-    pub fn from_body(body: &str) -> DeleteNetworkAclError {
+    pub fn from_body(body: &str, status: u16) -> DeleteNetworkAclError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -60203,7 +60775,13 @@ impl DeleteNetworkAclError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteNetworkAclError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteNetworkAclError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteNetworkAclError::Unknown(format!("{}", status))
+                } else {
+                    DeleteNetworkAclError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -60267,7 +60845,7 @@ pub enum DeleteNetworkAclEntryError {
 }
 
 impl DeleteNetworkAclEntryError {
-    pub fn from_body(body: &str) -> DeleteNetworkAclEntryError {
+    pub fn from_body(body: &str, status: u16) -> DeleteNetworkAclEntryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -60275,7 +60853,13 @@ impl DeleteNetworkAclEntryError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteNetworkAclEntryError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteNetworkAclEntryError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteNetworkAclEntryError::Unknown(format!("{}", status))
+                } else {
+                    DeleteNetworkAclEntryError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -60341,7 +60925,7 @@ pub enum DeleteNetworkInterfaceError {
 }
 
 impl DeleteNetworkInterfaceError {
-    pub fn from_body(body: &str) -> DeleteNetworkInterfaceError {
+    pub fn from_body(body: &str, status: u16) -> DeleteNetworkInterfaceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -60349,7 +60933,13 @@ impl DeleteNetworkInterfaceError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteNetworkInterfaceError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteNetworkInterfaceError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteNetworkInterfaceError::Unknown(format!("{}", status))
+                } else {
+                    DeleteNetworkInterfaceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -60415,7 +61005,7 @@ pub enum DeleteNetworkInterfacePermissionError {
 }
 
 impl DeleteNetworkInterfacePermissionError {
-    pub fn from_body(body: &str) -> DeleteNetworkInterfacePermissionError {
+    pub fn from_body(body: &str, status: u16) -> DeleteNetworkInterfacePermissionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -60423,7 +61013,17 @@ impl DeleteNetworkInterfacePermissionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteNetworkInterfacePermissionError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteNetworkInterfacePermissionError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteNetworkInterfacePermissionError::Unknown(format!("{}", status))
+                } else {
+                    DeleteNetworkInterfacePermissionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -60489,7 +61089,7 @@ pub enum DeletePlacementGroupError {
 }
 
 impl DeletePlacementGroupError {
-    pub fn from_body(body: &str) -> DeletePlacementGroupError {
+    pub fn from_body(body: &str, status: u16) -> DeletePlacementGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -60497,7 +61097,13 @@ impl DeletePlacementGroupError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeletePlacementGroupError::Unknown(String::from(body)),
             },
-            Err(_) => DeletePlacementGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeletePlacementGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeletePlacementGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -60563,7 +61169,7 @@ pub enum DeleteRouteError {
 }
 
 impl DeleteRouteError {
-    pub fn from_body(body: &str) -> DeleteRouteError {
+    pub fn from_body(body: &str, status: u16) -> DeleteRouteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -60571,7 +61177,13 @@ impl DeleteRouteError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteRouteError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteRouteError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteRouteError::Unknown(format!("{}", status))
+                } else {
+                    DeleteRouteError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -60635,7 +61247,7 @@ pub enum DeleteRouteTableError {
 }
 
 impl DeleteRouteTableError {
-    pub fn from_body(body: &str) -> DeleteRouteTableError {
+    pub fn from_body(body: &str, status: u16) -> DeleteRouteTableError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -60643,7 +61255,13 @@ impl DeleteRouteTableError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteRouteTableError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteRouteTableError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteRouteTableError::Unknown(format!("{}", status))
+                } else {
+                    DeleteRouteTableError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -60707,7 +61325,7 @@ pub enum DeleteSecurityGroupError {
 }
 
 impl DeleteSecurityGroupError {
-    pub fn from_body(body: &str) -> DeleteSecurityGroupError {
+    pub fn from_body(body: &str, status: u16) -> DeleteSecurityGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -60715,7 +61333,13 @@ impl DeleteSecurityGroupError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteSecurityGroupError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteSecurityGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteSecurityGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeleteSecurityGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -60781,7 +61405,7 @@ pub enum DeleteSnapshotError {
 }
 
 impl DeleteSnapshotError {
-    pub fn from_body(body: &str) -> DeleteSnapshotError {
+    pub fn from_body(body: &str, status: u16) -> DeleteSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -60789,7 +61413,13 @@ impl DeleteSnapshotError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteSnapshotError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    DeleteSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -60853,7 +61483,7 @@ pub enum DeleteSpotDatafeedSubscriptionError {
 }
 
 impl DeleteSpotDatafeedSubscriptionError {
-    pub fn from_body(body: &str) -> DeleteSpotDatafeedSubscriptionError {
+    pub fn from_body(body: &str, status: u16) -> DeleteSpotDatafeedSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -60861,7 +61491,17 @@ impl DeleteSpotDatafeedSubscriptionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteSpotDatafeedSubscriptionError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteSpotDatafeedSubscriptionError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteSpotDatafeedSubscriptionError::Unknown(format!("{}", status))
+                } else {
+                    DeleteSpotDatafeedSubscriptionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -60927,7 +61567,7 @@ pub enum DeleteSubnetError {
 }
 
 impl DeleteSubnetError {
-    pub fn from_body(body: &str) -> DeleteSubnetError {
+    pub fn from_body(body: &str, status: u16) -> DeleteSubnetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -60935,7 +61575,13 @@ impl DeleteSubnetError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteSubnetError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteSubnetError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteSubnetError::Unknown(format!("{}", status))
+                } else {
+                    DeleteSubnetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -60999,7 +61645,7 @@ pub enum DeleteTagsError {
 }
 
 impl DeleteTagsError {
-    pub fn from_body(body: &str) -> DeleteTagsError {
+    pub fn from_body(body: &str, status: u16) -> DeleteTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -61007,7 +61653,13 @@ impl DeleteTagsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteTagsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteTagsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteTagsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteTagsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -61071,7 +61723,7 @@ pub enum DeleteVolumeError {
 }
 
 impl DeleteVolumeError {
-    pub fn from_body(body: &str) -> DeleteVolumeError {
+    pub fn from_body(body: &str, status: u16) -> DeleteVolumeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -61079,7 +61731,13 @@ impl DeleteVolumeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVolumeError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteVolumeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteVolumeError::Unknown(format!("{}", status))
+                } else {
+                    DeleteVolumeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -61143,7 +61801,7 @@ pub enum DeleteVpcError {
 }
 
 impl DeleteVpcError {
-    pub fn from_body(body: &str) -> DeleteVpcError {
+    pub fn from_body(body: &str, status: u16) -> DeleteVpcError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -61151,7 +61809,13 @@ impl DeleteVpcError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpcError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteVpcError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteVpcError::Unknown(format!("{}", status))
+                } else {
+                    DeleteVpcError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -61215,7 +61879,7 @@ pub enum DeleteVpcEndpointConnectionNotificationsError {
 }
 
 impl DeleteVpcEndpointConnectionNotificationsError {
-    pub fn from_body(body: &str) -> DeleteVpcEndpointConnectionNotificationsError {
+    pub fn from_body(body: &str, status: u16) -> DeleteVpcEndpointConnectionNotificationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -61223,7 +61887,17 @@ impl DeleteVpcEndpointConnectionNotificationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpcEndpointConnectionNotificationsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteVpcEndpointConnectionNotificationsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteVpcEndpointConnectionNotificationsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteVpcEndpointConnectionNotificationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -61291,7 +61965,7 @@ pub enum DeleteVpcEndpointServiceConfigurationsError {
 }
 
 impl DeleteVpcEndpointServiceConfigurationsError {
-    pub fn from_body(body: &str) -> DeleteVpcEndpointServiceConfigurationsError {
+    pub fn from_body(body: &str, status: u16) -> DeleteVpcEndpointServiceConfigurationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -61299,7 +61973,17 @@ impl DeleteVpcEndpointServiceConfigurationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpcEndpointServiceConfigurationsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteVpcEndpointServiceConfigurationsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteVpcEndpointServiceConfigurationsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteVpcEndpointServiceConfigurationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -61365,7 +62049,7 @@ pub enum DeleteVpcEndpointsError {
 }
 
 impl DeleteVpcEndpointsError {
-    pub fn from_body(body: &str) -> DeleteVpcEndpointsError {
+    pub fn from_body(body: &str, status: u16) -> DeleteVpcEndpointsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -61373,7 +62057,13 @@ impl DeleteVpcEndpointsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpcEndpointsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteVpcEndpointsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteVpcEndpointsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteVpcEndpointsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -61439,7 +62129,7 @@ pub enum DeleteVpcPeeringConnectionError {
 }
 
 impl DeleteVpcPeeringConnectionError {
-    pub fn from_body(body: &str) -> DeleteVpcPeeringConnectionError {
+    pub fn from_body(body: &str, status: u16) -> DeleteVpcPeeringConnectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -61447,7 +62137,17 @@ impl DeleteVpcPeeringConnectionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpcPeeringConnectionError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteVpcPeeringConnectionError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteVpcPeeringConnectionError::Unknown(format!("{}", status))
+                } else {
+                    DeleteVpcPeeringConnectionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -61513,7 +62213,7 @@ pub enum DeleteVpnConnectionError {
 }
 
 impl DeleteVpnConnectionError {
-    pub fn from_body(body: &str) -> DeleteVpnConnectionError {
+    pub fn from_body(body: &str, status: u16) -> DeleteVpnConnectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -61521,7 +62221,13 @@ impl DeleteVpnConnectionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpnConnectionError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteVpnConnectionError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteVpnConnectionError::Unknown(format!("{}", status))
+                } else {
+                    DeleteVpnConnectionError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -61587,7 +62293,7 @@ pub enum DeleteVpnConnectionRouteError {
 }
 
 impl DeleteVpnConnectionRouteError {
-    pub fn from_body(body: &str) -> DeleteVpnConnectionRouteError {
+    pub fn from_body(body: &str, status: u16) -> DeleteVpnConnectionRouteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -61595,7 +62301,17 @@ impl DeleteVpnConnectionRouteError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpnConnectionRouteError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteVpnConnectionRouteError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteVpnConnectionRouteError::Unknown(format!("{}", status))
+                } else {
+                    DeleteVpnConnectionRouteError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -61661,7 +62377,7 @@ pub enum DeleteVpnGatewayError {
 }
 
 impl DeleteVpnGatewayError {
-    pub fn from_body(body: &str) -> DeleteVpnGatewayError {
+    pub fn from_body(body: &str, status: u16) -> DeleteVpnGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -61669,7 +62385,13 @@ impl DeleteVpnGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpnGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteVpnGatewayError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteVpnGatewayError::Unknown(format!("{}", status))
+                } else {
+                    DeleteVpnGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -61733,7 +62455,7 @@ pub enum DeregisterImageError {
 }
 
 impl DeregisterImageError {
-    pub fn from_body(body: &str) -> DeregisterImageError {
+    pub fn from_body(body: &str, status: u16) -> DeregisterImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -61741,7 +62463,13 @@ impl DeregisterImageError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeregisterImageError::Unknown(String::from(body)),
             },
-            Err(_) => DeregisterImageError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeregisterImageError::Unknown(format!("{}", status))
+                } else {
+                    DeregisterImageError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -61805,7 +62533,7 @@ pub enum DescribeAccountAttributesError {
 }
 
 impl DescribeAccountAttributesError {
-    pub fn from_body(body: &str) -> DescribeAccountAttributesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeAccountAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -61813,7 +62541,17 @@ impl DescribeAccountAttributesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeAccountAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeAccountAttributesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeAccountAttributesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAccountAttributesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -61879,7 +62617,7 @@ pub enum DescribeAddressesError {
 }
 
 impl DescribeAddressesError {
-    pub fn from_body(body: &str) -> DescribeAddressesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeAddressesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -61887,7 +62625,13 @@ impl DescribeAddressesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeAddressesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeAddressesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeAddressesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAddressesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -61953,7 +62697,7 @@ pub enum DescribeAggregateIdFormatError {
 }
 
 impl DescribeAggregateIdFormatError {
-    pub fn from_body(body: &str) -> DescribeAggregateIdFormatError {
+    pub fn from_body(body: &str, status: u16) -> DescribeAggregateIdFormatError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -61961,7 +62705,17 @@ impl DescribeAggregateIdFormatError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeAggregateIdFormatError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeAggregateIdFormatError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeAggregateIdFormatError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAggregateIdFormatError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -62027,7 +62781,7 @@ pub enum DescribeAvailabilityZonesError {
 }
 
 impl DescribeAvailabilityZonesError {
-    pub fn from_body(body: &str) -> DescribeAvailabilityZonesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeAvailabilityZonesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -62035,7 +62789,17 @@ impl DescribeAvailabilityZonesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeAvailabilityZonesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeAvailabilityZonesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeAvailabilityZonesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAvailabilityZonesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -62101,7 +62865,7 @@ pub enum DescribeBundleTasksError {
 }
 
 impl DescribeBundleTasksError {
-    pub fn from_body(body: &str) -> DescribeBundleTasksError {
+    pub fn from_body(body: &str, status: u16) -> DescribeBundleTasksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -62109,7 +62873,13 @@ impl DescribeBundleTasksError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeBundleTasksError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeBundleTasksError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeBundleTasksError::Unknown(format!("{}", status))
+                } else {
+                    DescribeBundleTasksError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -62175,7 +62945,7 @@ pub enum DescribeClassicLinkInstancesError {
 }
 
 impl DescribeClassicLinkInstancesError {
-    pub fn from_body(body: &str) -> DescribeClassicLinkInstancesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeClassicLinkInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -62183,7 +62953,17 @@ impl DescribeClassicLinkInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeClassicLinkInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeClassicLinkInstancesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeClassicLinkInstancesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeClassicLinkInstancesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -62249,7 +63029,7 @@ pub enum DescribeConversionTasksError {
 }
 
 impl DescribeConversionTasksError {
-    pub fn from_body(body: &str) -> DescribeConversionTasksError {
+    pub fn from_body(body: &str, status: u16) -> DescribeConversionTasksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -62257,7 +63037,17 @@ impl DescribeConversionTasksError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeConversionTasksError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeConversionTasksError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeConversionTasksError::Unknown(format!("{}", status))
+                } else {
+                    DescribeConversionTasksError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -62323,7 +63113,7 @@ pub enum DescribeCustomerGatewaysError {
 }
 
 impl DescribeCustomerGatewaysError {
-    pub fn from_body(body: &str) -> DescribeCustomerGatewaysError {
+    pub fn from_body(body: &str, status: u16) -> DescribeCustomerGatewaysError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -62331,7 +63121,17 @@ impl DescribeCustomerGatewaysError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeCustomerGatewaysError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeCustomerGatewaysError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeCustomerGatewaysError::Unknown(format!("{}", status))
+                } else {
+                    DescribeCustomerGatewaysError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -62397,7 +63197,7 @@ pub enum DescribeDhcpOptionsError {
 }
 
 impl DescribeDhcpOptionsError {
-    pub fn from_body(body: &str) -> DescribeDhcpOptionsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeDhcpOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -62405,7 +63205,13 @@ impl DescribeDhcpOptionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeDhcpOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDhcpOptionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDhcpOptionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDhcpOptionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -62471,7 +63277,7 @@ pub enum DescribeEgressOnlyInternetGatewaysError {
 }
 
 impl DescribeEgressOnlyInternetGatewaysError {
-    pub fn from_body(body: &str) -> DescribeEgressOnlyInternetGatewaysError {
+    pub fn from_body(body: &str, status: u16) -> DescribeEgressOnlyInternetGatewaysError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -62479,7 +63285,17 @@ impl DescribeEgressOnlyInternetGatewaysError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEgressOnlyInternetGatewaysError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEgressOnlyInternetGatewaysError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeEgressOnlyInternetGatewaysError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEgressOnlyInternetGatewaysError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -62545,7 +63361,7 @@ pub enum DescribeElasticGpusError {
 }
 
 impl DescribeElasticGpusError {
-    pub fn from_body(body: &str) -> DescribeElasticGpusError {
+    pub fn from_body(body: &str, status: u16) -> DescribeElasticGpusError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -62553,7 +63369,13 @@ impl DescribeElasticGpusError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeElasticGpusError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeElasticGpusError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeElasticGpusError::Unknown(format!("{}", status))
+                } else {
+                    DescribeElasticGpusError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -62619,7 +63441,7 @@ pub enum DescribeExportTasksError {
 }
 
 impl DescribeExportTasksError {
-    pub fn from_body(body: &str) -> DescribeExportTasksError {
+    pub fn from_body(body: &str, status: u16) -> DescribeExportTasksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -62627,7 +63449,13 @@ impl DescribeExportTasksError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeExportTasksError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeExportTasksError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeExportTasksError::Unknown(format!("{}", status))
+                } else {
+                    DescribeExportTasksError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -62693,7 +63521,7 @@ pub enum DescribeFleetHistoryError {
 }
 
 impl DescribeFleetHistoryError {
-    pub fn from_body(body: &str) -> DescribeFleetHistoryError {
+    pub fn from_body(body: &str, status: u16) -> DescribeFleetHistoryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -62701,7 +63529,13 @@ impl DescribeFleetHistoryError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeFleetHistoryError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeFleetHistoryError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeFleetHistoryError::Unknown(format!("{}", status))
+                } else {
+                    DescribeFleetHistoryError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -62767,7 +63601,7 @@ pub enum DescribeFleetInstancesError {
 }
 
 impl DescribeFleetInstancesError {
-    pub fn from_body(body: &str) -> DescribeFleetInstancesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeFleetInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -62775,7 +63609,13 @@ impl DescribeFleetInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeFleetInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeFleetInstancesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeFleetInstancesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeFleetInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -62841,7 +63681,7 @@ pub enum DescribeFleetsError {
 }
 
 impl DescribeFleetsError {
-    pub fn from_body(body: &str) -> DescribeFleetsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeFleetsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -62849,7 +63689,13 @@ impl DescribeFleetsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeFleetsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeFleetsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeFleetsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeFleetsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -62913,7 +63759,7 @@ pub enum DescribeFlowLogsError {
 }
 
 impl DescribeFlowLogsError {
-    pub fn from_body(body: &str) -> DescribeFlowLogsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeFlowLogsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -62921,7 +63767,13 @@ impl DescribeFlowLogsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeFlowLogsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeFlowLogsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeFlowLogsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeFlowLogsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -62985,7 +63837,7 @@ pub enum DescribeFpgaImageAttributeError {
 }
 
 impl DescribeFpgaImageAttributeError {
-    pub fn from_body(body: &str) -> DescribeFpgaImageAttributeError {
+    pub fn from_body(body: &str, status: u16) -> DescribeFpgaImageAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -62993,7 +63845,17 @@ impl DescribeFpgaImageAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeFpgaImageAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeFpgaImageAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeFpgaImageAttributeError::Unknown(format!("{}", status))
+                } else {
+                    DescribeFpgaImageAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -63059,7 +63921,7 @@ pub enum DescribeFpgaImagesError {
 }
 
 impl DescribeFpgaImagesError {
-    pub fn from_body(body: &str) -> DescribeFpgaImagesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeFpgaImagesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -63067,7 +63929,13 @@ impl DescribeFpgaImagesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeFpgaImagesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeFpgaImagesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeFpgaImagesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeFpgaImagesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -63133,7 +64001,7 @@ pub enum DescribeHostReservationOfferingsError {
 }
 
 impl DescribeHostReservationOfferingsError {
-    pub fn from_body(body: &str) -> DescribeHostReservationOfferingsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeHostReservationOfferingsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -63141,7 +64009,17 @@ impl DescribeHostReservationOfferingsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeHostReservationOfferingsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeHostReservationOfferingsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeHostReservationOfferingsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeHostReservationOfferingsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -63207,7 +64085,7 @@ pub enum DescribeHostReservationsError {
 }
 
 impl DescribeHostReservationsError {
-    pub fn from_body(body: &str) -> DescribeHostReservationsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeHostReservationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -63215,7 +64093,17 @@ impl DescribeHostReservationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeHostReservationsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeHostReservationsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeHostReservationsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeHostReservationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -63281,7 +64169,7 @@ pub enum DescribeHostsError {
 }
 
 impl DescribeHostsError {
-    pub fn from_body(body: &str) -> DescribeHostsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeHostsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -63289,7 +64177,13 @@ impl DescribeHostsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeHostsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeHostsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeHostsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeHostsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -63353,7 +64247,7 @@ pub enum DescribeIamInstanceProfileAssociationsError {
 }
 
 impl DescribeIamInstanceProfileAssociationsError {
-    pub fn from_body(body: &str) -> DescribeIamInstanceProfileAssociationsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeIamInstanceProfileAssociationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -63361,7 +64255,17 @@ impl DescribeIamInstanceProfileAssociationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeIamInstanceProfileAssociationsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeIamInstanceProfileAssociationsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeIamInstanceProfileAssociationsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeIamInstanceProfileAssociationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -63427,7 +64331,7 @@ pub enum DescribeIdFormatError {
 }
 
 impl DescribeIdFormatError {
-    pub fn from_body(body: &str) -> DescribeIdFormatError {
+    pub fn from_body(body: &str, status: u16) -> DescribeIdFormatError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -63435,7 +64339,13 @@ impl DescribeIdFormatError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeIdFormatError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeIdFormatError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeIdFormatError::Unknown(format!("{}", status))
+                } else {
+                    DescribeIdFormatError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -63499,7 +64409,7 @@ pub enum DescribeIdentityIdFormatError {
 }
 
 impl DescribeIdentityIdFormatError {
-    pub fn from_body(body: &str) -> DescribeIdentityIdFormatError {
+    pub fn from_body(body: &str, status: u16) -> DescribeIdentityIdFormatError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -63507,7 +64417,17 @@ impl DescribeIdentityIdFormatError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeIdentityIdFormatError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeIdentityIdFormatError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeIdentityIdFormatError::Unknown(format!("{}", status))
+                } else {
+                    DescribeIdentityIdFormatError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -63573,7 +64493,7 @@ pub enum DescribeImageAttributeError {
 }
 
 impl DescribeImageAttributeError {
-    pub fn from_body(body: &str) -> DescribeImageAttributeError {
+    pub fn from_body(body: &str, status: u16) -> DescribeImageAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -63581,7 +64501,13 @@ impl DescribeImageAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeImageAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeImageAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeImageAttributeError::Unknown(format!("{}", status))
+                } else {
+                    DescribeImageAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -63647,7 +64573,7 @@ pub enum DescribeImagesError {
 }
 
 impl DescribeImagesError {
-    pub fn from_body(body: &str) -> DescribeImagesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeImagesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -63655,7 +64581,13 @@ impl DescribeImagesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeImagesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeImagesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeImagesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeImagesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -63719,7 +64651,7 @@ pub enum DescribeImportImageTasksError {
 }
 
 impl DescribeImportImageTasksError {
-    pub fn from_body(body: &str) -> DescribeImportImageTasksError {
+    pub fn from_body(body: &str, status: u16) -> DescribeImportImageTasksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -63727,7 +64659,17 @@ impl DescribeImportImageTasksError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeImportImageTasksError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeImportImageTasksError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeImportImageTasksError::Unknown(format!("{}", status))
+                } else {
+                    DescribeImportImageTasksError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -63793,7 +64735,7 @@ pub enum DescribeImportSnapshotTasksError {
 }
 
 impl DescribeImportSnapshotTasksError {
-    pub fn from_body(body: &str) -> DescribeImportSnapshotTasksError {
+    pub fn from_body(body: &str, status: u16) -> DescribeImportSnapshotTasksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -63801,7 +64743,17 @@ impl DescribeImportSnapshotTasksError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeImportSnapshotTasksError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeImportSnapshotTasksError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeImportSnapshotTasksError::Unknown(format!("{}", status))
+                } else {
+                    DescribeImportSnapshotTasksError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -63867,7 +64819,7 @@ pub enum DescribeInstanceAttributeError {
 }
 
 impl DescribeInstanceAttributeError {
-    pub fn from_body(body: &str) -> DescribeInstanceAttributeError {
+    pub fn from_body(body: &str, status: u16) -> DescribeInstanceAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -63875,7 +64827,17 @@ impl DescribeInstanceAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeInstanceAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeInstanceAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeInstanceAttributeError::Unknown(format!("{}", status))
+                } else {
+                    DescribeInstanceAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -63941,7 +64903,7 @@ pub enum DescribeInstanceCreditSpecificationsError {
 }
 
 impl DescribeInstanceCreditSpecificationsError {
-    pub fn from_body(body: &str) -> DescribeInstanceCreditSpecificationsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeInstanceCreditSpecificationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -63949,7 +64911,17 @@ impl DescribeInstanceCreditSpecificationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeInstanceCreditSpecificationsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeInstanceCreditSpecificationsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeInstanceCreditSpecificationsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeInstanceCreditSpecificationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -64015,7 +64987,7 @@ pub enum DescribeInstanceStatusError {
 }
 
 impl DescribeInstanceStatusError {
-    pub fn from_body(body: &str) -> DescribeInstanceStatusError {
+    pub fn from_body(body: &str, status: u16) -> DescribeInstanceStatusError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -64023,7 +64995,13 @@ impl DescribeInstanceStatusError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeInstanceStatusError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeInstanceStatusError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeInstanceStatusError::Unknown(format!("{}", status))
+                } else {
+                    DescribeInstanceStatusError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -64089,7 +65067,7 @@ pub enum DescribeInstancesError {
 }
 
 impl DescribeInstancesError {
-    pub fn from_body(body: &str) -> DescribeInstancesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -64097,7 +65075,13 @@ impl DescribeInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeInstancesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeInstancesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -64163,7 +65147,7 @@ pub enum DescribeInternetGatewaysError {
 }
 
 impl DescribeInternetGatewaysError {
-    pub fn from_body(body: &str) -> DescribeInternetGatewaysError {
+    pub fn from_body(body: &str, status: u16) -> DescribeInternetGatewaysError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -64171,7 +65155,17 @@ impl DescribeInternetGatewaysError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeInternetGatewaysError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeInternetGatewaysError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeInternetGatewaysError::Unknown(format!("{}", status))
+                } else {
+                    DescribeInternetGatewaysError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -64237,7 +65231,7 @@ pub enum DescribeKeyPairsError {
 }
 
 impl DescribeKeyPairsError {
-    pub fn from_body(body: &str) -> DescribeKeyPairsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeKeyPairsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -64245,7 +65239,13 @@ impl DescribeKeyPairsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeKeyPairsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeKeyPairsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeKeyPairsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeKeyPairsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -64309,7 +65309,7 @@ pub enum DescribeLaunchTemplateVersionsError {
 }
 
 impl DescribeLaunchTemplateVersionsError {
-    pub fn from_body(body: &str) -> DescribeLaunchTemplateVersionsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeLaunchTemplateVersionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -64317,7 +65317,17 @@ impl DescribeLaunchTemplateVersionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeLaunchTemplateVersionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeLaunchTemplateVersionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeLaunchTemplateVersionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeLaunchTemplateVersionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -64383,7 +65393,7 @@ pub enum DescribeLaunchTemplatesError {
 }
 
 impl DescribeLaunchTemplatesError {
-    pub fn from_body(body: &str) -> DescribeLaunchTemplatesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeLaunchTemplatesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -64391,7 +65401,17 @@ impl DescribeLaunchTemplatesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeLaunchTemplatesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeLaunchTemplatesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeLaunchTemplatesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeLaunchTemplatesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -64457,7 +65477,7 @@ pub enum DescribeMovingAddressesError {
 }
 
 impl DescribeMovingAddressesError {
-    pub fn from_body(body: &str) -> DescribeMovingAddressesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeMovingAddressesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -64465,7 +65485,17 @@ impl DescribeMovingAddressesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeMovingAddressesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeMovingAddressesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeMovingAddressesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeMovingAddressesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -64531,7 +65561,7 @@ pub enum DescribeNatGatewaysError {
 }
 
 impl DescribeNatGatewaysError {
-    pub fn from_body(body: &str) -> DescribeNatGatewaysError {
+    pub fn from_body(body: &str, status: u16) -> DescribeNatGatewaysError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -64539,7 +65569,13 @@ impl DescribeNatGatewaysError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeNatGatewaysError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeNatGatewaysError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeNatGatewaysError::Unknown(format!("{}", status))
+                } else {
+                    DescribeNatGatewaysError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -64605,7 +65641,7 @@ pub enum DescribeNetworkAclsError {
 }
 
 impl DescribeNetworkAclsError {
-    pub fn from_body(body: &str) -> DescribeNetworkAclsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeNetworkAclsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -64613,7 +65649,13 @@ impl DescribeNetworkAclsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeNetworkAclsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeNetworkAclsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeNetworkAclsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeNetworkAclsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -64679,7 +65721,7 @@ pub enum DescribeNetworkInterfaceAttributeError {
 }
 
 impl DescribeNetworkInterfaceAttributeError {
-    pub fn from_body(body: &str) -> DescribeNetworkInterfaceAttributeError {
+    pub fn from_body(body: &str, status: u16) -> DescribeNetworkInterfaceAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -64687,7 +65729,17 @@ impl DescribeNetworkInterfaceAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeNetworkInterfaceAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeNetworkInterfaceAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeNetworkInterfaceAttributeError::Unknown(format!("{}", status))
+                } else {
+                    DescribeNetworkInterfaceAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -64753,7 +65805,7 @@ pub enum DescribeNetworkInterfacePermissionsError {
 }
 
 impl DescribeNetworkInterfacePermissionsError {
-    pub fn from_body(body: &str) -> DescribeNetworkInterfacePermissionsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeNetworkInterfacePermissionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -64761,7 +65813,17 @@ impl DescribeNetworkInterfacePermissionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeNetworkInterfacePermissionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeNetworkInterfacePermissionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeNetworkInterfacePermissionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeNetworkInterfacePermissionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -64827,7 +65889,7 @@ pub enum DescribeNetworkInterfacesError {
 }
 
 impl DescribeNetworkInterfacesError {
-    pub fn from_body(body: &str) -> DescribeNetworkInterfacesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeNetworkInterfacesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -64835,7 +65897,17 @@ impl DescribeNetworkInterfacesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeNetworkInterfacesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeNetworkInterfacesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeNetworkInterfacesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeNetworkInterfacesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -64901,7 +65973,7 @@ pub enum DescribePlacementGroupsError {
 }
 
 impl DescribePlacementGroupsError {
-    pub fn from_body(body: &str) -> DescribePlacementGroupsError {
+    pub fn from_body(body: &str, status: u16) -> DescribePlacementGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -64909,7 +65981,17 @@ impl DescribePlacementGroupsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribePlacementGroupsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribePlacementGroupsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribePlacementGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribePlacementGroupsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -64975,7 +66057,7 @@ pub enum DescribePrefixListsError {
 }
 
 impl DescribePrefixListsError {
-    pub fn from_body(body: &str) -> DescribePrefixListsError {
+    pub fn from_body(body: &str, status: u16) -> DescribePrefixListsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -64983,7 +66065,13 @@ impl DescribePrefixListsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribePrefixListsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribePrefixListsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribePrefixListsError::Unknown(format!("{}", status))
+                } else {
+                    DescribePrefixListsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -65049,7 +66137,7 @@ pub enum DescribePrincipalIdFormatError {
 }
 
 impl DescribePrincipalIdFormatError {
-    pub fn from_body(body: &str) -> DescribePrincipalIdFormatError {
+    pub fn from_body(body: &str, status: u16) -> DescribePrincipalIdFormatError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -65057,7 +66145,17 @@ impl DescribePrincipalIdFormatError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribePrincipalIdFormatError::Unknown(String::from(body)),
             },
-            Err(_) => DescribePrincipalIdFormatError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribePrincipalIdFormatError::Unknown(format!("{}", status))
+                } else {
+                    DescribePrincipalIdFormatError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -65123,7 +66221,7 @@ pub enum DescribeRegionsError {
 }
 
 impl DescribeRegionsError {
-    pub fn from_body(body: &str) -> DescribeRegionsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeRegionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -65131,7 +66229,13 @@ impl DescribeRegionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeRegionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeRegionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeRegionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeRegionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -65195,7 +66299,7 @@ pub enum DescribeReservedInstancesError {
 }
 
 impl DescribeReservedInstancesError {
-    pub fn from_body(body: &str) -> DescribeReservedInstancesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeReservedInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -65203,7 +66307,17 @@ impl DescribeReservedInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeReservedInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeReservedInstancesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeReservedInstancesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeReservedInstancesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -65269,7 +66383,7 @@ pub enum DescribeReservedInstancesListingsError {
 }
 
 impl DescribeReservedInstancesListingsError {
-    pub fn from_body(body: &str) -> DescribeReservedInstancesListingsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeReservedInstancesListingsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -65277,7 +66391,17 @@ impl DescribeReservedInstancesListingsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeReservedInstancesListingsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeReservedInstancesListingsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeReservedInstancesListingsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeReservedInstancesListingsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -65343,7 +66467,7 @@ pub enum DescribeReservedInstancesModificationsError {
 }
 
 impl DescribeReservedInstancesModificationsError {
-    pub fn from_body(body: &str) -> DescribeReservedInstancesModificationsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeReservedInstancesModificationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -65351,7 +66475,17 @@ impl DescribeReservedInstancesModificationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeReservedInstancesModificationsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeReservedInstancesModificationsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeReservedInstancesModificationsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeReservedInstancesModificationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -65417,7 +66551,7 @@ pub enum DescribeReservedInstancesOfferingsError {
 }
 
 impl DescribeReservedInstancesOfferingsError {
-    pub fn from_body(body: &str) -> DescribeReservedInstancesOfferingsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeReservedInstancesOfferingsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -65425,7 +66559,17 @@ impl DescribeReservedInstancesOfferingsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeReservedInstancesOfferingsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeReservedInstancesOfferingsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeReservedInstancesOfferingsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeReservedInstancesOfferingsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -65491,7 +66635,7 @@ pub enum DescribeRouteTablesError {
 }
 
 impl DescribeRouteTablesError {
-    pub fn from_body(body: &str) -> DescribeRouteTablesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeRouteTablesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -65499,7 +66643,13 @@ impl DescribeRouteTablesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeRouteTablesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeRouteTablesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeRouteTablesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeRouteTablesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -65565,7 +66715,7 @@ pub enum DescribeScheduledInstanceAvailabilityError {
 }
 
 impl DescribeScheduledInstanceAvailabilityError {
-    pub fn from_body(body: &str) -> DescribeScheduledInstanceAvailabilityError {
+    pub fn from_body(body: &str, status: u16) -> DescribeScheduledInstanceAvailabilityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -65573,7 +66723,17 @@ impl DescribeScheduledInstanceAvailabilityError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeScheduledInstanceAvailabilityError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeScheduledInstanceAvailabilityError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeScheduledInstanceAvailabilityError::Unknown(format!("{}", status))
+                } else {
+                    DescribeScheduledInstanceAvailabilityError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -65639,7 +66799,7 @@ pub enum DescribeScheduledInstancesError {
 }
 
 impl DescribeScheduledInstancesError {
-    pub fn from_body(body: &str) -> DescribeScheduledInstancesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeScheduledInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -65647,7 +66807,17 @@ impl DescribeScheduledInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeScheduledInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeScheduledInstancesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeScheduledInstancesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeScheduledInstancesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -65713,7 +66883,7 @@ pub enum DescribeSecurityGroupReferencesError {
 }
 
 impl DescribeSecurityGroupReferencesError {
-    pub fn from_body(body: &str) -> DescribeSecurityGroupReferencesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeSecurityGroupReferencesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -65721,7 +66891,17 @@ impl DescribeSecurityGroupReferencesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSecurityGroupReferencesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSecurityGroupReferencesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeSecurityGroupReferencesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSecurityGroupReferencesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -65787,7 +66967,7 @@ pub enum DescribeSecurityGroupsError {
 }
 
 impl DescribeSecurityGroupsError {
-    pub fn from_body(body: &str) -> DescribeSecurityGroupsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeSecurityGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -65795,7 +66975,13 @@ impl DescribeSecurityGroupsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSecurityGroupsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSecurityGroupsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeSecurityGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSecurityGroupsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -65861,7 +67047,7 @@ pub enum DescribeSnapshotAttributeError {
 }
 
 impl DescribeSnapshotAttributeError {
-    pub fn from_body(body: &str) -> DescribeSnapshotAttributeError {
+    pub fn from_body(body: &str, status: u16) -> DescribeSnapshotAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -65869,7 +67055,17 @@ impl DescribeSnapshotAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSnapshotAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSnapshotAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeSnapshotAttributeError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSnapshotAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -65935,7 +67131,7 @@ pub enum DescribeSnapshotsError {
 }
 
 impl DescribeSnapshotsError {
-    pub fn from_body(body: &str) -> DescribeSnapshotsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeSnapshotsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -65943,7 +67139,13 @@ impl DescribeSnapshotsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSnapshotsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSnapshotsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeSnapshotsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSnapshotsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -66009,7 +67211,7 @@ pub enum DescribeSpotDatafeedSubscriptionError {
 }
 
 impl DescribeSpotDatafeedSubscriptionError {
-    pub fn from_body(body: &str) -> DescribeSpotDatafeedSubscriptionError {
+    pub fn from_body(body: &str, status: u16) -> DescribeSpotDatafeedSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -66017,7 +67219,17 @@ impl DescribeSpotDatafeedSubscriptionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSpotDatafeedSubscriptionError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSpotDatafeedSubscriptionError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeSpotDatafeedSubscriptionError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSpotDatafeedSubscriptionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -66083,7 +67295,7 @@ pub enum DescribeSpotFleetInstancesError {
 }
 
 impl DescribeSpotFleetInstancesError {
-    pub fn from_body(body: &str) -> DescribeSpotFleetInstancesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeSpotFleetInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -66091,7 +67303,17 @@ impl DescribeSpotFleetInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSpotFleetInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSpotFleetInstancesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeSpotFleetInstancesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSpotFleetInstancesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -66157,7 +67379,7 @@ pub enum DescribeSpotFleetRequestHistoryError {
 }
 
 impl DescribeSpotFleetRequestHistoryError {
-    pub fn from_body(body: &str) -> DescribeSpotFleetRequestHistoryError {
+    pub fn from_body(body: &str, status: u16) -> DescribeSpotFleetRequestHistoryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -66165,7 +67387,17 @@ impl DescribeSpotFleetRequestHistoryError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSpotFleetRequestHistoryError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSpotFleetRequestHistoryError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeSpotFleetRequestHistoryError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSpotFleetRequestHistoryError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -66231,7 +67463,7 @@ pub enum DescribeSpotFleetRequestsError {
 }
 
 impl DescribeSpotFleetRequestsError {
-    pub fn from_body(body: &str) -> DescribeSpotFleetRequestsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeSpotFleetRequestsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -66239,7 +67471,17 @@ impl DescribeSpotFleetRequestsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSpotFleetRequestsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSpotFleetRequestsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeSpotFleetRequestsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSpotFleetRequestsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -66305,7 +67547,7 @@ pub enum DescribeSpotInstanceRequestsError {
 }
 
 impl DescribeSpotInstanceRequestsError {
-    pub fn from_body(body: &str) -> DescribeSpotInstanceRequestsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeSpotInstanceRequestsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -66313,7 +67555,17 @@ impl DescribeSpotInstanceRequestsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSpotInstanceRequestsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSpotInstanceRequestsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeSpotInstanceRequestsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSpotInstanceRequestsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -66379,7 +67631,7 @@ pub enum DescribeSpotPriceHistoryError {
 }
 
 impl DescribeSpotPriceHistoryError {
-    pub fn from_body(body: &str) -> DescribeSpotPriceHistoryError {
+    pub fn from_body(body: &str, status: u16) -> DescribeSpotPriceHistoryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -66387,7 +67639,17 @@ impl DescribeSpotPriceHistoryError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSpotPriceHistoryError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSpotPriceHistoryError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeSpotPriceHistoryError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSpotPriceHistoryError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -66453,7 +67715,7 @@ pub enum DescribeStaleSecurityGroupsError {
 }
 
 impl DescribeStaleSecurityGroupsError {
-    pub fn from_body(body: &str) -> DescribeStaleSecurityGroupsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeStaleSecurityGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -66461,7 +67723,17 @@ impl DescribeStaleSecurityGroupsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeStaleSecurityGroupsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeStaleSecurityGroupsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeStaleSecurityGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeStaleSecurityGroupsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -66527,7 +67799,7 @@ pub enum DescribeSubnetsError {
 }
 
 impl DescribeSubnetsError {
-    pub fn from_body(body: &str) -> DescribeSubnetsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeSubnetsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -66535,7 +67807,13 @@ impl DescribeSubnetsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSubnetsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSubnetsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeSubnetsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSubnetsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -66599,7 +67877,7 @@ pub enum DescribeTagsError {
 }
 
 impl DescribeTagsError {
-    pub fn from_body(body: &str) -> DescribeTagsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -66607,7 +67885,13 @@ impl DescribeTagsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeTagsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeTagsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeTagsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeTagsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -66671,7 +67955,7 @@ pub enum DescribeVolumeAttributeError {
 }
 
 impl DescribeVolumeAttributeError {
-    pub fn from_body(body: &str) -> DescribeVolumeAttributeError {
+    pub fn from_body(body: &str, status: u16) -> DescribeVolumeAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -66679,7 +67963,17 @@ impl DescribeVolumeAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVolumeAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVolumeAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVolumeAttributeError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVolumeAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -66745,7 +68039,7 @@ pub enum DescribeVolumeStatusError {
 }
 
 impl DescribeVolumeStatusError {
-    pub fn from_body(body: &str) -> DescribeVolumeStatusError {
+    pub fn from_body(body: &str, status: u16) -> DescribeVolumeStatusError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -66753,7 +68047,13 @@ impl DescribeVolumeStatusError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVolumeStatusError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVolumeStatusError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVolumeStatusError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVolumeStatusError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -66819,7 +68119,7 @@ pub enum DescribeVolumesError {
 }
 
 impl DescribeVolumesError {
-    pub fn from_body(body: &str) -> DescribeVolumesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeVolumesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -66827,7 +68127,13 @@ impl DescribeVolumesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVolumesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVolumesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVolumesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVolumesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -66891,7 +68197,7 @@ pub enum DescribeVolumesModificationsError {
 }
 
 impl DescribeVolumesModificationsError {
-    pub fn from_body(body: &str) -> DescribeVolumesModificationsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeVolumesModificationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -66899,7 +68205,17 @@ impl DescribeVolumesModificationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVolumesModificationsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVolumesModificationsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVolumesModificationsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVolumesModificationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -66965,7 +68281,7 @@ pub enum DescribeVpcAttributeError {
 }
 
 impl DescribeVpcAttributeError {
-    pub fn from_body(body: &str) -> DescribeVpcAttributeError {
+    pub fn from_body(body: &str, status: u16) -> DescribeVpcAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -66973,7 +68289,13 @@ impl DescribeVpcAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpcAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpcAttributeError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -67039,7 +68361,7 @@ pub enum DescribeVpcClassicLinkError {
 }
 
 impl DescribeVpcClassicLinkError {
-    pub fn from_body(body: &str) -> DescribeVpcClassicLinkError {
+    pub fn from_body(body: &str, status: u16) -> DescribeVpcClassicLinkError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -67047,7 +68369,13 @@ impl DescribeVpcClassicLinkError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcClassicLinkError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpcClassicLinkError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpcClassicLinkError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcClassicLinkError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -67113,7 +68441,7 @@ pub enum DescribeVpcClassicLinkDnsSupportError {
 }
 
 impl DescribeVpcClassicLinkDnsSupportError {
-    pub fn from_body(body: &str) -> DescribeVpcClassicLinkDnsSupportError {
+    pub fn from_body(body: &str, status: u16) -> DescribeVpcClassicLinkDnsSupportError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -67121,7 +68449,17 @@ impl DescribeVpcClassicLinkDnsSupportError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcClassicLinkDnsSupportError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpcClassicLinkDnsSupportError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpcClassicLinkDnsSupportError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcClassicLinkDnsSupportError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -67187,7 +68525,7 @@ pub enum DescribeVpcEndpointConnectionNotificationsError {
 }
 
 impl DescribeVpcEndpointConnectionNotificationsError {
-    pub fn from_body(body: &str) -> DescribeVpcEndpointConnectionNotificationsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeVpcEndpointConnectionNotificationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -67195,7 +68533,17 @@ impl DescribeVpcEndpointConnectionNotificationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcEndpointConnectionNotificationsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpcEndpointConnectionNotificationsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpcEndpointConnectionNotificationsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcEndpointConnectionNotificationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -67263,7 +68611,7 @@ pub enum DescribeVpcEndpointConnectionsError {
 }
 
 impl DescribeVpcEndpointConnectionsError {
-    pub fn from_body(body: &str) -> DescribeVpcEndpointConnectionsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeVpcEndpointConnectionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -67271,7 +68619,17 @@ impl DescribeVpcEndpointConnectionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcEndpointConnectionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpcEndpointConnectionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpcEndpointConnectionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcEndpointConnectionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -67337,7 +68695,7 @@ pub enum DescribeVpcEndpointServiceConfigurationsError {
 }
 
 impl DescribeVpcEndpointServiceConfigurationsError {
-    pub fn from_body(body: &str) -> DescribeVpcEndpointServiceConfigurationsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeVpcEndpointServiceConfigurationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -67345,7 +68703,17 @@ impl DescribeVpcEndpointServiceConfigurationsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcEndpointServiceConfigurationsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpcEndpointServiceConfigurationsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpcEndpointServiceConfigurationsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcEndpointServiceConfigurationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -67413,7 +68781,7 @@ pub enum DescribeVpcEndpointServicePermissionsError {
 }
 
 impl DescribeVpcEndpointServicePermissionsError {
-    pub fn from_body(body: &str) -> DescribeVpcEndpointServicePermissionsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeVpcEndpointServicePermissionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -67421,7 +68789,17 @@ impl DescribeVpcEndpointServicePermissionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcEndpointServicePermissionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpcEndpointServicePermissionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpcEndpointServicePermissionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcEndpointServicePermissionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -67487,7 +68865,7 @@ pub enum DescribeVpcEndpointServicesError {
 }
 
 impl DescribeVpcEndpointServicesError {
-    pub fn from_body(body: &str) -> DescribeVpcEndpointServicesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeVpcEndpointServicesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -67495,7 +68873,17 @@ impl DescribeVpcEndpointServicesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcEndpointServicesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpcEndpointServicesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpcEndpointServicesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcEndpointServicesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -67561,7 +68949,7 @@ pub enum DescribeVpcEndpointsError {
 }
 
 impl DescribeVpcEndpointsError {
-    pub fn from_body(body: &str) -> DescribeVpcEndpointsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeVpcEndpointsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -67569,7 +68957,13 @@ impl DescribeVpcEndpointsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcEndpointsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpcEndpointsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpcEndpointsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcEndpointsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -67635,7 +69029,7 @@ pub enum DescribeVpcPeeringConnectionsError {
 }
 
 impl DescribeVpcPeeringConnectionsError {
-    pub fn from_body(body: &str) -> DescribeVpcPeeringConnectionsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeVpcPeeringConnectionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -67643,7 +69037,17 @@ impl DescribeVpcPeeringConnectionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcPeeringConnectionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpcPeeringConnectionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpcPeeringConnectionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcPeeringConnectionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -67709,7 +69113,7 @@ pub enum DescribeVpcsError {
 }
 
 impl DescribeVpcsError {
-    pub fn from_body(body: &str) -> DescribeVpcsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeVpcsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -67717,7 +69121,13 @@ impl DescribeVpcsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpcsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpcsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpcsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -67781,7 +69191,7 @@ pub enum DescribeVpnConnectionsError {
 }
 
 impl DescribeVpnConnectionsError {
-    pub fn from_body(body: &str) -> DescribeVpnConnectionsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeVpnConnectionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -67789,7 +69199,13 @@ impl DescribeVpnConnectionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpnConnectionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpnConnectionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpnConnectionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpnConnectionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -67855,7 +69271,7 @@ pub enum DescribeVpnGatewaysError {
 }
 
 impl DescribeVpnGatewaysError {
-    pub fn from_body(body: &str) -> DescribeVpnGatewaysError {
+    pub fn from_body(body: &str, status: u16) -> DescribeVpnGatewaysError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -67863,7 +69279,13 @@ impl DescribeVpnGatewaysError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpnGatewaysError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeVpnGatewaysError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeVpnGatewaysError::Unknown(format!("{}", status))
+                } else {
+                    DescribeVpnGatewaysError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -67929,7 +69351,7 @@ pub enum DetachClassicLinkVpcError {
 }
 
 impl DetachClassicLinkVpcError {
-    pub fn from_body(body: &str) -> DetachClassicLinkVpcError {
+    pub fn from_body(body: &str, status: u16) -> DetachClassicLinkVpcError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -67937,7 +69359,13 @@ impl DetachClassicLinkVpcError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DetachClassicLinkVpcError::Unknown(String::from(body)),
             },
-            Err(_) => DetachClassicLinkVpcError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DetachClassicLinkVpcError::Unknown(format!("{}", status))
+                } else {
+                    DetachClassicLinkVpcError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -68003,7 +69431,7 @@ pub enum DetachInternetGatewayError {
 }
 
 impl DetachInternetGatewayError {
-    pub fn from_body(body: &str) -> DetachInternetGatewayError {
+    pub fn from_body(body: &str, status: u16) -> DetachInternetGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -68011,7 +69439,13 @@ impl DetachInternetGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DetachInternetGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => DetachInternetGatewayError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DetachInternetGatewayError::Unknown(format!("{}", status))
+                } else {
+                    DetachInternetGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -68077,7 +69511,7 @@ pub enum DetachNetworkInterfaceError {
 }
 
 impl DetachNetworkInterfaceError {
-    pub fn from_body(body: &str) -> DetachNetworkInterfaceError {
+    pub fn from_body(body: &str, status: u16) -> DetachNetworkInterfaceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -68085,7 +69519,13 @@ impl DetachNetworkInterfaceError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DetachNetworkInterfaceError::Unknown(String::from(body)),
             },
-            Err(_) => DetachNetworkInterfaceError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DetachNetworkInterfaceError::Unknown(format!("{}", status))
+                } else {
+                    DetachNetworkInterfaceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -68151,7 +69591,7 @@ pub enum DetachVolumeError {
 }
 
 impl DetachVolumeError {
-    pub fn from_body(body: &str) -> DetachVolumeError {
+    pub fn from_body(body: &str, status: u16) -> DetachVolumeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -68159,7 +69599,13 @@ impl DetachVolumeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DetachVolumeError::Unknown(String::from(body)),
             },
-            Err(_) => DetachVolumeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DetachVolumeError::Unknown(format!("{}", status))
+                } else {
+                    DetachVolumeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -68223,7 +69669,7 @@ pub enum DetachVpnGatewayError {
 }
 
 impl DetachVpnGatewayError {
-    pub fn from_body(body: &str) -> DetachVpnGatewayError {
+    pub fn from_body(body: &str, status: u16) -> DetachVpnGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -68231,7 +69677,13 @@ impl DetachVpnGatewayError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DetachVpnGatewayError::Unknown(String::from(body)),
             },
-            Err(_) => DetachVpnGatewayError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DetachVpnGatewayError::Unknown(format!("{}", status))
+                } else {
+                    DetachVpnGatewayError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -68295,7 +69747,7 @@ pub enum DisableVgwRoutePropagationError {
 }
 
 impl DisableVgwRoutePropagationError {
-    pub fn from_body(body: &str) -> DisableVgwRoutePropagationError {
+    pub fn from_body(body: &str, status: u16) -> DisableVgwRoutePropagationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -68303,7 +69755,17 @@ impl DisableVgwRoutePropagationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisableVgwRoutePropagationError::Unknown(String::from(body)),
             },
-            Err(_) => DisableVgwRoutePropagationError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DisableVgwRoutePropagationError::Unknown(format!("{}", status))
+                } else {
+                    DisableVgwRoutePropagationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -68369,7 +69831,7 @@ pub enum DisableVpcClassicLinkError {
 }
 
 impl DisableVpcClassicLinkError {
-    pub fn from_body(body: &str) -> DisableVpcClassicLinkError {
+    pub fn from_body(body: &str, status: u16) -> DisableVpcClassicLinkError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -68377,7 +69839,13 @@ impl DisableVpcClassicLinkError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisableVpcClassicLinkError::Unknown(String::from(body)),
             },
-            Err(_) => DisableVpcClassicLinkError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DisableVpcClassicLinkError::Unknown(format!("{}", status))
+                } else {
+                    DisableVpcClassicLinkError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -68443,7 +69911,7 @@ pub enum DisableVpcClassicLinkDnsSupportError {
 }
 
 impl DisableVpcClassicLinkDnsSupportError {
-    pub fn from_body(body: &str) -> DisableVpcClassicLinkDnsSupportError {
+    pub fn from_body(body: &str, status: u16) -> DisableVpcClassicLinkDnsSupportError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -68451,7 +69919,17 @@ impl DisableVpcClassicLinkDnsSupportError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisableVpcClassicLinkDnsSupportError::Unknown(String::from(body)),
             },
-            Err(_) => DisableVpcClassicLinkDnsSupportError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DisableVpcClassicLinkDnsSupportError::Unknown(format!("{}", status))
+                } else {
+                    DisableVpcClassicLinkDnsSupportError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -68517,7 +69995,7 @@ pub enum DisassociateAddressError {
 }
 
 impl DisassociateAddressError {
-    pub fn from_body(body: &str) -> DisassociateAddressError {
+    pub fn from_body(body: &str, status: u16) -> DisassociateAddressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -68525,7 +70003,13 @@ impl DisassociateAddressError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisassociateAddressError::Unknown(String::from(body)),
             },
-            Err(_) => DisassociateAddressError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DisassociateAddressError::Unknown(format!("{}", status))
+                } else {
+                    DisassociateAddressError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -68591,7 +70075,7 @@ pub enum DisassociateIamInstanceProfileError {
 }
 
 impl DisassociateIamInstanceProfileError {
-    pub fn from_body(body: &str) -> DisassociateIamInstanceProfileError {
+    pub fn from_body(body: &str, status: u16) -> DisassociateIamInstanceProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -68599,7 +70083,17 @@ impl DisassociateIamInstanceProfileError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisassociateIamInstanceProfileError::Unknown(String::from(body)),
             },
-            Err(_) => DisassociateIamInstanceProfileError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DisassociateIamInstanceProfileError::Unknown(format!("{}", status))
+                } else {
+                    DisassociateIamInstanceProfileError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -68665,7 +70159,7 @@ pub enum DisassociateRouteTableError {
 }
 
 impl DisassociateRouteTableError {
-    pub fn from_body(body: &str) -> DisassociateRouteTableError {
+    pub fn from_body(body: &str, status: u16) -> DisassociateRouteTableError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -68673,7 +70167,13 @@ impl DisassociateRouteTableError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisassociateRouteTableError::Unknown(String::from(body)),
             },
-            Err(_) => DisassociateRouteTableError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DisassociateRouteTableError::Unknown(format!("{}", status))
+                } else {
+                    DisassociateRouteTableError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -68739,7 +70239,7 @@ pub enum DisassociateSubnetCidrBlockError {
 }
 
 impl DisassociateSubnetCidrBlockError {
-    pub fn from_body(body: &str) -> DisassociateSubnetCidrBlockError {
+    pub fn from_body(body: &str, status: u16) -> DisassociateSubnetCidrBlockError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -68747,7 +70247,17 @@ impl DisassociateSubnetCidrBlockError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisassociateSubnetCidrBlockError::Unknown(String::from(body)),
             },
-            Err(_) => DisassociateSubnetCidrBlockError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DisassociateSubnetCidrBlockError::Unknown(format!("{}", status))
+                } else {
+                    DisassociateSubnetCidrBlockError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -68813,7 +70323,7 @@ pub enum DisassociateVpcCidrBlockError {
 }
 
 impl DisassociateVpcCidrBlockError {
-    pub fn from_body(body: &str) -> DisassociateVpcCidrBlockError {
+    pub fn from_body(body: &str, status: u16) -> DisassociateVpcCidrBlockError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -68821,7 +70331,17 @@ impl DisassociateVpcCidrBlockError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisassociateVpcCidrBlockError::Unknown(String::from(body)),
             },
-            Err(_) => DisassociateVpcCidrBlockError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DisassociateVpcCidrBlockError::Unknown(format!("{}", status))
+                } else {
+                    DisassociateVpcCidrBlockError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -68887,7 +70407,7 @@ pub enum EnableVgwRoutePropagationError {
 }
 
 impl EnableVgwRoutePropagationError {
-    pub fn from_body(body: &str) -> EnableVgwRoutePropagationError {
+    pub fn from_body(body: &str, status: u16) -> EnableVgwRoutePropagationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -68895,7 +70415,17 @@ impl EnableVgwRoutePropagationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => EnableVgwRoutePropagationError::Unknown(String::from(body)),
             },
-            Err(_) => EnableVgwRoutePropagationError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    EnableVgwRoutePropagationError::Unknown(format!("{}", status))
+                } else {
+                    EnableVgwRoutePropagationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -68961,7 +70491,7 @@ pub enum EnableVolumeIOError {
 }
 
 impl EnableVolumeIOError {
-    pub fn from_body(body: &str) -> EnableVolumeIOError {
+    pub fn from_body(body: &str, status: u16) -> EnableVolumeIOError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -68969,7 +70499,13 @@ impl EnableVolumeIOError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => EnableVolumeIOError::Unknown(String::from(body)),
             },
-            Err(_) => EnableVolumeIOError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    EnableVolumeIOError::Unknown(format!("{}", status))
+                } else {
+                    EnableVolumeIOError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -69033,7 +70569,7 @@ pub enum EnableVpcClassicLinkError {
 }
 
 impl EnableVpcClassicLinkError {
-    pub fn from_body(body: &str) -> EnableVpcClassicLinkError {
+    pub fn from_body(body: &str, status: u16) -> EnableVpcClassicLinkError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -69041,7 +70577,13 @@ impl EnableVpcClassicLinkError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => EnableVpcClassicLinkError::Unknown(String::from(body)),
             },
-            Err(_) => EnableVpcClassicLinkError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    EnableVpcClassicLinkError::Unknown(format!("{}", status))
+                } else {
+                    EnableVpcClassicLinkError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -69107,7 +70649,7 @@ pub enum EnableVpcClassicLinkDnsSupportError {
 }
 
 impl EnableVpcClassicLinkDnsSupportError {
-    pub fn from_body(body: &str) -> EnableVpcClassicLinkDnsSupportError {
+    pub fn from_body(body: &str, status: u16) -> EnableVpcClassicLinkDnsSupportError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -69115,7 +70657,17 @@ impl EnableVpcClassicLinkDnsSupportError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => EnableVpcClassicLinkDnsSupportError::Unknown(String::from(body)),
             },
-            Err(_) => EnableVpcClassicLinkDnsSupportError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    EnableVpcClassicLinkDnsSupportError::Unknown(format!("{}", status))
+                } else {
+                    EnableVpcClassicLinkDnsSupportError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -69181,7 +70733,7 @@ pub enum GetConsoleOutputError {
 }
 
 impl GetConsoleOutputError {
-    pub fn from_body(body: &str) -> GetConsoleOutputError {
+    pub fn from_body(body: &str, status: u16) -> GetConsoleOutputError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -69189,7 +70741,13 @@ impl GetConsoleOutputError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetConsoleOutputError::Unknown(String::from(body)),
             },
-            Err(_) => GetConsoleOutputError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetConsoleOutputError::Unknown(format!("{}", status))
+                } else {
+                    GetConsoleOutputError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -69253,7 +70811,7 @@ pub enum GetConsoleScreenshotError {
 }
 
 impl GetConsoleScreenshotError {
-    pub fn from_body(body: &str) -> GetConsoleScreenshotError {
+    pub fn from_body(body: &str, status: u16) -> GetConsoleScreenshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -69261,7 +70819,13 @@ impl GetConsoleScreenshotError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetConsoleScreenshotError::Unknown(String::from(body)),
             },
-            Err(_) => GetConsoleScreenshotError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetConsoleScreenshotError::Unknown(format!("{}", status))
+                } else {
+                    GetConsoleScreenshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -69327,7 +70891,7 @@ pub enum GetHostReservationPurchasePreviewError {
 }
 
 impl GetHostReservationPurchasePreviewError {
-    pub fn from_body(body: &str) -> GetHostReservationPurchasePreviewError {
+    pub fn from_body(body: &str, status: u16) -> GetHostReservationPurchasePreviewError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -69335,7 +70899,17 @@ impl GetHostReservationPurchasePreviewError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetHostReservationPurchasePreviewError::Unknown(String::from(body)),
             },
-            Err(_) => GetHostReservationPurchasePreviewError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetHostReservationPurchasePreviewError::Unknown(format!("{}", status))
+                } else {
+                    GetHostReservationPurchasePreviewError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -69401,7 +70975,7 @@ pub enum GetLaunchTemplateDataError {
 }
 
 impl GetLaunchTemplateDataError {
-    pub fn from_body(body: &str) -> GetLaunchTemplateDataError {
+    pub fn from_body(body: &str, status: u16) -> GetLaunchTemplateDataError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -69409,7 +70983,13 @@ impl GetLaunchTemplateDataError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetLaunchTemplateDataError::Unknown(String::from(body)),
             },
-            Err(_) => GetLaunchTemplateDataError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetLaunchTemplateDataError::Unknown(format!("{}", status))
+                } else {
+                    GetLaunchTemplateDataError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -69475,7 +71055,7 @@ pub enum GetPasswordDataError {
 }
 
 impl GetPasswordDataError {
-    pub fn from_body(body: &str) -> GetPasswordDataError {
+    pub fn from_body(body: &str, status: u16) -> GetPasswordDataError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -69483,7 +71063,13 @@ impl GetPasswordDataError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetPasswordDataError::Unknown(String::from(body)),
             },
-            Err(_) => GetPasswordDataError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetPasswordDataError::Unknown(format!("{}", status))
+                } else {
+                    GetPasswordDataError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -69547,7 +71133,7 @@ pub enum GetReservedInstancesExchangeQuoteError {
 }
 
 impl GetReservedInstancesExchangeQuoteError {
-    pub fn from_body(body: &str) -> GetReservedInstancesExchangeQuoteError {
+    pub fn from_body(body: &str, status: u16) -> GetReservedInstancesExchangeQuoteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -69555,7 +71141,17 @@ impl GetReservedInstancesExchangeQuoteError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetReservedInstancesExchangeQuoteError::Unknown(String::from(body)),
             },
-            Err(_) => GetReservedInstancesExchangeQuoteError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetReservedInstancesExchangeQuoteError::Unknown(format!("{}", status))
+                } else {
+                    GetReservedInstancesExchangeQuoteError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -69621,7 +71217,7 @@ pub enum ImportImageError {
 }
 
 impl ImportImageError {
-    pub fn from_body(body: &str) -> ImportImageError {
+    pub fn from_body(body: &str, status: u16) -> ImportImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -69629,7 +71225,13 @@ impl ImportImageError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ImportImageError::Unknown(String::from(body)),
             },
-            Err(_) => ImportImageError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ImportImageError::Unknown(format!("{}", status))
+                } else {
+                    ImportImageError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -69693,7 +71295,7 @@ pub enum ImportInstanceError {
 }
 
 impl ImportInstanceError {
-    pub fn from_body(body: &str) -> ImportInstanceError {
+    pub fn from_body(body: &str, status: u16) -> ImportInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -69701,7 +71303,13 @@ impl ImportInstanceError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ImportInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => ImportInstanceError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ImportInstanceError::Unknown(format!("{}", status))
+                } else {
+                    ImportInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -69765,7 +71373,7 @@ pub enum ImportKeyPairError {
 }
 
 impl ImportKeyPairError {
-    pub fn from_body(body: &str) -> ImportKeyPairError {
+    pub fn from_body(body: &str, status: u16) -> ImportKeyPairError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -69773,7 +71381,13 @@ impl ImportKeyPairError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ImportKeyPairError::Unknown(String::from(body)),
             },
-            Err(_) => ImportKeyPairError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ImportKeyPairError::Unknown(format!("{}", status))
+                } else {
+                    ImportKeyPairError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -69837,7 +71451,7 @@ pub enum ImportSnapshotError {
 }
 
 impl ImportSnapshotError {
-    pub fn from_body(body: &str) -> ImportSnapshotError {
+    pub fn from_body(body: &str, status: u16) -> ImportSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -69845,7 +71459,13 @@ impl ImportSnapshotError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ImportSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => ImportSnapshotError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ImportSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    ImportSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -69909,7 +71529,7 @@ pub enum ImportVolumeError {
 }
 
 impl ImportVolumeError {
-    pub fn from_body(body: &str) -> ImportVolumeError {
+    pub fn from_body(body: &str, status: u16) -> ImportVolumeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -69917,7 +71537,13 @@ impl ImportVolumeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ImportVolumeError::Unknown(String::from(body)),
             },
-            Err(_) => ImportVolumeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ImportVolumeError::Unknown(format!("{}", status))
+                } else {
+                    ImportVolumeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -69981,7 +71607,7 @@ pub enum ModifyFleetError {
 }
 
 impl ModifyFleetError {
-    pub fn from_body(body: &str) -> ModifyFleetError {
+    pub fn from_body(body: &str, status: u16) -> ModifyFleetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -69989,7 +71615,13 @@ impl ModifyFleetError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyFleetError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyFleetError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyFleetError::Unknown(format!("{}", status))
+                } else {
+                    ModifyFleetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -70053,7 +71685,7 @@ pub enum ModifyFpgaImageAttributeError {
 }
 
 impl ModifyFpgaImageAttributeError {
-    pub fn from_body(body: &str) -> ModifyFpgaImageAttributeError {
+    pub fn from_body(body: &str, status: u16) -> ModifyFpgaImageAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -70061,7 +71693,17 @@ impl ModifyFpgaImageAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyFpgaImageAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyFpgaImageAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyFpgaImageAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ModifyFpgaImageAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -70127,7 +71769,7 @@ pub enum ModifyHostsError {
 }
 
 impl ModifyHostsError {
-    pub fn from_body(body: &str) -> ModifyHostsError {
+    pub fn from_body(body: &str, status: u16) -> ModifyHostsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -70135,7 +71777,13 @@ impl ModifyHostsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyHostsError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyHostsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyHostsError::Unknown(format!("{}", status))
+                } else {
+                    ModifyHostsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -70199,7 +71847,7 @@ pub enum ModifyIdFormatError {
 }
 
 impl ModifyIdFormatError {
-    pub fn from_body(body: &str) -> ModifyIdFormatError {
+    pub fn from_body(body: &str, status: u16) -> ModifyIdFormatError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -70207,7 +71855,13 @@ impl ModifyIdFormatError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyIdFormatError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyIdFormatError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyIdFormatError::Unknown(format!("{}", status))
+                } else {
+                    ModifyIdFormatError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -70271,7 +71925,7 @@ pub enum ModifyIdentityIdFormatError {
 }
 
 impl ModifyIdentityIdFormatError {
-    pub fn from_body(body: &str) -> ModifyIdentityIdFormatError {
+    pub fn from_body(body: &str, status: u16) -> ModifyIdentityIdFormatError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -70279,7 +71933,13 @@ impl ModifyIdentityIdFormatError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyIdentityIdFormatError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyIdentityIdFormatError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyIdentityIdFormatError::Unknown(format!("{}", status))
+                } else {
+                    ModifyIdentityIdFormatError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -70345,7 +72005,7 @@ pub enum ModifyImageAttributeError {
 }
 
 impl ModifyImageAttributeError {
-    pub fn from_body(body: &str) -> ModifyImageAttributeError {
+    pub fn from_body(body: &str, status: u16) -> ModifyImageAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -70353,7 +72013,13 @@ impl ModifyImageAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyImageAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyImageAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyImageAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ModifyImageAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -70419,7 +72085,7 @@ pub enum ModifyInstanceAttributeError {
 }
 
 impl ModifyInstanceAttributeError {
-    pub fn from_body(body: &str) -> ModifyInstanceAttributeError {
+    pub fn from_body(body: &str, status: u16) -> ModifyInstanceAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -70427,7 +72093,17 @@ impl ModifyInstanceAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyInstanceAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyInstanceAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyInstanceAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ModifyInstanceAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -70493,7 +72169,7 @@ pub enum ModifyInstanceCreditSpecificationError {
 }
 
 impl ModifyInstanceCreditSpecificationError {
-    pub fn from_body(body: &str) -> ModifyInstanceCreditSpecificationError {
+    pub fn from_body(body: &str, status: u16) -> ModifyInstanceCreditSpecificationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -70501,7 +72177,17 @@ impl ModifyInstanceCreditSpecificationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyInstanceCreditSpecificationError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyInstanceCreditSpecificationError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyInstanceCreditSpecificationError::Unknown(format!("{}", status))
+                } else {
+                    ModifyInstanceCreditSpecificationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -70567,7 +72253,7 @@ pub enum ModifyInstancePlacementError {
 }
 
 impl ModifyInstancePlacementError {
-    pub fn from_body(body: &str) -> ModifyInstancePlacementError {
+    pub fn from_body(body: &str, status: u16) -> ModifyInstancePlacementError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -70575,7 +72261,17 @@ impl ModifyInstancePlacementError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyInstancePlacementError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyInstancePlacementError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyInstancePlacementError::Unknown(format!("{}", status))
+                } else {
+                    ModifyInstancePlacementError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -70641,7 +72337,7 @@ pub enum ModifyLaunchTemplateError {
 }
 
 impl ModifyLaunchTemplateError {
-    pub fn from_body(body: &str) -> ModifyLaunchTemplateError {
+    pub fn from_body(body: &str, status: u16) -> ModifyLaunchTemplateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -70649,7 +72345,13 @@ impl ModifyLaunchTemplateError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyLaunchTemplateError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyLaunchTemplateError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyLaunchTemplateError::Unknown(format!("{}", status))
+                } else {
+                    ModifyLaunchTemplateError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -70715,7 +72417,7 @@ pub enum ModifyNetworkInterfaceAttributeError {
 }
 
 impl ModifyNetworkInterfaceAttributeError {
-    pub fn from_body(body: &str) -> ModifyNetworkInterfaceAttributeError {
+    pub fn from_body(body: &str, status: u16) -> ModifyNetworkInterfaceAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -70723,7 +72425,17 @@ impl ModifyNetworkInterfaceAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyNetworkInterfaceAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyNetworkInterfaceAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyNetworkInterfaceAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ModifyNetworkInterfaceAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -70789,7 +72501,7 @@ pub enum ModifyReservedInstancesError {
 }
 
 impl ModifyReservedInstancesError {
-    pub fn from_body(body: &str) -> ModifyReservedInstancesError {
+    pub fn from_body(body: &str, status: u16) -> ModifyReservedInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -70797,7 +72509,17 @@ impl ModifyReservedInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyReservedInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyReservedInstancesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyReservedInstancesError::Unknown(format!("{}", status))
+                } else {
+                    ModifyReservedInstancesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -70863,7 +72585,7 @@ pub enum ModifySnapshotAttributeError {
 }
 
 impl ModifySnapshotAttributeError {
-    pub fn from_body(body: &str) -> ModifySnapshotAttributeError {
+    pub fn from_body(body: &str, status: u16) -> ModifySnapshotAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -70871,7 +72593,17 @@ impl ModifySnapshotAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifySnapshotAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => ModifySnapshotAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifySnapshotAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ModifySnapshotAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -70937,7 +72669,7 @@ pub enum ModifySpotFleetRequestError {
 }
 
 impl ModifySpotFleetRequestError {
-    pub fn from_body(body: &str) -> ModifySpotFleetRequestError {
+    pub fn from_body(body: &str, status: u16) -> ModifySpotFleetRequestError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -70945,7 +72677,13 @@ impl ModifySpotFleetRequestError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifySpotFleetRequestError::Unknown(String::from(body)),
             },
-            Err(_) => ModifySpotFleetRequestError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifySpotFleetRequestError::Unknown(format!("{}", status))
+                } else {
+                    ModifySpotFleetRequestError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -71011,7 +72749,7 @@ pub enum ModifySubnetAttributeError {
 }
 
 impl ModifySubnetAttributeError {
-    pub fn from_body(body: &str) -> ModifySubnetAttributeError {
+    pub fn from_body(body: &str, status: u16) -> ModifySubnetAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -71019,7 +72757,13 @@ impl ModifySubnetAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifySubnetAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => ModifySubnetAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifySubnetAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ModifySubnetAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -71085,7 +72829,7 @@ pub enum ModifyVolumeError {
 }
 
 impl ModifyVolumeError {
-    pub fn from_body(body: &str) -> ModifyVolumeError {
+    pub fn from_body(body: &str, status: u16) -> ModifyVolumeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -71093,7 +72837,13 @@ impl ModifyVolumeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVolumeError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyVolumeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyVolumeError::Unknown(format!("{}", status))
+                } else {
+                    ModifyVolumeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -71157,7 +72907,7 @@ pub enum ModifyVolumeAttributeError {
 }
 
 impl ModifyVolumeAttributeError {
-    pub fn from_body(body: &str) -> ModifyVolumeAttributeError {
+    pub fn from_body(body: &str, status: u16) -> ModifyVolumeAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -71165,7 +72915,13 @@ impl ModifyVolumeAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVolumeAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyVolumeAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyVolumeAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ModifyVolumeAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -71231,7 +72987,7 @@ pub enum ModifyVpcAttributeError {
 }
 
 impl ModifyVpcAttributeError {
-    pub fn from_body(body: &str) -> ModifyVpcAttributeError {
+    pub fn from_body(body: &str, status: u16) -> ModifyVpcAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -71239,7 +72995,13 @@ impl ModifyVpcAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyVpcAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyVpcAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ModifyVpcAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -71305,7 +73067,7 @@ pub enum ModifyVpcEndpointError {
 }
 
 impl ModifyVpcEndpointError {
-    pub fn from_body(body: &str) -> ModifyVpcEndpointError {
+    pub fn from_body(body: &str, status: u16) -> ModifyVpcEndpointError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -71313,7 +73075,13 @@ impl ModifyVpcEndpointError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcEndpointError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyVpcEndpointError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyVpcEndpointError::Unknown(format!("{}", status))
+                } else {
+                    ModifyVpcEndpointError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -71379,7 +73147,7 @@ pub enum ModifyVpcEndpointConnectionNotificationError {
 }
 
 impl ModifyVpcEndpointConnectionNotificationError {
-    pub fn from_body(body: &str) -> ModifyVpcEndpointConnectionNotificationError {
+    pub fn from_body(body: &str, status: u16) -> ModifyVpcEndpointConnectionNotificationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -71387,7 +73155,17 @@ impl ModifyVpcEndpointConnectionNotificationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcEndpointConnectionNotificationError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyVpcEndpointConnectionNotificationError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyVpcEndpointConnectionNotificationError::Unknown(format!("{}", status))
+                } else {
+                    ModifyVpcEndpointConnectionNotificationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -71453,7 +73231,7 @@ pub enum ModifyVpcEndpointServiceConfigurationError {
 }
 
 impl ModifyVpcEndpointServiceConfigurationError {
-    pub fn from_body(body: &str) -> ModifyVpcEndpointServiceConfigurationError {
+    pub fn from_body(body: &str, status: u16) -> ModifyVpcEndpointServiceConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -71461,7 +73239,17 @@ impl ModifyVpcEndpointServiceConfigurationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcEndpointServiceConfigurationError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyVpcEndpointServiceConfigurationError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyVpcEndpointServiceConfigurationError::Unknown(format!("{}", status))
+                } else {
+                    ModifyVpcEndpointServiceConfigurationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -71527,7 +73315,7 @@ pub enum ModifyVpcEndpointServicePermissionsError {
 }
 
 impl ModifyVpcEndpointServicePermissionsError {
-    pub fn from_body(body: &str) -> ModifyVpcEndpointServicePermissionsError {
+    pub fn from_body(body: &str, status: u16) -> ModifyVpcEndpointServicePermissionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -71535,7 +73323,17 @@ impl ModifyVpcEndpointServicePermissionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcEndpointServicePermissionsError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyVpcEndpointServicePermissionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyVpcEndpointServicePermissionsError::Unknown(format!("{}", status))
+                } else {
+                    ModifyVpcEndpointServicePermissionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -71601,7 +73399,7 @@ pub enum ModifyVpcPeeringConnectionOptionsError {
 }
 
 impl ModifyVpcPeeringConnectionOptionsError {
-    pub fn from_body(body: &str) -> ModifyVpcPeeringConnectionOptionsError {
+    pub fn from_body(body: &str, status: u16) -> ModifyVpcPeeringConnectionOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -71609,7 +73407,17 @@ impl ModifyVpcPeeringConnectionOptionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcPeeringConnectionOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyVpcPeeringConnectionOptionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyVpcPeeringConnectionOptionsError::Unknown(format!("{}", status))
+                } else {
+                    ModifyVpcPeeringConnectionOptionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -71675,7 +73483,7 @@ pub enum ModifyVpcTenancyError {
 }
 
 impl ModifyVpcTenancyError {
-    pub fn from_body(body: &str) -> ModifyVpcTenancyError {
+    pub fn from_body(body: &str, status: u16) -> ModifyVpcTenancyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -71683,7 +73491,13 @@ impl ModifyVpcTenancyError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcTenancyError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyVpcTenancyError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyVpcTenancyError::Unknown(format!("{}", status))
+                } else {
+                    ModifyVpcTenancyError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -71747,7 +73561,7 @@ pub enum MonitorInstancesError {
 }
 
 impl MonitorInstancesError {
-    pub fn from_body(body: &str) -> MonitorInstancesError {
+    pub fn from_body(body: &str, status: u16) -> MonitorInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -71755,7 +73569,13 @@ impl MonitorInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => MonitorInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => MonitorInstancesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    MonitorInstancesError::Unknown(format!("{}", status))
+                } else {
+                    MonitorInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -71819,7 +73639,7 @@ pub enum MoveAddressToVpcError {
 }
 
 impl MoveAddressToVpcError {
-    pub fn from_body(body: &str) -> MoveAddressToVpcError {
+    pub fn from_body(body: &str, status: u16) -> MoveAddressToVpcError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -71827,7 +73647,13 @@ impl MoveAddressToVpcError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => MoveAddressToVpcError::Unknown(String::from(body)),
             },
-            Err(_) => MoveAddressToVpcError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    MoveAddressToVpcError::Unknown(format!("{}", status))
+                } else {
+                    MoveAddressToVpcError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -71891,7 +73717,7 @@ pub enum PurchaseHostReservationError {
 }
 
 impl PurchaseHostReservationError {
-    pub fn from_body(body: &str) -> PurchaseHostReservationError {
+    pub fn from_body(body: &str, status: u16) -> PurchaseHostReservationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -71899,7 +73725,17 @@ impl PurchaseHostReservationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PurchaseHostReservationError::Unknown(String::from(body)),
             },
-            Err(_) => PurchaseHostReservationError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    PurchaseHostReservationError::Unknown(format!("{}", status))
+                } else {
+                    PurchaseHostReservationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -71965,7 +73801,7 @@ pub enum PurchaseReservedInstancesOfferingError {
 }
 
 impl PurchaseReservedInstancesOfferingError {
-    pub fn from_body(body: &str) -> PurchaseReservedInstancesOfferingError {
+    pub fn from_body(body: &str, status: u16) -> PurchaseReservedInstancesOfferingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -71973,7 +73809,17 @@ impl PurchaseReservedInstancesOfferingError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PurchaseReservedInstancesOfferingError::Unknown(String::from(body)),
             },
-            Err(_) => PurchaseReservedInstancesOfferingError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    PurchaseReservedInstancesOfferingError::Unknown(format!("{}", status))
+                } else {
+                    PurchaseReservedInstancesOfferingError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -72039,7 +73885,7 @@ pub enum PurchaseScheduledInstancesError {
 }
 
 impl PurchaseScheduledInstancesError {
-    pub fn from_body(body: &str) -> PurchaseScheduledInstancesError {
+    pub fn from_body(body: &str, status: u16) -> PurchaseScheduledInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -72047,7 +73893,17 @@ impl PurchaseScheduledInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PurchaseScheduledInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => PurchaseScheduledInstancesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    PurchaseScheduledInstancesError::Unknown(format!("{}", status))
+                } else {
+                    PurchaseScheduledInstancesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -72113,7 +73969,7 @@ pub enum RebootInstancesError {
 }
 
 impl RebootInstancesError {
-    pub fn from_body(body: &str) -> RebootInstancesError {
+    pub fn from_body(body: &str, status: u16) -> RebootInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -72121,7 +73977,13 @@ impl RebootInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RebootInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => RebootInstancesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RebootInstancesError::Unknown(format!("{}", status))
+                } else {
+                    RebootInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -72185,7 +74047,7 @@ pub enum RegisterImageError {
 }
 
 impl RegisterImageError {
-    pub fn from_body(body: &str) -> RegisterImageError {
+    pub fn from_body(body: &str, status: u16) -> RegisterImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -72193,7 +74055,13 @@ impl RegisterImageError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RegisterImageError::Unknown(String::from(body)),
             },
-            Err(_) => RegisterImageError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RegisterImageError::Unknown(format!("{}", status))
+                } else {
+                    RegisterImageError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -72257,7 +74125,7 @@ pub enum RejectVpcEndpointConnectionsError {
 }
 
 impl RejectVpcEndpointConnectionsError {
-    pub fn from_body(body: &str) -> RejectVpcEndpointConnectionsError {
+    pub fn from_body(body: &str, status: u16) -> RejectVpcEndpointConnectionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -72265,7 +74133,17 @@ impl RejectVpcEndpointConnectionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RejectVpcEndpointConnectionsError::Unknown(String::from(body)),
             },
-            Err(_) => RejectVpcEndpointConnectionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RejectVpcEndpointConnectionsError::Unknown(format!("{}", status))
+                } else {
+                    RejectVpcEndpointConnectionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -72331,7 +74209,7 @@ pub enum RejectVpcPeeringConnectionError {
 }
 
 impl RejectVpcPeeringConnectionError {
-    pub fn from_body(body: &str) -> RejectVpcPeeringConnectionError {
+    pub fn from_body(body: &str, status: u16) -> RejectVpcPeeringConnectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -72339,7 +74217,17 @@ impl RejectVpcPeeringConnectionError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RejectVpcPeeringConnectionError::Unknown(String::from(body)),
             },
-            Err(_) => RejectVpcPeeringConnectionError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RejectVpcPeeringConnectionError::Unknown(format!("{}", status))
+                } else {
+                    RejectVpcPeeringConnectionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -72405,7 +74293,7 @@ pub enum ReleaseAddressError {
 }
 
 impl ReleaseAddressError {
-    pub fn from_body(body: &str) -> ReleaseAddressError {
+    pub fn from_body(body: &str, status: u16) -> ReleaseAddressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -72413,7 +74301,13 @@ impl ReleaseAddressError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReleaseAddressError::Unknown(String::from(body)),
             },
-            Err(_) => ReleaseAddressError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ReleaseAddressError::Unknown(format!("{}", status))
+                } else {
+                    ReleaseAddressError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -72477,7 +74371,7 @@ pub enum ReleaseHostsError {
 }
 
 impl ReleaseHostsError {
-    pub fn from_body(body: &str) -> ReleaseHostsError {
+    pub fn from_body(body: &str, status: u16) -> ReleaseHostsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -72485,7 +74379,13 @@ impl ReleaseHostsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReleaseHostsError::Unknown(String::from(body)),
             },
-            Err(_) => ReleaseHostsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ReleaseHostsError::Unknown(format!("{}", status))
+                } else {
+                    ReleaseHostsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -72549,7 +74449,7 @@ pub enum ReplaceIamInstanceProfileAssociationError {
 }
 
 impl ReplaceIamInstanceProfileAssociationError {
-    pub fn from_body(body: &str) -> ReplaceIamInstanceProfileAssociationError {
+    pub fn from_body(body: &str, status: u16) -> ReplaceIamInstanceProfileAssociationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -72557,7 +74457,17 @@ impl ReplaceIamInstanceProfileAssociationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReplaceIamInstanceProfileAssociationError::Unknown(String::from(body)),
             },
-            Err(_) => ReplaceIamInstanceProfileAssociationError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ReplaceIamInstanceProfileAssociationError::Unknown(format!("{}", status))
+                } else {
+                    ReplaceIamInstanceProfileAssociationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -72623,7 +74533,7 @@ pub enum ReplaceNetworkAclAssociationError {
 }
 
 impl ReplaceNetworkAclAssociationError {
-    pub fn from_body(body: &str) -> ReplaceNetworkAclAssociationError {
+    pub fn from_body(body: &str, status: u16) -> ReplaceNetworkAclAssociationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -72631,7 +74541,17 @@ impl ReplaceNetworkAclAssociationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReplaceNetworkAclAssociationError::Unknown(String::from(body)),
             },
-            Err(_) => ReplaceNetworkAclAssociationError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ReplaceNetworkAclAssociationError::Unknown(format!("{}", status))
+                } else {
+                    ReplaceNetworkAclAssociationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -72697,7 +74617,7 @@ pub enum ReplaceNetworkAclEntryError {
 }
 
 impl ReplaceNetworkAclEntryError {
-    pub fn from_body(body: &str) -> ReplaceNetworkAclEntryError {
+    pub fn from_body(body: &str, status: u16) -> ReplaceNetworkAclEntryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -72705,7 +74625,13 @@ impl ReplaceNetworkAclEntryError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReplaceNetworkAclEntryError::Unknown(String::from(body)),
             },
-            Err(_) => ReplaceNetworkAclEntryError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ReplaceNetworkAclEntryError::Unknown(format!("{}", status))
+                } else {
+                    ReplaceNetworkAclEntryError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -72771,7 +74697,7 @@ pub enum ReplaceRouteError {
 }
 
 impl ReplaceRouteError {
-    pub fn from_body(body: &str) -> ReplaceRouteError {
+    pub fn from_body(body: &str, status: u16) -> ReplaceRouteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -72779,7 +74705,13 @@ impl ReplaceRouteError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReplaceRouteError::Unknown(String::from(body)),
             },
-            Err(_) => ReplaceRouteError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ReplaceRouteError::Unknown(format!("{}", status))
+                } else {
+                    ReplaceRouteError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -72843,7 +74775,7 @@ pub enum ReplaceRouteTableAssociationError {
 }
 
 impl ReplaceRouteTableAssociationError {
-    pub fn from_body(body: &str) -> ReplaceRouteTableAssociationError {
+    pub fn from_body(body: &str, status: u16) -> ReplaceRouteTableAssociationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -72851,7 +74783,17 @@ impl ReplaceRouteTableAssociationError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReplaceRouteTableAssociationError::Unknown(String::from(body)),
             },
-            Err(_) => ReplaceRouteTableAssociationError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ReplaceRouteTableAssociationError::Unknown(format!("{}", status))
+                } else {
+                    ReplaceRouteTableAssociationError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -72917,7 +74859,7 @@ pub enum ReportInstanceStatusError {
 }
 
 impl ReportInstanceStatusError {
-    pub fn from_body(body: &str) -> ReportInstanceStatusError {
+    pub fn from_body(body: &str, status: u16) -> ReportInstanceStatusError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -72925,7 +74867,13 @@ impl ReportInstanceStatusError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReportInstanceStatusError::Unknown(String::from(body)),
             },
-            Err(_) => ReportInstanceStatusError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ReportInstanceStatusError::Unknown(format!("{}", status))
+                } else {
+                    ReportInstanceStatusError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -72991,7 +74939,7 @@ pub enum RequestSpotFleetError {
 }
 
 impl RequestSpotFleetError {
-    pub fn from_body(body: &str) -> RequestSpotFleetError {
+    pub fn from_body(body: &str, status: u16) -> RequestSpotFleetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -72999,7 +74947,13 @@ impl RequestSpotFleetError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RequestSpotFleetError::Unknown(String::from(body)),
             },
-            Err(_) => RequestSpotFleetError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RequestSpotFleetError::Unknown(format!("{}", status))
+                } else {
+                    RequestSpotFleetError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -73063,7 +75017,7 @@ pub enum RequestSpotInstancesError {
 }
 
 impl RequestSpotInstancesError {
-    pub fn from_body(body: &str) -> RequestSpotInstancesError {
+    pub fn from_body(body: &str, status: u16) -> RequestSpotInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -73071,7 +75025,13 @@ impl RequestSpotInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RequestSpotInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => RequestSpotInstancesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RequestSpotInstancesError::Unknown(format!("{}", status))
+                } else {
+                    RequestSpotInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -73137,7 +75097,7 @@ pub enum ResetFpgaImageAttributeError {
 }
 
 impl ResetFpgaImageAttributeError {
-    pub fn from_body(body: &str) -> ResetFpgaImageAttributeError {
+    pub fn from_body(body: &str, status: u16) -> ResetFpgaImageAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -73145,7 +75105,17 @@ impl ResetFpgaImageAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ResetFpgaImageAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => ResetFpgaImageAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ResetFpgaImageAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ResetFpgaImageAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -73211,7 +75181,7 @@ pub enum ResetImageAttributeError {
 }
 
 impl ResetImageAttributeError {
-    pub fn from_body(body: &str) -> ResetImageAttributeError {
+    pub fn from_body(body: &str, status: u16) -> ResetImageAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -73219,7 +75189,13 @@ impl ResetImageAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ResetImageAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => ResetImageAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ResetImageAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ResetImageAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -73285,7 +75261,7 @@ pub enum ResetInstanceAttributeError {
 }
 
 impl ResetInstanceAttributeError {
-    pub fn from_body(body: &str) -> ResetInstanceAttributeError {
+    pub fn from_body(body: &str, status: u16) -> ResetInstanceAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -73293,7 +75269,13 @@ impl ResetInstanceAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ResetInstanceAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => ResetInstanceAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ResetInstanceAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ResetInstanceAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -73359,7 +75341,7 @@ pub enum ResetNetworkInterfaceAttributeError {
 }
 
 impl ResetNetworkInterfaceAttributeError {
-    pub fn from_body(body: &str) -> ResetNetworkInterfaceAttributeError {
+    pub fn from_body(body: &str, status: u16) -> ResetNetworkInterfaceAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -73367,7 +75349,17 @@ impl ResetNetworkInterfaceAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ResetNetworkInterfaceAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => ResetNetworkInterfaceAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ResetNetworkInterfaceAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ResetNetworkInterfaceAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -73433,7 +75425,7 @@ pub enum ResetSnapshotAttributeError {
 }
 
 impl ResetSnapshotAttributeError {
-    pub fn from_body(body: &str) -> ResetSnapshotAttributeError {
+    pub fn from_body(body: &str, status: u16) -> ResetSnapshotAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -73441,7 +75433,13 @@ impl ResetSnapshotAttributeError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ResetSnapshotAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => ResetSnapshotAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ResetSnapshotAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ResetSnapshotAttributeError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -73507,7 +75505,7 @@ pub enum RestoreAddressToClassicError {
 }
 
 impl RestoreAddressToClassicError {
-    pub fn from_body(body: &str) -> RestoreAddressToClassicError {
+    pub fn from_body(body: &str, status: u16) -> RestoreAddressToClassicError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -73515,7 +75513,17 @@ impl RestoreAddressToClassicError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RestoreAddressToClassicError::Unknown(String::from(body)),
             },
-            Err(_) => RestoreAddressToClassicError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RestoreAddressToClassicError::Unknown(format!("{}", status))
+                } else {
+                    RestoreAddressToClassicError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -73581,7 +75589,7 @@ pub enum RevokeSecurityGroupEgressError {
 }
 
 impl RevokeSecurityGroupEgressError {
-    pub fn from_body(body: &str) -> RevokeSecurityGroupEgressError {
+    pub fn from_body(body: &str, status: u16) -> RevokeSecurityGroupEgressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -73589,7 +75597,17 @@ impl RevokeSecurityGroupEgressError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RevokeSecurityGroupEgressError::Unknown(String::from(body)),
             },
-            Err(_) => RevokeSecurityGroupEgressError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RevokeSecurityGroupEgressError::Unknown(format!("{}", status))
+                } else {
+                    RevokeSecurityGroupEgressError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -73655,7 +75673,7 @@ pub enum RevokeSecurityGroupIngressError {
 }
 
 impl RevokeSecurityGroupIngressError {
-    pub fn from_body(body: &str) -> RevokeSecurityGroupIngressError {
+    pub fn from_body(body: &str, status: u16) -> RevokeSecurityGroupIngressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -73663,7 +75681,17 @@ impl RevokeSecurityGroupIngressError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RevokeSecurityGroupIngressError::Unknown(String::from(body)),
             },
-            Err(_) => RevokeSecurityGroupIngressError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RevokeSecurityGroupIngressError::Unknown(format!("{}", status))
+                } else {
+                    RevokeSecurityGroupIngressError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -73729,7 +75757,7 @@ pub enum RunInstancesError {
 }
 
 impl RunInstancesError {
-    pub fn from_body(body: &str) -> RunInstancesError {
+    pub fn from_body(body: &str, status: u16) -> RunInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -73737,7 +75765,13 @@ impl RunInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RunInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => RunInstancesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RunInstancesError::Unknown(format!("{}", status))
+                } else {
+                    RunInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -73801,7 +75835,7 @@ pub enum RunScheduledInstancesError {
 }
 
 impl RunScheduledInstancesError {
-    pub fn from_body(body: &str) -> RunScheduledInstancesError {
+    pub fn from_body(body: &str, status: u16) -> RunScheduledInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -73809,7 +75843,13 @@ impl RunScheduledInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RunScheduledInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => RunScheduledInstancesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RunScheduledInstancesError::Unknown(format!("{}", status))
+                } else {
+                    RunScheduledInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -73875,7 +75915,7 @@ pub enum StartInstancesError {
 }
 
 impl StartInstancesError {
-    pub fn from_body(body: &str) -> StartInstancesError {
+    pub fn from_body(body: &str, status: u16) -> StartInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -73883,7 +75923,13 @@ impl StartInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => StartInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => StartInstancesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    StartInstancesError::Unknown(format!("{}", status))
+                } else {
+                    StartInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -73947,7 +75993,7 @@ pub enum StopInstancesError {
 }
 
 impl StopInstancesError {
-    pub fn from_body(body: &str) -> StopInstancesError {
+    pub fn from_body(body: &str, status: u16) -> StopInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -73955,7 +76001,13 @@ impl StopInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => StopInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => StopInstancesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    StopInstancesError::Unknown(format!("{}", status))
+                } else {
+                    StopInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -74019,7 +76071,7 @@ pub enum TerminateInstancesError {
 }
 
 impl TerminateInstancesError {
-    pub fn from_body(body: &str) -> TerminateInstancesError {
+    pub fn from_body(body: &str, status: u16) -> TerminateInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -74027,7 +76079,13 @@ impl TerminateInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => TerminateInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => TerminateInstancesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    TerminateInstancesError::Unknown(format!("{}", status))
+                } else {
+                    TerminateInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -74093,7 +76151,7 @@ pub enum UnassignIpv6AddressesError {
 }
 
 impl UnassignIpv6AddressesError {
-    pub fn from_body(body: &str) -> UnassignIpv6AddressesError {
+    pub fn from_body(body: &str, status: u16) -> UnassignIpv6AddressesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -74101,7 +76159,13 @@ impl UnassignIpv6AddressesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UnassignIpv6AddressesError::Unknown(String::from(body)),
             },
-            Err(_) => UnassignIpv6AddressesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    UnassignIpv6AddressesError::Unknown(format!("{}", status))
+                } else {
+                    UnassignIpv6AddressesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -74167,7 +76231,7 @@ pub enum UnassignPrivateIpAddressesError {
 }
 
 impl UnassignPrivateIpAddressesError {
-    pub fn from_body(body: &str) -> UnassignPrivateIpAddressesError {
+    pub fn from_body(body: &str, status: u16) -> UnassignPrivateIpAddressesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -74175,7 +76239,17 @@ impl UnassignPrivateIpAddressesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UnassignPrivateIpAddressesError::Unknown(String::from(body)),
             },
-            Err(_) => UnassignPrivateIpAddressesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    UnassignPrivateIpAddressesError::Unknown(format!("{}", status))
+                } else {
+                    UnassignPrivateIpAddressesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -74241,7 +76315,7 @@ pub enum UnmonitorInstancesError {
 }
 
 impl UnmonitorInstancesError {
-    pub fn from_body(body: &str) -> UnmonitorInstancesError {
+    pub fn from_body(body: &str, status: u16) -> UnmonitorInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -74249,7 +76323,13 @@ impl UnmonitorInstancesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UnmonitorInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => UnmonitorInstancesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    UnmonitorInstancesError::Unknown(format!("{}", status))
+                } else {
+                    UnmonitorInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -74315,7 +76395,7 @@ pub enum UpdateSecurityGroupRuleDescriptionsEgressError {
 }
 
 impl UpdateSecurityGroupRuleDescriptionsEgressError {
-    pub fn from_body(body: &str) -> UpdateSecurityGroupRuleDescriptionsEgressError {
+    pub fn from_body(body: &str, status: u16) -> UpdateSecurityGroupRuleDescriptionsEgressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -74323,7 +76403,17 @@ impl UpdateSecurityGroupRuleDescriptionsEgressError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UpdateSecurityGroupRuleDescriptionsEgressError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateSecurityGroupRuleDescriptionsEgressError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateSecurityGroupRuleDescriptionsEgressError::Unknown(format!("{}", status))
+                } else {
+                    UpdateSecurityGroupRuleDescriptionsEgressError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -74391,7 +76481,7 @@ pub enum UpdateSecurityGroupRuleDescriptionsIngressError {
 }
 
 impl UpdateSecurityGroupRuleDescriptionsIngressError {
-    pub fn from_body(body: &str) -> UpdateSecurityGroupRuleDescriptionsIngressError {
+    pub fn from_body(body: &str, status: u16) -> UpdateSecurityGroupRuleDescriptionsIngressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -74399,7 +76489,17 @@ impl UpdateSecurityGroupRuleDescriptionsIngressError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UpdateSecurityGroupRuleDescriptionsIngressError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateSecurityGroupRuleDescriptionsIngressError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateSecurityGroupRuleDescriptionsIngressError::Unknown(format!("{}", status))
+                } else {
+                    UpdateSecurityGroupRuleDescriptionsIngressError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 

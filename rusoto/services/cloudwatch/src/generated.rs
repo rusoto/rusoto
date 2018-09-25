@@ -3403,7 +3403,7 @@ pub enum DeleteAlarmsError {
 }
 
 impl DeleteAlarmsError {
-    pub fn from_body(body: &str) -> DeleteAlarmsError {
+    pub fn from_body(body: &str, status: u16) -> DeleteAlarmsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -3414,7 +3414,13 @@ impl DeleteAlarmsError {
                 }
                 _ => DeleteAlarmsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteAlarmsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteAlarmsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteAlarmsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3484,7 +3490,7 @@ pub enum DeleteDashboardsError {
 }
 
 impl DeleteDashboardsError {
-    pub fn from_body(body: &str) -> DeleteDashboardsError {
+    pub fn from_body(body: &str, status: u16) -> DeleteDashboardsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -3501,7 +3507,13 @@ impl DeleteDashboardsError {
                 }
                 _ => DeleteDashboardsError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDashboardsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteDashboardsError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDashboardsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3569,7 +3581,7 @@ pub enum DescribeAlarmHistoryError {
 }
 
 impl DescribeAlarmHistoryError {
-    pub fn from_body(body: &str) -> DescribeAlarmHistoryError {
+    pub fn from_body(body: &str, status: u16) -> DescribeAlarmHistoryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -3580,7 +3592,13 @@ impl DescribeAlarmHistoryError {
                 }
                 _ => DescribeAlarmHistoryError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeAlarmHistoryError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeAlarmHistoryError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAlarmHistoryError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3648,7 +3666,7 @@ pub enum DescribeAlarmsError {
 }
 
 impl DescribeAlarmsError {
-    pub fn from_body(body: &str) -> DescribeAlarmsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeAlarmsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -3659,7 +3677,13 @@ impl DescribeAlarmsError {
                 }
                 _ => DescribeAlarmsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeAlarmsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeAlarmsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAlarmsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3723,7 +3747,7 @@ pub enum DescribeAlarmsForMetricError {
 }
 
 impl DescribeAlarmsForMetricError {
-    pub fn from_body(body: &str) -> DescribeAlarmsForMetricError {
+    pub fn from_body(body: &str, status: u16) -> DescribeAlarmsForMetricError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -3731,7 +3755,17 @@ impl DescribeAlarmsForMetricError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeAlarmsForMetricError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeAlarmsForMetricError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeAlarmsForMetricError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAlarmsForMetricError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -3796,7 +3830,7 @@ pub enum DisableAlarmActionsError {
 }
 
 impl DisableAlarmActionsError {
-    pub fn from_body(body: &str) -> DisableAlarmActionsError {
+    pub fn from_body(body: &str, status: u16) -> DisableAlarmActionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -3804,7 +3838,13 @@ impl DisableAlarmActionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisableAlarmActionsError::Unknown(String::from(body)),
             },
-            Err(_) => DisableAlarmActionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DisableAlarmActionsError::Unknown(format!("{}", status))
+                } else {
+                    DisableAlarmActionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3869,7 +3909,7 @@ pub enum EnableAlarmActionsError {
 }
 
 impl EnableAlarmActionsError {
-    pub fn from_body(body: &str) -> EnableAlarmActionsError {
+    pub fn from_body(body: &str, status: u16) -> EnableAlarmActionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -3877,7 +3917,13 @@ impl EnableAlarmActionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => EnableAlarmActionsError::Unknown(String::from(body)),
             },
-            Err(_) => EnableAlarmActionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    EnableAlarmActionsError::Unknown(format!("{}", status))
+                } else {
+                    EnableAlarmActionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -3948,7 +3994,7 @@ pub enum GetDashboardError {
 }
 
 impl GetDashboardError {
-    pub fn from_body(body: &str) -> GetDashboardError {
+    pub fn from_body(body: &str, status: u16) -> GetDashboardError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -3965,7 +4011,13 @@ impl GetDashboardError {
                 }
                 _ => GetDashboardError::Unknown(String::from(body)),
             },
-            Err(_) => GetDashboardError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetDashboardError::Unknown(format!("{}", status))
+                } else {
+                    GetDashboardError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -4033,7 +4085,7 @@ pub enum GetMetricDataError {
 }
 
 impl GetMetricDataError {
-    pub fn from_body(body: &str) -> GetMetricDataError {
+    pub fn from_body(body: &str, status: u16) -> GetMetricDataError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -4044,7 +4096,13 @@ impl GetMetricDataError {
                 }
                 _ => GetMetricDataError::Unknown(String::from(body)),
             },
-            Err(_) => GetMetricDataError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetMetricDataError::Unknown(format!("{}", status))
+                } else {
+                    GetMetricDataError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -4116,7 +4174,7 @@ pub enum GetMetricStatisticsError {
 }
 
 impl GetMetricStatisticsError {
-    pub fn from_body(body: &str) -> GetMetricStatisticsError {
+    pub fn from_body(body: &str, status: u16) -> GetMetricStatisticsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -4138,7 +4196,13 @@ impl GetMetricStatisticsError {
                 ),
                 _ => GetMetricStatisticsError::Unknown(String::from(body)),
             },
-            Err(_) => GetMetricStatisticsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetMetricStatisticsError::Unknown(format!("{}", status))
+                } else {
+                    GetMetricStatisticsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -4211,7 +4275,7 @@ pub enum ListDashboardsError {
 }
 
 impl ListDashboardsError {
-    pub fn from_body(body: &str) -> ListDashboardsError {
+    pub fn from_body(body: &str, status: u16) -> ListDashboardsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -4225,7 +4289,13 @@ impl ListDashboardsError {
                 }
                 _ => ListDashboardsError::Unknown(String::from(body)),
             },
-            Err(_) => ListDashboardsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListDashboardsError::Unknown(format!("{}", status))
+                } else {
+                    ListDashboardsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -4294,7 +4364,7 @@ pub enum ListMetricsError {
 }
 
 impl ListMetricsError {
-    pub fn from_body(body: &str) -> ListMetricsError {
+    pub fn from_body(body: &str, status: u16) -> ListMetricsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -4308,7 +4378,13 @@ impl ListMetricsError {
                 }
                 _ => ListMetricsError::Unknown(String::from(body)),
             },
-            Err(_) => ListMetricsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListMetricsError::Unknown(format!("{}", status))
+                } else {
+                    ListMetricsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -4377,7 +4453,7 @@ pub enum PutDashboardError {
 }
 
 impl PutDashboardError {
-    pub fn from_body(body: &str) -> PutDashboardError {
+    pub fn from_body(body: &str, status: u16) -> PutDashboardError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -4391,7 +4467,13 @@ impl PutDashboardError {
                 }
                 _ => PutDashboardError::Unknown(String::from(body)),
             },
-            Err(_) => PutDashboardError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutDashboardError::Unknown(format!("{}", status))
+                } else {
+                    PutDashboardError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -4458,7 +4540,7 @@ pub enum PutMetricAlarmError {
 }
 
 impl PutMetricAlarmError {
-    pub fn from_body(body: &str) -> PutMetricAlarmError {
+    pub fn from_body(body: &str, status: u16) -> PutMetricAlarmError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -4469,7 +4551,13 @@ impl PutMetricAlarmError {
                 }
                 _ => PutMetricAlarmError::Unknown(String::from(body)),
             },
-            Err(_) => PutMetricAlarmError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutMetricAlarmError::Unknown(format!("{}", status))
+                } else {
+                    PutMetricAlarmError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -4541,7 +4629,7 @@ pub enum PutMetricDataError {
 }
 
 impl PutMetricDataError {
-    pub fn from_body(body: &str) -> PutMetricDataError {
+    pub fn from_body(body: &str, status: u16) -> PutMetricDataError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -4561,7 +4649,13 @@ impl PutMetricDataError {
                 }
                 _ => PutMetricDataError::Unknown(String::from(body)),
             },
-            Err(_) => PutMetricDataError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    PutMetricDataError::Unknown(format!("{}", status))
+                } else {
+                    PutMetricDataError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -4632,7 +4726,7 @@ pub enum SetAlarmStateError {
 }
 
 impl SetAlarmStateError {
-    pub fn from_body(body: &str) -> SetAlarmStateError {
+    pub fn from_body(body: &str, status: u16) -> SetAlarmStateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -4646,7 +4740,13 @@ impl SetAlarmStateError {
                 }
                 _ => SetAlarmStateError::Unknown(String::from(body)),
             },
-            Err(_) => SetAlarmStateError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    SetAlarmStateError::Unknown(format!("{}", status))
+                } else {
+                    SetAlarmStateError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 

@@ -1212,7 +1212,7 @@ pub enum CancelJobError {
 }
 
 impl CancelJobError {
-    pub fn from_body(body: &str) -> CancelJobError {
+    pub fn from_body(body: &str, status: u16) -> CancelJobError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1238,7 +1238,13 @@ impl CancelJobError {
                 }
                 _ => CancelJobError::Unknown(String::from(body)),
             },
-            Err(_) => CancelJobError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CancelJobError::Unknown(format!("{}", status))
+                } else {
+                    CancelJobError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1339,7 +1345,7 @@ pub enum CreateJobError {
 }
 
 impl CreateJobError {
-    pub fn from_body(body: &str) -> CreateJobError {
+    pub fn from_body(body: &str, status: u16) -> CreateJobError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1395,7 +1401,13 @@ impl CreateJobError {
                 }
                 _ => CreateJobError::Unknown(String::from(body)),
             },
-            Err(_) => CreateJobError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateJobError::Unknown(format!("{}", status))
+                } else {
+                    CreateJobError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1488,7 +1500,7 @@ pub enum GetShippingLabelError {
 }
 
 impl GetShippingLabelError {
-    pub fn from_body(body: &str) -> GetShippingLabelError {
+    pub fn from_body(body: &str, status: u16) -> GetShippingLabelError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1517,7 +1529,13 @@ impl GetShippingLabelError {
                 }
                 _ => GetShippingLabelError::Unknown(String::from(body)),
             },
-            Err(_) => GetShippingLabelError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetShippingLabelError::Unknown(format!("{}", status))
+                } else {
+                    GetShippingLabelError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1597,7 +1615,7 @@ pub enum GetStatusError {
 }
 
 impl GetStatusError {
-    pub fn from_body(body: &str) -> GetStatusError {
+    pub fn from_body(body: &str, status: u16) -> GetStatusError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1620,7 +1638,13 @@ impl GetStatusError {
                 }
                 _ => GetStatusError::Unknown(String::from(body)),
             },
-            Err(_) => GetStatusError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    GetStatusError::Unknown(format!("{}", status))
+                } else {
+                    GetStatusError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1694,7 +1718,7 @@ pub enum ListJobsError {
 }
 
 impl ListJobsError {
-    pub fn from_body(body: &str) -> ListJobsError {
+    pub fn from_body(body: &str, status: u16) -> ListJobsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1711,7 +1735,13 @@ impl ListJobsError {
                 }
                 _ => ListJobsError::Unknown(String::from(body)),
             },
-            Err(_) => ListJobsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListJobsError::Unknown(format!("{}", status))
+                } else {
+                    ListJobsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -1813,7 +1843,7 @@ pub enum UpdateJobError {
 }
 
 impl UpdateJobError {
-    pub fn from_body(body: &str) -> UpdateJobError {
+    pub fn from_body(body: &str, status: u16) -> UpdateJobError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -1875,7 +1905,13 @@ impl UpdateJobError {
                 }
                 _ => UpdateJobError::Unknown(String::from(body)),
             },
-            Err(_) => UpdateJobError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    UpdateJobError::Unknown(format!("{}", status))
+                } else {
+                    UpdateJobError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 

@@ -155,7 +155,7 @@ impl GenerateErrorTypes for XmlErrorTypes {
     fn generate_error_from_body_impl(&self, operation_name: &str, operation: &Operation, service: &Service) -> String {
         format!("
                 impl {type_name} {{
-                    pub fn from_body(body: &str) -> {type_name} {{
+                    pub fn from_body(body: &str, status: u16) -> {type_name} {{
                         let reader = EventReader::new(body.as_bytes());
                         let mut stack = XmlResponse::new(reader.into_iter().peekable());
                         find_start_element(&mut stack);
@@ -165,7 +165,13 @@ impl GenerateErrorTypes for XmlErrorTypes {
                                     {type_matchers}
                                 }}
                            }},
-                           Err(_) => {type_name}::Unknown(body.to_string())
+                           Err(_) => {{
+                               if body.len() == 0 {{
+                                   {type_name}::Unknown(format!(\"{{}}\", status))
+                               }} else {{
+                                   {type_name}::Unknown(format!(\"{{}}:{{}}\", body.to_string(), status))
+                               }}
+                            }}
                        }}
                     }}
 

@@ -5522,7 +5522,7 @@ pub enum AddTagsError {
 }
 
 impl AddTagsError {
-    pub fn from_body(body: &str) -> AddTagsError {
+    pub fn from_body(body: &str, status: u16) -> AddTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -5537,7 +5537,13 @@ impl AddTagsError {
                 "TooManyTags" => AddTagsError::TooManyTags(String::from(parsed_error.message)),
                 _ => AddTagsError::Unknown(String::from(body)),
             },
-            Err(_) => AddTagsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AddTagsError::Unknown(format!("{}", status))
+                } else {
+                    AddTagsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -5609,7 +5615,7 @@ pub enum ApplySecurityGroupsToLoadBalancerError {
 }
 
 impl ApplySecurityGroupsToLoadBalancerError {
-    pub fn from_body(body: &str) -> ApplySecurityGroupsToLoadBalancerError {
+    pub fn from_body(body: &str, status: u16) -> ApplySecurityGroupsToLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -5632,7 +5638,17 @@ impl ApplySecurityGroupsToLoadBalancerError {
                 }
                 _ => ApplySecurityGroupsToLoadBalancerError::Unknown(String::from(body)),
             },
-            Err(_) => ApplySecurityGroupsToLoadBalancerError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ApplySecurityGroupsToLoadBalancerError::Unknown(format!("{}", status))
+                } else {
+                    ApplySecurityGroupsToLoadBalancerError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -5708,7 +5724,7 @@ pub enum AttachLoadBalancerToSubnetsError {
 }
 
 impl AttachLoadBalancerToSubnetsError {
-    pub fn from_body(body: &str) -> AttachLoadBalancerToSubnetsError {
+    pub fn from_body(body: &str, status: u16) -> AttachLoadBalancerToSubnetsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -5730,7 +5746,17 @@ impl AttachLoadBalancerToSubnetsError {
                 )),
                 _ => AttachLoadBalancerToSubnetsError::Unknown(String::from(body)),
             },
-            Err(_) => AttachLoadBalancerToSubnetsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AttachLoadBalancerToSubnetsError::Unknown(format!("{}", status))
+                } else {
+                    AttachLoadBalancerToSubnetsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -5801,7 +5827,7 @@ pub enum ConfigureHealthCheckError {
 }
 
 impl ConfigureHealthCheckError {
-    pub fn from_body(body: &str) -> ConfigureHealthCheckError {
+    pub fn from_body(body: &str, status: u16) -> ConfigureHealthCheckError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -5812,7 +5838,13 @@ impl ConfigureHealthCheckError {
                 ),
                 _ => ConfigureHealthCheckError::Unknown(String::from(body)),
             },
-            Err(_) => ConfigureHealthCheckError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ConfigureHealthCheckError::Unknown(format!("{}", status))
+                } else {
+                    ConfigureHealthCheckError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -5886,7 +5918,7 @@ pub enum CreateAppCookieStickinessPolicyError {
 }
 
 impl CreateAppCookieStickinessPolicyError {
-    pub fn from_body(body: &str) -> CreateAppCookieStickinessPolicyError {
+    pub fn from_body(body: &str, status: u16) -> CreateAppCookieStickinessPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -5910,7 +5942,17 @@ impl CreateAppCookieStickinessPolicyError {
                 ),
                 _ => CreateAppCookieStickinessPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => CreateAppCookieStickinessPolicyError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateAppCookieStickinessPolicyError::Unknown(format!("{}", status))
+                } else {
+                    CreateAppCookieStickinessPolicyError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -5987,7 +6029,7 @@ pub enum CreateLBCookieStickinessPolicyError {
 }
 
 impl CreateLBCookieStickinessPolicyError {
-    pub fn from_body(body: &str) -> CreateLBCookieStickinessPolicyError {
+    pub fn from_body(body: &str, status: u16) -> CreateLBCookieStickinessPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6009,7 +6051,17 @@ impl CreateLBCookieStickinessPolicyError {
                 ),
                 _ => CreateLBCookieStickinessPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => CreateLBCookieStickinessPolicyError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateLBCookieStickinessPolicyError::Unknown(format!("{}", status))
+                } else {
+                    CreateLBCookieStickinessPolicyError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -6102,7 +6154,7 @@ pub enum CreateLoadBalancerError {
 }
 
 impl CreateLoadBalancerError {
-    pub fn from_body(body: &str) -> CreateLoadBalancerError {
+    pub fn from_body(body: &str, status: u16) -> CreateLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6148,7 +6200,13 @@ impl CreateLoadBalancerError {
                 }
                 _ => CreateLoadBalancerError::Unknown(String::from(body)),
             },
-            Err(_) => CreateLoadBalancerError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateLoadBalancerError::Unknown(format!("{}", status))
+                } else {
+                    CreateLoadBalancerError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -6235,7 +6293,7 @@ pub enum CreateLoadBalancerListenersError {
 }
 
 impl CreateLoadBalancerListenersError {
-    pub fn from_body(body: &str) -> CreateLoadBalancerListenersError {
+    pub fn from_body(body: &str, status: u16) -> CreateLoadBalancerListenersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6260,7 +6318,17 @@ impl CreateLoadBalancerListenersError {
                 ),
                 _ => CreateLoadBalancerListenersError::Unknown(String::from(body)),
             },
-            Err(_) => CreateLoadBalancerListenersError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateLoadBalancerListenersError::Unknown(format!("{}", status))
+                } else {
+                    CreateLoadBalancerListenersError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -6340,7 +6408,7 @@ pub enum CreateLoadBalancerPolicyError {
 }
 
 impl CreateLoadBalancerPolicyError {
-    pub fn from_body(body: &str) -> CreateLoadBalancerPolicyError {
+    pub fn from_body(body: &str, status: u16) -> CreateLoadBalancerPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6365,7 +6433,17 @@ impl CreateLoadBalancerPolicyError {
                 )),
                 _ => CreateLoadBalancerPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => CreateLoadBalancerPolicyError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateLoadBalancerPolicyError::Unknown(format!("{}", status))
+                } else {
+                    CreateLoadBalancerPolicyError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -6435,7 +6513,7 @@ pub enum DeleteLoadBalancerError {
 }
 
 impl DeleteLoadBalancerError {
-    pub fn from_body(body: &str) -> DeleteLoadBalancerError {
+    pub fn from_body(body: &str, status: u16) -> DeleteLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6443,7 +6521,13 @@ impl DeleteLoadBalancerError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteLoadBalancerError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteLoadBalancerError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteLoadBalancerError::Unknown(format!("{}", status))
+                } else {
+                    DeleteLoadBalancerError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -6510,7 +6594,7 @@ pub enum DeleteLoadBalancerListenersError {
 }
 
 impl DeleteLoadBalancerListenersError {
-    pub fn from_body(body: &str) -> DeleteLoadBalancerListenersError {
+    pub fn from_body(body: &str, status: u16) -> DeleteLoadBalancerListenersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6521,7 +6605,17 @@ impl DeleteLoadBalancerListenersError {
                 ),
                 _ => DeleteLoadBalancerListenersError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteLoadBalancerListenersError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteLoadBalancerListenersError::Unknown(format!("{}", status))
+                } else {
+                    DeleteLoadBalancerListenersError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -6591,7 +6685,7 @@ pub enum DeleteLoadBalancerPolicyError {
 }
 
 impl DeleteLoadBalancerPolicyError {
-    pub fn from_body(body: &str) -> DeleteLoadBalancerPolicyError {
+    pub fn from_body(body: &str, status: u16) -> DeleteLoadBalancerPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6607,7 +6701,17 @@ impl DeleteLoadBalancerPolicyError {
                 }
                 _ => DeleteLoadBalancerPolicyError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteLoadBalancerPolicyError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteLoadBalancerPolicyError::Unknown(format!("{}", status))
+                } else {
+                    DeleteLoadBalancerPolicyError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -6678,7 +6782,7 @@ pub enum DeregisterInstancesFromLoadBalancerError {
 }
 
 impl DeregisterInstancesFromLoadBalancerError {
-    pub fn from_body(body: &str) -> DeregisterInstancesFromLoadBalancerError {
+    pub fn from_body(body: &str, status: u16) -> DeregisterInstancesFromLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6694,7 +6798,17 @@ impl DeregisterInstancesFromLoadBalancerError {
                 ),
                 _ => DeregisterInstancesFromLoadBalancerError::Unknown(String::from(body)),
             },
-            Err(_) => DeregisterInstancesFromLoadBalancerError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeregisterInstancesFromLoadBalancerError::Unknown(format!("{}", status))
+                } else {
+                    DeregisterInstancesFromLoadBalancerError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -6761,7 +6875,7 @@ pub enum DescribeAccountLimitsError {
 }
 
 impl DescribeAccountLimitsError {
-    pub fn from_body(body: &str) -> DescribeAccountLimitsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeAccountLimitsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6769,7 +6883,13 @@ impl DescribeAccountLimitsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeAccountLimitsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeAccountLimitsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeAccountLimitsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAccountLimitsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -6838,7 +6958,7 @@ pub enum DescribeInstanceHealthError {
 }
 
 impl DescribeInstanceHealthError {
-    pub fn from_body(body: &str) -> DescribeInstanceHealthError {
+    pub fn from_body(body: &str, status: u16) -> DescribeInstanceHealthError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6852,7 +6972,13 @@ impl DescribeInstanceHealthError {
                 }
                 _ => DescribeInstanceHealthError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeInstanceHealthError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeInstanceHealthError::Unknown(format!("{}", status))
+                } else {
+                    DescribeInstanceHealthError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -6923,7 +7049,7 @@ pub enum DescribeLoadBalancerAttributesError {
 }
 
 impl DescribeLoadBalancerAttributesError {
-    pub fn from_body(body: &str) -> DescribeLoadBalancerAttributesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeLoadBalancerAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -6939,7 +7065,17 @@ impl DescribeLoadBalancerAttributesError {
                 }
                 _ => DescribeLoadBalancerAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeLoadBalancerAttributesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeLoadBalancerAttributesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeLoadBalancerAttributesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -7010,7 +7146,7 @@ pub enum DescribeLoadBalancerPoliciesError {
 }
 
 impl DescribeLoadBalancerPoliciesError {
-    pub fn from_body(body: &str) -> DescribeLoadBalancerPoliciesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeLoadBalancerPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -7024,7 +7160,17 @@ impl DescribeLoadBalancerPoliciesError {
                 ),
                 _ => DescribeLoadBalancerPoliciesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeLoadBalancerPoliciesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeLoadBalancerPoliciesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeLoadBalancerPoliciesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -7093,7 +7239,7 @@ pub enum DescribeLoadBalancerPolicyTypesError {
 }
 
 impl DescribeLoadBalancerPolicyTypesError {
-    pub fn from_body(body: &str) -> DescribeLoadBalancerPolicyTypesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeLoadBalancerPolicyTypesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -7104,7 +7250,17 @@ impl DescribeLoadBalancerPolicyTypesError {
                 ),
                 _ => DescribeLoadBalancerPolicyTypesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeLoadBalancerPolicyTypesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeLoadBalancerPolicyTypesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeLoadBalancerPolicyTypesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -7174,7 +7330,7 @@ pub enum DescribeLoadBalancersError {
 }
 
 impl DescribeLoadBalancersError {
-    pub fn from_body(body: &str) -> DescribeLoadBalancersError {
+    pub fn from_body(body: &str, status: u16) -> DescribeLoadBalancersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -7188,7 +7344,13 @@ impl DescribeLoadBalancersError {
                 ),
                 _ => DescribeLoadBalancersError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeLoadBalancersError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeLoadBalancersError::Unknown(format!("{}", status))
+                } else {
+                    DescribeLoadBalancersError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -7257,7 +7419,7 @@ pub enum DescribeTagsError {
 }
 
 impl DescribeTagsError {
-    pub fn from_body(body: &str) -> DescribeTagsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -7268,7 +7430,13 @@ impl DescribeTagsError {
                 }
                 _ => DescribeTagsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeTagsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeTagsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeTagsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -7336,7 +7504,7 @@ pub enum DetachLoadBalancerFromSubnetsError {
 }
 
 impl DetachLoadBalancerFromSubnetsError {
-    pub fn from_body(body: &str) -> DetachLoadBalancerFromSubnetsError {
+    pub fn from_body(body: &str, status: u16) -> DetachLoadBalancerFromSubnetsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -7352,7 +7520,17 @@ impl DetachLoadBalancerFromSubnetsError {
                 }
                 _ => DetachLoadBalancerFromSubnetsError::Unknown(String::from(body)),
             },
-            Err(_) => DetachLoadBalancerFromSubnetsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DetachLoadBalancerFromSubnetsError::Unknown(format!("{}", status))
+                } else {
+                    DetachLoadBalancerFromSubnetsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -7423,7 +7601,7 @@ pub enum DisableAvailabilityZonesForLoadBalancerError {
 }
 
 impl DisableAvailabilityZonesForLoadBalancerError {
-    pub fn from_body(body: &str) -> DisableAvailabilityZonesForLoadBalancerError {
+    pub fn from_body(body: &str, status: u16) -> DisableAvailabilityZonesForLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -7441,7 +7619,17 @@ impl DisableAvailabilityZonesForLoadBalancerError {
                 }
                 _ => DisableAvailabilityZonesForLoadBalancerError::Unknown(String::from(body)),
             },
-            Err(_) => DisableAvailabilityZonesForLoadBalancerError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DisableAvailabilityZonesForLoadBalancerError::Unknown(format!("{}", status))
+                } else {
+                    DisableAvailabilityZonesForLoadBalancerError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -7512,7 +7700,7 @@ pub enum EnableAvailabilityZonesForLoadBalancerError {
 }
 
 impl EnableAvailabilityZonesForLoadBalancerError {
-    pub fn from_body(body: &str) -> EnableAvailabilityZonesForLoadBalancerError {
+    pub fn from_body(body: &str, status: u16) -> EnableAvailabilityZonesForLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -7525,7 +7713,17 @@ impl EnableAvailabilityZonesForLoadBalancerError {
                 }
                 _ => EnableAvailabilityZonesForLoadBalancerError::Unknown(String::from(body)),
             },
-            Err(_) => EnableAvailabilityZonesForLoadBalancerError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    EnableAvailabilityZonesForLoadBalancerError::Unknown(format!("{}", status))
+                } else {
+                    EnableAvailabilityZonesForLoadBalancerError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -7597,7 +7795,7 @@ pub enum ModifyLoadBalancerAttributesError {
 }
 
 impl ModifyLoadBalancerAttributesError {
-    pub fn from_body(body: &str) -> ModifyLoadBalancerAttributesError {
+    pub fn from_body(body: &str, status: u16) -> ModifyLoadBalancerAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -7618,7 +7816,17 @@ impl ModifyLoadBalancerAttributesError {
                 }
                 _ => ModifyLoadBalancerAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyLoadBalancerAttributesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyLoadBalancerAttributesError::Unknown(format!("{}", status))
+                } else {
+                    ModifyLoadBalancerAttributesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -7690,7 +7898,7 @@ pub enum RegisterInstancesWithLoadBalancerError {
 }
 
 impl RegisterInstancesWithLoadBalancerError {
-    pub fn from_body(body: &str) -> RegisterInstancesWithLoadBalancerError {
+    pub fn from_body(body: &str, status: u16) -> RegisterInstancesWithLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -7706,7 +7914,17 @@ impl RegisterInstancesWithLoadBalancerError {
                 ),
                 _ => RegisterInstancesWithLoadBalancerError::Unknown(String::from(body)),
             },
-            Err(_) => RegisterInstancesWithLoadBalancerError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RegisterInstancesWithLoadBalancerError::Unknown(format!("{}", status))
+                } else {
+                    RegisterInstancesWithLoadBalancerError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -7775,7 +7993,7 @@ pub enum RemoveTagsError {
 }
 
 impl RemoveTagsError {
-    pub fn from_body(body: &str) -> RemoveTagsError {
+    pub fn from_body(body: &str, status: u16) -> RemoveTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -7786,7 +8004,13 @@ impl RemoveTagsError {
                 }
                 _ => RemoveTagsError::Unknown(String::from(body)),
             },
-            Err(_) => RemoveTagsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RemoveTagsError::Unknown(format!("{}", status))
+                } else {
+                    RemoveTagsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -7860,7 +8084,7 @@ pub enum SetLoadBalancerListenerSSLCertificateError {
 }
 
 impl SetLoadBalancerListenerSSLCertificateError {
-    pub fn from_body(body: &str) -> SetLoadBalancerListenerSSLCertificateError {
+    pub fn from_body(body: &str, status: u16) -> SetLoadBalancerListenerSSLCertificateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -7891,7 +8115,17 @@ impl SetLoadBalancerListenerSSLCertificateError {
                 }
                 _ => SetLoadBalancerListenerSSLCertificateError::Unknown(String::from(body)),
             },
-            Err(_) => SetLoadBalancerListenerSSLCertificateError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    SetLoadBalancerListenerSSLCertificateError::Unknown(format!("{}", status))
+                } else {
+                    SetLoadBalancerListenerSSLCertificateError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -7969,7 +8203,7 @@ pub enum SetLoadBalancerPoliciesForBackendServerError {
 }
 
 impl SetLoadBalancerPoliciesForBackendServerError {
-    pub fn from_body(body: &str) -> SetLoadBalancerPoliciesForBackendServerError {
+    pub fn from_body(body: &str, status: u16) -> SetLoadBalancerPoliciesForBackendServerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -7990,7 +8224,17 @@ impl SetLoadBalancerPoliciesForBackendServerError {
                 ),
                 _ => SetLoadBalancerPoliciesForBackendServerError::Unknown(String::from(body)),
             },
-            Err(_) => SetLoadBalancerPoliciesForBackendServerError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    SetLoadBalancerPoliciesForBackendServerError::Unknown(format!("{}", status))
+                } else {
+                    SetLoadBalancerPoliciesForBackendServerError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -8068,7 +8312,7 @@ pub enum SetLoadBalancerPoliciesOfListenerError {
 }
 
 impl SetLoadBalancerPoliciesOfListenerError {
-    pub fn from_body(body: &str) -> SetLoadBalancerPoliciesOfListenerError {
+    pub fn from_body(body: &str, status: u16) -> SetLoadBalancerPoliciesOfListenerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -8092,7 +8336,17 @@ impl SetLoadBalancerPoliciesOfListenerError {
                 ),
                 _ => SetLoadBalancerPoliciesOfListenerError::Unknown(String::from(body)),
             },
-            Err(_) => SetLoadBalancerPoliciesOfListenerError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    SetLoadBalancerPoliciesOfListenerError::Unknown(format!("{}", status))
+                } else {
+                    SetLoadBalancerPoliciesOfListenerError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 

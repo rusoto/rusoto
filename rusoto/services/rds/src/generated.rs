@@ -18340,7 +18340,7 @@ pub enum AddRoleToDBClusterError {
 }
 
 impl AddRoleToDBClusterError {
-    pub fn from_body(body: &str) -> AddRoleToDBClusterError {
+    pub fn from_body(body: &str, status: u16) -> AddRoleToDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18366,7 +18366,13 @@ impl AddRoleToDBClusterError {
                 }
                 _ => AddRoleToDBClusterError::Unknown(String::from(body)),
             },
-            Err(_) => AddRoleToDBClusterError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AddRoleToDBClusterError::Unknown(format!("{}", status))
+                } else {
+                    AddRoleToDBClusterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18439,7 +18445,7 @@ pub enum AddSourceIdentifierToSubscriptionError {
 }
 
 impl AddSourceIdentifierToSubscriptionError {
-    pub fn from_body(body: &str) -> AddSourceIdentifierToSubscriptionError {
+    pub fn from_body(body: &str, status: u16) -> AddSourceIdentifierToSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18455,7 +18461,17 @@ impl AddSourceIdentifierToSubscriptionError {
                 }
                 _ => AddSourceIdentifierToSubscriptionError::Unknown(String::from(body)),
             },
-            Err(_) => AddSourceIdentifierToSubscriptionError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AddSourceIdentifierToSubscriptionError::Unknown(format!("{}", status))
+                } else {
+                    AddSourceIdentifierToSubscriptionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -18528,7 +18544,7 @@ pub enum AddTagsToResourceError {
 }
 
 impl AddTagsToResourceError {
-    pub fn from_body(body: &str) -> AddTagsToResourceError {
+    pub fn from_body(body: &str, status: u16) -> AddTagsToResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18545,7 +18561,13 @@ impl AddTagsToResourceError {
                 ),
                 _ => AddTagsToResourceError::Unknown(String::from(body)),
             },
-            Err(_) => AddTagsToResourceError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AddTagsToResourceError::Unknown(format!("{}", status))
+                } else {
+                    AddTagsToResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18615,7 +18637,7 @@ pub enum ApplyPendingMaintenanceActionError {
 }
 
 impl ApplyPendingMaintenanceActionError {
-    pub fn from_body(body: &str) -> ApplyPendingMaintenanceActionError {
+    pub fn from_body(body: &str, status: u16) -> ApplyPendingMaintenanceActionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18628,7 +18650,17 @@ impl ApplyPendingMaintenanceActionError {
                 }
                 _ => ApplyPendingMaintenanceActionError::Unknown(String::from(body)),
             },
-            Err(_) => ApplyPendingMaintenanceActionError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ApplyPendingMaintenanceActionError::Unknown(format!("{}", status))
+                } else {
+                    ApplyPendingMaintenanceActionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -18702,7 +18734,7 @@ pub enum AuthorizeDBSecurityGroupIngressError {
 }
 
 impl AuthorizeDBSecurityGroupIngressError {
-    pub fn from_body(body: &str) -> AuthorizeDBSecurityGroupIngressError {
+    pub fn from_body(body: &str, status: u16) -> AuthorizeDBSecurityGroupIngressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18730,7 +18762,17 @@ impl AuthorizeDBSecurityGroupIngressError {
                 }
                 _ => AuthorizeDBSecurityGroupIngressError::Unknown(String::from(body)),
             },
-            Err(_) => AuthorizeDBSecurityGroupIngressError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    AuthorizeDBSecurityGroupIngressError::Unknown(format!("{}", status))
+                } else {
+                    AuthorizeDBSecurityGroupIngressError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -18809,7 +18851,7 @@ pub enum BacktrackDBClusterError {
 }
 
 impl BacktrackDBClusterError {
-    pub fn from_body(body: &str) -> BacktrackDBClusterError {
+    pub fn from_body(body: &str, status: u16) -> BacktrackDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18825,7 +18867,13 @@ impl BacktrackDBClusterError {
                 }
                 _ => BacktrackDBClusterError::Unknown(String::from(body)),
             },
-            Err(_) => BacktrackDBClusterError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    BacktrackDBClusterError::Unknown(format!("{}", status))
+                } else {
+                    BacktrackDBClusterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -18898,7 +18946,7 @@ pub enum CopyDBClusterParameterGroupError {
 }
 
 impl CopyDBClusterParameterGroupError {
-    pub fn from_body(body: &str) -> CopyDBClusterParameterGroupError {
+    pub fn from_body(body: &str, status: u16) -> CopyDBClusterParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -18921,7 +18969,17 @@ impl CopyDBClusterParameterGroupError {
                 }
                 _ => CopyDBClusterParameterGroupError::Unknown(String::from(body)),
             },
-            Err(_) => CopyDBClusterParameterGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CopyDBClusterParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    CopyDBClusterParameterGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -19005,7 +19063,7 @@ pub enum CopyDBClusterSnapshotError {
 }
 
 impl CopyDBClusterSnapshotError {
-    pub fn from_body(body: &str) -> CopyDBClusterSnapshotError {
+    pub fn from_body(body: &str, status: u16) -> CopyDBClusterSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19039,7 +19097,13 @@ impl CopyDBClusterSnapshotError {
                 ),
                 _ => CopyDBClusterSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => CopyDBClusterSnapshotError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CopyDBClusterSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    CopyDBClusterSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19116,7 +19180,7 @@ pub enum CopyDBParameterGroupError {
 }
 
 impl CopyDBParameterGroupError {
-    pub fn from_body(body: &str) -> CopyDBParameterGroupError {
+    pub fn from_body(body: &str, status: u16) -> CopyDBParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19139,7 +19203,13 @@ impl CopyDBParameterGroupError {
                 }
                 _ => CopyDBParameterGroupError::Unknown(String::from(body)),
             },
-            Err(_) => CopyDBParameterGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CopyDBParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    CopyDBParameterGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19217,7 +19287,7 @@ pub enum CopyDBSnapshotError {
 }
 
 impl CopyDBSnapshotError {
-    pub fn from_body(body: &str) -> CopyDBSnapshotError {
+    pub fn from_body(body: &str, status: u16) -> CopyDBSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19240,7 +19310,13 @@ impl CopyDBSnapshotError {
                 ),
                 _ => CopyDBSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => CopyDBSnapshotError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CopyDBSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    CopyDBSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19314,7 +19390,7 @@ pub enum CopyOptionGroupError {
 }
 
 impl CopyOptionGroupError {
-    pub fn from_body(body: &str) -> CopyOptionGroupError {
+    pub fn from_body(body: &str, status: u16) -> CopyOptionGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19335,7 +19411,13 @@ impl CopyOptionGroupError {
                 }
                 _ => CopyOptionGroupError::Unknown(String::from(body)),
             },
-            Err(_) => CopyOptionGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CopyOptionGroupError::Unknown(format!("{}", status))
+                } else {
+                    CopyOptionGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19431,7 +19513,7 @@ pub enum CreateDBClusterError {
 }
 
 impl CreateDBClusterError {
-    pub fn from_body(body: &str) -> CreateDBClusterError {
+    pub fn from_body(body: &str, status: u16) -> CreateDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19492,7 +19574,13 @@ impl CreateDBClusterError {
                 ),
                 _ => CreateDBClusterError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDBClusterError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDBClusterError::Unknown(format!("{}", status))
+                } else {
+                    CreateDBClusterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19574,7 +19662,7 @@ pub enum CreateDBClusterParameterGroupError {
 }
 
 impl CreateDBClusterParameterGroupError {
-    pub fn from_body(body: &str) -> CreateDBClusterParameterGroupError {
+    pub fn from_body(body: &str, status: u16) -> CreateDBClusterParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19592,7 +19680,17 @@ impl CreateDBClusterParameterGroupError {
                 }
                 _ => CreateDBClusterParameterGroupError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDBClusterParameterGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDBClusterParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreateDBClusterParameterGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -19673,7 +19771,7 @@ pub enum CreateDBClusterSnapshotError {
 }
 
 impl CreateDBClusterSnapshotError {
-    pub fn from_body(body: &str) -> CreateDBClusterSnapshotError {
+    pub fn from_body(body: &str, status: u16) -> CreateDBClusterSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19704,7 +19802,17 @@ impl CreateDBClusterSnapshotError {
                 }
                 _ => CreateDBClusterSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDBClusterSnapshotError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDBClusterSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    CreateDBClusterSnapshotError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -19810,7 +19918,7 @@ pub enum CreateDBInstanceError {
 }
 
 impl CreateDBInstanceError {
-    pub fn from_body(body: &str) -> CreateDBInstanceError {
+    pub fn from_body(body: &str, status: u16) -> CreateDBInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -19880,7 +19988,13 @@ impl CreateDBInstanceError {
                 ),
                 _ => CreateDBInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDBInstanceError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDBInstanceError::Unknown(format!("{}", status))
+                } else {
+                    CreateDBInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -19997,7 +20111,7 @@ pub enum CreateDBInstanceReadReplicaError {
 }
 
 impl CreateDBInstanceReadReplicaError {
-    pub fn from_body(body: &str) -> CreateDBInstanceReadReplicaError {
+    pub fn from_body(body: &str, status: u16) -> CreateDBInstanceReadReplicaError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20091,7 +20205,17 @@ impl CreateDBInstanceReadReplicaError {
                 }
                 _ => CreateDBInstanceReadReplicaError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDBInstanceReadReplicaError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDBInstanceReadReplicaError::Unknown(format!("{}", status))
+                } else {
+                    CreateDBInstanceReadReplicaError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -20184,7 +20308,7 @@ pub enum CreateDBParameterGroupError {
 }
 
 impl CreateDBParameterGroupError {
-    pub fn from_body(body: &str) -> CreateDBParameterGroupError {
+    pub fn from_body(body: &str, status: u16) -> CreateDBParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20202,7 +20326,13 @@ impl CreateDBParameterGroupError {
                 }
                 _ => CreateDBParameterGroupError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDBParameterGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDBParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreateDBParameterGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20275,7 +20405,7 @@ pub enum CreateDBSecurityGroupError {
 }
 
 impl CreateDBSecurityGroupError {
-    pub fn from_body(body: &str) -> CreateDBSecurityGroupError {
+    pub fn from_body(body: &str, status: u16) -> CreateDBSecurityGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20298,7 +20428,13 @@ impl CreateDBSecurityGroupError {
                 }
                 _ => CreateDBSecurityGroupError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDBSecurityGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDBSecurityGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreateDBSecurityGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20374,7 +20510,7 @@ pub enum CreateDBSnapshotError {
 }
 
 impl CreateDBSnapshotError {
-    pub fn from_body(body: &str) -> CreateDBSnapshotError {
+    pub fn from_body(body: &str, status: u16) -> CreateDBSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20394,7 +20530,13 @@ impl CreateDBSnapshotError {
                 ),
                 _ => CreateDBSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDBSnapshotError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDBSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    CreateDBSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20471,7 +20613,7 @@ pub enum CreateDBSubnetGroupError {
 }
 
 impl CreateDBSubnetGroupError {
-    pub fn from_body(body: &str) -> CreateDBSubnetGroupError {
+    pub fn from_body(body: &str, status: u16) -> CreateDBSubnetGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20502,7 +20644,13 @@ impl CreateDBSubnetGroupError {
                 }
                 _ => CreateDBSubnetGroupError::Unknown(String::from(body)),
             },
-            Err(_) => CreateDBSubnetGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateDBSubnetGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreateDBSubnetGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20586,7 +20734,7 @@ pub enum CreateEventSubscriptionError {
 }
 
 impl CreateEventSubscriptionError {
-    pub fn from_body(body: &str) -> CreateEventSubscriptionError {
+    pub fn from_body(body: &str, status: u16) -> CreateEventSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20621,7 +20769,17 @@ impl CreateEventSubscriptionError {
                 }
                 _ => CreateEventSubscriptionError::Unknown(String::from(body)),
             },
-            Err(_) => CreateEventSubscriptionError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateEventSubscriptionError::Unknown(format!("{}", status))
+                } else {
+                    CreateEventSubscriptionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -20697,7 +20855,7 @@ pub enum CreateOptionGroupError {
 }
 
 impl CreateOptionGroupError {
-    pub fn from_body(body: &str) -> CreateOptionGroupError {
+    pub fn from_body(body: &str, status: u16) -> CreateOptionGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20715,7 +20873,13 @@ impl CreateOptionGroupError {
                 }
                 _ => CreateOptionGroupError::Unknown(String::from(body)),
             },
-            Err(_) => CreateOptionGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    CreateOptionGroupError::Unknown(format!("{}", status))
+                } else {
+                    CreateOptionGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20792,7 +20956,7 @@ pub enum DeleteDBClusterError {
 }
 
 impl DeleteDBClusterError {
-    pub fn from_body(body: &str) -> DeleteDBClusterError {
+    pub fn from_body(body: &str, status: u16) -> DeleteDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20819,7 +20983,13 @@ impl DeleteDBClusterError {
                 ),
                 _ => DeleteDBClusterError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDBClusterError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteDBClusterError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDBClusterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -20891,7 +21061,7 @@ pub enum DeleteDBClusterParameterGroupError {
 }
 
 impl DeleteDBClusterParameterGroupError {
-    pub fn from_body(body: &str) -> DeleteDBClusterParameterGroupError {
+    pub fn from_body(body: &str, status: u16) -> DeleteDBClusterParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -20909,7 +21079,17 @@ impl DeleteDBClusterParameterGroupError {
                 }
                 _ => DeleteDBClusterParameterGroupError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDBClusterParameterGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteDBClusterParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDBClusterParameterGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -20982,7 +21162,7 @@ pub enum DeleteDBClusterSnapshotError {
 }
 
 impl DeleteDBClusterSnapshotError {
-    pub fn from_body(body: &str) -> DeleteDBClusterSnapshotError {
+    pub fn from_body(body: &str, status: u16) -> DeleteDBClusterSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21000,7 +21180,17 @@ impl DeleteDBClusterSnapshotError {
                 }
                 _ => DeleteDBClusterSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDBClusterSnapshotError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteDBClusterSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDBClusterSnapshotError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -21077,7 +21267,7 @@ pub enum DeleteDBInstanceError {
 }
 
 impl DeleteDBInstanceError {
-    pub fn from_body(body: &str) -> DeleteDBInstanceError {
+    pub fn from_body(body: &str, status: u16) -> DeleteDBInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21100,7 +21290,13 @@ impl DeleteDBInstanceError {
                 ),
                 _ => DeleteDBInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDBInstanceError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteDBInstanceError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDBInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21172,7 +21368,7 @@ pub enum DeleteDBParameterGroupError {
 }
 
 impl DeleteDBParameterGroupError {
-    pub fn from_body(body: &str) -> DeleteDBParameterGroupError {
+    pub fn from_body(body: &str, status: u16) -> DeleteDBParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21190,7 +21386,13 @@ impl DeleteDBParameterGroupError {
                 }
                 _ => DeleteDBParameterGroupError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDBParameterGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteDBParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDBParameterGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21261,7 +21463,7 @@ pub enum DeleteDBSecurityGroupError {
 }
 
 impl DeleteDBSecurityGroupError {
-    pub fn from_body(body: &str) -> DeleteDBSecurityGroupError {
+    pub fn from_body(body: &str, status: u16) -> DeleteDBSecurityGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21279,7 +21481,13 @@ impl DeleteDBSecurityGroupError {
                 }
                 _ => DeleteDBSecurityGroupError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDBSecurityGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteDBSecurityGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDBSecurityGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21350,7 +21558,7 @@ pub enum DeleteDBSnapshotError {
 }
 
 impl DeleteDBSnapshotError {
-    pub fn from_body(body: &str) -> DeleteDBSnapshotError {
+    pub fn from_body(body: &str, status: u16) -> DeleteDBSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21364,7 +21572,13 @@ impl DeleteDBSnapshotError {
                 ),
                 _ => DeleteDBSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDBSnapshotError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteDBSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDBSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21435,7 +21649,7 @@ pub enum DeleteDBSubnetGroupError {
 }
 
 impl DeleteDBSubnetGroupError {
-    pub fn from_body(body: &str) -> DeleteDBSubnetGroupError {
+    pub fn from_body(body: &str, status: u16) -> DeleteDBSubnetGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21456,7 +21670,13 @@ impl DeleteDBSubnetGroupError {
                 ),
                 _ => DeleteDBSubnetGroupError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteDBSubnetGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteDBSubnetGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeleteDBSubnetGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21528,7 +21748,7 @@ pub enum DeleteEventSubscriptionError {
 }
 
 impl DeleteEventSubscriptionError {
-    pub fn from_body(body: &str) -> DeleteEventSubscriptionError {
+    pub fn from_body(body: &str, status: u16) -> DeleteEventSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21544,7 +21764,17 @@ impl DeleteEventSubscriptionError {
                 ),
                 _ => DeleteEventSubscriptionError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteEventSubscriptionError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteEventSubscriptionError::Unknown(format!("{}", status))
+                } else {
+                    DeleteEventSubscriptionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -21615,7 +21845,7 @@ pub enum DeleteOptionGroupError {
 }
 
 impl DeleteOptionGroupError {
-    pub fn from_body(body: &str) -> DeleteOptionGroupError {
+    pub fn from_body(body: &str, status: u16) -> DeleteOptionGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21631,7 +21861,13 @@ impl DeleteOptionGroupError {
                 ),
                 _ => DeleteOptionGroupError::Unknown(String::from(body)),
             },
-            Err(_) => DeleteOptionGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DeleteOptionGroupError::Unknown(format!("{}", status))
+                } else {
+                    DeleteOptionGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21698,7 +21934,7 @@ pub enum DescribeAccountAttributesError {
 }
 
 impl DescribeAccountAttributesError {
-    pub fn from_body(body: &str) -> DescribeAccountAttributesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeAccountAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21706,7 +21942,17 @@ impl DescribeAccountAttributesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeAccountAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeAccountAttributesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeAccountAttributesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeAccountAttributesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -21773,7 +22019,7 @@ pub enum DescribeCertificatesError {
 }
 
 impl DescribeCertificatesError {
-    pub fn from_body(body: &str) -> DescribeCertificatesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeCertificatesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21784,7 +22030,13 @@ impl DescribeCertificatesError {
                 ),
                 _ => DescribeCertificatesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeCertificatesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeCertificatesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeCertificatesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -21854,7 +22106,7 @@ pub enum DescribeDBClusterBacktracksError {
 }
 
 impl DescribeDBClusterBacktracksError {
-    pub fn from_body(body: &str) -> DescribeDBClusterBacktracksError {
+    pub fn from_body(body: &str, status: u16) -> DescribeDBClusterBacktracksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21872,7 +22124,17 @@ impl DescribeDBClusterBacktracksError {
                 }
                 _ => DescribeDBClusterBacktracksError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBClusterBacktracksError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBClusterBacktracksError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBClusterBacktracksError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -21941,7 +22203,7 @@ pub enum DescribeDBClusterParameterGroupsError {
 }
 
 impl DescribeDBClusterParameterGroupsError {
-    pub fn from_body(body: &str) -> DescribeDBClusterParameterGroupsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeDBClusterParameterGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -21954,7 +22216,17 @@ impl DescribeDBClusterParameterGroupsError {
                 }
                 _ => DescribeDBClusterParameterGroupsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBClusterParameterGroupsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBClusterParameterGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBClusterParameterGroupsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -22024,7 +22296,7 @@ pub enum DescribeDBClusterParametersError {
 }
 
 impl DescribeDBClusterParametersError {
-    pub fn from_body(body: &str) -> DescribeDBClusterParametersError {
+    pub fn from_body(body: &str, status: u16) -> DescribeDBClusterParametersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22037,7 +22309,17 @@ impl DescribeDBClusterParametersError {
                 }
                 _ => DescribeDBClusterParametersError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBClusterParametersError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBClusterParametersError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBClusterParametersError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -22105,7 +22387,7 @@ pub enum DescribeDBClusterSnapshotAttributesError {
 }
 
 impl DescribeDBClusterSnapshotAttributesError {
-    pub fn from_body(body: &str) -> DescribeDBClusterSnapshotAttributesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeDBClusterSnapshotAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22118,7 +22400,17 @@ impl DescribeDBClusterSnapshotAttributesError {
                 }
                 _ => DescribeDBClusterSnapshotAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBClusterSnapshotAttributesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBClusterSnapshotAttributesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBClusterSnapshotAttributesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -22188,7 +22480,7 @@ pub enum DescribeDBClusterSnapshotsError {
 }
 
 impl DescribeDBClusterSnapshotsError {
-    pub fn from_body(body: &str) -> DescribeDBClusterSnapshotsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeDBClusterSnapshotsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22201,7 +22493,17 @@ impl DescribeDBClusterSnapshotsError {
                 }
                 _ => DescribeDBClusterSnapshotsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBClusterSnapshotsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBClusterSnapshotsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBClusterSnapshotsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -22269,7 +22571,7 @@ pub enum DescribeDBClustersError {
 }
 
 impl DescribeDBClustersError {
-    pub fn from_body(body: &str) -> DescribeDBClustersError {
+    pub fn from_body(body: &str, status: u16) -> DescribeDBClustersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22280,7 +22582,13 @@ impl DescribeDBClustersError {
                 ),
                 _ => DescribeDBClustersError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBClustersError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBClustersError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBClustersError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -22346,7 +22654,7 @@ pub enum DescribeDBEngineVersionsError {
 }
 
 impl DescribeDBEngineVersionsError {
-    pub fn from_body(body: &str) -> DescribeDBEngineVersionsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeDBEngineVersionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22354,7 +22662,17 @@ impl DescribeDBEngineVersionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeDBEngineVersionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBEngineVersionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBEngineVersionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBEngineVersionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -22421,7 +22739,7 @@ pub enum DescribeDBInstancesError {
 }
 
 impl DescribeDBInstancesError {
-    pub fn from_body(body: &str) -> DescribeDBInstancesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeDBInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22432,7 +22750,13 @@ impl DescribeDBInstancesError {
                 ),
                 _ => DescribeDBInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBInstancesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBInstancesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBInstancesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -22500,7 +22824,7 @@ pub enum DescribeDBLogFilesError {
 }
 
 impl DescribeDBLogFilesError {
-    pub fn from_body(body: &str) -> DescribeDBLogFilesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeDBLogFilesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22511,7 +22835,13 @@ impl DescribeDBLogFilesError {
                 ),
                 _ => DescribeDBLogFilesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBLogFilesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBLogFilesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBLogFilesError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -22579,7 +22909,7 @@ pub enum DescribeDBParameterGroupsError {
 }
 
 impl DescribeDBParameterGroupsError {
-    pub fn from_body(body: &str) -> DescribeDBParameterGroupsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeDBParameterGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22592,7 +22922,17 @@ impl DescribeDBParameterGroupsError {
                 }
                 _ => DescribeDBParameterGroupsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBParameterGroupsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBParameterGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBParameterGroupsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -22660,7 +23000,7 @@ pub enum DescribeDBParametersError {
 }
 
 impl DescribeDBParametersError {
-    pub fn from_body(body: &str) -> DescribeDBParametersError {
+    pub fn from_body(body: &str, status: u16) -> DescribeDBParametersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22673,7 +23013,13 @@ impl DescribeDBParametersError {
                 }
                 _ => DescribeDBParametersError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBParametersError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBParametersError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBParametersError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -22741,7 +23087,7 @@ pub enum DescribeDBSecurityGroupsError {
 }
 
 impl DescribeDBSecurityGroupsError {
-    pub fn from_body(body: &str) -> DescribeDBSecurityGroupsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeDBSecurityGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22754,7 +23100,17 @@ impl DescribeDBSecurityGroupsError {
                 }
                 _ => DescribeDBSecurityGroupsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBSecurityGroupsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBSecurityGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBSecurityGroupsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -22822,7 +23178,7 @@ pub enum DescribeDBSnapshotAttributesError {
 }
 
 impl DescribeDBSnapshotAttributesError {
-    pub fn from_body(body: &str) -> DescribeDBSnapshotAttributesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeDBSnapshotAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22833,7 +23189,17 @@ impl DescribeDBSnapshotAttributesError {
                 ),
                 _ => DescribeDBSnapshotAttributesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBSnapshotAttributesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBSnapshotAttributesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBSnapshotAttributesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -22901,7 +23267,7 @@ pub enum DescribeDBSnapshotsError {
 }
 
 impl DescribeDBSnapshotsError {
-    pub fn from_body(body: &str) -> DescribeDBSnapshotsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeDBSnapshotsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22912,7 +23278,13 @@ impl DescribeDBSnapshotsError {
                 ),
                 _ => DescribeDBSnapshotsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBSnapshotsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBSnapshotsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBSnapshotsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -22980,7 +23352,7 @@ pub enum DescribeDBSubnetGroupsError {
 }
 
 impl DescribeDBSubnetGroupsError {
-    pub fn from_body(body: &str) -> DescribeDBSubnetGroupsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeDBSubnetGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -22993,7 +23365,13 @@ impl DescribeDBSubnetGroupsError {
                 }
                 _ => DescribeDBSubnetGroupsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeDBSubnetGroupsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeDBSubnetGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeDBSubnetGroupsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -23059,7 +23437,7 @@ pub enum DescribeEngineDefaultClusterParametersError {
 }
 
 impl DescribeEngineDefaultClusterParametersError {
-    pub fn from_body(body: &str) -> DescribeEngineDefaultClusterParametersError {
+    pub fn from_body(body: &str, status: u16) -> DescribeEngineDefaultClusterParametersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23067,7 +23445,17 @@ impl DescribeEngineDefaultClusterParametersError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEngineDefaultClusterParametersError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEngineDefaultClusterParametersError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeEngineDefaultClusterParametersError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEngineDefaultClusterParametersError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -23132,7 +23520,7 @@ pub enum DescribeEngineDefaultParametersError {
 }
 
 impl DescribeEngineDefaultParametersError {
-    pub fn from_body(body: &str) -> DescribeEngineDefaultParametersError {
+    pub fn from_body(body: &str, status: u16) -> DescribeEngineDefaultParametersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23140,7 +23528,17 @@ impl DescribeEngineDefaultParametersError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEngineDefaultParametersError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEngineDefaultParametersError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeEngineDefaultParametersError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEngineDefaultParametersError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -23205,7 +23603,7 @@ pub enum DescribeEventCategoriesError {
 }
 
 impl DescribeEventCategoriesError {
-    pub fn from_body(body: &str) -> DescribeEventCategoriesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeEventCategoriesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23213,7 +23611,17 @@ impl DescribeEventCategoriesError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEventCategoriesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEventCategoriesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeEventCategoriesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEventCategoriesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -23280,7 +23688,7 @@ pub enum DescribeEventSubscriptionsError {
 }
 
 impl DescribeEventSubscriptionsError {
-    pub fn from_body(body: &str) -> DescribeEventSubscriptionsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeEventSubscriptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23293,7 +23701,17 @@ impl DescribeEventSubscriptionsError {
                 }
                 _ => DescribeEventSubscriptionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEventSubscriptionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeEventSubscriptionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEventSubscriptionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -23359,7 +23777,7 @@ pub enum DescribeEventsError {
 }
 
 impl DescribeEventsError {
-    pub fn from_body(body: &str) -> DescribeEventsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeEventsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23367,7 +23785,13 @@ impl DescribeEventsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEventsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeEventsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeEventsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeEventsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -23430,7 +23854,7 @@ pub enum DescribeOptionGroupOptionsError {
 }
 
 impl DescribeOptionGroupOptionsError {
-    pub fn from_body(body: &str) -> DescribeOptionGroupOptionsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeOptionGroupOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23438,7 +23862,17 @@ impl DescribeOptionGroupOptionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeOptionGroupOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeOptionGroupOptionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeOptionGroupOptionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeOptionGroupOptionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -23505,7 +23939,7 @@ pub enum DescribeOptionGroupsError {
 }
 
 impl DescribeOptionGroupsError {
-    pub fn from_body(body: &str) -> DescribeOptionGroupsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeOptionGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23516,7 +23950,13 @@ impl DescribeOptionGroupsError {
                 ),
                 _ => DescribeOptionGroupsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeOptionGroupsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeOptionGroupsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeOptionGroupsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -23582,7 +24022,7 @@ pub enum DescribeOrderableDBInstanceOptionsError {
 }
 
 impl DescribeOrderableDBInstanceOptionsError {
-    pub fn from_body(body: &str) -> DescribeOrderableDBInstanceOptionsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeOrderableDBInstanceOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23590,7 +24030,17 @@ impl DescribeOrderableDBInstanceOptionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeOrderableDBInstanceOptionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeOrderableDBInstanceOptionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeOrderableDBInstanceOptionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeOrderableDBInstanceOptionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -23657,7 +24107,7 @@ pub enum DescribePendingMaintenanceActionsError {
 }
 
 impl DescribePendingMaintenanceActionsError {
-    pub fn from_body(body: &str) -> DescribePendingMaintenanceActionsError {
+    pub fn from_body(body: &str, status: u16) -> DescribePendingMaintenanceActionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23670,7 +24120,17 @@ impl DescribePendingMaintenanceActionsError {
                 }
                 _ => DescribePendingMaintenanceActionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribePendingMaintenanceActionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribePendingMaintenanceActionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribePendingMaintenanceActionsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -23738,7 +24198,7 @@ pub enum DescribeReservedDBInstancesError {
 }
 
 impl DescribeReservedDBInstancesError {
-    pub fn from_body(body: &str) -> DescribeReservedDBInstancesError {
+    pub fn from_body(body: &str, status: u16) -> DescribeReservedDBInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23751,7 +24211,17 @@ impl DescribeReservedDBInstancesError {
                 }
                 _ => DescribeReservedDBInstancesError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeReservedDBInstancesError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeReservedDBInstancesError::Unknown(format!("{}", status))
+                } else {
+                    DescribeReservedDBInstancesError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -23819,7 +24289,7 @@ pub enum DescribeReservedDBInstancesOfferingsError {
 }
 
 impl DescribeReservedDBInstancesOfferingsError {
-    pub fn from_body(body: &str) -> DescribeReservedDBInstancesOfferingsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeReservedDBInstancesOfferingsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23829,7 +24299,13 @@ impl DescribeReservedDBInstancesOfferingsError {
                                     "ReservedDBInstancesOfferingNotFound" => DescribeReservedDBInstancesOfferingsError::ReservedDBInstancesOfferingNotFoundFault(String::from(parsed_error.message)),_ => DescribeReservedDBInstancesOfferingsError::Unknown(String::from(body))
                                 }
                            },
-                           Err(_) => DescribeReservedDBInstancesOfferingsError::Unknown(body.to_string())
+                           Err(_) => {
+                               if body.len() == 0 {
+                                   DescribeReservedDBInstancesOfferingsError::Unknown(format!("{}", status))
+                               } else {
+                                   DescribeReservedDBInstancesOfferingsError::Unknown(format!("{}:{}", body.to_string(), status))
+                               }
+                            }
                        }
     }
 
@@ -23897,7 +24373,7 @@ pub enum DescribeSourceRegionsError {
 }
 
 impl DescribeSourceRegionsError {
-    pub fn from_body(body: &str) -> DescribeSourceRegionsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeSourceRegionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23905,7 +24381,13 @@ impl DescribeSourceRegionsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSourceRegionsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeSourceRegionsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeSourceRegionsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeSourceRegionsError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -23974,7 +24456,7 @@ pub enum DescribeValidDBInstanceModificationsError {
 }
 
 impl DescribeValidDBInstanceModificationsError {
-    pub fn from_body(body: &str) -> DescribeValidDBInstanceModificationsError {
+    pub fn from_body(body: &str, status: u16) -> DescribeValidDBInstanceModificationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -23992,7 +24474,17 @@ impl DescribeValidDBInstanceModificationsError {
                 }
                 _ => DescribeValidDBInstanceModificationsError::Unknown(String::from(body)),
             },
-            Err(_) => DescribeValidDBInstanceModificationsError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DescribeValidDBInstanceModificationsError::Unknown(format!("{}", status))
+                } else {
+                    DescribeValidDBInstanceModificationsError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -24065,7 +24557,7 @@ pub enum DownloadDBLogFilePortionError {
 }
 
 impl DownloadDBLogFilePortionError {
-    pub fn from_body(body: &str) -> DownloadDBLogFilePortionError {
+    pub fn from_body(body: &str, status: u16) -> DownloadDBLogFilePortionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -24079,7 +24571,17 @@ impl DownloadDBLogFilePortionError {
                 ),
                 _ => DownloadDBLogFilePortionError::Unknown(String::from(body)),
             },
-            Err(_) => DownloadDBLogFilePortionError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    DownloadDBLogFilePortionError::Unknown(format!("{}", status))
+                } else {
+                    DownloadDBLogFilePortionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -24152,7 +24654,7 @@ pub enum FailoverDBClusterError {
 }
 
 impl FailoverDBClusterError {
-    pub fn from_body(body: &str) -> FailoverDBClusterError {
+    pub fn from_body(body: &str, status: u16) -> FailoverDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -24169,7 +24671,13 @@ impl FailoverDBClusterError {
                 ),
                 _ => FailoverDBClusterError::Unknown(String::from(body)),
             },
-            Err(_) => FailoverDBClusterError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    FailoverDBClusterError::Unknown(format!("{}", status))
+                } else {
+                    FailoverDBClusterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -24243,7 +24751,7 @@ pub enum ListTagsForResourceError {
 }
 
 impl ListTagsForResourceError {
-    pub fn from_body(body: &str) -> ListTagsForResourceError {
+    pub fn from_body(body: &str, status: u16) -> ListTagsForResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -24260,7 +24768,13 @@ impl ListTagsForResourceError {
                 ),
                 _ => ListTagsForResourceError::Unknown(String::from(body)),
             },
-            Err(_) => ListTagsForResourceError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ListTagsForResourceError::Unknown(format!("{}", status))
+                } else {
+                    ListTagsForResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -24350,7 +24864,7 @@ pub enum ModifyDBClusterError {
 }
 
 impl ModifyDBClusterError {
-    pub fn from_body(body: &str) -> ModifyDBClusterError {
+    pub fn from_body(body: &str, status: u16) -> ModifyDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -24397,7 +24911,13 @@ impl ModifyDBClusterError {
                 ),
                 _ => ModifyDBClusterError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyDBClusterError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyDBClusterError::Unknown(format!("{}", status))
+                } else {
+                    ModifyDBClusterError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -24475,7 +24995,7 @@ pub enum ModifyDBClusterParameterGroupError {
 }
 
 impl ModifyDBClusterParameterGroupError {
-    pub fn from_body(body: &str) -> ModifyDBClusterParameterGroupError {
+    pub fn from_body(body: &str, status: u16) -> ModifyDBClusterParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -24493,7 +25013,17 @@ impl ModifyDBClusterParameterGroupError {
                 }
                 _ => ModifyDBClusterParameterGroupError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyDBClusterParameterGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyDBClusterParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    ModifyDBClusterParameterGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -24568,7 +25098,7 @@ pub enum ModifyDBClusterSnapshotAttributeError {
 }
 
 impl ModifyDBClusterSnapshotAttributeError {
-    pub fn from_body(body: &str) -> ModifyDBClusterSnapshotAttributeError {
+    pub fn from_body(body: &str, status: u16) -> ModifyDBClusterSnapshotAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -24591,7 +25121,17 @@ impl ModifyDBClusterSnapshotAttributeError {
                 }
                 _ => ModifyDBClusterSnapshotAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyDBClusterSnapshotAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyDBClusterSnapshotAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ModifyDBClusterSnapshotAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -24697,7 +25237,7 @@ pub enum ModifyDBInstanceError {
 }
 
 impl ModifyDBInstanceError {
-    pub fn from_body(body: &str) -> ModifyDBInstanceError {
+    pub fn from_body(body: &str, status: u16) -> ModifyDBInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -24763,7 +25303,13 @@ impl ModifyDBInstanceError {
                 ),
                 _ => ModifyDBInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyDBInstanceError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyDBInstanceError::Unknown(format!("{}", status))
+                } else {
+                    ModifyDBInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -24846,7 +25392,7 @@ pub enum ModifyDBParameterGroupError {
 }
 
 impl ModifyDBParameterGroupError {
-    pub fn from_body(body: &str) -> ModifyDBParameterGroupError {
+    pub fn from_body(body: &str, status: u16) -> ModifyDBParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -24864,7 +25410,13 @@ impl ModifyDBParameterGroupError {
                 }
                 _ => ModifyDBParameterGroupError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyDBParameterGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyDBParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    ModifyDBParameterGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -24933,7 +25485,7 @@ pub enum ModifyDBSnapshotError {
 }
 
 impl ModifyDBSnapshotError {
-    pub fn from_body(body: &str) -> ModifyDBSnapshotError {
+    pub fn from_body(body: &str, status: u16) -> ModifyDBSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -24944,7 +25496,13 @@ impl ModifyDBSnapshotError {
                 ),
                 _ => ModifyDBSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyDBSnapshotError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyDBSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    ModifyDBSnapshotError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -25014,7 +25572,7 @@ pub enum ModifyDBSnapshotAttributeError {
 }
 
 impl ModifyDBSnapshotAttributeError {
-    pub fn from_body(body: &str) -> ModifyDBSnapshotAttributeError {
+    pub fn from_body(body: &str, status: u16) -> ModifyDBSnapshotAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -25035,7 +25593,17 @@ impl ModifyDBSnapshotAttributeError {
                 }
                 _ => ModifyDBSnapshotAttributeError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyDBSnapshotAttributeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyDBSnapshotAttributeError::Unknown(format!("{}", status))
+                } else {
+                    ModifyDBSnapshotAttributeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -25113,7 +25681,7 @@ pub enum ModifyDBSubnetGroupError {
 }
 
 impl ModifyDBSubnetGroupError {
-    pub fn from_body(body: &str) -> ModifyDBSubnetGroupError {
+    pub fn from_body(body: &str, status: u16) -> ModifyDBSubnetGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -25142,7 +25710,13 @@ impl ModifyDBSubnetGroupError {
                 }
                 _ => ModifyDBSubnetGroupError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyDBSubnetGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyDBSubnetGroupError::Unknown(format!("{}", status))
+                } else {
+                    ModifyDBSubnetGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -25224,7 +25798,7 @@ pub enum ModifyEventSubscriptionError {
 }
 
 impl ModifyEventSubscriptionError {
-    pub fn from_body(body: &str) -> ModifyEventSubscriptionError {
+    pub fn from_body(body: &str, status: u16) -> ModifyEventSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -25254,7 +25828,17 @@ impl ModifyEventSubscriptionError {
                 ),
                 _ => ModifyEventSubscriptionError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyEventSubscriptionError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyEventSubscriptionError::Unknown(format!("{}", status))
+                } else {
+                    ModifyEventSubscriptionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -25329,7 +25913,7 @@ pub enum ModifyOptionGroupError {
 }
 
 impl ModifyOptionGroupError {
-    pub fn from_body(body: &str) -> ModifyOptionGroupError {
+    pub fn from_body(body: &str, status: u16) -> ModifyOptionGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -25345,7 +25929,13 @@ impl ModifyOptionGroupError {
                 ),
                 _ => ModifyOptionGroupError::Unknown(String::from(body)),
             },
-            Err(_) => ModifyOptionGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ModifyOptionGroupError::Unknown(format!("{}", status))
+                } else {
+                    ModifyOptionGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -25416,7 +26006,7 @@ pub enum PromoteReadReplicaError {
 }
 
 impl PromoteReadReplicaError {
-    pub fn from_body(body: &str) -> PromoteReadReplicaError {
+    pub fn from_body(body: &str, status: u16) -> PromoteReadReplicaError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -25430,7 +26020,13 @@ impl PromoteReadReplicaError {
                 ),
                 _ => PromoteReadReplicaError::Unknown(String::from(body)),
             },
-            Err(_) => PromoteReadReplicaError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    PromoteReadReplicaError::Unknown(format!("{}", status))
+                } else {
+                    PromoteReadReplicaError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -25501,7 +26097,7 @@ pub enum PromoteReadReplicaDBClusterError {
 }
 
 impl PromoteReadReplicaDBClusterError {
-    pub fn from_body(body: &str) -> PromoteReadReplicaDBClusterError {
+    pub fn from_body(body: &str, status: u16) -> PromoteReadReplicaDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -25519,7 +26115,17 @@ impl PromoteReadReplicaDBClusterError {
                 }
                 _ => PromoteReadReplicaDBClusterError::Unknown(String::from(body)),
             },
-            Err(_) => PromoteReadReplicaDBClusterError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    PromoteReadReplicaDBClusterError::Unknown(format!("{}", status))
+                } else {
+                    PromoteReadReplicaDBClusterError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -25592,7 +26198,7 @@ pub enum PurchaseReservedDBInstancesOfferingError {
 }
 
 impl PurchaseReservedDBInstancesOfferingError {
-    pub fn from_body(body: &str) -> PurchaseReservedDBInstancesOfferingError {
+    pub fn from_body(body: &str, status: u16) -> PurchaseReservedDBInstancesOfferingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -25602,7 +26208,13 @@ impl PurchaseReservedDBInstancesOfferingError {
                                     "ReservedDBInstanceAlreadyExists" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"ReservedDBInstanceQuotaExceeded" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceQuotaExceededFault(String::from(parsed_error.message)),"ReservedDBInstancesOfferingNotFound" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstancesOfferingNotFoundFault(String::from(parsed_error.message)),_ => PurchaseReservedDBInstancesOfferingError::Unknown(String::from(body))
                                 }
                            },
-                           Err(_) => PurchaseReservedDBInstancesOfferingError::Unknown(body.to_string())
+                           Err(_) => {
+                               if body.len() == 0 {
+                                   PurchaseReservedDBInstancesOfferingError::Unknown(format!("{}", status))
+                               } else {
+                                   PurchaseReservedDBInstancesOfferingError::Unknown(format!("{}:{}", body.to_string(), status))
+                               }
+                            }
                        }
     }
 
@@ -25680,7 +26292,7 @@ pub enum RebootDBInstanceError {
 }
 
 impl RebootDBInstanceError {
-    pub fn from_body(body: &str) -> RebootDBInstanceError {
+    pub fn from_body(body: &str, status: u16) -> RebootDBInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -25694,7 +26306,13 @@ impl RebootDBInstanceError {
                 ),
                 _ => RebootDBInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => RebootDBInstanceError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RebootDBInstanceError::Unknown(format!("{}", status))
+                } else {
+                    RebootDBInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -25765,7 +26383,7 @@ pub enum RemoveRoleFromDBClusterError {
 }
 
 impl RemoveRoleFromDBClusterError {
-    pub fn from_body(body: &str) -> RemoveRoleFromDBClusterError {
+    pub fn from_body(body: &str, status: u16) -> RemoveRoleFromDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -25786,7 +26404,17 @@ impl RemoveRoleFromDBClusterError {
                 }
                 _ => RemoveRoleFromDBClusterError::Unknown(String::from(body)),
             },
-            Err(_) => RemoveRoleFromDBClusterError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RemoveRoleFromDBClusterError::Unknown(format!("{}", status))
+                } else {
+                    RemoveRoleFromDBClusterError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -25858,7 +26486,7 @@ pub enum RemoveSourceIdentifierFromSubscriptionError {
 }
 
 impl RemoveSourceIdentifierFromSubscriptionError {
-    pub fn from_body(body: &str) -> RemoveSourceIdentifierFromSubscriptionError {
+    pub fn from_body(body: &str, status: u16) -> RemoveSourceIdentifierFromSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -25876,7 +26504,17 @@ impl RemoveSourceIdentifierFromSubscriptionError {
                 }
                 _ => RemoveSourceIdentifierFromSubscriptionError::Unknown(String::from(body)),
             },
-            Err(_) => RemoveSourceIdentifierFromSubscriptionError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RemoveSourceIdentifierFromSubscriptionError::Unknown(format!("{}", status))
+                } else {
+                    RemoveSourceIdentifierFromSubscriptionError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -25951,7 +26589,7 @@ pub enum RemoveTagsFromResourceError {
 }
 
 impl RemoveTagsFromResourceError {
-    pub fn from_body(body: &str) -> RemoveTagsFromResourceError {
+    pub fn from_body(body: &str, status: u16) -> RemoveTagsFromResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -25968,7 +26606,13 @@ impl RemoveTagsFromResourceError {
                 ),
                 _ => RemoveTagsFromResourceError::Unknown(String::from(body)),
             },
-            Err(_) => RemoveTagsFromResourceError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RemoveTagsFromResourceError::Unknown(format!("{}", status))
+                } else {
+                    RemoveTagsFromResourceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -26040,7 +26684,7 @@ pub enum ResetDBClusterParameterGroupError {
 }
 
 impl ResetDBClusterParameterGroupError {
-    pub fn from_body(body: &str) -> ResetDBClusterParameterGroupError {
+    pub fn from_body(body: &str, status: u16) -> ResetDBClusterParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -26058,7 +26702,17 @@ impl ResetDBClusterParameterGroupError {
                 }
                 _ => ResetDBClusterParameterGroupError::Unknown(String::from(body)),
             },
-            Err(_) => ResetDBClusterParameterGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ResetDBClusterParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    ResetDBClusterParameterGroupError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -26131,7 +26785,7 @@ pub enum ResetDBParameterGroupError {
 }
 
 impl ResetDBParameterGroupError {
-    pub fn from_body(body: &str) -> ResetDBParameterGroupError {
+    pub fn from_body(body: &str, status: u16) -> ResetDBParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -26149,7 +26803,13 @@ impl ResetDBParameterGroupError {
                 }
                 _ => ResetDBParameterGroupError::Unknown(String::from(body)),
             },
-            Err(_) => ResetDBParameterGroupError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    ResetDBParameterGroupError::Unknown(format!("{}", status))
+                } else {
+                    ResetDBParameterGroupError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -26242,7 +26902,7 @@ pub enum RestoreDBClusterFromS3Error {
 }
 
 impl RestoreDBClusterFromS3Error {
-    pub fn from_body(body: &str) -> RestoreDBClusterFromS3Error {
+    pub fn from_body(body: &str, status: u16) -> RestoreDBClusterFromS3Error {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -26307,7 +26967,13 @@ impl RestoreDBClusterFromS3Error {
                 ),
                 _ => RestoreDBClusterFromS3Error::Unknown(String::from(body)),
             },
-            Err(_) => RestoreDBClusterFromS3Error::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RestoreDBClusterFromS3Error::Unknown(format!("{}", status))
+                } else {
+                    RestoreDBClusterFromS3Error::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -26419,7 +27085,7 @@ pub enum RestoreDBClusterFromSnapshotError {
 }
 
 impl RestoreDBClusterFromSnapshotError {
-    pub fn from_body(body: &str) -> RestoreDBClusterFromSnapshotError {
+    pub fn from_body(body: &str, status: u16) -> RestoreDBClusterFromSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -26501,7 +27167,17 @@ impl RestoreDBClusterFromSnapshotError {
                 }
                 _ => RestoreDBClusterFromSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => RestoreDBClusterFromSnapshotError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RestoreDBClusterFromSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    RestoreDBClusterFromSnapshotError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -26624,7 +27300,7 @@ pub enum RestoreDBClusterToPointInTimeError {
 }
 
 impl RestoreDBClusterToPointInTimeError {
-    pub fn from_body(body: &str) -> RestoreDBClusterToPointInTimeError {
+    pub fn from_body(body: &str, status: u16) -> RestoreDBClusterToPointInTimeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -26713,7 +27389,17 @@ impl RestoreDBClusterToPointInTimeError {
                 }
                 _ => RestoreDBClusterToPointInTimeError::Unknown(String::from(body)),
             },
-            Err(_) => RestoreDBClusterToPointInTimeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RestoreDBClusterToPointInTimeError::Unknown(format!("{}", status))
+                } else {
+                    RestoreDBClusterToPointInTimeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -26841,7 +27527,7 @@ pub enum RestoreDBInstanceFromDBSnapshotError {
 }
 
 impl RestoreDBInstanceFromDBSnapshotError {
-    pub fn from_body(body: &str) -> RestoreDBInstanceFromDBSnapshotError {
+    pub fn from_body(body: &str, status: u16) -> RestoreDBInstanceFromDBSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -26938,7 +27624,17 @@ impl RestoreDBInstanceFromDBSnapshotError {
                 }
                 _ => RestoreDBInstanceFromDBSnapshotError::Unknown(String::from(body)),
             },
-            Err(_) => RestoreDBInstanceFromDBSnapshotError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RestoreDBInstanceFromDBSnapshotError::Unknown(format!("{}", status))
+                } else {
+                    RestoreDBInstanceFromDBSnapshotError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -27060,7 +27756,7 @@ pub enum RestoreDBInstanceFromS3Error {
 }
 
 impl RestoreDBInstanceFromS3Error {
-    pub fn from_body(body: &str) -> RestoreDBInstanceFromS3Error {
+    pub fn from_body(body: &str, status: u16) -> RestoreDBInstanceFromS3Error {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -27142,7 +27838,17 @@ impl RestoreDBInstanceFromS3Error {
                 }
                 _ => RestoreDBInstanceFromS3Error::Unknown(String::from(body)),
             },
-            Err(_) => RestoreDBInstanceFromS3Error::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RestoreDBInstanceFromS3Error::Unknown(format!("{}", status))
+                } else {
+                    RestoreDBInstanceFromS3Error::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -27263,7 +27969,7 @@ pub enum RestoreDBInstanceToPointInTimeError {
 }
 
 impl RestoreDBInstanceToPointInTimeError {
-    pub fn from_body(body: &str) -> RestoreDBInstanceToPointInTimeError {
+    pub fn from_body(body: &str, status: u16) -> RestoreDBInstanceToPointInTimeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -27365,7 +28071,17 @@ impl RestoreDBInstanceToPointInTimeError {
                 }
                 _ => RestoreDBInstanceToPointInTimeError::Unknown(String::from(body)),
             },
-            Err(_) => RestoreDBInstanceToPointInTimeError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RestoreDBInstanceToPointInTimeError::Unknown(format!("{}", status))
+                } else {
+                    RestoreDBInstanceToPointInTimeError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -27464,7 +28180,7 @@ pub enum RevokeDBSecurityGroupIngressError {
 }
 
 impl RevokeDBSecurityGroupIngressError {
-    pub fn from_body(body: &str) -> RevokeDBSecurityGroupIngressError {
+    pub fn from_body(body: &str, status: u16) -> RevokeDBSecurityGroupIngressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -27487,7 +28203,17 @@ impl RevokeDBSecurityGroupIngressError {
                 }
                 _ => RevokeDBSecurityGroupIngressError::Unknown(String::from(body)),
             },
-            Err(_) => RevokeDBSecurityGroupIngressError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    RevokeDBSecurityGroupIngressError::Unknown(format!("{}", status))
+                } else {
+                    RevokeDBSecurityGroupIngressError::Unknown(format!(
+                        "{}:{}",
+                        body.to_string(),
+                        status
+                    ))
+                }
+            }
         }
     }
 
@@ -27577,7 +28303,7 @@ pub enum StartDBInstanceError {
 }
 
 impl StartDBInstanceError {
-    pub fn from_body(body: &str) -> StartDBInstanceError {
+    pub fn from_body(body: &str, status: u16) -> StartDBInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -27622,7 +28348,13 @@ impl StartDBInstanceError {
                 ),
                 _ => StartDBInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => StartDBInstanceError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    StartDBInstanceError::Unknown(format!("{}", status))
+                } else {
+                    StartDBInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
@@ -27706,7 +28438,7 @@ pub enum StopDBInstanceError {
 }
 
 impl StopDBInstanceError {
-    pub fn from_body(body: &str) -> StopDBInstanceError {
+    pub fn from_body(body: &str, status: u16) -> StopDBInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
@@ -27729,7 +28461,13 @@ impl StopDBInstanceError {
                 ),
                 _ => StopDBInstanceError::Unknown(String::from(body)),
             },
-            Err(_) => StopDBInstanceError::Unknown(body.to_string()),
+            Err(_) => {
+                if body.len() == 0 {
+                    StopDBInstanceError::Unknown(format!("{}", status))
+                } else {
+                    StopDBInstanceError::Unknown(format!("{}:{}", body.to_string(), status))
+                }
+            }
         }
     }
 
