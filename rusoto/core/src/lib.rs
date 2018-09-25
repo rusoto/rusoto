@@ -35,6 +35,7 @@ extern crate xml;
 
 mod future;
 mod client;
+mod stream;
 
 pub mod param;
 pub mod region;
@@ -54,3 +55,4 @@ pub use credential::{ProvideAwsCredentials, DefaultCredentialsProvider, Credenti
 pub use request::{DispatchSignedRequest, HttpClient, HttpDispatchError};
 pub use region::Region;
 pub use future::RusotoFuture;
+pub use stream::ByteStream;

@@ -333,48 +333,8 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
 
         if streaming {
             // Add a second type for streaming blobs, which are the only streaming type we can have
-            writeln!(writer,
-                     "pub struct {streaming_name} {{
-                         len: Option<usize>,
-                         inner: Box<::futures::Stream<Item=Vec<u8>, Error=::std::io::Error> + Send>
-                     }}
-
-                     impl {streaming_name} {{
-                         pub fn new<S>(stream: S) -> {streaming_name}
-                             where S: ::futures::Stream<Item=Vec<u8>, Error=::std::io::Error> + Send + 'static
-                         {{
-                             {streaming_name} {{
-                                 len: None,
-                                 inner: Box::new(stream)
-                             }}
-                         }}
-                     }}
-
-                     impl From<Vec<u8>> for {streaming_name} {{
-                         fn from(buf: Vec<u8>) -> {streaming_name} {{
-                             {streaming_name} {{
-                                 len: Some(buf.len()),
-                                 inner: Box::new(::futures::stream::once(Ok(buf)))
-                             }}
-                         }}
-                     }}
-
-                     impl fmt::Debug for {streaming_name} {{
-                         fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {{
-                             write!(f, \"<{name}: streaming content, len = {{:?}}>\", self.len)
-                         }}
-                     }}
-
-                     impl ::futures::Stream for {streaming_name} {{
-                         type Item = Vec<u8>;
-                         type Error = ::std::io::Error;
-
-                         fn poll(&mut self) -> ::futures::Poll<Option<Self::Item>, Self::Error> {{
-                             self.inner.poll()
-                         }}
-                     }}",
-                     name = type_name,
-                     streaming_name = mutate_type_name_for_streaming(&type_name))?;
+            writeln!(writer, "pub type {} = ::rusoto_core::ByteStream;",
+                mutate_type_name_for_streaming(&type_name))?;
         }
 
         if deserialized {

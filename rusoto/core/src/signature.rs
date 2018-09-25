@@ -9,11 +9,9 @@
 use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
 use std::fmt;
-use std::io;
 use std::str;
 use std::time::Duration;
 
-use futures::Stream;
 use hmac::{Hmac, Mac};
 use sha2::{Digest, Sha256};
 use time::Tm;
@@ -26,13 +24,14 @@ use base64;
 use param::{Params, ServiceParams};
 use region::Region;
 use credential::AwsCredentials;
+use stream::ByteStream;
 
 /// Possible payloads included in a `SignedRequest`.
 pub enum SignedRequestPayload {
     /// Transfer payload in a single chunk
     Buffer(Vec<u8>),
     /// Transfer payload in multiple chunks
-    Stream(Option<usize>, Box<Stream<Item=Vec<u8>, Error=io::Error> + Send>)
+    Stream(ByteStream)
 }
 
 impl fmt::Debug for SignedRequestPayload {
@@ -40,8 +39,8 @@ impl fmt::Debug for SignedRequestPayload {
         match self {
             &SignedRequestPayload::Buffer(ref buf) =>
                 write!(f, "SignedRequestPayload::Buffer(len = {})", buf.len()),
-            &SignedRequestPayload::Stream(len, _) =>
-                write!(f, "SignedRequestPayload::Stream(len_hint = {:?})", len),
+            &SignedRequestPayload::Stream(ref stream) =>
+                write!(f, "SignedRequestPayload::Stream(size_hint = {:?})", stream.size_hint()),
         }
     }
 }
@@ -115,8 +114,8 @@ impl SignedRequest {
     }
 
     /// Sets the new body (payload) as a stream
-    pub fn set_payload_stream(&mut self, len_hint: Option<usize>, stream: Box<Stream<Item=Vec<u8>, Error=io::Error> + Send>) {
-        self.payload = Some(SignedRequestPayload::Stream(len_hint, stream));
+    pub fn set_payload_stream(&mut self, stream: ByteStream) {
+        self.payload = Some(SignedRequestPayload::Stream(stream));
     }
 
     /// Computes and sets the Content-MD5 header based on the current payload.
@@ -249,7 +248,7 @@ impl SignedRequest {
         self.remove_header("X-Amz-Content-Sha256");
 
         self.remove_header("X-Amz-Date");
-        
+
         self.remove_header("Content-Type");
 
         if let Some(ref token) = *creds.token() {
@@ -276,7 +275,7 @@ impl SignedRequest {
         self.params.put("X-Amz-Date", current_time_fmted);
 
         self.canonical_query_string = build_canonical_query_string(&self.params);
-        
+
         debug!("canonical_uri: {:?}", self.canonical_uri);
         debug!("canonical_headers: {:?}", canonical_headers);
         debug!("signed_headers: {:?}", signed_headers);
@@ -393,7 +392,7 @@ impl SignedRequest {
                                             &digest);
                 (Some(digest), Some(len))
             }
-            Some(SignedRequestPayload::Stream(len, _)) => {
+            Some(SignedRequestPayload::Stream(ref stream)) => {
                 canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
                                             &self.method,
                                             canonical_uri,
@@ -401,7 +400,7 @@ impl SignedRequest {
                                             canonical_headers,
                                             signed_headers,
                                             "UNSIGNED-PAYLOAD");
-                (Some("UNSIGNED-PAYLOAD".to_owned()), len)
+                (Some("UNSIGNED-PAYLOAD".to_owned()), stream.size_hint())
             }
         };
 
