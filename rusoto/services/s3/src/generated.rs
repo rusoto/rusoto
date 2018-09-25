@@ -1116,46 +1116,7 @@ impl AnalyticsS3ExportFileFormatSerializer {
     }
 }
 
-pub struct StreamingBody {
-    len: Option<usize>,
-    inner: Box<::futures::Stream<Item = Vec<u8>, Error = ::std::io::Error> + Send>,
-}
-
-impl StreamingBody {
-    pub fn new<S>(stream: S) -> StreamingBody
-    where
-        S: ::futures::Stream<Item = Vec<u8>, Error = ::std::io::Error> + Send + 'static,
-    {
-        StreamingBody {
-            len: None,
-            inner: Box::new(stream),
-        }
-    }
-}
-
-impl From<Vec<u8>> for StreamingBody {
-    fn from(buf: Vec<u8>) -> StreamingBody {
-        StreamingBody {
-            len: Some(buf.len()),
-            inner: Box::new(::futures::stream::once(Ok(buf))),
-        }
-    }
-}
-
-impl fmt::Debug for StreamingBody {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "<Body: streaming content, len = {:?}>", self.len)
-    }
-}
-
-impl ::futures::Stream for StreamingBody {
-    type Item = Vec<u8>;
-    type Error = ::std::io::Error;
-
-    fn poll(&mut self) -> ::futures::Poll<Option<Self::Item>, Self::Error> {
-        self.inner.poll()
-    }
-}
+pub type StreamingBody = ::rusoto_core::ByteStream;
 struct BodyDeserializer;
 impl BodyDeserializer {
     #[allow(unused_variables)]
@@ -25243,10 +25204,7 @@ impl S3 for S3Client {
             }
 
             let mut result = GetObjectOutput::default();
-            result.body = Some(StreamingBody {
-                len: None,
-                inner: response.body,
-            });
+            result.body = Some(response.body);
             if let Some(accept_ranges) = response.headers.get("accept-ranges") {
                 let value = accept_ranges.to_owned();
                 result.accept_ranges = Some(value)
@@ -25516,10 +25474,7 @@ impl S3 for S3Client {
             }
 
             let mut result = GetObjectTorrentOutput::default();
-            result.body = Some(StreamingBody {
-                len: None,
-                inner: response.body,
-            });
+            result.body = Some(response.body);
             if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
                 let value = request_charged.to_owned();
                 result.request_charged = Some(value)
@@ -27110,7 +27065,7 @@ impl S3 for S3Client {
         }
 
         if let Some(__body) = input.body {
-            request.set_payload_stream(__body.len, __body.inner);
+            request.set_payload_stream(__body);
         }
 
         self.client.sign_and_dispatch(request, |response| {
@@ -27544,7 +27499,7 @@ impl S3 for S3Client {
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
         if let Some(__body) = input.body {
-            request.set_payload_stream(__body.len, __body.inner);
+            request.set_payload_stream(__body);
         }
 
         self.client.sign_and_dispatch(request, |response| {
