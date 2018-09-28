@@ -84,6 +84,7 @@ members = [
     "rusoto/services/marketplacecommerceanalytics",
     "rusoto/services/marketplace-entitlement",
     "rusoto/services/mediastore",
+    "rusoto/services/mediatailor",
     "rusoto/services/meteringmarketplace",
     "rusoto/services/mgh",
     "rusoto/services/mq",

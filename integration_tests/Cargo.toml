@@ -343,6 +343,10 @@ path = "../rusoto/services/marketplace-entitlement"
 optional = true
 path = "../rusoto/services/mediastore"
 
+[dependencies.rusoto_mediatailor]
+optional = true
+path = "../rusoto/services/mediatailor"
+
 [dependencies.rusoto_mgh]
 optional = true
 path = "../rusoto/services/mgh"
@@ -593,15 +597,16 @@ all = [
 		"lex-runtime",
 		"logs",
 		"neptune",
-	   	"machinelearning",
+		"machinelearning",
 		"macie",
-	   	"marketplacecommerceanalytics",
+		"marketplacecommerceanalytics",
 		"marketplace-entitlement",
 		"mediastore",
+		"mediatailor",
 		"mgh",
 		"mq",
 		"mturk",
-	   	"opsworks",
+		"opsworks",
 		"opsworkscm",
 		"organizations",
 		"pi",
@@ -720,6 +725,7 @@ macie = ["rusoto_macie"]
 marketplacecommerceanalytics = ["rusoto_marketplacecommerceanalytics"]
 marketplace-entitlement = ["rusoto_marketplace_entitlement"]
 mediastore = ["rusoto_mediastore"]
+mediatailor = ["rusoto_mediatailor"]
 mgh = ["rusoto_mgh"]
 mq = ["rusoto_mq"]
 mturk = ["rusoto_mturk"]

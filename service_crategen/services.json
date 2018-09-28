@@ -482,6 +482,12 @@
     "protocolVersion": "2017-09-01",
     "baseTypeName": "MediaStore"
   },
+  "mediatailor": {
+    "version": "0.34.0",
+    "coreVersion": "0.34.0",
+    "protocolVersion": "2018-04-23",
+    "baseTypeName": "MediaTailor"
+  },
   "meteringmarketplace": {
     "version": "0.35.0",
     "coreVersion": "0.35.0",
