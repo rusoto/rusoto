@@ -35,6 +35,7 @@ members = [
     "rusoto/services/cognito-sync",
     "rusoto/services/comprehend",
     "rusoto/services/config",
+    "rusoto/services/connect",
     "rusoto/services/cur",
     "rusoto/services/datapipeline",
     "rusoto/services/dax",
