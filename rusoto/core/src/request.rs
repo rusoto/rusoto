@@ -43,7 +43,7 @@ lazy_static! {
 }
 
 /// HTTP headers
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct Headers(HashMap<String, String>);
 
 impl Headers {
@@ -93,6 +93,7 @@ pub struct HttpResponse {
 }
 
 /// Stores the buffered response from a HTTP request.
+#[derive(Debug, PartialEq)]
 pub struct BufferedHttpResponse {
     /// Status code of HTTP Request
     pub status: StatusCode,
@@ -125,7 +126,7 @@ impl Future for BufferedHttpResponseFuture {
 }
 
 impl HttpResponse {
-    /// Buffer the full response body in memory, resulting in a `BufferedHttpResponse`. 
+    /// Buffer the full response body in memory, resulting in a `BufferedHttpResponse`.
     pub fn buffer(self) -> BufferedHttpResponseFuture {
         BufferedHttpResponseFuture {
             status: self.status,
