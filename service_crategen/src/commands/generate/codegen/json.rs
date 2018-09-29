@@ -45,7 +45,7 @@ impl GenerateProtocol for JsonGenerator {
                             {ok_response}
                         }} else {{
                             Box::new(response.buffer().from_err().and_then(|response| {{
-                                Err({error_type}::from_body(String::from_utf8_lossy(response.body.as_ref()).as_ref()))
+                                Err({error_type}::from_response(response))
                             }}))
                         }}
                     }})
@@ -74,7 +74,7 @@ impl GenerateProtocol for JsonGenerator {
                  "use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
-        use serde_json::from_str;")
+        use serde_json::from_slice;")
     }
 
     fn serialize_trait(&self) -> Option<&'static str> {

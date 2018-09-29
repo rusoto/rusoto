@@ -22,6 +22,7 @@
 - Add ACM PCA support
 - rusoto_credential uses Serde derives for credentials instead of hand written code
 - Add MediaStore support
+- Expose raw BufferedHttpResponse on ::Unknown error variants
 
 ## [0.34.0] - 2018-09-05
 
