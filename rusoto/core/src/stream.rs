@@ -2,7 +2,7 @@ use std::io;
 use std::fmt;
 
 use tokio::io::AsyncRead;
-use futures::{Stream, stream, Async, Poll};
+use futures::{Future, Stream, future, stream, Async, Poll};
 
 /// Stream of bytes.
 pub struct ByteStream {
@@ -28,10 +28,12 @@ impl ByteStream {
 
     /// Return an implementation of `AsyncRead` that uses async i/o to consume the stream.
     pub fn into_async_read(self) -> impl AsyncRead + Send {
-        ImplAsyncRead {
-            buffer: io::Cursor::new(Vec::new()),
-            stream: self.inner.fuse(),
-        }
+        ImplAsyncRead::new(self.inner)
+    }
+
+    /// Return an implementation of `Read` that uses blocking i/o to consume the stream.
+    pub fn into_blocking_read(self) -> impl io::Read + Send {
+        ImplBlockingRead::new(self.inner)
     }
 }
 
@@ -64,6 +66,15 @@ struct ImplAsyncRead {
     stream: stream::Fuse<Box<Stream<Item = Vec<u8>, Error = io::Error> + Send>>,
 }
 
+impl ImplAsyncRead {
+    fn new(stream: Box<Stream<Item = Vec<u8>, Error = io::Error> + Send>) -> Self {
+        ImplAsyncRead {
+            buffer: io::Cursor::new(Vec::new()),
+            stream: stream.fuse(),
+        }
+    }
+}
+
 impl io::Read for ImplAsyncRead {
     fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
         if buf.len() == 0 {
@@ -92,6 +103,22 @@ impl io::Read for ImplAsyncRead {
 
 impl AsyncRead for ImplAsyncRead {}
 
+struct ImplBlockingRead {
+    inner: ImplAsyncRead
+}
+
+impl ImplBlockingRead {
+    fn new(stream: Box<Stream<Item = Vec<u8>, Error = io::Error> + Send>) -> Self {
+        ImplBlockingRead { inner: ImplAsyncRead::new(stream) }
+    }
+}
+
+impl io::Read for ImplBlockingRead {
+    fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
+        future::poll_fn(|| self.inner.poll_read(buf)).wait()
+    }
+}
+
 #[test]
 fn test_async_read() {
     use std::io::Read;
@@ -99,6 +126,26 @@ fn test_async_read() {
     let chunks = vec![b"1234".to_vec(), b"5678".to_vec()];
     let stream = ByteStream::new(stream::iter_ok(chunks));
     let mut async_read = stream.into_async_read();
+
+    let mut buf = [0u8; 3];
+    assert_eq!(async_read.read(&mut buf).unwrap(), 3);
+    assert_eq!(&buf[..3], b"123");
+    assert_eq!(async_read.read(&mut buf).unwrap(), 1);
+    assert_eq!(&buf[..1], b"4");
+    assert_eq!(async_read.read(&mut buf).unwrap(), 3);
+    assert_eq!(&buf[..3], b"567");
+    assert_eq!(async_read.read(&mut buf).unwrap(), 1);
+    assert_eq!(&buf[..1], b"8");
+    assert_eq!(async_read.read(&mut buf).unwrap(), 0);
+}
+
+#[test]
+fn test_blocking_read() {
+    use std::io::Read;
+
+    let chunks = vec![b"1234".to_vec(), b"5678".to_vec()];
+    let stream = ByteStream::new(stream::iter_ok(chunks));
+    let mut async_read = stream.into_blocking_read();
 
     let mut buf = [0u8; 3];
     assert_eq!(async_read.read(&mut buf).unwrap(), 3);
